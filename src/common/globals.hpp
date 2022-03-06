@@ -12,6 +12,8 @@ namespace gta_base {
     namespace globals {
       constexpr auto name = "gta-base";
       constexpr auto version = "1.0.0";
+      constexpr auto target_window_name = "";
+      constexpr auto target_window_class = "Notepad";
 
       extern bool running;
     }

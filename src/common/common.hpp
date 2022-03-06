@@ -13,6 +13,9 @@
 
 #pragma warning(disable:4996)
 
+/// NOTE: Everything in this file has to be __forceinline otherwise the linker will get mad.
+/// This could be fixed by moving the implementation to a .cpp file, but this also works fine for now.
+
 namespace gta_base {
   namespace common {
     __forceinline std::filesystem::path GetBaseDir() {
@@ -49,6 +52,14 @@ namespace gta_base {
 
     __forceinline bool KeyState(int key) {
       return GetAsyncKeyState(key) & 0x8000;
+    }
+
+    __forceinline HWND GetHwnd(const char* class_name, const char* window_name) {
+      return FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
+    }
+
+    __forceinline bool IsTargetProcess() {
+      return GetHwnd(globals::target_window_class, globals::target_window_name) != nullptr;
     }
   }
 }

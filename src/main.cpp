@@ -14,7 +14,7 @@ void BaseMain() {
 
   gta_base::kLOGGER = std::make_unique<gta_base::Logger>();
 
-  LOG_TRACE("Hello World!");
+  LOG_TRACE("Hello {}!", "World");
   while (common::globals::running) {
     if (common::KeyState(VK_DELETE))
       break;

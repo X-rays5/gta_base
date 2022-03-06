@@ -6,6 +6,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "main.hpp"
+#include "common/common.hpp"
 
 HANDLE main_thread_ = nullptr;
 HINSTANCE dll_handle_ = nullptr;
@@ -22,8 +23,12 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD load_reason ,LPVOID _) {
 
     dll_handle_ = dll_handle;
     main_thread_ = CreateThread(nullptr, 0, [](PVOID) -> DWORD {
+      if (!gta_base::common::IsTargetProcess())
+        goto exit;
+
       CALL_MAIN(BaseMain)
 
+      exit:
       CloseHandle(main_thread_);
       FreeLibraryAndExitThread(dll_handle_, 0);
     }, nullptr, 0, nullptr);
