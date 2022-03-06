@@ -13,7 +13,7 @@ namespace gta_base {
       if (ORIGINAL_WNDPROC)
         throw std::runtime_error("WndProc already hooked");
 
-      ORIGINAL_WNDPROC = reinterpret_cast<WNDPROC>(SetWindowLongPtrA(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WndProc)));
+      ORIGINAL_WNDPROC = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WndProc)));
 
       return ORIGINAL_WNDPROC;
     }
@@ -22,12 +22,16 @@ namespace gta_base {
       if (!ORIGINAL_WNDPROC)
         throw std::runtime_error("WndProc is not hooked");
 
-      LONG_PTR success = SetWindowLongPtrA(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&ORIGINAL_WNDPROC));
+      LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(ORIGINAL_WNDPROC));
 
       return success;
     }
 
     LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM parameter_uint_ptr, LPARAM parameter_long_ptr) {
+      if (!ORIGINAL_WNDPROC) {
+        return 0;
+      }
+
       LOG_DEBUG("WndProc called: {}, {}, {}", message, parameter_uint_ptr, parameter_long_ptr);
 
       return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
