@@ -28,9 +28,9 @@ namespace gta_base {
     }
 
     LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM parameter_uint_ptr, LPARAM parameter_long_ptr) {
-      LOG_DEBUG("WndProc called");
+      LOG_DEBUG("WndProc called: {}, {}, {}", message, parameter_uint_ptr, parameter_long_ptr);
 
-      return ORIGINAL_WNDPROC(window, message, parameter_uint_ptr, parameter_long_ptr);
+      return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
     }
   }
 }
