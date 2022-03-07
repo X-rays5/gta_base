@@ -164,7 +164,7 @@ namespace gta_base {
     class Module : public MemoryRegion {
     public:
       /**
-       * \brief Constructs the class with the main module
+       * \brief Constructs the class with the game_main module
        */
       explicit Module(std::nullptr_t) : Module(static_cast<char*>(nullptr))
       {
@@ -271,7 +271,7 @@ namespace gta_base {
 
       /**
        * \brief Scans for the pattern in a memory region
-       * \param region The region to search in, default is the main module
+       * \param region The region to search in, default is the game_main module
        * \return MemoryHandle
        */
       MemoryHandle Scan(const std::string& name, MemoryRegion region = Module(nullptr)) {

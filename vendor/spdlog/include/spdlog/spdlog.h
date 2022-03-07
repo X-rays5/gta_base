@@ -1,7 +1,7 @@
 // Copyright(c) 2015-present, Gabi Melman & spdlog contributors.
 // Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
-// spdlog main header file.
+// spdlog game_main header file.
 // see example.cpp for usage example
 
 #ifndef SPDLOG_H

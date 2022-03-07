@@ -2037,7 +2037,7 @@ FMT_INLINE int remove_trailing_zeros(uint64_t& n) FMT_NOEXCEPT {
   return 7;
 }
 
-// The main algorithm for shorter interval case
+// The game_main algorithm for shorter interval case
 template <class T>
 FMT_INLINE decimal_fp<T> shorter_interval_case(int exponent) FMT_NOEXCEPT {
   decimal_fp<T> ret_value;

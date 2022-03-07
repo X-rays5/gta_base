@@ -1307,7 +1307,7 @@ SPDLOG_INLINE void pattern_formatter::handle_flag_(char flag, details::padding_i
             formatters_.push_back((std::move(unknown_flag)));
         }
         // fix issue #1617 (prev char was '!' and should have been treated as funcname flag instead of truncating flag)
-        // spdlog::set_pattern("[%10!] %v") => "[      main] some message"
+        // spdlog::set_pattern("[%10!] %v") => "[      game_main] some message"
         // spdlog::set_pattern("[%3!!] %v") => "[mai] some message"
         else
         {

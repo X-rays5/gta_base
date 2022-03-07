@@ -19,7 +19,7 @@
 //
 //     #include <spdlog/sinks/dup_filter_sink.h>
 //
-//     int main() {
+//     int game_main() {
 //         auto dup_filter = std::make_shared<dup_filter_sink_st>(std::chrono::seconds(5));
 //         dup_filter->add_sink(std::make_shared<stdout_color_sink_mt>());
 //         spdlog::logger l("logger", dup_filter);

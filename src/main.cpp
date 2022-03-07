@@ -9,9 +9,13 @@
 #include "common/common.hpp"
 #include "hooking/hooking.hpp"
 #include "memory/pointers.hpp"
+#include "threads/threads.hpp"
+#include "scripts/game_main/game_script.hpp"
+#include "scripts/render_main/render_script.hpp"
+#include "scripts/scripting_main/main_script.hpp"
 
 
-bool gta_base::common::globals::running = true;
+std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
   using namespace gta_base;
 
@@ -20,10 +24,21 @@ void BaseMain() {
 
   kHOOKING = std::make_unique<Hooking>();
 
-  LOG_TRACE("Hello {}!", "World");
+  kTHREADS = std::make_unique<Threads>();
+
+  kTHREADS->AddScript(std::make_shared<scripts::Game>());
+  kTHREADS->AddScript(std::make_shared<scripts::Render>());
+  kTHREADS->AddScript(std::make_shared<scripts::Main>());
+
+  std::thread([]{
+    while(common::globals::running)
+      kTHREADS->Tick(threads::ThreadType::kScripting);
+  }).detach();
+
   while (common::globals::running) {
     if (common::KeyState(VK_ESCAPE))
-      break;
+      common::globals::running = false;
+
     Sleep(500);
   }
 

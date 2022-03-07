@@ -6,6 +6,7 @@
 
 #ifndef GTABASE_GLOBALS_HPP
 #define GTABASE_GLOBALS_HPP
+#include <atomic>
 
 namespace gta_base {
   namespace common {
@@ -15,7 +16,7 @@ namespace gta_base {
       constexpr auto target_window_name = "";
       constexpr auto target_window_class = "Notepad";
 
-      extern bool running;
+      extern std::atomic<bool> running;
     }
   }
 }
