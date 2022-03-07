@@ -13,6 +13,7 @@
 #include "scripts/game_main/game_script.hpp"
 #include "scripts/render_main/render_script.hpp"
 #include "scripts/scripting_main/main_script.hpp"
+#include "rpc/discord.hpp"
 
 
 std::atomic<bool> gta_base::common::globals::running = true;
@@ -30,18 +31,25 @@ void BaseMain() {
   kTHREADS->AddScript(std::make_shared<scripts::Render>());
   kTHREADS->AddScript(std::make_shared<scripts::Main>());
 
+  rpc::kDISCORD = std::make_unique<rpc::Discord>();
+
   std::thread([]{
     while(common::globals::running)
       kTHREADS->Tick(threads::ThreadType::kScripting);
   }).detach();
 
   while (common::globals::running) {
+    rpc::kDISCORD->Tick();
+
     if (common::KeyState(VK_ESCAPE))
       common::globals::running = false;
 
     Sleep(500);
   }
 
+  rpc::kDISCORD.reset();
+
+  kTHREADS.reset();
 
   kHOOKING.reset();
 
