@@ -30,13 +30,13 @@ namespace gta_base {
 #endif
       spdlog::flush_every(std::chrono::seconds(1));
 
-      std::string log_file_path = common::GetLogDir().string() + "/debug.log";
+      std::string log_file_path = common::GetLogDir().string() + fmt::format("/{}.log", common::globals::name);
       if (std::filesystem::exists(log_file_path)) {
         std::filesystem::rename(log_file_path, log_file_path + ".bak");
       }
 
       console_log_ = spdlog::stdout_color_mt("console");
-      file_log_ = spdlog::basic_logger_mt("file_log", common::GetLogDir().string() + "/debug.log");
+      file_log_ = spdlog::basic_logger_mt("file_log", common::GetLogDir().string() + fmt::format("/{}.log", common::globals::name));
     } else {
       throw std::runtime_error("Failed to create console");
     }
@@ -51,9 +51,9 @@ namespace gta_base {
     FreeConsole();
 
     uint64_t since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    auto debug_file = std::filesystem::path(common::GetLogDir().string() + "/debug.log");
+    auto debug_file = std::filesystem::path(common::GetLogDir().string() + fmt::format("/{}.log", common::globals::name));
     if (std::filesystem::exists(debug_file)) {
-      std::filesystem::rename(debug_file, std::filesystem::path(common::GetLogSaveDir().string() + "/" + (std::to_string(since_epoch) + "_debug.log")));
+      std::filesystem::rename(debug_file, std::filesystem::path(common::GetLogSaveDir().string() + fmt::format("/{}_{}.log", since_epoch, common::globals::name)));
     }
   }
 }

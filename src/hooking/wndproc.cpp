@@ -32,8 +32,6 @@ namespace gta_base {
         return 0;
       }
 
-      LOG_DEBUG("WndProc called: {}, {}, {}", message, parameter_uint_ptr, parameter_long_ptr);
-
       return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
     }
   }
