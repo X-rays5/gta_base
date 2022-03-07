@@ -1,0 +1,9 @@
+[submodule "vendor/spdlog"]
+	path = vendor/spdlog
+	url = https://github.com/X-rays5/spdlog.git
+[submodule "vendor/minhook"]
+	path = vendor/minhook
+	url = https://github.com/X-rays5/minhook.git
+[submodule "vendor/discord-rpc"]
+	path = vendor/discord-rpc
+	url = https://github.com/X-rays5/discord-rpc.git
