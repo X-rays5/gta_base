@@ -7,17 +7,16 @@
 #include <windows.h>
 #include "logger/logger.hpp"
 #include "common/common.hpp"
-#include "hooking/wndproc.hpp"
 #include "memory/sigscanner.hpp"
+#include "hooking/hooking.hpp"
 
 
 bool gta_base::common::globals::running = true;
 void BaseMain() {
   using namespace gta_base;
 
-  gta_base::kLOGGER = std::make_unique<gta_base::Logger>();
-
-  hooking::HookWndProc();
+  kLOGGER = std::make_unique<Logger>();
+  kHOOKING = std::make_unique<Hooking>();
 
   using is_elevated_t = LPVOID(*)();
   is_elevated_t IsElevated{};
@@ -31,6 +30,9 @@ void BaseMain() {
     Sleep(500);
   }
 
-  hooking::UnhookWndProc();
+
+  kHOOKING.reset();
+
+  LOG_INFO("successful unload");
   gta_base::kLOGGER.reset();
 }
