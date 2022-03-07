@@ -283,7 +283,6 @@ namespace gta_base {
         }
         return result;
       }
-
     private:
       MemoryHandle ScanImpl(MemoryRegion region = Module(nullptr)) {
         auto compareMemory = [](const std::uint8_t* data, Element* elem, std::size_t num) -> bool {
