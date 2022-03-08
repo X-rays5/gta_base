@@ -23,6 +23,12 @@ void BaseMain() {
   kLOGGER = std::make_unique<Logger>();
   memory::kPOINTERS = std::make_unique<memory::Pointers>();
 
+  LOG_INFO("Waiting for the game to load...");
+  while(*memory::kPOINTERS->game_state_ != rage::GameState::kPlaying) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  }
+  LOG_INFO("Game loaded initializing...");
+
   kHOOKING = std::make_unique<Hooking>();
 
   kTHREADS = std::make_unique<Threads>();
@@ -38,14 +44,16 @@ void BaseMain() {
       kTHREADS->Tick(threads::ThreadType::kScripting);
   }).detach();
 
+  LOG_INFO("Initialized");
   while (common::globals::running) {
     rpc::kDISCORD->Tick();
 
     if (common::KeyState(VK_ESCAPE))
       common::globals::running = false;
 
-    Sleep(500);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
+  LOG_INFO("Unloading...");
 
   rpc::kDISCORD.reset();
 
@@ -54,6 +62,7 @@ void BaseMain() {
   kHOOKING.reset();
 
   memory::kPOINTERS.reset();
+
   LOG_INFO("successful unload");
   gta_base::kLOGGER.reset();
 }

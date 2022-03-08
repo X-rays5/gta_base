@@ -8,6 +8,7 @@
 #define GTABASE_POINTERS_HPP
 #include <memory>
 #include "sigscanner.hpp"
+#include "../rage/enums.hpp"
 
 namespace gta_base {
   namespace memory {
@@ -15,7 +16,7 @@ namespace gta_base {
     public:
       Pointers();
 
-      std::uint32_t* game_state_;
+      enum rage::GameState* game_state_{};
     };
     inline std::unique_ptr<Pointers> kPOINTERS;
   }

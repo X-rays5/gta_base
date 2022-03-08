@@ -7,7 +7,7 @@
 namespace gta_base {
   namespace memory {
     Pointers::Pointers() {
-      game_state_ = Signature("48 85 C9 74 4B 83 3D").Scan("game_state").Add(7).Rip().As<decltype(game_state_)>();
+      game_state_ = Signature("83 3D ? ? ? ? ? 75 17 8B 43 20").Scan("game_state").Add(2).Rip().As<decltype(game_state_)>();
     }
   }
 }

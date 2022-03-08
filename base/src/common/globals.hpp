@@ -14,7 +14,7 @@ namespace gta_base {
       constexpr auto name = "gta-base";
       constexpr auto version = "1.0.0";
       constexpr auto target_window_name = "";
-      constexpr auto target_window_class = "Notepad";
+      constexpr auto target_window_class = "grcWindow";
 
       extern std::atomic<bool> running;
     }
