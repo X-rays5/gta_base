@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 project(gta_base)
 
 IF(WIN32)
-    add_subdirectory(base)
-    add_subdirectory(libinject)
+    IF(MSVC)
+        add_subdirectory(base)
+    ENDIF()
     add_subdirectory(launcher)
 ENDIF()
 
