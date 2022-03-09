@@ -13,6 +13,6 @@ set(IMGUI_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_widgets.cpp"
 )
 
-add_executable(ui_dev WIN32 ${IMGUI_SOURCES} src/main.cpp src/wndproc.cpp src/wndproc.hpp src/ui/ui.cpp src/ui/ui.hpp src/d3d11/d3d11.cpp src/d3d11/d3d11.hpp)
+add_executable(ui_dev ${IMGUI_SOURCES} src/main.cpp src/ui/ui.cpp src/ui/ui.hpp)
 
 target_include_directories(ui_dev PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
