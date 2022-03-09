@@ -5,6 +5,7 @@ IF(WIN32)
     IF(MSVC)
         add_subdirectory(base)
     ENDIF()
+    add_subdirectory(ui_dev)
     add_subdirectory(launcher)
 ENDIF()
 
