@@ -3,6 +3,16 @@ project(ui_dev)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ui_dev WIN32 src/main.cpp src/wndproc.cpp src/wndproc.hpp src/d3d11/D3D11.cpp src/d3d11/D3D11.h src/ui/ui.cpp src/ui/ui.hpp)
+set(IMGUI_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_demo.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_draw.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_impl_dx11.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_impl_win32.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_tables.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_widgets.cpp"
+)
+
+add_executable(ui_dev WIN32 ${IMGUI_SOURCES} src/main.cpp src/wndproc.cpp src/wndproc.hpp src/ui/ui.cpp src/ui/ui.hpp src/d3d11/d3d11.cpp src/d3d11/d3d11.hpp)
 
 target_include_directories(ui_dev PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)

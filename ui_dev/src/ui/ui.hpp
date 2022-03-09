@@ -6,6 +6,10 @@
 
 #ifndef GTA_BASE_UI_HPP
 #define GTA_BASE_UI_HPP
+#include <imgui.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
+
 namespace ui {
   bool IsInitialized();
   void Initialize();
