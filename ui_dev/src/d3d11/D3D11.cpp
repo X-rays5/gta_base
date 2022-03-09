@@ -35,19 +35,19 @@ bool D3D11::initialize(const UINT &width, const UINT &height, const HWND &window
 #ifdef _DEBUG
 	flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-	HRESULT hr = D3D11CreateDeviceAndSwapChain(0, D3D_DRIVER_TYPE_HARDWARE, 0, flags, featureLevels, 2, D3D11_SDK_VERSION, &scd, &mSwapChain, &mDevice, 0, &mDeviceContext);
+	HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, featureLevels, 2, D3D11_SDK_VERSION, &scd, &mSwapChain, &mDevice, nullptr, &mDeviceContext);
 	if (FAILED(hr)) {
-		return 0;
+		return false;
 	}
 
 	hr = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&mSwapChainBuffer);
 	if (FAILED(hr)) {
-		return 0;
+		return false;
 	}
 
-	hr = mDevice->CreateRenderTargetView(mSwapChainBuffer, 0, &mRenderTargetView);
+	hr = mDevice->CreateRenderTargetView(mSwapChainBuffer, nullptr, &mRenderTargetView);
 	if (FAILED(hr)) {
-		return 0;
+		return false;
 	}
 
 	D3D11_TEXTURE2D_DESC dsdDesc;
@@ -77,25 +77,25 @@ bool D3D11::initialize(const UINT &width, const UINT &height, const HWND &window
 
 	return true;
 }
-void D3D11::endScene()
+void D3D11::endScene() const
 {
 	mSwapChain->Present(0, 0);
 }
-void D3D11::clearRenderTargetViews(const float &r, const float &g, const float &b, const float &a)
+void D3D11::clearRenderTargetViews(const float &r, const float &g, const float &b, const float &a) const
 {
 	ID3D11RenderTargetView *rtvs[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT] = { nullptr };
 	D3D11::mDeviceContext->OMGetRenderTargets(D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT, rtvs, nullptr);
-	for (UINT i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i) {
-		if (rtvs[i] != nullptr) {
+	for (auto&& rtv : rtvs) {
+		if (rtv != nullptr) {
 			float clearCols[] = { r, g, b, a };
-			D3D11::mDeviceContext->ClearRenderTargetView(rtvs[i], clearCols);
-			safeRelease(rtvs[i]);
+			D3D11::mDeviceContext->ClearRenderTargetView(rtv, clearCols);
+			safeRelease(rtv);
 		}
 	}
 }
-void D3D11::destroy()
+void D3D11::destroy() const
 {
-	mSwapChain->SetFullscreenState(0, 0);
+	mSwapChain->SetFullscreenState(0, nullptr);
 	mDeviceContext->ClearState();
 	safeRelease(mDevice);
 	safeRelease(mDeviceContext);

@@ -22,20 +22,26 @@ public:
 		return instance;
 	}
 	bool initialize(const UINT &width, const UINT &height, const HWND &window, const bool &windowed);
-	void clearRenderTargetViews(const float &r = 0.0f, const float &g = 0.0f, const float &b = 0.0f, const float &a = 1.0f);
-	void endScene();
-	void destroy();
+	void clearRenderTargetViews(const float &r = 0.0f, const float &g = 0.0f, const float &b = 0.0f, const float &a = 1.0f) const;
+	void endScene() const;
+	void destroy() const;
+
+  [[nodiscard]] ID3D11Device* GetDevice() const { return mDevice; }
+  [[nodiscard]] ID3D11DeviceContext* GetDeviceContext() const { return mDeviceContext; }
+  [[nodiscard]] IDXGISwapChain* GetSwapChain() const { return mSwapChain; }
+  [[nodiscard]] ID3D11Texture2D* GetSwapChainBuffer() const { return mSwapChainBuffer; }
+  [[nodiscard]] ID3D11RenderTargetView* GetRenderTargetView() const { return mRenderTargetView; }
 public:
-	ID3D11Device *mDevice;
-	ID3D11DeviceContext *mDeviceContext;
-	IDXGISwapChain *mSwapChain;
-	ID3D11Texture2D *mSwapChainBuffer;
-	ID3D11RenderTargetView *mRenderTargetView;
+	ID3D11Device *mDevice{};
+	ID3D11DeviceContext *mDeviceContext{};
+	IDXGISwapChain *mSwapChain{};
+	ID3D11Texture2D *mSwapChainBuffer{};
+	ID3D11RenderTargetView *mRenderTargetView{};
 public:
-	UINT mWindowWidth;
-	UINT mWindowHeight;
-	HWND mWindow;
-	bool mWindowed;
+	UINT mWindowWidth{};
+	UINT mWindowHeight{};
+	HWND mWindow{};
+	bool mWindowed{};
 private:
 	D3D11() {}
 	D3D11(D3D11 const&) = delete;

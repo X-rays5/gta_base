@@ -5,12 +5,13 @@
 #include <windows.h>
 #include "d3d11/D3D11.h"
 #include "wndproc.hpp"
+#include "ui/ui.hpp"
 
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 
 int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-  WNDCLASSEXA wc = {sizeof(wc), CS_VREDRAW | CS_HREDRAW, ui::windows::WndProc, NULL, NULL, GetModuleHandleA(nullptr), nullptr, nullptr, (HBRUSH)COLOR_WINDOW, nullptr, "ui_dev", nullptr};
+  WNDCLASSEXA wc = {sizeof(wc), CS_VREDRAW | CS_HREDRAW, WndProc, NULL, NULL, GetModuleHandleA(nullptr), nullptr, nullptr, (HBRUSH)COLOR_WINDOW, nullptr, "ui_dev", nullptr};
   if (!RegisterClassExA(&wc)) {
     MessageBoxA(nullptr, "RegisterClassExA failed", "Error", MB_OK | MB_ICONERROR);
     return 1;
@@ -27,9 +28,16 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
       TranslateMessage(&msg);
       DispatchMessage(&msg);
     }
+
+    if (!ui::IsInitialized())
+      ui::Initialize();
+
+    ui::Tick();
+
     D3D11::getInstance().clearRenderTargetViews();
     D3D11::getInstance().endScene();
   }
+  ui::Shutdown();
 
   D3D11::getInstance().destroy();
   return 0;

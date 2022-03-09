@@ -9,9 +9,5 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-namespace ui {
-  namespace windows {
-    LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM parameter_uint_ptr, LPARAM parameter_long_ptr);
-  }
-}
+LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM parameter_uint_ptr, LPARAM parameter_long_ptr);
 #endif //GTA_BASE_WNDPROC_HPP
