@@ -83,7 +83,11 @@ int main(int, char**) {
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+#ifdef _DEBUG
+    ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 20, ImVec2(5, 5), ImColor(255, 0, 0), "DEBUG BUILD");
+#endif
     ui::Tick();
+
 
     // Rendering
     ImGui::Render();

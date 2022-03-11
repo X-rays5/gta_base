@@ -11,8 +11,8 @@ set(IMGUI_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_impl_win32.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_tables.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/imgui_widgets.cpp"
-)
+        src/ui/components/option/baseoption.hpp src/ui/components/submenu.hpp src/ui/components/enums.hpp)
 
-add_executable(ui_dev ${IMGUI_SOURCES} src/main.cpp src/ui/ui.cpp src/ui/ui.hpp)
+add_executable(ui_dev ${IMGUI_SOURCES} src/main.cpp src/ui/ui.cpp src/ui/ui.hpp src/ui/manager.cpp src/ui/manager.hpp src/ui/components/option/executeoption.hpp src/ui/draw.hpp)
 
 target_include_directories(ui_dev PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
