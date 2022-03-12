@@ -16,8 +16,8 @@ namespace ui {
         using action_t = void(*)();
 
         explicit ExecuteOption(const std::string& name, const std::string& description = "", action_t action = []{}) {
-          name_ = (char*)name.c_str();
-          description_ = (char*)description.c_str();
+          name_ = name;
+          description_ = description;
           action_ = action;
         }
 

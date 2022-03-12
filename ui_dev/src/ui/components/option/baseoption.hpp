@@ -7,6 +7,7 @@
 #ifndef GTA_BASE_BASEOPTION_HPP
 #define GTA_BASE_BASEOPTION_HPP
 #include <filesystem>
+#include <utility>
 #include "../enums.hpp"
 
 namespace ui {
@@ -14,25 +15,25 @@ namespace ui {
     namespace option {
       class BaseOption {
       public:
-        virtual const char* GetName() {
+        virtual std::string GetName() {
           return name_;
         }
-        virtual void SetName(const char* name) {
-          name_ = (char*)name;
+        virtual void SetName(std::string name) {
+          name_ = std::move(name);
         }
 
-        virtual const char* GetDescription() {
+        virtual std::string GetDescription() {
           return description_;
         }
-        virtual void SetDescription(const char* description) {
-          description_ = (char*)description;
+        virtual void SetDescription(std::string description) {
+          description_ = std::move(description);
         }
 
-        virtual char* GetRightText() {
+        virtual std::string GetRightText() {
           return rightText_;
         }
-        virtual void SetRightText(const char* rightText) {
-          rightText_ = (char*)rightText;
+        virtual void SetRightText(std::string rightText) {
+          rightText_ = std::move(rightText);
         }
         virtual std::filesystem::path GetIconPath() {
           return icon_path_;
@@ -43,9 +44,9 @@ namespace ui {
 
         virtual void HandleKey(KeyInput key) = 0;
       protected:
-        char* name_{};
-        char* description_{};
-        char* rightText_{};
+        std::string name_{};
+        std::string description_{};
+        std::string rightText_{};
         std::filesystem::path icon_path_{};
       };
     }

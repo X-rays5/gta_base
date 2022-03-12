@@ -6,6 +6,7 @@
 
 #ifndef GTA_BASE_DRAW_HPP
 #define GTA_BASE_DRAW_HPP
+#include <utility>
 #include <vector>
 #include <mutex>
 #include <imgui.h>
@@ -21,11 +22,11 @@ namespace ui {
       return {pos.x + size.x, pos.y + size.y};
     }
 
-    inline ImVec2 CalcTextSize(const ImFont* font, float font_size, const char* text, float wrap_width = 0.0f) {
+    inline ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
       if (!font)
         return {0,0};
 
-      ImVec2 text_size = font->CalcTextSizeA(font_size, FLT_MAX, wrap_width, text);
+      ImVec2 text_size = font->CalcTextSizeA(font_size, FLT_MAX, wrap_width, text.c_str());
       text_size.x = ((float)(int)(text_size.x + 0.99999f));
 
       return text_size;
@@ -87,7 +88,7 @@ namespace ui {
 
     class Text : public BaseDrawCommand {
     public:
-      inline Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, float font_size, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(text), right_align_(right_align), font_size_(font_size), font_(font)
+      inline Text(ImVec2 pos, ImU32 color, std::string  text, bool right_align, float font_size, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), font_size_(font_size), font_(font)
       {
       }
 
@@ -96,9 +97,17 @@ namespace ui {
           if (!font_) {
             font_ = ImGui::GetFont();
           }
-          ImVec2 text_size = CalcTextSize(font_, font_size_, text_.c_str());
+          ImVec2 text_size = CalcTextSize(font_, font_size_, text_);
           pos_.x -= text_size.x;
+          pos_.y += (text_size.y / 2);
+        } else {
+          if (!font_) {
+            font_ = ImGui::GetFont();
+          }
+          ImVec2 text_size = CalcTextSize(font_, font_size_, text_);
+          pos_.y += (text_size.y / 2);
         }
+
 
         GetDrawList()->AddText(font_, Scale(font_size_), Scale(pos_), color_, text_.c_str());
       }
@@ -133,10 +142,10 @@ namespace ui {
 
     class DrawList {
     public:
-      template<typename T, typename... Args>
-      inline void AddCommand(Args&&... args) {
+      template<typename T>
+      inline void AddCommand(T command) {
         std::lock_guard lock(mtx_);
-        draw_commands_.push_back(std::make_shared<T>(std::forward<Args>(args)...));
+        draw_commands_.push_back(std::make_shared<T>(std::forward<T>(command)));
       }
 
       inline void Draw() {

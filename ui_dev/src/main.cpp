@@ -7,7 +7,9 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
+#include <string>
 #include "ui/ui.hpp"
+#include "ui/fonts/roboto_regular.hpp"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -59,9 +61,10 @@ int main(int, char**) {
   ImGui_ImplDX11_Init(kDEVICE, kDEVICE_CONTEXT);
 
   // Our state
-  bool show_demo_window = true;
-  bool show_another_window = false;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+  auto roboto_regular = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_regular_compressed_data, roboto_regular_compressed_size, 36);
+  if (!ImGui::GetIO().Fonts->IsBuilt())
+    ImGui::GetIO().Fonts->Build();
 
   // Main loop
   bool done = false;
@@ -83,11 +86,14 @@ int main(int, char**) {
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    ImGui::PushFont(roboto_regular);
 #ifdef _DEBUG
     ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 20, ImVec2(5, 5), ImColor(255, 0, 0), "DEBUG BUILD");
+    ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 20, ImVec2(5, 25), ImColor(0, 255, 0), std::string("FPS: " + std::to_string((int)ImGui::GetIO().Framerate)).c_str());
 #endif
     ui::Tick();
 
+    ImGui::PopFont();
 
     // Rendering
     ImGui::Render();

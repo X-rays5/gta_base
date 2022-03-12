@@ -18,9 +18,87 @@ namespace ui {
     kMANAGER = std::make_unique<Manager>();
 
     kMANAGER->AddSubmenu("Home", "", components::Submenus::Home, [](components::Submenu* sub){
-      sub->AddOption<components::option::ExecuteOption>("Hello World!", "This a a option", []{
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
         std::cout << "Hello World! from option press" << std::endl;
-      });
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
+        std::cout << "Hello World! from option press" << std::endl;
+      }));
     });
   }
 
