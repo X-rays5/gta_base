@@ -28,6 +28,16 @@ namespace ui {
           if (key == KeyInput::kReturn)
             action_();
         }
+
+        bool HasFlag(OptionFlag flag) final {
+          if (flag == OptionFlag::kRightText) {
+            return right_text_.empty();
+          } else if (flag == OptionFlag::kRightIcon) {
+            return icon_path_.string().empty();
+          } else {
+            return false;
+          }
+        }
       private:
         action_t action_;
       };

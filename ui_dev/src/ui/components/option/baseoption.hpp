@@ -30,10 +30,10 @@ namespace ui {
         }
 
         virtual std::string GetRightText() {
-          return rightText_;
+          return right_text_;
         }
         virtual void SetRightText(std::string rightText) {
-          rightText_ = std::move(rightText);
+          right_text_ = std::move(rightText);
         }
         virtual std::filesystem::path GetIconPath() {
           return icon_path_;
@@ -43,10 +43,11 @@ namespace ui {
         }
 
         virtual void HandleKey(KeyInput key) = 0;
+        virtual bool HasFlag(OptionFlag flag) = 0;
       protected:
         std::string name_{};
         std::string description_{};
-        std::string rightText_{};
+        std::string right_text_{};
         std::filesystem::path icon_path_{};
       };
     }

@@ -73,9 +73,6 @@ namespace ui {
     } else if (input_down_->Get()) {
       cur_sub->HandleKey(components::KeyInput::kDown);
     } else if (input_return_->Get()) {
-      //if (cur_sub->GetOption(cur_sub->GetSelectedOption()) {
-        // TODO: handle entering of submenus
-      //}
       cur_sub->HandleKey(components::KeyInput::kReturn);
     } else if (input_back_->Get()) {
       if (submenus_stack_.size() > 1) {

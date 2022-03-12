@@ -5,6 +5,7 @@
 #include <iostream>
 #include "manager.hpp"
 #include "components/option/executeoption.hpp"
+#include "components/option/submenuoption.hpp"
 
 namespace ui {
   bool initialized = false;
@@ -18,86 +19,26 @@ namespace ui {
     kMANAGER = std::make_unique<Manager>();
 
     kMANAGER->AddSubmenu("Home", "", components::Submenus::Home, [](components::Submenu* sub){
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
+      sub->AddOption(components::option::SubmenuOption("Player", "", components::Submenus::Player));
+      sub->AddOption(components::option::SubmenuOption("Settings", "", components::Submenus::Settings));
+    });
+
+    kMANAGER->AddSubmenu("Player", "", components::Submenus::Player, [](components::Submenu* sub){
+      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+        std::cout << "Hello World from the player submenu" << std::endl;
       }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
+    });
+
+    kMANAGER->AddSubmenu("Settings", "", components::Submenus::Settings, [](components::Submenu* sub){
+      sub->AddOption(components::option::SubmenuOption("Unload", "", components::Submenus::UnloadConfirm));
+    });
+
+    kMANAGER->AddSubmenu("Unload", "", components::Submenus::UnloadConfirm, [](components::Submenu* sub){
+      sub->AddOption(components::option::ExecuteOption("Yes", "", []{
+        // TODO: unload
       }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World!", "This a a option", []{
-        std::cout << "Hello World! from option press" << std::endl;
+      sub->AddOption(components::option::ExecuteOption("No", "", []{
+        kMANAGER->PopSubmenu();
       }));
     });
   }

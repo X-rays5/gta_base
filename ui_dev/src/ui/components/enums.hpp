@@ -21,10 +21,10 @@ namespace ui {
     };
 
     enum class OptionFlag {
-      kNone = 0x00,
-      kDisabled = 0x01,
-      kRightIcon = 0x02,
-      kRightText = 0x04,
+      kDisabled,
+      kRightIcon,
+      kRightText,
+      kSubmenuLink,
     };
     DEFINE_ENUM_FLAG_OPERATORS(OptionFlag)
 

@@ -10,7 +10,7 @@ file(GLOB IMGUI_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/*.cpp"
 )
 
-add_executable(${PROJECT_NAME} ${IMGUI_SOURCES} src/main.cpp src/ui/ui.cpp src/ui/ui.hpp src/ui/manager.cpp src/ui/manager.hpp src/ui/components/option/executeoption.hpp src/ui/draw.hpp src/ui/components/option/baseoption.hpp src/ui/components/submenu.hpp src/ui/components/enums.hpp src/ui/fonts/roboto_regular.hpp)
+add_executable(${PROJECT_NAME} ${IMGUI_SOURCES} src/main.cpp src/ui/ui.cpp src/ui/ui.hpp src/ui/manager.cpp src/ui/manager.hpp src/ui/components/option/executeoption.hpp src/ui/draw.hpp src/ui/components/option/baseoption.hpp src/ui/components/submenu.hpp src/ui/components/enums.hpp src/ui/fonts/roboto_regular.hpp src/ui/components/option/submenuoption.hpp)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/freetype/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
