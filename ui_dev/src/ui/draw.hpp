@@ -48,12 +48,19 @@ namespace ui {
     }
 
     inline ImVec2 ScaleImpl(ImVec2& vec) {
-      ScaleInBounds(vec);
+      /*ScaleInBounds(vec);
 
-      float x_scale = ImGui::GetIO().DisplaySize.x / 1000.f;
-      float y_scale = ImGui::GetIO().DisplaySize.y / 1000.f;
+      float x_scale = ImGui::GetIO().DisplaySize.x / 1920.f;
+      float y_scale = ImGui::GetIO().DisplaySize.y / 1080.f;
 
-      return {vec.x * x_scale, vec.y * y_scale};
+      return {vec.x * x_scale, vec.y * y_scale};*/
+      ImGuiIO& io = ImGui::GetIO(); (void)io;
+      float newScale = (io.DisplaySize.x * io.DisplaySize.y) / (1920.f * 1080.f);
+
+      if (newScale > 1.0f)
+        newScale = 1.f;
+
+      return {vec.x * newScale, vec.y * newScale};
     }
 
     inline ImVec2 Scale(ImVec2 vec) {
@@ -88,7 +95,7 @@ namespace ui {
 
     class Text : public BaseDrawCommand {
     public:
-      inline Text(ImVec2 pos, ImU32 color, std::string  text, bool right_align, float font_size, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), font_size_(font_size), font_(font)
+      inline Text(ImVec2 pos, ImU32 color, std::string  text, bool right_align, bool center, float font_size, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), font_size_(font_size), font_(font)
       {
       }
 
@@ -101,11 +108,13 @@ namespace ui {
           pos_.x -= text_size.x;
           pos_.y += (text_size.y / 2);
         } else {
-          if (!font_) {
-            font_ = ImGui::GetFont();
+          if (center_) {
+            if (!font_) {
+              font_ = ImGui::GetFont();
+            }
+            ImVec2 text_size = CalcTextSize(font_, font_size_, text_);
+            pos_.y += ((text_size.y / 2));
           }
-          ImVec2 text_size = CalcTextSize(font_, font_size_, text_);
-          pos_.y += (text_size.y / 2);
         }
 
 
@@ -117,6 +126,7 @@ namespace ui {
       ImU32 color_;
       std::string text_;
       bool right_align_;
+      bool center_;
       float font_size_;
       const ImFont* font_;
     };

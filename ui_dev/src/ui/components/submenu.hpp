@@ -17,7 +17,7 @@ namespace ui {
     public:
       using constructor_cb = void(*)(Submenu *);
 
-      explicit Submenu(std::string name, std::string description, Submenus submenu_id, constructor_cb cb) : name_(std::move(name)), description_(std::move(description)), submenu_id_(submenu_id) {
+      explicit Submenu(std::string name, Submenus submenu_id, constructor_cb cb) : name_(std::move(name)), submenu_id_(submenu_id) {
         cb(this);
       }
 
@@ -27,14 +27,6 @@ namespace ui {
 
       void SetName(std::string name) {
         name_ = std::move(name);
-      };
-
-      [[nodiscard]] std::string GetDescription() const {
-        return description_;
-      };
-
-      void SetDescription(std::string description) {
-        description_ = std::move(description);
       };
 
       std::shared_ptr<option::BaseOption> GetOption(size_t index) {
@@ -82,7 +74,6 @@ namespace ui {
 
     private:
       std::string name_{};
-      std::string description_{};
       std::vector<std::shared_ptr<option::BaseOption>> options_;
       std::int64_t selected_option_ = 0;
       Submenus submenu_id_;

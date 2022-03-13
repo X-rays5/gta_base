@@ -6,12 +6,81 @@
 #include "manager.hpp"
 
 namespace ui {
-  inline draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text) const {
-    return {ImVec2(base_x + (menu_width / 38), y_pos), color, text, false, 10};
+  inline draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center) const {
+    return {ImVec2(base_x + 4, y_pos), color, text, false, center, font_size};
   }
 
-  inline draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text) const {
-    return {ImVec2(base_x + (menu_width - 2), y_pos), color, text, true, 10};
+  inline draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center) const {
+    return {ImVec2(base_x + (menu_width - 4), y_pos), color, text, true, center, font_size};
+  }
+
+  inline std::string Trim(std::string str, char trim_c) {
+    while(str.front() == trim_c) {
+      str.erase(0, 1);
+    }
+    return str;
+  }
+
+  inline std::string TrimR(std::string str, char trim_c) {
+    while (str.back() == trim_c) {
+      str.pop_back();
+    }
+    return str;
+  }
+  #define TRIM_STR(str, c) TrimR(Trim(str, c), c)
+
+  int WordWrap(std::string& wrap, float max_width, float font_size, int max_lines = 3) {
+    wrap = TRIM_STR(wrap, ' ');
+    int max_characters_per_line = std::floor(max_width / (font_size / 2));
+    if (wrap.size() <= max_characters_per_line) {
+      return 1;
+    } else {
+      int i = 0;
+      do {
+        size_t last_space = wrap.rfind(' ', (max_characters_per_line - 1) * (i + 1));
+        if (last_space == std::string::npos) {
+          last_space = max_characters_per_line;
+        }
+        std::string front = wrap.substr(0, last_space);
+        std::string back = wrap.substr(last_space);
+
+        TrimR(front, ' ');
+        Trim(back, ' ');
+
+        front.append("\n");
+        front.append(back);
+        wrap = front;
+
+        if (wrap.size() <= max_characters_per_line)
+          return i + 1;
+
+        i += 1;
+      } while(i < (max_lines - 1));
+
+      if (wrap.size() <= max_characters_per_line)
+        return i + 1;
+
+      // doesn't fit into max_lines lines
+      int max_string_length = (max_characters_per_line * max_lines) - 3;
+      wrap = wrap.substr(0, max_string_length);
+      wrap = TrimR(wrap, ' ');
+      wrap.append("...");
+
+      return max_lines;
+    }
+  }
+
+  inline void Manager::DrawDescriptionText(std::string description, size_t option_count) const {
+    float draw_zone_left = base_x + 2;
+    float draw_zone_right = base_x + (menu_width - 2);
+
+    int lines = WordWrap(description, draw::Scale(draw_zone_right - draw_zone_left), font_size);
+
+    constexpr float separator_y_size = 5;
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, (base_y + (option_y_size * (float)option_count)) + (bottom_bar_y_size + description_offset_y)), ImVec2(menu_width, separator_y_size), secondary_color.load()));
+
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, (base_y + (option_y_size * (float)option_count)) + (bottom_bar_y_size + description_offset_y) + separator_y_size), ImVec2(menu_width, ((font_size + draw::Scale(6)) * lines)), primary_color.load()));
+    draw_list_->AddCommand(DrawTextLeft(base_y + (((option_y_size * (float)option_count) + bottom_bar_y_size) + (description_offset_y + separator_y_size) + 6.f), text_color.load(), description, false));
   }
 
   inline void Manager::DrawHeader() {
@@ -32,11 +101,12 @@ namespace ui {
     size_t options = option_count > max_drawn_options ? max_drawn_options : option_count;
 
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)options)), ImVec2(menu_width, bottom_bar_y_size), primary_color.load()));
+    draw_list_->AddCommand(DrawTextRight(base_y + (option_y_size * (float)options), text_color.load(), "v1.0.0"));
 
     // TODO: draw some arrows pointing up and down
   }
 
-  inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos) {
+  inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count) {
     // TODO: separate the scroller from this and make a scrolling animation
 
     if (selected) {
@@ -54,7 +124,7 @@ namespace ui {
     }
 
     if (selected && !option->GetDescription().empty()) {
-      // TODO: draw the description of the option
+      DrawDescriptionText(option->GetDescription(), sub_option_count > max_drawn_options ? max_drawn_options : sub_option_count);
     }
   }
 
@@ -94,7 +164,7 @@ namespace ui {
     }
 
     for (int i = 0; draw_options_from < draw_options_till; draw_options_from++) {
-      DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i);
+      DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i, cur_sub->GetOptionCount());
 
       i += 1;
     }

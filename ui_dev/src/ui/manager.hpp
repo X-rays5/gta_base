@@ -46,8 +46,8 @@ namespace ui {
       input_back_ = std::make_shared<TimedInput>(VK_BACK, std::chrono::milliseconds(300));
     }
 
-    inline void AddSubmenu(const std::string& name, const std::string& description, components::Submenus id, components::Submenu::constructor_cb constructor_cb) {
-      auto submenu_ptr = std::make_shared<components::Submenu>(name, description, id, constructor_cb);
+    inline void AddSubmenu(const std::string& name, components::Submenus id, components::Submenu::constructor_cb constructor_cb) {
+      auto submenu_ptr = std::make_shared<components::Submenu>(name, id, constructor_cb);
       submenus_[id] = submenu_ptr;
       if (submenus_stack_.empty()) {
         submenus_stack_.push(submenu_ptr);
@@ -74,17 +74,20 @@ namespace ui {
 
     void Draw();
   public:
-    std::atomic<float> menu_width = 170;
+    std::atomic<float> menu_width = 400;
     std::atomic<float> base_x = 20;
-    std::atomic<float> top_bar_y_size = 30;
-    std::atomic<float> bottom_bar_y_size = 30;
-    std::atomic<float> option_y_size = 30;
+    std::atomic<float> top_bar_y_size = 40;
+    std::atomic<float> bottom_bar_y_size = 40;
+    std::atomic<float> option_y_size = 40;
+    std::atomic<float> description_offset_y = 10;
 
     std::atomic<ImColor> primary_color = ImColor(0,0,0);
     std::atomic<ImColor> secondary_color = ImColor(255,255,255);
     std::atomic<ImColor> scroller_color = ImColor(255,255,255);
     std::atomic<ImColor> text_color = ImColor(255,255,255);
     std::atomic<ImColor> selected_text_color = ImColor(0,0,0);
+
+    std::atomic<float> font_size = 20;
   private:
     float base_y = 200;
     int max_drawn_options = 14;
@@ -103,12 +106,13 @@ namespace ui {
     std::shared_ptr<TimedInput> input_back_;
 
   private:
-    inline draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text) const;
-    inline draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text) const;
+    inline draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
+    inline draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;
+    inline void DrawDescriptionText(std::string description, size_t option_count) const;
     inline void DrawHeader();
     inline void DrawTopBar(const std::string& title, size_t option_current, size_t option_count);
     inline void DrawBottomBar(size_t option_count);
-    inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos);
+    inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count);
 
   };
   inline std::unique_ptr<Manager> kMANAGER;

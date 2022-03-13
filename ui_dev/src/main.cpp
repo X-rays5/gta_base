@@ -32,7 +32,7 @@ int main(int, char**) {
   //ImGui_ImplWin32_EnableDpiAwareness();
   WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, _T("ui_dev"), nullptr};
   ::RegisterClassEx(&wc);
-  HWND hwnd = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, nullptr, nullptr, wc.hInstance, nullptr);
+  HWND hwnd = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, 100, 100, 1920, 1080, nullptr, nullptr, wc.hInstance, nullptr);
 
   // Initialize Direct3D
   if (!CreateDeviceD3D(hwnd)) {
@@ -102,8 +102,8 @@ int main(int, char**) {
     kDEVICE_CONTEXT->ClearRenderTargetView(kRENDER_TARGET_VIEW, clear_color_with_alpha);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-    kSWAPCHAIN->Present(1, 0); // Present with vsync
-    //g_pSwapChain->Present(0, 0); // Present without vsync
+    //kSWAPCHAIN->Present(1, 0); // Present with vsync
+    kSWAPCHAIN->Present(0, 0); // Present without vsync
   }
 
   // Cleanup

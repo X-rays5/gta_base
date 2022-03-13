@@ -18,22 +18,22 @@ namespace ui {
 
     kMANAGER = std::make_unique<Manager>();
 
-    kMANAGER->AddSubmenu("Home", "", components::Submenus::Home, [](components::Submenu* sub){
-      sub->AddOption(components::option::SubmenuOption("Player", "", components::Submenus::Player));
-      sub->AddOption(components::option::SubmenuOption("Settings", "", components::Submenus::Settings));
+    kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
+      sub->AddOption(components::option::SubmenuOption("Player", "a short description a short description", components::Submenus::Player));
+      sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop oh no anyways this is a really long description as you can see weep woop oh no anyways this is a really long description as you can see weep woop oh no anyways this is a really long description as you can see weep woop oh no anyways", components::Submenus::Settings));
     });
 
-    kMANAGER->AddSubmenu("Player", "", components::Submenus::Player, [](components::Submenu* sub){
+    kMANAGER->AddSubmenu("Player", components::Submenus::Player, [](components::Submenu* sub){
       sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
         std::cout << "Hello World from the player submenu" << std::endl;
       }));
     });
 
-    kMANAGER->AddSubmenu("Settings", "", components::Submenus::Settings, [](components::Submenu* sub){
+    kMANAGER->AddSubmenu("Settings", components::Submenus::Settings, [](components::Submenu* sub){
       sub->AddOption(components::option::SubmenuOption("Unload", "", components::Submenus::UnloadConfirm));
     });
 
-    kMANAGER->AddSubmenu("Unload", "", components::Submenus::UnloadConfirm, [](components::Submenu* sub){
+    kMANAGER->AddSubmenu("Unload", components::Submenus::UnloadConfirm, [](components::Submenu* sub){
       sub->AddOption(components::option::ExecuteOption("Yes", "", []{
         // TODO: unload
       }));
