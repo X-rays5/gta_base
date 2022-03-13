@@ -19,7 +19,7 @@ namespace ui {
     kMANAGER = std::make_unique<Manager>();
 
     kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
-      sub->AddOption(components::option::SubmenuOption("Player", "a short description a short description", components::Submenus::Player));
+      sub->AddOption(components::option::SubmenuOption("Player", "a short description a short description just a bit too long", components::Submenus::Player));
       sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop oh no anyways this is a really long description as you can see weep woop oh no anyways this is a really long description as you can see weep woop oh no anyways this is a really long description as you can see weep woop oh no anyways", components::Submenus::Settings));
     });
 

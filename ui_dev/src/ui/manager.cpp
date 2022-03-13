@@ -29,52 +29,52 @@ namespace ui {
   }
   #define TRIM_STR(str, c) TrimR(Trim(str, c), c)
 
-  int WordWrap(std::string& wrap, float max_width, float font_size, int max_lines = 3) {
+  __forceinline int WordWrap(std::string& wrap, float max_width, float font_size, int max_lines = 3) {
     wrap = TRIM_STR(wrap, ' ');
-    int max_characters_per_line = std::floor(max_width / (font_size / 2));
+    float character_x_size = draw::CalcTextSize(ImGui::GetFont(), font_size, wrap).x / (float)wrap.size();
+    int max_characters_per_line = std::floor(max_width / character_x_size);
     if (wrap.size() <= max_characters_per_line) {
       return 1;
     } else {
       int i = 0;
       do {
+        if (wrap.size() <= (max_characters_per_line * (i + 1)))
+          return i + 1;
+
         size_t last_space = wrap.rfind(' ', (max_characters_per_line - 1) * (i + 1));
         if (last_space == std::string::npos) {
           last_space = max_characters_per_line;
         }
-        std::string front = wrap.substr(0, last_space);
-        std::string back = wrap.substr(last_space);
-
-        TrimR(front, ' ');
-        Trim(back, ' ');
+        std::string front = TRIM_STR(wrap.substr(0, last_space), ' ');
+        std::string back = TRIM_STR(wrap.substr(last_space), ' ');
 
         front.append("\n");
         front.append(back);
         wrap = front;
 
-        if (wrap.size() <= max_characters_per_line)
-          return i + 1;
-
         i += 1;
       } while(i < (max_lines - 1));
 
-      if (wrap.size() <= max_characters_per_line)
+      if (wrap.size() <= (max_characters_per_line * (i + 1)))
         return i + 1;
 
       // doesn't fit into max_lines lines
-      int max_string_length = (max_characters_per_line * max_lines) - 3;
-      wrap = wrap.substr(0, max_string_length);
-      wrap = TrimR(wrap, ' ');
-      wrap.append("...");
+      int last_line_pos = wrap.rfind('\n');
+      auto last_line = TRIM_STR(wrap.substr(last_line_pos), ' ');
+      last_line.erase(max_characters_per_line);
+      last_line.replace(last_line.size() - 3, 3, "...");
+      wrap.replace(last_line_pos, wrap.size(), last_line);
 
       return max_lines;
     }
   }
 
   inline void Manager::DrawDescriptionText(std::string description, size_t option_count) const {
-    float draw_zone_left = base_x + 2;
-    float draw_zone_right = base_x + (menu_width - 2);
+    float draw_zone_left = base_x + 4;
+    float draw_zone_right = base_x + (menu_width - 4);
 
-    int lines = WordWrap(description, draw::Scale(draw_zone_right - draw_zone_left), font_size);
+    std::cout << '\n';
+    int lines = WordWrap(description, draw_zone_right - draw_zone_left, font_size);
 
     constexpr float separator_y_size = 5;
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, (base_y + (option_y_size * (float)option_count)) + (bottom_bar_y_size + description_offset_y)), ImVec2(menu_width, separator_y_size), secondary_color.load()));
