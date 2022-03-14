@@ -108,6 +108,8 @@ namespace ui {
     double last_scroller_update_ = 0.0;
     float current_pos_ = -1.f;
     float scroller_speed_ = 10.f;
+    bool scroller_reset_ = false;
+    int previous_selected_option_ = -1;
   private:
     inline draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
     inline draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;

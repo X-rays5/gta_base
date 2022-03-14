@@ -114,8 +114,10 @@ namespace ui {
   // FIXME: with the current implementation this works better the higher the fps
   // should correct this to something better some time
   inline void Manager::DrawScroller(float target_pos) {
-    if (current_pos_ == -1.f)
-      current_pos_ = target_pos;
+    if (current_pos_ == -1.f || scroller_reset_){
+     scroller_reset_ = false;
+     current_pos_ = target_pos;
+    }
 
     if (current_pos_ < target_pos) {
       current_pos_ += ScaleFps(scroller_speed_);
@@ -133,6 +135,14 @@ namespace ui {
   inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count) {
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)option_pos)), ImVec2(menu_width, option_y_size), primary_color.load()));
     if (selected) {
+      std::cout << "prev: " << previous_selected_option_ << " current: " << option_pos << " sub: " << sub_option_count << std::endl;
+      if (previous_selected_option_ == 0 && option_pos == (sub_option_count - 1)) {
+        scroller_reset_ = true;
+      } else if (previous_selected_option_ == (sub_option_count - 1) && option_pos == 0) {
+        scroller_reset_ = true;
+      }
+      previous_selected_option_ = option_pos;
+
       DrawScroller(base_y + (option_y_size * (float)option_pos));
 
       draw_list_->AddCommand(DrawTextLeft(base_y + (option_y_size * (float)option_pos), selected_text_color.load(), option->GetName()));
