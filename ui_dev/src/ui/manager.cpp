@@ -111,35 +111,52 @@ namespace ui {
     // TODO: draw some arrows pointing up and down
   }
 
-  void Manager::DrawScrollBar(size_t option_count, int current_option) const {
+  inline void Manager::DrawScrollBarScroller(float target_pos, float scroller_y_size) {
+    if (scroller_current_pos_ == -1.f || smooth_scrolling_reset) {
+      smooth_scrolling_reset = false;
+      scrollbar_current_pos_ = target_pos;
+    }
+
+    if (scrollbar_current_pos_ < target_pos) {
+      scrollbar_current_pos_ += ScaleFps(smooth_scrolling_speed);
+      if (scrollbar_current_pos_ > target_pos)
+        scrollbar_current_pos_ = target_pos;
+    } else if (scrollbar_current_pos_ > target_pos) {
+      scrollbar_current_pos_ -= ScaleFps(smooth_scrolling_speed);
+      if (scrollbar_current_pos_ < target_pos)
+        scrollbar_current_pos_ = target_pos;
+    }
+
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x + (menu_width + scrollbar_offset), scrollbar_current_pos_), ImVec2(scrollbar_width, scroller_y_size), secondary_color.load()));
+  }
+
+  void Manager::DrawScrollBar(size_t option_count, int current_option) {
     size_t options = option_count > max_drawn_options ? max_drawn_options : option_count;
     float scrollbar_y_area = base_y + (option_y_size * (float)options) - base_y;
 
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x + (menu_width + scrollbar_offset), base_y), ImVec2(scrollbar_width, scrollbar_y_area), primary_color.load()));
 
     float scroller_y_size = (scrollbar_y_area / (float)option_count);
-    draw_list_->AddCommand(draw::Rect(ImVec2(base_x + (menu_width + scrollbar_offset), base_y + (current_option * scroller_y_size)), ImVec2(scrollbar_width, scroller_y_size), secondary_color.load()));
+    DrawScrollBarScroller(base_y + ((float)current_option * scroller_y_size), scroller_y_size);
   }
 
-  // FIXME: with the current implementation this works better the higher the fps
-  // should correct this to something better some time
   inline void Manager::DrawScroller(float target_pos) {
-    if (current_pos_ == -1.f || scroller_reset_){
-     scroller_reset_ = false;
-     current_pos_ = target_pos;
+    if (scroller_current_pos_ == -1.f || smooth_scrolling_reset){
+     smooth_scrolling_reset = false;
+      scroller_current_pos_ = target_pos;
     }
 
-    if (current_pos_ < target_pos) {
-      current_pos_ += ScaleFps(scroller_speed_);
-      if (current_pos_ > target_pos)
-        current_pos_ = target_pos;
-    } else if (current_pos_ > target_pos) {
-      current_pos_ -= ScaleFps(scroller_speed_);
-      if (current_pos_ < target_pos)
-        current_pos_ = target_pos;
+    if (scroller_current_pos_ < target_pos) {
+      scroller_current_pos_ += ScaleFps(smooth_scrolling_speed);
+      if (scroller_current_pos_ > target_pos)
+        scroller_current_pos_ = target_pos;
+    } else if (scroller_current_pos_ > target_pos) {
+      scroller_current_pos_ -= ScaleFps(smooth_scrolling_speed);
+      if (scroller_current_pos_ < target_pos)
+        scroller_current_pos_ = target_pos;
     }
 
-    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, current_pos_), ImVec2(menu_width, option_y_size), scroller_color.load()));
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, scroller_current_pos_), ImVec2(menu_width, option_y_size), scroller_color.load()));
   }
 
   inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
@@ -147,9 +164,9 @@ namespace ui {
     if (selected) {
       std::cout << "prev: " << previous_selected_option_ << " current: " << option_idx << " total option: " << sub_option_count - 1 << std::endl;
       if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1)) {
-        scroller_reset_ = true;
+        smooth_scrolling_reset = true;
       } else if (previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
-        scroller_reset_ = true;
+        smooth_scrolling_reset = true;
       }
       previous_selected_option_ = option_idx;
 
@@ -188,12 +205,12 @@ namespace ui {
     } else if (input_return_->Get()) {
       cur_sub->HandleKey(components::KeyInput::kReturn);
       cur_sub = submenus_stack_.top();
-      scroller_reset_ = true;
+      smooth_scrolling_reset = true;
     } else if (input_back_->Get()) {
       if (submenus_stack_.size() > 1) {
         submenus_stack_.pop();
         cur_sub = submenus_stack_.top();
-        scroller_reset_ = true;
+        smooth_scrolling_reset = true;
       }
     }
 

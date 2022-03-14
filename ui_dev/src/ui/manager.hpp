@@ -107,11 +107,12 @@ namespace ui {
     std::shared_ptr<TimedInput> input_return_;
     std::shared_ptr<TimedInput> input_back_;
 
-    double last_scroller_update_ = 0.0;
-    float current_pos_ = -1.f;
-    float scroller_speed_ = option_y_size.load() / 8.f;
-    bool scroller_reset_ = false;
+    bool smooth_scrolling_reset = false;
+    float smooth_scrolling_speed = 5;
     int previous_selected_option_ = -1;
+
+    float scroller_current_pos_ = -1.f;
+    float scrollbar_current_pos_ = -1.f;
   private:
     inline draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
     inline draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;
@@ -119,7 +120,8 @@ namespace ui {
     inline void DrawHeader();
     inline void DrawTopBar(const std::string& title, size_t option_current, size_t option_count);
     inline void DrawBottomBar(size_t option_count);
-    inline void DrawScrollBar(size_t option_count, int current_option) const;
+    inline void DrawScrollBarScroller(float target_pos, float scroller_y_size);
+    inline void DrawScrollBar(size_t option_count, int current_option);
     inline void DrawScroller(float target_pos);
     inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
 
