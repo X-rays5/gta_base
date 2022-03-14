@@ -63,6 +63,24 @@ namespace ui {
       sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
         std::cout << "Hello World from the player submenu" << std::endl;
       }));
+      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+        std::cout << "Hello World from the player submenu" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+        std::cout << "Hello World from the player submenu" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+        std::cout << "Hello World from the player submenu" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+        std::cout << "Hello World from the player submenu" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+        std::cout << "Hello World from the player submenu" << std::endl;
+      }));
+      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+        std::cout << "Hello World from the player submenu" << std::endl;
+      }));
     });
 
     kMANAGER->AddSubmenu("Settings", components::Submenus::Settings, [](components::Submenu* sub){

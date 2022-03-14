@@ -80,6 +80,7 @@ namespace ui {
     std::atomic<float> bottom_bar_y_size = 40;
     std::atomic<float> option_y_size = 40;
     std::atomic<float> description_offset_y = 10;
+    std::atomic<float> scrollbar_width = 10;
 
     std::atomic<ImColor> primary_color = ImColor(0,0,0);
     std::atomic<ImColor> secondary_color = ImColor(255,255,255);
@@ -91,6 +92,7 @@ namespace ui {
   private:
     float base_y = 200;
     int max_drawn_options = 14;
+    std::atomic<float> scrollbar_offset = 20;
 
     using submenu_ptr_t = std::shared_ptr<components::Submenu>;
 
@@ -117,6 +119,7 @@ namespace ui {
     inline void DrawHeader();
     inline void DrawTopBar(const std::string& title, size_t option_current, size_t option_count);
     inline void DrawBottomBar(size_t option_count);
+    inline void DrawScrollBar(size_t option_count, int current_option) const;
     inline void DrawScroller(float target_pos);
     inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count);
 

@@ -6,12 +6,9 @@
 #include "manager.hpp"
 
 namespace ui {
-  inline draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center) const {
-    return {ImVec2(base_x + 4, y_pos), color, text, false, center, font_size};
-  }
-
-  inline draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center) const {
-    return {ImVec2(base_x + (menu_width - 4), y_pos), color, text, true, center, font_size};
+  // scale number based of fps
+  inline float ScaleFps(float number) {
+    return number * (144.f / ImGui::GetIO().Framerate);
   }
 
   inline std::string Trim(std::string str, char trim_c) {
@@ -27,7 +24,7 @@ namespace ui {
     }
     return str;
   }
-  #define TRIM_STR(str, c) TrimR(Trim(str, c), c)
+#define TRIM_STR(str, c) TrimR(Trim(str, c), c)
 
   __forceinline int WordWrap(std::string& wrap, float max_width, float font_size, int max_lines = 3) {
     wrap = TRIM_STR(wrap, ' ');
@@ -69,6 +66,14 @@ namespace ui {
     }
   }
 
+  inline draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center) const {
+    return {ImVec2(base_x + 4, y_pos), color, text, false, center, font_size};
+  }
+
+  inline draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center) const {
+    return {ImVec2(base_x + (menu_width - 4), y_pos), color, text, true, center, font_size};
+  }
+
   inline void Manager::DrawDescriptionText(std::string description, size_t option_count) const {
     float draw_zone_left = base_x + 4;
     float draw_zone_right = base_x + (menu_width - 4);
@@ -106,9 +111,14 @@ namespace ui {
     // TODO: draw some arrows pointing up and down
   }
 
-  // scale number based of fps
-  inline float ScaleFps(float number) {
-    return number * (144.f / ImGui::GetIO().Framerate);
+  void Manager::DrawScrollBar(size_t option_count, int current_option) const {
+    size_t options = option_count > max_drawn_options ? max_drawn_options : option_count;
+    float scrollbar_y_area = base_y + (option_y_size * (float)options) - base_y;
+
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x + (menu_width + scrollbar_offset), base_y), ImVec2(scrollbar_width, scrollbar_y_area), primary_color.load()));
+
+    float scroller_y_size = (scrollbar_y_area / (float)option_count);
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x + (menu_width + scrollbar_offset), base_y + (current_option * scroller_y_size)), ImVec2(scrollbar_width, scroller_y_size), secondary_color.load()));
   }
 
   // FIXME: with the current implementation this works better the higher the fps
@@ -135,7 +145,7 @@ namespace ui {
   inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count) {
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)option_pos)), ImVec2(menu_width, option_y_size), primary_color.load()));
     if (selected) {
-      std::cout << "prev: " << previous_selected_option_ << " current: " << option_pos << " sub: " << sub_option_count << std::endl;
+      std::cout << "prev_pos: " << previous_selected_option_ << " current_pos: " << option_pos << " total: " << sub_option_count - 1 << std::endl;
       if (previous_selected_option_ == 0 && option_pos == (sub_option_count - 1)) {
         scroller_reset_ = true;
       } else if (previous_selected_option_ == (sub_option_count - 1) && option_pos == 0) {
@@ -177,17 +187,20 @@ namespace ui {
       cur_sub->HandleKey(components::KeyInput::kDown);
     } else if (input_return_->Get()) {
       cur_sub->HandleKey(components::KeyInput::kReturn);
+      cur_sub = submenus_stack_.top();
+      scroller_reset_ = true;
     } else if (input_back_->Get()) {
       if (submenus_stack_.size() > 1) {
         submenus_stack_.pop();
+        cur_sub = submenus_stack_.top();
+        scroller_reset_ = true;
       }
     }
 
     DrawHeader();
     DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption() + 1, cur_sub->GetOptionCount());
     DrawBottomBar(cur_sub->GetOptionCount());
-
-    // TODO: maybe add a scroll bar sometime
+    DrawScrollBar(cur_sub->GetOptionCount(), cur_sub->GetSelectedOption());
 
     std::size_t draw_options_from = 0;
     std::size_t draw_options_till = cur_sub->GetOptionCount() > max_drawn_options ? max_drawn_options : cur_sub->GetOptionCount();
