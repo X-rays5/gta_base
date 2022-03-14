@@ -8,8 +8,8 @@
 #define GTA_BASE_ROBOTO_REGULAR_HPP
 // File: 'Roboto-Regular.ttf' (168260 bytes)
 // Exported using binary_to_compressed_c.cpp
-static const unsigned int roboto_regular_compressed_size = 116929;
-static const unsigned int roboto_regular_compressed_data[116932/4] = {
+constexpr static const unsigned int roboto_regular_compressed_size = 116929;
+constexpr static const unsigned int roboto_regular_compressed_data[116932/4] = {
     0x0000bc57, 0x00000000, 0x44910200, 0x00000400, 0x00010025, 0x82120000, 0x043e0804, 0x44472000, 0x42b44645, 0x020082b0, 0x0000841b, 0x50476202,
     0x1aff534f, 0x0200d712, 0x0000e81d, 0x5347cc5d, 0x82eb4255, 0x020059e4, 0x0000b47b, 0x534f9015, 0x8297322f, 0x0200a8b1, 0x45826c09, 0x6d63603c,
     0xeec67061, 0x02006d51, 0x0000e40e, 0x76638206, 0xa82b2074, 0x02009d07, 0x1f827018, 0x70665438, 0xf8776d67, 0x0200ab60, 0x00006815, 0x6167bc01,

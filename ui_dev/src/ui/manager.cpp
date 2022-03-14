@@ -56,7 +56,7 @@ namespace ui {
         return i + 1;
 
       // doesn't fit into max_lines lines
-      int last_line_pos = wrap.rfind('\n');
+      size_t last_line_pos = wrap.rfind('\n');
       auto last_line = TRIM_STR(wrap.substr(last_line_pos), ' ');
       last_line.erase(max_characters_per_line);
       last_line.replace(last_line.size() - 3, 3, "...");
@@ -84,7 +84,7 @@ namespace ui {
     constexpr float separator_y_size = 5;
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, (base_y + (option_y_size * (float)option_count)) + (bottom_bar_y_size + description_offset_y)), ImVec2(menu_width, separator_y_size), secondary_color.load()));
 
-    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, (base_y + (option_y_size * (float)option_count)) + (bottom_bar_y_size + description_offset_y) + separator_y_size), ImVec2(menu_width, ((font_size + draw::Scale(6)) * lines)), primary_color.load()));
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, (base_y + (option_y_size * (float)option_count)) + (bottom_bar_y_size + description_offset_y) + separator_y_size), ImVec2(menu_width, ((font_size + draw::Scale(6)) * (float)lines)), primary_color.load()));
     draw_list_->AddCommand(DrawTextLeft(base_y + (((option_y_size * (float)option_count) + bottom_bar_y_size) + (description_offset_y + separator_y_size) + 6.f), text_color.load(), description, false));
   }
 
@@ -168,7 +168,7 @@ namespace ui {
       } else if (previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
         smooth_scrolling_reset = true;
       }
-      previous_selected_option_ = option_idx;
+      previous_selected_option_ = (int)option_idx;
 
       DrawScroller(base_y + (option_y_size * (float)option_pos));
 
@@ -217,7 +217,7 @@ namespace ui {
     DrawHeader();
     DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption() + 1, cur_sub->GetOptionCount());
     DrawBottomBar(cur_sub->GetOptionCount());
-    DrawScrollBar(cur_sub->GetOptionCount(), cur_sub->GetSelectedOption());
+    DrawScrollBar(cur_sub->GetOptionCount(), (int)cur_sub->GetSelectedOption());
 
     std::size_t draw_options_from = 0;
     std::size_t draw_options_till = cur_sub->GetOptionCount() > max_drawn_options ? max_drawn_options : cur_sub->GetOptionCount();

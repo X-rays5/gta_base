@@ -17,7 +17,7 @@ namespace ui {
     public:
       using constructor_cb = void(*)(Submenu *);
 
-      explicit Submenu(std::string name, Submenus submenu_id, constructor_cb cb) : name_(std::move(name)), submenu_id_(submenu_id) {
+      explicit Submenu(std::string name, Submenus submenu_id, constructor_cb cb) : name_(std::move(name)) {
         cb(this);
       }
 
@@ -76,7 +76,6 @@ namespace ui {
       std::string name_{};
       std::vector<std::shared_ptr<option::BaseOption>> options_;
       std::int64_t selected_option_ = 0;
-      Submenus submenu_id_;
     };
   }
 }
