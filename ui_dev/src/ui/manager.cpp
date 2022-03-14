@@ -106,17 +106,40 @@ namespace ui {
     // TODO: draw some arrows pointing up and down
   }
 
-  inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count) {
-    // TODO: separate the scroller from this and make a scrolling animation
+  // scale number based of fps
+  inline float ScaleFps(float number) {
+    return number * (144.f / ImGui::GetIO().Framerate);
+  }
 
+  // FIXME: with the current implementation this works better the higher the fps
+  // should correct this to something better some time
+  inline void Manager::DrawScroller(float target_pos) {
+    if (current_pos_ == -1.f)
+      current_pos_ = target_pos;
+
+    if (current_pos_ < target_pos) {
+      current_pos_ += ScaleFps(scroller_speed_);
+      if (current_pos_ > target_pos)
+        current_pos_ = target_pos;
+    } else if (current_pos_ > target_pos) {
+      current_pos_ -= ScaleFps(scroller_speed_);
+      if (current_pos_ < target_pos)
+        current_pos_ = target_pos;
+    }
+
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, current_pos_), ImVec2(menu_width, option_y_size), scroller_color.load()));
+  }
+
+  inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count) {
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)option_pos)), ImVec2(menu_width, option_y_size), primary_color.load()));
     if (selected) {
-      draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)option_pos)), ImVec2(menu_width, option_y_size), scroller_color.load()));
+      DrawScroller(base_y + (option_y_size * (float)option_pos));
+
       draw_list_->AddCommand(DrawTextLeft(base_y + (option_y_size * (float)option_pos), selected_text_color.load(), option->GetName()));
 
       // TODO: check if icon or text should be drawn on the right
       draw_list_->AddCommand(DrawTextRight(base_y + (option_y_size * (float)option_pos), selected_text_color.load(), option->GetRightText()));
     } else {
-      draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)option_pos)), ImVec2(menu_width, option_y_size), primary_color.load()));
       draw_list_->AddCommand(DrawTextLeft(base_y + (option_y_size * (float)option_pos), text_color.load(), option->GetName()));
 
       // TODO: check if icon or text should be drawn on the right
