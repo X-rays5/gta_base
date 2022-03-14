@@ -107,11 +107,12 @@ namespace ui {
     std::shared_ptr<TimedInput> input_return_;
     std::shared_ptr<TimedInput> input_back_;
 
-    bool smooth_scrolling_reset = false;
     float smooth_scrolling_speed = 5;
     int previous_selected_option_ = -1;
 
+    bool scroller_reset_ = false;
     float scroller_current_pos_ = -1.f;
+    bool scrollbar_reset_ = false;
     float scrollbar_current_pos_ = -1.f;
   private:
     inline draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
@@ -125,6 +126,10 @@ namespace ui {
     inline void DrawScroller(float target_pos);
     inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
 
+    inline void ResetSmoothScrolling() {
+      scroller_reset_ = true;
+      scrollbar_reset_ = true;
+    }
   };
   inline std::unique_ptr<Manager> kMANAGER;
 }

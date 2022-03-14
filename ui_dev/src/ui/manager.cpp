@@ -112,8 +112,8 @@ namespace ui {
   }
 
   inline void Manager::DrawScrollBarScroller(float target_pos, float scroller_y_size) {
-    if (scroller_current_pos_ == -1.f || smooth_scrolling_reset) {
-      smooth_scrolling_reset = false;
+    if (scroller_current_pos_ == -1.f || scrollbar_reset_) {
+      scrollbar_reset_ = false;
       scrollbar_current_pos_ = target_pos;
     }
 
@@ -141,9 +141,9 @@ namespace ui {
   }
 
   inline void Manager::DrawScroller(float target_pos) {
-    if (scroller_current_pos_ == -1.f || smooth_scrolling_reset){
-     smooth_scrolling_reset = false;
-      scroller_current_pos_ = target_pos;
+    if (scroller_current_pos_ == -1.f || scroller_reset_){
+     scroller_reset_ = false;
+     scroller_current_pos_ = target_pos;
     }
 
     if (scroller_current_pos_ < target_pos) {
@@ -164,9 +164,9 @@ namespace ui {
     if (selected) {
       std::cout << "prev: " << previous_selected_option_ << " current: " << option_idx << " total option: " << sub_option_count - 1 << std::endl;
       if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1)) {
-        smooth_scrolling_reset = true;
+        ResetSmoothScrolling();
       } else if (previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
-        smooth_scrolling_reset = true;
+        ResetSmoothScrolling();
       }
       previous_selected_option_ = (int)option_idx;
 
@@ -205,12 +205,12 @@ namespace ui {
     } else if (input_return_->Get()) {
       cur_sub->HandleKey(components::KeyInput::kReturn);
       cur_sub = submenus_stack_.top();
-      smooth_scrolling_reset = true;
+      ResetSmoothScrolling();
     } else if (input_back_->Get()) {
       if (submenus_stack_.size() > 1) {
         submenus_stack_.pop();
         cur_sub = submenus_stack_.top();
-        smooth_scrolling_reset = true;
+        ResetSmoothScrolling();
       }
     }
 
