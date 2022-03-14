@@ -142,16 +142,16 @@ namespace ui {
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, current_pos_), ImVec2(menu_width, option_y_size), scroller_color.load()));
   }
 
-  inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count) {
+  inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)option_pos)), ImVec2(menu_width, option_y_size), primary_color.load()));
     if (selected) {
-      std::cout << "prev_pos: " << previous_selected_option_ << " current_pos: " << option_pos << " total: " << sub_option_count - 1 << std::endl;
-      if (previous_selected_option_ == 0 && option_pos == (sub_option_count - 1)) {
+      std::cout << "prev: " << previous_selected_option_ << " current: " << option_idx << " total option: " << sub_option_count - 1 << std::endl;
+      if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1)) {
         scroller_reset_ = true;
-      } else if (previous_selected_option_ == (sub_option_count - 1) && option_pos == 0) {
+      } else if (previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
         scroller_reset_ = true;
       }
-      previous_selected_option_ = option_pos;
+      previous_selected_option_ = option_idx;
 
       DrawScroller(base_y + (option_y_size * (float)option_pos));
 
@@ -210,7 +210,7 @@ namespace ui {
     }
 
     for (int i = 0; draw_options_from < draw_options_till; draw_options_from++) {
-      DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i, cur_sub->GetOptionCount());
+      DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i, cur_sub->GetOptionCount(), draw_options_from);
 
       i += 1;
     }

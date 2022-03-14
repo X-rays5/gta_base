@@ -109,7 +109,7 @@ namespace ui {
 
     double last_scroller_update_ = 0.0;
     float current_pos_ = -1.f;
-    float scroller_speed_ = 10.f;
+    float scroller_speed_ = option_y_size.load() / 8.f;
     bool scroller_reset_ = false;
     int previous_selected_option_ = -1;
   private:
@@ -121,7 +121,7 @@ namespace ui {
     inline void DrawBottomBar(size_t option_count);
     inline void DrawScrollBar(size_t option_count, int current_option) const;
     inline void DrawScroller(float target_pos);
-    inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count);
+    inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
 
   };
   inline std::unique_ptr<Manager> kMANAGER;
