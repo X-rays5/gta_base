@@ -118,11 +118,11 @@ namespace ui {
     }
 
     if (scrollbar_current_pos_ < target_pos) {
-      scrollbar_current_pos_ += ScaleFps(smooth_scrolling_speed);
+      scrollbar_current_pos_ += ScaleFps(scrollbar_speed_);
       if (scrollbar_current_pos_ > target_pos)
         scrollbar_current_pos_ = target_pos;
     } else if (scrollbar_current_pos_ > target_pos) {
-      scrollbar_current_pos_ -= ScaleFps(smooth_scrolling_speed);
+      scrollbar_current_pos_ -= ScaleFps(scrollbar_speed_);
       if (scrollbar_current_pos_ < target_pos)
         scrollbar_current_pos_ = target_pos;
     }
@@ -130,7 +130,7 @@ namespace ui {
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x + (menu_width + scrollbar_offset), scrollbar_current_pos_), ImVec2(scrollbar_width, scroller_y_size), secondary_color.load()));
   }
 
-  void Manager::DrawScrollBar(size_t option_count, int current_option) {
+  inline void Manager::DrawScrollBar(size_t option_count, int current_option) {
     size_t options = option_count > max_drawn_options ? max_drawn_options : option_count;
     float scrollbar_y_area = base_y + (option_y_size * (float)options) - base_y;
 
@@ -140,29 +140,30 @@ namespace ui {
     DrawScrollBarScroller(base_y + ((float)current_option * scroller_y_size), scroller_y_size);
   }
 
-  inline void Manager::DrawScroller(float target_pos) {
+  inline bool Manager::DrawScroller(float target_pos) {
     if (scroller_current_pos_ == -1.f || scroller_reset_){
      scroller_reset_ = false;
      scroller_current_pos_ = target_pos;
     }
 
     if (scroller_current_pos_ < target_pos) {
-      scroller_current_pos_ += ScaleFps(smooth_scrolling_speed);
+      scroller_current_pos_ += ScaleFps(scroller_speed_);
       if (scroller_current_pos_ > target_pos)
         scroller_current_pos_ = target_pos;
     } else if (scroller_current_pos_ > target_pos) {
-      scroller_current_pos_ -= ScaleFps(smooth_scrolling_speed);
+      scroller_current_pos_ -= ScaleFps(scroller_speed_);
       if (scroller_current_pos_ < target_pos)
         scroller_current_pos_ = target_pos;
     }
 
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, scroller_current_pos_), ImVec2(menu_width, option_y_size), scroller_color.load()));
+
+    // check if halfway there
+    return (scroller_current_pos_ > (target_pos - (option_y_size / 2.f)) && scroller_current_pos_ < (target_pos + (option_y_size / 2.f)));
   }
 
   inline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
-    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)option_pos)), ImVec2(menu_width, option_y_size), primary_color.load()));
     if (selected) {
-      std::cout << "prev: " << previous_selected_option_ << " current: " << option_idx << " total option: " << sub_option_count - 1 << std::endl;
       if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1)) {
         ResetSmoothScrolling();
       } else if (previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
@@ -172,10 +173,11 @@ namespace ui {
 
       DrawScroller(base_y + (option_y_size * (float)option_pos));
 
-      draw_list_->AddCommand(DrawTextLeft(base_y + (option_y_size * (float)option_pos), selected_text_color.load(), option->GetName()));
+      auto color = DrawScroller(base_y + (option_y_size * (float)option_pos)) ? selected_text_color.load() : text_color.load();
+      draw_list_->AddCommand(DrawTextLeft(base_y + (option_y_size * (float)option_pos), color, option->GetName()));
 
       // TODO: check if icon or text should be drawn on the right
-      draw_list_->AddCommand(DrawTextRight(base_y + (option_y_size * (float)option_pos), selected_text_color.load(), option->GetRightText()));
+      draw_list_->AddCommand(DrawTextRight(base_y + (option_y_size * (float)option_pos), color, option->GetRightText()));
     } else {
       draw_list_->AddCommand(DrawTextLeft(base_y + (option_y_size * (float)option_pos), text_color.load(), option->GetName()));
 
@@ -226,6 +228,8 @@ namespace ui {
       draw_options_till = cur_sub->GetSelectedOption() + 1;
     }
 
+    size_t option_draw_count = draw_options_till - draw_options_from;
+    draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y), ImVec2(menu_width, (option_draw_count * option_y_size)), primary_color.load()));
     for (int i = 0; draw_options_from < draw_options_till; draw_options_from++) {
       DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i, cur_sub->GetOptionCount(), draw_options_from);
 
