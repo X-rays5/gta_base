@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include "manager.hpp"
 #include "components/option/executeoption.hpp"
 #include "components/option/submenuoption.hpp"
 

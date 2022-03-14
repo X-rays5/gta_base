@@ -150,6 +150,7 @@ namespace ui {
       ImU32 col_;
     };
 
+    // FIXME: add some system to keep calls to avoid ui flickering due to the script thread running slower then the rendering thread or vice versa
     class DrawList {
     public:
       template<typename T>
@@ -160,7 +161,7 @@ namespace ui {
 
       inline void Draw() {
         std::lock_guard lock(mtx_);
-        for (auto&& command : draw_commands_) {
+        for (auto& command : draw_commands_) {
           command->Draw();
         }
         draw_commands_.clear();
