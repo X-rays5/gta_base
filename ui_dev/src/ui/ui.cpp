@@ -7,6 +7,7 @@
 #include "components/option/submenuoption.hpp"
 
 namespace ui {
+  bool ui_draw_tick = false;
   bool initialized = false;
   void Init() {
     if (initialized) {
@@ -100,7 +101,18 @@ namespace ui {
     if (!initialized)
       Init();
 
-    kMANAGER->Draw();
+    // TODO: this should be using a thread pool since this is slow
+    if (!ui_draw_tick) {
+      ui_draw_tick = true;
+      std::cout << "draw tick" << std::endl;
+
+      std::thread([&]{
+        kMANAGER->Draw();
+
+        ui_draw_tick = false;
+      }).detach();
+    }
+
     kMANAGER->GetDrawList()->Draw();
   }
 }

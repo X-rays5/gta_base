@@ -37,7 +37,7 @@ namespace ui {
   class Manager {
   public:
     Manager() {
-      draw_list_ = std::make_shared<draw::DrawList>();
+      draw_list_ = std::make_shared<draw::DrawList>(2);
       input_left_ = std::make_shared<TimedInput>(VK_LEFT, std::chrono::milliseconds(140));
       input_right_ = std::make_shared<TimedInput>(VK_RIGHT, std::chrono::milliseconds(140));
       input_up_ = std::make_shared<TimedInput>(VK_UP, std::chrono::milliseconds(120));

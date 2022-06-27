@@ -150,26 +150,64 @@ namespace ui {
       ImU32 col_;
     };
 
-    // FIXME: add some system to keep calls to avoid ui flickering due to the script thread running slower then the rendering thread or vice versa
+
     class DrawList {
     public:
+      explicit DrawList(std::size_t draw_command_buffer_count) {
+        assert(draw_command_buffer_count >= 2);
+
+        for (std::size_t i = 0; i < draw_command_buffer_count; ++i) {
+          draw_commands_.push_back(draw_list_t{});
+        }
+        draw_commands_.shrink_to_fit();
+      }
+
       template<typename T>
       inline void AddCommand(T command) {
-        std::lock_guard lock(mtx_);
-        draw_commands_.push_back(std::make_shared<T>(std::forward<T>(command)));
+        mtx_.lock();
+        draw_commands_[cur_write_target_].push_back(std::make_shared<T>(std::forward<T>(command)));
+        mtx_.unlock();
       }
 
       inline void Draw() {
-        std::lock_guard lock(mtx_);
-        for (auto& command : draw_commands_) {
+        mtx_.lock();
+        for (auto& command : draw_commands_[cur_render_target_]) {
           command->Draw();
         }
-        draw_commands_.clear();
+        mtx_.unlock();
+      }
+
+      __forceinline void NextTargets() {
+        mtx_.lock();
+        NextWriteTarget();
+        NextRenderTarget();
+        mtx_.unlock();
       }
 
     private:
+      using draw_list_t = std::vector<std::shared_ptr<BaseDrawCommand>>;
+      using draw_commands_t = std::vector<draw_list_t>;
+
+
       std::mutex mtx_;
-      std::vector<std::shared_ptr<BaseDrawCommand>> draw_commands_;
+      std::size_t cur_write_target_ = 1;
+      std::size_t cur_render_target_ = 0;
+      draw_commands_t draw_commands_;
+
+    private:
+      __forceinline void NextRenderTarget() {
+        cur_render_target_ += 1;
+        if (cur_render_target_ >= draw_commands_.size())
+          cur_render_target_ = 0;
+      }
+
+      __forceinline void NextWriteTarget() {
+        cur_write_target_ += 1;
+        if (cur_write_target_ >= draw_commands_.size())
+          cur_write_target_ = 0;
+
+        draw_commands_[cur_write_target_].clear();
+      }
     };
   }
 }

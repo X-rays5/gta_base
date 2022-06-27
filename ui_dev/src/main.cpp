@@ -102,8 +102,8 @@ int main(int, char**) {
     kDEVICE_CONTEXT->ClearRenderTargetView(kRENDER_TARGET_VIEW, clear_color_with_alpha);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-    //kSWAPCHAIN->Present(1, 0); // Present with vsync
-    kSWAPCHAIN->Present(0, 0); // Present without vsync
+    kSWAPCHAIN->Present(1, 0); // Present with vsync
+    //kSWAPCHAIN->Present(0, 0); // Present without vsync
   }
 
   // Cleanup

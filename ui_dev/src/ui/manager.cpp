@@ -107,8 +107,6 @@ namespace ui {
 
     draw_list_->AddCommand(draw::Rect(ImVec2(base_x, base_y + (option_y_size * (float)options)), ImVec2(menu_width, bottom_bar_y_size), primary_color.load()));
     draw_list_->AddCommand(DrawTextRight(base_y + (option_y_size * (float)options), text_color.load(), "v1.0.0"));
-
-    // TODO: draw some arrows pointing up and down
   }
 
   inline void Manager::DrawScrollBarScroller(float target_pos, float scroller_y_size) {
@@ -235,5 +233,7 @@ namespace ui {
 
       i += 1;
     }
+
+    draw_list_->NextTargets();
   }
 }
