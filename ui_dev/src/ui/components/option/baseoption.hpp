@@ -18,6 +18,7 @@ namespace ui {
         virtual std::string GetName() {
           return name_;
         }
+
         virtual void SetName(std::string name) {
           name_ = std::move(name);
         }
@@ -25,6 +26,7 @@ namespace ui {
         virtual std::string GetDescription() {
           return description_;
         }
+
         virtual void SetDescription(std::string description) {
           description_ = std::move(description);
         }
@@ -32,12 +34,15 @@ namespace ui {
         virtual std::string GetRightText() {
           return right_text_;
         }
+
         virtual void SetRightText(std::string rightText) {
           right_text_ = std::move(rightText);
         }
+
         virtual std::filesystem::path GetIconPath() {
           return icon_path_;
         }
+
         virtual void SetIconPath(const std::filesystem::path& iconPath) {
           icon_path_ = iconPath;
         }

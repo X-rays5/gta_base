@@ -8,6 +8,8 @@
 #define GTA_BASE_EXECUTEOPTION_HPP
 #include "baseoption.hpp"
 
+#define UI_EXECUTE_OPTION_ACTION_AND_ID(action) action, #action
+
 namespace ui {
   namespace components {
     namespace option {
@@ -15,17 +17,18 @@ namespace ui {
       public:
         using action_t = void(*)();
 
-        explicit ExecuteOption(const std::string& name, const std::string& description = "", action_t action = []{}) {
+        explicit ExecuteOption(const std::string& name, const std::string& description = "", action_t action = []{}, const std::string& action_id = "") {
           name_ = name;
           description_ = description;
           action_ = action;
+          action_id_ = action_id;
         }
 
         void HandleKey(KeyInput key) final {
           if (!action_)
             return;
 
-          if (key == KeyInput::kReturn)
+          if (key == KeyInput::kReturn || key == KeyInput::kHotkey)
             action_();
         }
 
@@ -34,12 +37,15 @@ namespace ui {
             return right_text_.empty();
           } else if (flag == OptionFlag::kRightIcon) {
             return icon_path_.string().empty();
+          } else if (flag == OptionFlag::kHotkeyable) {
+            return true;
           } else {
-            return false;
+              return false;
           }
         }
       private:
         action_t action_;
+        std::string action_id_;
       };
     }
   }

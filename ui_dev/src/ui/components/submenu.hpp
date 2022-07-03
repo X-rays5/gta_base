@@ -21,23 +21,23 @@ namespace ui {
         cb(this);
       }
 
-      [[nodiscard]] std::string GetName() const {
+      [[nodiscard]] inline std::string GetName() const {
         return name_;
       };
 
-      void SetName(std::string name) {
+      inline void SetName(std::string name) {
         name_ = std::move(name);
       };
 
-      std::shared_ptr<option::BaseOption> GetOption(size_t index) {
+      inline std::shared_ptr<option::BaseOption> GetOption(size_t index) {
         return options_[index];
       };
 
-      size_t GetOptionCount() {
+      inline size_t GetOptionCount() {
         return options_.size();
       };
 
-      [[nodiscard]] size_t GetSelectedOption() const {
+      [[nodiscard]] inline size_t GetSelectedOption() const {
         return selected_option_;
       };
 
@@ -50,8 +50,11 @@ namespace ui {
       };
 
       template<typename T>
-      void AddOption(T option) {
-        options_.push_back(std::make_shared<T>(std::forward<T>(option)));
+      std::shared_ptr<T> AddOption(T option) {
+        auto tmp = std::make_shared<T>(std::forward<T>(option));
+        options_.push_back(tmp);
+
+        return tmp;
       }
 
       void HandleKey(KeyInput key) {

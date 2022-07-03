@@ -10,8 +10,14 @@ file(GLOB IMGUI_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/*.cpp"
 )
 
-add_executable(${PROJECT_NAME} ${IMGUI_SOURCES} src/main.cpp src/ui/ui.cpp src/ui/ui.hpp src/ui/manager.cpp src/ui/manager.hpp src/ui/components/option/executeoption.hpp src/ui/draw.hpp src/ui/components/option/baseoption.hpp src/ui/components/submenu.hpp src/ui/components/enums.hpp src/ui/fonts/roboto_regular.hpp src/ui/components/option/submenuoption.hpp)
+include(FetchContent)
 
+FetchContent_Declare(robin_hood GIT_REPOSITORY https://github.com/martinus/robin-hood-hashing.git GIT_TAG bd2f7194ae5a52337a9dcaf06edd87338ed1d754)
+FetchContent_MakeAvailable(robin_hood)
+
+add_executable(${PROJECT_NAME} ${IMGUI_SOURCES} src/main.cpp src/ui/ui.cpp src/ui/ui.hpp src/ui/manager.cpp src/ui/manager.hpp src/ui/components/option/executeoption.hpp src/ui/components/option/baseoption.hpp src/ui/components/submenu.hpp src/ui/components/enums.hpp src/ui/fonts/roboto_regular.hpp src/ui/components/option/submenuoption.hpp src/ui/notification/notification.cpp src/ui/notification/notification.hpp src/ui/translate/translate.cpp src/ui/translate/translate.hpp src/ui/util/timedinput.cpp src/ui/util/timedinput.hpp src/ui/util/draw.hpp src/ui/util/util.cpp src/ui/util/util.hpp)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${robin_hood_SOURCE_DIR}/src/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/freetype/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
 

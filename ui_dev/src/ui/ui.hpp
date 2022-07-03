@@ -6,7 +6,6 @@
 
 #ifndef GTA_BASE_UI_HPP
 #define GTA_BASE_UI_HPP
-#include "manager.hpp"
 
 namespace ui {
   void Tick();

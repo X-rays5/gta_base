@@ -7,7 +7,7 @@
 #ifndef GTA_BASE_ENUMS_HPP
 #define GTA_BASE_ENUMS_HPP
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <Windows.h>
 
 #define _ENUMS_HAS_FLAG(flag, bit) ((flag & bit) == flag)
 
@@ -25,6 +25,7 @@ namespace ui {
       kRightIcon,
       kRightText,
       kSubmenuLink,
+      kHotkeyable,
     };
     DEFINE_ENUM_FLAG_OPERATORS(OptionFlag)
 
@@ -35,6 +36,7 @@ namespace ui {
       kRight,
       kReturn,
       kBackspace,
+      kHotkey,
     };
   }// namespace components
 }// namespace ui

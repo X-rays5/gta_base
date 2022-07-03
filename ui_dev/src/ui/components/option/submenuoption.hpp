@@ -7,7 +7,6 @@
 #ifndef GTA_BASE_SUBMENUOPTION_HPP
 #define GTA_BASE_SUBMENUOPTION_HPP
 #include "baseoption.hpp"
-#include "../../manager.hpp"
 
 namespace ui {
   namespace components {
@@ -30,10 +29,13 @@ namespace ui {
             if (action_)
               action_();
           }
+
+          if (key == KeyInput::kHotkey && action_)
+            action_();
         }
 
         bool HasFlag(OptionFlag flag) final {
-          return flag == OptionFlag::kSubmenuLink || flag == OptionFlag::kRightText;
+          return flag == OptionFlag::kSubmenuLink || flag == OptionFlag::kRightText || flag == OptionFlag::kHotkeyable;
         }
 
       private:
