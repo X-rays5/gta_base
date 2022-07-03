@@ -1,9 +1,0 @@
-[submodule "base/vendor/discord-rpc"]
-	path = base/vendor/discord-rpc
-	url = https://github.com/X-rays5/discord-rpc.git
-[submodule "base/vendor/spdlog"]
-	path = base/vendor/spdlog
-	url = https://github.com/X-rays5/spdlog.git
-[submodule "base/vendor/minhook"]
-	path = base/vendor/minhook
-	url = https://github.com/X-rays5/minhook.git

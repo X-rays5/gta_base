@@ -7,7 +7,7 @@
 #ifndef GTABASE_LOGGER_HPP
 #define GTABASE_LOGGER_HPP
 #include <memory>
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
 namespace gta_base {
   class Logger {
