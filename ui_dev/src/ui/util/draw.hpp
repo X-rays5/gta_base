@@ -9,6 +9,7 @@
 #include <memory>
 #include <iostream>
 #include <mutex>
+#include <cassert>
 #include <d3d11.h>
 #include "imgui.h"
 

@@ -15,8 +15,8 @@ namespace ui {
     draw_list_ = std::make_shared<util::draw::DrawList>(2);
     input_left_ = std::make_unique<util::TimedInput>(VK_LEFT, 140);
     input_right_ = std::make_unique<util::TimedInput>(VK_RIGHT, 140);
-    input_up_ = std::make_unique<util::TimedInput>(VK_UP, 120);
-    input_down_ = std::make_unique<util::TimedInput>(VK_DOWN, 120);
+    input_up_ = std::make_unique<util::TimedInput>(VK_UP, 100);
+    input_down_ = std::make_unique<util::TimedInput>(VK_DOWN, 100);
     input_return_ = std::make_unique<util::TimedInput>(VK_RETURN, 300);
     input_back_ = std::make_unique<util::TimedInput>(VK_BACK, 300);
 
@@ -71,11 +71,11 @@ namespace ui {
     if (scrollbar_current_pos_ < target_pos) {
       scrollbar_current_pos_ += util::draw::ScaleYFromScreen(ScaleFps(scrollbar_speed_));
       if (scrollbar_current_pos_ > target_pos)
-        scrollbar_current_pos_ = target_pos;
+        scrollbar_reset_ = true;
     } else if (scrollbar_current_pos_ > target_pos) {
       scrollbar_current_pos_ -= util::draw::ScaleYFromScreen(ScaleFps(scrollbar_speed_));
       if (scrollbar_current_pos_ < target_pos)
-        scrollbar_current_pos_ = target_pos;
+        scrollbar_reset_ = true;
     }
 
     draw_list_->AddCommand(util::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color.load()));
@@ -118,11 +118,11 @@ namespace ui {
     if (scroller_current_pos_ < target_pos) {
       scroller_current_pos_ += util::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
       if (scroller_current_pos_ > target_pos)
-        scroller_current_pos_ = target_pos;
+        scroller_reset_ = true;
     } else if (scroller_current_pos_ > target_pos) {
       scroller_current_pos_ -= util::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
       if (scroller_current_pos_ < target_pos)
-        scroller_current_pos_ = target_pos;
+        scroller_reset_ = true;
     }
 
     draw_list_->AddCommand(util::draw::Rect({x_base, scroller_current_pos_}, {x_size, y_size_option}, scroller_color.load()));

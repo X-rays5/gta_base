@@ -32,7 +32,7 @@
 
 // FIXME: cfg.OversampleH, OversampleV are not supported (but perhaps not so necessary with this rasterizer).
 
-#include "imgui_freetype.h"
+#include "misc/freetype/imgui_freetype.h"
 #include "imgui_internal.h"     // ImMin,ImMax,ImFontAtlasBuild*,
 #include <stdint.h>
 #include <ft2build.h>
@@ -368,7 +368,7 @@ struct ImFontBuildSrcGlyphFT
     uint32_t            Codepoint;
     unsigned int*       BitmapData;         // Point within one of the dst_tmp_bitmap_buffers[] array
 
-    ImFontBuildSrcGlyphFT() { memset(this, 0, sizeof(*this)); }
+    ImFontBuildSrcGlyphFT() { memset((void*)this, 0, sizeof(*this)); }
 };
 
 struct ImFontBuildSrcDataFT

@@ -48,7 +48,7 @@ namespace ui {
 
     void Draw();
   public:
-    std::atomic<float> x_size = 0.2f;
+    std::atomic<float> x_size = 0.15f;
     std::atomic<float> x_base = 0.025f;
     std::atomic<float> x_size_scrollbar = 0.005f;
     std::atomic<float> y_size_top_bar = 0.025f;
@@ -66,7 +66,7 @@ namespace ui {
   private:
     float y_base = 0.185f;
     int max_drawn_options = 14;
-    std::atomic<float> scrollbar_offset = 0.01f;
+    float scrollbar_offset = 0.002f;
 
     using submenu_ptr_t = std::shared_ptr<components::Submenu>;
 
@@ -87,8 +87,8 @@ namespace ui {
     float scroller_speed_ = 2.5f;
     float scroller_current_pos_ = -1.f;
     bool scrollbar_reset_ = false;
-    float scrollbar_speed_ = 2.5f;
-    float scrollbar_current_pos_ = -1.f;
+    float scrollbar_speed_ = scroller_speed_;
+    float scrollbar_current_pos_ = scroller_current_pos_;
   private:
     inline util::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
     inline util::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;
