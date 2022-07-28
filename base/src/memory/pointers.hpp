@@ -9,6 +9,7 @@
 #include <memory>
 #include "sigscanner.hpp"
 #include "../rage/enums.hpp"
+#include "../rage/classes.hpp"
 
 namespace gta_base {
   namespace memory {
@@ -17,6 +18,7 @@ namespace gta_base {
       Pointers();
 
       enum rage::GameState* game_state_{};
+      CPedFactory** ped_factory_{};
     };
     inline std::unique_ptr<Pointers> kPOINTERS;
   }

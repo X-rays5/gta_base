@@ -4,7 +4,7 @@
 
 #include <fstream>
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <Windows.h>
 #include "logger/logger.hpp"
 #include "common/common.hpp"
 #include "hooking/hooking.hpp"
@@ -47,6 +47,19 @@ void BaseMain() {
   LOG_INFO("Initialized");
   while (common::globals::running) {
     rpc::kDISCORD->Tick();
+
+    if (auto ped_factory = *memory::kPOINTERS->ped_factory_) {
+      auto ped = ped_factory->m_local_ped;
+      LOG_DEBUG("Player hp: {} armor: {}", ped->m_health, ped->m_armor);
+      if (ped->m_vehicle) {
+        auto vehicle = ped->m_vehicle;
+        LOG_DEBUG("Player vehicle model: {}", vehicle->m_model_info->m_model_type);
+      }
+      if (ped->m_weapon_manager->m_weapon_info) {
+        auto cur_wep = ped->m_weapon_manager->m_weapon_info;
+        LOG_DEBUG("Current weapon name: {}, range: {}", cur_wep->m_name, cur_wep->m_weapon_range);
+      }
+    }
 
     if (common::KeyState(VK_ESCAPE))
       common::globals::running = false;
