@@ -16,18 +16,18 @@
 namespace ui {
   namespace util {
     namespace draw {
-      __forceinline ImDrawList* GetDrawList() {
+      inline ImDrawList* GetDrawList() {
         return ImGui::GetForegroundDrawList();
       }
 
-      __forceinline ImVec2 GetSize(ImVec2 pos, ImVec2 size) {
+      inline ImVec2 GetSize(ImVec2 pos, ImVec2 size) {
         return {pos.x + size.x, pos.y + size.y};
       }
 
       // scale float in range [0, 1] to [0, screen_size]
-      __forceinline ImVec2 ScaleToScreen(ImVec2 xy) {
-        if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) { // best to just throw here since this should never happen
-          throw std::out_of_range("ScaleToScreen: xy out of bounds");
+      inline ImVec2 ScaleToScreen(ImVec2 xy) {
+        if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
+          std::cout << "ScaleToScreen: xy out of range: " << xy.x << " " << xy.y << std::endl;
         }
 
         ImVec2 cur_res = ImGui::GetIO().DisplaySize;
@@ -39,11 +39,14 @@ namespace ui {
       }
 
       // scale float in range [0, screen_size] to [0, 1]
-      __forceinline ImVec2 ScaleFromScreen(ImVec2 xy) {
+      inline ImVec2 ScaleFromScreen(ImVec2 xy) {
         ImVec2 cur_res = ImGui::GetIO().DisplaySize;
+        if (cur_res.x == 0 || cur_res.y == 0) {
+          return {}; // Happens when the window is minimized.
+        }
 
-        if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) { // best to just throw here since this should never happen
-          throw std::out_of_range("ScaleFromScreen: xy out of bounds");
+        if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
+          std::cout << "ScaleFromScreen: xy out of range: " << xy.x << " " << xy.y << std::endl;
         }
 
         xy.x = (xy.x / cur_res.x);
@@ -52,46 +55,101 @@ namespace ui {
         return xy;
       }
 
-      __forceinline float ScaleXToScreen(float x) {
+      inline float ScaleXToScreen(float x) {
         return ScaleToScreen({x, 0}).x;
       }
 
-      __forceinline float ScaleXFromScreen(float x) {
+      inline float ScaleXFromScreen(float x) {
         return ScaleFromScreen({x, 0}).x;
       }
 
-      __forceinline float ScaleYToScreen(float y) {
+      inline float ScaleYToScreen(float y) {
         return ScaleToScreen({0, y}).y;
       }
 
-      __forceinline float ScaleYFromScreen(float y) {
+      inline float ScaleYFromScreen(float y) {
         return ScaleFromScreen({0, y}).y;
       }
 
-      __forceinline float ScaleFont(float size) {
+      inline float ScaleFont(float size) {
         return ScaleYToScreen(size);
       }
 
-      __forceinline ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
+      inline ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
         if (!font)
           return {0,0};
 
         ImVec2 text_size = font->CalcTextSizeA(ScaleFont(font_size), ImGui::GetIO().DisplaySize.x, wrap_width, text.c_str());
         text_size.x = ((float)(int)(text_size.x + 0.99999f));
 
-        return ScaleFromScreen(text_size);
+        return text_size;
+      }
+
+      inline ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
+        return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
+      }
+
+      // FIXME: Make it work with non monospaced fonts.
+      // 2 lines take 0.01 ms in debug so it's fine for now
+      inline std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::uint32_t max_lines) {
+        auto real_max_x = ScaleXToScreen(max_x);
+
+        if (str.empty() || CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
+          return 1; // Wrapping is not needed so just return that there is 1 line
+        }
+
+        auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
+        auto chars_per_line = (std::uint32_t)(real_max_x / char_x_size);
+
+        auto* lines = new std::string[max_lines];
+        std::uint32_t line_count = 0;
+        while (!str.empty()) {
+          if (line_count >= max_lines) {
+            auto last_line = lines[max_lines - 1];
+            last_line.replace(last_line.end() - 3, last_line.end(), "...");
+            lines[max_lines - 1] = last_line;
+            break;
+          }
+
+          std::size_t pos = str.rfind(' ', chars_per_line);
+          if (pos != std::string::npos) {
+            lines[line_count] = str.substr(0, pos + 1);
+            str = str.substr(pos + 1);
+          } else {
+            lines[line_count] = str.substr(0, chars_per_line);
+            str = str.substr(chars_per_line);
+          }
+          line_count += 1;
+
+          if (CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
+            break;
+          }
+        }
+
+        str.clear();
+        for (std::uint32_t i = 0; i < line_count; i++) {
+          auto line = lines[i];
+          while (line.back() == ' ') {
+            line.pop_back();
+          }
+          str += line;
+          str += '\n';
+        }
+        delete[] lines;
+
+        return line_count;
       }
 
       class BaseDrawCommand {
       public:
-        virtual __forceinline void Draw() = 0;
+        virtual inline void Draw() = 0;
       };
 
       class Rect : public BaseDrawCommand{
       public:
-        __forceinline Rect(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
+        inline Rect(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
 
-        __forceinline void Draw() final {
+        inline void Draw() final {
           GetDrawList()->AddRectFilled(ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), color_);
         }
 
@@ -103,11 +161,11 @@ namespace ui {
 
       class Text : public BaseDrawCommand {
       public:
-        __forceinline Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font)
+        inline Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font)
         {
         }
 
-        __forceinline void Draw() final {
+        inline void Draw() final {
           if (right_align_) {
             if (!font_) {
               font_ = ImGui::GetFont();
@@ -140,11 +198,11 @@ namespace ui {
 
       class Image : public BaseDrawCommand {
       public:
-        __forceinline Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1), ImU32 col = IM_COL32_WHITE) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col)
+        inline Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1), ImU32 col = IM_COL32_WHITE) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col)
         {
         }
 
-        __forceinline void Draw() final {
+        inline void Draw() final {
           GetDrawList()->AddImage((void*)texture_, ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), uv_min_, uv_max_, col_);
         }
 
@@ -160,7 +218,7 @@ namespace ui {
 
       class DrawList {
       public:
-        __forceinline explicit DrawList(std::size_t draw_command_buffer_count) {
+        inline explicit DrawList(std::size_t draw_command_buffer_count) {
           assert(draw_command_buffer_count >= 2);
 
           for (std::size_t i = 0; i < draw_command_buffer_count; ++i) {
@@ -170,21 +228,21 @@ namespace ui {
         }
 
         template<typename T>
-        __forceinline void AddCommand(T command) {
+        inline void AddCommand(T command) {
           mtx_.lock();
           draw_commands_[cur_write_target_].push_back(std::make_shared<T>(std::forward<T>(command)));
           mtx_.unlock();
         }
-
-        __forceinline void Draw() {
+        
+        inline void Draw() {
           mtx_.lock();
           for (auto& command : draw_commands_[cur_render_target_]) {
             command->Draw();
           }
           mtx_.unlock();
         }
-
-        __forceinline void NextTargets() {
+        
+        inline void NextTargets() {
           mtx_.lock();
           NextRenderTarget();
           NextWriteTarget();
@@ -194,21 +252,20 @@ namespace ui {
       private:
         using draw_list_t = std::vector<std::shared_ptr<BaseDrawCommand>>;
         using draw_commands_t = std::vector<draw_list_t>;
-
-
+        
         std::mutex mtx_;
         std::size_t cur_write_target_ = 1;
         std::size_t cur_render_target_ = 0;
         draw_commands_t draw_commands_;
 
       private:
-        __forceinline void NextRenderTarget() {
+        inline void NextRenderTarget() {
           cur_render_target_ += 1;
           if (cur_render_target_ >= draw_commands_.size())
             cur_render_target_ = 0;
         }
 
-        __forceinline void NextWriteTarget() {
+        inline void NextWriteTarget() {
           cur_write_target_ += 1;
           if (cur_write_target_ >= draw_commands_.size())
             cur_write_target_ = 0;

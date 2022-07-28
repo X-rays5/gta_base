@@ -39,10 +39,10 @@ void BaseMain() {
 
   rpc::kDISCORD = std::make_unique<rpc::Discord>();
 
-  std::thread([]{
+  auto scripting_thread = std::thread([]{
     while(common::globals::running)
       kTHREADS->Tick(threads::ThreadType::kScripting);
-  }).detach();
+  });
 
   LOG_INFO("Initialized");
   while (common::globals::running) {
@@ -53,7 +53,7 @@ void BaseMain() {
       LOG_DEBUG("Player hp: {} armor: {}", ped->m_health, ped->m_armor);
       if (ped->m_vehicle) {
         auto vehicle = ped->m_vehicle;
-        LOG_DEBUG("Player vehicle model: {}", vehicle->m_model_info->m_model_type);
+        LOG_DEBUG("Player vehicle model: {}", vehicle->m_model_info->m_model_hash);
       }
       if (ped->m_weapon_manager->m_weapon_info) {
         auto cur_wep = ped->m_weapon_manager->m_weapon_info;
@@ -69,6 +69,9 @@ void BaseMain() {
   LOG_INFO("Unloading...");
 
   rpc::kDISCORD.reset();
+
+  if (scripting_thread.joinable())
+    scripting_thread.join();
 
   kTHREADS.reset();
 

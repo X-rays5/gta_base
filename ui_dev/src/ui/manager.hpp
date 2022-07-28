@@ -50,11 +50,11 @@ namespace ui {
   public:
     std::atomic<float> x_size = 0.15f;
     std::atomic<float> x_base = 0.025f;
-    std::atomic<float> x_size_scrollbar = 0.005f;
+    std::atomic<float> x_size_scrollbar = 0.003f;
     std::atomic<float> y_size_top_bar = 0.025f;
     std::atomic<float> y_size_bottom_bar = y_size_top_bar.load();
     std::atomic<float> y_size_option = y_size_top_bar.load();
-    std::atomic<float> y_offset_description = 0.01f;
+    std::atomic<float> y_offset_description = 0.005f;
 
     std::atomic<ImColor> primary_color = ImColor(0,0,0);
     std::atomic<ImColor> secondary_color = ImColor(255,255,255);

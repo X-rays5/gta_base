@@ -23,15 +23,15 @@ namespace ui {
     kNOTIFICATIONS->Create();
 
     kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
-      sub->AddOption(components::option::SubmenuOption("Player", "a short description a short description\njust a bit too long", components::Submenus::Player));
-      sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description\nas you can see weep woop", components::Submenus::Settings));
+      sub->AddOption(components::option::SubmenuOption("Player", "a short description a short description just a bit too long", components::Submenus::Player));
+      sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
     });
 
     kMANAGER->AddSubmenu("Player", components::Submenus::Player, [](components::Submenu* sub){
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+      sub->AddOption(components::option::ExecuteOption("Hello World", "f", []{
         std::cout << "Hello World from the player submenu" << std::endl;
       }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+      sub->AddOption(components::option::ExecuteOption("Hello World", "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", []{
         std::cout << "Hello World from the player submenu" << std::endl;
       }));
       sub->AddOption(components::option::ExecuteOption("Hello World", "", []{

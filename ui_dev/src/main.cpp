@@ -8,8 +8,9 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
 #include <string>
+#include "iostream"
 #include "ui/ui.hpp"
-#include "ui/fonts/roboto_regular.hpp"
+#include "ui/fonts/roboto_mono.hpp"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -28,6 +29,18 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // Main code
 int main(int, char**) {
+  std::set_terminate([]{
+    try {
+      std::rethrow_exception(std::current_exception());
+    } catch (std::exception& e) {
+     std::cout << e.what() << std::endl;
+    } catch (...) {
+      std::cout << "Unknown exception thrown" << std::endl;
+    }
+
+    exit(EXIT_FAILURE);
+  });
+
   // Create application window
   //ImGui_ImplWin32_EnableDpiAwareness();
   WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, _T("ui_dev"), nullptr};
@@ -62,7 +75,7 @@ int main(int, char**) {
 
   // Our state
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-  auto roboto_regular = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_regular_compressed_data, roboto_regular_compressed_size, 36);
+  auto roboto_regular = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 36);
   if (!ImGui::GetIO().Fonts->IsBuilt())
     ImGui::GetIO().Fonts->Build();
 
@@ -102,8 +115,8 @@ int main(int, char**) {
     kDEVICE_CONTEXT->ClearRenderTargetView(kRENDER_TARGET_VIEW, clear_color_with_alpha);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-    kSWAPCHAIN->Present(1, 0); // Present with vsync
-    //kSWAPCHAIN->Present(0, 0); // Present without vsync
+    //kSWAPCHAIN->Present(1, 0); // Present with vsync
+    kSWAPCHAIN->Present(0, 0); // Present without vsync
   }
 
   // Cleanup

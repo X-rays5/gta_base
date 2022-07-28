@@ -12,7 +12,7 @@ namespace ui {
   }
 
   Manager::Manager() {
-    draw_list_ = std::make_shared<util::draw::DrawList>(2);
+    draw_list_ = std::make_shared<util::draw::DrawList>(3);
     input_left_ = std::make_unique<util::TimedInput>(VK_LEFT, 140);
     input_right_ = std::make_unique<util::TimedInput>(VK_RIGHT, 140);
     input_up_ = std::make_unique<util::TimedInput>(VK_UP, 100);
@@ -130,16 +130,17 @@ namespace ui {
     return (scroller_current_pos_ > (target_pos - (y_size_option / 2.f)) && scroller_current_pos_ < (target_pos + (y_size_option / 2.f)));
   }
 
-
   __forceinline void Manager::DrawDescriptionText(const std::string& description, size_t option_count) const {
     constexpr static const float y_size_separator = 0.0046f;
     float y_pos = (y_base + (y_size_option * option_count)) + (y_size_bottom_bar + y_offset_description) + y_size_top_bar;
     float y_pos_text_box = y_pos + y_size_separator;
 
+    std::string description_tmp = description;
+    util::draw::WordWrap(font_size, description_tmp, x_size, 3);
 
     draw_list_->AddCommand(util::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color.load()));
-    draw_list_->AddCommand(util::draw::Rect({x_base, y_pos_text_box}, {x_size, util::draw::CalcTextSize(ImGui::GetFont(), font_size, description).y}, primary_color.load()));
-    draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color.load(), description, false));
+    draw_list_->AddCommand(util::draw::Rect({x_base, y_pos_text_box}, {x_size, util::draw::CalcTextSize(ImGui::GetFont(), font_size, description_tmp).y}, primary_color.load()));
+    draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color.load(), description_tmp, false));
   }
 
   void Manager::Draw() {
