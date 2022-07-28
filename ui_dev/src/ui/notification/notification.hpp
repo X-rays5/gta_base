@@ -24,9 +24,9 @@ namespace ui {
 
     struct NotificationData {
     public:
-      NotificationData(Type type, std::string title, std::string body, std::uint64_t duration = 2000) : type_(type), title_(std::move(title)), body_(std::move(body)), duration_(duration) {}
+      NotificationData(Type type, std::string title, std::string body, std::uint64_t duration) : type_(type), title_(std::move(title)), body_(std::move(body)), duration_(duration) {}
 
-      void Draw(const ImVec2& pos);
+      float Draw(const ImVec2& pos);
 
       Type type_;
       std::string title_;
@@ -48,27 +48,28 @@ namespace ui {
         return {};
       }
 
-      constexpr static const ImU32 success_color = 0x00ff00ff;
-      constexpr static const ImU32 fail_color = 0xff0000ff;
-      constexpr static const ImU32 info_color = 0xffffffff;
+      static constexpr const auto success_color = ImColor(0.f, 255.f, 0.f);
+      static constexpr const auto fail_color = ImColor(255.f, 0.f, 0.f);
+      static constexpr const auto info_color = ImColor(255.f, 255.f, 255.f);
     };
 
-    void Create();
+    void Create(Type type, std::string title, std::string description, std::uint32_t duration = 3000);
 
     void Tick();
 
   private:
-    constexpr static const float x_size = 0.15f;
+    constexpr static const float x_size = 0.16f;
     constexpr static const float x_base = 1.f - x_size;
     constexpr static const float y_base = 0.015f;
-    constexpr static const float y_size = 0.08f;
+    constexpr static const float y_size = 0.01f;
     constexpr static const float y_spacing = y_base;
-    constexpr static const float y_top_bar_size = 0.008f;
-    constexpr static const float font_size_title = 0.025f;
+    constexpr static const float y_top_bar_size = 0.004f;
+    constexpr static const float font_size_title = 0.022f;
     constexpr static const float font_size_body = 0.018f;
     constexpr static const ImU32 text_color = 0xffffffff;
 
     std::vector<NotificationData> notifications_;
+    std::mutex mtx_;
   };
 
   inline std::unique_ptr<Notification> kNOTIFICATIONS;

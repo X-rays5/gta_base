@@ -20,7 +20,6 @@ namespace ui {
     initialized = true;
 
     kMANAGER = std::make_unique<Manager>();
-    kNOTIFICATIONS->Create();
 
     kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
       sub->AddOption(components::option::SubmenuOption("Player", "a short description a short description just a bit too long", components::Submenus::Player));
@@ -28,62 +27,14 @@ namespace ui {
     });
 
     kMANAGER->AddSubmenu("Player", components::Submenus::Player, [](components::Submenu* sub){
-      sub->AddOption(components::option::ExecuteOption("Hello World", "f", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
       sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
         std::cout << "Hello World from the player submenu" << std::endl;
       }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
-      }));
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
-        std::cout << "Hello World from the player submenu" << std::endl;
+      sub->AddOption(components::option::ExecuteOption("Test notify", "", []{
+        kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "Test notify", "This is a test of the info notification. Seems to look pretty good");
+        kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Test notify", "This is a test of the success notification. Seems to look pretty good");
+        kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Test notify", "This is a test of the fail notification. Seems to look pretty good");
+        kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "", "xxXThyhardXxx joined into slot 5sddddddddddfasdfsdfsdfsd");
       }));
     });
 
