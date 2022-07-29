@@ -23,20 +23,26 @@ namespace ui {
     kNOTIFICATIONS = std::make_unique<Notification>();
   }
 
-  __forceinline util::draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center) const {
+  inline util::draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center) const {
     return {{x_base + 0.002f, y_pos}, color, text, false, center, font_size};
   }
 
-  __forceinline util::draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center) const {
+  inline util::draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center) const {
     return {{x_base + x_size - 0.002f, y_pos}, color, text, true, center, font_size};
   }
 
-  __forceinline void Manager::DrawHeader() {
+  inline util::draw::Text Manager::DrawTextCenter(float y_pos, ImColor color, const std::string& text) const {
+    auto text_size = util::draw::CalcTextSize(ImGui::GetFont(), font_size, text);
+    return {{x_base + (x_size - text_size.x) / 2, y_pos}, color, text, false, true, font_size};
+  }
+
+  void Manager::DrawHeader() {
 
   }
 
-  __forceinline void Manager::DrawTopBar(const std::string& title, size_t option_current, size_t option_count) {
+  void Manager::DrawTopBar(const std::string& title, size_t option_current, size_t option_count) {
     draw_list_->AddCommand(util::draw::Rect({x_base, y_base}, {x_size, y_size_top_bar}, primary_color.load()));
+    draw_list_->AddCommand(util::draw::Rect({x_base, (y_base + y_size_top_bar) - (y_size_top_bar / 10)}, {x_size, y_size_top_bar / 10}, secondary_color.load()));
     draw_list_->AddCommand(DrawTextLeft(y_base - (y_size_top_bar / 4), text_color.load(), title));
 
     std::stringstream option_count_str;
@@ -81,9 +87,11 @@ namespace ui {
     draw_list_->AddCommand(util::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color.load()));
   }
 
-  __forceinline void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
+  void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
     float pos = y_base + (y_size_option * option_pos) + y_size_top_bar;
     float text_pos = pos - (y_size_option / 4);
+
+    ImColor text_color_tmp = text_color;
     if (selected) {
       if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1)) {
         ResetSmoothScrolling();
@@ -92,16 +100,24 @@ namespace ui {
       }
       previous_selected_option_ = (int)option_idx;
 
-      auto color = DrawScroller(pos) ? selected_text_color.load() : text_color.load();
-      draw_list_->AddCommand(DrawTextLeft(text_pos , color, option->GetName()));
+      if (DrawScroller(pos))
+        text_color_tmp = selected_text_color;
+    }
 
-      // TODO: check if icon or text should be drawn on the right
-      draw_list_->AddCommand(DrawTextRight(text_pos, color, option->GetRightText()));
+    auto name = option->GetName();
+    auto center_text = option->GetCenterText();
+    auto right_text = option->GetRightText();
+
+    if (!center_text.empty()) {
+      draw_list_->AddCommand(DrawTextCenter(text_pos, text_color_tmp, center_text));
     } else {
-      draw_list_->AddCommand(DrawTextLeft(text_pos, text_color.load(), option->GetName()));
+      if (!name.empty())
+        draw_list_->AddCommand(DrawTextLeft(text_pos, text_color_tmp, name));
 
-      // TODO: check if icon or text should be drawn on the right
-      draw_list_->AddCommand(DrawTextRight(text_pos, text_color.load(), option->GetRightText()));
+      if (!right_text.empty()) {
+        // TODO: check if icon or text should be drawn on the right
+        draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
+      }
     }
 
     if (selected && !option->GetDescription().empty()) {
@@ -155,8 +171,24 @@ namespace ui {
         cur_sub->HandleKey(components::KeyInput::kRight);
       } else if (input_up_->Get()) {
         cur_sub->HandleKey(components::KeyInput::kUp);
+
+        // The only way this can result in an infinite loop is if the developer is stupid.
+        auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+          ResetSmoothScrolling();
+          cur_sub->HandleKey(components::KeyInput::kUp);
+          cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        }
       } else if (input_down_->Get()) {
         cur_sub->HandleKey(components::KeyInput::kDown);
+
+        // The only way this can result in an infinite loop is if the developer is stupid.
+        auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+          ResetSmoothScrolling();
+          cur_sub->HandleKey(components::KeyInput::kDown);
+          cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        }
       } else if (input_return_->Get()) {
         cur_sub->HandleKey(components::KeyInput::kReturn);
         cur_sub = submenus_stack_.top();

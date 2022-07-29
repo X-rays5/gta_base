@@ -92,6 +92,7 @@ namespace ui {
   private:
     inline util::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
     inline util::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;
+    util::draw::Text DrawTextCenter(float y_pos, ImColor color, const std::string& text) const;
     inline void DrawHeader();
     inline void DrawTopBar(const std::string& title, size_t option_current, size_t option_count);
     inline void DrawBottomBar(size_t option_count);
