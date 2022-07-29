@@ -103,7 +103,6 @@ int main(int, char**) {
 #ifdef _DEBUG
     ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 20, ImVec2(5, 5), ImColor(255, 0, 0), "DEBUG BUILD");
 #endif
-    ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 20, ImVec2(5, 25), ImColor(0, 255, 0), std::string("FPS: " + std::to_string((int)ImGui::GetIO().Framerate)).c_str());
     ui::Tick();
 
     ImGui::PopFont();
