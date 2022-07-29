@@ -28,8 +28,10 @@ namespace ui {
           if (!action_)
             return;
 
-          if (key == KeyInput::kReturn || key == KeyInput::kHotkey)
+          if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
             action_();
+            SendEvent(Event::kSelect);
+          }
         }
 
         bool HasFlag(OptionFlag flag) final {

@@ -26,6 +26,7 @@ namespace ui {
       kRightText,
       kSubmenuLink,
       kHotkeyable,
+      kLabel,
     };
     DEFINE_ENUM_FLAG_OPERATORS(OptionFlag)
 
@@ -37,6 +38,11 @@ namespace ui {
       kReturn,
       kBackspace,
       kHotkey,
+    };
+
+    enum class Event {
+      kSelect,
+      kChange
     };
   }// namespace components
 }// namespace ui

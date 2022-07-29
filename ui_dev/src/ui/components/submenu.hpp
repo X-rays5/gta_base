@@ -41,7 +41,7 @@ namespace ui {
         return selected_option_;
       };
 
-      void SetSelectedOption(std::int64_t index) {
+      inline void SetSelectedOption(std::int64_t index) {
         if (index >= options_.size())
           index = 0;
         if (index < 0)
@@ -50,25 +50,25 @@ namespace ui {
       };
 
       template<typename T>
-      std::shared_ptr<T> AddOption(T option) {
+      inline std::shared_ptr<T> AddOption(T option) {
         auto tmp = std::make_shared<T>(std::forward<T>(option));
         options_.push_back(tmp);
 
         return tmp;
       }
 
-      void HandleKey(KeyInput key) {
+      inline void HandleKey(KeyInput key) {
         if (key == KeyInput::kUp) {
           if (selected_option_ > 0) {
-            SetSelectedOption(selected_option_ - 1);
+            selected_option_--;
           } else {
-            SetSelectedOption(options_.size() - 1);
+            selected_option_ = options_.size() - 1;
           }
         } else if (key == KeyInput::kDown) {
           if (selected_option_ < options_.size() - 1) {
-            SetSelectedOption(selected_option_ + 1);
+            selected_option_++;
           } else {
-            SetSelectedOption(0);
+            selected_option_ = 0;
           }
         } else {
           GetOption(GetSelectedOption())->HandleKey(key);

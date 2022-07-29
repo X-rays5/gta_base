@@ -15,36 +15,50 @@ namespace ui {
     namespace option {
       class BaseOption {
       public:
-        virtual std::string GetName() {
+        using on_event_t = void(*)(Event event);
+
+        inline std::string GetName() {
           return name_;
         }
 
-        virtual void SetName(std::string name) {
+        inline void SetName(std::string name) {
           name_ = std::move(name);
         }
 
-        virtual std::string GetDescription() {
+        inline std::string GetDescription() {
           return description_;
         }
 
-        virtual void SetDescription(std::string description) {
+        inline void SetDescription(std::string description) {
           description_ = std::move(description);
         }
 
-        virtual std::string GetRightText() {
+        inline std::string GetCenterText() {
+          return center_text_;
+        }
+
+        inline void SetCenterText(std::string center_text) {
+          center_text_ = std::move(center_text);
+        }
+
+        inline std::string GetRightText() {
           return right_text_;
         }
 
-        virtual void SetRightText(std::string rightText) {
+        inline void SetRightText(std::string rightText) {
           right_text_ = std::move(rightText);
         }
 
-        virtual std::filesystem::path GetIconPath() {
+        inline std::filesystem::path GetIconPath() {
           return icon_path_;
         }
 
-        virtual void SetIconPath(const std::filesystem::path& iconPath) {
+        inline void SetIconPath(const std::filesystem::path& iconPath) {
           icon_path_ = iconPath;
+        }
+
+        inline void OnEvent(on_event_t handler) {
+          event_handler_ = handler;
         }
 
         virtual void HandleKey(KeyInput key) = 0;
@@ -52,8 +66,16 @@ namespace ui {
       protected:
         std::string name_{};
         std::string description_{};
+        std::string center_text_{};
         std::string right_text_{};
         std::filesystem::path icon_path_{};
+        on_event_t event_handler_ = nullptr;
+
+      protected:
+        inline void SendEvent(Event event) {
+          if (event_handler_)
+            event_handler_(event);
+        }
       };
     }
   }
