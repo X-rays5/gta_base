@@ -8,10 +8,13 @@
 #include "notification/notification.hpp"
 #include "components/option/executeoption.hpp"
 #include "components/option/submenuoption.hpp"
+#include "components/option/numberoption.hpp"
+#include "components/option/labeloption.hpp"
 
 namespace ui {
   bool ui_draw_tick = false;
   bool initialized = false;
+  float test_value_f = 1;
   void Init() {
     if (initialized) {
       return;
@@ -34,8 +37,13 @@ namespace ui {
         kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "Test notify", "This is a test of the info notification. Seems to look pretty good");
         kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Test notify", "This is a test of the success notification. Seems to look pretty good");
         kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Test notify", "This is a test of the fail notification. Seems to look pretty good");
-        kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "", "xxXThyhardXxx joined into slot 5sddddddddddfasdfsdfsdfsd");
+        kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "", "asdasdkjbhllllllllllllllllllllllllhadbyuagweuy3rfboiuw 5sddddddddddfasdfsdfsdfsd");
       }));
+      sub->AddOption(components::option::LabelOption("Component examples"));
+      sub->AddOption(components::option::NumberOption("Test numberoption", "", &test_value_f, 0.5, 0, 10))->OnEvent([](components::Event event){
+        if (event == components::Event::kChange)
+          std::cout << test_value_f << std::endl;
+      });
     });
 
     kMANAGER->AddSubmenu("Settings", components::Submenus::Settings, [](components::Submenu* sub){
