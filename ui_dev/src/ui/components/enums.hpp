@@ -27,6 +27,8 @@ namespace ui {
       kSubmenuLink,
       kHotkeyable,
       kLabel,
+      kToggle,
+      kToggled
     };
     DEFINE_ENUM_FLAG_OPERATORS(OptionFlag)
 

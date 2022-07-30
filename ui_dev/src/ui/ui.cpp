@@ -10,11 +10,13 @@
 #include "components/option/submenuoption.hpp"
 #include "components/option/numberoption.hpp"
 #include "components/option/labeloption.hpp"
+#include "components/option/toggleoption.hpp"
 
 namespace ui {
   bool ui_draw_tick = false;
   bool initialized = false;
   float test_value_f = 1;
+  bool test_value_b = false;
   void Init() {
     if (initialized) {
       return;
@@ -48,6 +50,7 @@ namespace ui {
         if (event == components::Event::kChange)
           std::cout << test_value_f << std::endl;
       });
+      sub->AddOption(components::option::ToggleOption("Test toggleoption", "", &test_value_b));
     });
 
     kMANAGER->AddSubmenu("Settings", components::Submenus::Settings, [](components::Submenu* sub){

@@ -3,8 +3,8 @@
 //
 
 #include "manager.hpp"
-#include <sstream>
 #include "notification/notification.hpp"
+#include "util/texturemanager.hpp"
 
 namespace ui {
   inline float ScaleFps(float number) {
@@ -21,6 +21,7 @@ namespace ui {
     input_back_ = std::make_unique<util::TimedInput>(VK_BACK, 300);
 
     kNOTIFICATIONS = std::make_unique<Notification>();
+    util::kTEXTURE_MANAGER = std::make_unique<util::TextureManager>();
   }
 
   inline util::draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center) const {
@@ -58,7 +59,7 @@ namespace ui {
     draw_list_->AddCommand(util::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar}, primary_color.load()));
     draw_list_->AddCommand(util::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar / 10}, secondary_color.load()));
     draw_list_->AddCommand(DrawTextRight(y_pos - (y_size_bottom_bar / 4), text_color.load(), "v1.0.0")); // TODO: replace this with an a real version string or something
-    draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color.load(), "FPS: " + std::to_string((int)ImGui::GetIO().Framerate)));
+    draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color.load(), std::format("FPS: {}", (int)ImGui::GetIO().Framerate)));
   }
 
   void Manager::DrawScrollBar(size_t option_count, int current_option) {
@@ -117,7 +118,17 @@ namespace ui {
       if (!name.empty())
         draw_list_->AddCommand(DrawTextLeft(text_pos, text_color_tmp, name));
 
-      if (!right_text.empty()) {
+      if (option->HasFlag(components::OptionFlag::kToggle)) {
+        std::string filepath;
+        if (option->HasFlag(components::OptionFlag::kToggled)) {
+          filepath = selected ? "shop_box_tickb.png" : "shop_box_tick.png";
+        } else {
+          filepath = selected ? "shop_box_blankb.png" : "shop_box_blank.png";
+        }
+
+        ImVec2 checkbox_size = util::draw::ScaleFromScreen({48.f, 48.f});
+        draw_list_->AddCommand(util::draw::Image(util::kTEXTURE_MANAGER->Get(filepath).texture, {(x_base + x_size) - (checkbox_size.x / 1.2f), pos - checkbox_size.y / 4}, checkbox_size));
+      } else if (!right_text.empty()) {
         // TODO: check if icon or text should be drawn on the right
         draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
       }
