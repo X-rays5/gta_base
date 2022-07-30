@@ -155,7 +155,7 @@ namespace ui {
     float y_pos_text_box = y_pos + y_size_separator;
 
     std::string description_tmp = description;
-    util::draw::WordWrap(font_size, description_tmp, x_size, 3);
+    util::draw::WordWrap(font_size, description_tmp, x_size + 0.02f, 3); // + 0.02f is needed to avoid unused space at the end of the text box
 
     draw_list_->AddCommand(util::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color.load()));
     draw_list_->AddCommand(util::draw::Rect({x_base, y_pos_text_box}, {x_size, util::draw::CalcTextSize(ImGui::GetFont(), font_size, description_tmp).y}, primary_color.load()));

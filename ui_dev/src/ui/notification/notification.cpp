@@ -14,30 +14,34 @@ namespace ui {
     auto title_tmp = title_;
     auto body_tmp = body_;
 
-    util::draw::WordWrap(font_size_title, title_tmp, x_size, 1);
+    util::draw::WordWrap(font_size_title, title_tmp, x_size + 0.02f, 1);
 
     auto y_size_char_title = util::draw::CalcTextSize(font, font_size_title, " ").y;
     auto y_size_char_body = util::draw::CalcTextSize(font, font_size_body, " ").y;
     float y_textbox_size = y_size;
     if (!title_tmp.empty())
       y_textbox_size += y_size_char_title;
-    if (util::draw::WordWrap(font_size_body, body_tmp, x_size, 3) == 1) {
+
+    auto body_line_count = util::draw::WordWrap(font_size_body, body_tmp, x_size + 0.01f, 3);
+    if (body_line_count == 1) {
       body_tmp += "\n "; // fix positioning issues without multiline
       y_textbox_size += y_size_char_body;
     } else {
       y_textbox_size += util::draw::CalcTextSize(font, font_size_body, body_tmp).y;
     }
+
     auto y_pos_body = pos.y;
-    if (!title_tmp.empty())
-      y_pos_body += (y_size_char_title - (y_size_char_title / 5.f));
-    else
-      y_pos_body -= y_size_char_body / 2.f;
+    if (!title_tmp.empty()) {
+      y_pos_body += (y_size_char_title - (y_size_char_title / 5.f)) + (y_size_char_title / 2.f);
+    } else {
+      y_pos_body -= y_size_char_body - 0.03f;
+    }
 
     draw_list->AddCommand(util::draw::Rect(pos, {x_size, y_top_bar_size}, color));
     draw_list->AddCommand(util::draw::Rect({pos.x, pos.y + y_top_bar_size}, {x_size, y_textbox_size}, ImColor(0,0,0,255)));
 
-    draw_list->AddCommand(util::draw::Text({pos.x + 0.002f, pos.y}, text_color, title_tmp, false, true, font_size_title));
-    draw_list->AddCommand(util::draw::Text({pos.x + 0.002f, y_pos_body}, text_color, body_tmp, false, true, font_size_body));
+    draw_list->AddCommand(util::draw::Text({pos.x + 0.002f, pos.y + 0.005f}, text_color, title_tmp, false, false, font_size_title));
+    draw_list->AddCommand(util::draw::Text({pos.x + 0.002f, y_pos_body}, text_color, body_tmp, false, false, font_size_body));
 
     return y_textbox_size;
   }

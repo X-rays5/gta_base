@@ -37,7 +37,11 @@ namespace ui {
         kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "Test notify", "This is a test of the info notification. Seems to look pretty good");
         kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Test notify", "This is a test of the success notification. Seems to look pretty good");
         kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Test notify", "This is a test of the fail notification. Seems to look pretty good");
-        kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "", "asdasdkjbhllllllllllllllllllllllllhadbyuagweuy3rfboiuw 5sddddddddddfasdfsdfsdfsd");
+      }));
+      sub->AddOption(components::option::ExecuteOption("Test notify 2", "", []{
+        kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "1 line");
+        kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "2 line 2 line 2 line 2 line 2 line 2 line 2 line 2 line 2 line 2");
+        kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line ");
       }));
       sub->AddOption(components::option::LabelOption("Component examples"));
       sub->AddOption(components::option::NumberOption("Test numberoption", "", &test_value_f, 0.5, 0, 10))->OnEvent([](components::Event event){
