@@ -80,11 +80,11 @@ namespace ui {
     if (scrollbar_current_pos_ < target_pos) {
       scrollbar_current_pos_ += util::draw::ScaleYFromScreen(ScaleFps(scrollbar_speed_));
       if (scrollbar_current_pos_ > target_pos)
-        scrollbar_reset_ = true;
+        scrollbar_current_pos_ = target_pos;
     } else if (scrollbar_current_pos_ > target_pos) {
       scrollbar_current_pos_ -= util::draw::ScaleYFromScreen(ScaleFps(scrollbar_speed_));
       if (scrollbar_current_pos_ < target_pos)
-        scrollbar_reset_ = true;
+        scrollbar_current_pos_ = target_pos;
     }
 
     draw_list_->AddCommand(util::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color.load()));
@@ -137,11 +137,11 @@ namespace ui {
     if (scroller_current_pos_ < target_pos) {
       scroller_current_pos_ += util::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
       if (scroller_current_pos_ > target_pos)
-        scroller_reset_ = true;
+        scroller_current_pos_ = target_pos;
     } else if (scroller_current_pos_ > target_pos) {
       scroller_current_pos_ -= util::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
       if (scroller_current_pos_ < target_pos)
-        scroller_reset_ = true;
+        scroller_current_pos_ = target_pos;
     }
 
     draw_list_->AddCommand(util::draw::Rect({x_base, scroller_current_pos_}, {x_size, y_size_option}, scroller_color.load()));
