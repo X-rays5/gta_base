@@ -89,6 +89,20 @@ namespace ui {
         return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
       }
 
+      inline std::string WordWrapGetString(std::string* lines, std::uint32_t line_count) {
+        std::string res;
+        for (std::uint32_t i = 0; i < line_count; i++) {
+          auto line = lines[i];
+          while (line.back() == ' ') {
+            line.pop_back();
+          }
+          res += line;
+          res += '\n';
+        }
+
+        return res;
+      }
+
       // FIXME: Make it work with non monospaced fonts.
       // 2 lines take 0.01 ms in debug so it's fine for now
       inline std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::uint32_t max_lines) {
@@ -111,30 +125,22 @@ namespace ui {
             break;
           }
 
-          std::size_t pos = str.rfind(' ', chars_per_line);
+          std::size_t pos = chars_per_line < str.size() ? str.rfind(' ', chars_per_line) : str.size();
           if (pos != std::string::npos) {
             lines[line_count] = str.substr(0, pos + 1);
-            str = str.substr(pos + 1);
+            str.erase(0, pos + 1);
           } else {
             lines[line_count] = str.substr(0, chars_per_line);
-            str = str.substr(chars_per_line);
+            str.erase(0, chars_per_line);
           }
           line_count += 1;
 
-          if (CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
+          if (str.empty() && CalcTextSizeRaw(ImGui::GetFont(), font_size, lines[line_count - 1]).x <= real_max_x) {
             break;
           }
         }
 
-        str.clear();
-        for (std::uint32_t i = 0; i < line_count; i++) {
-          auto line = lines[i];
-          while (line.back() == ' ') {
-            line.pop_back();
-          }
-          str += line;
-          str += '\n';
-        }
+        str = WordWrapGetString(lines, line_count);
         delete[] lines;
 
         return line_count;
