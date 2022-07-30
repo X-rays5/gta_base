@@ -9,7 +9,6 @@
 #include <imgui_impl_dx11.h>
 #include <string>
 #include <iostream>
-#include "main.hpp"
 #include "ui/ui.hpp"
 #include "ui/fonts/roboto_mono.hpp"
 

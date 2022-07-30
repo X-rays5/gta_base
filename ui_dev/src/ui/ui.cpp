@@ -30,11 +30,11 @@ namespace ui {
     kMANAGER = std::make_unique<Manager>();
 
     kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
-      sub->AddOption(components::option::SubmenuOption("Player", "a short description a short description just a bit too long", components::Submenus::Player));
+      sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
       sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
     });
 
-    kMANAGER->AddSubmenu("Player", components::Submenus::Player, [](components::Submenu* sub){
+    kMANAGER->AddSubmenu("Debug", components::Submenus::Debug, [](components::Submenu* sub){
       sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
         std::cout << "Hello World from the player submenu" << std::endl;
       }));

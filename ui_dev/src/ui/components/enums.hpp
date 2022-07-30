@@ -15,7 +15,7 @@ namespace ui {
   namespace components {
     enum class Submenus {
       Home,
-      Player,
+      Debug,
       Settings,
       UnloadConfirm,
     };
