@@ -12,8 +12,6 @@ namespace ui {
     namespace option {
       class NumberOption : public BaseOption {
       public:
-        using action_t = void(*)();
-
         explicit NumberOption(const std::string& name, const std::string& description, float* value, float step, float min, float max) {
           name_ = name;
           description_ = description;
@@ -28,12 +26,18 @@ namespace ui {
           if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
             SendEvent(Event::kSelect);
           } else if (key == KeyInput::kLeft) {
+            if (*value_ == min_)
+              return;
+
             *value_ -= step_;
             if (*value_ < min_)
               *value_ = min_;
             UpdateRightText();
             SendEvent(Event::kChange);
           } else if (key == KeyInput::kRight) {
+            if (*value_ == max_)
+              return;
+
             *value_ += step_;
             if (*value_ > max_)
               *value_ = max_;
@@ -61,7 +65,7 @@ namespace ui {
 
       private:
         void UpdateRightText() {
-          auto tmp_right_text = std::format("[{}", *value_);
+          auto tmp_right_text = std::format("[{:f}", *value_);
           while (!tmp_right_text.empty() && tmp_right_text.back() == '0')
             tmp_right_text.pop_back();
           if (!tmp_right_text.empty() && tmp_right_text.back() == '.')
