@@ -31,7 +31,7 @@ namespace ui {
     if (!title_tmp.empty())
       y_pos_body += (y_size_char_title - (y_size_char_title / 5.f));
     else
-      y_pos_body -= y_size_char_body / 3.6;
+      y_pos_body -= y_size_char_body / 2.f;
 
     draw_list->AddCommand(util::draw::Rect(pos, {x_size, y_top_bar_size}, color));
     draw_list->AddCommand(util::draw::Rect({pos.x, pos.y + y_top_bar_size}, {x_size, y_textbox_size}, ImColor(0,0,0,255)));

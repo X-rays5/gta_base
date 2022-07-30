@@ -62,7 +62,7 @@ namespace ui {
     constexpr static const float x_base = 1.f - x_size;
     constexpr static const float y_base = 0.015f;
     constexpr static const float y_size = 0.01f;
-    constexpr static const float y_spacing = y_base;
+    constexpr static const float y_spacing = 0.01f;
     constexpr static const float y_top_bar_size = 0.004f;
     constexpr static const float font_size_title = 0.022f;
     constexpr static const float font_size_body = 0.018f;
