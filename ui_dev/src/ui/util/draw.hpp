@@ -9,6 +9,7 @@
 #include <memory>
 #include <iostream>
 #include <mutex>
+#include <numeric>
 #include <format>
 #include <cassert>
 #include <d3d11.h>
@@ -24,6 +25,8 @@ namespace ui {
       inline ImVec2 GetSize(ImVec2 pos, ImVec2 size) {
         return {pos.x + size.x, pos.y + size.y};
       }
+
+
 
       // scale float in range [0, 1] to [0, screen_size]
       inline ImVec2 ScaleToScreen(ImVec2 xy) {
@@ -70,6 +73,11 @@ namespace ui {
 
       inline float ScaleYFromScreen(float y) {
         return ScaleFromScreen({0, y}).y;
+      }
+
+      inline ImVec2 ScaleSquare(float y) {
+        auto tmp = ScaleYToScreen(y);
+        return ScaleFromScreen({tmp, tmp});
       }
 
       inline float ScaleFont(float size) {
@@ -165,6 +173,20 @@ namespace ui {
         ImU32 color_;
       };
 
+      class RectOutline : public BaseDrawCommand {
+      public:
+        inline RectOutline(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
+
+        inline void Draw() final {
+          GetDrawList()->AddRect(ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), color_);
+        }
+
+      private:
+        ImVec2 pos_;
+        ImVec2 size_;
+        ImU32 color_;
+      };
+
       class Text : public BaseDrawCommand {
       public:
         inline Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font)
@@ -239,7 +261,7 @@ namespace ui {
           draw_commands_[cur_write_target_].push_back(std::make_shared<T>(std::forward<T>(command)));
           mtx_.unlock();
         }
-        
+
         inline void Draw() {
           mtx_.lock();
           for (auto& command : draw_commands_[cur_render_target_]) {
@@ -247,7 +269,7 @@ namespace ui {
           }
           mtx_.unlock();
         }
-        
+
         inline void NextTargets() {
           mtx_.lock();
           NextRenderTarget();
@@ -258,7 +280,7 @@ namespace ui {
       private:
         using draw_list_t = std::vector<std::shared_ptr<BaseDrawCommand>>;
         using draw_commands_t = std::vector<draw_list_t>;
-        
+
         std::mutex mtx_;
         std::size_t cur_write_target_ = 1;
         std::size_t cur_render_target_ = 0;

@@ -91,6 +91,7 @@ namespace ui {
     float scrollbar_current_pos_ = scroller_current_pos_;
 
 
+    float toggle_button_size_ = 0.01f;
   private:
     inline util::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
     inline util::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;
