@@ -129,7 +129,6 @@ namespace ui {
         ImVec2 checkbox_size = util::draw::ScaleFromScreen({48.f, 48.f});
         draw_list_->AddCommand(util::draw::Image(util::kTEXTURE_MANAGER->Get(filepath).texture, {(x_base + x_size) - (checkbox_size.x / 1.2f), pos - checkbox_size.y / 4}, checkbox_size));
       } else if (!right_text.empty()) {
-        // TODO: check if icon or text should be drawn on the right
         draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
       }
     }

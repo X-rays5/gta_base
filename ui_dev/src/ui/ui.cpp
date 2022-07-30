@@ -11,12 +11,15 @@
 #include "components/option/numberoption.hpp"
 #include "components/option/labeloption.hpp"
 #include "components/option/toggleoption.hpp"
+#include "components/option/listoption.hpp"
 
 namespace ui {
   bool ui_draw_tick = false;
   bool initialized = false;
   float test_value_f = 1;
   bool test_value_b = false;
+  std::vector<std::string> test_value_v = {"test", "test2"};
+  std::size_t test_value_v_idx = 0;
   void Init() {
     if (initialized) {
       return;
@@ -51,6 +54,7 @@ namespace ui {
           std::cout << test_value_f << std::endl;
       });
       sub->AddOption(components::option::ToggleOption("Test toggleoption", "", &test_value_b));
+      sub->AddOption(components::option::ListOption("Test listoption", "", test_value_v_idx, test_value_v));
     });
 
     kMANAGER->AddSubmenu("Settings", components::Submenus::Settings, [](components::Submenu* sub){
