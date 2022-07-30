@@ -5,6 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_LABELOPTION_HPP
 #define GTA_BASE_LABELOPTION_HPP
+#include <format>
 #include "baseoption.hpp"
 
 namespace ui {
@@ -13,8 +14,7 @@ namespace ui {
       class LabelOption : public BaseOption {
       public:
         explicit LabelOption(const std::string& label) {
-          // FIXME: Use a proper formatting function
-          center_text_ = "[" + label + "]";
+          center_text_ = std::format("[{}]", label);
         }
 
         void HandleKey(KeyInput key) final {

@@ -60,9 +60,8 @@ namespace ui {
         float max_;
 
       private:
-        // FIXME: replace with proper formatting
         void UpdateRightText() {
-          auto tmp_right_text = "[" + std::to_string(*value_);
+          auto tmp_right_text = std::format("[{}", *value_);
           while (!tmp_right_text.empty() && tmp_right_text.back() == '0')
             tmp_right_text.pop_back();
           if (!tmp_right_text.empty() && tmp_right_text.back() == '.')
