@@ -8,17 +8,18 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
 #include <string>
-#include "iostream"
+#include <iostream>
+#include "main.hpp"
 #include "ui/ui.hpp"
 #include "ui/fonts/roboto_mono.hpp"
 
 #pragma comment(lib, "d3d11.lib")
 
-// Data
-static ID3D11Device*            kDEVICE = nullptr;
-static ID3D11DeviceContext*     kDEVICE_CONTEXT = nullptr;
-static IDXGISwapChain*          kSWAPCHAIN = nullptr;
-static ID3D11RenderTargetView*  kRENDER_TARGET_VIEW = nullptr;
+// data
+ID3D11Device* kDEVICE = nullptr;
+ID3D11DeviceContext* kDEVICE_CONTEXT = nullptr;
+IDXGISwapChain* kSWAPCHAIN = nullptr;
+ID3D11RenderTargetView* kRENDER_TARGET_VIEW = nullptr;
 
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);

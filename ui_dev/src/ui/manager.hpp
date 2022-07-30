@@ -89,6 +89,8 @@ namespace ui {
     bool scrollbar_reset_ = false;
     float scrollbar_speed_ = scroller_speed_;
     float scrollbar_current_pos_ = scroller_current_pos_;
+
+
   private:
     inline util::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
     inline util::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;

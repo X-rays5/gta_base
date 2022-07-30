@@ -9,6 +9,7 @@
 #include <memory>
 #include <iostream>
 #include <mutex>
+#include <format>
 #include <cassert>
 #include <d3d11.h>
 #include "imgui.h"
@@ -96,8 +97,7 @@ namespace ui {
           while (line.back() == ' ') {
             line.pop_back();
           }
-          res += line;
-          res += '\n';
+          res = std::format("{}{}\n", res, line);
         }
 
         return res;
@@ -204,7 +204,7 @@ namespace ui {
 
       class Image : public BaseDrawCommand {
       public:
-        inline Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1), ImU32 col = IM_COL32_WHITE) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col)
+        inline Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col)
         {
         }
 
