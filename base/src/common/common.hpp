@@ -50,6 +50,22 @@ namespace gta_base {
       return log_path;
     }
 
+    __forceinline std::filesystem::path GetDataDir() {
+      std::filesystem::path data_path = GetBaseDir() / "data";
+      if (!std::filesystem::exists(data_path)) {
+        std::filesystem::create_directories(data_path);
+      }
+      return data_path;
+    }
+
+    __forceinline std::filesystem::path GetTextureDir() {
+      std::filesystem::path texture_path = GetDataDir() / "textures";
+      if (!std::filesystem::exists(texture_path)) {
+        std::filesystem::create_directories(texture_path);
+      }
+      return texture_path;
+    }
+
     __forceinline bool KeyState(int key) {
       return GetAsyncKeyState(key) & 0x8000;
     }

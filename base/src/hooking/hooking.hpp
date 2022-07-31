@@ -7,19 +7,29 @@
 #ifndef GTABASE_HOOKING_HPP
 #define GTABASE_HOOKING_HPP
 #include <memory>
-#include "minhook/minhook.hpp"
+#include <unordered_map>
+#include <MinHook.h>
+#include "vmt.hpp"
 
 namespace gta_base {
+  struct Hooks {
+    static constexpr auto swapchain_num_funcs = 19;
+    static constexpr auto swapchain_present_index = 8;
+    static constexpr auto swapchain_resizebuffers_index = 13;
+  };
+
   class Hooking {
+  public:
+    hooking::VmtHook swap_chain_hook_;
+
   public:
     Hooking();
     ~Hooking();
 
-    hooking::MinHook& operator->() {
-      return mh_hook_;
-    }
+    MH_STATUS AddHook(const std::string& name, LPVOID src, LPVOID dst, LPVOID* og);
+    MH_STATUS RemoveHook(const std::string& name);
   private:
-    hooking::MinHook mh_hook_;
+    std::unordered_map<std::string, LPVOID> hooks;
   };
   inline std::unique_ptr<Hooking> kHOOKING;
 }

@@ -8,6 +8,7 @@
 #include "logger/logger.hpp"
 #include "common/common.hpp"
 #include "hooking/hooking.hpp"
+#include "d3d/renderer.hpp"
 #include "memory/pointers.hpp"
 #include "threads/threads.hpp"
 #include "scripts/game_main/game_script.hpp"
@@ -37,6 +38,8 @@ void BaseMain() {
   kTHREADS->AddScript(std::make_shared<scripts::Render>());
   kTHREADS->AddScript(std::make_shared<scripts::Main>());
 
+  d3d::kRENDERER = std::make_unique<d3d::Renderer>(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name));
+
   rpc::kDISCORD = std::make_unique<rpc::Discord>();
 
   auto scripting_thread = std::thread([]{
@@ -61,7 +64,7 @@ void BaseMain() {
       }
     }
 
-    if (common::KeyState(VK_ESCAPE))
+    if (common::KeyState(VK_DELETE))
       common::globals::running = false;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -69,6 +72,8 @@ void BaseMain() {
   LOG_INFO("Unloading...");
 
   rpc::kDISCORD.reset();
+
+  d3d::kRENDERER.reset();
 
   if (scripting_thread.joinable())
     scripting_thread.join();

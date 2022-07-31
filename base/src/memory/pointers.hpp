@@ -7,6 +7,7 @@
 #ifndef GTABASE_POINTERS_HPP
 #define GTABASE_POINTERS_HPP
 #include <memory>
+#include <d3d11.h>
 #include "sigscanner.hpp"
 #include "../rage/enums.hpp"
 #include "../rage/classes.hpp"
@@ -19,6 +20,7 @@ namespace gta_base {
 
       enum rage::GameState* game_state_{};
       CPedFactory** ped_factory_{};
+      IDXGISwapChain** swap_chain_{};
     };
     inline std::unique_ptr<Pointers> kPOINTERS;
   }

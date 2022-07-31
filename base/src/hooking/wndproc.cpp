@@ -5,6 +5,7 @@
 #include "wndproc.hpp"
 #include "../common/common.hpp"
 #include "../logger/logger.hpp"
+#include "../d3d/renderer.hpp"
 
 namespace gta_base {
   namespace hooking {
@@ -31,6 +32,9 @@ namespace gta_base {
       if (!ORIGINAL_WNDPROC) {
         return 0;
       }
+
+      if (common::globals::running)
+        d3d::Renderer::WndProc(window, message, parameter_uint_ptr, parameter_long_ptr);
 
       return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
     }
