@@ -9,13 +9,17 @@
 #include <memory>
 #include <unordered_map>
 #include <MinHook.h>
+#include <d3d11.h>
 #include "vmt.hpp"
 
 namespace gta_base {
   struct Hooks {
-    static constexpr auto swapchain_num_funcs = 19;
+    static constexpr auto swapchain_num_funcs = 18;
     static constexpr auto swapchain_present_index = 8;
     static constexpr auto swapchain_resizebuffers_index = 13;
+    static HRESULT Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags);
+    static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
+
   };
 
   class Hooking {

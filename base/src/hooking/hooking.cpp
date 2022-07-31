@@ -13,16 +13,15 @@ namespace gta_base {
     MH_Initialize();
     hooking::HookWndProc();
 
-    swap_chain_hook_.Hook(Hooks::swapchain_present_index, &d3d::Renderer::Present);
-    swap_chain_hook_.Hook(Hooks::swapchain_resizebuffers_index, &d3d::Renderer::SwapChainResizeBuffer);
-
+    swap_chain_hook_.Hook(Hooks::swapchain_present_index, &Hooks::Present);
+    swap_chain_hook_.Hook(Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
     swap_chain_hook_.Enable();
   }
 
   Hooking::~Hooking() {
     swap_chain_hook_.Disable();
-    swap_chain_hook_.Unhook(Hooks::swapchain_present_index);
-    swap_chain_hook_.Unhook(Hooks::swapchain_resizebuffers_index);
+    //swap_chain_hook_.Unhook(Hooks::swapchain_present_index);
+    //swap_chain_hook_.Unhook(Hooks::swapchain_resizebuffers_index);
 
     MH_DisableHook(MH_ALL_HOOKS);
     for (auto &hook : hooks) {
@@ -55,4 +54,13 @@ namespace gta_base {
     MH_DisableHook(hook_src);
     return MH_RemoveHook(hook_src);
   }
+
+  HRESULT Hooks::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
+    return d3d::Renderer::Present(swap_chain, sync_interval, flags);
+  }
+
+  HRESULT Hooks::ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags) {
+    return d3d::Renderer::SwapChainResizeBuffer(swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
+  }
+
 }

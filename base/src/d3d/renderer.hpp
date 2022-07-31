@@ -41,7 +41,7 @@ namespace gta_base {
 
       static void WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-      static void Present(IDXGISwapChain *swap_chain, UINT sync_interval, UINT flags);
+      static HRESULT Present(IDXGISwapChain *swap_chain, UINT sync_interval, UINT flags);
       static HRESULT SwapChainResizeBuffer(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags);
     private:
       Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain_;

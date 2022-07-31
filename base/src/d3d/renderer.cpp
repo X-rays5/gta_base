@@ -50,39 +50,36 @@ namespace gta_base {
       ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
     }
 
-    void Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
+    HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
       if (common::globals::running) {
         ImGui_ImplWin32_NewFrame();
         ImGui_ImplDX11_NewFrame();
         ImGui::NewFrame();
 
         ImGui::PushFont(kRENDERER->GetFont());
-        ImGui::Begin("Test");
-        ImGui::Text("gamer moment confirmed");
-        ImGui::End();
         // TODO: call d3d scripts here
         LOG_DEBUG("Present");
         ImGui::PopFont();
 
         ImGui::Render();
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-        kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Present)>(Hooks::swapchain_present_index)(swap_chain, sync_interval, flags);
       }
+
+      return kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::Present)>(Hooks::swapchain_present_index)(swap_chain, sync_interval, flags);
     }
 
     HRESULT Renderer::SwapChainResizeBuffer(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags) {
       if (common::globals::running) {
         ImGui_ImplDX11_InvalidateDeviceObjects();
 
-        auto res = kHOOKING->swap_chain_hook_.GetOriginal<decltype(&SwapChainResizeBuffer)>(Hooks::swapchain_resizebuffers_index)(swap_chain, buffer_count, width, height, new_format, swapchain_flags);
+        auto res = kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::ResizeBuffers)>(Hooks::swapchain_resizebuffers_index)(swap_chain, buffer_count, width, height, new_format, swapchain_flags);
         if (SUCCEEDED(res))
           ImGui_ImplDX11_CreateDeviceObjects();
 
         return res;
+      } else {
+        return kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::ResizeBuffers)>(Hooks::swapchain_resizebuffers_index)(swap_chain, buffer_count, width, height, new_format, swapchain_flags);
       }
-
-      return NULL;
     }
   }
 }
