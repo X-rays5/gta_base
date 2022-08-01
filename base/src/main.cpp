@@ -35,32 +35,43 @@ void BaseMain() {
 
     abort();
   });
+  LOG_INFO << "Terminate handler set";
 
-  memory::kPOINTERS = std::make_unique<memory::Pointers>();
+  auto ptr_inst = std::make_unique<memory::Pointers>();
+  LOG_INFO << "Pointers initialized";
 
   LOG_INFO << "Waiting for the game to load...";
   while(*memory::kPOINTERS->game_state_ != rage::GameState::kPlaying) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
-  LOG_INFO << "Game loaded initializing...";
+  LOG_INFO << "Game loaded";
 
   MH_Initialize();
-  kHOOKING = std::make_unique<Hooking>();
+  auto hook_inst = std::make_unique<Hooking>();
+  LOG_INFO << "Hooking initialized";
 
-  kTHREADS = std::make_unique<Threads>();
+  auto threads_inst = std::make_unique<Threads>();
+  LOG_INFO << "Threads initialized";
 
   kTHREADS->AddScript(std::make_shared<scripts::Game>());
   kTHREADS->AddScript(std::make_shared<scripts::Render>());
   kTHREADS->AddScript(std::make_shared<scripts::Main>());
+  LOG_INFO << "Scripts added";
 
-  d3d::kRENDERER = std::make_unique<d3d::Renderer>(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name));
+  auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name));
+  LOG_INFO << "Renderer initialized";
 
-  rpc::kDISCORD = std::make_unique<rpc::Discord>();
+  auto discord_inst = std::make_unique<rpc::Discord>();
+  LOG_INFO << "Discord initialized";
 
   auto scripting_thread = std::thread([]{
     while(common::globals::running)
       kTHREADS->Tick(threads::ThreadType::kScripting);
   });
+  LOG_INFO << "Scripting thread started";
+
+  kHOOKING->Enable();
+  LOG_INFO << "Hooks enabled";
 
   LOG_INFO << "Initialized";
   while (common::globals::running) {
@@ -73,19 +84,31 @@ void BaseMain() {
   }
   LOG_INFO << "Unloading...";
 
-  rpc::kDISCORD.reset();
+  kHOOKING->Disable();
+  LOG_INFO << "Hooks disabled";
 
-  d3d::kRENDERER.reset();
+  discord_inst.reset();
+  LOG_INFO << "Discord shutdown";
+
+  renderer_inst.reset();
+  LOG_INFO << "Renderer shutdown";
 
   if (scripting_thread.joinable())
     scripting_thread.join();
+  LOG_INFO << "Scripting thread stopped";
 
-  kTHREADS.reset();
+  threads_inst.reset();
+  LOG_INFO << "Threads shutdown";
 
-  kHOOKING.reset();
+  hook_inst.reset();
   MH_Uninitialize();
+  LOG_INFO << "Hooking shutdown";
 
-  memory::kPOINTERS.reset();
+  ptr_inst.reset();
+  LOG_INFO << "Pointers shutdown";
+
+  std::set_terminate(og_terminate_handler);
+  LOG_INFO << "Terminate handler restored";
 
   LOG_INFO << "Shutting logging down...";
   logger_inst.reset();

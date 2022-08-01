@@ -5,6 +5,14 @@
 #include "threads.hpp"
 
 namespace gta_base {
+  Threads::Threads() {
+    kTHREADS = this;
+  }
+
+  Threads::~Threads() {
+    kTHREADS = nullptr;
+  }
+
   void Threads::Tick(threads::ThreadType type) {
     mtx_.lock();
     for (auto&& script : scripts_) {

@@ -15,9 +15,13 @@ namespace gta_base {
       DiscordEventHandlers handlers;
       std::memset(&handlers, 0, sizeof(handlers));
       Discord_Initialize(DISCORD_APP_ID, &handlers, 1, "0");
+
+      kDISCORD = this;
     }
 
     Discord::~Discord() {
+      kDISCORD = nullptr;
+
       Discord_ClearPresence();
       Discord_Shutdown();
     }

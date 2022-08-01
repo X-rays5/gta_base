@@ -53,7 +53,7 @@ namespace gta_base {
     private:
       void InitD3D();
     };
-    inline std::unique_ptr<Renderer> kRENDERER;
+    inline Renderer* kRENDERER{};
   }
 }
 

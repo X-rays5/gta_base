@@ -14,6 +14,9 @@
 namespace gta_base {
   class Threads {
   public:
+    Threads();
+    ~Threads();
+
     void Tick(threads::ThreadType type);
     void AddScript(const std::shared_ptr<threads::BaseScript>& script);
     void RemoveScript(const std::shared_ptr<threads::BaseScript>& script);
@@ -25,7 +28,7 @@ namespace gta_base {
   private:
 
   };
-  inline std::unique_ptr<Threads> kTHREADS;
+  inline Threads* kTHREADS{};
 }
 
 #endif //GTABASE_THREADS_HPP

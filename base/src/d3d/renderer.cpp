@@ -28,9 +28,13 @@ namespace gta_base {
       device_->GetImmediateContext(device_context_.GetAddressOf());
 
       InitD3D();
+
+      kRENDERER = this;
     }
 
     Renderer::~Renderer() {
+      kRENDERER = nullptr;
+
       ImGui_ImplWin32_Shutdown();
       ImGui_ImplDX11_Shutdown();
       ImGui::DestroyContext();

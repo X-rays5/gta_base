@@ -17,6 +17,7 @@ namespace gta_base {
     class Pointers {
     public:
       Pointers();
+      ~Pointers();
 
       using send_minidump_t = char(*)();
 
@@ -25,7 +26,7 @@ namespace gta_base {
       IDXGISwapChain** swap_chain_{};
       send_minidump_t send_minidump{};
     };
-    inline std::unique_ptr<Pointers> kPOINTERS;
+    inline Pointers* kPOINTERS{};
   }
 }
 #endif //GTABASE_POINTERS_HPP

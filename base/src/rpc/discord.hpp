@@ -49,7 +49,7 @@ namespace gta_base {
       std::atomic<const char*> small_image_key_ = "";
       std::atomic<const char*> small_image_text_ = "";
     };
-    inline std::unique_ptr<Discord> kDISCORD;
+    inline Discord* kDISCORD{};
   }
 }
 #endif //GTABASE_DISCORD_HPP

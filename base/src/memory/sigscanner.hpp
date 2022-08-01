@@ -279,7 +279,11 @@ namespace gta_base {
         if (result.Rip().As<void*>() == nullptr) {
           LOG_WARNING << "Failed to find " << name;
         } else {
-          LOG_INFO << "Found " << name << " at " << result.Rip().As<void*>();
+          #ifndef NDEBUG
+            LOG_INFO << "Found " << name << " at " << result.Rip().As<void*>();
+          #else
+            LOG_INFO << "Found " << name;
+          #endif
         }
         return result;
       }

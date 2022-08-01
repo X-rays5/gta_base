@@ -33,7 +33,10 @@ namespace gta_base {
   public:
     Hooking();
     ~Hooking();
+
+    void Enable();
+    void Disable();
   };
-  inline std::unique_ptr<Hooking> kHOOKING;
+  inline Hooking* kHOOKING{};
 }
 #endif //GTABASE_HOOKING_HPP
