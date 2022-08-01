@@ -34,7 +34,11 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD load_reason ,LPVOID _) {
     }, nullptr, 0, nullptr);
 
     return TRUE;
-  } else {
-    return FALSE;
+  } else if (load_reason == DLL_PROCESS_DETACH) {
+    gta_base::common::globals::running = false;
+    if (main_thread_)
+      WaitForSingleObject(main_thread_, INFINITE);
+
+    return TRUE;
   }
 }
