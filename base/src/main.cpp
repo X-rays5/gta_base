@@ -16,20 +16,33 @@
 #include "scripts/scripting_main/main_script.hpp"
 #include "rpc/discord.hpp"
 
-
 std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
   using namespace gta_base;
 
   kLOGGER = std::make_unique<Logger>();
+
+  std::set_terminate([]{
+    try {
+      std::rethrow_exception(std::current_exception());
+    } catch(std::runtime_error& e) {
+      LOG_FATAL << "Uncaught exception occurred: " << e.what();
+    } catch(...) {
+      LOG_FATAL << "Unknown exception occurred";
+    }
+
+    abort();
+  });
+
   memory::kPOINTERS = std::make_unique<memory::Pointers>();
 
-  LOG_INFO("Waiting for the game to load...");
+  LOG_INFO << "Waiting for the game to load...";
   while(*memory::kPOINTERS->game_state_ != rage::GameState::kPlaying) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
-  LOG_INFO("Game loaded initializing...");
+  LOG_INFO << "Game loaded initializing...";
 
+  MH_Initialize();
   kHOOKING = std::make_unique<Hooking>();
 
   kTHREADS = std::make_unique<Threads>();
@@ -47,7 +60,7 @@ void BaseMain() {
       kTHREADS->Tick(threads::ThreadType::kScripting);
   });
 
-  LOG_INFO("Initialized");
+  LOG_INFO << "Initialized";
   while (common::globals::running) {
     rpc::kDISCORD->Tick();
 
@@ -56,7 +69,7 @@ void BaseMain() {
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
-  LOG_INFO("Unloading...");
+  LOG_INFO << "Unloading...";
 
   rpc::kDISCORD.reset();
 
@@ -68,9 +81,10 @@ void BaseMain() {
   kTHREADS.reset();
 
   kHOOKING.reset();
+  MH_Uninitialize();
 
   memory::kPOINTERS.reset();
 
-  LOG_INFO("successful unload");
+  LOG_INFO << "successful unload";
   gta_base::kLOGGER.reset();
 }

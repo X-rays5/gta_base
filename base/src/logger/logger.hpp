@@ -7,7 +7,11 @@
 #ifndef GTABASE_LOGGER_HPP
 #define GTABASE_LOGGER_HPP
 #include <memory>
-#include <spdlog/spdlog.h>
+#include <fstream>
+#include <g3log/g3log.hpp>
+#include <g3log/logworker.hpp>
+#include <g3log/logmessage.hpp>
+#include <fmt/format.h>
 
 namespace gta_base {
   class Logger {
@@ -15,54 +19,35 @@ namespace gta_base {
     Logger();
     ~Logger();
 
-    template<typename... Args>
-    __forceinline void trace(Args&&... args) {
-      console_log_->trace(args...);
-      file_log_->trace(args...);
-    }
-
-    template<typename... Args>
-    __forceinline void debug(Args&&... args) {
-      console_log_->debug(args...);
-      file_log_->debug(args...);
-    }
-
-    template<typename... Args>
-    __forceinline void info(Args&&... args) {
-      console_log_->info(args...);
-      file_log_->info(args...);
-    }
-
-    template<typename... Args>
-    __forceinline void warn(Args&&... args) {
-      console_log_->warn(args...);
-      file_log_->warn(args...);
-    }
-
-    template<typename... Args>
-    __forceinline void error(Args&&... args) {
-      console_log_->error(args...);
-      file_log_->error(args...);
-    }
-
-    template<typename... Args>
-    __forceinline void critical(Args&&... args) {
-      console_log_->critical(args...);
-      file_log_->critical(args...);
-    }
-
   private:
-    std::shared_ptr<spdlog::logger> console_log_;
-    std::shared_ptr<spdlog::logger> file_log_;
+    enum class LogColor {
+      RESET,
+      WHITE = 97,
+      CYAN = 36,
+      MAGENTA = 35,
+      BLUE = 34,
+      GREEN = 32,
+      YELLOW = 33,
+      RED = 31,
+      BLACK = 30
+    };
+
+    struct LogSink {
+      void Log(g3::LogMessageMover log);
+      static LogColor GetColor(const LEVELS& level);
+      static std::string FormatConsole(const g3::LogMessage& msg);
+      static std::string FormatFile(const g3::LogMessage& msg);
+    };
+
+    std::unique_ptr<g3::LogWorker> log_worker_;
+    std::ofstream cout_;
+    std::ofstream file_out_;
   };
   inline std::unique_ptr<Logger> kLOGGER;
 }
 
-#define LOG_TRACE(...) ::gta_base::kLOGGER->trace(__VA_ARGS__)
-#define LOG_DEBUG(...) ::gta_base::kLOGGER->debug(__VA_ARGS__)
-#define LOG_INFO(...) ::gta_base::kLOGGER->info(__VA_ARGS__)
-#define LOG_WARN(...) ::gta_base::kLOGGER->warn(__VA_ARGS__)
-#define LOG_ERROR(...) ::gta_base::kLOGGER->error(__VA_ARGS__)
-#define LOG_CRITICAL(...) ::gta_base::kLOGGER->critical(__VA_ARGS__)
-#define LOG_FATAL(...) ::gta_base::kLOGGER->fatal(__VA_ARGS__)
+#define LOG_DEBUG LOG(DEBUG)
+#define LOG_INFO LOG(INFO)
+#define LOG_WARNING LOG(WARNING)
+#define LOG_FATAL LOG(FATAL)
 #endif //GTABASE_LOGGER_HPP

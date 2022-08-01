@@ -18,9 +18,12 @@ namespace gta_base {
     public:
       Pointers();
 
+      using send_minidump_t = char(*)();
+
       enum rage::GameState* game_state_{};
       CPedFactory** ped_factory_{};
       IDXGISwapChain** swap_chain_{};
+      send_minidump_t send_minidump{};
     };
     inline std::unique_ptr<Pointers> kPOINTERS;
   }

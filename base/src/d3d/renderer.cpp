@@ -10,6 +10,7 @@
 #include "../logger/logger.hpp"
 #include "../ui/fonts/roboto_mono.hpp"
 #include "../common/globals.hpp"
+#include "../threads/threads.hpp"
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -52,17 +53,16 @@ namespace gta_base {
 
     HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
       if (common::globals::running) {
-        ImGui_ImplWin32_NewFrame();
+        /*ImGui_ImplWin32_NewFrame();
         ImGui_ImplDX11_NewFrame();
         ImGui::NewFrame();
 
         ImGui::PushFont(kRENDERER->GetFont());
-        // TODO: call d3d scripts here
-        LOG_DEBUG("Present");
+        kTHREADS->Tick(threads::ThreadType::kRenderer);
         ImGui::PopFont();
 
         ImGui::Render();
-        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());*/
       }
 
       return kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::Present)>(Hooks::swapchain_present_index)(swap_chain, sync_interval, flags);

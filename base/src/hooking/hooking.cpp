@@ -5,54 +5,27 @@
 #include "hooking.hpp"
 #include "wndproc.hpp"
 #include "../logger/logger.hpp"
-#include "../memory/pointers.hpp"
 #include "../d3d/renderer.hpp"
 
 namespace gta_base {
-  Hooking::Hooking() : swap_chain_hook_(*memory::kPOINTERS->swap_chain_, Hooks::swapchain_num_funcs) {
-    MH_Initialize();
+  Hooking::Hooking() :
+  swap_chain_hook_(*memory::kPOINTERS->swap_chain_, Hooks::swapchain_num_funcs),
+  send_minidump("SendMinidump", memory::kPOINTERS->send_minidump, &Hooks::SendMiniDump) {
     hooking::HookWndProc();
 
-    swap_chain_hook_.Hook(Hooks::swapchain_present_index, &Hooks::Present);
-    swap_chain_hook_.Hook(Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
-    swap_chain_hook_.Enable();
+    //swap_chain_hook_.Hook(Hooks::swapchain_present_index, &Hooks::Present);
+    //swap_chain_hook_.Hook(Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
+    //swap_chain_hook_.Enable();
+
+    send_minidump.Enable();
   }
 
   Hooking::~Hooking() {
-    swap_chain_hook_.Disable();
-    //swap_chain_hook_.Unhook(Hooks::swapchain_present_index);
-    //swap_chain_hook_.Unhook(Hooks::swapchain_resizebuffers_index);
+    //swap_chain_hook_.Disable();
 
-    MH_DisableHook(MH_ALL_HOOKS);
-    for (auto &hook : hooks) {
-      MH_RemoveHook(hook.second);
-    }
-    MH_Uninitialize();
+    send_minidump.Disable();
+
     hooking::UnhookWndProc();
-  }
-
-  MH_STATUS Hooking::AddHook(const std::string& name, LPVOID src, LPVOID dst, LPVOID* og) {
-    MH_CreateHook(src, dst, og);
-    MH_STATUS result = MH_EnableHook(src);
-    hooks[name] = src;
-
-    if (result == MH_OK) {
-#ifdef NDEBUG
-      LOG_INFO("[{}] hooked", name);
-#else
-      LOG_DEBUG("[{}] hooked src -> {}, dst -> {}, og -> {}", name, (void*)src, (void*)dst, (void*)og);
-#endif
-    }
-
-    return result;
-  }
-
-  MH_STATUS Hooking::RemoveHook(const std::string& name) {
-    auto hook_src = hooks[name];
-    hooks.erase(name);
-
-    MH_DisableHook(hook_src);
-    return MH_RemoveHook(hook_src);
   }
 
   HRESULT Hooks::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
@@ -63,4 +36,9 @@ namespace gta_base {
     return d3d::Renderer::SwapChainResizeBuffer(swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
   }
 
+  char Hooks::SendMiniDump() {
+    LOG_FATAL << "Minidump is being sent";
+
+    return kHOOKING->send_minidump.GetOriginal<decltype(&SendMiniDump)>()();
+  }
 }

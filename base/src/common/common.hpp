@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <string>
+#include <fmt/format.h>
 #include "globals.hpp"
 
 #pragma warning(disable:4996)

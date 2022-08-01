@@ -23,11 +23,11 @@ namespace gta_base {
       virtual ThreadType GetType() = 0;
       virtual void RunTick() = 0;
       [[nodiscard]] bool IsInitialized() const {
-        return initialized;
+        return initialized_;
       };
       virtual void Init() = 0;
     protected:
-      bool initialized = false;
+      bool initialized_ = false;
 
     protected:
       BaseScript() = default;
