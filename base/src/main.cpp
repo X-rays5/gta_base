@@ -20,8 +20,10 @@ std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
   using namespace gta_base;
 
-  kLOGGER = std::make_unique<Logger>();
+  auto logger_inst = std::make_unique<Logger>();
+  LOG_INFO << "Logging initialized";
 
+  auto og_terminate_handler = std::get_terminate();
   std::set_terminate([]{
     try {
       std::rethrow_exception(std::current_exception());
@@ -85,6 +87,6 @@ void BaseMain() {
 
   memory::kPOINTERS.reset();
 
-  LOG_INFO << "successful unload";
-  gta_base::kLOGGER.reset();
+  LOG_INFO << "Shutting logging down...";
+  logger_inst.reset();
 }

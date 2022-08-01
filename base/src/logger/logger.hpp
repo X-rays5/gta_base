@@ -19,6 +19,14 @@ namespace gta_base {
     Logger();
     ~Logger();
 
+    inline std::shared_ptr<std::ofstream> GetCout() {
+      return cout_;
+    }
+
+    inline std::shared_ptr<std::ofstream> GetFileOut() {
+      return file_out_;
+    }
+
   private:
     enum class LogColor {
       RESET,
@@ -38,12 +46,13 @@ namespace gta_base {
       static std::string FormatConsole(const g3::LogMessage& msg);
       static std::string FormatFile(const g3::LogMessage& msg);
     };
+    friend struct LogSink;
 
     std::unique_ptr<g3::LogWorker> log_worker_;
-    std::ofstream cout_;
-    std::ofstream file_out_;
+    std::shared_ptr<std::ofstream> cout_;
+    std::shared_ptr<std::ofstream> file_out_;
   };
-  inline std::unique_ptr<Logger> kLOGGER;
+  inline Logger* kLOGGER{};
 }
 
 #define LOG_DEBUG LOG(DEBUG)

@@ -43,6 +43,10 @@ namespace gta_base {
       return log_path;
     }
 
+    __forceinline std::filesystem::path GetLogFile() {
+      return GetLogDir() / fmt::format("{}.log", globals::name);
+    }
+
     __forceinline std::filesystem::path GetLogSaveDir() {
       std::filesystem::path log_path = GetLogDir() / "save";
       if (!std::filesystem::exists(log_path)) {

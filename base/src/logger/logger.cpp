@@ -29,6 +29,8 @@ namespace gta_base {
   }
 
   Logger::Logger() : log_worker_(g3::LogWorker::createLogWorker()) {
+    kLOGGER = this;
+
     if (AttachConsole(GetCurrentProcessId()) || AllocConsole()) {
       auto console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
       if (!console_handle)
@@ -39,7 +41,7 @@ namespace gta_base {
 
       SetConsoleMode(console_handle);
 
-      auto log_file_path = common::GetLogDir() / fmt::format("{}.log", common::globals::name);
+      auto log_file_path = common::GetLogFile();
       if (std::filesystem::exists(log_file_path)) {
         uint64_t since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_crashed{}", since_epoch, log_file_path.stem().string(), log_file_path.extension().string());
@@ -47,8 +49,13 @@ namespace gta_base {
         SaveLogFile(log_file_path_tmp);
       }
 
-      cout_.open("CONOUT$", std::ios_base::out | std::ios_base::app);
-      file_out_.open(log_file_path, std::ios_base::out | std::ios_base::trunc);
+      cout_ = std::make_shared<std::ofstream>("CONOUT$");
+      file_out_ = std::make_shared<std::ofstream>(log_file_path, std::ios_base::out | std::ios_base::app);
+
+      if (cout_->is_open())
+        *cout_ << "Console logging stream open" << std::endl;
+      if (file_out_->is_open())
+        *file_out_ << "File logging stream open" << std::endl;
 
       log_worker_->addSink(std::make_unique<LogSink>(), &LogSink::Log);
       g3::initializeLogging(log_worker_.get());
@@ -58,28 +65,33 @@ namespace gta_base {
   }
 
   Logger::~Logger() {
-    log_worker_->removeAllSinks();
     log_worker_.reset();
 
-    if (cout_.is_open())
-      cout_.close();
-    if (file_out_.is_open())
-      file_out_.close();
-
-    FreeConsole();
-
-    uint64_t since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    auto debug_file = std::filesystem::path(common::GetLogDir().string() + fmt::format("/{}.log", common::globals::name));
-    if (std::filesystem::exists(debug_file)) {
-      std::filesystem::rename(debug_file, std::filesystem::path(common::GetLogSaveDir().string() + fmt::format("/{}_{}.log", since_epoch, common::globals::name)));
+    *file_out_ << "File logging stream closing" << std::endl;
+    file_out_->close();
+    try {
+      uint64_t since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+      auto log_file = common::GetLogFile();
+      if (std::filesystem::exists(log_file)) {
+        auto log_file_tmp = log_file.parent_path() / fmt::format("{}_{}{}", since_epoch, log_file.stem().string(), log_file.extension().string());
+        std::filesystem::rename(log_file, log_file_tmp);
+        SaveLogFile(log_file_tmp);
+      }
+    } catch (std::filesystem::filesystem_error& e) {
+      *cout_ << "Exception while storing log file: " << e.what() << '\n' << "src: " << e.path1().string() << '\n' << "dst: " << e.path2().string() << '\n';
     }
+
+    *cout_ << "Console logging stream closing" << std::endl;
+    cout_->close();
+    FreeConsole();
+    kLOGGER = nullptr;
   }
 
   void Logger::LogSink::Log(g3::LogMessageMover log) {
-    if (kLOGGER->cout_.is_open())
-      kLOGGER->cout_ << log.get().toString(FormatConsole) << std::flush;
-    if (kLOGGER->file_out_.is_open())
-      kLOGGER->file_out_ << log.get().toString(FormatFile) << std::flush;
+    if (kLOGGER->GetCout()->is_open())
+      *kLOGGER->GetCout() << log.get().toString(FormatConsole) << std::flush;
+    if (kLOGGER->GetFileOut()->is_open())
+      *kLOGGER->GetFileOut() << log.get().toString(FormatFile) << std::flush;
   }
 
   Logger::LogColor Logger::LogSink::GetColor(const LEVELS& level) {
