@@ -3,18 +3,16 @@
 //
 
 #include <chrono>
-#include "discord_register.h"
 #include "discord_rpc.h"
 #include "discord.hpp"
-
-#define DISCORD_APP_ID "example"
+#include <xorstr.hpp>
 
 namespace gta_base {
   namespace rpc {
     Discord::Discord() {
       DiscordEventHandlers handlers;
       std::memset(&handlers, 0, sizeof(handlers));
-      Discord_Initialize(DISCORD_APP_ID, &handlers, 1, "0");
+      Discord_Initialize(xorstr_("1003792099059183676"), &handlers, 1, nullptr);
 
       kDISCORD = this;
     }

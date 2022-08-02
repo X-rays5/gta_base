@@ -6,14 +6,14 @@
 
 #ifndef GTABASE_RENDER_SCRIPT_HPP
 #define GTABASE_RENDER_SCRIPT_HPP
-#include "../../threads/base_script.hpp"
+#include "../../scriptmanager/base_script.hpp"
 
 namespace gta_base {
   namespace scripts {
-    class Render : public threads::BaseScript {
+    class UiDraw : public scriptmanager::BaseScript {
     public:
-      threads::ThreadType GetType() final {
-        return threads::ThreadType::kRenderer;
+      scriptmanager::ScriptType GetType() final {
+        return scriptmanager::ScriptType::kRenderer;
       }
 
       void Init() final;

@@ -8,7 +8,7 @@
 #include <Windows.h>
 #include <fmt/format.h>
 #include "logger.hpp"
-#include "../common/common.hpp"
+#include "../misc/common.hpp"
 
 namespace gta_base {
   #define AddColorToStream(color) "\x1b[" << int(color) << "m"
@@ -43,8 +43,7 @@ namespace gta_base {
 
       auto log_file_path = common::GetLogFile();
       if (std::filesystem::exists(log_file_path)) {
-        uint64_t since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_crashed{}", since_epoch, log_file_path.stem().string(), log_file_path.extension().string());
+        auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_crashed{}", common::GetEpoch(), log_file_path.stem().string(), log_file_path.extension().string());
         std::filesystem::rename(log_file_path, log_file_path_tmp);
         SaveLogFile(log_file_path_tmp);
       }
@@ -70,10 +69,9 @@ namespace gta_base {
     *file_out_ << "File logging stream closing" << std::endl;
     file_out_->close();
     try {
-      uint64_t since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
       auto log_file = common::GetLogFile();
       if (std::filesystem::exists(log_file)) {
-        auto log_file_tmp = log_file.parent_path() / fmt::format("{}_{}{}", since_epoch, log_file.stem().string(), log_file.extension().string());
+        auto log_file_tmp = log_file.parent_path() / fmt::format("{}_{}{}", common::GetEpoch(), log_file.stem().string(), log_file.extension().string());
         std::filesystem::rename(log_file, log_file_tmp);
         SaveLogFile(log_file_tmp);
       }

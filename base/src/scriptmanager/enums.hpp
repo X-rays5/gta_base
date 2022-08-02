@@ -7,8 +7,8 @@
 #ifndef GTABASE_THREADDEFS_HPP
 #define GTABASE_THREADDEFS_HPP
 namespace gta_base {
-  namespace threads {
-    enum class ThreadType {
+  namespace scriptmanager {
+    enum class ScriptType {
       kScripting,
       kGame,
       kRenderer

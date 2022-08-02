@@ -2,38 +2,39 @@
 // Created by X-ray on 3/7/2022.
 //
 
-#include "threads.hpp"
+#include "scriptmanager.hpp"
 
 namespace gta_base {
-  Threads::Threads() {
-    kTHREADS = this;
+  ScriptManager::ScriptManager() {
+    kSCRIPT_MANAGER = this;
   }
 
-  Threads::~Threads() {
-    kTHREADS = nullptr;
+  ScriptManager::~ScriptManager() {
+    kSCRIPT_MANAGER = nullptr;
   }
 
-  void Threads::Tick(threads::ThreadType type) {
+  void ScriptManager::Tick(scriptmanager::ScriptType type) {
     mtx_.lock();
     for (auto&& script : scripts_) {
       mtx_.unlock();
       if (script->GetType() == type) {
-        if (!script->IsInitialized())
+        if (!script->IsInitialized()) {
           script->Init();
-
-        script->RunTick();
+        } else {
+          script->RunTick();
+        }
       }
       mtx_.lock();
     }
     mtx_.unlock();
   }
 
-  void Threads::AddScript(const std::shared_ptr<threads::BaseScript>& script) {
+  void ScriptManager::AddScript(const std::shared_ptr<scriptmanager::BaseScript>& script) {
     std::lock_guard mtx_lock(mtx_);
     scripts_.emplace_back(script);
   }
 
-  void Threads::RemoveScript(const std::shared_ptr<threads::BaseScript>& script) {
+  void ScriptManager::RemoveScript(const std::shared_ptr<scriptmanager::BaseScript>& script) {
     std::lock_guard mtx_lock(mtx_);
     for (int i = 0; i < scripts_.size(); i++) {
       if (scripts_[i] == script) {

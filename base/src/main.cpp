@@ -6,15 +6,16 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "logger/logger.hpp"
-#include "common/common.hpp"
+#include "misc/common.hpp"
 #include "hooking/hooking.hpp"
 #include "d3d/renderer.hpp"
 #include "memory/pointers.hpp"
-#include "threads/threads.hpp"
-#include "scripts/game_main/game_script.hpp"
-#include "scripts/render_main/render_script.hpp"
-#include "scripts/scripting_main/main_script.hpp"
+#include "scriptmanager/scriptmanager.hpp"
+#include "scripts/game/discord.hpp"
+#include "scripts/game/uitick.hpp"
+#include "scripts/render/uidraw.hpp"
 #include "rpc/discord.hpp"
+#include "ui/manager.hpp"
 
 std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
@@ -50,23 +51,27 @@ void BaseMain() {
   auto hook_inst = std::make_unique<Hooking>();
   LOG_INFO << "Hooking initialized";
 
-  auto threads_inst = std::make_unique<Threads>();
-  LOG_INFO << "Threads initialized";
+  auto script_manager_inst = std::make_unique<ScriptManager>();
+  LOG_INFO << "Script Manager initialized";
 
-  kTHREADS->AddScript(std::make_shared<scripts::Game>());
-  kTHREADS->AddScript(std::make_shared<scripts::Render>());
-  kTHREADS->AddScript(std::make_shared<scripts::Main>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
   LOG_INFO << "Scripts added";
 
   auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name));
   LOG_INFO << "Renderer initialized";
+
+  auto ui_manager_inst = std::make_unique<ui::Manager>();
+  LOG_INFO << "UI Manager initialized";
 
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO << "Discord initialized";
 
   auto scripting_thread = std::thread([]{
     while(common::globals::running)
-      kTHREADS->Tick(threads::ThreadType::kScripting);
+      kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame); // TODO: actually make this a game thread
+      kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
   });
   LOG_INFO << "Scripting thread started";
 
@@ -75,8 +80,6 @@ void BaseMain() {
 
   LOG_INFO << "Initialized";
   while (common::globals::running) {
-    rpc::kDISCORD->Tick();
-
     if (common::KeyState(VK_DELETE))
       common::globals::running = false;
 
@@ -90,6 +93,9 @@ void BaseMain() {
   discord_inst.reset();
   LOG_INFO << "Discord shutdown";
 
+  ui_manager_inst.reset();
+  LOG_INFO << "UI Manager shutdown";
+
   renderer_inst.reset();
   LOG_INFO << "Renderer shutdown";
 
@@ -97,8 +103,8 @@ void BaseMain() {
     scripting_thread.join();
   LOG_INFO << "Scripting thread stopped";
 
-  threads_inst.reset();
-  LOG_INFO << "Threads shutdown";
+  script_manager_inst.reset();
+  LOG_INFO << "Script Manager shutdown";
 
   hook_inst.reset();
   MH_Uninitialize();

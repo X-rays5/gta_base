@@ -11,26 +11,29 @@ namespace gta_base {
   Hooking::Hooking() :
   swap_chain_hook_(*memory::kPOINTERS->swap_chain_, Hooks::swapchain_num_funcs),
   send_minidump("SendMinidump", memory::kPOINTERS->send_minidump, &Hooks::SendMiniDump) {
-    //swap_chain_hook_.Hook(Hooks::swapchain_present_index, &Hooks::Present);
-    //swap_chain_hook_.Hook(Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
+    swap_chain_hook_.Hook(Hooks::swapchain_present_index, &Hooks::Present);
+    swap_chain_hook_.Hook(Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
 
     kHOOKING = this;
   }
 
   Hooking::~Hooking() {
+    swap_chain_hook_.Unhook(Hooks::swapchain_present_index);
+    swap_chain_hook_.Unhook(Hooks::swapchain_resizebuffers_index);
+
     kHOOKING = nullptr;
   }
 
   void Hooking::Enable() {
     hooking::HookWndProc();
-    //swap_chain_hook_.Enable();
+    swap_chain_hook_.Enable();
 
     send_minidump.Enable();
 
   }
 
   void Hooking::Disable() {
-    //swap_chain_hook_.Disable();
+    swap_chain_hook_.Disable();
 
     send_minidump.Disable();
     hooking::UnhookWndProc();

@@ -6,7 +6,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "main.hpp"
-#include "common/common.hpp"
+#include "misc/common.hpp"
 
 HANDLE main_thread_ = nullptr;
 HINSTANCE dll_handle_ = nullptr;

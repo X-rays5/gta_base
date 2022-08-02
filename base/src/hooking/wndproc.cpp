@@ -3,7 +3,7 @@
 //
 
 #include "wndproc.hpp"
-#include "../common/common.hpp"
+#include "../misc/common.hpp"
 #include "../logger/logger.hpp"
 #include "../d3d/renderer.hpp"
 

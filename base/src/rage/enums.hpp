@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GTA_BASE_ENUMS_HPP
-#define GTA_BASE_ENUMS_HPP
+#ifndef GTA_BASE_ENUMS_RAGE_HPP
+#define GTA_BASE_ENUMS_RAGE_HPP
 #include <cstdint>
 
 namespace gta_base {

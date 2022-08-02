@@ -7,10 +7,10 @@
 #ifndef GTABASE_BASE_SCRIPT_HPP
 #define GTABASE_BASE_SCRIPT_HPP
 #include <queue>
-#include "threaddefs.hpp"
+#include "enums.hpp"
 
 namespace gta_base {
-  namespace threads {
+  namespace scriptmanager {
     class BaseScript {
     public:
       virtual ~BaseScript() noexcept = default;
@@ -20,7 +20,7 @@ namespace gta_base {
       BaseScript& operator=(BaseScript&&) = delete;
 
 
-      virtual ThreadType GetType() = 0;
+      virtual ScriptType GetType() = 0;
       virtual void RunTick() = 0;
       [[nodiscard]] bool IsInitialized() const {
         return initialized_;

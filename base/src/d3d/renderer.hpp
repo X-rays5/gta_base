@@ -11,6 +11,8 @@
 #include <Windows.h>
 #include <wrl/client.h>
 #include <d3d11.h>
+#include "texturemanager.hpp"
+#include "draw.hpp"
 
 namespace gta_base {
   namespace d3d {
@@ -44,6 +46,8 @@ namespace gta_base {
       static HRESULT Present(IDXGISwapChain *swap_chain, UINT sync_interval, UINT flags);
       static HRESULT SwapChainResizeBuffer(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags);
     private:
+      std::unique_ptr<TextureManager> texture_manager_;
+
       Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain_;
       Microsoft::WRL::ComPtr<ID3D11Device> device_;
       Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context_;

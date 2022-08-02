@@ -6,11 +6,9 @@
 #include <imgui_impl_win32.h>
 #include "renderer.hpp"
 #include "../hooking/hooking.hpp"
-#include "../memory/pointers.hpp"
-#include "../logger/logger.hpp"
 #include "../ui/fonts/roboto_mono.hpp"
-#include "../common/globals.hpp"
-#include "../threads/threads.hpp"
+#include "../misc/globals.hpp"
+#include "../scriptmanager/scriptmanager.hpp"
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -22,17 +20,19 @@ namespace gta_base {
 
       void* device{};
       if (FAILED(swap_chain_->GetDevice(__uuidof(ID3D11Device), &device))) {
-        // TODO: log
+        LOG_FATAL << "Failed to get device from swap chain";
       }
       device_.Attach(static_cast<ID3D11Device*>(device));
       device_->GetImmediateContext(device_context_.GetAddressOf());
 
       InitD3D();
 
+      texture_manager_ = std::make_unique<TextureManager>();
       kRENDERER = this;
     }
 
     Renderer::~Renderer() {
+      texture_manager_.reset();
       kRENDERER = nullptr;
 
       ImGui_ImplWin32_Shutdown();
@@ -57,16 +57,16 @@ namespace gta_base {
 
     HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
       if (common::globals::running) {
-        /*ImGui_ImplWin32_NewFrame();
+        ImGui_ImplWin32_NewFrame();
         ImGui_ImplDX11_NewFrame();
         ImGui::NewFrame();
 
         ImGui::PushFont(kRENDERER->GetFont());
-        kTHREADS->Tick(threads::ThreadType::kRenderer);
+        kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kRenderer);
         ImGui::PopFont();
 
         ImGui::Render();
-        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());*/
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
       }
 
       return kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::Present)>(Hooks::swapchain_present_index)(swap_chain, sync_interval, flags);

@@ -9,7 +9,10 @@
 #include <cstdlib>
 #include <filesystem>
 #include <string>
+#include <chrono>
 #include <fmt/format.h>
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #include "globals.hpp"
 
 #pragma warning(disable:4996)
@@ -71,12 +74,24 @@ namespace gta_base {
       return texture_path;
     }
 
-    __forceinline bool KeyState(int key) {
-      return GetAsyncKeyState(key) & 0x8000;
+    __forceinline std::uint64_t GetEpoch() {
+      return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     }
 
     __forceinline HWND GetHwnd(const char* class_name, const char* window_name) {
       return FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
+    }
+
+    __forceinline bool IsForegroundWindow() {
+      auto foreground_window = GetForegroundWindow();
+      return foreground_window == GetConsoleWindow() || foreground_window == GetHwnd(common::globals::target_window_class, common::globals::target_window_name);
+    }
+
+    __forceinline bool KeyState(int key) {
+      if (IsForegroundWindow())
+        return GetAsyncKeyState(key) & 0x8000;
+
+      return false;
     }
 
     __forceinline bool IsTargetProcess() {
