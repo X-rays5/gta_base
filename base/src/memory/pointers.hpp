@@ -9,8 +9,10 @@
 #include <memory>
 #include <d3d11.h>
 #include "sigscanner.hpp"
+#include <ped/CPedFactory.hpp>
 #include "../rage/enums.hpp"
-#include "../rage/classes.hpp"
+#include "../rage/classes/script_thread.hpp"
+#include "../rage/classes/at_array.hpp"
 
 namespace gta_base {
   namespace memory {
@@ -19,12 +21,39 @@ namespace gta_base {
       Pointers();
       ~Pointers();
 
-      using send_minidump_t = char(*)();
-
       enum rage::GameState* game_state_{};
+
       CPedFactory** ped_factory_{};
+
       IDXGISwapChain** swap_chain_{};
-      send_minidump_t send_minidump{};
+
+      using send_minidump_t = char(*)();
+      send_minidump_t SendMiniDump{};
+
+      using read_bitbuf_dword_t = bool(*)(rage::datBitBuffer* buffer, PVOID read, int bits);
+      read_bitbuf_dword_t ReadBitBufDword{};
+      using read_bitbuf_string_t = bool(*)(rage::datBitBuffer* buffer, char* read, int bits);
+      read_bitbuf_string_t ReadBitBufString{};
+      using read_bitbuf_bool_t = bool(*)(rage::datBitBuffer* buffer, bool* read, int bits);
+      read_bitbuf_bool_t ReadBitBufBool{};
+      using read_bitbuf_array_t = bool(*)(rage::datBitBuffer* buffer, PVOID read, int bits, int unk);
+      read_bitbuf_array_t ReadBitBufArray{};
+      using write_bitbuf_qword_t = bool(*)(rage::datBitBuffer* buffer, uint64_t val, int bits);
+      write_bitbuf_qword_t WriteBitBufQword{};
+      using write_bitbuf_dword_t = bool(*)(rage::datBitBuffer* buffer, uint32_t val, int bits);
+      write_bitbuf_dword_t WriteBitBufDword{};
+      using write_bitbuf_int64_t = bool(*)(rage::datBitBuffer* buffer, int64_t val, int bits);
+      write_bitbuf_int64_t WriteBitBufInt64{};
+      using write_bitbuf_int32_t = bool(*)(rage::datBitBuffer* buffer, int32_t val, int bits);
+      write_bitbuf_int32_t WriteBitBufInt32{};
+      using write_bitbuf_bool_t = bool(*)(rage::datBitBuffer* buffer, bool val, int bits);
+      write_bitbuf_bool_t WriteBitBufBool{};
+      using write_bitbuf_array_t = bool(*)(rage::datBitBuffer* buffer, uint8_t* val, int bits, int unk);
+      write_bitbuf_array_t WriteBitBufArray{};
+
+      rage::atArray<GtaThread*>* script_threads_;
+      using run_script_threads_t = bool(*)(std::uint32_t ops_to_execute);
+      run_script_threads_t RunScriptThreads{};
     };
     inline Pointers* kPOINTERS{};
   }

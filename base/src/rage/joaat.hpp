@@ -5,16 +5,12 @@
 #pragma once
 #ifndef GTA_BASE_JOAAT_HPP
 #define GTA_BASE_JOAAT_HPP
-
-
-#pragma once
 #include <cstddef>
 #include <cstdint>
 #include <string_view>
 #include <type_traits>
 
-namespace rage
-{
+namespace rage {
   using joaat_t = std::uint32_t;
 
   inline constexpr char joaat_to_lower(char c)
@@ -90,6 +86,6 @@ namespace rage
 }
 
 #define RAGE_JOAAT_IMPL(str) (::rage::constexpr_joaat<sizeof(str) - 1>((str), std::make_index_sequence<sizeof(str) - 1>())())
-#define RAGE_JOAAT(str) (std::integral_constant<rage::joaat_t, RAGE_JOAAT_IMPL(str)>::value)
+#define RAGE_JOAAT(str) (std::integral_constant<::rage::joaat_t, RAGE_JOAAT_IMPL(str)>::value)
 
 #endif //GTA_BASE_JOAAT_HPP

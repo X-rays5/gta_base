@@ -6,13 +6,17 @@
 #include "wndproc.hpp"
 #include "../logger/logger.hpp"
 #include "../d3d/renderer.hpp"
+#include "../misc/common.hpp"
+#include "../scriptmanager/scriptmanager.hpp"
 
 namespace gta_base {
   Hooking::Hooking() :
-  swap_chain_hook_(*memory::kPOINTERS->swap_chain_, Hooks::swapchain_num_funcs),
-  send_minidump("SendMinidump", memory::kPOINTERS->send_minidump, &Hooks::SendMiniDump) {
-    swap_chain_hook_.Hook(Hooks::swapchain_present_index, &Hooks::Present);
-    swap_chain_hook_.Hook(Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
+  swap_chain_hook_(*memory::kPOINTERS->swap_chain_),
+  //send_minidump_hook_("SendMinidump", memory::kPOINTERS->SendMiniDump, &Hooks::SendMiniDump)
+  run_script_threads_hook_("RunScriptThreds", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads)
+  {
+    swap_chain_hook_.Hook("Present", Hooks::swapchain_present_index, &Hooks::Present);
+    swap_chain_hook_.Hook("ResizeBuffers", Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
 
     kHOOKING = this;
   }
@@ -26,16 +30,22 @@ namespace gta_base {
 
   void Hooking::Enable() {
     hooking::HookWndProc();
-    swap_chain_hook_.Enable();
+    swap_chain_hook_.Enable(Hooks::swapchain_present_index);
+    swap_chain_hook_.Enable(Hooks::swapchain_resizebuffers_index);
 
-    send_minidump.Enable();
+    run_script_threads_hook_.Enable();
+
+    //send_minidump_hook_.Enable();
 
   }
 
   void Hooking::Disable() {
-    swap_chain_hook_.Disable();
+    swap_chain_hook_.Disable(Hooks::swapchain_resizebuffers_index);
+    swap_chain_hook_.Disable(Hooks::swapchain_present_index);
 
-    send_minidump.Disable();
+    run_script_threads_hook_.Disable();
+
+    //send_minidump_hook_.Disable();
     hooking::UnhookWndProc();
   }
 
@@ -50,6 +60,19 @@ namespace gta_base {
   char Hooks::SendMiniDump() {
     LOG_FATAL << "Minidump is being sent";
 
-    return kHOOKING->send_minidump.GetOriginal<decltype(&SendMiniDump)>()();
+    return 1;
+    //return kHOOKING->send_minidump_hook_.GetOriginal<decltype(&SendMiniDump)>()();
+  }
+
+  bool Hooks::RunScriptThreads(std::uint32_t ops_to_execute) {
+    try {
+      if (common::globals::running) {
+        kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame);
+      }
+    } catch(...) {
+      LOG_WARNING << "Exception was thrown in RunScriptThreads";
+    }
+
+    return kHOOKING->run_script_threads_hook_.GetOriginal<decltype(&Hooks::RunScriptThreads)>()(ops_to_execute);
   }
 }

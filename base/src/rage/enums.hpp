@@ -8,14 +8,12 @@
 #define GTA_BASE_ENUMS_RAGE_HPP
 #include <cstdint>
 
-namespace gta_base {
-  namespace rage {
-    enum GameState : std::uint32_t
-    {
-      kPlaying = 0
-    };
+namespace rage {
+  enum GameState : std::uint32_t
+  {
+    kPlaying = 0
+  };
 
-  }
 }
 
 #endif //GTA_BASE_ENUMS_HPP

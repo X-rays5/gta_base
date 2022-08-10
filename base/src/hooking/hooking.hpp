@@ -23,12 +23,15 @@ namespace gta_base {
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
 
     static char SendMiniDump();
+
+    static bool RunScriptThreads(std::uint32_t ops_to_execute);
   };
 
   class Hooking {
   public:
     hooking::VmtHook swap_chain_hook_;
-    hooking::DetourHook send_minidump;
+    //hooking::DetourHook send_minidump_hook_;
+    hooking::DetourHook run_script_threads_hook_;
 
   public:
     Hooking();

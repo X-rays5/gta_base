@@ -3,8 +3,13 @@
 //
 
 #include "scriptmanager.hpp"
+#include "../rage/util/execasscript.hpp"
 
 namespace gta_base {
+  void NativeTick(const std::shared_ptr<scriptmanager::BaseScript>& script) {
+    
+  }
+
   ScriptManager::ScriptManager() {
     kSCRIPT_MANAGER = this;
   }
@@ -14,9 +19,13 @@ namespace gta_base {
   }
 
   void ScriptManager::Tick(scriptmanager::ScriptType type) {
-    mtx_.lock();
+    std::lock_guard mtx_lock(mtx_);
     for (auto&& script : scripts_) {
-      mtx_.unlock();
+      if (type == scriptmanager::ScriptType::kGame) {
+        rage::util::ExecuteAsScript(RAGE_JOAAT("main_persistent"), [&]{ NativeTick(script);});
+        continue;
+      }
+
       if (script->GetType() == type) {
         if (!script->IsInitialized()) {
           script->Init();
@@ -24,9 +33,7 @@ namespace gta_base {
           script->RunTick();
         }
       }
-      mtx_.lock();
     }
-    mtx_.unlock();
   }
 
   void ScriptManager::AddScript(const std::shared_ptr<scriptmanager::BaseScript>& script) {

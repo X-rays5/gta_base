@@ -70,7 +70,6 @@ void BaseMain() {
 
   auto scripting_thread = std::thread([]{
     while(common::globals::running)
-      kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame); // TODO: actually make this a game thread
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
   });
   LOG_INFO << "Scripting thread started";
