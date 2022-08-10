@@ -51,6 +51,8 @@ namespace gta_base {
 
       void Draw();
     public:
+      std::atomic<bool> should_tick = true;
+
       std::atomic<float> x_size = 0.15f;
       std::atomic<float> x_base = 0.025f;
       std::atomic<float> x_size_scrollbar = 0.003f;
@@ -88,7 +90,7 @@ namespace gta_base {
       int previous_selected_option_ = -1;
 
       bool scroller_reset_ = false;
-      float scroller_speed_ = 1.f;
+      float scroller_speed_ = 2.5f;
       float scroller_current_pos_ = -1.f;
       bool scrollbar_reset_ = false;
       float scrollbar_speed_ = scroller_speed_;

@@ -13,6 +13,7 @@ namespace gta_base {
 
     void UiDraw::RunTick() {
       ui::kMANAGER->GetDrawList()->Draw();
+      ui::kMANAGER->should_tick = true;
     }
   }
 }

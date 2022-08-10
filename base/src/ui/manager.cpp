@@ -151,7 +151,6 @@ namespace gta_base {
         scroller_reset_ = false;
         scroller_current_pos_ = target_pos;
       }
-      LOG_DEBUG << scroller_current_pos_ << " " << target_pos << " " << d3d::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
 
       if (scroller_current_pos_ < target_pos) {
         scroller_current_pos_ += d3d::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
@@ -174,7 +173,7 @@ namespace gta_base {
       float y_pos_text_box = y_pos + y_size_separator;
 
       std::string description_tmp = description;
-      d3d::draw::WordWrap(font_size, description_tmp, x_size + 0.02f, 3); // + 0.02f is needed to avoid unused space at the end of the text box
+      d3d::draw::WordWrap(font_size, description_tmp, x_size + 0.01f, 3); // + 0.01f is needed to avoid unused space at the end of the text box
 
       draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color.load()));
       draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos_text_box}, {x_size, d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, description_tmp).y}, primary_color.load()));
@@ -182,6 +181,9 @@ namespace gta_base {
     }
 
     void Manager::Draw() {
+      if (!should_tick)
+        return;
+
       kNOTIFICATIONS->Tick();
 
       if (!submenus_stack_.empty()) {
@@ -250,6 +252,7 @@ namespace gta_base {
       }
 
       draw_list_->NextTargets();
+      should_tick = false;
     }
   }
 }
