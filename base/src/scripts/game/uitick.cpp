@@ -22,12 +22,12 @@ namespace gta_base {
       if (ui::kMANAGER) {
         initialized_ = true;
 
-        auto ped_factory = *memory::kPOINTERS->ped_factory_;
-        run_speed = ped_factory->m_local_ped->m_player_info->m_run_speed;
-
         using namespace ui;
 
         kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
+          auto player = *memory::kPOINTERS->ped_factory_;
+          sub->AddOption(components::option::NumberOption<std::uint32_t>("Wanted Level", "Press enter to set to current wanted level", &player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+
           sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
           sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
         });
@@ -47,7 +47,7 @@ namespace gta_base {
             kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line ");
           }));
           sub->AddOption(components::option::LabelOption("Component examples"));
-          sub->AddOption(components::option::NumberOption("Test numberoption", "", &test_value_f, 0.5, 0, 10))->OnEvent([this](components::Event event){
+          sub->AddOption(components::option::NumberOption<float>("Test numberoption", "", &test_value_f, 0.5, 0, 10))->OnEvent([this](components::Event event){
             if (event == components::Event::kChange)
               std::cout << test_value_f << std::endl;
           });

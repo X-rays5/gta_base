@@ -11,9 +11,11 @@ namespace gta_base {
   namespace ui {
     namespace components {
       namespace option {
+        template<typename T>
+        requires std::integral<T> or std::floating_point<T>
         class NumberOption : public BaseOption {
         public:
-          explicit NumberOption(const std::string& name, const std::string& description, float* value, float step, float min, float max) {
+          explicit NumberOption(const std::string& name, const std::string& description, T* value, T step, T min, T max) {
             name_ = name;
             description_ = description;
             value_ = value;
@@ -25,6 +27,7 @@ namespace gta_base {
 
           void HandleKey(KeyInput key) final {
             if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
+              UpdateRightText();
               SendEvent(Event::kSelect);
             } else if (key == KeyInput::kLeft) {
               if (*value_ == min_)
@@ -59,18 +62,20 @@ namespace gta_base {
             }
           }
         private:
-          float* value_;
-          float step_;
-          float min_;
-          float max_;
+          T* value_;
+          T step_;
+          T min_;
+          T max_;
 
         private:
           void UpdateRightText() {
-            auto tmp_right_text = fmt::format("[{:f}", *value_);
+            auto tmp_right_text = fmt::format("[{}", *value_);
             while (!tmp_right_text.empty() && tmp_right_text.back() == '0')
               tmp_right_text.pop_back();
-            if (!tmp_right_text.empty() && tmp_right_text.back() == '.')
+            if (tmp_right_text.back() == '.')
               tmp_right_text += "0";
+            if (tmp_right_text.back() == '[')
+              tmp_right_text += '0';
             tmp_right_text += "]";
 
             SetRightText(tmp_right_text);
