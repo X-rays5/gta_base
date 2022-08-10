@@ -1,8 +1,15 @@
+//
+// Created by X-ray on 08/08/22.
+//
+
 #pragma once
+#ifndef GTA_BASE_SCRIPT_THREAD_CLASS_HPP
+#define GTA_BASE_SCRIPT_THREAD_CLASS_HPP
 #include <cstdint>
-#include "fwddec.hpp"
+//#include "fwddec.hpp"
 #include "../joaat.hpp"
-#include "tlsContext.hpp"
+#include "tls_context.hpp"
+#include "script_handler.hpp"
 
 namespace rage
 {
@@ -19,7 +26,7 @@ namespace rage
   {
   public:
     std::uint32_t m_thread_id;           // 0x00
-    joaat_t m_script_hash;               // 0x04
+    rage::joaat_t m_script_hash;               // 0x04
     eThreadState m_state;                // 0x08
     std::uint32_t m_instruction_pointer; // 0x0C
     std::uint32_t m_frame_pointer;       // 0x10
@@ -79,3 +86,5 @@ public:
 };
 
 static_assert(sizeof(GtaThread) == 0x160);
+
+#endif //GTA_BASE_SCRIPT_THREAD_CLASS_HPP

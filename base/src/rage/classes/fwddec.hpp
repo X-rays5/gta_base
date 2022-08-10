@@ -1,11 +1,10 @@
 //
-// Created by X-ray on 07/28/22.
+// Created by X-ray on 08/08/22.
 //
 
 #pragma once
 #ifndef GTA_BASE_FWDDEC_HPP
 #define GTA_BASE_FWDDEC_HPP
-
 namespace rage
 {
   template <typename T>
@@ -48,11 +47,7 @@ namespace rage
 
   class fwRefAwareBase;
   class fwExtensibleBase;
-  class fwEntity;
   class fwArchetype;
-
-  class CVehicle;
-  class CPed;
 }
 
 class GtaThread;
