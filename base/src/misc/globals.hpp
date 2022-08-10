@@ -17,6 +17,8 @@ namespace gta_base {
       constexpr auto target_window_class = "grcWindow";
 
       extern std::atomic<bool> running;
+      extern HANDLE main_thread;
+      extern HINSTANCE dll_handle;
     }
   }
 }
