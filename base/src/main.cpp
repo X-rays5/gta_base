@@ -24,20 +24,6 @@ void BaseMain() {
   auto logger_inst = std::make_unique<Logger>();
   LOG_INFO << "Logging initialized";
 
-  auto og_terminate_handler = std::get_terminate();
-  std::set_terminate([]{
-    try {
-      std::rethrow_exception(std::current_exception());
-    } catch(std::runtime_error& e) {
-      LOG_FATAL << "Uncaught exception occurred: " << e.what();
-    } catch(...) {
-      LOG_FATAL << "Unknown exception occurred";
-    }
-
-    abort();
-  });
-  LOG_INFO << "Terminate handler set";
-
   auto ptr_inst = std::make_unique<memory::Pointers>();
   LOG_INFO << "Pointers initialized";
 
@@ -111,9 +97,6 @@ void BaseMain() {
 
   ptr_inst.reset();
   LOG_INFO << "Pointers shutdown";
-
-  std::set_terminate(og_terminate_handler);
-  LOG_INFO << "Terminate handler restored";
 
   LOG_INFO << "Shutting logging down...";
   logger_inst.reset();
