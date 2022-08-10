@@ -6,48 +6,48 @@
 #ifndef GTA_BASE_VMT_HPP
 #define GTA_BASE_VMT_HPP
 #include <memory>
+#include <robin_hood.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include "../logger/logger.hpp"
 
 namespace gta_base {
   namespace hooking {
     class VmtHook {
     public:
-      explicit VmtHook(void* object, std::size_t num_funcs) noexcept : object_(reinterpret_cast<std::uintptr_t**>(object)), num_funcs_(num_funcs), og_(*object_), new_(std::make_unique<std::uintptr_t[]>(num_funcs_ + 1)) {
-        std::copy_n(og_ - 1, num_funcs_ + 1, new_.get());
-      }
+      explicit VmtHook(LPVOID vtable);
 
-      ~VmtHook() noexcept = default;
-      VmtHook(VmtHook const&) noexcept = delete;
-      VmtHook(VmtHook&&) noexcept = delete;
-      VmtHook& operator=(VmtHook const&) noexcept = delete;
-      VmtHook& operator=(VmtHook&&) noexcept = delete;
+      void Hook(const std::string& name, std::size_t index, LPVOID detour);
+      void Unhook(std::size_t index);
 
+      void Enable(std::size_t index);
+      void Disable(std::size_t index);
 
-      void Hook(std::size_t index, void* func) noexcept {
-        new_[index + 1] = reinterpret_cast<std::uintptr_t>(func);
-      }
+      template<typename T>
+      T GetOriginal(std::size_t index) {
+        if (auto it = hooks_.find(index); it == hooks_.end()) {
+          LOG_WARNING << "Tried to get original at idx: " << index << " which doesn't exist";
+        } else {
+          return static_cast<T>(it->second.original);
+        }
 
-      void Unhook(std::size_t index) noexcept {
-        new_[index + 1] = og_[index];
-      }
-
-      void Enable() noexcept {
-        *object_ = &new_[1];
-      }
-
-      void Disable() noexcept {
-        *object_ = og_;
-      }
-
-      template <typename T>
-      T GetOriginal(std::size_t index) noexcept {
-        return reinterpret_cast<T>(og_[index]);
+        return {};
       }
     private:
-      std::uintptr_t** object_;
-      std::size_t num_funcs_;
-      std::uintptr_t* og_;
-      std::unique_ptr<std::uintptr_t[]> new_;
+      struct Hook_t {
+        std::string name;
+        LPVOID target;
+        LPVOID detour;
+        LPVOID original;
+      };
 
+      LPVOID* vtable_;
+      robin_hood::unordered_map<std::size_t, Hook_t> hooks_;
+
+    private:
+      void FixHookAddress(const std::string& name, LPVOID target);
+
+      DWORD ExpHandler(PEXCEPTION_POINTERS exp, const std::string& name);
     };
   }
 }
