@@ -280,7 +280,7 @@ namespace gta_base {
           LOG_WARNING << "Failed to find " << name;
         } else {
           #ifndef NDEBUG
-            LOG_INFO << "Found " << name << " at " << result.Rip().As<void*>();
+            LOG_INFO << "Found " << name << " at 0x" << result.Rip().As<void*>();
           #else
             LOG_INFO << "Found " << name;
           #endif
