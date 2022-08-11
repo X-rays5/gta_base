@@ -48,6 +48,7 @@ namespace gta_base {
       std::atomic<const char*> large_image_text_ = "";
       std::atomic<const char*> small_image_key_ = "";
       std::atomic<const char*> small_image_text_ = "";
+      std::int64_t start_time_;
     };
     inline Discord* kDISCORD{};
   }

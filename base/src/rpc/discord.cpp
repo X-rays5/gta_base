@@ -14,6 +14,8 @@ namespace gta_base {
       std::memset(&handlers, 0, sizeof(handlers));
       Discord_Initialize(xorstr_("1003792099059183676"), &handlers, 1, nullptr);
 
+      start_time_ = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
       kDISCORD = this;
     }
 
@@ -34,7 +36,7 @@ namespace gta_base {
       discord_rpc.largeImageText = large_image_text_;
       discord_rpc.smallImageKey = small_image_key_;
       discord_rpc.smallImageText = small_image_text_;
-      discord_rpc.startTimestamp = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+      discord_rpc.startTimestamp = start_time_;
       discord_rpc.instance = 1;
 
       Discord_UpdatePresence(&discord_rpc);
