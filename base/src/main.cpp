@@ -16,6 +16,7 @@
 #include "scripts/render/uidraw.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"
+#include "thread_pool/thread_pool.hpp"
 
 std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
@@ -55,10 +56,16 @@ void BaseMain() {
   LOG_INFO << "Discord initialized";
 
   auto scripting_thread = std::thread([]{
-    while(common::globals::running)
+    while(common::globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
+      std::this_thread::yield();
+    }
   });
   LOG_INFO << "Scripting thread started";
+
+  auto thread_pool_inst = std::make_unique<BS::thread_pool>();
+  kTHREADPOOL = thread_pool_inst.get();
+  LOG_INFO << "Thread pool created with " << kTHREADPOOL->get_thread_count() << " threads";
 
   kHOOKING->Enable();
   LOG_INFO << "Hooks enabled";
@@ -83,6 +90,11 @@ void BaseMain() {
 
   renderer_inst.reset();
   LOG_INFO << "Renderer shutdown";
+
+  LOG_INFO << "Starting thread-pool shutdown";
+  kTHREADPOOL = nullptr;
+  thread_pool_inst.reset();
+  LOG_INFO << "Thread pool shutdown";
 
   if (scripting_thread.joinable())
     scripting_thread.join();
