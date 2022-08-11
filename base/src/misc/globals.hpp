@@ -7,9 +7,15 @@
 #ifndef GTABASE_GLOBALS_HPP
 #define GTABASE_GLOBALS_HPP
 #include <atomic>
+#include <robin_hood.h>
 
 namespace gta_base {
   namespace common {
+    struct KeyState {
+      bool down = false;
+      std::uint64_t released_at = 0;
+    };
+
     namespace globals {
       constexpr auto name = "gta-base";
       constexpr auto version = "1.0.0";
@@ -19,6 +25,7 @@ namespace gta_base {
       extern std::atomic<bool> running;
       extern HANDLE main_thread;
       extern HINSTANCE dll_handle;
+      extern robin_hood::unordered_map<std::uint32_t, KeyState> key_state;
     }
   }
 }

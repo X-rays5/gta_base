@@ -9,7 +9,7 @@ namespace gta_base {
   namespace util {
     bool TimedInput::Get() { // TODO: only when foreground window
       if ((common::GetEpoch() - last_input_) > timeout_) {
-        if (common::KeyState(input_)){
+        if (common::IsKeyDown(input_)){
           last_input_ = common::GetEpoch();
           return true;
         }

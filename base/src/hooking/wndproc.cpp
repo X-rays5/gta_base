@@ -33,8 +33,15 @@ namespace gta_base {
         return 0;
       }
 
-      if (common::globals::running)
+      if (common::globals::running) {
+        if (message == WM_KEYDOWN) {
+          common::SetKeyState(parameter_uint_ptr, true);
+        } else if (message == WM_KEYUP) {
+          common::SetKeyState(parameter_uint_ptr, false);
+        }
+
         d3d::Renderer::WndProc(window, message, parameter_uint_ptr, parameter_long_ptr);
+      }
 
       return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
     }
