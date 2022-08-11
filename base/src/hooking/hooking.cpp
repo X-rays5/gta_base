@@ -12,8 +12,7 @@
 namespace gta_base {
   Hooking::Hooking() :
   swap_chain_hook_(*memory::kPOINTERS->swap_chain_),
-  //send_minidump_hook_("SendMinidump", memory::kPOINTERS->SendMiniDump, &Hooks::SendMiniDump)
-  run_script_threads_hook_("RunScriptThreds", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads)
+  run_script_threads_hook_("RunScriptThreads", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads)
   {
     swap_chain_hook_.Hook("Present", Hooks::swapchain_present_index, &Hooks::Present);
     swap_chain_hook_.Hook("ResizeBuffers", Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
@@ -34,9 +33,6 @@ namespace gta_base {
     swap_chain_hook_.Enable(Hooks::swapchain_resizebuffers_index);
 
     run_script_threads_hook_.Enable();
-
-    //send_minidump_hook_.Enable();
-
   }
 
   void Hooking::Disable() {
@@ -45,7 +41,6 @@ namespace gta_base {
 
     run_script_threads_hook_.Disable();
 
-    //send_minidump_hook_.Disable();
     hooking::UnhookWndProc();
   }
 
@@ -55,13 +50,6 @@ namespace gta_base {
 
   HRESULT Hooks::ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags) {
     return d3d::Renderer::SwapChainResizeBuffer(swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
-  }
-
-  char Hooks::SendMiniDump() {
-    LOG_FATAL << "Minidump is being sent";
-
-    return 1;
-    //return kHOOKING->send_minidump_hook_.GetOriginal<decltype(&SendMiniDump)>()();
   }
 
   bool Hooks::RunScriptThreads(std::uint32_t ops_to_execute) {

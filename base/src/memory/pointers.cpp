@@ -18,8 +18,6 @@ namespace gta_base {
 
       swap_chain_ = Signature(xorstr_("48 8B 0D ? ? ? ? 48 8B 01 44 8D 43 01 33 D2 FF 50 40 8B C8")).Scan(VAR_NAME(swap_chain_)).Add(3).Rip().As<IDXGISwapChain**>();
 
-      SendMiniDump = Signature(xorstr_("40 55 48 83 EC 50 48 8D 6C 24")).Scan(VAR_NAME(SendMiniDump)).As<decltype(SendMiniDump)>();
-
       ReadBitBufDword = Signature(xorstr_("48 89 74 24 ? 57 48 83 EC 20 48 8B D9 33 C9 41 8B F0 8A")).Scan(VAR_NAME(ReadBitBufDword)).Sub(5).As<decltype(ReadBitBufDword)>();
       ReadBitBufArray = Signature(xorstr_("48 89 5C 24 ? 57 48 83 EC 30 41 8B F8 4C")).Scan(VAR_NAME(ReadBitBufArray)).As<decltype(ReadBitBufArray)>();
       ReadBitBufString = Signature(xorstr_("E8 ? ? ? ? 48 8D 4F 3C")).Scan(VAR_NAME(ReadBitBufString)).Add(1).Rip().As<decltype(ReadBitBufString)>();

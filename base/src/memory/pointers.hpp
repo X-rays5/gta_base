@@ -27,9 +27,6 @@ namespace gta_base {
 
       IDXGISwapChain** swap_chain_{};
 
-      using send_minidump_t = char(*)();
-      send_minidump_t SendMiniDump{};
-
       using read_bitbuf_dword_t = bool(*)(rage::datBitBuffer* buffer, PVOID read, int bits);
       read_bitbuf_dword_t ReadBitBufDword{};
       using read_bitbuf_string_t = bool(*)(rage::datBitBuffer* buffer, char* read, int bits);
