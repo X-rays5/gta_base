@@ -3,34 +3,38 @@
 //
 
 #include <stdexcept>
+#include <thread>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "main.hpp"
 #include "misc/common.hpp"
+#include "logger/logger.hpp"
 
-HANDLE gta_base::common::globals::main_thread = nullptr;
 HINSTANCE gta_base::common::globals::dll_handle = nullptr;
+HANDLE gta_base::common::globals::main_thread = nullptr;
 
-#if !defined(NDEBUG)
-#define CALL_MAIN(func) try {func();} catch(std::runtime_error &e){MessageBoxA(gta_base::common::GetHwnd(gta_base::common::globals::target_window_class, gta_base::common::globals::target_window_name), e.what(), "Error", MB_OK);}catch(...) {MessageBoxA(gta_base::common::GetHwnd(gta_base::common::globals::target_window_class, gta_base::common::globals::target_window_name), "Caught an exception", "Error", MB_OK);}
-#else
-#define CALL_MAIN(func) func();
-#endif
-
-BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD load_reason ,LPVOID _) {
+BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID _) {
   using namespace gta_base::common;
 
-  if (load_reason == DLL_PROCESS_ATTACH) {
+  if (call_reason == DLL_PROCESS_ATTACH) {
     DisableThreadLibraryCalls(dll_handle);
 
     globals::dll_handle = dll_handle;
     globals::main_thread = CreateThread(nullptr, 0, [](PVOID) -> DWORD {
-      if (!gta_base::common::IsTargetProcess())
-        goto exit;
+      while (!IsTargetProcess())
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
-      CALL_MAIN(BaseMain)
+      auto logger_inst = std::make_unique<gta_base::Logger>();
+      LOG_INFO << "Logging initialized";
+      try {
+        BaseMain();
+      } catch (std::exception& e) {
+        LOG_FATAL << e.what();
+      }
+      LOG_DEBUG << globals::dll_handle << " " << &globals::main_thread;
+      LOG_INFO << "Shutting logging down...";
+      logger_inst.reset();
 
-      exit:
       CloseHandle(globals::main_thread);
       FreeLibraryAndExitThread(globals::dll_handle, 0);
     }, nullptr, 0, nullptr);

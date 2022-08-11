@@ -11,8 +11,8 @@
 #include "d3d/renderer.hpp"
 #include "memory/pointers.hpp"
 #include "scriptmanager/scriptmanager.hpp"
-#include "scripts/game/discord.hpp"
-#include "scripts/game/uitick.hpp"
+#include "scripts/scripting/discord.hpp"
+#include "scripts/scripting/uitick.hpp"
 #include "scripts/render/uidraw.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"
@@ -21,9 +21,6 @@
 std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
   using namespace gta_base;
-
-  auto logger_inst = std::make_unique<Logger>();
-  LOG_INFO << "Logging initialized";
 
   auto ptr_inst = std::make_unique<memory::Pointers>();
   LOG_INFO << "Pointers initialized";
@@ -72,7 +69,7 @@ void BaseMain() {
 
   LOG_INFO << "Initialized";
   while (common::globals::running) {
-    if (common::KeyState(VK_DELETE))
+    if (common::IsKeyDown(VK_DELETE))
       common::globals::running = false;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -109,7 +106,4 @@ void BaseMain() {
 
   ptr_inst.reset();
   LOG_INFO << "Pointers shutdown";
-
-  LOG_INFO << "Shutting logging down...";
-  logger_inst.reset();
 }

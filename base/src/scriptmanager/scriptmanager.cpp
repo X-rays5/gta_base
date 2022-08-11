@@ -7,7 +7,7 @@
 
 namespace gta_base {
   void NativeTick(const std::shared_ptr<scriptmanager::BaseScript>& script) {
-    
+
   }
 
   ScriptManager::ScriptManager() {
