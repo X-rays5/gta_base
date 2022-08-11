@@ -14,6 +14,7 @@
 #include <d3d11.h>
 #include <fmt/format.h>
 #include <imgui.h>
+#include "../logger/logger.hpp"
 
 namespace gta_base {
   namespace d3d {
@@ -29,7 +30,7 @@ namespace gta_base {
       // scale float in range [0, 1] to [0, screen_size]
       inline ImVec2 ScaleToScreen(ImVec2 xy) {
         if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-          std::cout << "ScaleToScreen: xy out of range: " << xy.x << " " << xy.y << std::endl;
+          LOG_WARNING << "ScaleToScreen: xy out of range: " << xy.x << " " << xy.y;
         }
 
         ImVec2 cur_res = ImGui::GetIO().DisplaySize;
@@ -48,7 +49,7 @@ namespace gta_base {
         }
 
         if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-          std::cout << "ScaleFromScreen: xy out of range: " << xy.x << " " << xy.y << std::endl;
+          LOG_WARNING << "ScaleFromScreen: xy out of range: " << xy.x << " " << xy.y;
         }
 
         xy.x = (xy.x / cur_res.x);
