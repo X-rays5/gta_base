@@ -16,7 +16,8 @@
 #include "scripts/render/uidraw.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"
-#include "thread_pool/thread_pool.hpp"
+#include "fiber/manager.hpp"
+#include "fiber/pool.hpp"
 
 std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
@@ -41,7 +42,11 @@ void BaseMain() {
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<fiber::Manager>());
   LOG_INFO << "Scripts added";
+
+  auto fiber_inst = std::make_shared<fiber::Pool>(12);
+  LOG_INFO << "Created fiber pool";
 
   auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name));
   LOG_INFO << "Renderer initialized";
@@ -52,6 +57,9 @@ void BaseMain() {
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO << "Discord initialized";
 
+  kHOOKING->Enable();
+  LOG_INFO << "Hooks enabled";
+
   auto scripting_thread = std::thread([]{
     while(common::globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
@@ -59,13 +67,6 @@ void BaseMain() {
     }
   });
   LOG_INFO << "Scripting thread started";
-
-  auto thread_pool_inst = std::make_unique<BS::thread_pool>();
-  kTHREADPOOL = thread_pool_inst.get();
-  LOG_INFO << "Thread pool created with " << kTHREADPOOL->get_thread_count() << " threads";
-
-  kHOOKING->Enable();
-  LOG_INFO << "Hooks enabled";
 
   LOG_INFO << "Initialized";
   while (common::globals::running) {
@@ -75,6 +76,10 @@ void BaseMain() {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
   LOG_INFO << "Unloading...";
+
+  if (scripting_thread.joinable())
+    scripting_thread.join();
+  LOG_INFO << "Scripting thread stopped";
 
   kHOOKING->Disable();
   LOG_INFO << "Hooks disabled";
@@ -88,14 +93,8 @@ void BaseMain() {
   renderer_inst.reset();
   LOG_INFO << "Renderer shutdown";
 
-  LOG_INFO << "Starting thread-pool shutdown";
-  kTHREADPOOL = nullptr;
-  thread_pool_inst.reset();
-  LOG_INFO << "Thread pool shutdown";
-
-  if (scripting_thread.joinable())
-    scripting_thread.join();
-  LOG_INFO << "Scripting thread stopped";
+  fiber_inst.reset();
+  LOG_INFO << "Fiber pool shutdown";
 
   script_manager_inst.reset();
   LOG_INFO << "Script Manager shutdown";

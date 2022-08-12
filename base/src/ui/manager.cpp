@@ -183,7 +183,6 @@ namespace gta_base {
     void Manager::Draw() {
       if (!should_tick)
         return;
-      should_tick = false;
 
       kNOTIFICATIONS->Tick();
 
@@ -252,6 +251,7 @@ namespace gta_base {
         }
       }
 
+      should_tick = false;
       draw_list_->NextTargets();
     }
   }

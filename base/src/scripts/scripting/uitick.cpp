@@ -14,7 +14,6 @@
 #include "../../ui/components/options/labeloption.hpp"
 #include "../../ui/components/options/toggleoption.hpp"
 #include "../../ui/components/options/listoption.hpp"
-#include "../../thread_pool/thread_pool.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -71,11 +70,7 @@ namespace gta_base {
     }
 
     void UiTick::RunTick() {
-      if (ui::kMANAGER->should_tick) {
-        kTHREADPOOL->submit([] {
-          ui::kMANAGER->Draw();
-        });
-      }
+      ui::kMANAGER->Draw();
     }
   }
 }
