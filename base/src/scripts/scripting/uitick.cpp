@@ -14,6 +14,8 @@
 #include "../../ui/components/options/labeloption.hpp"
 #include "../../ui/components/options/toggleoption.hpp"
 #include "../../ui/components/options/listoption.hpp"
+#include "../../natives/natives.hpp"
+#include "../../fiber/pool.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -26,6 +28,16 @@ namespace gta_base {
         kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
           auto player = *memory::kPOINTERS->ped_factory_;
           sub->AddOption(components::option::NumberOption<std::uint32_t>("Wanted Level", "Press enter to set to current wanted level", &player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+          sub->AddOption(components::option::ExecuteOption("fake wanted lvl 0", "", [] {
+            fiber::kPOOL->AddJob([]{
+              MISC::SET_FAKE_WANTED_LEVEL(0);
+            });
+          }));
+          sub->AddOption(components::option::ExecuteOption("fake wanted lvl 6", "", [] {
+            fiber::kPOOL->AddJob([]{
+              MISC::SET_FAKE_WANTED_LEVEL(6);
+            });
+          }));
 
           sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
           sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
@@ -70,6 +82,11 @@ namespace gta_base {
     }
 
     void UiTick::RunTick() {
+      if (ui::kMANAGER->show_ui)
+      fiber::kPOOL->AddJob([]{
+        PAD::DISABLE_CONTROL_ACTION(0, 27, true); // disable phone
+      });
+
       ui::kMANAGER->Draw();
     }
   }

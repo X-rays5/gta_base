@@ -32,6 +32,12 @@ namespace gta_base {
       auto script_threads_tmp = Signature(xorstr_("45 33 F6 8B E9 85 C9 B8")).Scan("script_threads");
       script_threads_ = script_threads_tmp.Sub(4).Rip().Sub(8).As<decltype(script_threads_)>();
       RunScriptThreads = script_threads_tmp.Sub(0x1F).As<decltype(RunScriptThreads)>();
+
+      auto natives_handler_tmp = Signature(xorstr_("48 8D 0D ? ? ? ? 48 8B 14 FA E8 ? ? ? ? 48 85 C0 75 0A")).Scan("natives_handler");
+      native_registration_table_ = natives_handler_tmp.Add(3).Rip().As<decltype(native_registration_table_)>();
+      GetNativeHandler = natives_handler_tmp.Add(12).Rip().As<decltype(GetNativeHandler)>();
+      FixVectors = Signature(xorstr_("83 79 18 00 48 8B D1 74 4A FF 4A 18 48 63 4A 18 48 8D 41 04 48 8B 4C CA")).Scan(VAR_NAME(FixVectors)).As<decltype(FixVectors)>();
+      native_return_ = Signature(xorstr_("FF E3")).Scan(VAR_NAME(native_return_)).Add(0).As<decltype(native_return_)>();
     }
 
     Pointers::~Pointers() {

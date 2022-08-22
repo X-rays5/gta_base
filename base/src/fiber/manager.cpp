@@ -4,6 +4,7 @@
 
 #include "manager.hpp"
 #include "../rage/util/execasscript.hpp"
+#include "../natives/invoker.hpp"
 
 namespace gta_base {
   namespace fiber {
@@ -30,6 +31,7 @@ namespace gta_base {
     void Manager::RunTick() {
       rage::util::ExecuteAsScript(RAGE_JOAAT("main_persistent"), [this]{
         static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
+        static bool ensure_native_handlers = (rage::kINVOKER.CacheHandlers(), true);
 
         std::lock_guard lock(mtx_);
         for (auto const& script : scripts_)

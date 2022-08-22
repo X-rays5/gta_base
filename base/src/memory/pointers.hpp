@@ -13,6 +13,7 @@
 #include "../rage/enums.hpp"
 #include "../rage/classes/script_thread.hpp"
 #include "../rage/classes/at_array.hpp"
+#include "../rage/classes/natives.hpp"
 
 namespace gta_base {
   namespace memory {
@@ -51,6 +52,13 @@ namespace gta_base {
       rage::atArray<GtaThread*>* script_threads_;
       using run_script_threads_t = bool(*)(std::uint32_t ops_to_execute);
       run_script_threads_t RunScriptThreads{};
+
+      rage::scrNativeRegistrationTable* native_registration_table_{};
+      using get_native_handler_t = rage::scrNativeHandler(*)(rage::scrNativeRegistrationTable* registration_table, rage::scrNativeHash hash);
+      get_native_handler_t GetNativeHandler{};
+      using fix_vectors_t = void(*)(rage::scrNativeCallContext* call_ctx);
+      fix_vectors_t FixVectors{};
+      PVOID native_return_;
     };
     inline Pointers* kPOINTERS{};
   }
