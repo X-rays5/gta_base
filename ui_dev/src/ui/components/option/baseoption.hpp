@@ -17,7 +17,7 @@ namespace ui {
       public:
         using on_event_t = void(*)(Event event);
 
-        inline std::string GetName() {
+        inline std::string_view GetName() {
           return name_;
         }
 
@@ -25,7 +25,7 @@ namespace ui {
           name_ = std::move(name);
         }
 
-        inline std::string GetDescription() {
+        inline std::string_view GetDescription() {
           return description_;
         }
 
@@ -33,7 +33,7 @@ namespace ui {
           description_ = std::move(description);
         }
 
-        inline std::string GetCenterText() {
+        inline std::string_view GetCenterText() {
           return center_text_;
         }
 
@@ -41,7 +41,7 @@ namespace ui {
           center_text_ = std::move(center_text);
         }
 
-        inline std::string GetRightText() {
+        inline std::string_view GetRightText() {
           return right_text_;
         }
 

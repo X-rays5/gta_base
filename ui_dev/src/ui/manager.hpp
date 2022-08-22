@@ -83,6 +83,9 @@ namespace ui {
 
     int previous_selected_option_ = -1;
 
+    std::size_t scroller_prev_idx_ = 0;
+    float scroller_duration_ = 200;
+    float scroller_elapsed_time_ = 0;
     bool scroller_reset_ = false;
     float scroller_speed_ = 2.5f;
     float scroller_current_pos_ = -1.f;
@@ -90,8 +93,9 @@ namespace ui {
     float scrollbar_speed_ = scroller_speed_;
     float scrollbar_current_pos_ = scroller_current_pos_;
 
+    std::uint64_t delta_time_ = 0;
+    std::uint64_t last_draw_time_ = 0;
 
-    float toggle_button_size_ = 0.01f;
   private:
     inline util::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
     inline util::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;
@@ -102,8 +106,9 @@ namespace ui {
     inline void DrawScrollBar(size_t option_count, int current_option);
     inline void DrawScrollBarScroller(float target_pos, float scroller_y_size);
     inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
-    inline bool DrawScroller(float target_pos);
+    inline bool DrawScroller(float prev_pos, float target_pos);
     inline void DrawDescriptionText(const std::string& description, size_t option_count) const;
+    inline void HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub);
 
     inline void ResetSmoothScrolling() {
       scroller_reset_ = true;

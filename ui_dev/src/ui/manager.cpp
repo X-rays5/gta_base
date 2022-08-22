@@ -97,14 +97,13 @@ namespace ui {
 
     ImColor text_color_tmp = text_color;
     if (selected) {
-      if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1)) {
-        ResetSmoothScrolling();
-      } else if (previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
+      if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1) || previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
         ResetSmoothScrolling();
       }
       previous_selected_option_ = (int)option_idx;
 
-      if (DrawScroller(pos))
+      auto prev_pos = y_base + (y_size_option * scroller_prev_idx_) + y_size_top_bar;
+      if (DrawScroller(prev_pos, pos))
         text_color_tmp = selected_text_color;
     }
 
@@ -113,10 +112,10 @@ namespace ui {
     auto right_text = option->GetRightText();
 
     if (!center_text.empty()) {
-      draw_list_->AddCommand(DrawTextCenter(text_pos, text_color_tmp, center_text));
+      draw_list_->AddCommand(DrawTextCenter(text_pos, text_color_tmp, center_text.data()));
     } else {
       if (!name.empty())
-        draw_list_->AddCommand(DrawTextLeft(text_pos, text_color_tmp, name));
+        draw_list_->AddCommand(DrawTextLeft(text_pos, text_color_tmp, name.data()));
 
       if (option->HasFlag(components::OptionFlag::kToggle)) {
         std::string filepath;
@@ -126,34 +125,32 @@ namespace ui {
           filepath = selected ? "shop_box_blankb.png" : "shop_box_blank.png";
         }
 
-        auto t = util::draw::ScaleYToScreen(0.05f);
         ImVec2 checkbox_size = util::draw::ScaleSquare(0.05f);
         draw_list_->AddCommand(util::draw::Image(util::kTEXTURE_MANAGER->Get(filepath).texture, {x_base + (x_size - checkbox_size.x), pos - (checkbox_size.y / 4)}, checkbox_size));
       } else if (!right_text.empty()) {
-        draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
+        draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text.data()));
       }
     }
 
     if (selected && !option->GetDescription().empty()) {
-      DrawDescriptionText(option->GetDescription(), sub_option_count > max_drawn_options ? max_drawn_options : sub_option_count);
+      DrawDescriptionText(option->GetDescription().data(), sub_option_count > max_drawn_options ? max_drawn_options : sub_option_count);
     }
   }
 
-  bool Manager::DrawScroller(float target_pos) {
+  bool Manager::DrawScroller(float prev_pos, float target_pos) {
     if (scroller_current_pos_ == -1.f || scroller_reset_){
       scroller_reset_ = false;
       scroller_current_pos_ = target_pos;
+      scroller_elapsed_time_ = 0;
+      std::cout << "scroller reset\n" << std::endl;
     }
 
-    if (scroller_current_pos_ < target_pos) {
-      scroller_current_pos_ += util::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
-      if (scroller_current_pos_ > target_pos)
-        scroller_current_pos_ = target_pos;
-    } else if (scroller_current_pos_ > target_pos) {
-      scroller_current_pos_ -= util::draw::ScaleYFromScreen(ScaleFps(scroller_speed_));
-      if (scroller_current_pos_ < target_pos)
-        scroller_current_pos_ = target_pos;
-    }
+    scroller_elapsed_time_ += delta_time_;
+    float t = (scroller_elapsed_time_ / (scroller_duration_)) * 100;
+    if (t > 100)
+      t = 100;
+    if (scroller_current_pos_ != target_pos) scroller_current_pos_ = std::lerp(prev_pos, target_pos, t);
+    std::cout << t << '\n' << std::endl;
 
     draw_list_->AddCommand(util::draw::Rect({x_base, scroller_current_pos_}, {x_size, y_size_option}, scroller_color.load()));
 
@@ -173,47 +170,56 @@ namespace ui {
     draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color.load(), description_tmp, false));
   }
 
+  void Manager::HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub) {
+    if (input_left_->Get()) {
+      cur_sub->HandleKey(components::KeyInput::kLeft);
+    } else if (input_right_->Get()) {
+      cur_sub->HandleKey(components::KeyInput::kRight);
+    } else if (input_up_->Get()) {
+      scroller_prev_idx_ = cur_sub->GetSelectedOption();
+      cur_sub->HandleKey(components::KeyInput::kUp);
+
+      // The only way this can result in an infinite loop is by being a retard.
+      auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+      while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+        ResetSmoothScrolling();
+        scroller_prev_idx_ = cur_sub->GetSelectedOption();
+        cur_sub->HandleKey(components::KeyInput::kUp);
+        cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+      }
+    } else if (input_down_->Get()) {
+      scroller_prev_idx_ = cur_sub->GetSelectedOption();
+      cur_sub->HandleKey(components::KeyInput::kDown);
+
+      // The only way this can result in an infinite loop is by being a retard.
+      auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+      while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+        ResetSmoothScrolling();
+        scroller_prev_idx_ = cur_sub->GetSelectedOption();
+        cur_sub->HandleKey(components::KeyInput::kDown);
+        cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+      }
+    } else if (input_return_->Get()) {
+      cur_sub->HandleKey(components::KeyInput::kReturn);
+      cur_sub = submenus_stack_.top();
+      ResetSmoothScrolling();
+    } else if (input_back_->Get()) {
+      if (submenus_stack_.size() > 1) {
+        submenus_stack_.pop();
+        cur_sub = submenus_stack_.top();
+        ResetSmoothScrolling();
+      }
+    }
+  }
+
   void Manager::Draw() {
+    delta_time_ = util::UnixEpoch() - last_draw_time_;
     kNOTIFICATIONS->Tick();
 
     if (!submenus_stack_.empty()) {
       auto cur_sub = submenus_stack_.top();
 
-      if (input_left_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kLeft);
-      } else if (input_right_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kRight);
-      } else if (input_up_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kUp);
-
-        // The only way this can result in an infinite loop is if the developer is stupid.
-        auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
-          ResetSmoothScrolling();
-          cur_sub->HandleKey(components::KeyInput::kUp);
-          cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-        }
-      } else if (input_down_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kDown);
-
-        // The only way this can result in an infinite loop is if the developer is stupid.
-        auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
-          ResetSmoothScrolling();
-          cur_sub->HandleKey(components::KeyInput::kDown);
-          cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-        }
-      } else if (input_return_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kReturn);
-        cur_sub = submenus_stack_.top();
-        ResetSmoothScrolling();
-      } else if (input_back_->Get()) {
-        if (submenus_stack_.size() > 1) {
-          submenus_stack_.pop();
-          cur_sub = submenus_stack_.top();
-          ResetSmoothScrolling();
-        }
-      }
+      HandleKeyInput(cur_sub);
 
       DrawHeader();
       DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());
@@ -237,5 +243,6 @@ namespace ui {
     }
 
     draw_list_->NextTargets();
+    last_draw_time_ = util::UnixEpoch();
   }
 }

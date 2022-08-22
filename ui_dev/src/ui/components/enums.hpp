@@ -15,6 +15,7 @@ namespace ui {
   namespace components {
     enum class Submenus {
       Home,
+      TestScroll,
       Debug,
       Settings,
       UnloadConfirm,
