@@ -180,6 +180,47 @@ namespace gta_base {
       draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color.load(), description_tmp, false));
     }
 
+    void Manager::HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub) {
+      if (input_left_->Get()) {
+        cur_sub->HandleKey(components::KeyInput::kLeft);
+      } else if (input_right_->Get()) {
+        cur_sub->HandleKey(components::KeyInput::kRight);
+      } else if (input_up_->Get()) {
+        cur_sub->HandleKey(components::KeyInput::kUp);
+
+        // The only way this can result in an infinite loop is if the developer is stupid.
+        auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+          ResetSmoothScrolling();
+          cur_sub->HandleKey(components::KeyInput::kUp);
+          cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        }
+      } else if (input_down_->Get()) {
+        cur_sub->HandleKey(components::KeyInput::kDown);
+
+        // The only way this can result in an infinite loop is if the developer is stupid.
+        auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+          ResetSmoothScrolling();
+          cur_sub->HandleKey(components::KeyInput::kDown);
+          cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        }
+      } else if (input_return_->Get()) {
+        cur_sub->HandleKey(components::KeyInput::kReturn);
+        cur_sub = submenus_stack_.top();
+        ResetSmoothScrolling();
+      } else if (input_back_->Get()) {
+        cur_sub->HandleKey(components::KeyInput::kBackspace);
+        if (submenus_stack_.size() > 1) {
+          submenus_stack_.pop();
+          cur_sub = submenus_stack_.top();
+          ResetSmoothScrolling();
+        } else {
+          show_ui = false;
+        }
+      }
+    }
+
     void Manager::Draw() {
       if (!should_tick)
         return;
@@ -189,45 +230,10 @@ namespace gta_base {
       if (!submenus_stack_.empty()) {
         auto cur_sub = submenus_stack_.top();
         if (input_open_->Get())
-          show_ui_ = !show_ui_;
+          show_ui = !show_ui;
 
-        if (show_ui_) {
-          if (input_left_->Get()) {
-            cur_sub->HandleKey(components::KeyInput::kLeft);
-          } else if (input_right_->Get()) {
-            cur_sub->HandleKey(components::KeyInput::kRight);
-          } else if (input_up_->Get()) {
-            cur_sub->HandleKey(components::KeyInput::kUp);
-
-            // The only way this can result in an infinite loop is if the developer is stupid.
-            auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-            while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
-              ResetSmoothScrolling();
-              cur_sub->HandleKey(components::KeyInput::kUp);
-              cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-            }
-          } else if (input_down_->Get()) {
-            cur_sub->HandleKey(components::KeyInput::kDown);
-
-            // The only way this can result in an infinite loop is if the developer is stupid.
-            auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-            while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
-              ResetSmoothScrolling();
-              cur_sub->HandleKey(components::KeyInput::kDown);
-              cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-            }
-          } else if (input_return_->Get()) {
-            cur_sub->HandleKey(components::KeyInput::kReturn);
-            cur_sub = submenus_stack_.top();
-            ResetSmoothScrolling();
-          } else if (input_back_->Get()) {
-            cur_sub->HandleKey(components::KeyInput::kBackspace);
-            if (submenus_stack_.size() > 1) {
-              submenus_stack_.pop();
-              cur_sub = submenus_stack_.top();
-              ResetSmoothScrolling();
-            }
-          }
+        if (show_ui) {
+          HandleKeyInput(cur_sub);
 
           DrawHeader();
           DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());

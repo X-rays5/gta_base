@@ -52,6 +52,7 @@ namespace gta_base {
       void Draw();
     public:
       std::atomic<bool> should_tick = true;
+      std::atomic<bool> show_ui = false;
 
       std::atomic<float> x_size = 0.15f;
       std::atomic<float> x_base = 0.025f;
@@ -98,8 +99,6 @@ namespace gta_base {
 
       std::unique_ptr<::gta_base::ui::Notification> notification_inst_;
 
-      bool show_ui_ = false;
-
       float toggle_button_size_ = 0.01f;
     private:
       inline d3d::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
@@ -113,6 +112,7 @@ namespace gta_base {
       inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
       inline bool DrawScroller(float target_pos);
       inline void DrawDescriptionText(const std::string& description, size_t option_count) const;
+      inline void HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub);
 
       inline void ResetSmoothScrolling() {
         scroller_reset_ = true;

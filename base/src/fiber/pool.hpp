@@ -9,6 +9,7 @@
 #include <functional>
 #include <mutex>
 #include <queue>
+#undef AddJob
 
 namespace gta_base {
   namespace fiber {
