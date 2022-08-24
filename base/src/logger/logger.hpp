@@ -6,12 +6,19 @@
 
 #ifndef GTABASE_LOGGER_HPP
 #define GTABASE_LOGGER_HPP
+
+#ifndef NDEBUG
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
+#endif
+
 #include <memory>
+#include <iostream>
 #include <fstream>
-#include <g3log/g3log.hpp>
-#include <g3log/logworker.hpp>
-#include <g3log/logmessage.hpp>
 #include <fmt/format.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/async.h>
 
 namespace gta_base {
   class Logger {
@@ -19,44 +26,24 @@ namespace gta_base {
     Logger();
     ~Logger();
 
-    inline std::shared_ptr<std::ofstream> GetCout() {
-      return cout_;
-    }
-
-    inline std::shared_ptr<std::ofstream> GetFileOut() {
-      return file_out_;
-    }
+  private:
+    PVOID vectored_exception_handler_h_;
+    LPTOP_LEVEL_EXCEPTION_FILTER  og_unhandled_exception_filter_h_;
 
   private:
-    enum class LogColor {
-      RESET,
-      WHITE = 97,
-      CYAN = 36,
-      MAGENTA = 35,
-      BLUE = 34,
-      GREEN = 32,
-      YELLOW = 33,
-      RED = 31,
-      BLACK = 30
-    };
+    void Shutdown();
 
-    struct LogSink {
-      void Log(g3::LogMessageMover log);
-      static LogColor GetColor(const LEVELS& level);
-      static std::string FormatConsole(const g3::LogMessage& msg);
-      static std::string FormatFile(const g3::LogMessage& msg);
-    };
-    friend struct LogSink;
-
-    std::unique_ptr<g3::LogWorker> log_worker_;
-    std::shared_ptr<std::ofstream> cout_;
-    std::shared_ptr<std::ofstream> file_out_;
+    void SetupExceptionHandler();
+    void RemoveExceptionHandler();
   };
   inline Logger* kLOGGER{};
 }
 
-#define LOG_DEBUG LOG(DEBUG)
-#define LOG_INFO LOG(INFO)
-#define LOG_WARNING LOG(WARNING)
-#define LOG_FATAL LOG(FATAL)
+#define LOG_TRACE(...) SPDLOG_TRACE(__VA_ARGS__)
+#define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__)
+#define LOG_INFO(...)  SPDLOG_INFO(__VA_ARGS__)
+#define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
+#define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
+#define LOG_CRITICAL(...) SPDLOG_CRITICAL(__VA_ARGS__)
+#define LOG_FATAL(...) SPDLOG_CRITICAL(__VA_ARGS__)
 #endif //GTABASE_LOGGER_HPP

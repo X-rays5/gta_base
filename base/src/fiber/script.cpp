@@ -50,7 +50,7 @@ namespace gta_base {
         offset = ((DWORD64)e->ExceptionRecord->ExceptionAddress - (DWORD64)mod);
         GetModuleFileNameA(mod, buffer, MAX_PATH - 1);
       }
-      LOG_FATAL << "Exception Code: 0x" << e->ExceptionRecord->ExceptionCode << " Exception Offset: 0x" << offset << " Fault Module Name: " << buffer;
+      LOG_FATAL("Exception Code: 0x{} Exception Offset: 0x{} Fault Module Name: {}", e->ExceptionRecord->ExceptionCode, offset, buffer);
     }
 
     [[noreturn]] void Script::FiberFunc() {
@@ -59,7 +59,7 @@ namespace gta_base {
       } __except (ScriptExceptHandler(GetExceptionInformation()), EXCEPTION_EXECUTE_HANDLER) { }
 
       []() {
-        LOG_INFO << "Script finished!";
+        LOG_INFO("Script finished!");
       }();
 
       while(true) {

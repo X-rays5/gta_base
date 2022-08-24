@@ -58,7 +58,7 @@ namespace gta_base {
         kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame);
       }
     } catch(...) {
-      LOG_WARNING << "Exception was thrown in RunScriptThreads";
+      LOG_WARN("Exception was thrown in RunScriptThreads");
     }
 
     return kHOOKING->run_script_threads_hook_.GetOriginal<decltype(&Hooks::RunScriptThreads)>()(ops_to_execute);

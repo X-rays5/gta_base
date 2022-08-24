@@ -277,12 +277,12 @@ namespace gta_base {
       MemoryHandle Scan(const std::string& name, MemoryRegion region = Module(nullptr)) {
         auto result = ScanImpl(region);
         if (result.Rip().As<void*>() == nullptr) {
-          LOG_WARNING << "Failed to find " << name;
+          LOG_WARN("Failed to find {}", name);
         } else {
           #ifndef NDEBUG
-            LOG_INFO << "Found " << name << " at 0x" << result.Rip().As<void*>();
+            LOG_INFO("Found {} at 0x{}", name, result.Rip().As<void*>());
           #else
-            LOG_INFO << "Found " << name;
+            LOG_INFO("Found {}", name);
           #endif
         }
         return result;

@@ -30,7 +30,7 @@ namespace gta_base {
       // scale float in range [0, 1] to [0, screen_size]
       inline ImVec2 ScaleToScreen(ImVec2 xy) {
         if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-          LOG_WARNING << "ScaleToScreen: xy out of range: " << xy.x << " " << xy.y;
+          LOG_WARN("ScaleToScreen: xy out of range: {} {}", xy.x, xy.y);
         }
 
         ImVec2 cur_res = ImGui::GetIO().DisplaySize;
@@ -49,7 +49,7 @@ namespace gta_base {
         }
 
         if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-          LOG_WARNING << "ScaleFromScreen: xy out of range: " << xy.x << " " << xy.y;
+          LOG_WARN("ScaleFromScreen: xy out of range: {} {}", xy.x, xy.y);
         }
 
         xy.x = (xy.x / cur_res.x);

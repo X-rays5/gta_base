@@ -16,7 +16,7 @@ namespace rage {
   }
 
   void ExceptionHandler(PEXCEPTION_POINTERS e) {
-    LOG_WARNING <<  "Exception caught while trying to call a native";
+    LOG_WARN("Exception caught while trying to call a native");
   }
 
   void Invoker::CacheHandlers() {
@@ -47,7 +47,7 @@ namespace rage {
 
       CallNative(hash, &call_context_, handler, gta_base::memory::kPOINTERS->native_return_, gta_base::memory::kPOINTERS->FixVectors);
     } else {
-      LOG_WARNING << "Failed to find: " << hash << " native's handler";
+      LOG_WARN("Failed to find: 0x{} native's handler", hash);
     }
   }
 }

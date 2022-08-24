@@ -54,7 +54,7 @@ namespace rage {
       auto g_gtaTlsEntry = *(sysMemAllocator**)(*(uintptr_t*)(__readgsqword(88)) + 0xC8); //This has been 0xC8 since 323, I'm not adding this signature to pointers...
 
       if (g_gtaTlsEntry == nullptr)
-        LOG_FATAL << "Failed to find tlsEntry within GTA5.exe via __readgsqword";
+        LOG_FATAL("Failed to find tlsEntry within GTA5.exe via __readgsqword");
 
       *(sysMemAllocator**)(*(uintptr_t*)(__readgsqword(88)) + 0xC8) = g_gtaTlsEntry;
       *(sysMemAllocator**)(*(uintptr_t*)(__readgsqword(88)) + 0xC8 - 8) = g_gtaTlsEntry;

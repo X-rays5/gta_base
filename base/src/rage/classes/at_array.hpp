@@ -55,7 +55,7 @@ namespace rage {
       auto old_capacity = m_count;
 
       if ((value_array_size + m_count) > std::numeric_limits<uint16_t>::max())
-        LOG_FATAL << "RAGE atArray::append was given too large of an atArray to append";
+        LOG_FATAL("RAGE atArray::append was given too large of an atArray to append");
 
       auto size = (uint16_t)value_array_size;
       expand(m_count + size);
@@ -75,7 +75,7 @@ namespace rage {
       auto old_capacity = m_count;
 
       if ((value_array_size + m_count) > std::numeric_limits<uint16_t>::max())
-        LOG_FATAL << "RAGE atArray::append was given too large of a vector to append";
+        LOG_FATAL("RAGE atArray::append was given too large of a vector to append");
 
       auto size = (uint16_t)value_array_size;
       expand(m_count + size);
@@ -95,7 +95,7 @@ namespace rage {
       auto old_capacity = m_count;
 
       if ((value_array_size + m_count) > std::numeric_limits<uint16_t>::max())
-        LOG_FATAL << "RAGE atArray::append was given too large of a list to append";
+        LOG_FATAL("RAGE atArray::append was given too large of a list to append");
 
       auto size = (uint16_t)value_array_size;
       expand(m_count + size);

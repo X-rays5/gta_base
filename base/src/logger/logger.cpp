@@ -9,11 +9,9 @@
 #include <fmt/format.h>
 #include "logger.hpp"
 #include "../misc/common.hpp"
+#include "stacktrace.hpp"
 
 namespace gta_base {
-  #define AddColorToStream(color) "\x1b[" << int(color) << "m"
-  #define ResetStreamColor "\x1b[" << int(LogColor::RESET) << "m"
-
   void SetConsoleMode(HANDLE console_handle) {
     DWORD console_mode;
     GetConsoleMode(console_handle, &console_mode);
@@ -28,9 +26,7 @@ namespace gta_base {
     std::filesystem::rename(path, save_path);
   }
 
-  Logger::Logger() : log_worker_(g3::LogWorker::createLogWorker()) {
-    kLOGGER = this;
-
+  Logger::Logger() {
     if (AttachConsole(GetCurrentProcessId()) || AllocConsole()) {
       auto console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
       if (!console_handle)
@@ -48,26 +44,39 @@ namespace gta_base {
         SaveLogFile(log_file_path_tmp);
       }
 
-      cout_ = std::make_shared<std::ofstream>("CONOUT$");
-      file_out_ = std::make_shared<std::ofstream>(log_file_path, std::ios_base::out | std::ios_base::app);
+      spdlog::init_thread_pool(spdlog::details::default_async_q_size, 1);
 
-      if (cout_->is_open())
-        *cout_ << "Console logging stream open" << std::endl;
-      if (file_out_->is_open())
-        *file_out_ << "File logging stream open" << std::endl;
+      auto console_logger = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+      auto file_logger = std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_file_path.string());
 
-      log_worker_->addSink(std::make_unique<LogSink>(), &LogSink::Log);
-      g3::initializeLogging(log_worker_.get());
+      std::vector<spdlog::sink_ptr> sinks {console_logger, file_logger};
+      auto logger = std::make_shared<spdlog::async_logger>("main_logger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+      logger->set_pattern("[%T] [%^%l%$] [Thread: %t] [%s:%#] %v");
+      spdlog::register_logger(logger);
+      spdlog::set_default_logger(logger);
+
+      SetupExceptionHandler();
+
+      kLOGGER = this;
     } else {
       throw std::runtime_error("Failed to create console");
     }
   }
 
   Logger::~Logger() {
-    log_worker_.reset();
+    Shutdown();
+  }
 
-    *file_out_ << "File logging stream closing" << std::endl;
-    file_out_->close();
+  void Logger::Shutdown() {
+    kLOGGER = nullptr;
+
+    RemoveExceptionHandler();
+
+    spdlog::default_logger_raw()->flush();
+    spdlog::drop_all();
+    spdlog::shutdown();
+    FreeConsole();
+
     try {
       auto log_file = common::GetLogFile();
       if (std::filesystem::exists(log_file)) {
@@ -76,45 +85,31 @@ namespace gta_base {
         SaveLogFile(log_file_tmp);
       }
     } catch (std::filesystem::filesystem_error& e) {
-      *cout_ << "Exception while storing log file: " << e.what() << '\n' << "src: " << e.path1().string() << '\n' << "dst: " << e.path2().string() << '\n';
+      MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK);
     }
-
-    *cout_ << "Console logging stream closing" << std::endl;
-    cout_->close();
-    FreeConsole();
-    kLOGGER = nullptr;
   }
 
-  void Logger::LogSink::Log(g3::LogMessageMover log) {
-    if (kLOGGER->GetCout()->is_open())
-      *kLOGGER->GetCout() << log.get().toString(FormatConsole) << std::flush;
-    if (kLOGGER->GetFileOut()->is_open())
-      *kLOGGER->GetFileOut() << log.get().toString(FormatFile) << std::flush;
-  }
+  void Logger::SetupExceptionHandler() {
+    auto handler = [](PEXCEPTION_POINTERS except) -> LONG {
+      LOG_FATAL(logger::stacktrace::GetExceptionString(except));
 
-  Logger::LogColor Logger::LogSink::GetColor(const LEVELS& level) {
-    switch (level.value) {
-      case g3::kDebugValue:
-        return LogColor::BLUE;
-      case g3::kInfoValue:
-        return LogColor::GREEN;
-      case g3::kWarningValue:
-        return LogColor::YELLOW;
+      std::this_thread::sleep_for(std::chrono::seconds(10));
+      kLOGGER->Shutdown();
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+      return EXCEPTION_CONTINUE_SEARCH;
+    };
+
+    vectored_exception_handler_h_ = AddVectoredExceptionHandler(false, handler);
+    og_unhandled_exception_filter_h_ = SetUnhandledExceptionFilter(handler);
+
+    if (!vectored_exception_handler_h_) {
+      LOG_CRITICAL("Failed to set vectored exception handler");
     }
-    return g3::internal::wasFatal(level) ? LogColor::RED : LogColor::WHITE;
   }
 
-  std::string Logger::LogSink::FormatConsole(const g3::LogMessage& msg) {
-    LogColor color = GetColor(msg._level);
-    std::stringstream color_start;
-    std::stringstream color_end;
-    color_start << AddColorToStream(color);
-    color_end << ResetStreamColor;
-
-    return fmt::format("[{}] [{}{}{}] [Thread: {}] [{}:{}] ", msg.timestamp("%H:%M:%S"), color_start.str(), msg.level(), color_end.str(), msg.threadID(), msg.file(), msg.line());
-  }
-
-  std::string Logger::LogSink::FormatFile(const g3::LogMessage& msg) {
-    return fmt::format("[{}] [{}] [Thread: {}] [{}:{}] ", msg.timestamp("%H:%M:%S"), msg.level(), msg.threadID(), msg.file(), msg.line());
+  void Logger::RemoveExceptionHandler() {
+    RemoveVectoredExceptionHandler(vectored_exception_handler_h_);
+    SetUnhandledExceptionFilter(og_unhandled_exception_filter_h_);
   }
 }

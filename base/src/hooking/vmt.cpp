@@ -14,7 +14,7 @@ namespace gta_base {
 
     void VmtHook::Hook(const std::string& name, std::size_t index, LPVOID detour) {
       if (auto it = hooks_.find(index); it != hooks_.end()) {
-        LOG_WARNING << "Tried to create hook: " << name << " at idx: " << index << ". But a hook with the name: " << it->second.name << " already exists";
+        LOG_WARN("Tried to create hook: {} at idx: {}. But a hook with the name: {} already exists", name, index, it->second.name);
       }
 
       LPVOID target = vtable_[index];
@@ -23,9 +23,9 @@ namespace gta_base {
       LPVOID og;
 
       if (auto status = MH_CreateHook(target, detour, &og); status == MH_OK) {
-        LOG_INFO << "Created hook '" << name << "'.";
+        LOG_INFO("Created hook '{}'.", name);
       } else {
-        LOG_FATAL << fmt::format("Failed to create hook '{}' at 0x{:X} (error: {})", name, uintptr_t(target), MH_StatusToString(status));
+        LOG_FATAL("Failed to create hook '{}' at 0x{:X} (error: {})", name, uintptr_t(target), MH_StatusToString(status));
       }
 
       hooks_[index] = {name, target, detour, og};
@@ -33,12 +33,12 @@ namespace gta_base {
 
     void VmtHook::Unhook(std::size_t index) {
       if (auto it = hooks_.find(index); it == hooks_.end()) {
-        LOG_WARNING << "Tried to remove hook at idx: " << index << " which doesn't exist";
+        LOG_WARN("Tried to remove hook at idx: {} which doesn't exist", index);
       } else {
         if (auto status = MH_RemoveHook(it->second.target); status == MH_OK) {
-          LOG_INFO << "Removed hook at idx: " << index << " with the name: " << it->second.name;
+          LOG_INFO("Removed hook at idx: {} with the name: {}", index, it->second.name);
         } else {
-          LOG_FATAL << "Failed to remove hook at idx: " << index << " with the name: " << it->second.name;
+          LOG_FATAL("Failed to remove hook at idx: {} with the name: {}", index, it->second.name);
         }
 
         hooks_.erase(it);
@@ -47,24 +47,24 @@ namespace gta_base {
 
     void VmtHook::Enable(std::size_t index) {
       if (auto it = hooks_.find(index); it == hooks_.end()) {
-        LOG_WARNING << "Tried to enable hook at idx: " << index << " which doesn't exist";
+        LOG_WARN("Tried to enable hook at idx: {} which doesn't exist", index);
       } else {
         if (auto status = MH_EnableHook(it->second.target); status == MH_OK) {
-          LOG_INFO << "Enabled hook at idx: " << index << " with the name: " << it->second.name;
+          LOG_INFO("Enabled hook at idx: {} with the name: {}", index, it->second.name);
         } else {
-          LOG_FATAL << "Failed to enable hook at idx: " << index << " with the name: " << it->second.name;
+          LOG_FATAL("Failed to enable hook at idx: {} with the name: {}", index, it->second.name);
         }
       }
     }
 
     void VmtHook::Disable(std::size_t index) {
       if (auto it = hooks_.find(index); it == hooks_.end()) {
-        LOG_WARNING << "Tried to disable hook at idx: " << index << " which doesn't exist";
+        LOG_WARN("Tried to disable hook at idx: {} which doesn't exist", index);
       } else {
         if (auto status = MH_DisableHook(it->second.target); status == MH_OK) {
-          LOG_INFO << "Disabled hook at idx: " << index << " with the name: " << it->second.name;
+          LOG_INFO("Disabled hook at idx: {} with the name: {}", index, it->second.name);
         } else {
-          LOG_FATAL << "Failed to disable hook at idx: " << index << " with the name: " << it->second.name;
+          LOG_FATAL("Failed to disable hook at idx: {} with the name: {}", index, it->second.name);
         }
       }
     }
@@ -77,7 +77,7 @@ namespace gta_base {
         target = ptr.As<void*>();
       } __except (ExpHandler(GetExceptionInformation(), name)) {
         [&name]() {
-          LOG_FATAL << fmt::format("Failed to fix hook address for '{}'", name);
+          LOG_FATAL("Failed to fix hook address for '{}'", name);
         }();
       }
     }

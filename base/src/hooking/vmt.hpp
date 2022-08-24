@@ -26,7 +26,7 @@ namespace gta_base {
       template<typename T>
       T GetOriginal(std::size_t index) {
         if (auto it = hooks_.find(index); it == hooks_.end()) {
-          LOG_WARNING << "Tried to get original at idx: " << index << " which doesn't exist";
+          LOG_WARN("Tried to get original at idx: {} which doesn't exist", index);
         } else {
           return static_cast<T>(it->second.original);
         }
