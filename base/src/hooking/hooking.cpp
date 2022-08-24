@@ -10,6 +10,9 @@
 #include "../scriptmanager/scriptmanager.hpp"
 
 namespace gta_base {
+  static LPVOID* OutputDebugStringA_og{};
+  static LPVOID* OutputDebugStringA_target{};
+
   Hooking::Hooking() :
   swap_chain_hook_(*memory::kPOINTERS->swap_chain_),
   run_script_threads_hook_("RunScriptThreads", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads)
@@ -32,14 +35,20 @@ namespace gta_base {
     swap_chain_hook_.Enable(Hooks::swapchain_present_index);
     swap_chain_hook_.Enable(Hooks::swapchain_resizebuffers_index);
 
+    MH_CreateHookApiEx(L"KERNELBASE", "OutputDebugStringA", Hooks::OutputDebugStringA, OutputDebugStringA_og, OutputDebugStringA_target);
+
     run_script_threads_hook_.Enable();
+    MH_EnableHook(OutputDebugStringA_target);
   }
 
   void Hooking::Disable() {
     swap_chain_hook_.Disable(Hooks::swapchain_resizebuffers_index);
     swap_chain_hook_.Disable(Hooks::swapchain_present_index);
 
+    MH_DisableHook(OutputDebugStringA_target);
     run_script_threads_hook_.Disable();
+
+    MH_RemoveHook(OutputDebugStringA_target);
 
     hooking::UnhookWndProc();
   }
@@ -62,5 +71,9 @@ namespace gta_base {
     }
 
     return kHOOKING->run_script_threads_hook_.GetOriginal<decltype(&Hooks::RunScriptThreads)>()(ops_to_execute);
+  }
+
+  void Hooks::OutputDebugStringA(LPCSTR lpOutputString) {
+    LOG_DEBUG("OutputDebugStringA: {}", lpOutputString);
   }
 }
