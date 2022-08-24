@@ -6,6 +6,7 @@
 #include <mutex>
 #include <vector>
 #include <sstream>
+#include <filesystem>
 #include <map>
 #include <psapi.h>
 #include <dbghelp.h>
@@ -244,7 +245,7 @@ namespace gta_base {
                 auto min = reinterpret_cast<std::uintptr_t>(info.lpBaseOfDll);
                 auto max = min + info.SizeOfImage;
                 if (location >= min && location < max) {
-                  return modName;
+                  return std::filesystem::path(modName).filename().string();
                 }
               }
             }
