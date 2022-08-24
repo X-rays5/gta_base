@@ -52,6 +52,7 @@ namespace gta_base {
       std::vector<spdlog::sink_ptr> sinks {console_logger, file_logger};
       auto logger = std::make_shared<spdlog::async_logger>("main_logger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
       logger->set_pattern("[%T] [%^%l%$] [Thread: %t] [%s:%#] %v");
+      logger->set_level(spdlog::level::trace);
       spdlog::register_logger(logger);
       spdlog::set_default_logger(logger);
 
