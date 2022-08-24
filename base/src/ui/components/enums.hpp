@@ -12,6 +12,7 @@ namespace gta_base {
     namespace components {
       enum class Submenus {
         Home,
+        Player,
         Debug,
         Settings,
         UnloadConfirm,

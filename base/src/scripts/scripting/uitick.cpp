@@ -19,6 +19,8 @@
 
 namespace gta_base {
   namespace scripts {
+    static bool never_wanted = false;
+
     void UiTick::Init() {
       if (ui::kMANAGER) {
         initialized_ = true;
@@ -39,8 +41,20 @@ namespace gta_base {
             });
           }));
 
+          sub->AddOption(components::option::SubmenuOption("Player", "", components::Submenus::Player));
           sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
           sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
+        });
+
+        kMANAGER->AddSubmenu("Player", components::Submenus::Player, [this](components::Submenu* sub){
+          sub->AddOption(components::option::ToggleOption("Never Wanted", "", &never_wanted))->OnEvent([](components::Event event){
+            if (event == components::Event::kChange) {
+              fiber::kPOOL->AddJob([&]{
+                LOG_DEBUG("never wanted is now: {}", never_wanted);
+                never_wanted ? PLAYER::SET_MAX_WANTED_LEVEL(0) : PLAYER::SET_MAX_WANTED_LEVEL(5);
+              });
+            }
+          });
         });
 
         kMANAGER->AddSubmenu("Debug", components::Submenus::Debug, [this](components::Submenu* sub){
@@ -82,10 +96,11 @@ namespace gta_base {
     }
 
     void UiTick::RunTick() {
-      if (ui::kMANAGER->show_ui)
-      fiber::kPOOL->AddJob([]{
-        PAD::DISABLE_CONTROL_ACTION(0, 27, true); // disable phone
-      });
+      /*if (ui::kMANAGER->show_ui) {
+        fiber::kPOOL->AddJob([]{
+          PAD::DISABLE_CONTROL_ACTION(0, 27, true); // disable phone
+        });
+      }*/
 
       ui::kMANAGER->Draw();
     }

@@ -7,7 +7,7 @@
 namespace gta_base {
   namespace common {
     std::filesystem::path GetBaseDir() {
-      std::filesystem::path base_path = std::string(std::getenv("APPDATA")) + "/" + globals::name;
+      std::filesystem::path base_path = std::filesystem::path(std::getenv("APPDATA")) / globals::name;
       if (!std::filesystem::exists(base_path)) {
         std::filesystem::create_directories(base_path);
       }
@@ -50,7 +50,7 @@ namespace gta_base {
       return data_path;
     }
 
-    std::filesystem::path GetTexturesDir() {
+    std::filesystem::path GetTextureDir() {
       std::filesystem::path texture_path = GetDataDir() / "textures";
       if (!std::filesystem::exists(texture_path)) {
         std::filesystem::create_directories(texture_path);

@@ -9,6 +9,7 @@
 #include <memory>
 #include <robin_hood.h>
 #include <d3d11.h>
+#include "../misc/common.hpp"
 #undef LoadImage
 
 namespace gta_base {
@@ -25,14 +26,12 @@ namespace gta_base {
       ~TextureManager();
 
       Texture Get(const std::filesystem::path& path) {
+        auto texture_path = common::GetTextureDir() / path;
+
         auto key = textures_.find(path);
 
         if (key != textures_.end())
           return key->second;
-
-        if (!std::filesystem::exists(path))
-          return {};
-
 
         Texture tex_tmp;
         if (LoadImage(path.string(), &tex_tmp.texture, &tex_tmp.width, &tex_tmp.height)) {

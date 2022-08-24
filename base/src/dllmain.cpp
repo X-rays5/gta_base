@@ -17,8 +17,10 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID) {
 
   if (call_reason == DLL_PROCESS_ATTACH) {
     globals::dll_handle = dll_handle;
-      while (!IsTargetProcess())
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+    CreateThread(nullptr, 0, [](LPVOID) -> DWORD {
+      if (!IsTargetProcess()) {
+        FreeLibraryAndExitThread(globals::dll_handle, 0);
+      }
 
       auto logger_inst = std::make_unique<gta_base::Logger>();
       LOG_INFO("Logging initialized");

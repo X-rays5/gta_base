@@ -1,0 +1,9 @@
+//
+// Created by X-ray on 08/22/22.
+//
+
+#pragma once
+#ifndef GTA_BASE_TOGGLENUMBEROPTION_HPP
+#define GTA_BASE_TOGGLENUMBEROPTION_HPP
+
+#endif //GTA_BASE_TOGGLENUMBEROPTION_HPP
