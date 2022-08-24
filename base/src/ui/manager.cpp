@@ -5,6 +5,7 @@
 #include "manager.hpp"
 #include "../d3d/texturemanager.hpp"
 #include "../logger/logger.hpp"
+#include "fonts/IconsFontAwesome6.h"
 
 namespace gta_base {
   namespace ui {
@@ -126,16 +127,17 @@ namespace gta_base {
           draw_list_->AddCommand(DrawTextLeft(text_pos, text_color_tmp, name));
 
         if (option->HasFlag(components::OptionFlag::kToggle)) {
-          std::string filepath;
-          if (option->HasFlag(components::OptionFlag::kToggled)) {
+          /*if (option->HasFlag(components::OptionFlag::kToggled)) {
             filepath = selected ? "shop_box_tickb.png" : "shop_box_tick.png";
           } else {
             filepath = selected ? "shop_box_blankb.png" : "shop_box_blank.png";
-          }
+          }*/
+          bool toggled = option->HasFlag(components::OptionFlag::kToggled);
 
-          auto t = d3d::draw::ScaleYToScreen(0.05f);
-          ImVec2 checkbox_size = d3d::draw::ScaleSquare(0.05f); // TODO: draw image
-          //draw_list_->AddCommand(d3d::draw::Image(d3d::kTEXTURE_MANAGER->Get(filepath).texture, {x_base + (x_size - checkbox_size.x), pos - (checkbox_size.y / 4)}, checkbox_size));
+          ImVec2 checkbox_size = d3d::draw::ScaleSquare(0.05f);
+         // draw_list_->AddCommand(d3d::draw::Image(d3d::kTEXTURE_MANAGER->Get(filepath).texture, {x_base + (x_size - checkbox_size.x), pos - (checkbox_size.y / 4)}, checkbox_size));
+         right_text = fmt::format("{} a test to see {}", right_text, toggled ? ICON_FA_CHECK : ICON_FA_XMARK);
+         draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
         } else if (!right_text.empty()) {
           draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
         }

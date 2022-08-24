@@ -4,9 +4,13 @@
 
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
+#define BAKERY_PROVIDE_VECTOR
+#include <binary_bakery_decoder.h>
 #include "renderer.hpp"
 #include "../hooking/hooking.hpp"
 #include "../ui/fonts/roboto_mono.hpp"
+#include "../ui/fonts/fa.h"
+#include "../ui/fonts/IconsFontAwesome6.h"
 #include "../misc/globals.hpp"
 #include "../scriptmanager/scriptmanager.hpp"
 
@@ -46,7 +50,18 @@ namespace gta_base {
       ImGui_ImplWin32_Init(hwnd_);
       ImGui_ImplDX11_Init(device_.Get(), device_context_.Get());
 
-      roboto_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 36);
+      ImFontConfig cfg;
+      cfg.FontDataOwnedByAtlas = false;
+      roboto_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 36, &cfg);
+
+      static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+      ImFontConfig icons_config;
+      icons_config.MergeMode = true;
+      icons_config.PixelSnapH = true;
+      icons_config.FontDataOwnedByAtlas = false;
+
+      auto font_awesome = bb::decode_to_vector<std::uint8_t>(bb::get_payload("fa-solid-900.ttf"));
+      ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_awesome.data(), font_awesome.size(), 24, &icons_config, icons_ranges);
       if (!ImGui::GetIO().Fonts->IsBuilt())
         ImGui::GetIO().Fonts->Build();
     }

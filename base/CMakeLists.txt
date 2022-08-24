@@ -42,6 +42,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${gtav_classes_SOURCE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/xorstr/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/binary_bakery)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE discord-rpc)
 target_link_libraries(${PROJECT_NAME} PRIVATE g3log)
