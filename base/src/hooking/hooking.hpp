@@ -23,8 +23,6 @@ namespace gta_base {
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
 
     static bool RunScriptThreads(std::uint32_t ops_to_execute);
-
-    static void OutputDebugStringA(LPCSTR lpOutputString);
   };
 
   class Hooking {

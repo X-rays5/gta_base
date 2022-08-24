@@ -92,6 +92,12 @@ namespace gta_base {
 
   void Logger::SetupExceptionHandler() {
     auto handler = [](PEXCEPTION_POINTERS except) -> LONG {
+      if (except->ExceptionRecord->ExceptionCode == DBG_PRINTEXCEPTION_WIDE_C || except->ExceptionRecord->ExceptionCode == DBG_PRINTEXCEPTION_C) {
+        LOG_DEBUG("Received DBG_PRINTEXCEPTION_C ignoring");
+
+        return EXCEPTION_CONTINUE_EXECUTION;
+      }
+
       LOG_FATAL(logger::stacktrace::GetExceptionString(except));
 
       std::this_thread::sleep_for(std::chrono::seconds(10));
