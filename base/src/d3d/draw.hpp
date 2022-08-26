@@ -85,7 +85,7 @@ namespace gta_base {
 
       inline ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
         if (!font)
-          return {0,0};
+          font = ImGui::GetFont();
 
         ImVec2 text_size = font->CalcTextSizeA(ScaleFont(font_size), ImGui::GetIO().DisplaySize.x, wrap_width, text.c_str());
         text_size.x = ((float)(int)(text_size.x + 0.99999f));
