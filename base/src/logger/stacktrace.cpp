@@ -291,13 +291,6 @@ namespace gta_base {
             SymCleanup(GetCurrentProcess());
           });
 
-          msg << GetRegisters(ctx);
-
-          const size_t kmax_frame_dump_size = 64;
-          std::vector<uint64_t>  frame_pointers(kmax_frame_dump_size);
-          captureStackTrace(ctx, frame_pointers);
-          msg << "\n\r" << convertFramesToText(frame_pointers) << "\n\r";
-
           msg << "\n\rLoaded Modules:\n\r";
           std::map<std::string, std::pair<uint64_t, uint64_t>> map;
           getAllModuleInfos(&map);
@@ -305,6 +298,13 @@ namespace gta_base {
             msg << key + " Base Address: " + AddrToHex(val.first) + " Size: " + AddrToHex(val.second);
             msg << "\n\r";
           }
+
+          msg << GetRegisters(ctx);
+
+          const size_t kmax_frame_dump_size = 64;
+          std::vector<uint64_t>  frame_pointers(kmax_frame_dump_size);
+          captureStackTrace(ctx, frame_pointers);
+          msg << "\n\r" << convertFramesToText(frame_pointers) << "\n\r";
 
           return RemoveDoubleSpaces(msg.str());
         }
