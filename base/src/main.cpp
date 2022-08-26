@@ -14,6 +14,7 @@
 #include "scripts/scripting/discord.hpp"
 #include "scripts/scripting/uitick.hpp"
 #include "scripts/render/uidraw.hpp"
+#include "scripts/game/ui_disable_phone.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"
 #include "fiber/manager.hpp"
@@ -39,10 +40,14 @@ void BaseMain() {
   auto script_manager_inst = std::make_unique<ScriptManager>();
   LOG_INFO("Script Manager initialized");
 
+  // render scripts
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
+  // scripting scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
-  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
+  // game scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<fiber::Manager>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UIDisablePhone>());
   LOG_INFO("Scripts added");
 
   auto fiber_inst = std::make_shared<fiber::Pool>(12);

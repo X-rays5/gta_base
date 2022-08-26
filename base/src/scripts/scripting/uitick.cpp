@@ -96,12 +96,6 @@ namespace gta_base {
     }
 
     void UiTick::RunTick() {
-      /*if (ui::kMANAGER->show_ui) {
-        fiber::kPOOL->AddJob([]{
-          PAD::DISABLE_CONTROL_ACTION(0, 27, true); // disable phone
-        });
-      }*/
-
       ui::kMANAGER->Draw();
     }
   }

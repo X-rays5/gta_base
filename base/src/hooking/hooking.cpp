@@ -4,9 +4,7 @@
 
 #include "hooking.hpp"
 #include "wndproc.hpp"
-#include "../logger/logger.hpp"
 #include "../d3d/renderer.hpp"
-#include "../misc/common.hpp"
 #include "../scriptmanager/scriptmanager.hpp"
 
 namespace gta_base {
