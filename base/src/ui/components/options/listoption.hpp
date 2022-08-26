@@ -30,10 +30,18 @@ namespace gta_base {
                 *idx_ -= 1;
                 UpdateRightText();
                 SendEvent(Event::kChange);
+              } else {
+                *idx_ = items_->size() - 1;
+                UpdateRightText();
+                SendEvent(Event::kChange);
               }
             } else if (key == KeyInput::kRight) {
               if (*idx_ < items_->size() - 1) {
                 *idx_ += 1;
+                UpdateRightText();
+                SendEvent(Event::kChange);
+              } else {
+                *idx_ = 0;
                 UpdateRightText();
                 SendEvent(Event::kChange);
               }

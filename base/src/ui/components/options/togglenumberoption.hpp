@@ -32,8 +32,12 @@ namespace gta_base {
               UpdateRightText();
               SendEvent(Event::kSelect);
             } else if (key == KeyInput::kLeft) {
-              if (*value_ == min_)
+              if (*value_ == min_) {
+                *value_ = max_;
+                UpdateRightText();
+                SendEvent(Event::kChange);
                 return;
+              }
 
               *value_ -= step_;
               if (*value_ < min_)
@@ -41,8 +45,12 @@ namespace gta_base {
               UpdateRightText();
               SendEvent(Event::kChange);
             } else if (key == KeyInput::kRight) {
-              if (*value_ == max_)
+              if (*value_ == max_) {
+                *value_ = min_;
+                UpdateRightText();
+                SendEvent(Event::kChange);
                 return;
+              }
 
               *value_ += step_;
               if (*value_ > max_)
@@ -76,14 +84,7 @@ namespace gta_base {
 
         private:
           void UpdateRightText() {
-            auto tmp_right_text = fmt::format("[{}", *value_);
-            while (!tmp_right_text.empty() && tmp_right_text.back() == '0')
-              tmp_right_text.pop_back();
-            if (tmp_right_text.back() == '.')
-              tmp_right_text += "0";
-            if (tmp_right_text.back() == '[')
-              tmp_right_text += '0';
-            tmp_right_text += "]";
+            auto tmp_right_text = fmt::format("[{}]", *value_);
 
             SetRightText(tmp_right_text);
           }
