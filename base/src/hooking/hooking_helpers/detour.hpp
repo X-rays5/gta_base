@@ -6,8 +6,8 @@
 #ifndef GTA_BASE_DETOUR_HPP
 #define GTA_BASE_DETOUR_HPP
 #include <string>
-#include <MinHook.h>
-#include "../memory/sigscanner.hpp"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 namespace gta_base {
   namespace hooking {

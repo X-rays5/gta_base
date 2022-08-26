@@ -3,6 +3,9 @@
 //
 
 #include "detour.hpp"
+#include <MinHook.h>
+#include "../../logger/logger.hpp"
+#include "../../memory/scanner/handle.hpp"
 
 namespace gta_base {
   namespace hooking {
@@ -49,10 +52,10 @@ namespace gta_base {
 
     void DetourHook::FixHookAddress() {
       __try {
-        auto ptr = memory::MemoryHandle(target_);
-        while (ptr.As<std::uint8_t&>() == 0xE9)
-        ptr = ptr.Add(1).Rip();
-        target_ = ptr.As<void*>();
+        auto ptr = memory::scanner::Handle(target_);
+        while (ptr.as<std::uint8_t&>() == 0xE9)
+        ptr = ptr.add(1).rip();
+        target_ = ptr.as<void*>();
       } __except (ExpHandler(GetExceptionInformation(), name_)) {
         [this]() {
           LOG_FATAL("Failed to fix hook address for '{}'", name_);

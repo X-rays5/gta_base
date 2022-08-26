@@ -2,9 +2,9 @@
 // Created by X-ray on 08/08/22.
 //
 
-#include <MinHook.h>
+#include "MinHook.h"
 #include "vmt.hpp"
-#include "../memory/sigscanner.hpp"
+#include "../../memory/scanner/handle.hpp"
 
 namespace gta_base {
   namespace hooking {
@@ -71,10 +71,10 @@ namespace gta_base {
 
     void VmtHook::FixHookAddress(const std::string& name, LPVOID target) {
       __try {
-        auto ptr = memory::MemoryHandle(target);
-        while (ptr.As<std::uint8_t&>() == 0xE9)
-        ptr = ptr.Add(1).Rip();
-        target = ptr.As<void*>();
+        auto ptr = memory::scanner::Handle(target);
+        while (ptr.as<std::uint8_t&>() == 0xE9)
+        ptr = ptr.add(1).rip();
+        target = ptr.as<void*>();
       } __except (ExpHandler(GetExceptionInformation(), name)) {
         [&name]() {
           LOG_FATAL("Failed to fix hook address for '{}'", name);

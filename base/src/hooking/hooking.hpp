@@ -10,8 +10,8 @@
 #include <robin_hood.h>
 #include <MinHook.h>
 #include <d3d11.h>
-#include "vmt.hpp"
-#include "detour.hpp"
+#include "hooking_helpers/vmt.hpp"
+#include "hooking_helpers/detour.hpp"
 #include "../memory/pointers.hpp"
 
 namespace gta_base {

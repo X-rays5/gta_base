@@ -9,7 +9,7 @@
 #include <robin_hood.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "../logger/logger.hpp"
+#include "../../logger/logger.hpp"
 
 namespace gta_base {
   namespace hooking {
