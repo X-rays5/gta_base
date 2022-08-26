@@ -8,7 +8,6 @@
 #define GTABASE_POINTERS_HPP
 #include <memory>
 #include <d3d11.h>
-#include "sigscanner.hpp"
 #include <ped/CPedFactory.hpp>
 #include "../rage/enums.hpp"
 #include "../rage/classes/script_thread.hpp"
