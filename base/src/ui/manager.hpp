@@ -54,7 +54,7 @@ namespace gta_base {
       std::atomic<bool> should_tick = true;
       std::atomic<bool> show_ui = false;
 
-      std::atomic<float> x_size = 0.15f;
+      std::atomic<float> x_size = 0.175f;
       std::atomic<float> x_base = 0.025f;
       std::atomic<float> x_size_scrollbar = 0.003f;
       std::atomic<float> y_size_top_bar = 0.025f;

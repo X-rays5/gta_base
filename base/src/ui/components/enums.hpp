@@ -14,6 +14,7 @@ namespace gta_base {
         Home,
         Player,
         Debug,
+        TestComponents,
         Settings,
         UnloadConfirm,
       };

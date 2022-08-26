@@ -5,5 +5,91 @@
 #pragma once
 #ifndef GTA_BASE_TOGGLENUMBEROPTION_HPP
 #define GTA_BASE_TOGGLENUMBEROPTION_HPP
+#include "baseoption.hpp"
 
+namespace gta_base {
+  namespace ui {
+    namespace components {
+      namespace option {
+        template<typename T>
+        requires std::integral<T> or std::floating_point<T>
+        class ToggleNumberOption : public BaseOption {
+        public:
+          explicit ToggleNumberOption(const std::string& name, const std::string& description, bool& toggle, T& value, T step, T min, T max) {
+            name_ = name;
+            description_ = description;
+            toggle_ = &toggle;
+            value_ = &value;
+            step_ = step;
+            min_ = min;
+            max_ = max;
+            UpdateRightText();
+          }
+
+          void HandleKey(KeyInput key) final {
+            if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
+              *toggle_ = !*toggle_;
+              UpdateRightText();
+              SendEvent(Event::kSelect);
+            } else if (key == KeyInput::kLeft) {
+              if (*value_ == min_)
+                return;
+
+              *value_ -= step_;
+              if (*value_ < min_)
+                *value_ = min_;
+              UpdateRightText();
+              SendEvent(Event::kChange);
+            } else if (key == KeyInput::kRight) {
+              if (*value_ == max_)
+                return;
+
+              *value_ += step_;
+              if (*value_ > max_)
+                *value_ = max_;
+              UpdateRightText();
+              SendEvent(Event::kChange);
+            }
+          }
+
+          bool HasFlag(OptionFlag flag) final {
+            if (flag == OptionFlag::kRightText) {
+              return right_text_.empty();
+            } else if (flag == OptionFlag::kRightIcon) {
+              return icon_path_.string().empty();
+            } else if (flag == OptionFlag::kHotkeyable) {
+              return true;
+            } else if (flag == OptionFlag::kToggle) {
+              return true;
+            } else if (flag == OptionFlag::kToggled) {
+              return *toggle_;
+            } else {
+              return false;
+            }
+          }
+        private:
+          bool* toggle_;
+          T* value_;
+          T step_;
+          T min_;
+          T max_;
+
+        private:
+          void UpdateRightText() {
+            auto tmp_right_text = fmt::format("[{}", *value_);
+            while (!tmp_right_text.empty() && tmp_right_text.back() == '0')
+              tmp_right_text.pop_back();
+            if (tmp_right_text.back() == '.')
+              tmp_right_text += "0";
+            if (tmp_right_text.back() == '[')
+              tmp_right_text += '0';
+            tmp_right_text += "]";
+
+            SetRightText(tmp_right_text);
+          }
+        };
+      }
+    }
+  }
+}
 #endif //GTA_BASE_TOGGLENUMBEROPTION_HPP

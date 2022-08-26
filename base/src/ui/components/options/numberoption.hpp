@@ -15,10 +15,10 @@ namespace gta_base {
         requires std::integral<T> or std::floating_point<T>
         class NumberOption : public BaseOption {
         public:
-          explicit NumberOption(const std::string& name, const std::string& description, T* value, T step, T min, T max) {
+          explicit NumberOption(const std::string& name, const std::string& description, T& value, T step, T min, T max) {
             name_ = name;
             description_ = description;
-            value_ = value;
+            value_ = &value;
             step_ = step;
             min_ = min;
             max_ = max;

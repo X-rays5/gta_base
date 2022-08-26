@@ -1,10 +1,10 @@
 //
-// Created by X-ray on 07/30/22.
+// Created by X-ray on 08/26/22.
 //
 
 #pragma once
-#ifndef GTA_BASE_LISTOPTION_HPP
-#define GTA_BASE_LISTOPTION_HPP
+#ifndef GTA_BASE_TOGGLELISTOPTION_HPP
+#define GTA_BASE_TOGGLELISTOPTION_HPP
 #include "baseoption.hpp"
 
 namespace gta_base {
@@ -12,11 +12,12 @@ namespace gta_base {
     namespace components {
       namespace option {
         template<typename T>
-        class ListOption : public BaseOption {
+        class ToggleListOption : public BaseOption {
         public:
-          explicit ListOption(const std::string& name, const std::string& description, std::size_t& idx, std::vector<T>& items) {
+          explicit ToggleListOption(const std::string& name, const std::string& description, bool& toggle, std::size_t& idx, std::vector<T>& items) {
             name_ = name;
             description_ = description;
+            toggle_ = &toggle;
             idx_ = &idx;
             items_ = &items;
             UpdateRightText();
@@ -24,6 +25,7 @@ namespace gta_base {
 
           void HandleKey(KeyInput key) final {
             if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
+              *toggle_ = !*toggle_;
               SendEvent(Event::kSelect);
             } else if (key == KeyInput::kLeft) {
               if (*idx_ > 0) {
@@ -47,11 +49,16 @@ namespace gta_base {
               return icon_path_.string().empty();
             } else if (flag == OptionFlag::kHotkeyable) {
               return true;
+            } else if (flag == OptionFlag::kToggle) {
+              return true;
+            } else if (flag == OptionFlag::kToggled) {
+              return *toggle_;
             } else {
               return false;
             }
           }
         private:
+          bool* toggle_;
           std::size_t* idx_;
           std::vector<T>* items_;
 
@@ -64,4 +71,4 @@ namespace gta_base {
     }
   }
 }
-#endif //GTA_BASE_LISTOPTION_HPP
+#endif //GTA_BASE_TOGGLELISTOPTION_HPP

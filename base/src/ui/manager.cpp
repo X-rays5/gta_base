@@ -131,7 +131,7 @@ namespace gta_base {
 
           auto toggle_text = toggled ? ICON_FA_CHECK : ICON_FA_XMARK;
           draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, toggle_text));
-          draw_list_->AddCommand(d3d::draw::Text({(x_base + x_size) - 0.01f, text_pos}, text_color_tmp, "sadasda", true, true, font_size));
+          draw_list_->AddCommand(d3d::draw::Text({(x_base + x_size) - 0.01f, text_pos}, text_color_tmp, right_text, true, true, font_size));
         } else if (!right_text.empty()) {
           draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
         }
