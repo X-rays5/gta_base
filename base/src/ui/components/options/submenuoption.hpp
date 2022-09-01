@@ -17,10 +17,10 @@ namespace gta_base {
         public:
           using action_t = void(*)();
 
-          SubmenuOption(const std::string& name, const std::string& description, Submenus sub_id, action_t action = nullptr) {
-            name_ = name;
-            description_ = description;
-            right_text_ = ">";
+          SubmenuOption(const std::string& name_key, const std::string& description_key, Submenus sub_id, action_t action = nullptr) {
+            name_key_ = name_key;
+            description_key_ = description_key;
+            right_text_key_ = ">";
             sub_id_ = sub_id;
             action_ = action;
           }

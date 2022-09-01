@@ -13,6 +13,7 @@
 #include "imgui.h"
 #include "components/submenu.hpp"
 #include "notification/notification.hpp"
+#include "translation/translation_manager.hpp"
 #include "../misc/timedinput.hpp"
 #include "../d3d/draw.hpp"
 
@@ -97,7 +98,8 @@ namespace gta_base {
       float scrollbar_speed_ = scroller_speed_;
       float scrollbar_current_pos_ = scroller_current_pos_;
 
-      std::unique_ptr<::gta_base::ui::Notification> notification_inst_;
+      std::unique_ptr<Notification> notification_inst_;
+      std::unique_ptr<TranslationManager> translation_manager_inst_;
 
       float toggle_button_size_ = 0.01f;
     private:

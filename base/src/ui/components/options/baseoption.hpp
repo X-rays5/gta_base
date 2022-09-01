@@ -11,6 +11,7 @@
 #include <functional>
 #include <fmt/format.h>
 #include "../enums.hpp"
+#include "../../translation/translation_manager.hpp"
 
 namespace gta_base {
   namespace ui {
@@ -21,56 +22,60 @@ namespace gta_base {
           using on_event_t = std::function<void(Event)>;
 
           inline std::string GetName() {
-            return name_;
+            return std::string((*kTRANSLATION_MANAGER)[name_key_]);
           }
 
-          inline void SetName(std::string name) {
-            name_ = std::move(name);
+          inline void SetNameKey(std::string name_key) {
+            name_key_ = std::move(name_key);
           }
 
           inline std::string GetDescription() {
-            return description_;
+            return std::string((*kTRANSLATION_MANAGER)[description_key_]);
           }
 
-          inline void SetDescription(std::string description) {
-            description_ = std::move(description);
+          inline void SetDescriptionKey(std::string description_key) {
+            description_key_ = std::move(description_key);
           }
 
           inline std::string GetCenterText() {
-            return center_text_;
+            auto res = std::string((*kTRANSLATION_MANAGER)[center_text_key_]);
+            if (HasFlag(OptionFlag::kLabel))
+              res = fmt::format("[{}]", res);
+
+            return res;
           }
 
-          inline void SetCenterText(std::string center_text) {
-            center_text_ = std::move(center_text);
+          inline void SetCenterTextKey(std::string center_text_key) {
+            center_text_key_ = std::move(center_text_key);
           }
 
           inline std::string GetRightText() {
-            return right_text_;
+            return std::string((*kTRANSLATION_MANAGER)[right_text_key_]);
           }
 
-          inline void SetRightText(std::string rightText) {
-            right_text_ = std::move(rightText);
+          inline void SetRightTextKey(std::string right_text_key) {
+            right_text_key_ = std::move(right_text_key);
           }
 
           inline std::filesystem::path GetIconPath() {
             return icon_path_;
           }
 
-          inline void SetIconPath(const std::filesystem::path& iconPath) {
-            icon_path_ = iconPath;
+          inline void SetIconPath(const std::filesystem::path& icon_path) {
+            icon_path_ = icon_path;
           }
 
           inline void OnEvent(on_event_t handler) {
-            event_handler_ = handler;
+            event_handler_ = std::move(handler);
           }
 
           virtual void HandleKey(KeyInput key) = 0;
           virtual bool HasFlag(OptionFlag flag) = 0;
         protected:
-          std::string name_{};
-          std::string description_{};
-          std::string center_text_{};
-          std::string right_text_{};
+          std::string name_key_{};
+          std::string description_key_{};
+          std::string center_text_key_{};
+          std::string right_text_key_{};
           std::filesystem::path icon_path_{};
           on_event_t event_handler_ = nullptr;
 

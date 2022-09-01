@@ -24,6 +24,7 @@ namespace gta_base {
       input_back_ = std::make_unique<util::TimedInput>(VK_BACK, 300);
 
       notification_inst_ = std::make_unique<Notification>();
+      translation_manager_inst_ = std::make_unique<TranslationManager>(); // TODO: Set to translation from current language
       kMANAGER = this;
     }
 

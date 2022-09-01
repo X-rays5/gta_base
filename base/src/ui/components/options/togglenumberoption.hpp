@@ -15,9 +15,9 @@ namespace gta_base {
         requires std::integral<T> or std::floating_point<T>
         class ToggleNumberOption : public BaseOption {
         public:
-          explicit ToggleNumberOption(const std::string& name, const std::string& description, bool& toggle, T& value, T step, T min, T max) {
-            name_ = name;
-            description_ = description;
+          explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max) {
+            name_key_ = name_key;
+            description_key_ = description_key;
             toggle_ = &toggle;
             value_ = &value;
             step_ = step;
@@ -62,7 +62,7 @@ namespace gta_base {
 
           bool HasFlag(OptionFlag flag) final {
             if (flag == OptionFlag::kRightText) {
-              return right_text_.empty();
+              return right_text_key_.empty();
             } else if (flag == OptionFlag::kRightIcon) {
               return icon_path_.string().empty();
             } else if (flag == OptionFlag::kHotkeyable) {
@@ -86,7 +86,7 @@ namespace gta_base {
           void UpdateRightText() {
             auto tmp_right_text = fmt::format("[{}]", *value_);
 
-            SetRightText(tmp_right_text);
+            SetRightTextKey(tmp_right_text);
           }
         };
       }

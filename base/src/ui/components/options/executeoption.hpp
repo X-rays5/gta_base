@@ -18,9 +18,9 @@ namespace gta_base {
         public:
           using action_t = void(*)();
 
-          explicit ExecuteOption(const std::string& name, const std::string& description = "", action_t action = []{}, const std::string& action_id = "") {
-            name_ = name;
-            description_ = description;
+          explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, const std::string& action_id = "") {
+            name_key_ = name_key;
+            description_key_ = description_key;
             action_ = action;
             action_id_ = action_id;
           }
@@ -37,7 +37,7 @@ namespace gta_base {
 
           bool HasFlag(OptionFlag flag) final {
             if (flag == OptionFlag::kRightText) {
-              return right_text_.empty();
+              return right_text_key_.empty();
             } else if (flag == OptionFlag::kRightIcon) {
               return icon_path_.string().empty();
             } else if (flag == OptionFlag::kHotkeyable) {

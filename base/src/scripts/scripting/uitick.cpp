@@ -49,14 +49,8 @@ namespace gta_base {
         });
 
         kMANAGER->AddSubmenu("Player", components::Submenus::Player, [this](components::Submenu* sub){
-          sub->AddOption(components::option::ToggleOption("Never Wanted", "", &never_wanted))->OnEvent([](components::Event event){
-            if (event == components::Event::kChange) {
-              fiber::kPOOL->AddJob([&]{
-                LOG_DEBUG("never wanted is now: {}", never_wanted);
-                never_wanted ? PLAYER::SET_MAX_WANTED_LEVEL(0) : PLAYER::SET_MAX_WANTED_LEVEL(5);
-              });
-            }
-          });
+          auto player = *memory::kPOINTERS->ped_factory_;
+          sub->AddOption(components::option::NumberOption<std::uint32_t>("wanted_level", "wanted_level_desc", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
         });
 
         kMANAGER->AddSubmenu("Debug", components::Submenus::Debug, [this](components::Submenu* sub){

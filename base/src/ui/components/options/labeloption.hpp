@@ -14,8 +14,8 @@ namespace gta_base {
       namespace option {
         class LabelOption : public BaseOption {
         public:
-          explicit LabelOption(const std::string& label) {
-            center_text_ = fmt::format("[{}]", label);
+          explicit LabelOption(const std::string& label_key) {
+            center_text_key_ = label_key;
           }
 
           void HandleKey(KeyInput key) final {
