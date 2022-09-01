@@ -84,6 +84,19 @@ namespace gta_base {
         native_return_ = ptr.as<decltype(native_return_)>();
       });
 
+      main_batch.add(VAR_NAME(network_player_mgr_), xorstr_("48 8B 0D ? ? ? ? 8A D3 48 8B 01 FF 50 ? 4C 8B 07 48 8B CF"), [this](scanner::Handle ptr){
+        network_player_mgr_ = ptr.add(3).rip().as<decltype(network_player_mgr_)>();
+      });
+
+      main_batch.add(std::string(VAR_NAME(GetConnectionPeer)) + "/" + VAR_NAME(SendRemoveGamerCmd), xorstr_("8D 42 FF 83 F8 FD 77 3D"), [this](scanner::Handle ptr){
+        GetConnectionPeer = ptr.add(32).rip().as<decltype(GetConnectionPeer)>();
+        SendRemoveGamerCmd = ptr.add(65).rip().as<decltype(SendRemoveGamerCmd)>();
+      });
+
+      main_batch.add(VAR_NAME(HandleRemoveGamerCmd), xorstr_("41 FF C6 FF C7"), [this](scanner::Handle ptr){
+        HandleRemoveGamerCmd = ptr.sub(0x6E).as<decltype(HandleRemoveGamerCmd)>();
+      });
+
       main_batch.run(scanner::Module(nullptr));
     }
 

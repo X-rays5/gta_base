@@ -19,6 +19,10 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 #include <spdlog/async.h>
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+#undef GetObject
 
 namespace gta_base {
   class Logger {

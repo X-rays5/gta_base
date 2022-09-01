@@ -98,7 +98,7 @@ namespace gta_base {
         return EXCEPTION_CONTINUE_EXECUTION;
       }
 
-      LOG_FATAL(logger::stacktrace::GetExceptionString(except));
+      LOG_ERROR(logger::stacktrace::GetExceptionString(except));
 
       std::this_thread::sleep_for(std::chrono::seconds(10));
       kLOGGER->Shutdown();

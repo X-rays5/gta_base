@@ -18,6 +18,7 @@
 #include "../../ui/components/options/togglelistoption.hpp"
 #include "../../natives/natives.hpp"
 #include "../../fiber/pool.hpp"
+#include "../../rage/util/get.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -30,21 +31,13 @@ namespace gta_base {
         using namespace ui;
 
         kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
-          auto player = *memory::kPOINTERS->ped_factory_;
-          sub->AddOption(components::option::NumberOption<std::uint32_t>("Wanted Level", "Press enter to set to current wanted level", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
-          sub->AddOption(components::option::ExecuteOption("fake wanted lvl 0", "", [] {
-            fiber::kPOOL->AddJob([]{
-              MISC::SET_FAKE_WANTED_LEVEL(0);
-            });
-          }));
-          sub->AddOption(components::option::ExecuteOption("fake wanted lvl 6", "", [] {
-            fiber::kPOOL->AddJob([]{
-              MISC::SET_FAKE_WANTED_LEVEL(6);
-            });
-          }));
+          sub->AddOption(components::option::ExecuteOption("Breakup kick lobby", "", [] {
 
+          }));
           sub->AddOption(components::option::SubmenuOption("Player", "", components::Submenus::Player));
+#ifndef NDEBUG
           sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
+#endif
           sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
         });
 

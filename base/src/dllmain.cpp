@@ -35,6 +35,9 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID) {
 
       FreeLibraryAndExitThread(globals::dll_handle, 0);
     }, nullptr, 0, nullptr);
+  } else if (call_reason == DLL_PROCESS_DETACH) {
+    globals::running = false;
+    gta_base::kLOGGER->~Logger(); // avoid stacktrace on normal exit
   }
 
   return true;

@@ -6,11 +6,6 @@
 #ifndef GTA_BASE_BASE_HPP
 #define GTA_BASE_BASE_HPP
 namespace rage {
-  class datBase {
-  public:
-    virtual ~datBase() = default;
-  };
-
   class pgBase
   {
   public:
