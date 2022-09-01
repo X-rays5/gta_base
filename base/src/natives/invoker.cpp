@@ -6,8 +6,7 @@
 #include "crossmap.hpp"
 #include "../memory/pointers.hpp"
 #include "../logger/logger.hpp"
-
-extern "C" void	_call_asm(void* context, void* function, void* ret);
+#include "spoofer/spoof.hpp"
 
 namespace rage {
   NativeCallContext::NativeCallContext() {
@@ -15,8 +14,8 @@ namespace rage {
     m_args = &arg_stack_[0];
   }
 
-  void ExceptionHandler(PEXCEPTION_POINTERS e) {
-    LOG_WARN("Exception caught while trying to call a native");
+  void ExceptionHandler(PEXCEPTION_POINTERS e, rage::scrNativeHash hash) {
+    LOG_WARN("Exception caught while trying to call native with hash: 0x{:X}", hash);
   }
 
   void Invoker::CacheHandlers() {
@@ -33,10 +32,17 @@ namespace rage {
 
   void CallNative(rage::scrNativeHash hash, NativeCallContext* call_context, scrNativeHandler handler, PVOID native_ret, gta_base::memory::Pointers::fix_vectors_t fix_vectors) {
     __try {
-      _call_asm(call_context, handler, native_ret);
-      //handler(call_context);
+      static char og_native_ret[2];
+      constexpr static const std::uint8_t patch[2] = { (std::uint8_t)0xFF, (std::uint8_t)0x23 };
+
+      std::copy_n((char*)native_ret, 2, og_native_ret);
+      std::copy(std::begin(patch), std::end(patch), (char*)native_ret);
+
+      spoof_call(native_ret, static_cast<void(*)(rage::scrNativeCallContext*)>(handler), static_cast<rage::scrNativeCallContext*>(call_context));
+      std::copy(std::begin(og_native_ret), std::end(og_native_ret), (char*)native_ret);
+
       fix_vectors(call_context);
-    } __except(ExceptionHandler(GetExceptionInformation()), EXCEPTION_EXECUTE_HANDLER) {}
+    } __except(ExceptionHandler(GetExceptionInformation(), hash), EXCEPTION_EXECUTE_HANDLER) {}
   }
 
   void Invoker::EndCall(rage::scrNativeHash hash) {
@@ -47,7 +53,7 @@ namespace rage {
 
       CallNative(hash, &call_context_, handler, gta_base::memory::kPOINTERS->native_return_, gta_base::memory::kPOINTERS->FixVectors);
     } else {
-      LOG_WARN("Failed to find: 0x{} native's handler", hash);
+      LOG_WARN("Failed to find: 0x{:X} native's handler", hash);
     }
   }
 }
