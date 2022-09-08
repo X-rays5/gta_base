@@ -32,7 +32,9 @@ namespace gta_base {
 
         kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
           sub->AddOption(components::option::ExecuteOption("Breakup kick lobby", "", [] {
-
+            fiber::kPOOL->AddJob([]{
+              LOG_DEBUG("{}", ENTITY::GET_ENTITY_HEALTH(PLAYER::PLAYER_PED_ID()));
+            });
           }));
           sub->AddOption(components::option::SubmenuOption("Player", "", components::Submenus::Player));
 #ifndef NDEBUG
@@ -91,6 +93,8 @@ namespace gta_base {
             kMANAGER->PopSubmenu();
           }));
         });
+
+        kNOTIFICATIONS->Create(Notification::Type::kInfo, "UI Loaded", "");
       }
     }
 

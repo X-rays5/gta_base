@@ -7,9 +7,16 @@
 
 namespace gta_base {
   namespace common {
+    Platform GetCurrentPlatform() {
+      static const Platform cur_platform = GetModuleHandleA("steam_api64.dll") ? Platform::kSteam : GetModuleHandleA("EOSSDK-Win64-Shipping.dll") ? Platform::kEpicGames : Platform::kRockstar;
+
+      return cur_platform;
+    }
+
     bool IsSessionStarted() {
       return memory::kPOINTERS->is_session_started_;
     }
+
     std::filesystem::path GetBaseDir() {
       std::filesystem::path base_path = std::filesystem::path(std::getenv("APPDATA")) / globals::name;
       if (!std::filesystem::exists(base_path)) {

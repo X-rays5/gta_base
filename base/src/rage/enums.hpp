@@ -7,13 +7,6 @@
 #ifndef GTA_BASE_ENUMS_RAGE_HPP
 #define GTA_BASE_ENUMS_RAGE_HPP
 #include <cstdint>
-
-namespace rage {
-  enum GameState : std::uint32_t
-  {
-    kPlaying = 0
-  };
-
-}
+#include <player/CPlayerInfo.hpp>
 
 #endif //GTA_BASE_ENUMS_HPP

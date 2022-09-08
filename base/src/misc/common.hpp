@@ -20,8 +20,16 @@
 
 namespace gta_base {
   namespace common {
+    enum class Platform {
+      kRockstar,
+      kEpicGames,
+      kSteam
+    };
+
+    Platform GetCurrentPlatform();
 
     bool IsSessionStarted();
+
     std::filesystem::path GetBaseDir();
     std::filesystem::path GetConfigDir();
     std::filesystem::path GetLogDir();

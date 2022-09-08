@@ -19,6 +19,7 @@
 #include "ui/manager.hpp"
 #include "fiber/manager.hpp"
 #include "fiber/pool.hpp"
+#include "player_mgr/manager.hpp"
 
 std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
@@ -28,7 +29,7 @@ void BaseMain() {
   LOG_INFO("Pointers initialized");
 
   LOG_INFO("Waiting for the game to load...");
-  while(*memory::kPOINTERS->game_state_ != rage::GameState::kPlaying) {
+  while(*memory::kPOINTERS->game_state_ != eGameState::Playing) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
   LOG_INFO("Game loaded");
@@ -62,6 +63,9 @@ void BaseMain() {
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO("Discord initialized");
 
+  auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
+  LOG_INFO("Player Manager initialized");
+
   kHOOKING->Enable();
   LOG_INFO("Hooks enabled");
 
@@ -88,6 +92,9 @@ void BaseMain() {
 
   kHOOKING->Disable();
   LOG_INFO("Hooks disabled");
+
+  player_mgr_inst.reset();
+  LOG_INFO("Player Manager unloaded");
 
   discord_inst.reset();
   LOG_INFO("Discord shutdown");

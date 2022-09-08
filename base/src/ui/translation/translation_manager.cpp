@@ -61,7 +61,6 @@ namespace gta_base {
       auto it = translation_.find(key);
 
       if (it != translation_.end()) {
-        LOG_DEBUG("TranslationManager: Found translation for key: {}", key);
         return it->second;
       } else {
         return key;
