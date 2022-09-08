@@ -6,7 +6,8 @@
 #include "crossmap.hpp"
 #include "../memory/pointers.hpp"
 #include "../logger/logger.hpp"
-#include "spoofer/spoof.hpp"
+
+extern "C" void	spoof_call(void* context, void* function, void* ret);
 
 namespace rage {
   NativeCallContext::NativeCallContext() {
@@ -30,18 +31,13 @@ namespace rage {
     call_context_.reset();
   }
 
-  void CallNative(rage::scrNativeHash hash, NativeCallContext* call_context, scrNativeHandler handler, PVOID native_ret, gta_base::memory::Pointers::fix_vectors_t fix_vectors) {
+  void CallNative(rage::scrNativeHash hash, NativeCallContext* call_context, scrNativeHandler handler) {
     __try {
-      static char og_native_ret[2];
-      constexpr static const std::uint8_t patch[2] = { (std::uint8_t)0xFF, (std::uint8_t)0x23 };
 
-      std::copy_n((char*)native_ret, 2, og_native_ret);
-      std::copy(std::begin(patch), std::end(patch), (char*)native_ret);
+      spoof_call(call_context, handler, gta_base::memory::kPOINTERS->native_return_);
+      //handler(call_context);
 
-      spoof_call(native_ret, static_cast<void(*)(rage::scrNativeCallContext*)>(handler), static_cast<rage::scrNativeCallContext*>(call_context));
-      std::copy(std::begin(og_native_ret), std::end(og_native_ret), (char*)native_ret);
-
-      fix_vectors(call_context);
+      gta_base::memory::kPOINTERS->FixVectors(call_context);
     } __except(ExceptionHandler(GetExceptionInformation(), hash), EXCEPTION_EXECUTE_HANDLER) {}
   }
 
@@ -51,7 +47,7 @@ namespace rage {
     if (entry != handler_cache_.end()) {
       auto handler = entry->second;
 
-      CallNative(hash, &call_context_, handler, gta_base::memory::kPOINTERS->native_return_, gta_base::memory::kPOINTERS->FixVectors);
+      CallNative(hash, &call_context_, handler);
     } else {
       LOG_WARN("Failed to find: 0x{:X} native's handler", hash);
     }
