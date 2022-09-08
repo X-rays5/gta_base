@@ -21,9 +21,7 @@ namespace gta_base {
       public:
         using constructor_cb = std::function<void(Submenu*)>;
 
-        explicit Submenu(std::string name, Submenus submenu_id, constructor_cb cb) : name_(std::move(name)) {
-          std::invoke(cb, this);
-        }
+        Submenu(std::string name, Submenus submenu_id, constructor_cb cb) : name_(std::move(name)), create_options_(std::move(cb)) {}
 
         [[nodiscard]] inline std::string GetName() const {
           return name_;
@@ -79,8 +77,17 @@ namespace gta_base {
           }
         };
 
+        void Clear() {
+          options_.clear();
+        }
+
+        void CreateOptions() {
+          std::invoke(create_options_, this);
+        }
+
       private:
         std::string name_{};
+        constructor_cb create_options_;
         std::vector<std::shared_ptr<option::BaseOption>> options_;
         std::int64_t selected_option_ = 0;
       };

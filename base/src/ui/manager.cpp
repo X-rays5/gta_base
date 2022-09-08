@@ -226,6 +226,9 @@ namespace gta_base {
 
       if (!submenus_stack_.empty()) {
         auto cur_sub = submenus_stack_.top();
+        cur_sub->Clear();
+        cur_sub->CreateOptions();
+
         if (input_open_->Get())
           show_ui = !show_ui;
 
