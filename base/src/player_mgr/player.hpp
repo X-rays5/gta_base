@@ -6,10 +6,11 @@
 #ifndef GTA_BASE_PLAYER_HPP
 #define GTA_BASE_PLAYER_HPP
 #include <algorithm>
-#include <ctype.h>
+#include <cctype>
 #include <network/CNetGamePlayer.hpp>
 #include <vehicle/CVehicle.hpp>
 #include <ped/CPed.hpp>
+#include <network/snSession.hpp>
 
 namespace gta_base {
   namespace player_mgr {
@@ -24,18 +25,11 @@ namespace gta_base {
       [[nodiscard]] CPed* Ped();
       [[nodiscard]] CVehicle* Vehicle();
       [[nodiscard]] ClanData* Clan();
+      [[nodiscard]] rage::snPlayer* SessionPlayer();
+      [[nodiscard]] rage::snPeer* SessionPeer();
 
-      template<typename str_t = const char*>
-      [[nodiscard]] const char* Name() {
-        return (str_t)self_->get_name();
-      }
-
-      std::string NameLowerCase() {
-        std::string res = Name();
-        std::transform(res.begin(), res.end(), res.begin(), ::tolower);
-
-        return res;
-      }
+      [[nodiscard]] std::string Name();
+      [[nodiscard]] std::string NameLowerCase();
 
       [[nodiscard]] std::uint8_t Id() const;
       [[nodiscard]] bool Host() const;

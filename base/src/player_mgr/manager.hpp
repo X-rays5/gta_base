@@ -7,7 +7,7 @@
 #define GTA_BASE_PLAYER_MANAGER_HPP
 #include <memory>
 #include <utility>
-//#include <robin_hood.h>
+#include <robin_hood.h>
 #include "player.hpp"
 #include "../rage/util/get.hpp"
 
@@ -16,7 +16,7 @@ namespace gta_base {
     class Manager {
     public:
       using player_ptr_t = std::shared_ptr<Player>;
-      using player_list_t = robin_hood::unordered_map<std::string, player_ptr_t>;
+      using player_list_t = std::unordered_map<std::string, player_ptr_t>;
 
     public:
       Manager();
@@ -51,6 +51,10 @@ namespace gta_base {
 
       void Clear();
 
+      player_list_t GetPlayerList();
+
+      void Iterate(bool include_self, const std::function<void(const std::string&, const std::shared_ptr<Player>&)>& fn);
+
       [[nodiscard]] inline player_list_t::iterator begin() noexcept;
       [[nodiscard]] inline player_list_t::const_iterator cbegin() const noexcept;
       [[nodiscard]] inline player_list_t::iterator end() noexcept;
@@ -59,7 +63,7 @@ namespace gta_base {
     private:
       player_list_t player_list_;
       player_ptr_t self_;
-      player_ptr_t selected_player_ = nullptr;
+      player_ptr_t selected_player_ = std::make_shared<Player>(nullptr);
     };
   }
   inline player_mgr::Manager* kPLAYER_MGR{};

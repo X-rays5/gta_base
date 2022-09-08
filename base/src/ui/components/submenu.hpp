@@ -39,7 +39,10 @@ namespace gta_base {
           return options_.size();
         };
 
-        [[nodiscard]] inline size_t GetSelectedOption() const {
+        [[nodiscard]] inline size_t GetSelectedOption() {
+          if (selected_option_ >= options_.size())
+            selected_option_ = 0;
+
           return selected_option_;
         };
 
@@ -60,6 +63,9 @@ namespace gta_base {
         }
 
         inline void HandleKey(KeyInput key) {
+          if (options_.empty())
+            return;
+
           if (key == KeyInput::kUp) {
             if (selected_option_ > 0) {
               selected_option_--;

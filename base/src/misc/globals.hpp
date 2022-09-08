@@ -25,8 +25,8 @@ namespace gta_base {
       extern std::atomic<bool> running;
       extern HINSTANCE dll_handle;
       extern robin_hood::unordered_map<std::uint32_t, KeyState> key_state;
-      extern std::atomic<std::uint64_t> session_join_time;
-      extern std::atomic<std::uint64_t> session_leave_time;
+      extern std::atomic<std::int64_t> session_join_time;
+      extern std::atomic<std::int64_t> session_leave_time;
     }
   }
 }

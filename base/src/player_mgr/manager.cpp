@@ -3,6 +3,8 @@
 //
 
 #include "manager.hpp"
+
+#include <utility>
 #include "../ui/manager.hpp"
 
 namespace gta_base {
@@ -190,7 +192,12 @@ namespace gta_base {
       return player_list_.empty();
     }
 
-    void Manager::SetSelectedPlayer(Manager::player_ptr_t player) {
+    void Manager::SetSelectedPlayer(player_ptr_t player) {
+      if (!player) {
+        LOG_DEBUG("Manager::SetSelectedPlayer called with a nullptr");
+        return;
+      }
+
       selected_player_ = std::move(player);
     }
 
@@ -199,8 +206,17 @@ namespace gta_base {
     }
 
     void Manager::Clear() {
-      selected_player_ = nullptr;
+      selected_player_ = std::make_shared<Player>(nullptr);
       player_list_.clear();
+    }
+
+    void Manager::Iterate(bool include_self, const std::function<void(const std::string&, const std::shared_ptr<Player>&)>& fn) {
+      for (auto&& player_entry: player_list_) {
+        if (!include_self && player_entry.second->Id() == self_->Id())
+          continue;
+
+        std::invoke(fn, player_entry.first, player_entry.second);
+      }
     }
 
     Manager::player_list_t::iterator Manager::begin() noexcept {
@@ -217,6 +233,10 @@ namespace gta_base {
 
     Manager::player_list_t::const_iterator Manager::cend() const noexcept {
       return player_list_.cend();
+    }
+
+    Manager::player_list_t Manager::GetPlayerList() {
+      return player_list_;
     }
   }
 }

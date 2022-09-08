@@ -11,8 +11,8 @@
 
 
 namespace gta_base {
-  std::atomic<std::uint64_t> common::globals::session_join_time = 0;
-  std::atomic<std::uint64_t> common::globals::session_leave_time = 1;
+  std::atomic<std::int64_t> common::globals::session_join_time = 0;
+  std::atomic<std::int64_t> common::globals::session_leave_time = 1;
   void Hooks::NetworkPlayerMgrInit(CNetworkPlayerMgr* that, std::uint64_t a2, std::uint32_t a3, std::uint32_t a4[4]) {
 
     kHOOKING->network_player_mgr_init_hook_.GetOriginal<decltype(&Hooks::NetworkPlayerMgrInit)>()(that, a2, a3, a4);

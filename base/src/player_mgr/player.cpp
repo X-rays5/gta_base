@@ -3,6 +3,8 @@
 //
 
 #include "player.hpp"
+#include "../memory/pointers.hpp"
+#include "../rage/util/get.hpp"
 
 namespace gta_base {
  namespace player_mgr {
@@ -52,6 +54,44 @@ namespace gta_base {
      return &self_->m_clan_data;
    }
 
+   rage::snPlayer* Player::SessionPlayer() {
+     auto network = rage::GetNetwork();
+     for (auto i = 0; i < network->m_game_session_ptr->m_player_count; i++) {
+       if (network->m_game_session_ptr->m_players[i]->m_player_data.m_host_token == NetData()->m_host_token)
+         return network->m_game_session_ptr->m_players[i];
+     }
+
+     if (network->m_game_session_ptr->m_local_player.m_player_data.m_host_token == NetData()->m_host_token)
+       return &network->m_game_session_ptr->m_local_player;
+
+     return nullptr;
+   }
+
+   rage::snPeer* Player::SessionPeer() {
+     auto network = rage::GetNetwork();
+     for (auto i = 0; i < network->m_game_session_ptr->m_peer_count; i++) {
+       if (network->m_game_session_ptr->m_peers[i]->m_peer_data.m_gamer_handle_2.m_rockstar_id == NetData()->m_gamer_handle_2.m_rockstar_id) {
+         return network->m_game_session_ptr->m_peers[i];
+       }
+     }
+
+     return nullptr;
+   }
+
+   std::string Player::Name() {
+     if (!self_ || !self_->m_player_info)
+       return {};
+
+     return (char*)self_->m_player_info->m_net_player_data.m_name;
+   }
+
+   std::string Player::NameLowerCase() {
+     std::string res = Name();
+     std::transform(res.begin(), res.end(), res.begin(), ::tolower);
+
+     return res;
+   }
+
    std::uint8_t Player::Id() const {
      return self_->m_player_id;
    }
@@ -65,6 +105,9 @@ namespace gta_base {
    }
 
    bool Player::operator==(CNetGamePlayer& other) const {
+     if (!self_)
+       return false;
+
      return self_->m_player_id == other.m_player_id;
    }
  }

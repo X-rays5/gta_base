@@ -14,7 +14,7 @@ namespace gta_base {
     }
 
     bool IsSessionStarted() {
-      return memory::kPOINTERS->is_session_started_;
+      return *memory::kPOINTERS->is_session_started_;
     }
 
     std::filesystem::path GetBaseDir() {
