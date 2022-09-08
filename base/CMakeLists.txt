@@ -26,7 +26,7 @@ FetchContent_MakeAvailable(freetype)
 FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt.git GIT_TAG b6f4ceaed0a0a24ccf575fab6c56dd50ccf6f1a9)
 FetchContent_MakeAvailable(fmt)
 
-FetchContent_Declare(gtav_classes GIT_REPOSITORY https://github.com/Yimura/GTAV-Classes.git GIT_TAG 133b5f12bdf364199a92e59e25136457bf5a7e7a)
+FetchContent_Declare(gtav_classes GIT_REPOSITORY https://github.com/maybegreat48/GTAV-Classes.git GIT_TAG 0fdea946d0e74f18fbaa30d99838a79afe12ff92)
 FetchContent_MakeAvailable(gtav_classes)
 
 FetchContent_Declare(rapidjson GIT_REPOSITORY https://github.com/Tencent/rapidjson.git GIT_TAG 27c3a8dc0e2c9218fe94986d249a12b5ed838f1d)
