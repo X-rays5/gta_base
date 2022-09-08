@@ -17,6 +17,9 @@ namespace gta_base {
 
       void Init() final;
       void RunTick() final;
+
+    private:
+      std::uint64_t last_update_ = INT64_MAX; // so it refreshes the first time
     };
   }
 }

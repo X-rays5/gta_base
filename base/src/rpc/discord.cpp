@@ -30,12 +30,12 @@ namespace gta_base {
       DiscordRichPresence discord_rpc;
       std::memset(&discord_rpc, 0, sizeof(discord_rpc));
 
-      discord_rpc.state = state_;
-      discord_rpc.details = details_;
-      discord_rpc.largeImageKey = large_image_key_;
-      discord_rpc.largeImageText = large_image_text_;
-      discord_rpc.smallImageKey = small_image_key_;
-      discord_rpc.smallImageText = small_image_text_;
+      discord_rpc.state = state_.c_str();
+      discord_rpc.details = details_.c_str();
+      discord_rpc.largeImageKey = large_image_key_.c_str();
+      discord_rpc.largeImageText = large_image_text_.c_str();
+      discord_rpc.smallImageKey = small_image_key_.c_str();
+      discord_rpc.smallImageText = small_image_text_.c_str();
       discord_rpc.startTimestamp = start_time_;
       discord_rpc.instance = 1;
 

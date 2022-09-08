@@ -3,9 +3,13 @@
 //
 
 #include "common.hpp"
+#include "../memory/pointers.hpp"
 
 namespace gta_base {
   namespace common {
+    bool IsSessionStarted() {
+      return memory::kPOINTERS->is_session_started_;
+    }
     std::filesystem::path GetBaseDir() {
       std::filesystem::path base_path = std::filesystem::path(std::getenv("APPDATA")) / globals::name;
       if (!std::filesystem::exists(base_path)) {

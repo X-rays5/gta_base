@@ -7,7 +7,7 @@
 #ifndef GTABASE_DISCORD_HPP
 #define GTABASE_DISCORD_HPP
 #include <memory>
-#include <atomic>
+#include <string>
 
 namespace gta_base {
   namespace rpc {
@@ -18,36 +18,36 @@ namespace gta_base {
 
       void Tick();
 
-      void SetStatus(const char* status) {
+      void SetStatus(const std::string& status) {
         state_ = status;
       }
 
-      void SetDetails(const char* details) {
+      void SetDetails(const std::string& details) {
         details_ = details;
       }
 
-      void SetLargeImage(const char* image) {
+      void SetLargeImage(const std::string& image) {
         large_image_key_ = image;
       }
 
-      void SetLargeImageText(const char* text) {
+      void SetLargeImageText(const std::string& text) {
         large_image_text_ = text;
       }
 
-      void SetSmallImage(const char* image) {
+      void SetSmallImage(const std::string& image) {
         small_image_key_ = image;
       }
 
-      void SetSmallImageText(const char* text) {
+      void SetSmallImageText(const std::string& text) {
         small_image_text_ = text;
       }
     private:
-      std::atomic<const char*> state_ = "";
-      std::atomic<const char*> details_ = "";
-      std::atomic<const char*> large_image_key_ = "";
-      std::atomic<const char*> large_image_text_ = "";
-      std::atomic<const char*> small_image_key_ = "";
-      std::atomic<const char*> small_image_text_ = "";
+      std::string state_;
+      std::string details_;
+      std::string large_image_key_;
+      std::string large_image_text_;
+      std::string small_image_key_;
+      std::string small_image_text_;
       std::int64_t start_time_;
     };
     inline Discord* kDISCORD{};
