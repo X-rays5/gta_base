@@ -19,6 +19,8 @@
 #include "../../natives/natives.hpp"
 #include "../../fiber/pool.hpp"
 #include "../../rage/util/get.hpp"
+#include "../../rage/util/breakup_kick.hpp"
+#include "../../player_mgr/manager.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -31,12 +33,10 @@ namespace gta_base {
         using namespace ui;
 
         kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
-          sub->AddOption(components::option::ExecuteOption("Breakup kick lobby", "", [] {
-            fiber::kPOOL->AddJob([]{
-              LOG_DEBUG("{}", ENTITY::GET_ENTITY_HEALTH(PLAYER::PLAYER_PED_ID()));
-            });
-          }));
           sub->AddOption(components::option::SubmenuOption("Player", "", components::Submenus::Player));
+          if (common::IsSessionStarted()) {
+            sub->AddOption(components::option::SubmenuOption("Player List", "", components::Submenus::PlayerList));
+          }
 #ifndef NDEBUG
           sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
 #endif
@@ -48,6 +48,15 @@ namespace gta_base {
           sub->AddOption(components::option::NumberOption<std::uint32_t>("wanted_level", "wanted_level_desc", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
         });
 
+        kMANAGER->AddSubmenu("Player List", components::Submenus::PlayerList, [this](components::Submenu* sub){
+          kPLAYER_MGR->Iterate(true, [&](const std::string& name, const std::shared_ptr<player_mgr::Player>& player){
+            sub->AddOption(components::option::SubmenuOption(name, "", components::Submenus::SelectedPlayer, [&]{
+              kPLAYER_MGR->SetSelectedPlayer(player);
+            }));
+          });
+        });
+        kMANAGER->AddSubmenu(kPLAYER_MGR->GetSelectedPlayer()->Name(), components::Submenus::SelectedPlayer, [this](components::Submenu* sub){
+        });
         kMANAGER->AddSubmenu("Debug", components::Submenus::Debug, [this](components::Submenu* sub){
           sub->AddOption(components::option::SubmenuOption("Test Components", "", components::Submenus::TestComponents));
           sub->AddOption(components::option::ExecuteOption("Test notify", "", []{
