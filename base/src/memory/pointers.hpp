@@ -69,9 +69,9 @@ namespace gta_base {
 
       using get_connection_peer_t = rage::netConnectionPeer* (*)(rage::netConnectionManager* manager, int peer_id);
       get_connection_peer_t GetConnectionPeer{};
-      using send_remove_gamer_cmd_t = void(*)(rage::netConnectionManager* net_connection_mgr, rage::netConnectionPeer* player, uint32_t connection_id, rage::snMsgRemoveGamersFromSessionCmd* cmd, int flags);
+      using send_remove_gamer_cmd_t = void(*)(rage::netConnectionManager* net_connection_mgr, rage::netConnectionPeer* player, int connection_id, rage::snMsgRemoveGamersFromSessionCmd* cmd, int flags);
       send_remove_gamer_cmd_t SendRemoveGamerCmd{};
-      using handle_remove_gamer_cmd_t = void* (*)(rage::snSession* session, CNetGamePlayer* origin, rage::snMsgRemoveGamersFromSessionCmd* cmd);
+      using handle_remove_gamer_cmd_t = void* (*)(rage::snSession* session, rage::snPlayer* origin, rage::snMsgRemoveGamersFromSessionCmd* cmd);
       handle_remove_gamer_cmd_t HandleRemoveGamerCmd{};
 
       PVOID NetworkPlayerMgrInit{};

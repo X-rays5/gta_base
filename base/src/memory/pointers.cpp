@@ -93,7 +93,7 @@ namespace gta_base {
       });
 
       main_batch.add(std::string(VAR_NAME(GetConnectionPeer)) + "/" + VAR_NAME(SendRemoveGamerCmd), xorstr_("8D 42 FF 83 F8 FD 77 3D"), [this](scanner::Handle ptr){
-        GetConnectionPeer = ptr.add(32).rip().as<decltype(GetConnectionPeer)>();
+        GetConnectionPeer = ptr.add(23).rip().as<decltype(GetConnectionPeer)>();
         SendRemoveGamerCmd = ptr.add(65).rip().as<decltype(SendRemoveGamerCmd)>();
       });
 

@@ -55,8 +55,15 @@ namespace gta_base {
             }));
           });
         });
+
         kMANAGER->AddSubmenu(kPLAYER_MGR->GetSelectedPlayer()->Name(), components::Submenus::SelectedPlayer, [this](components::Submenu* sub){
+          sub->AddOption(components::option::ExecuteOption("Kick", "", []{
+            if (common::IsSessionStarted() && kPLAYER_MGR->GetSelectedPlayer() != kPLAYER_MGR->GetSelf()) {
+              rage::BreakupKick(kPLAYER_MGR->GetSelectedPlayer());
+            }
+          }));
         });
+
         kMANAGER->AddSubmenu("Debug", components::Submenus::Debug, [this](components::Submenu* sub){
           sub->AddOption(components::option::SubmenuOption("Test Components", "", components::Submenus::TestComponents));
           sub->AddOption(components::option::ExecuteOption("Test notify", "", []{
