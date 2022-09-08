@@ -15,7 +15,7 @@ namespace gta_base {
       scanner::Batch main_batch;
 
       main_batch.add(VAR_NAME(game_state_), xorstr_("83 3D ? ? ? ? ? 75 17 8B 43 20"), [this](scanner::Handle ptr){
-        game_state_ = ptr.add(2).rip().as<rage::GameState*>();
+        game_state_ = ptr.add(2).rip().as<decltype(game_state_)>();
       });
 
       main_batch.add(VAR_NAME(ped_factory_), xorstr_("48 8B 05 ? ? ? ? 48 8B 48 08 48 85 C9 74 52 8B 81"), [this](scanner::Handle ptr){
@@ -88,6 +88,10 @@ namespace gta_base {
         network_player_mgr_ = ptr.add(3).rip().as<decltype(network_player_mgr_)>();
       });
 
+      main_batch.add(VAR_NAME(network_), xorstr_("48 8B 0D ? ? ? ? 48 8D 55 E8 E8 ? ? ? ? 84 C0 75 C9"), [this](scanner::Handle ptr){
+        network_ = ptr.add(3).rip().as<decltype(network_)>();
+      });
+
       main_batch.add(std::string(VAR_NAME(GetConnectionPeer)) + "/" + VAR_NAME(SendRemoveGamerCmd), xorstr_("8D 42 FF 83 F8 FD 77 3D"), [this](scanner::Handle ptr){
         GetConnectionPeer = ptr.add(32).rip().as<decltype(GetConnectionPeer)>();
         SendRemoveGamerCmd = ptr.add(65).rip().as<decltype(SendRemoveGamerCmd)>();
@@ -95,6 +99,22 @@ namespace gta_base {
 
       main_batch.add(VAR_NAME(HandleRemoveGamerCmd), xorstr_("41 FF C6 FF C7"), [this](scanner::Handle ptr){
         HandleRemoveGamerCmd = ptr.sub(0x6E).as<decltype(HandleRemoveGamerCmd)>();
+      });
+
+      main_batch.add(VAR_NAME(NetworkPlayerMgrInit), xorstr_("41 56 48 83 EC ? 48 8B F1 B9 ? ? ? ? 49 8B F9 41 8B E8 4C 8B F2 E8"), [this](scanner::Handle ptr){
+        NetworkPlayerMgrInit = ptr.sub(0x13).as<decltype(NetworkPlayerMgrInit)>();
+      });
+
+      main_batch.add(VAR_NAME(NetworkPlayerMgrShutdown), xorstr_("48 8D 9F ? ? ? ? EB ? 48 8B 13 48 85 D2 74 ? 48 8B CB E8 ? ? ? ? 48 83 7B ? ? 75 ? 48 8D 9F"), [this](scanner::Handle ptr){
+        NetworkPlayerMgrShutdown = ptr.sub(0x1A).as<decltype(NetworkPlayerMgrShutdown)>();
+      });
+
+      main_batch.add(VAR_NAME(AssignPhysicalIdx), xorstr_("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20 41 8A E8"), [this](scanner::Handle ptr){
+        AssignPhysicalIdx = ptr.as<decltype(AssignPhysicalIdx)>();
+      });
+
+      main_batch.add(VAR_NAME(is_session_started_), xorstr_("40 38 35 ? ? ? ? 75 0E 4C 8B C3 49 8B D7 49 8B CE"), [this](scanner::Handle ptr){
+        is_session_started_ = ptr.add(3).rip().as<decltype(is_session_started_)>();
       });
 
       main_batch.run(scanner::Module(nullptr));

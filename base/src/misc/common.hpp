@@ -20,6 +20,8 @@
 
 namespace gta_base {
   namespace common {
+
+    bool IsSessionStarted();
     std::filesystem::path GetBaseDir();
     std::filesystem::path GetConfigDir();
     std::filesystem::path GetLogDir();

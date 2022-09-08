@@ -10,14 +10,14 @@
 #include <d3d11.h>
 #include <ped/CPedFactory.hpp>
 #include <network/CNetGamePlayer.hpp>
+#include <network/snSession.hpp>
+#include <network/Network.hpp>
 #include "../rage/enums.hpp"
 #include "../rage/classes/script_thread.hpp"
 #include "../rage/classes/at_array.hpp"
 #include "../rage/classes/natives.hpp"
 #include "../rage/classes/net_connection_mgr.hpp"
 #include "../rage/classes/net_connection_peer.hpp"
-#include "../rage/classes/sn_msg_remove_gamers_from_session_cmd.hpp"
-#include "../rage/classes/sn_session.hpp"
 
 namespace gta_base {
   namespace memory {
@@ -26,7 +26,7 @@ namespace gta_base {
       Pointers();
       ~Pointers();
 
-      enum rage::GameState* game_state_{};
+      eGameState* game_state_{};
 
       CPedFactory** ped_factory_{};
 
@@ -54,8 +54,7 @@ namespace gta_base {
       write_bitbuf_array_t WriteBitBufArray{};
 
       rage::atArray<GtaThread*>* script_threads_;
-      using run_script_threads_t = bool(*)(std::uint32_t ops_to_execute);
-      run_script_threads_t RunScriptThreads{};
+      PVOID RunScriptThreads{};
 
       rage::scrNativeRegistrationTable* native_registration_table_{};
       using get_native_handler_t = rage::scrNativeHandler(*)(rage::scrNativeRegistrationTable* registration_table, rage::scrNativeHash hash);
@@ -66,12 +65,20 @@ namespace gta_base {
 
       CNetworkPlayerMgr** network_player_mgr_{};
 
+      Network** network_{};
+
       using get_connection_peer_t = rage::netConnectionPeer* (*)(rage::netConnectionManager* manager, int peer_id);
       get_connection_peer_t GetConnectionPeer{};
-      using send_remove_gamer_cmd_t = void(*)(rage::netConnectionManager* net_connection_mgr, rage::netConnectionPeer* player, int connection_id, rage::snMsgRemoveGamersFromSessionCmd* cmd, int flags);
+      using send_remove_gamer_cmd_t = void(*)(rage::netConnectionManager* net_connection_mgr, rage::netConnectionPeer* player, uint32_t connection_id, rage::snMsgRemoveGamersFromSessionCmd* cmd, int flags);
       send_remove_gamer_cmd_t SendRemoveGamerCmd{};
       using handle_remove_gamer_cmd_t = void* (*)(rage::snSession* session, CNetGamePlayer* origin, rage::snMsgRemoveGamersFromSessionCmd* cmd);
       handle_remove_gamer_cmd_t HandleRemoveGamerCmd{};
+
+      PVOID NetworkPlayerMgrInit{};
+      PVOID NetworkPlayerMgrShutdown{};
+      PVOID AssignPhysicalIdx{};
+
+      bool* is_session_started_{};
     };
     inline Pointers* kPOINTERS{};
   }
