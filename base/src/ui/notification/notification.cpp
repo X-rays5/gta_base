@@ -37,7 +37,11 @@ namespace gta_base {
       if (!title_tmp.empty()) {
         y_pos_body += (y_size_char_title - (y_size_char_title / 5.f)) + (y_size_char_title / 2.f);
       } else {
-        y_pos_body -= y_size_char_body - 0.03f;
+        y_pos_body -= y_size_char_body - 0.025f;
+      }
+
+      if (body_tmp.empty()) {
+        y_textbox_size -= y_size_char_body * 1.25f;
       }
 
       draw_list->AddCommand(d3d::draw::Rect(pos, {x_size, y_top_bar_size}, color));
