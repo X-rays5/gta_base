@@ -14,12 +14,14 @@
 #include "scripts/scripting/discord.hpp"
 #include "scripts/scripting/uitick.hpp"
 #include "scripts/render/uidraw.hpp"
+#include "scripts/render/keyboard_draw.hpp"
 #include "scripts/game/ui_disable_phone.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"
 #include "fiber/manager.hpp"
 #include "fiber/pool.hpp"
 #include "player_mgr/manager.hpp"
+#include "ui/components/keyboard.hpp"
 
 std::atomic<bool> gta_base::common::globals::running = true;
 void BaseMain() {
@@ -43,6 +45,7 @@ void BaseMain() {
 
   // render scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::KeyboardDraw>());
   // scripting scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
@@ -59,6 +62,9 @@ void BaseMain() {
 
   auto ui_manager_inst = std::make_unique<ui::Manager>();
   LOG_INFO("UI Manager initialized");
+
+  auto keyboard_manager_inst = std::make_unique<ui::components::keyboard::Manager>();
+  LOG_INFO("Keyboard Manager initialized");
 
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO("Discord initialized");
@@ -98,6 +104,9 @@ void BaseMain() {
 
   discord_inst.reset();
   LOG_INFO("Discord shutdown");
+
+  keyboard_manager_inst.reset();
+  LOG_INFO("Keyboard Manager unloaded");
 
   ui_manager_inst.reset();
   LOG_INFO("UI Manager shutdown");
