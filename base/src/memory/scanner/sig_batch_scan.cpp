@@ -22,8 +22,8 @@ namespace gta_base {
               std::invoke(std::move(entry.cb_), result);
 #ifndef NDEBUG
               LOG_DEBUG("Found '{}' GTA5.exe+{:x}", entry.name_, (result.as<DWORD64>() - region.begin().as<DWORD64>()));
-#elif
-              LOG_INFO("Found '{}'", entry.name)
+#else
+              LOG_INFO("Found '{}'", entry.name_);
 #endif
             }
             else {

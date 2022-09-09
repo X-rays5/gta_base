@@ -8,7 +8,9 @@
 #define GTABASE_LOGGER_HPP
 
 #ifndef NDEBUG
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
+#define SPDLOG_ACTIVE_LEVEL 1 // DEBUG
+#else
+#define SPDLOG_ACTIVE_LEVEL 2 // INFO
 #endif
 
 #include <memory>
