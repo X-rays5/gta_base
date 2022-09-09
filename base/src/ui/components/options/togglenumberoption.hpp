@@ -84,7 +84,14 @@ namespace gta_base {
 
         private:
           void UpdateRightText() {
-            auto tmp_right_text = fmt::format("[{}]", *value_);
+            std::string tmp_right_text;
+
+            constexpr static const bool is_float = std::is_floating_point_v<T>;
+            if constexpr (is_float) {
+              tmp_right_text = fmt::format("[{:.3f}]", *value_);
+            } else {
+              tmp_right_text = fmt::format("[{}]", *value_);
+            }
 
             SetRightTextKey(tmp_right_text);
           }
