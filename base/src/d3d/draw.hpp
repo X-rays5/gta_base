@@ -11,6 +11,7 @@
 #include <mutex>
 #include <numeric>
 #include <cassert>
+#include <utility>
 #include <d3d11.h>
 #include <fmt/format.h>
 #include <imgui.h>
@@ -156,6 +157,19 @@ namespace gta_base {
       class BaseDrawCommand {
       public:
         virtual inline void Draw() = 0;
+      };
+
+      // This can be used to execute code that should run on the render thread on render of a draw list
+      class DrawCallback : public BaseDrawCommand {
+      public:
+        inline explicit DrawCallback(std::function<void()> cb) : cb_(std::move(cb)) {}
+
+        inline void Draw() final {
+          cb_();
+        };
+
+      private:
+        std::function<void()> cb_;
       };
 
       class Rect : public BaseDrawCommand{
