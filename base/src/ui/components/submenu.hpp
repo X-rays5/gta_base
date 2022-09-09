@@ -21,14 +21,14 @@ namespace gta_base {
       public:
         using constructor_cb = std::function<void(Submenu*)>;
 
-        Submenu(std::string name, Submenus submenu_id, constructor_cb cb) : name_(std::move(name)), create_options_(std::move(cb)) {}
+        Submenu(std::string name_key, Submenus submenu_id, constructor_cb cb) : name_key_(std::move(name_key)), create_options_(std::move(cb)) {}
 
         [[nodiscard]] inline std::string GetName() const {
-          return name_;
+          return std::string((*kTRANSLATION_MANAGER)[name_key_]);
         };
 
-        inline void SetName(std::string name) {
-          name_ = std::move(name);
+        inline void SetNameKey(std::string name) {
+          name_key_ = std::move(name);
         };
 
         inline std::shared_ptr<option::BaseOption> GetOption(size_t index) {
@@ -92,7 +92,7 @@ namespace gta_base {
         }
 
       private:
-        std::string name_{};
+        std::string name_key_{};
         constructor_cb create_options_;
         std::vector<std::shared_ptr<option::BaseOption>> options_;
         std::int64_t selected_option_ = 0;
