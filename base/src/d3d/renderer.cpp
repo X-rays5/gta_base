@@ -52,7 +52,7 @@ namespace gta_base {
 
       ImFontConfig cfg;
       cfg.FontDataOwnedByAtlas = false;
-      roboto_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 36, &cfg);
+      roboto_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 24, &cfg);
 
       static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
       ImFontConfig icons_config;
