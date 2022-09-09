@@ -51,13 +51,13 @@ namespace gta_base {
     }
 
     void Manager::DrawTopBar(const std::string& title, size_t option_current, size_t option_count) {
-      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_base}, {x_size, y_size_top_bar}, primary_color.load()));
-      draw_list_->AddCommand(d3d::draw::Rect({x_base, (y_base + y_size_top_bar) - (y_size_top_bar / 10)}, {x_size, y_size_top_bar / 10}, secondary_color.load()));
-      draw_list_->AddCommand(DrawTextLeft(y_base - (y_size_top_bar / 4), text_color.load(), title));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_base}, {x_size, y_size_top_bar}, primary_color));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base, (y_base + y_size_top_bar) - (y_size_top_bar / 10)}, {x_size, y_size_top_bar / 10}, secondary_color));
+      draw_list_->AddCommand(DrawTextLeft(y_base - (y_size_top_bar / 4), text_color, title));
 
       std::stringstream option_count_str;
       option_count_str << option_current + 1 << '/' << option_count;
-      draw_list_->AddCommand(DrawTextRight(y_base - (y_size_top_bar / 4), text_color.load(), option_count_str.str()));
+      draw_list_->AddCommand(DrawTextRight(y_base - (y_size_top_bar / 4), text_color, option_count_str.str()));
     }
 
     void Manager::DrawBottomBar(size_t option_count) {
@@ -65,17 +65,17 @@ namespace gta_base {
 
       float y_pos = (y_base + y_size_top_bar) + (y_size_option * visible_options);
 
-      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar}, primary_color.load()));
-      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar / 10}, secondary_color.load()));
-      draw_list_->AddCommand(DrawTextRight(y_pos - (y_size_bottom_bar / 4), text_color.load(), "v1.0.0")); // TODO: replace this with an a real version string or something
-      draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color.load(), fmt::format("FPS: {}", (int)(ImGui::GetIO().Framerate / 2))));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar}, primary_color));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar / 10}, secondary_color));
+      draw_list_->AddCommand(DrawTextRight(y_pos - (y_size_bottom_bar / 4), text_color, common::globals::version));
+      draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color, fmt::format("FPS: {}", (int)(ImGui::GetIO().Framerate / 2))));
     }
 
     void Manager::DrawScrollBar(size_t option_count, int current_option) {
       std::uint32_t visible_options = option_count > max_drawn_options ? max_drawn_options : option_count;
       float scrollbar_y_area = (y_size_option * visible_options);
 
-      draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), y_base + y_size_top_bar}, {x_size_scrollbar, scrollbar_y_area}, primary_color.load()));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), y_base + y_size_top_bar}, {x_size_scrollbar, scrollbar_y_area}, primary_color));
 
       float scroller_y_size = scrollbar_y_area / option_count;
       DrawScrollBarScroller(y_base + (current_option * scroller_y_size) + y_size_top_bar, scroller_y_size);
@@ -97,7 +97,7 @@ namespace gta_base {
           scrollbar_current_pos_ = target_pos;
       }
 
-      draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color.load()));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color));
     }
 
     void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
@@ -159,7 +159,7 @@ namespace gta_base {
           scroller_current_pos_ = target_pos;
       }
 
-      draw_list_->AddCommand(d3d::draw::Rect({x_base, scroller_current_pos_}, {x_size, y_size_option}, scroller_color.load()));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base, scroller_current_pos_}, {x_size, y_size_option}, scroller_color));
 
       return (scroller_current_pos_ > (target_pos - (y_size_option / 2.f)) && scroller_current_pos_ < (target_pos + (y_size_option / 2.f)));
     }
@@ -172,9 +172,9 @@ namespace gta_base {
       std::string description_tmp = description;
       d3d::draw::WordWrap(font_size, description_tmp, x_size + 0.01f, 3); // + 0.01f is needed to avoid unused space at the end of the text box
 
-      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color.load()));
-      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos_text_box}, {x_size, d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, description_tmp).y}, primary_color.load()));
-      draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color.load(), description_tmp, false));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color));
+      draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos_text_box}, {x_size, d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, description_tmp).y}, primary_color));
+      draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color, description_tmp, false));
     }
 
     void Manager::HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub) {
@@ -248,7 +248,7 @@ namespace gta_base {
           }
           size_t option_draw_count = draw_options_till - draw_options_from;
 
-          draw_list_->AddCommand(d3d::draw::Rect({x_base, y_base + y_size_top_bar}, {x_size, (option_draw_count * y_size_option)}, primary_color.load()));
+          draw_list_->AddCommand(d3d::draw::Rect({x_base, y_base + y_size_top_bar}, {x_size, (option_draw_count * y_size_option)}, primary_color));
           for (int i = 0; draw_options_from < draw_options_till; draw_options_from++) {
             DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i, cur_sub->GetOptionCount(), draw_options_from);
 

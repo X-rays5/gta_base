@@ -55,24 +55,24 @@ namespace gta_base {
       std::atomic<bool> should_tick = true;
       std::atomic<bool> show_ui = false;
 
-      std::atomic<float> x_size = 0.175f;
-      std::atomic<float> x_base = 0.025f;
-      std::atomic<float> x_size_scrollbar = 0.003f;
-      std::atomic<float> y_size_top_bar = 0.025f;
-      std::atomic<float> y_size_bottom_bar = y_size_top_bar.load();
-      std::atomic<float> y_size_option = y_size_top_bar.load();
-      std::atomic<float> y_offset_description = 0.005f;
-
-      std::atomic<ImColor> primary_color = ImColor(0,0,0);
-      std::atomic<ImColor> secondary_color = ImColor(255,255,255);
-      std::atomic<ImColor> scroller_color = ImColor(255,255,255);
-      std::atomic<ImColor> text_color = ImColor(255,255,255);
-      std::atomic<ImColor> selected_text_color = ImColor(0,0,0);
-
-      std::atomic<float> font_size = 0.018f;
-    private:
+      float x_size = 0.175f;
+      float x_base = 0.025f;
+      float x_size_scrollbar = 0.003f;
+      float y_size_top_bar = 0.025f;
+      float y_size_bottom_bar = y_size_top_bar;
+      float y_size_option = y_size_top_bar;
+      float y_offset_description = 0.005f;
       float y_base = 0.185f;
       int max_drawn_options = 14;
+
+      ImColor primary_color = ImColor(0,0,0);
+      ImColor secondary_color = ImColor(255,255,255);
+      ImColor scroller_color = ImColor(255,255,255);
+      ImColor text_color = ImColor(255,255,255);
+      ImColor selected_text_color = ImColor(0,0,0);
+
+      float font_size = 0.018f;
+    private:
       float scrollbar_offset = 0.002f;
 
       using submenu_ptr_t = std::shared_ptr<components::Submenu>;
