@@ -17,6 +17,10 @@ namespace gta_base {
       return *memory::kPOINTERS->is_session_started_;
     }
 
+    std::string FloatPrecision(float num, std::size_t precision) {
+      return fmt::format("{:.{}f}", num, precision);
+    }
+
     std::filesystem::path GetBaseDir() {
       std::filesystem::path base_path = std::filesystem::path(std::getenv("APPDATA")) / globals::name;
       if (!std::filesystem::exists(base_path)) {

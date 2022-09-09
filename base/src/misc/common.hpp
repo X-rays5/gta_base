@@ -30,6 +30,8 @@ namespace gta_base {
 
     bool IsSessionStarted();
 
+    std::string FloatPrecision(float num, std::size_t precision = 3);
+
     std::filesystem::path GetBaseDir();
     std::filesystem::path GetConfigDir();
     std::filesystem::path GetLogDir();
