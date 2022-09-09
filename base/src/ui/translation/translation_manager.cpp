@@ -3,6 +3,7 @@
 //
 
 #include "translation_manager.hpp"
+#include <inireader/inireader.hpp>
 
 namespace gta_base {
   namespace ui {
@@ -10,25 +11,14 @@ namespace gta_base {
       if (!std::filesystem::exists(path))
         return;
 
-      std::ifstream reader(path);
-      if (!reader.is_open())
-        return;
+      ini::Parser ini_reader;
+      ini_reader.Parse(path);
 
-      rapidjson::IStreamWrapper json_file(reader);
-      rapidjson::Document doc;
-      if (doc.ParseStream(json_file).HasParseError())
-        return;
-
-      reader.close();
-
-      if (!doc.IsObject())
-        return;
-
-      for (auto&& member : doc.GetObject()) {
-        if (!member.value.IsString())
+      for (auto& [name, val] : ini_reader["translation"]) {
+        if (!val.is<std::string>())
           continue;
 
-        translation_.insert({member.name.GetString(), member.value.GetString()});
+        translation_[name] = val.as<std::string>();
       }
     }
 
@@ -37,23 +27,15 @@ namespace gta_base {
       if (!writer.is_open())
         return false;
 
-      rapidjson::Document doc;
-      doc.SetObject();
+      ini::Parser ini_writer;
 
-      for (auto&& member : translation_) {
-        rapidjson::Value key(member.first.c_str(), doc.GetAllocator());
-        rapidjson::Value value(member.second.c_str(), doc.GetAllocator());
-        doc.AddMember(key, value, doc.GetAllocator());
-      }
+      auto section = ini_writer.AddSection("translation");
 
-      rapidjson::StringBuffer buffer;
-      buffer.Clear();
-      rapidjson::Writer<rapidjson::StringBuffer> json_writer(buffer);
-      doc.Accept(json_writer);
+      for (auto& [key, val] : translation_)
+        section[key] = val;
 
-      writer << buffer.GetString();
+      writer << ini_writer.Stringify();
 
-      writer.close();
       return true;
     }
 
