@@ -92,10 +92,15 @@ namespace gta_base {
 
   void Logger::SetupExceptionHandler() {
     auto handler = [](PEXCEPTION_POINTERS except) -> LONG {
-      if (except->ExceptionRecord->ExceptionCode == DBG_PRINTEXCEPTION_WIDE_C || except->ExceptionRecord->ExceptionCode == DBG_PRINTEXCEPTION_C) {
+      auto err_code = except->ExceptionRecord->ExceptionCode;
+      if (err_code == DBG_PRINTEXCEPTION_WIDE_C || err_code == DBG_PRINTEXCEPTION_C) {
         LOG_DEBUG("Received DBG_PRINTEXCEPTION_C ignoring");
 
         return EXCEPTION_CONTINUE_EXECUTION;
+      } else if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") { // Without this the c++ try catch blocks will break
+        LOG_WARN("Received unknown exception code: {}. This could be a c++ exception", err_code);
+
+        return EXCEPTION_CONTINUE_SEARCH;
       }
 
       LOG_ERROR(logger::stacktrace::GetExceptionString(except));

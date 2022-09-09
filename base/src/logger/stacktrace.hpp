@@ -14,6 +14,8 @@ namespace gta_base {
     namespace stacktrace {
       extern std::uint32_t RECURSIVE_CRASH_CHECK;
 
+      std::string ExceptionCodeToStr(std::uint32_t code);
+
       std::string GetExceptionString(PEXCEPTION_POINTERS except);
       std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx);
     }
