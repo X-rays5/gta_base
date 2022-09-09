@@ -30,7 +30,7 @@ namespace gta_base {
       if (!title_tmp.empty())
         y_textbox_size += y_size_char_title;
 
-      d3d::draw::WordWrap(font_size_body, body_tmp, x_size + 0.01f, 3);
+      d3d::draw::WordWrap(font_size_body, body_tmp, x_size + 0.005f, 3);
       y_textbox_size += d3d::draw::CalcTextSize(font, font_size_body, body_tmp).y;
 
       auto y_pos_body = pos.y;
@@ -60,6 +60,12 @@ namespace gta_base {
     }
 
     void Notification::Tick() {
+      float x_base;
+      if (kMANAGER->x_base <= 0.5f)
+        x_base = x_base_right;
+      else
+        x_base = x_base_left;
+
       float y_pos = y_base;
       mtx_.lock();
       for (int i = 0; i < notifications_.size(); i++) {

@@ -63,7 +63,8 @@ namespace gta_base {
 
     private:
       constexpr static const float x_size = 0.16f;
-      constexpr static const float x_base = 1.f - x_size;
+      constexpr static const float x_base_left = 0.0f;
+      constexpr static const float x_base_right = 1.f - x_size;
       constexpr static const float y_base = 0.015f;
       constexpr static const float y_size = 0.01f;
       constexpr static const float y_spacing = 0.01f;
