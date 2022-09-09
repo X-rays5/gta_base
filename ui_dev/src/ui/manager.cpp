@@ -150,7 +150,6 @@ namespace ui {
     if (t > 100)
       t = 100;
     if (scroller_current_pos_ != target_pos) scroller_current_pos_ = std::lerp(prev_pos, target_pos, t);
-    std::cout << t << '\n' << std::endl;
 
     draw_list_->AddCommand(util::draw::Rect({x_base, scroller_current_pos_}, {x_size, y_size_option}, scroller_color.load()));
 

@@ -66,8 +66,4 @@ namespace ui {
     else
       return key;
   }
-
-  TranslationManager::~TranslationManager() {
-    kTRANSLATION_MANAGER = nullptr;
-  }
 }

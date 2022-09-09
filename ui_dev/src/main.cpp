@@ -11,6 +11,7 @@
 #include <iostream>
 #include "ui/ui.hpp"
 #include "ui/fonts/roboto_mono.hpp"
+#include "ui/components/keyboard.hpp"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -75,9 +76,18 @@ int main(int, char**) {
 
   // Our state
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-  auto roboto_regular = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 36);
+  auto roboto_regular = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 16);
   if (!ImGui::GetIO().Fonts->IsBuilt())
     ImGui::GetIO().Fonts->Build();
+
+  ui::components::keyboard::Manager key_mgr;
+  key_mgr.ShowKeyboard("Test", [](const std::string& text, ui::components::keyboard::Result res){
+    if (res == ui::components::keyboard::Result::kDone) {
+      std::cout << "success: " << text << std::endl;
+    } else {
+      std::cout << "cancel: " << text << std::endl;
+    }
+  });
 
   // Main loop
   bool done = false;
@@ -104,6 +114,7 @@ int main(int, char**) {
     ImGui::GetForegroundDrawList()->AddText(ImGui::GetFont(), 20, ImVec2(5, 5), ImColor(255, 0, 0), "DEBUG BUILD");
 #endif
     ui::Tick();
+    key_mgr.Tick();
 
     ImGui::PopFont();
 
