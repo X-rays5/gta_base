@@ -18,6 +18,7 @@ namespace gta_base {
         Debug,
         TestComponents,
         Settings,
+        Theme,
         UnloadConfirm,
       };
 

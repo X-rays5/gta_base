@@ -32,23 +32,23 @@ namespace gta_base {
 
         using namespace ui;
 
-        kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
-          sub->AddOption(components::option::SubmenuOption("Player", "", components::Submenus::Player));
+        kMANAGER->AddSubmenu("tab/title/home", components::Submenus::Home, [](components::Submenu* sub){
+          sub->AddOption(components::option::SubmenuOption("tab/title/self", "", components::Submenus::Player));
           if (common::IsSessionStarted()) {
-            sub->AddOption(components::option::SubmenuOption("Player List", "", components::Submenus::PlayerList));
+            sub->AddOption(components::option::SubmenuOption("tab/title/player_list", "", components::Submenus::PlayerList));
           }
 #ifndef NDEBUG
-          sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
+          sub->AddOption(components::option::SubmenuOption("Debug", "", components::Submenus::Debug));
 #endif
-          sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
+          sub->AddOption(components::option::SubmenuOption("tab/title/setting", "", components::Submenus::Settings));
         });
 
-        kMANAGER->AddSubmenu("Player", components::Submenus::Player, [this](components::Submenu* sub){
+        kMANAGER->AddSubmenu("tab/title/self", components::Submenus::Player, [this](components::Submenu* sub){
           auto player = *memory::kPOINTERS->ped_factory_;
-          sub->AddOption(components::option::NumberOption<std::uint32_t>("wanted_level", "wanted_level_desc", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+          sub->AddOption(components::option::NumberOption<std::uint32_t>("option/wanted_level", "option/wanted_level/desc", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
         });
 
-        kMANAGER->AddSubmenu("Player List", components::Submenus::PlayerList, [this](components::Submenu* sub){
+        kMANAGER->AddSubmenu("tab/title/player_list", components::Submenus::PlayerList, [this](components::Submenu* sub){
           kPLAYER_MGR->Iterate(true, [&](const std::string& name, const std::shared_ptr<player_mgr::Player>& player){
             sub->AddOption(components::option::SubmenuOption(name, "", components::Submenus::SelectedPlayer, [&]{
               kPLAYER_MGR->SetSelectedPlayer(player);
@@ -97,15 +97,22 @@ namespace gta_base {
           sub->AddOption(components::option::ToggleListOption("Test ToggleListOption", "", test_value_b_toggle_list, test_value_v_idx_toggle_list, test_value_v));
         });
 
-        kMANAGER->AddSubmenu("Settings", components::Submenus::Settings, [](components::Submenu* sub){
-          sub->AddOption(components::option::SubmenuOption("Unload", "", components::Submenus::UnloadConfirm));
+        kMANAGER->AddSubmenu("tab/title/setting", components::Submenus::Settings, [](components::Submenu* sub){
+          sub->AddOption(components::option::SubmenuOption("tab/title/theme", "", components::Submenus::Theme));
+          sub->AddOption(components::option::SubmenuOption("tab/title/unload", "", components::Submenus::UnloadConfirm));
         });
 
-        kMANAGER->AddSubmenu("Unload", components::Submenus::UnloadConfirm, [](components::Submenu* sub) {
-          sub->AddOption(components::option::ExecuteOption("Yes", "", [] {
+        kMANAGER->AddSubmenu("tab/title/theme", components::Submenus::Theme, [](components::Submenu* sub){
+          sub->AddOption(components::option::NumberOption<float>("option/xpos", "option/xpos/desc", ui::kMANAGER->x_base, 0.005f, 0.f, 1.f - kMANAGER->x_size));
+          sub->AddOption(components::option::NumberOption<float>("option/ypos", "option/ypos/desc", ui::kMANAGER->y_base, 0.005f, 0.f, 1.f));
+          sub->AddOption(components::option::NumberOption<int>("option/max_options", "option/max_options/desc", ui::kMANAGER->max_drawn_options, 1, 1, 30));
+        });
+
+        kMANAGER->AddSubmenu("tab/title/unload", components::Submenus::UnloadConfirm, [](components::Submenu* sub) {
+          sub->AddOption(components::option::ExecuteOption("confirm/yes", "", [] {
             common::globals::running = false;
           }));
-          sub->AddOption(components::option::ExecuteOption("No", "", [] {
+          sub->AddOption(components::option::ExecuteOption("confirm/no", "", [] {
             kMANAGER->PopSubmenu();
           }));
         });

@@ -11,10 +11,6 @@
 #include <filesystem>
 #include <fstream>
 #include <robin_hood.h>
-#include <rapidjson/document.h>
-#include <rapidjson/istreamwrapper.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
 #include "../../logger/logger.hpp"
 
 #define ADD_TRANSLATION(key, trans) {key, trans}
@@ -33,10 +29,24 @@ namespace gta_base {
 
       private:
         inline static const robin_hood::unordered_map<std::string, std::string> default_translation = {
-          ADD_TRANSLATION("option_godmode", "Godmode"),
-          ADD_TRANSLATION("option_never_wanted", "Never Wanted"),
-          ADD_TRANSLATION("wanted_level", "Wanted Level"),
-          ADD_TRANSLATION("wanted_level_desc", "Set the wanted level"),
+          ADD_TRANSLATION("tab/title/home", "Home"),
+          ADD_TRANSLATION("tab/title/self", "Player"),
+          ADD_TRANSLATION("tab/title/player_list", "Player List"),
+          ADD_TRANSLATION("tab/title/setting", "Settings"),
+          ADD_TRANSLATION("tab/title/theme", "Theme"),
+          ADD_TRANSLATION("tab/title/unload", "Unload"),
+          ADD_TRANSLATION("confirm/yes", "Yes"),
+          ADD_TRANSLATION("confirm/no", "No"),
+          ADD_TRANSLATION("confirm/ok", "OK"),
+          ADD_TRANSLATION("confirm/cancel", "Cancel"),
+          ADD_TRANSLATION("option/wanted_level", "Wanted Level"),
+          ADD_TRANSLATION("option/wanted_level/desc", "Set your wanted level."),
+          ADD_TRANSLATION("option/xpos", "X Position"),
+          ADD_TRANSLATION("option/xpos/desc", "Set the X position of the UI."),
+          ADD_TRANSLATION("option/ypos", "Y Position"),
+          ADD_TRANSLATION("option/ypos/desc", "Set the Y position of the UI."),
+          ADD_TRANSLATION("option/max_options", "Max Options"),
+          ADD_TRANSLATION("option/max_options/desc", "Set the max options displayed at once."),
         };
 
         robin_hood::unordered_map<std::string, std::string> translation_;
