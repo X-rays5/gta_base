@@ -82,7 +82,7 @@ namespace gta_base {
      if (!self_ || !self_->m_player_info)
        return {};
 
-     return (char*)self_->m_player_info->m_net_player_data.m_name;
+     return self_->get_name();
    }
 
    std::string Player::NameLowerCase() {
