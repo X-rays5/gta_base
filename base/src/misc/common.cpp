@@ -70,6 +70,7 @@ namespace gta_base {
       if (!std::filesystem::exists(texture_path)) {
         std::filesystem::create_directories(texture_path);
       }
+
       return texture_path;
     }
 
@@ -78,7 +79,8 @@ namespace gta_base {
     }
 
     HWND GetHwnd(const char* class_name, const char* window_name) {
-      return FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
+      static const auto res = FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
+      return res;
     }
 
     bool IsForegroundWindow() {

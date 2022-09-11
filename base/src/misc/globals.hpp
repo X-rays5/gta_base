@@ -21,6 +21,8 @@ namespace gta_base {
       constexpr auto version = "1.0.0";
       constexpr auto target_window_name = "";
       constexpr auto target_window_class = "grcWindow";
+      constexpr auto compile_date = __DATE__;
+      constexpr auto compile_time = __TIME__;
 
       extern std::atomic<bool> running;
       extern HINSTANCE dll_handle;

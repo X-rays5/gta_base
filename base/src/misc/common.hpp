@@ -30,6 +30,15 @@ namespace gta_base {
 
     bool IsSessionStarted();
 
+    template<typename T>
+    T LexicalCast(const std::string& str) {
+      T res;
+      std::istringstream iss;
+      iss.str(str);
+      iss >> res;
+      return res;
+    }
+
     std::string FloatPrecision(float num, std::size_t precision = 3);
 
     std::filesystem::path GetBaseDir();

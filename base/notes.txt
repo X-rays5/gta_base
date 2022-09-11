@@ -79,3 +79,6 @@ namespace rage
 					(*g_pointers->m_network)->m_game_session_ptr->m_connection_identifier, &cmd, 0x1000000);
 		}
 	}
+
+
+03 C9 83 F9 14 77 18 8A 84 24 ? ? ? ? 80 A3 // random crash online 1.61
