@@ -6,6 +6,8 @@
 #ifndef GTA_BASE_NUMBEROPTION_HPP
 #define GTA_BASE_NUMBEROPTION_HPP
 #include "baseoption.hpp"
+#include "../../../misc/common.hpp"
+#include "../keyboard.hpp"
 
 namespace gta_base {
   namespace ui {
@@ -27,8 +29,26 @@ namespace gta_base {
 
           void HandleKey(KeyInput key) final {
             if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
-              UpdateRightText();
-              SendEvent(Event::kSelect);
+              keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [this](const std::string& text, keyboard::Result res){
+                if (text.empty())
+                  return;
+
+                if (res == keyboard::Result::kDone) {
+                  try {
+                    constexpr static const bool is_float = std::is_floating_point_v<T>;
+                    if constexpr (is_float) {
+                      *value_ = static_cast<T>(std::stod(text));
+                    } else {
+                      *value_ = static_cast<T>(std::stoll(text));
+                    }
+                    /*CheckValueBounds();
+                    UpdateRightText();
+                    SendEvent(Event::kChange);*/
+                  } catch (std::exception& e) {
+                    LOG_WARN("{}", e.what());
+                  }
+                }
+              });
             } else if (key == KeyInput::kLeft) {
               if (*value_ == min_) {
                 *value_ = max_;
@@ -38,8 +58,7 @@ namespace gta_base {
               }
 
               *value_ -= step_;
-              if (*value_ < min_)
-                *value_ = min_;
+              CheckValueBounds();
               UpdateRightText();
               SendEvent(Event::kChange);
             } else if (key == KeyInput::kRight) {
@@ -51,8 +70,7 @@ namespace gta_base {
               }
 
               *value_ += step_;
-              if (*value_ > max_)
-                *value_ = max_;
+              CheckValueBounds();
               UpdateRightText();
               SendEvent(Event::kChange);
             }
@@ -88,6 +106,13 @@ namespace gta_base {
 
 
             SetRightTextKey(tmp_right_text);
+          }
+
+          inline void CheckValueBounds() {
+            if (*value_ < min_)
+              *value_ = min_;
+            else if (*value_ > max_)
+              *value_ = max_;
           }
         };
       }

@@ -4,6 +4,7 @@
 
 #include "manager.hpp"
 #include "../d3d/texturemanager.hpp"
+#include "components/keyboard.hpp"
 #include "../logger/logger.hpp"
 #include "fonts/IconsFontAwesome6.h"
 
@@ -233,7 +234,8 @@ namespace gta_base {
           show_ui = !show_ui;
 
         if (show_ui) {
-          HandleKeyInput(cur_sub);
+          if (!components::keyboard::kMANAGER->KeyBoardActive())
+            HandleKeyInput(cur_sub);
 
           DrawHeader();
           DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());

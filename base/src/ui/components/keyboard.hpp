@@ -42,12 +42,12 @@ namespace gta_base {
             ImGui::SameLine();
             if (ImGui::Button("Done")) {
               state_ = Result::kDone;
-              cb_(std::string(text_buf_), state_);
+              std::invoke(cb_, std::string(text_buf_), state_);
             }
             ImGui::SameLine();
             if (ImGui::Button("Cancel")) {
               state_ = Result::kCancel;
-              cb_(std::string(text_buf_), state_);
+              std::invoke(cb_, std::string(text_buf_), state_);
             }
             ImGui::End();
           }
@@ -82,6 +82,10 @@ namespace gta_base {
 
           void ShowKeyboard(const std::string& title, const Instance::callback_t& cb) {
             keyboards_.emplace_back(std::make_shared<Instance>(title, cb));
+          }
+
+          bool KeyBoardActive() {
+            return !keyboards_.empty();
           }
 
           void Tick() {
