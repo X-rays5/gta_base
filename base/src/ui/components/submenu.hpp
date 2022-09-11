@@ -21,7 +21,7 @@ namespace gta_base {
       public:
         using constructor_cb = std::function<void(Submenu*)>;
 
-        Submenu(std::string name_key, Submenus submenu_id, constructor_cb cb) : name_key_(std::move(name_key)), create_options_(std::move(cb)) {}
+        Submenu(std::string name_key, constructor_cb cb) : name_key_(std::move(name_key)), create_options_(std::move(cb)) {}
 
         [[nodiscard]] inline std::string GetName() const {
           return std::string((*kTRANSLATION_MANAGER)[name_key_]);

@@ -31,42 +31,45 @@ namespace gta_base {
         initialized_ = true;
 
         using namespace ui;
+        using namespace ui::components;
 
-        kMANAGER->AddSubmenu("tab/title/home", components::Submenus::Home, [](components::Submenu* sub){
-          sub->AddOption(components::option::SubmenuOption("tab/title/self", "", components::Submenus::Player));
+        kMANAGER->AddSubmenu(Submenus::Home, "tab/title/home", [](Submenu* sub){
+          sub->AddOption(option::SubmenuOption("tab/title/self", "", Submenus::Player));
           if (common::IsSessionStarted()) {
-            sub->AddOption(components::option::SubmenuOption("tab/title/player_list", "", components::Submenus::PlayerList));
+            sub->AddOption(option::SubmenuOption("tab/title/player_list", "", Submenus::PlayerList));
           }
 #ifndef NDEBUG
-          sub->AddOption(components::option::SubmenuOption("Debug", "", components::Submenus::Debug));
+          sub->AddOption(option::SubmenuOption("Debug", "", Submenus::Debug));
 #endif
-          sub->AddOption(components::option::SubmenuOption("tab/title/setting", "", components::Submenus::Settings));
+          sub->AddOption(option::SubmenuOption("tab/title/setting", "", Submenus::Settings));
         });
 
-        kMANAGER->AddSubmenu("tab/title/self", components::Submenus::Player, [this](components::Submenu* sub){
+        kMANAGER->AddSubmenu(Submenus::Player, "tab/title/self", [](Submenu* sub){
           auto player = *memory::kPOINTERS->ped_factory_;
-          sub->AddOption(components::option::NumberOption<std::uint32_t>("option/wanted_level", "option/wanted_level/desc", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+          sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "option/wanted_level/desc", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
         });
 
-        kMANAGER->AddSubmenu("tab/title/player_list", components::Submenus::PlayerList, [this](components::Submenu* sub){
+        kMANAGER->AddSubmenu(components::Submenus::PlayerList, "tab/title/player_list", [](Submenu* sub){
+          sub->AddOption(option::LabelOption(fmt::format("Players: {}", kPLAYER_MGR->Size())));
           kPLAYER_MGR->Iterate(true, [&](const std::string& name, const std::shared_ptr<player_mgr::Player>& player){
-            sub->AddOption(components::option::SubmenuOption(name, "", components::Submenus::SelectedPlayer, [&]{
+            sub->AddOption(option::SubmenuOption(name, "", Submenus::SelectedPlayer, [&]{
               kPLAYER_MGR->SetSelectedPlayer(player);
+              kMANAGER->GetSubmenu(Submenus::SelectedPlayer)->SetNameKey(player->Name());
             }));
           });
         });
 
-        kMANAGER->AddSubmenu(kPLAYER_MGR->GetSelectedPlayer()->Name(), components::Submenus::SelectedPlayer, [this](components::Submenu* sub){
-          sub->AddOption(components::option::ExecuteOption("Kick", "", []{
+        kMANAGER->AddSubmenu(components::Submenus::SelectedPlayer, "", [](Submenu* sub){
+          sub->AddOption(option::ExecuteOption("Kick", "", []{
             if (common::IsSessionStarted() && kPLAYER_MGR->GetSelectedPlayer() != kPLAYER_MGR->GetSelf()) {
               rage::BreakupKick(kPLAYER_MGR->GetSelectedPlayer());
             }
           }));
         });
 
-        kMANAGER->AddSubmenu("Debug", components::Submenus::Debug, [this](components::Submenu* sub){
-          sub->AddOption(components::option::SubmenuOption("Test Components", "", components::Submenus::TestComponents));
-          sub->AddOption(components::option::ExecuteOption("Test notify", "", []{
+        kMANAGER->AddSubmenu(components::Submenus::Debug, "Debug", [](Submenu* sub){
+          sub->AddOption(option::SubmenuOption("Test Components", "", Submenus::TestComponents));
+          sub->AddOption(option::ExecuteOption("Test notify", "", []{
             kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "Test notify", "This is a test of the info notification. Seems to look pretty good");
             kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Test notify", "This is a test of the success notification. Seems to look pretty good");
             kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Test notify", "This is a test of the fail notification. Seems to look pretty good");
@@ -78,46 +81,47 @@ namespace gta_base {
           }));
         });
 
-        kMANAGER->AddSubmenu("Test Components", components::Submenus::TestComponents, [this](components::Submenu* sub){
-          sub->AddOption(components::option::SubmenuOption("Test SubmenuOption", "", components::Submenus::Home));
-          sub->AddOption(components::option::LabelOption("Test LabelOption"));
-          sub->AddOption(components::option::ExecuteOption("Test ExecuteOption", "", []{
+        kMANAGER->AddSubmenu(Submenus::TestComponents, "Test Components", [this](Submenu* sub){
+          sub->AddOption(option::SubmenuOption("Test SubmenuOption", "", Submenus::Home));
+          sub->AddOption(option::LabelOption("Test LabelOption"));
+          sub->AddOption(option::ExecuteOption("Test ExecuteOption", "", []{
             LOG_DEBUG("Test ExecuteOption");
           }));
-          sub->AddOption(components::option::ToggleOption("Test ToggleOption", "", &test_value_b));
-          sub->AddOption(components::option::NumberOption<float>("Test NumberOption", "", test_value_f, 0.5, 0, 10))->OnEvent([this](components::Event event){
-            if (event == components::Event::kChange)
+          sub->AddOption(option::ToggleOption("Test ToggleOption", "", &test_value_b));
+          sub->AddOption(option::NumberOption<float>("Test NumberOption", "", test_value_f, 0.5, 0, 10))->OnEvent([this](Event event){
+            if (event == Event::kChange)
               LOG_DEBUG("Test NumberOption {}", test_value_f);
           });
-          sub->AddOption(components::option::ToggleNumberOption<float>("Test ToggleNumberOption", "", test_value_b_toggle_number, test_value_f_toggle_number, 0.5, 0, 10))->OnEvent([this](components::Event event){
-            if (event == components::Event::kChange)
+          sub->AddOption(option::ToggleNumberOption<float>("Test ToggleNumberOption", "", test_value_b_toggle_number, test_value_f_toggle_number, 0.5, 0, 10))->OnEvent([this](Event event){
+            if (event == Event::kChange)
               LOG_DEBUG("Test ToggleNumberOption {} {}", test_value_b_toggle_number, test_value_f_toggle_number);
           });
-          sub->AddOption(components::option::ListOption("Test ListOption", "", test_value_v_idx, test_value_v));
-          sub->AddOption(components::option::ToggleListOption("Test ToggleListOption", "", test_value_b_toggle_list, test_value_v_idx_toggle_list, test_value_v));
+          sub->AddOption(option::ListOption("Test ListOption", "", test_value_v_idx, test_value_v));
+          sub->AddOption(option::ToggleListOption("Test ToggleListOption", "", test_value_b_toggle_list, test_value_v_idx_toggle_list, test_value_v));
         });
 
-        kMANAGER->AddSubmenu("tab/title/setting", components::Submenus::Settings, [](components::Submenu* sub){
-          sub->AddOption(components::option::SubmenuOption("tab/title/theme", "", components::Submenus::Theme));
-          sub->AddOption(components::option::SubmenuOption("tab/title/unload", "", components::Submenus::UnloadConfirm));
+        kMANAGER->AddSubmenu(Submenus::Settings, "tab/title/setting", [](Submenu* sub){
+          sub->AddOption(option::SubmenuOption("tab/title/theme", "", Submenus::Theme));
+          sub->AddOption(option::SubmenuOption("tab/title/unload", "", Submenus::UnloadConfirm));
         });
 
-        kMANAGER->AddSubmenu("tab/title/theme", components::Submenus::Theme, [](components::Submenu* sub){
-          sub->AddOption(components::option::NumberOption<float>("option/xpos", "option/xpos/desc", ui::kMANAGER->x_base, 0.005f, 0.f, 1.f - kMANAGER->x_size));
-          sub->AddOption(components::option::NumberOption<float>("option/ypos", "option/ypos/desc", ui::kMANAGER->y_base, 0.005f, 0.f, 1.f));
-          sub->AddOption(components::option::NumberOption<int>("option/max_options", "option/max_options/desc", ui::kMANAGER->max_drawn_options, 1, 1, 30));
+        kMANAGER->AddSubmenu(Submenus::Theme, "tab/title/theme", [](Submenu* sub){
+          sub->AddOption(option::NumberOption<float>("option/xpos", "option/xpos/desc", kMANAGER->x_base, 0.005f, 0.f, 1.f - kMANAGER->x_size));
+          sub->AddOption(option::NumberOption<float>("option/ypos", "option/ypos/desc", kMANAGER->y_base, 0.005f, 0.f, 1.f));
+          sub->AddOption(option::NumberOption<int>("option/max_options", "option/max_options/desc", kMANAGER->max_drawn_options, 1, 1, 30));
         });
 
-        kMANAGER->AddSubmenu("tab/title/unload", components::Submenus::UnloadConfirm, [](components::Submenu* sub) {
-          sub->AddOption(components::option::ExecuteOption("confirm/yes", "", [] {
+        kMANAGER->AddSubmenu(Submenus::UnloadConfirm, "tab/title/unload", [](Submenu* sub) {
+          sub->AddOption(option::ExecuteOption("confirm/yes", "", [] {
             common::globals::running = false;
           }));
-          sub->AddOption(components::option::ExecuteOption("confirm/no", "", [] {
+          sub->AddOption(option::ExecuteOption("confirm/no", "", [] {
             kMANAGER->PopSubmenu();
           }));
         });
 
-        kNOTIFICATIONS->Create(Notification::Type::kInfo, "UI Loaded", "");
+        const std::string build_time = std::string("Compilation time: ") + common::globals::compile_date + " " + common::globals::compile_time;
+        kNOTIFICATIONS->Create(Notification::Type::kInfo, "UI Loaded", build_time);
       }
     }
 

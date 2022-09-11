@@ -24,8 +24,8 @@ namespace gta_base {
       Manager();
       ~Manager();
 
-      inline void AddSubmenu(const std::string& name, components::Submenus id, components::Submenu::constructor_cb constructor_cb) {
-        auto submenu_ptr = std::make_shared<components::Submenu>(name, id, constructor_cb);
+      inline void AddSubmenu(components::Submenus id, const std::string& name_key, components::Submenu::constructor_cb cb) {
+        auto submenu_ptr = std::make_shared<components::Submenu>(name_key, std::move(cb));
         submenus_[id] = submenu_ptr;
         if (submenus_stack_.empty()) {
           submenus_stack_.push(submenu_ptr);
@@ -38,6 +38,16 @@ namespace gta_base {
         if (entry != submenus_.end()) {
           submenus_stack_.push(entry->second);
         }
+      }
+
+      inline std::shared_ptr<components::Submenu> GetSubmenu(components::Submenus id) {
+        auto entry = submenus_.find(id);
+
+        if (entry != submenus_.end()) {
+          return entry->second;
+        }
+
+        return nullptr;
       }
 
       inline void PopSubmenu() {

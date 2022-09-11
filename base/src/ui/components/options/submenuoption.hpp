@@ -30,8 +30,9 @@ namespace gta_base {
           void HandleKey(KeyInput key) final {
             if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
               kMANAGER->SetActiveSubmenu(sub_id_);
-              if (action_)
+              if (action_) {
                 std::invoke(action_);
+              }
             }
           }
 
