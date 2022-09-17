@@ -96,9 +96,9 @@ namespace gta_base {
       if (err_code == DBG_PRINTEXCEPTION_WIDE_C || err_code == DBG_PRINTEXCEPTION_C) {
         LOG_DEBUG("Received DBG_PRINTEXCEPTION_C ignoring");
 
-        return EXCEPTION_CONTINUE_EXECUTION;
+        return EXCEPTION_CONTINUE_SEARCH; // maybe a debugger wants it
       } else if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") { // Without this the c++ try catch blocks will break
-        LOG_WARN("Received unknown exception code: {}. This could be a c++ exception", err_code);
+        LOG_WARN("Received unknown exception code: {}. This is most likely a exception originating from c++ throw.", err_code);
 
         return EXCEPTION_CONTINUE_SEARCH;
       }

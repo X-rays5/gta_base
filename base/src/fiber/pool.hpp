@@ -9,6 +9,7 @@
 #include <functional>
 #include <mutex>
 #include <queue>
+#include "../natives/natives.hpp"
 #undef AddJob
 
 namespace gta_base {

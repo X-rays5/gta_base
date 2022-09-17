@@ -15,8 +15,9 @@
 #include "scripts/scripting/uitick.hpp"
 #include "scripts/scripting/job_queue.hpp"
 #include "scripts/render/uidraw.hpp"
-#include "scripts/render/keyboard_draw.hpp"
+#include "scripts/scripting/keyboard.hpp"
 #include "scripts/game/ui_disable_phone.hpp"
+#include "scripts/game/loops.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"
 #include "fiber/manager.hpp"
@@ -46,7 +47,7 @@ void BaseMain() {
 
   // render scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
-  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::KeyboardDraw>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Keyboard>());
   // scripting scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
@@ -54,7 +55,8 @@ void BaseMain() {
   // game scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<fiber::Manager>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UIDisablePhone>());
-  LOG_INFO("Scripts added");
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Loops>());
+  LOG_INFO("kSCRIPT_MANAGER: added scripts now managing {} scripts", kSCRIPT_MANAGER->Count());
 
   auto fiber_inst = std::make_shared<fiber::Pool>(12);
   LOG_INFO("Created fiber pool");

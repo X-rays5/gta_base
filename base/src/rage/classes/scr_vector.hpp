@@ -14,11 +14,11 @@ namespace rage
   public:
     scrVector() = default;
 
-    scrVector(float x, float y, float z) :
+    [[maybe_unused]] scrVector(float x, float y, float z) :
       x(x), y(y), z(z)
     {}
 
-    scrVector operator+(const scrVector& other)
+    scrVector operator+(const scrVector& other) const
     {
       scrVector vec;
       vec.x = this->x + other.x;
@@ -27,7 +27,7 @@ namespace rage
       return vec;
     }
 
-    scrVector operator-(const scrVector& other)
+    scrVector operator-(const scrVector& other) const
     {
       scrVector vec;
       vec.x = this->x - other.x;
@@ -36,7 +36,7 @@ namespace rage
       return vec;
     }
 
-    scrVector operator*(const scrVector& other)
+    scrVector operator*(const scrVector& other) const
     {
       scrVector vec;
       vec.x = this->x * other.x;
@@ -45,13 +45,21 @@ namespace rage
       return vec;
     }
 
-    scrVector operator*(const float& other)
+    scrVector operator*(const float& other) const
     {
       scrVector vec;
       vec.x = this->x * other;
       vec.y = this->y * other;
       vec.z = this->z * other;
       return vec;
+    }
+
+    scrVector& operator=(const float& new_val) {
+      x = new_val;
+      y = new_val;
+      z = new_val;
+
+      return *this;
     }
   public:
     float x{};

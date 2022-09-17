@@ -160,6 +160,7 @@ namespace gta_base {
       };
 
       // This can be used to execute code that should run on the render thread on render of a draw list
+      // Also usable to draw ImGui windows
       class DrawCallback : public BaseDrawCommand {
       public:
         inline explicit DrawCallback(std::function<void()> cb) : cb_(std::move(cb)) {}
@@ -172,7 +173,7 @@ namespace gta_base {
         std::function<void()> cb_;
       };
 
-      class Rect : public BaseDrawCommand{
+      class Rect : public BaseDrawCommand {
       public:
         inline Rect(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
 

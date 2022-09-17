@@ -16,6 +16,8 @@
 #include "../logger/logger.hpp"
 #include "globals.hpp"
 
+#define GTA_BASE_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
+
 #pragma warning(disable:4996)
 
 namespace gta_base {
@@ -31,7 +33,10 @@ namespace gta_base {
     bool IsSessionStarted();
 
     template<typename T>
-    T LexicalCast(const std::string& str) {
+    inline T LexicalCast(const std::string& str) {
+      if (str.empty())
+        return {};
+
       T res;
       std::istringstream iss;
       iss.str(str);
