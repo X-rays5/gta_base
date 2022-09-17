@@ -289,6 +289,14 @@ namespace gta_base {
           mtx_.unlock();
         }
 
+        inline std::size_t GetWriteTarget() const {
+          return cur_write_target_;
+        }
+
+        inline std::size_t GetRenderTarget() const {
+          return cur_render_target_;
+        }
+
       private:
         using draw_list_t = std::vector<std::shared_ptr<BaseDrawCommand>>;
         using draw_commands_t = std::vector<draw_list_t>;
