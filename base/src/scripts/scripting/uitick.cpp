@@ -21,6 +21,7 @@
 #include "../../rage/util/get.hpp"
 #include "../../rage/util/breakup_kick.hpp"
 #include "../../player_mgr/manager.hpp"
+#include "../../misc/settings.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -41,12 +42,36 @@ namespace gta_base {
 #ifndef NDEBUG
           sub->AddOption(option::SubmenuOption("Debug", "", Submenus::Debug));
 #endif
+          sub->AddOption(option::SubmenuOption("tab/title/misc", "", Submenus::Misc));
           sub->AddOption(option::SubmenuOption("tab/title/setting", "", Submenus::Settings));
         });
 
-        kMANAGER->AddSubmenu(Submenus::Player, "tab/title/self", [](Submenu* sub){
-          auto player = *memory::kPOINTERS->ped_factory_;
-          sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "option/wanted_level/desc", player->m_local_ped->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+        kMANAGER->AddSubmenu(Submenus::Player, "tab/title/self", [](Submenu* sub) {
+          auto player = rage::GetLocalPed();
+          sub->AddOption(option::SubmenuOption("tab/title/player_health", "", Submenus::PlayerHealth));
+          sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "option/wanted_level/desc", &player->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+        });
+
+        kMANAGER->AddSubmenu(Submenus::PlayerHealth, "tab/title/player_health", [](Submenu* sub){
+          auto player = rage::GetLocalPed();
+          sub->AddOption(option::ToggleOption("option/god_mode", "option/unimplemented_option/desc", &kSETTINGS.player.god_mode));
+          sub->AddOption(option::ToggleOption("option/semi_god_mode", "option/semi_god_mode/desc", &kSETTINGS.player.semi_god_mode));
+          sub->AddOption(option::ExecuteOption("option/suicide", "", [player]{
+            player->m_health = 0;
+          }));
+          sub->AddOption(option::ExecuteOption("option/heal", "", [player]{
+            fiber::kPOOL->AddJob([player]{
+              player->m_health = ENTITY::GET_ENTITY_MAX_HEALTH(globals::local_player.ped_id);
+            });
+          }));
+          sub->AddOption(option::ExecuteOption("option/max_armor", "", [player]{
+            fiber::kPOOL->AddJob([player]{
+              player->m_armor= PLAYER::GET_PLAYER_MAX_ARMOUR(globals::local_player.id);
+            });
+          }));
+          sub->AddOption(option::ExecuteOption("option/remove_armor", "", [player]{
+            player->m_armor = 0;
+          }));
         });
 
         kMANAGER->AddSubmenu(components::Submenus::PlayerList, "tab/title/player_list", [](Submenu* sub){
@@ -88,7 +113,7 @@ namespace gta_base {
             LOG_DEBUG("Test ExecuteOption");
           }));
           sub->AddOption(option::ToggleOption("Test ToggleOption", "", &test_value_b));
-          sub->AddOption(option::NumberOption<float>("Test NumberOption", "", test_value_f, 0.5, 0, 10))->OnEvent([this](Event event){
+          sub->AddOption(option::NumberOption<float>("Test NumberOption", "", &test_value_f, 0.5, 0, 10))->OnEvent([this](Event event){
             if (event == Event::kChange)
               LOG_DEBUG("Test NumberOption {}", test_value_f);
           });
@@ -100,15 +125,23 @@ namespace gta_base {
           sub->AddOption(option::ToggleListOption("Test ToggleListOption", "", test_value_b_toggle_list, test_value_v_idx_toggle_list, test_value_v));
         });
 
+        kMANAGER->AddSubmenu(Submenus::Misc, "tab/title/misc", [](Submenu* sub){
+          sub->AddOption(option::ExecuteOption("option/skip_cutscene", "", []{
+            fiber::kPOOL->AddJob([]{
+              CUTSCENE::STOP_CUTSCENE_IMMEDIATELY();
+            });
+          }));
+        });
+
         kMANAGER->AddSubmenu(Submenus::Settings, "tab/title/setting", [](Submenu* sub){
           sub->AddOption(option::SubmenuOption("tab/title/theme", "", Submenus::Theme));
           sub->AddOption(option::SubmenuOption("tab/title/unload", "", Submenus::UnloadConfirm));
         });
 
         kMANAGER->AddSubmenu(Submenus::Theme, "tab/title/theme", [](Submenu* sub){
-          sub->AddOption(option::NumberOption<float>("option/xpos", "option/xpos/desc", kMANAGER->x_base, 0.005f, 0.f, 1.f - kMANAGER->x_size));
-          sub->AddOption(option::NumberOption<float>("option/ypos", "option/ypos/desc", kMANAGER->y_base, 0.005f, 0.f, 1.f));
-          sub->AddOption(option::NumberOption<int>("option/max_options", "option/max_options/desc", kMANAGER->max_drawn_options, 1, 1, 30));
+          sub->AddOption(option::NumberOption<float>("option/xpos", "option/xpos/desc", &kMANAGER->x_base, 0.005f, 0.f, 1.f - kMANAGER->x_size));
+          sub->AddOption(option::NumberOption<float>("option/ypos", "option/ypos/desc", &kMANAGER->y_base, 0.005f, 0.f, 1.f));
+          sub->AddOption(option::NumberOption<int>("option/max_options", "option/max_options/desc", &kMANAGER->max_drawn_options, 1, 1, 30));
         });
 
         kMANAGER->AddSubmenu(Submenus::UnloadConfirm, "tab/title/unload", [](Submenu* sub) {
