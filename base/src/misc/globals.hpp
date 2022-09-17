@@ -8,8 +8,11 @@
 #define GTABASE_GLOBALS_HPP
 #include <atomic>
 #include <robin_hood.h>
+#include <unordered_map>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "../rage/types.hpp"
+#include "../fiber/pool.hpp"
 
 namespace gta_base {
   namespace common {
@@ -17,6 +20,36 @@ namespace gta_base {
       bool down = false;
       std::uint64_t released_at = 0;
     };
+
+    enum class LocalPlayerEvent {
+      kEnterVehicle,
+      kLeaveVehicle,
+      kRespawned,
+      kDied,
+    };
+
+    struct LocalPlayer {
+      Player id{};
+      Ped ped_id{};
+      bool alive = false;
+      rage::scrVector player_pos{};
+      Vehicle vehicle_id{};
+      rage::scrVector vehicle_pos{};
+      std::unordered_multimap<LocalPlayerEvent, std::function<void()>> event_handlers;
+
+      void SendEvent(LocalPlayerEvent event) {
+        auto entry = event_handlers.find(event);
+
+        while (entry != event_handlers.end()) {
+          auto handler = entry->second;
+          fiber::kPOOL->AddJob([&handler]{
+            std::invoke(handler);
+          });
+          entry++;
+        }
+      }
+    };
+  }
 
   namespace globals {
     constexpr auto name = "gta-base";
