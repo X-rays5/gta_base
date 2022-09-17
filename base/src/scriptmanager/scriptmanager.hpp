@@ -20,6 +20,12 @@ namespace gta_base {
     void Tick(scriptmanager::ScriptType type);
     void AddScript(const std::shared_ptr<scriptmanager::BaseScript>& script);
     void RemoveScript(const std::shared_ptr<scriptmanager::BaseScript>& script);
+    std::size_t Count() {
+      mtx_.lock();
+      auto script_count = scripts_.size();
+      mtx_.unlock();
+      return script_count;
+    }
 
   private:
     std::mutex mtx_;
