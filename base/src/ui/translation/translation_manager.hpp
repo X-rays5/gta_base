@@ -11,9 +11,11 @@
 #include <filesystem>
 #include <fstream>
 #include <robin_hood.h>
+#include <xorstr.hpp>
 #include "../../logger/logger.hpp"
 
-#define ADD_TRANSLATION(key, trans) {key, trans}
+
+#define ADD_TRANSLATION(key, trans) {xorstr_(key), xorstr_(trans)}
 
 namespace gta_base {
   namespace ui {
@@ -31,7 +33,9 @@ namespace gta_base {
         inline static const robin_hood::unordered_map<std::string, std::string> default_translation = {
           ADD_TRANSLATION("tab/title/home", "Home"),
           ADD_TRANSLATION("tab/title/self", "Player"),
+          ADD_TRANSLATION("tab/title/player_health", "Health"),
           ADD_TRANSLATION("tab/title/player_list", "Player List"),
+          ADD_TRANSLATION("tab/title/misc", "Misc"),
           ADD_TRANSLATION("tab/title/setting", "Settings"),
           ADD_TRANSLATION("tab/title/theme", "Theme"),
           ADD_TRANSLATION("tab/title/unload", "Unload"),
@@ -39,8 +43,17 @@ namespace gta_base {
           ADD_TRANSLATION("confirm/no", "No"),
           ADD_TRANSLATION("confirm/ok", "OK"),
           ADD_TRANSLATION("confirm/cancel", "Cancel"),
+          ADD_TRANSLATION("option/unimplemented_option/desc", "WARNING: This option does nothing. Since it's currently not implemented."),
+          ADD_TRANSLATION("option/god_mode", "God Mode"),
+          ADD_TRANSLATION("option/semi_god_mode", "Semi God Mode"),
+          ADD_TRANSLATION("option/semi_god_mode/desc", "Can only die to damage that one hit kills"),
+          ADD_TRANSLATION("option/suicide", "Suicide"),
+          ADD_TRANSLATION("option/heal", "Heal"),
+          ADD_TRANSLATION("option/max_armor", "Max Armor"),
+          ADD_TRANSLATION("option/remove_armor", "Remove Armor"),
           ADD_TRANSLATION("option/wanted_level", "Wanted Level"),
           ADD_TRANSLATION("option/wanted_level/desc", "Set your wanted level."),
+          ADD_TRANSLATION("option/skip_cutscene", "Skip Cutscene"),
           ADD_TRANSLATION("option/xpos", "X Position"),
           ADD_TRANSLATION("option/xpos/desc", "Set the X position of the UI."),
           ADD_TRANSLATION("option/ypos", "Y Position"),
