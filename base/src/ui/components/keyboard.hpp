@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_KEYBOARD_HPP
-#define GTA_BASE_KEYBOARD_HPP
+#ifndef GTA_BASE_KEYBOARD_MANAGER_HPP
+#define GTA_BASE_KEYBOARD_MANAGER_HPP
 #include <functional>
 #include <string>
 #include <utility>
@@ -27,32 +27,44 @@ namespace gta_base {
           using callback_t = std::function<void(std::string, Result)>;
 
         public:
-          explicit Instance(std::string title, callback_t cb) : title_(std::move(title)), cb_(std::move(cb)) {
+          explicit inline Instance(std::string title, callback_t& cb) : title_(std::move(title)), cb_(cb) {
             window_title_ = "###keyboard_title" + title_;
             input_title_ = "###keyboard" + title_;
           }
 
           void Tick() {
-            static bool show = true; // should never change
+            // Don't draw multiple times on 1 render tick
+            if (last_render_write_target_ != kMANAGER->GetDrawList()->GetWriteTarget() && state_ == Result::kNone) {
+              last_render_write_target_ = kMANAGER->GetDrawList()->GetWriteTarget();
+              kMANAGER->GetDrawList()->AddCommand(d3d::draw::DrawCallback{[this]{
+                ImGui::SetNextWindowSize(d3d::draw::ScaleToScreen(size_));
+                ImGui::SetNextWindowPos(d3d::draw::ScaleToScreen(pos_));
+                if (ImGui::Begin(window_title_.c_str(), nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize)) {
+                  ImGui::InputText(input_title_.c_str(), (char*)&text_buf_, sizeof(text_buf_));
+                  ImGui::SameLine();
+                  if (ImGui::Button("Done")) {
+                    state_ = Result::kDone;
+                  }
+                  ImGui::SameLine();
+                  if (ImGui::Button("Cancel")) {
+                    state_ = Result::kCancel;
+                  }
+                }
+                ImGui::End();
+              }});
+            }
 
-            ImGui::SetNextWindowSize(d3d::draw::ScaleToScreen(size_));
-            ImGui::SetNextWindowPos(d3d::draw::ScaleToScreen(pos_), ImGuiCond_Appearing);
-            ImGui::Begin(window_title_.c_str(), &show, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-            ImGui::InputText(input_title_.c_str(), (char*)&text_buf_, sizeof(text_buf_));
-            ImGui::SameLine();
-            if (ImGui::Button("Done")) {
-              state_ = Result::kDone;
-              std::invoke(cb_, std::string(text_buf_), state_);
+            switch(state_) {
+              case Result::kDone:
+              case Result::kCancel:
+                std::invoke(cb_, std::string((char*)&text_buf_), state_);
+                break;
+              default:
+                break;
             }
-            ImGui::SameLine();
-            if (ImGui::Button("Cancel")) {
-              state_ = Result::kCancel;
-              std::invoke(cb_, std::string(text_buf_), state_);
-            }
-            ImGui::End();
           }
 
-          Result GetState() {
+          inline Result GetState() {
             return state_;
           }
 
@@ -63,6 +75,7 @@ namespace gta_base {
           Result state_ = Result::kNone;
           callback_t cb_;
           char text_buf_[256]{};
+          std::size_t last_render_write_target_;
           constexpr static const ImVec2 size_ = {0.18f, 0.035f};
           constexpr static const ImVec2 pos_ = {0.5f - (size_.x / 2), 0.5f - (size_.y / 2)};
         };
@@ -80,11 +93,11 @@ namespace gta_base {
             kMANAGER = nullptr;
           }
 
-          void ShowKeyboard(const std::string& title, const Instance::callback_t& cb) {
+          inline void ShowKeyboard(const std::string& title, Instance::callback_t cb) {
             keyboards_.emplace_back(std::make_shared<Instance>(title, cb));
           }
 
-          bool KeyBoardActive() {
+          inline bool KeyBoardActive() {
             return !keyboards_.empty();
           }
 
@@ -112,4 +125,4 @@ namespace gta_base {
     }
   }
 }
-#endif //GTA_BASE_KEYBOARD_HPP
+#endif //GTA_BASE_KEYBOARD_MANAGER_HPP

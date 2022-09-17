@@ -8,6 +8,10 @@
 #include "baseoption.hpp"
 #include "../../../misc/common.hpp"
 #include "../keyboard.hpp"
+#include "../../../scripts/scripting/job_queue.hpp"
+
+#undef max
+#undef min
 
 namespace gta_base {
   namespace ui {
@@ -24,51 +28,84 @@ namespace gta_base {
           }
 
           void HandleKey(KeyInput key) final {
-            if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
-              keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [this](const std::string& text, keyboard::Result res){
-                if (text.empty())
-                  return;
+            switch(key) {
+              case KeyInput::kReturn:
+              case KeyInput::kHotkey: {
+               /* keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [this](const std::string& text, keyboard::Result res){
+                  if (text.empty())
+                    return;
 
-                if (res == keyboard::Result::kDone) {
-                  try {
-                    constexpr static const bool is_float = std::is_floating_point_v<T>;
-                    if constexpr (is_float) {
-                      *value_ = static_cast<T>(std::stod(text));
-                    } else {
-                      *value_ = static_cast<T>(std::stoll(text));
+                  if (res == keyboard::Result::kDone) {
+                    if (value_) {
+                      constexpr static const bool is_float = std::is_floating_point_v<T>;
+                      if (is_float) {
+                        LOG_DEBUG("float");
+                        auto converted = std::stod(text);
+                        auto min = std::numeric_limits<T>::min();
+                        auto max = std::numeric_limits<T>::max();
+                        if (converted < min) {
+                          converted = min;
+                        } else if (converted > max) {
+                          converted = max;
+                        }
+                        LOG_DEBUG("{}", converted);
+                        *value_ = converted;
+                      } else {
+                        LOG_DEBUG("no float");
+                        auto converted = std::stoll(text);
+                        auto min = std::numeric_limits<T>::min();
+                        auto max = std::numeric_limits<T>::max();
+                        if (converted < min) {
+                          converted = min;
+                        } else if (converted > max) {
+                          converted = max;
+                        }
+                        LOG_DEBUG("{}", converted);
+                        *value_ = converted;
+                      }
+                      CheckValueBounds();
+                      UpdateRightText();
+
+                      SendEvent(Event::kChange);
                     }
-                    /*CheckValueBounds();
-                    UpdateRightText();
-                    SendEvent(Event::kChange);*/
-                  } catch (std::exception& e) {
-                    LOG_WARN("{}", e.what());
                   }
+                });*/
+
+                break;
+              }
+              case KeyInput::kLeft: {
+                if (*value_ == min_) {
+                  *value_ = max_;
+                  UpdateRightText();
+                  SendEvent(Event::kChange);
+
+                  break;
                 }
-              });
-            } else if (key == KeyInput::kLeft) {
-              if (*value_ == min_) {
-                *value_ = max_;
+
+                *value_ -= step_;
+                CheckValueBounds();
                 UpdateRightText();
                 SendEvent(Event::kChange);
-                return;
-              }
 
-              *value_ -= step_;
-              CheckValueBounds();
-              UpdateRightText();
-              SendEvent(Event::kChange);
-            } else if (key == KeyInput::kRight) {
-              if (*value_ == max_) {
-                *value_ = min_;
+                break;
+              }
+              case KeyInput::kRight: {
+                if (*value_ == max_) {
+                  *value_ = min_;
+                  UpdateRightText();
+                  SendEvent(Event::kChange);
+                  return;
+                }
+
+                *value_ += step_;
+                CheckValueBounds();
                 UpdateRightText();
                 SendEvent(Event::kChange);
-                return;
-              }
 
-              *value_ += step_;
-              CheckValueBounds();
-              UpdateRightText();
-              SendEvent(Event::kChange);
+                break;
+              }
+              default:
+                break;
             }
           }
 
