@@ -10,10 +10,11 @@
 #include "misc/common.hpp"
 #include "logger/logger.hpp"
 
-HINSTANCE gta_base::common::globals::dll_handle = nullptr;
+HINSTANCE gta_base::globals::dll_handle = nullptr;
 
 BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID) {
   using namespace gta_base::common;
+  using namespace gta_base;
 
   if (call_reason == DLL_PROCESS_ATTACH) {
     globals::dll_handle = dll_handle;

@@ -25,7 +25,7 @@ namespace gta_base {
       kPLAYER_MGR->AddPlayer(player);
 
       // Prevent spam on new session join
-      if (common::GetEpoch() - common::globals::session_join_time > 30000) {
+      if (common::GetEpoch() - globals::session_join_time > 30000) {
         auto msg = fmt::format("name: {}\nslot: {}\nRID: {}", player->get_name(), new_index, player->get_net_data()->m_gamer_handle.m_rockstar_id);
         ui::kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "Player Joining.", msg);
         LOG_INFO("{} is joining. slot: {} RID: {}", player->get_name(), new_index, player->get_net_data()->m_gamer_handle.m_rockstar_id);

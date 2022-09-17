@@ -6,6 +6,7 @@
 #include "wndproc.hpp"
 #include "../d3d/renderer.hpp"
 #include "../scriptmanager/scriptmanager.hpp"
+#include "../natives/invoker.hpp"
 
 namespace gta_base {
   Hooking::Hooking() :
@@ -61,7 +62,7 @@ namespace gta_base {
 
   bool Hooks::RunScriptThreads(std::uint32_t ops_to_execute) {
     try {
-      if (common::globals::running) {
+      if (globals::running) {
         kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame);
       }
     } catch(...) {

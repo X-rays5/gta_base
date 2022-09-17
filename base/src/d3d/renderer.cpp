@@ -71,7 +71,7 @@ namespace gta_base {
     }
 
     HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
-      if (common::globals::running) {
+      if (globals::running) {
         ImGui_ImplWin32_NewFrame();
         ImGui_ImplDX11_NewFrame();
         ImGui::NewFrame();
@@ -88,7 +88,7 @@ namespace gta_base {
     }
 
     HRESULT Renderer::SwapChainResizeBuffer(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags) {
-      if (common::globals::running) {
+      if (globals::running) {
         ImGui_ImplDX11_InvalidateDeviceObjects();
 
         auto res = kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::ResizeBuffers)>(Hooks::swapchain_resizebuffers_index)(swap_chain, buffer_count, width, height, new_format, swapchain_flags);

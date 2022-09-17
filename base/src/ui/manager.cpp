@@ -68,7 +68,7 @@ namespace gta_base {
 
       draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar}, primary_color));
       draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar / 10}, secondary_color));
-      draw_list_->AddCommand(DrawTextRight(y_pos - (y_size_bottom_bar / 4), text_color, common::globals::version));
+      draw_list_->AddCommand(DrawTextRight(y_pos - (y_size_bottom_bar / 4), text_color, globals::version));
       draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color, fmt::format("FPS: {}", (int)(ImGui::GetIO().Framerate / 2))));
     }
 

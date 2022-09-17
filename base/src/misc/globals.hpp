@@ -8,6 +8,8 @@
 #define GTABASE_GLOBALS_HPP
 #include <atomic>
 #include <robin_hood.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 namespace gta_base {
   namespace common {
@@ -16,20 +18,20 @@ namespace gta_base {
       std::uint64_t released_at = 0;
     };
 
-    namespace globals {
-      constexpr auto name = "gta-base";
-      constexpr auto version = "1.0.0";
-      constexpr auto target_window_name = "";
-      constexpr auto target_window_class = "grcWindow";
-      constexpr auto compile_date = __DATE__;
-      constexpr auto compile_time = __TIME__;
+  namespace globals {
+    constexpr auto name = "gta-base";
+    constexpr auto version = "1.0.0";
+    constexpr auto target_window_name = "";
+    constexpr auto target_window_class = "grcWindow";
+    constexpr auto compile_date = __DATE__;
+    constexpr auto compile_time = __TIME__;
 
-      extern std::atomic<bool> running;
-      extern HINSTANCE dll_handle;
-      extern robin_hood::unordered_map<std::uint32_t, KeyState> key_state;
-      extern std::atomic<std::int64_t> session_join_time;
-      extern std::atomic<std::int64_t> session_leave_time;
-    }
+    extern std::atomic<bool> running;
+    extern HINSTANCE dll_handle;
+    extern robin_hood::unordered_map<std::uint32_t, common::KeyState> key_state;
+    extern std::atomic<std::int64_t> session_join_time;
+    extern std::atomic<std::int64_t> session_leave_time;
+    extern common::LocalPlayer local_player;
   }
 }
 #endif //GTABASE_GLOBALS_HPP

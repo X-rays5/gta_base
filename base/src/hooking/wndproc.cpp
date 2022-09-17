@@ -14,7 +14,7 @@ namespace gta_base {
       if (ORIGINAL_WNDPROC)
         throw std::runtime_error("WndProc already hooked");
 
-      ORIGINAL_WNDPROC = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WndProc)));
+      ORIGINAL_WNDPROC = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WndProc)));
 
       return ORIGINAL_WNDPROC;
     }
@@ -23,7 +23,7 @@ namespace gta_base {
       if (!ORIGINAL_WNDPROC)
         throw std::runtime_error("WndProc is not hooked");
 
-      LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(ORIGINAL_WNDPROC));
+      LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(ORIGINAL_WNDPROC));
 
       return success;
     }
@@ -33,7 +33,7 @@ namespace gta_base {
         return 0;
       }
 
-      if (common::globals::running) {
+      if (globals::running) {
         if (message == WM_KEYDOWN) {
           common::SetKeyState(parameter_uint_ptr, true);
         } else if (message == WM_KEYUP) {

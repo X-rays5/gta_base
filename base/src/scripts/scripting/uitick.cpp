@@ -113,14 +113,14 @@ namespace gta_base {
 
         kMANAGER->AddSubmenu(Submenus::UnloadConfirm, "tab/title/unload", [](Submenu* sub) {
           sub->AddOption(option::ExecuteOption("confirm/yes", "", [] {
-            common::globals::running = false;
+            globals::running = false;
           }));
           sub->AddOption(option::ExecuteOption("confirm/no", "", [] {
             kMANAGER->PopSubmenu();
           }));
         });
 
-        const std::string build_time = std::string("Compilation time: ") + common::globals::compile_date + " " + common::globals::compile_time;
+        const std::string build_time = std::string("Compilation time: ") + globals::compile_date + " " + globals::compile_time;
         kNOTIFICATIONS->Create(Notification::Type::kInfo, "UI Loaded", build_time);
       }
     }

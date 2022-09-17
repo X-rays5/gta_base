@@ -85,7 +85,7 @@ namespace gta_base {
 
     bool IsForegroundWindow() {
       auto foreground_window = GetForegroundWindow();
-      return foreground_window == GetConsoleWindow() || foreground_window == GetHwnd(common::globals::target_window_class, common::globals::target_window_name);
+      return foreground_window == GetConsoleWindow() || foreground_window == GetHwnd(globals::target_window_class, globals::target_window_name);
     }
 
     bool IsTargetProcess() {

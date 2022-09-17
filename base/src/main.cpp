@@ -23,7 +23,7 @@
 #include "player_mgr/manager.hpp"
 #include "ui/components/keyboard.hpp"
 
-std::atomic<bool> gta_base::common::globals::running = true;
+std::atomic<bool> gta_base::globals::running = true;
 void BaseMain() {
   using namespace gta_base;
 
@@ -57,7 +57,7 @@ void BaseMain() {
   auto fiber_inst = std::make_shared<fiber::Pool>(12);
   LOG_INFO("Created fiber pool");
 
-  auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(common::globals::target_window_class, common::globals::target_window_name));
+  auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(globals::target_window_class, globals::target_window_name));
   LOG_INFO("Renderer initialized");
 
   auto ui_manager_inst = std::make_unique<ui::Manager>();
@@ -76,7 +76,7 @@ void BaseMain() {
   LOG_INFO("Hooks enabled");
 
   auto scripting_thread = std::thread([]{
-    while(common::globals::running) {
+    while(globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
       std::this_thread::yield();
     }
@@ -84,9 +84,9 @@ void BaseMain() {
   LOG_INFO("Scripting thread started");
 
   LOG_INFO("Initialized");
-  while (common::globals::running) {
+  while (globals::running) {
     if (common::IsKeyDown(VK_DELETE))
-      common::globals::running = false;
+      globals::running = false;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
