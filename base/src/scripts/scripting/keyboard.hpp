@@ -3,16 +3,16 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_KEYBOARD_DRAW_HPP
-#define GTA_BASE_KEYBOARD_DRAW_HPP
+#ifndef GTA_BASE_KEYBOARD_SCRIPT_HPP
+#define GTA_BASE_KEYBOARD_SCRIPT_HPP
 #include "../../scriptmanager/base_script.hpp"
 
 namespace gta_base {
   namespace scripts {
-    class KeyboardDraw : public scriptmanager::BaseScript {
+    class Keyboard : public scriptmanager::BaseScript {
     public:
       scriptmanager::ScriptType GetType() final {
-        return scriptmanager::ScriptType::kRenderer;
+        return scriptmanager::ScriptType::kScripting;
       }
 
       void Init() final;
@@ -20,4 +20,4 @@ namespace gta_base {
     };
   }
 }
-#endif //GTA_BASE_KEYBOARD_DRAW_HPP
+#endif //GTA_BASE_KEYBOARD_SCRIPT_HPP
