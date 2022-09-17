@@ -13,6 +13,7 @@
 #include "scriptmanager/scriptmanager.hpp"
 #include "scripts/scripting/discord.hpp"
 #include "scripts/scripting/uitick.hpp"
+#include "scripts/scripting/job_queue.hpp"
 #include "scripts/render/uidraw.hpp"
 #include "scripts/render/keyboard_draw.hpp"
 #include "scripts/game/ui_disable_phone.hpp"
@@ -49,6 +50,7 @@ void BaseMain() {
   // scripting scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::JobQueue>());
   // game scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<fiber::Manager>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UIDisablePhone>());
