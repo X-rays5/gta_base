@@ -14,12 +14,9 @@ namespace gta_base {
         template<typename T>
         class ToggleListOption : public BaseOption {
         public:
-          explicit ToggleListOption(const std::string& name_key, const std::string& description_key, bool& toggle, std::size_t& idx, std::vector<T>& items) {
-            name_key_ = name_key;
-            description_key_ = description_key;
-            toggle_ = &toggle;
-            idx_ = &idx;
-            items_ = &items;
+          explicit ToggleListOption(const std::string& name_key, const std::string& description_key, bool& toggle, std::size_t& idx, std::vector<T>& items) :
+          BaseOption(name_key, description_key), toggle_(&toggle), idx_(&idx), items_(&items)
+          {
             UpdateRightText();
           }
 

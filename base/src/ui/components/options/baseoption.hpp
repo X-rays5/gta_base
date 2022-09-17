@@ -21,6 +21,10 @@ namespace gta_base {
         public:
           using on_event_t = std::function<void(Event)>;
 
+          BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", std::string icon_path = "", on_event_t event_handler = nullptr) :
+              name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), icon_path_(std::move(icon_path)), event_handler_(std::move(event_handler))
+              {}
+
           inline std::string GetName() {
             return std::string((*kTRANSLATION_MANAGER)[name_key_]);
           }
@@ -72,12 +76,12 @@ namespace gta_base {
           virtual void HandleKey(KeyInput key) = 0;
           virtual bool HasFlag(OptionFlag flag) = 0;
         protected:
-          std::string name_key_{};
-          std::string description_key_{};
-          std::string center_text_key_{};
-          std::string right_text_key_{};
-          std::filesystem::path icon_path_{};
-          on_event_t event_handler_ = nullptr;
+          std::string name_key_;
+          std::string description_key_;
+          std::string center_text_key_;
+          std::string right_text_key_;
+          std::filesystem::path icon_path_;
+          on_event_t event_handler_;
 
         protected:
           inline void SendEvent(Event event) {

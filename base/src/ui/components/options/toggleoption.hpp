@@ -13,11 +13,9 @@ namespace gta_base {
       namespace option {
         class ToggleOption : public BaseOption {
         public:
-          explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle) {
-            name_key_ = name_key;
-            description_key_ = description_key;
-            toggle_ = toggle;
-          }
+          explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle) :
+          BaseOption(name_key, description_key), toggle_(toggle)
+          {}
 
           void HandleKey(KeyInput key) final {
             if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {

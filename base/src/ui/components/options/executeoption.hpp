@@ -16,14 +16,11 @@ namespace gta_base {
       namespace option {
         class ExecuteOption : public BaseOption {
         public:
-          using action_t = void(*)();
+          using action_t = std::function<void()>;
 
-          explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, const std::string& action_id = "") {
-            name_key_ = name_key;
-            description_key_ = description_key;
-            action_ = action;
-            action_id_ = action_id;
-          }
+          explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, const std::string& action_id = "") :
+              BaseOption(name_key, description_key, "", "", "", nullptr), action_(action), action_id_(action_id)
+              {}
 
           void HandleKey(KeyInput key) final {
             if (!action_)

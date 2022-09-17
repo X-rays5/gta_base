@@ -15,14 +15,9 @@ namespace gta_base {
         requires std::integral<T> or std::floating_point<T>
         class ToggleNumberOption : public BaseOption {
         public:
-          explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max) {
-            name_key_ = name_key;
-            description_key_ = description_key;
-            toggle_ = &toggle;
-            value_ = &value;
-            step_ = step;
-            min_ = min;
-            max_ = max;
+          explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max) :
+          BaseOption(name_key, description_key), toggle_(&toggle), value_(&value), step_(step), min_(min), max_(max)
+          {
             UpdateRightText();
           }
 

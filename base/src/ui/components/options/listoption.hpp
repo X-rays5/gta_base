@@ -14,11 +14,9 @@ namespace gta_base {
         template<typename T>
         class ListOption : public BaseOption {
         public:
-          explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items) {
-            name_key_ = name_key;
-            description_key_ = description_key;
-            idx_ = &idx;
-            items_ = &items;
+          explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items) :
+          BaseOption(name_key, description_key), idx_(&idx), items_(&items)
+          {
             UpdateRightText();
           }
 
