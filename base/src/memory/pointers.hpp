@@ -79,6 +79,10 @@ namespace gta_base {
       PVOID AssignPhysicalIdx{};
 
       bool* is_session_started_{};
+      PUSHORT spectator_check_;
+
+      using ptr_to_handle_t = Entity(*)(void* entity);
+      ptr_to_handle_t PtrToHandle{};
     };
     inline Pointers* kPOINTERS{};
   }

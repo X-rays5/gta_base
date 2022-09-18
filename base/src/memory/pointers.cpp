@@ -117,10 +117,55 @@ namespace gta_base {
         is_session_started_ = ptr.add(3).rip().as<decltype(is_session_started_)>();
       });
 
-      main_batch.run(scanner::Module(nullptr));
+      // Request Control of Entity PATCH
+      main_batch.add(VAR_NAME(spectator_check_), xorstr_("48 89 5C 24 ? 57 48 83 EC 20 8B D9 E8 ? ? ? ? ? ? ? ? 8B CB"), [this](scanner::Handle ptr)
+      {
+        spectator_check_ = ptr.add(0x13).as<decltype(spectator_check_)>();
+        *spectator_check_ = 0x9090;
+      });
+
+      main_batch.add(VAR_NAME(PtrToHandle), xorstr_("48 8B F9 48 83 C1 10 33 DB"), [this](scanner::Handle ptr)
+      {
+        PtrToHandle = ptr.sub(0x15).as<decltype(PtrToHandle)>();
+      });
+
+      auto mem_region = scanner::Module(nullptr);
+      main_batch.run(mem_region);
+
+      /**
+		 * Freemode thread restorer through VM patch
+		*/
+
+      LOG_DEBUG("freemode patch 1");
+      if (auto pat1 = mem_region.scan(xorstr_("3b 0a 0f 83 ? ? ? ? 48 ff c7"))) {
+        *pat1.add(2).as<uint32_t*>() = 0xc9310272;
+        *pat1.add(6).as<uint16_t*>() = 0x9090;
+      }
+
+      LOG_DEBUG("freemode patch 2");
+      if (auto pat2 = mem_region.scan(xorstr_("3b 0a 0f 83 ? ? ? ? 49 03 fa"))) {
+        *pat2.add(2).as<uint32_t*>() = 0xc9310272;
+        *pat2.add(6).as<uint16_t*>() = 0x9090;
+      }
+
+      LOG_DEBUG("freemode patch 3");
+      auto pat3 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 48 ff c7"));
+      for (auto& handle : pat3) {
+        *handle.add(2).as<uint32_t*>() = 0xd2310272;
+        *handle.add(6).as<uint16_t*>() = 0x9090;
+      }
+
+      LOG_DEBUG("freemode patch 4");
+      auto pat4 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 49 03 fa"));
+      for (auto& handle : pat4) {
+        *handle.add(2).as<uint32_t*>() = 0xd2310272;
+        *handle.add(6).as<uint16_t*>() = 0x9090;
+      }
     }
 
     Pointers::~Pointers() {
+      *spectator_check_ = 0x6A75;
+
       kPOINTERS = nullptr;
     }
   }

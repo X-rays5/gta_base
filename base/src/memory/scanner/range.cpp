@@ -43,6 +43,10 @@ namespace gta_base {
         return nullptr;
       }
 
+      Handle Range::scan(char* sig) {
+        return scan(Pattern(sig));
+      }
+
       std::vector<Handle> Range::scan_all(Pattern const &sig) {
         std::vector<Handle> result;
 
@@ -55,6 +59,10 @@ namespace gta_base {
         }
 
         return std::move(result);
+      }
+
+      std::vector<Handle> Range::scan_all(char* sig) {
+        return scan_all(Pattern(sig));
       }
     }
   }

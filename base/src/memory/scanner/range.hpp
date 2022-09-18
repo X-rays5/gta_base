@@ -17,7 +17,9 @@ namespace gta_base {
         bool contains(Handle h);
 
         Handle scan(Pattern const& sig);
+        Handle scan(char* sig);
         std::vector<Handle> scan_all(Pattern const& sig);
+        std::vector<Handle> scan_all(char* sig);
       protected:
         Handle base_;
         std::size_t size_;
