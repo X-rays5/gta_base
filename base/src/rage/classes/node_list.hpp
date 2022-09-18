@@ -5,7 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_NODE_LIST_HPP
 #define GTA_BASE_NODE_LIST_HPP
-#include "base.hpp"
+#include <base/datBase.hpp>
 
 namespace rage
 {
