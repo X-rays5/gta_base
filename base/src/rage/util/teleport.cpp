@@ -10,14 +10,18 @@
 #include "streaming.hpp"
 #include "../../misc/globals.hpp"
 #include "../../ui/notification/notification.hpp"
+#include "entity.hpp"
 
 namespace rage {
   namespace util {
     bool Teleport(rage::fvector3 coords, bool with_vehicle) {
-      coords = (fvector3)LoadGroundAtCoord(coords);
-      if (GetLocalVehicle() && with_vehicle) {
-        PED::SET_PED_COORDS_KEEP_VEHICLE(gta_base::globals::local_player.ped_id, coords.x, coords.y, coords.z);
-        VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(PED::GET_VEHICLE_PED_IS_IN(gta_base::globals::local_player.ped_id, false), 5.f);
+      if (PED::IS_PED_IN_ANY_VEHICLE(gta_base::globals::local_player.ped_id, false) && with_vehicle) {
+        auto veh = PED::GET_VEHICLE_PED_IS_IN(gta_base::globals::local_player.ped_id, false);
+        if (!TakeControlOfEntity(veh)) {
+          gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kInfo, "Teleport", "Failed to take control of vehicle. Teleporting might not work.");
+        }
+        ENTITY::SET_ENTITY_COORDS(veh, coords.x, coords.y, coords.z, 1, 0, 0, 1);
+        VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(veh, 5.f);
         return true;
       } else if (GetLocalPed()) {
         ENTITY::SET_ENTITY_COORDS(gta_base::globals::local_player.ped_id, coords.x, coords.y, coords.z, 1, 0, 0, 0);
@@ -44,9 +48,6 @@ namespace rage {
         return false;
       }
 
-      scrVector veh_coords = ENTITY::GET_ENTITY_COORDS(veh_id, true);
-      LoadGroundAtCoord(veh_coords);
-
       PED::SET_PED_INTO_VEHICLE(gta_base::globals::local_player.ped_id, veh_id, seat_idx);
 
       return true;
@@ -59,13 +60,13 @@ namespace rage {
         gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportToBlip", "Failed to get blip location");
       }
 
-      return Teleport((fvector3)location, with_vehicle);
+      return Teleport((fvector3)LoadGroundAtCoord(location), with_vehicle);
     }
 
     bool TeleportToWayPoint(bool with_vehicle) {
       auto coords = GetWaypointLocation();
       if (coords) {
-        return Teleport((fvector3)coords, with_vehicle);
+        return Teleport((fvector3)LoadGroundAtCoord(coords), with_vehicle);
       }
 
       gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportToWayPoint", "Failed to get waypoint location");
@@ -75,7 +76,7 @@ namespace rage {
     bool TeleportToObjective(bool with_vehicle) {
       auto coords = GetObjectiveLocation();
       if (coords) {
-        return Teleport((fvector3)coords, with_vehicle);
+        return Teleport((fvector3)LoadGroundAtCoord(coords), with_vehicle);
       }
 
       gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportToObjective", "Failed to get objective location");
