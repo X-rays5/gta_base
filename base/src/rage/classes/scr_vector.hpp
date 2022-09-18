@@ -5,18 +5,21 @@
 #pragma once
 #ifndef GTA_BASE_SCR_VECTOR_HPP
 #define GTA_BASE_SCR_VECTOR_HPP
+#include <rage/vector.hpp>
+
 namespace rage
 {
 
 #pragma pack(push, 1)
-  class scrVector
-  {
+  class scrVector {
   public:
     scrVector() = default;
 
     [[maybe_unused]] scrVector(float x, float y, float z) :
       x(x), y(y), z(z)
     {}
+
+    scrVector(fvector3& vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
     scrVector operator+(const scrVector& other) const
     {
@@ -61,18 +64,27 @@ namespace rage
 
       return *this;
     }
+
+    explicit operator bool() const {
+      return x != 0.0f || y != 0.0f || z != 0.0f;
+    }
+
+    explicit operator fvector3() const {
+      return {x,y,z};
+    }
+
   public:
     float x{};
   private:
-    char m_padding1[0x04];
+    char m_padding1[0x04]{};
   public:
     float y{};
   private:
-    char m_padding2[0x04];
+    char m_padding2[0x04]{};
   public:
     float z{};
   private:
-    char m_padding3[0x04];
+    char m_padding3[0x04]{};
   };
 #pragma pack(pop)
 }

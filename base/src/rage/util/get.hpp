@@ -29,6 +29,14 @@ namespace rage {
     return nullptr;
   }
 
+  inline CVehicle* GetLocalVehicle() {
+    if (auto player_info = GetLocalPed()) {
+      return player_info->m_vehicle;
+    }
+
+    return nullptr;
+  }
+
   inline rlGamerInfo* GetLocalGamerInfo() {
     if (auto info = GetLocalPlayerInfo()) {
       return &info->m_net_player_data;
@@ -39,6 +47,14 @@ namespace rage {
 
   inline CNetworkPlayerMgr* GetNetworkPlayerMgr() {
     return *gta_base::memory::kPOINTERS->network_player_mgr_;
+  }
+
+  inline ::CNetGamePlayer* GetPlayerAtidx(int idx) {
+    if (auto player_mgr = GetNetworkPlayerMgr()) {
+      return &player_mgr->m_net_players[idx];
+    }
+
+    return nullptr;
   }
 
   inline ::CNetGamePlayer* GetLocalNetGamePlayer() {
