@@ -24,15 +24,15 @@ namespace gta_base {
       Manager();
       ~Manager();
 
-      inline void AddSubmenu(components::Submenus id, const std::string& name_key, components::Submenu::constructor_cb cb) {
-        auto submenu_ptr = std::make_shared<components::Submenu>(name_key, std::move(cb));
+      inline void AddSubmenu(Submenus id, const std::string& name_key, Submenu::constructor_cb cb) {
+        auto submenu_ptr = std::make_shared<Submenu>(name_key, std::move(cb));
         submenus_[id] = submenu_ptr;
         if (submenus_stack_.empty()) {
           submenus_stack_.push(submenu_ptr);
         }
       }
 
-      inline void SetActiveSubmenu(components::Submenus id) {
+      inline void SetActiveSubmenu(Submenus id) {
         auto entry = submenus_.find(id);
 
         if (entry != submenus_.end()) {
@@ -40,7 +40,7 @@ namespace gta_base {
         }
       }
 
-      inline std::shared_ptr<components::Submenu> GetSubmenu(components::Submenus id) {
+      inline std::shared_ptr<Submenu> GetSubmenu(Submenus id) {
         auto entry = submenus_.find(id);
 
         if (entry != submenus_.end()) {
@@ -85,9 +85,9 @@ namespace gta_base {
     private:
       float scrollbar_offset = 0.002f;
 
-      using submenu_ptr_t = std::shared_ptr<components::Submenu>;
+      using submenu_ptr_t = std::shared_ptr<Submenu>;
 
-      robin_hood::unordered_map<components::Submenus, submenu_ptr_t> submenus_{};
+      robin_hood::unordered_map<Submenus, submenu_ptr_t> submenus_{};
       std::stack<submenu_ptr_t> submenus_stack_{};
       std::shared_ptr<d3d::draw::DrawList> draw_list_;
 
@@ -121,10 +121,10 @@ namespace gta_base {
       inline void DrawBottomBar(size_t option_count);
       inline void DrawScrollBar(size_t option_count, int current_option);
       inline void DrawScrollBarScroller(float target_pos, float scroller_y_size);
-      inline void DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
+      inline void DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
       inline bool DrawScroller(float target_pos);
       inline void DrawDescriptionText(const std::string& description, size_t option_count) const;
-      inline void HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub);
+      inline void HandleKeyInput(std::shared_ptr<Submenu>& cur_sub);
 
       inline void ResetSmoothScrolling() {
         scroller_reset_ = true;

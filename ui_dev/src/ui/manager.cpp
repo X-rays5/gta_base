@@ -91,7 +91,7 @@ namespace ui {
     draw_list_->AddCommand(util::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color.load()));
   }
 
-  void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
+  void Manager::DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
     float pos = y_base + (y_size_option * option_pos) + y_size_top_bar;
     float text_pos = pos - (y_size_option / 4);
 
@@ -117,9 +117,9 @@ namespace ui {
       if (!name.empty())
         draw_list_->AddCommand(DrawTextLeft(text_pos, text_color_tmp, name.data()));
 
-      if (option->HasFlag(components::OptionFlag::kToggle)) {
+      if (option->HasFlag(OptionFlag::kToggle)) {
         std::string filepath;
-        if (option->HasFlag(components::OptionFlag::kToggled)) {
+        if (option->HasFlag(OptionFlag::kToggled)) {
           filepath = selected ? "shop_box_tickb.png" : "shop_box_tick.png";
         } else {
           filepath = selected ? "shop_box_blankb.png" : "shop_box_blank.png";
@@ -169,37 +169,37 @@ namespace ui {
     draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color.load(), description_tmp, false));
   }
 
-  void Manager::HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub) {
+  void Manager::HandleKeyInput(std::shared_ptr<Submenu>& cur_sub) {
     if (input_left_->Get()) {
-      cur_sub->HandleKey(components::KeyInput::kLeft);
+      cur_sub->HandleKey(KeyInput::kLeft);
     } else if (input_right_->Get()) {
-      cur_sub->HandleKey(components::KeyInput::kRight);
+      cur_sub->HandleKey(KeyInput::kRight);
     } else if (input_up_->Get()) {
       scroller_prev_idx_ = cur_sub->GetSelectedOption();
-      cur_sub->HandleKey(components::KeyInput::kUp);
+      cur_sub->HandleKey(KeyInput::kUp);
 
       // The only way this can result in an infinite loop is by being a retard.
       auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-      while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+      while(cur_opt->HasFlag(OptionFlag::kLabel)) {
         ResetSmoothScrolling();
         scroller_prev_idx_ = cur_sub->GetSelectedOption();
-        cur_sub->HandleKey(components::KeyInput::kUp);
+        cur_sub->HandleKey(KeyInput::kUp);
         cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
       }
     } else if (input_down_->Get()) {
       scroller_prev_idx_ = cur_sub->GetSelectedOption();
-      cur_sub->HandleKey(components::KeyInput::kDown);
+      cur_sub->HandleKey(KeyInput::kDown);
 
       // The only way this can result in an infinite loop is by being a retard.
       auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-      while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+      while(cur_opt->HasFlag(OptionFlag::kLabel)) {
         ResetSmoothScrolling();
         scroller_prev_idx_ = cur_sub->GetSelectedOption();
-        cur_sub->HandleKey(components::KeyInput::kDown);
+        cur_sub->HandleKey(KeyInput::kDown);
         cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
       }
     } else if (input_return_->Get()) {
-      cur_sub->HandleKey(components::KeyInput::kReturn);
+      cur_sub->HandleKey(KeyInput::kReturn);
       cur_sub = submenus_stack_.top();
       ResetSmoothScrolling();
     } else if (input_back_->Get()) {

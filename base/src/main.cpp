@@ -67,7 +67,7 @@ void BaseMain() {
   auto ui_manager_inst = std::make_unique<ui::Manager>();
   LOG_INFO("UI Manager initialized");
 
-  auto keyboard_manager_inst = std::make_unique<ui::components::keyboard::Manager>();
+  auto keyboard_manager_inst = std::make_unique<ui::keyboard::Manager>();
   LOG_INFO("Keyboard Manager initialized");
 
   auto discord_inst = std::make_unique<rpc::Discord>();

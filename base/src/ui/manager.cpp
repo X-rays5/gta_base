@@ -101,7 +101,7 @@ namespace gta_base {
       draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color));
     }
 
-    void Manager::DrawOption(const std::shared_ptr<components::option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
+    void Manager::DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
       float pos = y_base + (y_size_option * option_pos) + y_size_top_bar;
       float text_pos = pos - (y_size_option / 4);
 
@@ -128,8 +128,8 @@ namespace gta_base {
         if (!name.empty())
           draw_list_->AddCommand(DrawTextLeft(text_pos, text_color_tmp, name));
 
-        if (option->HasFlag(components::OptionFlag::kToggle)) {
-          bool toggled = option->HasFlag(components::OptionFlag::kToggled);
+        if (option->HasFlag(OptionFlag::kToggle)) {
+          bool toggled = option->HasFlag(OptionFlag::kToggled);
 
           auto toggle_text = toggled ? ICON_FA_CHECK : ICON_FA_XMARK;
           draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, toggle_text));
@@ -178,37 +178,37 @@ namespace gta_base {
       draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color, description_tmp, false));
     }
 
-    void Manager::HandleKeyInput(std::shared_ptr<components::Submenu>& cur_sub) {
+    void Manager::HandleKeyInput(std::shared_ptr<Submenu>& cur_sub) {
       if (input_left_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kLeft);
+        cur_sub->HandleKey(KeyInput::kLeft);
       } else if (input_right_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kRight);
+        cur_sub->HandleKey(KeyInput::kRight);
       } else if (input_up_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kUp);
+        cur_sub->HandleKey(KeyInput::kUp);
 
         // The only way this can result in an infinite loop is if the developer is stupid.
         auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+        while(cur_opt->HasFlag(OptionFlag::kLabel)) {
           ResetSmoothScrolling();
-          cur_sub->HandleKey(components::KeyInput::kUp);
+          cur_sub->HandleKey(KeyInput::kUp);
           cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
         }
       } else if (input_down_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kDown);
+        cur_sub->HandleKey(KeyInput::kDown);
 
         // The only way this can result in an infinite loop is if the developer is stupid.
         auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-        while(cur_opt->HasFlag(components::OptionFlag::kLabel)) {
+        while(cur_opt->HasFlag(OptionFlag::kLabel)) {
           ResetSmoothScrolling();
-          cur_sub->HandleKey(components::KeyInput::kDown);
+          cur_sub->HandleKey(KeyInput::kDown);
           cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
         }
       } else if (input_return_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kReturn);
+        cur_sub->HandleKey(KeyInput::kReturn);
         cur_sub = submenus_stack_.top();
         ResetSmoothScrolling();
       } else if (input_back_->Get()) {
-        cur_sub->HandleKey(components::KeyInput::kBackspace);
+        cur_sub->HandleKey(KeyInput::kBackspace);
         if (submenus_stack_.size() > 1) {
           submenus_stack_.pop();
           cur_sub = submenus_stack_.top();
@@ -234,7 +234,7 @@ namespace gta_base {
           show_ui = !show_ui;
 
         if (show_ui) {
-          if (!components::keyboard::kMANAGER->KeyBoardActive())
+          if (!keyboard::kMANAGER->KeyBoardActive())
             HandleKeyInput(cur_sub);
 
           DrawHeader();

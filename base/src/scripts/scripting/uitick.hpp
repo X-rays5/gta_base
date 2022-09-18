@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_UITICK_HPP
 #define GTA_BASE_UITICK_HPP
-#include <string>
 #include "../../scriptmanager/base_script.hpp"
 
 namespace gta_base {
@@ -18,18 +17,6 @@ namespace gta_base {
 
       void Init() final;
       void RunTick() final;
-
-    private:
-      float test_value_f = 1;
-      float test_value_f_toggle_number = 1;
-      bool test_value_b_toggle_number = false;
-      bool test_value_b = false;
-      std::vector<std::string> test_value_v = {"test", "test2"};
-      std::size_t test_value_v_idx = 0;
-      bool test_value_b_toggle_list;
-      std::size_t test_value_v_idx_toggle_list;
-
-      float run_speed{};
     };
   }
 }

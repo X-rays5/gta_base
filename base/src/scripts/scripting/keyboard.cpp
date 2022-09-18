@@ -12,7 +12,7 @@ namespace gta_base {
     }
 
     void Keyboard::RunTick() {
-      ui::components::keyboard::kMANAGER->Tick();
+      ui::keyboard::kMANAGER->Tick();
     }
   }
 }

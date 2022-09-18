@@ -29,50 +29,50 @@ namespace ui {
 
     kMANAGER = std::make_unique<Manager>();
 
-    kMANAGER->AddSubmenu("Home", components::Submenus::Home, [](components::Submenu* sub){
-      sub->AddOption(components::option::SubmenuOption("TestScroll", "", components::Submenus::TestScroll));
-      sub->AddOption(components::option::SubmenuOption("Debug", "a short description a short description just a bit too long", components::Submenus::Debug));
-      sub->AddOption(components::option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", components::Submenus::Settings));
+    kMANAGER->AddSubmenu("Home", Submenus::Home, [](Submenu* sub){
+      sub->AddOption(option::SubmenuOption("TestScroll", "", Submenus::TestScroll));
+      sub->AddOption(option::SubmenuOption("Debug", "a short description a short description just a bit too long", Submenus::Debug));
+      sub->AddOption(option::SubmenuOption("Settings", "this is a really long description as you can see weep woop", Submenus::Settings));
     });
 
-    kMANAGER->AddSubmenu("TestScroll", components::Submenus::TestScroll, [](components::Submenu* sub){
+    kMANAGER->AddSubmenu("TestScroll", Submenus::TestScroll, [](Submenu* sub){
       for (int i = 0; i < 100; i++) {
-        sub->AddOption(components::option::ExecuteOption(std::format("test {}", i), "", []{}));
+        sub->AddOption(option::ExecuteOption(std::format("test {}", i), "", []{}));
       }
     });
 
-    kMANAGER->AddSubmenu("Debug", components::Submenus::Debug, [](components::Submenu* sub){
-      sub->AddOption(components::option::ExecuteOption("Hello World", "", []{
+    kMANAGER->AddSubmenu("Debug", Submenus::Debug, [](Submenu* sub){
+      sub->AddOption(option::ExecuteOption("Hello World", "", []{
         std::cout << "Hello World from the player submenu" << std::endl;
       }));
-      sub->AddOption(components::option::ExecuteOption("Test notify", "", []{
+      sub->AddOption(option::ExecuteOption("Test notify", "", []{
         kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "Test notify", "This is a test of the info notification. Seems to look pretty good");
         kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Test notify", "This is a test of the success notification. Seems to look pretty good");
         kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Test notify", "This is a test of the fail notification. Seems to look pretty good");
       }));
-      sub->AddOption(components::option::ExecuteOption("Test notify 2", "", []{
+      sub->AddOption(option::ExecuteOption("Test notify 2", "", []{
         kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "1 line");
         kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "2 line 2 line 2 line 2 line 2 line 2 line 2 line 2 line 2 line 2");
         kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line 3 line ");
       }));
-      sub->AddOption(components::option::LabelOption("Component examples"));
-      sub->AddOption(components::option::NumberOption("Test numberoption", "", &test_value_f, 0.5, 0, 10))->OnEvent([](components::Event event){
-        if (event == components::Event::kChange)
+      sub->AddOption(option::LabelOption("Component examples"));
+      sub->AddOption(option::NumberOption("Test numberoption", "", &test_value_f, 0.5, 0, 10))->OnEvent([](Event event){
+        if (event == Event::kChange)
           std::cout << test_value_f << std::endl;
       });
-      sub->AddOption(components::option::ToggleOption("Test toggleoption", "", &test_value_b));
-      sub->AddOption(components::option::ListOption("Test listoption", "", test_value_v_idx, test_value_v));
+      sub->AddOption(option::ToggleOption("Test toggleoption", "", &test_value_b));
+      sub->AddOption(option::ListOption("Test listoption", "", test_value_v_idx, test_value_v));
     });
 
-    kMANAGER->AddSubmenu("Settings", components::Submenus::Settings, [](components::Submenu* sub){
-      sub->AddOption(components::option::SubmenuOption("Unload", "", components::Submenus::UnloadConfirm));
+    kMANAGER->AddSubmenu("Settings", Submenus::Settings, [](Submenu* sub){
+      sub->AddOption(option::SubmenuOption("Unload", "", Submenus::UnloadConfirm));
     });
 
-    kMANAGER->AddSubmenu("Unload", components::Submenus::UnloadConfirm, [](components::Submenu* sub){
-      sub->AddOption(components::option::ExecuteOption("Yes", "", []{
+    kMANAGER->AddSubmenu("Unload", Submenus::UnloadConfirm, [](Submenu* sub){
+      sub->AddOption(option::ExecuteOption("Yes", "", []{
         // TODO: unload
       }));
-      sub->AddOption(components::option::ExecuteOption("No", "", []{
+      sub->AddOption(option::ExecuteOption("No", "", []{
         kMANAGER->PopSubmenu();
       }));
     });

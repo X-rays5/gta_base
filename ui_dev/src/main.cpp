@@ -80,9 +80,9 @@ int main(int, char**) {
   if (!ImGui::GetIO().Fonts->IsBuilt())
     ImGui::GetIO().Fonts->Build();
 
-  ui::components::keyboard::Manager key_mgr;
-  key_mgr.ShowKeyboard("Test", [](const std::string& text, ui::components::keyboard::Result res){
-    if (res == ui::components::keyboard::Result::kDone) {
+  ui::keyboard::Manager key_mgr;
+  key_mgr.ShowKeyboard("Test", [](const std::string& text, ui::keyboard::Result res){
+    if (res == ui::keyboard::Result::kDone) {
       std::cout << "success: " << text << std::endl;
     } else {
       std::cout << "cancel: " << text << std::endl;
