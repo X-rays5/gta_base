@@ -129,6 +129,9 @@ namespace gta_base {
         PtrToHandle = ptr.sub(0x15).as<decltype(PtrToHandle)>();
       });
 
+      main_batch.add(VAR_NAME(script_globals_), xorstr_("48 8D 15 ? ? ? ? 4C 8B C0 E8 ? ? ? ? 48 85 FF 48 89 1D"), [this](scanner::Handle ptr) {
+        script_globals_ = ptr.add(3).rip().as<decltype(script_globals_)>();
+      });
       auto mem_region = scanner::Module(nullptr);
       main_batch.run(mem_region);
 

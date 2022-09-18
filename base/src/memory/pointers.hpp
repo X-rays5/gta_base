@@ -83,6 +83,7 @@ namespace gta_base {
 
       using ptr_to_handle_t = Entity(*)(void* entity);
       ptr_to_handle_t PtrToHandle{};
+      std::int64_t** script_globals_{};
     };
     inline Pointers* kPOINTERS{};
   }
