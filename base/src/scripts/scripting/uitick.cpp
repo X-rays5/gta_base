@@ -22,6 +22,7 @@
 #include "../../rage/util/breakup_kick.hpp"
 #include "../../player_mgr/manager.hpp"
 #include "../../misc/settings.hpp"
+#include "../../rage/util/teleport.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -49,6 +50,16 @@ namespace gta_base {
         kMANAGER->AddSubmenu(Submenus::Player, "tab/title/self", [](Submenu* sub) {
           auto player = rage::GetLocalPed();
           sub->AddOption(option::SubmenuOption("tab/title/player_health", "", Submenus::PlayerHealth));
+          sub->AddOption(option::ExecuteOption("option/teleport_waypoint", "", []{
+            fiber::kPOOL->AddJob([]{
+              rage::util::TeleportToWayPoint(true);
+            });
+          }));
+          sub->AddOption(option::ExecuteOption("option/teleport_objective", "", []{
+            fiber::kPOOL->AddJob([]{
+              rage::util::TeleportToObjective(true);
+            });
+          }));
           sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "option/wanted_level/desc", &player->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
         });
 
@@ -85,6 +96,22 @@ namespace gta_base {
         });
 
         kMANAGER->AddSubmenu(components::Submenus::SelectedPlayer, "", [](Submenu* sub){
+          sub->AddOption(option::LabelOption("label/teleport_remote"));
+          sub->AddOption(option::ExecuteOption("option/teleport_to_selected", "", []{
+            fiber::kPOOL->AddJob([]{
+              rage::util::Teleport(kPLAYER_MGR->GetSelectedPlayer()->Ped()->m_position, true);
+            });
+          }));
+          sub->AddOption(option::ExecuteOption("option/teleport_into_selected_vehicle", "", []{
+            fiber::kPOOL->AddJob([]{
+              if (kPLAYER_MGR->GetSelectedPlayer()->Vehicle()) {
+                rage::util::TeleportIntoVehicle(memory::kPOINTERS->PtrToHandle(kPLAYER_MGR->GetSelectedPlayer()->Vehicle()));
+              } else {
+                kNOTIFICATIONS->Create(Notification::Type::kFail, "Teleport into vehicle error", "The selected player is currently not in a vehicle. You might be too far away");
+              }
+            });
+          }));
+          sub->AddOption(option::LabelOption("label/toxic_remote"));
           sub->AddOption(option::ExecuteOption("Kick", "", []{
             if (common::IsSessionStarted() && kPLAYER_MGR->GetSelectedPlayer() != kPLAYER_MGR->GetSelf()) {
               rage::BreakupKick(kPLAYER_MGR->GetSelectedPlayer());
