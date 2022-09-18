@@ -6,6 +6,7 @@
 #include "../../looped_game/self_globals.hpp"
 #include "../../looped_game/self_features.hpp"
 #include "../../looped_game/weapon.hpp"
+#include "../../looped_game/transition_state.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -16,6 +17,7 @@ namespace gta_base {
       looped_game::SetSelfGlobals();
       looped_game::SelfFeatures();
       looped_game::Weapons();
+      looped_game::TransitionState();
     }
   }
 }
