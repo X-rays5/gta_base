@@ -37,7 +37,7 @@ namespace gta_base {
       SwitchToFiber(og_fiber_);
     }
 
-    Script* Script::GetCur() {
+    Script* Script::GetCurr() {
       return static_cast<Script*>(GetFiberData());
     }
 

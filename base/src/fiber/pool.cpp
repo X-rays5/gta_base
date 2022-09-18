@@ -43,7 +43,7 @@ namespace gta_base {
     [[noreturn]] void Pool::FiberFunc() {
       while(true) {
         kPOOL->Tick();
-        Script::GetCur()->Yield();
+        Script::GetCurr()->Yield();
       }
     }
   }

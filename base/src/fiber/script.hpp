@@ -23,7 +23,7 @@ namespace gta_base {
 
       void Tick();
       void Yield(std::uint64_t amount = 0);
-      static Script* GetCur();
+      static Script* GetCurr();
       static void ScriptExceptHandler(PEXCEPTION_POINTERS e);
 
     private:
