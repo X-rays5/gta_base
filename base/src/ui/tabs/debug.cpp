@@ -21,7 +21,7 @@ namespace gta_base {
 
       void DebugTab() {
         kMANAGER->AddSubmenu(Submenus::Debug, "Debug", [](Submenu* sub){
-          sub->AddOption(option::SubmenuOption("Test Components", "", Submenus::TestComponents));
+          sub->AddOption(option::SubmenuOption("Test Components", "", Submenus::DebugTestComponents));
           sub->AddOption(option::ExecuteOption("Test notify", "", []{
             kNOTIFICATIONS->Create(Notification::Type::kInfo, "Test notify", "This is a test of the info notification. Seems to look pretty good");
             kNOTIFICATIONS->Create(Notification::Type::kSuccess, "Test notify", "This is a test of the success notification. Seems to look pretty good");
@@ -34,7 +34,7 @@ namespace gta_base {
           }));
         });
 
-        kMANAGER->AddSubmenu(Submenus::TestComponents, "Test Components", [](Submenu* sub){
+        kMANAGER->AddSubmenu(Submenus::DebugTestComponents, "Test Components", [](Submenu* sub){
           sub->AddOption(option::SubmenuOption("Test SubmenuOption", "", Submenus::Home));
           sub->AddOption(option::LabelOption("Test LabelOption"));
           sub->AddOption(option::ExecuteOption("Test ExecuteOption", "", []{

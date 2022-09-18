@@ -3,14 +3,13 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_MAIN_TAB_HPP
-#define GTA_BASE_MAIN_TAB_HPP
-
+#ifndef GTA_BASE_NETWORK_HPP
+#define GTA_BASE_NETWORK_HPP
 namespace gta_base {
   namespace ui {
     namespace tabs {
-      void MainTab();
+      void NetworkTab();
     }
   }
 }
-#endif //GTA_BASE_MAIN_TAB_HPP
+#endif //GTA_BASE_NETWORK_HPP

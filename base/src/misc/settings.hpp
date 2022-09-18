@@ -10,9 +10,16 @@
 
 
 namespace gta_base {
+  struct SettingsPlayerWeapon {
+    bool infinite_ammo = false;
+    bool infinite_clip = false;
+  };
+
   struct SettingsPlayer {
     bool god_mode = false;
     bool semi_god_mode = false;
+    bool never_wanted = false;
+    SettingsPlayerWeapon weapon;
   };
 
   struct Settings {

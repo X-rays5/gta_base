@@ -9,13 +9,23 @@
 #include <network/CNetGamePlayer.hpp>
 #include <network/CNetworkPlayerMgr.hpp>
 #include <network/Network.hpp>
+#include <entities/fwEntity.hpp>
 #include "../../memory/pointers.hpp"
 #include "../../misc/common.hpp"
+#include "../types.hpp"
 
 namespace rage {
   inline CPed* GetLocalPed() {
     if (auto ped_factory = *gta_base::memory::kPOINTERS->ped_factory_) {
       return ped_factory->m_local_ped;
+    }
+
+    return nullptr;
+  }
+
+  inline CPedWeaponManager* GetLocalWeaponManager() {
+    if (auto ped = GetLocalPed()) {
+      return ped->m_weapon_manager;
     }
 
     return nullptr;
@@ -71,6 +81,10 @@ namespace rage {
       network += sizeof(rage::rlSessionInfo);
 
     return (Network*)network;
+  }
+
+  inline Entity PtrToHandle(rage::fwEntity* ent) {
+    return gta_base::memory::kPOINTERS->PtrToHandle(ent);
   }
 }
 #endif //GTA_BASE_GET_HPP

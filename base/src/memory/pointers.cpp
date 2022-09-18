@@ -118,20 +118,23 @@ namespace gta_base {
       });
 
       // Request Control of Entity PATCH
-      main_batch.add(VAR_NAME(spectator_check_), xorstr_("48 89 5C 24 ? 57 48 83 EC 20 8B D9 E8 ? ? ? ? ? ? ? ? 8B CB"), [this](scanner::Handle ptr)
-      {
+      main_batch.add(VAR_NAME(spectator_check_), xorstr_("48 89 5C 24 ? 57 48 83 EC 20 8B D9 E8 ? ? ? ? ? ? ? ? 8B CB"), [this](scanner::Handle ptr){
         spectator_check_ = ptr.add(0x13).as<decltype(spectator_check_)>();
         *spectator_check_ = 0x9090;
       });
 
-      main_batch.add(VAR_NAME(PtrToHandle), xorstr_("48 8B F9 48 83 C1 10 33 DB"), [this](scanner::Handle ptr)
-      {
+      main_batch.add(VAR_NAME(PtrToHandle), xorstr_("48 8B F9 48 83 C1 10 33 DB"), [this](scanner::Handle ptr) {
         PtrToHandle = ptr.sub(0x15).as<decltype(PtrToHandle)>();
+      });
+
+      main_batch.add(VAR_NAME(blame_explode_bypass_), xorstr_("0F 85 ? ? ? ? 48 8B 05 ? ? ? ? 48 8B 48 08 E8"), [this](scanner::Handle ptr) {
+        blame_explode_bypass_ = ptr.as<decltype(blame_explode_bypass_)>();
       });
 
       main_batch.add(VAR_NAME(script_globals_), xorstr_("48 8D 15 ? ? ? ? 4C 8B C0 E8 ? ? ? ? 48 85 FF 48 89 1D"), [this](scanner::Handle ptr) {
         script_globals_ = ptr.add(3).rip().as<decltype(script_globals_)>();
       });
+
       auto mem_region = scanner::Module(nullptr);
       main_batch.run(mem_region);
 

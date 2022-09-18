@@ -10,15 +10,23 @@
 
 namespace gta_base {
   namespace looped_game {
-    void GodMode() {
+    inline void GodMode() {
 
     }
 
-    void SemiGod() {
+    inline void SemiGod() {
       fiber::kPOOL->AddJob([]{
         auto player = rage::GetLocalPed();
         player->m_health = ENTITY::GET_ENTITY_MAX_HEALTH(globals::local_player.ped_id);
       });
+    }
+
+    inline void NeverWanted() {
+      if (auto player_info = rage::GetLocalPlayerInfo()) {
+        player_info->m_is_wanted = false;
+        player_info->m_wanted_level = 0;
+        player_info->m_wanted_level_display = 0;
+      }
     }
 
     void SelfFeatures() {
@@ -28,6 +36,8 @@ namespace gta_base {
         if (kSETTINGS.player.semi_god_mode)
           SemiGod();
       }
+      if (kSETTINGS.player.never_wanted)
+        NeverWanted();
     }
   }
 }

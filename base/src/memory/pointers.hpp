@@ -83,6 +83,12 @@ namespace gta_base {
 
       using ptr_to_handle_t = Entity(*)(void* entity);
       ptr_to_handle_t PtrToHandle{};
+
+      PVOID blame_explode_bypass_{};
+      void EnableBlameExplode(bool enable) {
+        *(unsigned short*)blame_explode_bypass_ = enable ? 0xE990 : 0x850F;
+      }
+
       std::int64_t** script_globals_{};
     };
     inline Pointers* kPOINTERS{};

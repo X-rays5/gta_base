@@ -5,32 +5,37 @@
 #include "selected_player.hpp"
 #include "tab_includes.hpp"
 #include "../../rage/util/teleport.hpp"
+#include "../../rage/util/entity.hpp"
+#include "../../rage/util/streaming.hpp"
+#include "../../rage/enums.hpp"
 
 namespace gta_base {
   namespace ui {
     namespace tabs {
       void SelectedPlayerTab() {
-        kMANAGER->AddSubmenu(Submenus::PlayerList, "tab/title/player_list", [](Submenu* sub){
+        kMANAGER->AddSubmenu(Submenus::NetworkPlayerList, "tab/title/player_list", [](Submenu* sub){
           sub->AddOption(option::LabelOption(fmt::format("Players: {}", kPLAYER_MGR->Size())));
           kPLAYER_MGR->Iterate(true, [&](const std::string& name, const std::shared_ptr<player_mgr::Player>& player){
-            sub->AddOption(option::SubmenuOption(name, "", Submenus::SelectedPlayer, [&]{
+            sub->AddOption(option::SubmenuOption(name, "", Submenus::PlayerListSelectedPlayer, [&]{
               kPLAYER_MGR->SetSelectedPlayer(player);
-              kMANAGER->GetSubmenu(Submenus::SelectedPlayer)->SetNameKey(player->Name());
+              kMANAGER->GetSubmenu(Submenus::PlayerListSelectedPlayer)->SetNameKey(player->Name());
             }));
           });
         });
 
-        kMANAGER->AddSubmenu(Submenus::SelectedPlayer, "", [](Submenu* sub){
+        kMANAGER->AddSubmenu(Submenus::PlayerListSelectedPlayer, "", [](Submenu* sub){
           sub->AddOption(option::LabelOption("label/teleport_remote"));
           sub->AddOption(option::ExecuteOption("option/teleport_to_selected", "", []{
             fiber::kPOOL->AddJob([]{
-              rage::util::Teleport(kPLAYER_MGR->GetSelectedPlayer()->Ped()->m_position, true);
+              auto target = rage::util::LoadGroundAtCoord(kPLAYER_MGR->GetSelectedPlayer()->Ped()->m_position);
+              rage::util::Teleport((rage::fvector3)target, true);
             });
           }));
           sub->AddOption(option::ExecuteOption("option/teleport_into_selected_vehicle", "", []{
             fiber::kPOOL->AddJob([]{
-              if (kPLAYER_MGR->GetSelectedPlayer()->Vehicle()) {
-                rage::util::TeleportIntoVehicle(memory::kPOINTERS->PtrToHandle(kPLAYER_MGR->GetSelectedPlayer()->Vehicle()));
+              Ped target_ped = rage::PtrToHandle(kPLAYER_MGR->GetSelectedPlayer()->Ped());
+              if (PED::IS_PED_IN_ANY_VEHICLE(target_ped, false)) {
+                rage::util::TeleportIntoVehicle(PED::GET_VEHICLE_PED_IS_IN(target_ped, false));
               } else {
                 kNOTIFICATIONS->Create(Notification::Type::kFail, "Teleport into vehicle error", "The selected player is currently not in a vehicle. You might be too far away");
               }

@@ -13,6 +13,26 @@ namespace gta_base {
         kMANAGER->AddSubmenu(Submenus::Player, "tab/title/self", [](Submenu* sub) {
           auto player = rage::GetLocalPed();
           sub->AddOption(option::SubmenuOption("tab/title/player_health", "", Submenus::PlayerHealth));
+          sub->AddOption(option::ExecuteOption("option/teleport_to_last_vehicle", "", []{
+            fiber::kPOOL->AddJob([]{
+              Vehicle last_vehicle = PED::GET_VEHICLE_PED_IS_IN(globals::local_player.ped_id, true);
+              if (!PED::IS_PED_IN_ANY_VEHICLE(globals::local_player.ped_id, false) && ENTITY::IS_ENTITY_A_VEHICLE(last_vehicle)) {
+                rage::util::Teleport((rage::fvector3)ENTITY::GET_ENTITY_COORDS(last_vehicle, false), true);
+              } else {
+                kNOTIFICATIONS->Create(Notification::Type::kFail, "Teleport", "Failed to find last vehicle");
+              }
+            });
+          }));
+          sub->AddOption(option::ExecuteOption("option/teleport_into_last_vehicle", "", []{
+            fiber::kPOOL->AddJob([]{
+              Vehicle last_vehicle = PED::GET_VEHICLE_PED_IS_IN(globals::local_player.ped_id, true);
+              if (!PED::IS_PED_IN_ANY_VEHICLE(globals::local_player.ped_id, false) && ENTITY::IS_ENTITY_A_VEHICLE(last_vehicle)) {
+                rage::util::TeleportIntoVehicle(last_vehicle);
+              } else {
+                kNOTIFICATIONS->Create(Notification::Type::kFail, "Teleport", "Failed to find last vehicle");
+              }
+            });
+          }));
           sub->AddOption(option::ExecuteOption("option/teleport_waypoint", "", []{
             fiber::kPOOL->AddJob([]{
               rage::util::TeleportToWayPoint(true);
@@ -23,7 +43,8 @@ namespace gta_base {
               rage::util::TeleportToObjective(true);
             });
           }));
-          sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "option/wanted_level/desc", &player->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+          sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "", &player->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+          sub->AddOption(option::ToggleOption("option/never_wanted", "", &kSETTINGS.player.never_wanted));
         });
 
         kMANAGER->AddSubmenu(Submenus::PlayerHealth, "tab/title/player_health", [](Submenu* sub){

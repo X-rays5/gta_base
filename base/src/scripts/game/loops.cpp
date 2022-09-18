@@ -5,6 +5,7 @@
 #include "loops.hpp"
 #include "../../looped_game/self_globals.hpp"
 #include "../../looped_game/self_features.hpp"
+#include "../../looped_game/weapon.hpp"
 
 namespace gta_base {
   namespace scripts {
@@ -14,6 +15,7 @@ namespace gta_base {
     void Loops::RunTick() {
       looped_game::SetSelfGlobals();
       looped_game::SelfFeatures();
+      looped_game::Weapons();
     }
   }
 }

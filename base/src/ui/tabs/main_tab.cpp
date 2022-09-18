@@ -6,10 +6,11 @@
 #include "tab_includes.hpp"
 #include "debug.hpp"
 #include "misc.hpp"
-#include "selected_player.hpp"
+#include "network.hpp"
 #include "self.hpp"
 #include "settings.hpp"
 #include "world.hpp"
+#include "weapon.hpp"
 
 namespace gta_base {
   namespace ui {
@@ -17,22 +18,22 @@ namespace gta_base {
       void MainTab() {
         kMANAGER->AddSubmenu(Submenus::Home, "tab/title/home", [](Submenu* sub){
           sub->AddOption(option::SubmenuOption("tab/title/self", "", Submenus::Player));
-          if (common::IsSessionStarted()) {
-            sub->AddOption(option::SubmenuOption("tab/title/player_list", "", Submenus::PlayerList));
-          }
+          sub->AddOption(option::SubmenuOption("tab/title/weapon", "", Submenus::Weapon));
+          sub->AddOption(option::SubmenuOption("tab/title/network", "", Submenus::Network));
+          sub->AddOption(option::SubmenuOption("tab/title/misc", "", Submenus::Misc));
+          sub->AddOption(option::SubmenuOption("tab/title/setting", "", Submenus::Settings));
 #ifndef NDEBUG
           sub->AddOption(option::SubmenuOption("Debug", "", Submenus::Debug));
 #endif
-          sub->AddOption(option::SubmenuOption("tab/title/misc", "", Submenus::Misc));
-          sub->AddOption(option::SubmenuOption("tab/title/setting", "", Submenus::Settings));
         });
 
         DebugTab();
         MiscTab();
-        SelectedPlayerTab();
+        NetworkTab();
         SelfTab();
         SettingsTab();
         WorldTab();
+        WeaponsTab();
       }
     }
   }

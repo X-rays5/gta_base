@@ -4,6 +4,7 @@
 
 #include "misc.hpp"
 #include "tab_includes.hpp"
+#include "../../rage/util/session_switcher.hpp"
 
 namespace gta_base {
   namespace ui {
