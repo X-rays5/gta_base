@@ -132,7 +132,7 @@ namespace gta_base {
           bool toggled = option->HasFlag(OptionFlag::kToggled);
 
           auto toggle_text = toggled ? ICON_FA_CHECK : ICON_FA_XMARK;
-          draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, toggle_text));
+          draw_list_->AddCommand(DrawTextRight(text_pos + (d3d::draw::CalcTextSize(nullptr, font_size, " ").y / 4), text_color_tmp, toggle_text));
           draw_list_->AddCommand(d3d::draw::Text({(x_base + x_size) - 0.01f, text_pos}, text_color_tmp, right_text, true, true, font_size));
         } else if (!right_text.empty()) {
           draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));
