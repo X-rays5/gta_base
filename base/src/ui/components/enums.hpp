@@ -9,47 +9,45 @@
 
 namespace gta_base {
   namespace ui {
-    namespace components {
-      enum class Submenus {
-        Home,
-        Player,
-        PlayerHealth,
-        PlayerList,
-        SelectedPlayer,
-        Debug,
-        TestComponents,
-        Misc,
-        Settings,
-        Theme,
-        UnloadConfirm,
-      };
+    enum class Submenus {
+      Home,
+      Player,
+      PlayerHealth,
+      PlayerList,
+      SelectedPlayer,
+      Debug,
+      TestComponents,
+      Misc,
+      Settings,
+      Theme,
+      UnloadConfirm,
+    };
 
-      enum class OptionFlag {
-        kDisabled,
-        kRightIcon,
-        kRightText,
-        kSubmenuLink,
-        kHotkeyable,
-        kLabel,
-        kToggle,
-        kToggled
-      };
+    enum class OptionFlag {
+      kDisabled,
+      kRightIcon,
+      kRightText,
+      kSubmenuLink,
+      kHotkeyable,
+      kLabel,
+      kToggle,
+      kToggled
+    };
 
-      enum class KeyInput {
-        kUp,
-        kDown,
-        kLeft,
-        kRight,
-        kReturn,
-        kBackspace,
-        kHotkey,
-      };
+    enum class KeyInput {
+      kUp,
+      kDown,
+      kLeft,
+      kRight,
+      kReturn,
+      kBackspace,
+      kHotkey,
+    };
 
-      enum class Event {
-        kSelect,
-        kChange
-      };
-    }// namespace components
+    enum class Event {
+      kSelect,
+      kChange
+    };
   }// namespace ui
 }
 #endif //GTA_BASE_ENUMS_HPP

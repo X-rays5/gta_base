@@ -10,27 +10,25 @@
 
 namespace gta_base {
   namespace ui {
-    namespace components {
-      namespace option {
-        class LabelOption : public BaseOption {
-        public:
-          explicit LabelOption(const std::string& label_key) {
-            center_text_key_ = label_key;
-          }
+    namespace option {
+      class LabelOption : public BaseOption {
+      public:
+        explicit LabelOption(const std::string& label_key) {
+          center_text_key_ = label_key;
+        }
 
-          void HandleKey(KeyInput key) final {
+        void HandleKey(KeyInput key) final {
 
-          }
+        }
 
-          bool HasFlag(OptionFlag flag) final {
-            if (flag == OptionFlag::kLabel) {
-              return true;
-            } else {
-              return false;
-            }
+        bool HasFlag(OptionFlag flag) final {
+          if (flag == OptionFlag::kLabel) {
+            return true;
+          } else {
+            return false;
           }
-        };
-      }
+        }
+      };
     }
   }
 }

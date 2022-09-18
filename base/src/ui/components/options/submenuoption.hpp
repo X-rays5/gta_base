@@ -13,34 +13,32 @@
 
 namespace gta_base {
   namespace ui {
-    namespace components {
-      namespace option {
-        class SubmenuOption : public BaseOption {
-        public:
-          using action_t = std::function<void()>;
+    namespace option {
+      class SubmenuOption : public BaseOption {
+      public:
+        using action_t = std::function<void()>;
 
-          SubmenuOption(const std::string& name_key, const std::string& description_key, Submenus sub_id, action_t action = nullptr) :
-              BaseOption(name_key, description_key, "", ">", "", nullptr), sub_id_(sub_id), action_(std::move(action))
-              {}
+        SubmenuOption(const std::string& name_key, const std::string& description_key, Submenus sub_id, action_t action = nullptr) :
+          BaseOption(name_key, description_key, "", ">", "", nullptr), sub_id_(sub_id), action_(std::move(action))
+        {}
 
-          void HandleKey(KeyInput key) final {
-            if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
-              kMANAGER->SetActiveSubmenu(sub_id_);
-              if (action_) {
-                std::invoke(action_);
-              }
+        void HandleKey(KeyInput key) final {
+          if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
+            kMANAGER->SetActiveSubmenu(sub_id_);
+            if (action_) {
+              std::invoke(action_);
             }
           }
+        }
 
-          bool HasFlag(OptionFlag flag) final {
-            return flag == OptionFlag::kSubmenuLink || flag == OptionFlag::kRightText || flag == OptionFlag::kHotkeyable;
-          }
+        bool HasFlag(OptionFlag flag) final {
+          return flag == OptionFlag::kSubmenuLink || flag == OptionFlag::kRightText || flag == OptionFlag::kHotkeyable;
+        }
 
-        private:
-          Submenus sub_id_;
-          action_t action_;
-        };
-      }
+      private:
+        Submenus sub_id_;
+        action_t action_;
+      };
     }
   }
 }

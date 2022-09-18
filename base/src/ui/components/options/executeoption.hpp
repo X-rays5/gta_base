@@ -12,42 +12,40 @@
 
 namespace gta_base {
   namespace ui {
-    namespace components {
-      namespace option {
-        class ExecuteOption : public BaseOption {
-        public:
-          using action_t = std::function<void()>;
+    namespace option {
+      class ExecuteOption : public BaseOption {
+      public:
+        using action_t = std::function<void()>;
 
-          explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, const std::string& action_id = "") :
-              BaseOption(name_key, description_key, "", "", "", nullptr), action_(action), action_id_(action_id)
-              {}
+        explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, const std::string& action_id = "") :
+          BaseOption(name_key, description_key, "", "", "", nullptr), action_(action), action_id_(action_id)
+        {}
 
-          void HandleKey(KeyInput key) final {
-            if (!action_)
-              return;
+        void HandleKey(KeyInput key) final {
+          if (!action_)
+            return;
 
-            if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
-              action_();
-              SendEvent(Event::kSelect);
-            }
+          if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
+            action_();
+            SendEvent(Event::kSelect);
           }
+        }
 
-          bool HasFlag(OptionFlag flag) final {
-            if (flag == OptionFlag::kRightText) {
-              return right_text_key_.empty();
-            } else if (flag == OptionFlag::kRightIcon) {
-              return icon_path_.string().empty();
-            } else if (flag == OptionFlag::kHotkeyable) {
-              return true;
-            } else {
-              return false;
-            }
+        bool HasFlag(OptionFlag flag) final {
+          if (flag == OptionFlag::kRightText) {
+            return right_text_key_.empty();
+          } else if (flag == OptionFlag::kRightIcon) {
+            return icon_path_.string().empty();
+          } else if (flag == OptionFlag::kHotkeyable) {
+            return true;
+          } else {
+            return false;
           }
-        private:
-          action_t action_;
-          std::string action_id_;
-        };
-      }
+        }
+      private:
+        action_t action_;
+        std::string action_id_;
+      };
     }
   }
 }

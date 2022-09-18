@@ -9,40 +9,38 @@
 
 namespace gta_base {
   namespace ui {
-    namespace components {
-      namespace option {
-        class ToggleOption : public BaseOption {
-        public:
-          explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle) :
+    namespace option {
+      class ToggleOption : public BaseOption {
+      public:
+        explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle) :
           BaseOption(name_key, description_key), toggle_(toggle)
-          {}
+        {}
 
-          void HandleKey(KeyInput key) final {
-            if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
-              *toggle_ = !*toggle_;
+        void HandleKey(KeyInput key) final {
+          if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
+            *toggle_ = !*toggle_;
 
-              SendEvent(Event::kSelect);
-              SendEvent(Event::kChange);
-            }
+            SendEvent(Event::kSelect);
+            SendEvent(Event::kChange);
+          }
+        }
+
+        bool HasFlag(OptionFlag flag) final {
+          if (flag == OptionFlag::kRightIcon) {
+            return true;
+          } else if (flag == OptionFlag::kHotkeyable) {
+            return true;
+          } else if (flag == OptionFlag::kToggle) {
+            return true;
+          } else if (flag == OptionFlag::kToggled) {
+            return *toggle_;
           }
 
-          bool HasFlag(OptionFlag flag) final {
-            if (flag == OptionFlag::kRightIcon) {
-              return true;
-            } else if (flag == OptionFlag::kHotkeyable) {
-              return true;
-            } else if (flag == OptionFlag::kToggle) {
-              return true;
-            } else if (flag == OptionFlag::kToggled) {
-              return *toggle_;
-            }
-
-            return false;
-          }
-        private:
-          bool* toggle_;
-        };
-      }
+          return false;
+        }
+      private:
+        bool* toggle_;
+      };
     }
   }
 }
