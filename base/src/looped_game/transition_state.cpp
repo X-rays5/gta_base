@@ -83,10 +83,10 @@ namespace gta_base {
       "DLC Intro Bink",
     };
 
-    auto transition_state = rage::script::Global(rage::GlobalIdx::kTransitionState);
+    auto transition_state = rage::script::Global(rage::Globals::Misc::kTransitionState);
     rage::eTransitionState last_state = rage::eTransitionState::TRANSITION_STATE_EMPTY;
     void TransitionState() {
-      const auto state = *transition_state.As<rage::eTransitionState*>();
+      const auto state = *transition_state.As<rage::eTransitionState>();
 
       // When freemode script loaded remove loading screen.
       if (state == rage::eTransitionState::TRANSITION_STATE_WAIT_JOIN_FM_SESSION && DLC::GET_IS_LOADING_SCREEN_ACTIVE()) {

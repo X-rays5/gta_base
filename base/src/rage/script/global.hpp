@@ -14,30 +14,47 @@ namespace rage {
   namespace script {
     class Global {
     public:
+      template<typename T>
+      struct Entry {
+        explicit Entry(T* val) : val_(val) {}
+
+        Entry& operator=(T val) {
+          *val_ = std::move(val);
+          return *this;
+        }
+
+        T operator*() {
+          return *val_;
+        }
+
+        operator T() {
+          return *val_;
+        }
+
+        operator T*() {
+          return val_;
+        }
+
+      private:
+        T* val_;
+      };
+
+    public:
       explicit Global(std::size_t idx);
-      explicit Global(GlobalIdx idx);
 
-
-      Global At(std::ptrdiff_t idx) const;
-      Global At(GlobalIdx idx) const;
-      Global At(std::ptrdiff_t idx, std::size_t arr_size) const;
-      Global At(GlobalIdx idx, GlobalIdx arr_size) const;
+      [[nodiscard]] Global At(std::ptrdiff_t idx) const;
+      [[nodiscard]] Global At(std::ptrdiff_t idx, std::size_t arr_size) const;
 
       template <typename T>
-      std::enable_if_t<std::is_pointer_v<T>, T> As() {
-        return static_cast<T>(Get());
-      }
-
-      template <typename T>
-      std::enable_if_t<std::is_lvalue_reference_v<T>, T> As() {
-        return *static_cast<std::add_pointer_t<std::remove_reference_t<T>>>(Get());
+      Entry<T> As() {
+        return Entry(reinterpret_cast<T*>(Get()));
       }
 
     private:
       std::size_t idx_;
 
     private:
-      void* Get() const;
+      [[nodiscard]] void* Get() const;
     };
   }
 }

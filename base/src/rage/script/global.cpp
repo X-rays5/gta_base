@@ -7,23 +7,14 @@
 
 namespace rage {
   namespace script {
-    Global::Global(std::size_t idx) : idx_(idx) {}
-    Global::Global(GlobalIdx idx) : Global(static_cast<std::size_t>(idx)) {}
+    Global::Global(std::size_t idx): idx_(idx) {
+    }
 
     Global Global::At(std::ptrdiff_t idx) const {
       return Global(idx_ + idx);
     }
-
-    Global Global::At(GlobalIdx idx) const {
-      return At(static_cast<std::ptrdiff_t>(idx));
-    }
-
     Global Global::At(std::ptrdiff_t idx, std::size_t arr_size) const {
       return Global(idx_ + 1 + (idx * arr_size));
-    }
-
-    Global Global::At(GlobalIdx idx, GlobalIdx arr_size) const {
-      return At(static_cast<std::ptrdiff_t>(idx), static_cast<std::size_t>(arr_size));
     }
 
     void* Global::Get() const {
