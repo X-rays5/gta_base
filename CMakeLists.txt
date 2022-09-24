@@ -8,5 +8,3 @@ IF(WIN32)
     add_subdirectory(ui_dev)
     add_subdirectory(launcher)
 ENDIF()
-
-add_subdirectory(lua_codegen)
