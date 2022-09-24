@@ -107,7 +107,7 @@ class LuaCodeGenerator extends CodeGeneratorBase<LuaCodeGeneratorSettings> {
       .conditional(this.settings.generateComments, gen => gen.writeComment(native.comment))
       .conditional(this.settings.generateComments && this.settings.includeNdbLinks && !!native.comment, gen => gen.writeComment(' '))
       .conditional(this.settings.includeNdbLinks, gen => gen.writeComment(link))
-      .writeLine(`['${name}'] = function(${params})`)
+      .writeLine(`${name.toLowerCase()} = function(${params})`)
       .wackIndent(this.settings.oneLineFunctions)
       .writeLine(`${returnString}${invoker}${mod}(${invokeParams}) end,`)
       .popBranchWithComment(`${native.hash} ${native.jhash} ${native.build ? `b${native.build}` : ''}`)
@@ -115,7 +115,7 @@ class LuaCodeGenerator extends CodeGeneratorBase<LuaCodeGeneratorSettings> {
 
   pushNamespace(name: string): this {
     return this
-      .writeLine(`${name}={`)
+      .writeLine(`${name.toLowerCase()} = {`)
       .wackIndent(false)
   }
 
