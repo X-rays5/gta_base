@@ -44,7 +44,24 @@ namespace gta_base {
         });
 
         kMANAGER->AddSubmenu(Submenus::NetworkRequestServices, "tab/title/request_services", [](Submenu* sub){
-          sub->AddOption(option::ExecuteOption("placeholder"));
+          sub->AddOption(option::ExecuteOption("option/request_avenger", "", []{
+            rage::script::Global(rage::Globals::RequestServices::kMain).At(rage::Globals::RequestServices::kAvenger).As<bool>() = true;
+          }));
+          sub->AddOption(option::ExecuteOption("option/request_moc", "", []{
+            rage::script::Global(rage::Globals::RequestServices::kMain).At(rage::Globals::RequestServices::kMoc).As<bool>() = true;
+          }));
+          sub->AddOption(option::ExecuteOption("option/request_terrorbyte", "", []{
+            rage::script::Global(rage::Globals::RequestServices::kMain).At(rage::Globals::RequestServices::kTerrorbyte).As<bool>() = true;
+          }));
+          sub->AddOption(option::ExecuteOption("option/request_kosatka", "", []{
+            rage::script::Global(rage::Globals::RequestServices::kMain).At(rage::Globals::RequestServices::kKosatka).As<bool>() = true;
+          }));
+          sub->AddOption(option::ExecuteOption("option/request_ballistic_armor", "", []{
+            rage::script::Global(rage::Globals::RequestServices::kMain).At(rage::Globals::RequestServices::kBallisticArmor).As<bool>() = true;
+          }));
+          sub->AddOption(option::ExecuteOption("option/request_dinghy", "", []{
+            rage::script::Global(rage::Globals::RequestServices::kMain).At(rage::Globals::RequestServices::kDingy).As<bool>() = true;
+          }));
         });
 
         AllPlayersTab();
