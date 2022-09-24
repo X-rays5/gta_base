@@ -35,7 +35,18 @@ namespace gta_base {
       [[nodiscard]] bool Host() const;
       [[nodiscard]] bool Valid() const;
 
+      bool operator==(CNetGamePlayer* other) const;
       bool operator==(CNetGamePlayer& other) const;
+      bool operator==(const CNetGamePlayer& other) const;
+      bool operator!=(CNetGamePlayer* other) const;
+      bool operator!=(CNetGamePlayer& other) const;
+      bool operator!=(const CNetGamePlayer& other) const;
+      bool operator==(Player* other) const;
+      bool operator==(Player& other) const;
+      bool operator==(const Player& other) const;
+      bool operator!=(Player* other) const;
+      bool operator!=(Player& other) const;
+      bool operator!=(const Player& other) const;
 
     private:
       CNetGamePlayer* self_;

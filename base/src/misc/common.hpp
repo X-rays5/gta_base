@@ -1,3 +1,4 @@
+
 //
 // Created by X-ray on 3/6/2022.
 //
@@ -59,6 +60,7 @@ namespace gta_base {
     std::uint64_t GetEpoch();
 
     HWND GetHwnd(const char* class_name, const char* window_name);
+    HWND GetGameHwnd();
     bool IsForegroundWindow();
     bool IsTargetProcess();
 

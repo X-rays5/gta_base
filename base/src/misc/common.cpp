@@ -94,17 +94,21 @@ namespace gta_base {
     }
 
     HWND GetHwnd(const char* class_name, const char* window_name) {
-      static const auto res = FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
-      return res;
+      return FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
+    }
+
+    HWND GetGameHwnd() {
+      static const auto hwnd = GetHwnd(globals::target_window_class, globals::target_window_name);
+      return hwnd;
     }
 
     bool IsForegroundWindow() {
       auto foreground_window = GetForegroundWindow();
-      return foreground_window == GetConsoleWindow() || foreground_window == GetHwnd(globals::target_window_class, globals::target_window_name);
+      return foreground_window == GetConsoleWindow() || GetGameHwnd();
     }
 
     bool IsTargetProcess() {
-      return GetHwnd(globals::target_window_class, globals::target_window_name) != nullptr;
+      return GetGameHwnd() != nullptr;
     }
 
     robin_hood::unordered_map<std::uint32_t, KeyState> key_state{};

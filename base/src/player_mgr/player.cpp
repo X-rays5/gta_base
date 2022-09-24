@@ -104,11 +104,88 @@ namespace gta_base {
      return self_->is_valid();
    }
 
+   bool Player::operator==(CNetGamePlayer* other) const {
+     if (!self_ || !other)
+       return false;
+
+     return this->self_->m_player_id == other->m_player_id;
+   }
+
    bool Player::operator==(CNetGamePlayer& other) const {
      if (!self_)
        return false;
 
      return self_->m_player_id == other.m_player_id;
+   }
+
+   bool Player::operator==(const CNetGamePlayer& other) const {
+     if (!self_)
+       return false;
+
+     return self_->m_player_id == other.m_player_id;
+   }
+
+   bool Player::operator!=(CNetGamePlayer* other) const {
+     if (!self_ || !other)
+       return true;
+
+     return self_->m_player_id != other->m_player_id;
+   }
+
+   bool Player::operator!=(CNetGamePlayer& other) const {
+     if (!self_)
+       return true;
+
+     return self_->m_player_id != other.m_player_id;
+   }
+
+   bool Player::operator!=(const CNetGamePlayer& other) const {
+     if (!self_)
+       return true;
+
+     return self_->m_player_id != other.m_player_id;
+   }
+
+   bool Player::operator==(Player* other) const {
+     if (!self_ || !other)
+       return false;
+
+     return self_->m_player_id == other->self_->m_player_id;
+   }
+
+   bool Player::operator==(Player& other) const {
+      if (!self_)
+        return false;
+
+      return self_->m_player_id == other.self_->m_player_id;
+   }
+
+   bool Player::operator==(const Player& other) const {
+      if (!self_)
+        return false;
+
+      return self_->m_player_id == other.self_->m_player_id;
+   }
+
+   bool Player::operator!=(Player* other) const {
+      if (!self_ || !other)
+        return true;
+
+      return self_->m_player_id != other->self_->m_player_id;
+   }
+
+   bool Player::operator!=(Player& other) const {
+      if (!self_)
+        return true;
+
+      return self_->m_player_id != other.self_->m_player_id;
+   }
+
+   bool Player::operator!=(const Player& other) const {
+      if (!self_)
+        return true;
+
+      return self_->m_player_id != other.self_->m_player_id;
    }
  }
 }

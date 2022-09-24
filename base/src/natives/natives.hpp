@@ -2,6 +2,18 @@
 #include "invoker.hpp"
 #include "../rage/types.hpp"
 
+/**
+All the natives with return address checks 1.58
+
+SCR_REGISTER_SECURE_HONEYPOT(GET_PLAYER_PED,0x407e03586628e458,							CommandGetPlayerPed							);					//	NATIVE PROC GET_PLAYER_PED (PLAYERID PLAYER_IN, CHARID &CHAR_OUT)
+SCR_REGISTER_SECURE_HONEYPOT(GET_NUMBER_OF_PLAYERS,0x3a0de5c10c341c80,					CommandGetNumberOfPlayers                   );                  //  NATIVE FUNC INT GET_NUM_PLAYERS()
+SCR_REGISTER_SECURE_HONEYPOT(SET_PLAYER_WANTED_LEVEL,0xbcd99b4edae55be6,				CommandAlterWantedLevel						);					//	NATIVE PROC ALTER_WANTED_LEVEL( INT PlayerIndex, INT WantedLevel )
+SCR_REGISTER_SECURE_HONEYPOT(IS_PLAYER_FREE_AIMING,0x55e78b6aafef4eb8,							CommandIsPlayerFreeAiming					);					//	NATIVE PROC IS_PLAYER_FREE_AIMING( INT PlayerIndex )
+SCR_REGISTER_SECURE_HONEYPOT(SET_PLAYER_INVINCIBLE,0xc099da307dd6bc62,					CommandSetPlayerInvincible);
+SCR_REGISTER_SECURE_HONEYPOT(TRIGGER_SCRIPT_EVENT,0xa29c2ecc2c86354d,  CommandTriggerScriptEvent);
+SCR_REGISTER_SECURE_HONEYPOT(SEND_TU_SCRIPT_EVENT,0x2700c00f82c16bf0,  CommandWinterIsComing);
+*/
+
 // Generated on 9/19/2022, 2:35:34 PM
 // https://nativedb.spyral.dev
 

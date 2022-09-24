@@ -5,7 +5,6 @@
 #include "uitick.hpp"
 #include "../../ui/manager.hpp"
 #include "../../ui/tabs/main_tab.hpp"
-#include "../../ui/notification/notification.hpp"
 
 namespace gta_base {
   namespace scripts {

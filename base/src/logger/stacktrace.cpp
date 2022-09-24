@@ -22,7 +22,6 @@ namespace gta_base {
 
       std::string ExceptionCodeToStr(std::uint32_t code) {
         switch(code) {
-          case STILL_ACTIVE: return "STILL_ACTIVE";
           case EXCEPTION_ACCESS_VIOLATION: return "EXCEPTION_ACCESS_VIOLATION";
           case EXCEPTION_DATATYPE_MISALIGNMENT: return "EXCEPTION_DATATYPE_MISALIGNMENT";
           case EXCEPTION_BREAKPOINT: return "EXCEPTION_BREAKPOINT";
@@ -45,8 +44,6 @@ namespace gta_base {
           case EXCEPTION_INVALID_DISPOSITION: return "EXCEPTION_INVALID_DISPOSITION";
           case EXCEPTION_GUARD_PAGE: return "EXCEPTION_GUARD_PAGE";
           case EXCEPTION_INVALID_HANDLE: return "EXCEPTION_INVALID_HANDLE";
-          case DBG_PRINTEXCEPTION_C: return "DBG_PRINTEXCEPTION_C";
-          case CONTROL_C_EXIT: return "CONTROL_C_EXIT";
           default: return "UNKNOWN";
         }
       }
