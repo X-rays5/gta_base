@@ -13,8 +13,8 @@ namespace gta_base {
       template<typename T>
       class ListOption : public BaseOption {
       public:
-        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items) :
-          BaseOption(name_key, description_key), idx_(&idx), items_(&items)
+        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", hotkeyable), idx_(&idx), items_(&items)
         {
           UpdateRightText();
         }
@@ -51,7 +51,7 @@ namespace gta_base {
           } else if (flag == OptionFlag::kRightIcon) {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return true;
+            return hotkeyable_;
           } else {
             return false;
           }

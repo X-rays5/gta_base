@@ -52,6 +52,7 @@ namespace gta_base {
     std::filesystem::path GetLogFile();
     std::filesystem::path GetLogSaveDir();
     std::filesystem::path GetDataDir();
+    std::filesystem::path GetSettingsDir();
     std::filesystem::path GetTeleportsDir();
     std::filesystem::path GetTextureDir();
 

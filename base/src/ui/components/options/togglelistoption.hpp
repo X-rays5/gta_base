@@ -13,8 +13,8 @@ namespace gta_base {
       template<typename T>
       class ToggleListOption : public BaseOption {
       public:
-        explicit ToggleListOption(const std::string& name_key, const std::string& description_key, bool& toggle, std::size_t& idx, std::vector<T>& items) :
-          BaseOption(name_key, description_key), toggle_(&toggle), idx_(&idx), items_(&items)
+        explicit ToggleListOption(const std::string& name_key, const std::string& description_key, bool& toggle, std::size_t& idx, std::vector<T>& items, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", hotkeyable), toggle_(&toggle), idx_(&idx), items_(&items)
         {
           UpdateRightText();
         }
@@ -52,7 +52,7 @@ namespace gta_base {
           } else if (flag == OptionFlag::kRightIcon) {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return true;
+            return hotkeyable_;
           } else if (flag == OptionFlag::kToggle) {
             return true;
           } else if (flag == OptionFlag::kToggled) {

@@ -105,12 +105,12 @@ namespace gta_base {
         active_translation_ = std::move(translation);
       }
 
-      inline std::string_view Get(const std::string& key) {
-        return (*active_translation_)[key];
+      inline std::string Get(const std::string& key) {
+        return std::string((*active_translation_)[key]);
       }
 
-      inline std::string_view operator[](const std::string& key) {
-        return (*active_translation_)[key];
+      inline std::string operator[](const std::string& key) {
+        return std::string((*active_translation_)[key]);
       }
 
     private:

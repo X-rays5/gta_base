@@ -6,6 +6,7 @@
 #include "../misc/common.hpp"
 #include "../logger/logger.hpp"
 #include "../d3d/renderer.hpp"
+#include "../misc/hotkey_manager.hpp"
 
 namespace gta_base {
   namespace hooking {
@@ -38,6 +39,9 @@ namespace gta_base {
           common::SetKeyState(parameter_uint_ptr, true);
         } else if (message == WM_KEYUP) {
           common::SetKeyState(parameter_uint_ptr, false);
+
+          if (!misc::kHOTKEY_MANAGER->AddKeyPressed(parameter_uint_ptr))
+            misc::kHOTKEY_MANAGER->KeyPressed(parameter_uint_ptr);
         }
 
         d3d::Renderer::WndProc(window, message, parameter_uint_ptr, parameter_long_ptr);

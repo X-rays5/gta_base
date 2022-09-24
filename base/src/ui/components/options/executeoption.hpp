@@ -6,6 +6,8 @@
 
 #ifndef GTA_BASE_EXECUTEOPTION_HPP
 #define GTA_BASE_EXECUTEOPTION_HPP
+#include <utility>
+
 #include "baseoption.hpp"
 
 #define UI_EXECUTE_OPTION_ACTION_AND_ID(action) action, #action
@@ -17,8 +19,8 @@ namespace gta_base {
       public:
         using action_t = std::function<void()>;
 
-        explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, const std::string& action_id = "") :
-          BaseOption(name_key, description_key, "", "", "", nullptr), action_(action), action_id_(action_id)
+        explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", hotkeyable), action_(std::move(action))
         {}
 
         void HandleKey(KeyInput key) final {
@@ -37,14 +39,13 @@ namespace gta_base {
           } else if (flag == OptionFlag::kRightIcon) {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return true;
+            return hotkeyable_;
           } else {
             return false;
           }
         }
       private:
         action_t action_;
-        std::string action_id_;
       };
     }
   }

@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_UI_DISABLE_PHONE_HPP
-#define GTA_BASE_UI_DISABLE_PHONE_HPP
+#ifndef GTA_BASE_UI_DISABLE_CONTROL_HPP
+#define GTA_BASE_UI_DISABLE_CONTROL_HPP
 #include "../../scriptmanager/base_script.hpp"
 
 namespace gta_base {
@@ -24,4 +24,4 @@ namespace gta_base {
     };
   }
 }
-#endif //GTA_BASE_UI_DISABLE_PHONE_HPP
+#endif //GTA_BASE_UI_DISABLE_CONTROL_HPP

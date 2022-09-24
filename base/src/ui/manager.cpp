@@ -4,6 +4,7 @@
 
 #include "manager.hpp"
 #include "../d3d/texturemanager.hpp"
+#include "../d3d/renderer.hpp"
 #include "components/keyboard.hpp"
 #include "../logger/logger.hpp"
 #include "fonts/IconsFontAwesome6.h"
@@ -23,14 +24,18 @@ namespace gta_base {
       input_down_ = std::make_unique<util::TimedInput>(VK_DOWN, 100);
       input_return_ = std::make_unique<util::TimedInput>(VK_RETURN, 300);
       input_back_ = std::make_unique<util::TimedInput>(VK_BACK, 300);
+      input_create_hotkey_ = std::make_unique<util::TimedInput>(VK_F1, 300);
 
       notification_inst_ = std::make_unique<Notification>();
       translation_manager_inst_ = std::make_unique<TranslationManager>(); // TODO: Set to translation from current language
+      hotkey_manager_inst_ = std::make_unique<misc::HotkeyManager>();
       kMANAGER = this;
     }
 
     Manager::~Manager() {
       notification_inst_.reset();
+      translation_manager_inst_.reset();
+      hotkey_manager_inst_.reset();
       kMANAGER = nullptr;
     }
 
@@ -216,10 +221,18 @@ namespace gta_base {
         } else {
           show_ui = false;
         }
+      } else if (input_create_hotkey_->Get()) {
+        auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+        if (cur_opt->HasFlag(OptionFlag::kHotkeyable)) {
+          hotkey_manager_inst_->StartHotkeyAdd(cur_opt->GetNameKey().data());
+        } else {
+          notification_inst_->Create(Notification::Type::kFail, "Hotkey", "Current option doesn't support adding a hotkey");
+        }
       }
     }
 
     void Manager::Draw() {
+      // Don't run again when the draw calls haven't run yet
       if (!should_tick)
         return;
 

@@ -14,6 +14,7 @@
 #include "components/submenu.hpp"
 #include "notification/notification.hpp"
 #include "translation/translation_manager.hpp"
+#include "../misc/hotkey_manager.hpp"
 #include "../misc/timedinput.hpp"
 #include "../d3d/draw.hpp"
 
@@ -25,6 +26,7 @@ namespace gta_base {
       ~Manager();
 
       inline void AddSubmenu(Submenus id, const std::string& name_key, Submenu::constructor_cb cb) {
+        std::unique_lock lock(sub_mtx_);
         auto submenu_ptr = std::make_shared<Submenu>(name_key, std::move(cb));
         submenus_[id] = submenu_ptr;
         if (submenus_stack_.empty()) {
@@ -33,6 +35,7 @@ namespace gta_base {
       }
 
       inline void SetActiveSubmenu(Submenus id) {
+        std::unique_lock lock(sub_mtx_);
         auto entry = submenus_.find(id);
 
         if (entry != submenus_.end()) {
@@ -41,6 +44,7 @@ namespace gta_base {
       }
 
       inline std::shared_ptr<Submenu> GetSubmenu(Submenus id) {
+        std::unique_lock lock(sub_mtx_);
         auto entry = submenus_.find(id);
 
         if (entry != submenus_.end()) {
@@ -51,9 +55,20 @@ namespace gta_base {
       }
 
       inline void PopSubmenu() {
+        std::unique_lock lock(sub_mtx_);
         if (submenus_stack_.size() > 1) {
           submenus_stack_.pop();
         }
+      }
+
+      inline bool HotkeyPressed(const std::string& name) {
+        std::unique_lock lock(sub_mtx_);
+        for (auto&& sub : submenus_) {
+          if (sub.second->HotkeyPressed(name))
+            return true;
+        }
+
+        return false;
       }
 
       inline std::shared_ptr<d3d::draw::DrawList> GetDrawList() const {
@@ -83,6 +98,7 @@ namespace gta_base {
 
       float font_size = 0.018f;
     private:
+      std::mutex sub_mtx_;
       float scrollbar_offset = 0.002f;
 
       using submenu_ptr_t = std::shared_ptr<Submenu>;
@@ -98,6 +114,7 @@ namespace gta_base {
       std::unique_ptr<util::TimedInput> input_down_;
       std::unique_ptr<util::TimedInput> input_return_;
       std::unique_ptr<util::TimedInput> input_back_;
+      std::unique_ptr<util::TimedInput> input_create_hotkey_;
 
       int previous_selected_option_ = -1;
 
@@ -110,6 +127,7 @@ namespace gta_base {
 
       std::unique_ptr<Notification> notification_inst_;
       std::unique_ptr<TranslationManager> translation_manager_inst_;
+      std::unique_ptr<misc::HotkeyManager> hotkey_manager_inst_;
 
       float toggle_button_size_ = 0.01f;
     private:

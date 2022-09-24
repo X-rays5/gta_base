@@ -20,12 +20,16 @@ namespace gta_base {
       public:
         using on_event_t = std::function<void(Event)>;
 
-        BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", std::string icon_path = "", on_event_t event_handler = nullptr) :
-          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), icon_path_(std::move(icon_path)), event_handler_(std::move(event_handler))
+        BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", const std::string& icon_path = "", bool hotkeyable = true, on_event_t event_handler = nullptr) :
+          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), icon_path_(icon_path), hotkeyable_(hotkeyable), event_handler_(std::move(event_handler))
         {}
 
         inline std::string GetName() {
           return std::string((*kTRANSLATION_MANAGER)[name_key_]);
+        }
+
+        inline std::string_view GetNameKey() {
+          return name_key_;
         }
 
         inline void SetNameKey(std::string name_key) {
@@ -80,6 +84,7 @@ namespace gta_base {
         std::string center_text_key_;
         std::string right_text_key_;
         std::filesystem::path icon_path_;
+        bool hotkeyable_;
         on_event_t event_handler_;
 
       protected:

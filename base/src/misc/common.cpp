@@ -65,6 +65,14 @@ namespace gta_base {
       return data_path;
     }
 
+    std::filesystem::path GetSettingsDir() {
+      std::filesystem::path settings_path = GetDataDir() / "settings";
+      if (!std::filesystem::exists(settings_path)) {
+        std::filesystem::create_directories(settings_path);
+      }
+      return settings_path;
+    }
+
     std::filesystem::path GetTeleportsDir() {
       std::filesystem::path data_path = GetDataDir() / "teleports";
       if (!std::filesystem::exists(data_path)) {

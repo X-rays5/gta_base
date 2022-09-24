@@ -20,8 +20,8 @@ namespace gta_base {
       requires std::integral<T> or std::floating_point<T>
       class NumberOption : public BaseOption {
       public:
-        explicit NumberOption(const std::string& name_key, const std::string& description_key, T* value, T step, T min, T max) :
-          BaseOption(name_key, description_key), value_(value), step_(step), min_(min), max_(max)
+        explicit NumberOption(const std::string& name_key, const std::string& description_key, T* value, T step, T min, T max, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", hotkeyable), value_(value), step_(step), min_(min), max_(max)
         {
           UpdateRightText();
         }
@@ -114,7 +114,7 @@ namespace gta_base {
           } else if (flag == OptionFlag::kRightIcon) {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return true;
+            return hotkeyable_;
           } else {
             return false;
           }

@@ -16,7 +16,7 @@
 #include "scripts/scripting/job_queue.hpp"
 #include "scripts/render/uidraw.hpp"
 #include "scripts/scripting/keyboard.hpp"
-#include "scripts/game/ui_disable_phone.hpp"
+#include "scripts/game/ui_disable_control.hpp"
 #include "scripts/game/loops.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"

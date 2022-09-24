@@ -12,8 +12,8 @@ namespace gta_base {
     namespace option {
       class ToggleOption : public BaseOption {
       public:
-        explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle) :
-          BaseOption(name_key, description_key), toggle_(toggle)
+        explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", hotkeyable), toggle_(toggle)
         {}
 
         void HandleKey(KeyInput key) final {
@@ -29,7 +29,7 @@ namespace gta_base {
           if (flag == OptionFlag::kRightIcon) {
             return true;
           } else if (flag == OptionFlag::kHotkeyable) {
-            return true;
+            return hotkeyable_;
           } else if (flag == OptionFlag::kToggle) {
             return true;
           } else if (flag == OptionFlag::kToggled) {

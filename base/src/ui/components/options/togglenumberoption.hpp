@@ -14,8 +14,8 @@ namespace gta_base {
       requires std::integral<T> or std::floating_point<T>
       class ToggleNumberOption : public BaseOption {
       public:
-        explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max) :
-          BaseOption(name_key, description_key), toggle_(&toggle), value_(&value), step_(step), min_(min), max_(max)
+        explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", hotkeyable), toggle_(&toggle), value_(&value), step_(step), min_(min), max_(max)
         {
           UpdateRightText();
         }
@@ -60,7 +60,7 @@ namespace gta_base {
           } else if (flag == OptionFlag::kRightIcon) {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return true;
+            return hotkeyable_;
           } else if (flag == OptionFlag::kToggle) {
             return true;
           } else if (flag == OptionFlag::kToggled) {
