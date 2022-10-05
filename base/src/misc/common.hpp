@@ -11,9 +11,17 @@
 #include <filesystem>
 #include <string>
 #include <chrono>
+#include <algorithm>
+#include <limits>
 #include <fmt/format.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
 #include "../logger/logger.hpp"
 #include "globals.hpp"
 
@@ -43,6 +51,14 @@ namespace gta_base {
       iss.str(str);
       iss >> res;
       return res;
+    }
+
+    template<typename in_t, typename ret_t>
+    inline ret_t WithinLimits(in_t convert) {
+      constexpr static const in_t min = std::numeric_limits<ret_t>::min();
+      constexpr static const in_t max = std::numeric_limits<ret_t>::max();
+
+      return static_cast<ret_t>(std::clamp(convert, min, max));
     }
 
     std::string FloatPrecision(float num, std::size_t precision = 3);

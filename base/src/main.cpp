@@ -47,7 +47,6 @@ void BaseMain() {
 
   // render scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
-  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Keyboard>());
   // scripting scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
@@ -110,7 +109,7 @@ void BaseMain() {
   LOG_INFO("Discord shutdown");
 
   keyboard_manager_inst.reset();
-  LOG_INFO("Keyboard Manager unloaded");
+  LOG_INFO("Keyboard Manager shutdown");
 
   ui_manager_inst.reset();
   LOG_INFO("UI Manager shutdown");

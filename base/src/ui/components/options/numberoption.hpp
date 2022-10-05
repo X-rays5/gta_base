@@ -30,45 +30,25 @@ namespace gta_base {
           switch(key) {
             case KeyInput::kReturn:
             case KeyInput::kHotkey: {
-              /* keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [this](const std::string& text, keyboard::Result res){
-                 if (text.empty())
-                   return;
+              T* value = value_;
+              T min = min_;
+              T max = max_;
+              keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [value, min, max](std::string text, keyboard::Result res) {
+                LOG_DEBUG("input");
+                if (res != keyboard::Result::kDone || text.empty())
+                  return;
 
-                 if (res == keyboard::Result::kDone) {
-                   if (value_) {
-                     constexpr static const bool is_float = std::is_floating_point_v<T>;
-                     if (is_float) {
-                       LOG_DEBUG("float");
-                       auto converted = std::stod(text);
-                       auto min = std::numeric_limits<T>::min();
-                       auto max = std::numeric_limits<T>::max();
-                       if (converted < min) {
-                         converted = min;
-                       } else if (converted > max) {
-                         converted = max;
-                       }
-                       LOG_DEBUG("{}", converted);
-                       *value_ = converted;
-                     } else {
-                       LOG_DEBUG("no float");
-                       auto converted = std::stoll(text);
-                       auto min = std::numeric_limits<T>::min();
-                       auto max = std::numeric_limits<T>::max();
-                       if (converted < min) {
-                         converted = min;
-                       } else if (converted > max) {
-                         converted = max;
-                       }
-                       LOG_DEBUG("{}", converted);
-                       *value_ = converted;
-                     }
-                     CheckValueBounds();
-                     UpdateRightText();
-
-                     SendEvent(Event::kChange);
-                   }
-                 }
-               });*/
+                if (value) {
+                  constexpr static const bool is_float = std::is_floating_point_v<T>;
+                  if (is_float) {
+                    LOG_DEBUG("float");
+                    *value = std::clamp(common::WithinLimits<std::double_t, T>(std::stod(text)), min, max);
+                  } else {
+                    LOG_DEBUG("no float");
+                    *value = std::clamp(common::WithinLimits<std::int64_t, T>(std::stoll(text)), min, max);
+                  }
+                }
+              });
 
               break;
             }
@@ -142,10 +122,7 @@ namespace gta_base {
         }
 
         inline void CheckValueBounds() {
-          if (*value_ < min_)
-            *value_ = min_;
-          else if (*value_ > max_)
-            *value_ = max_;
+          *value_ = std::clamp(*value_, min_, max_);
         }
       };
     }

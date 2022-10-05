@@ -237,6 +237,7 @@ namespace gta_base {
         return;
 
       kNOTIFICATIONS->Tick();
+      keyboard::kMANAGER->Tick();
 
       if (!submenus_stack_.empty()) {
         auto cur_sub = submenus_stack_.top();
