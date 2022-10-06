@@ -18,6 +18,7 @@
 #include "../rage/classes/natives.hpp"
 #include "../rage/classes/net_connection_mgr.hpp"
 #include "../rage/classes/net_connection_peer.hpp"
+#include "../rage/classes/script_program.hpp"
 
 namespace gta_base {
   namespace memory {
@@ -57,6 +58,7 @@ namespace gta_base {
       PVOID RunScriptThreads{};
 
       rage::scrNativeRegistrationTable* native_registration_table_{};
+      rage::scrProgramTable* script_programs_table{};
       using get_native_handler_t = rage::scrNativeHandler(*)(rage::scrNativeRegistrationTable* registration_table, rage::scrNativeHash hash);
       get_native_handler_t GetNativeHandler{};
       using fix_vectors_t = void(*)(rage::scrNativeCallContext* call_ctx);
@@ -90,6 +92,9 @@ namespace gta_base {
       }
 
       std::int64_t** script_globals_{};
+
+      PVOID GtaThreadStart{};
+      PVOID GtaThreadKill{};
     };
     inline Pointers* kPOINTERS{};
   }

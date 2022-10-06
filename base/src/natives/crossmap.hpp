@@ -9,7 +9,7 @@
 
 namespace rage
 {
-  inline constexpr const rage::scrNativeMapping kCROSSMAP[]
+  inline static const rage::scrNativeMapping kCROSSMAP =
     {
       { 0xF7AF4F159FF99F97, 0xF7AF4F159FF99F97 },
       { 0x4EDE34FBADD967A6, 0x4EDE34FBADD967A6 },

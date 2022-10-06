@@ -1,0 +1,45 @@
+//
+// Created by X-ray on 10/05/22.
+//
+
+#pragma once
+#ifndef GTA_BASE_NATIVE_HOOKING_HPP
+#define GTA_BASE_NATIVE_HOOKING_HPP
+#include <robin_hood.h>
+#include "hooking_helpers/script.hpp"
+#include "../rage/classes/script_thread.hpp"
+#include "../rage/classes/natives.hpp"
+#include "../rage/joaat.hpp"
+
+#define GTA_BASE_NATIVE_DETOUR_ALL_SCRIPTS RAGE_JOAAT("ALL_RUNNING_SCRIPTS")
+
+namespace gta_base {
+  namespace hooking {
+    struct NativeHooks {
+
+    };
+
+    class NativeHooking {
+    public:
+      NativeHooking();
+      ~NativeHooking();
+
+      NativeHooking(const NativeHooking&) = delete;
+      NativeHooking(NativeHooking&&) noexcept = delete;
+      NativeHooking& operator=(const NativeHooking&) = delete;
+      NativeHooking& operator=(NativeHooking&&) noexcept = delete;
+
+      void AddDetour(rage::scrNativeHash native_hash, rage::scrNativeHandler handler);
+      void AddDetour(rage::joaat_t script_hash, rage::scrNativeHash native_hash, rage::scrNativeHandler handler);
+
+      void ThreadStart(const GtaThread* thread);
+      void ThreadKill(const GtaThread* thread);
+
+    private:
+      robin_hood::unordered_map<rage::joaat_t, robin_hood::unordered_map<rage::scrNativeHash, rage::scrNativeHandler>> detour_hooks_;
+      robin_hood::unordered_map<rage::joaat_t, std::unique_ptr<ScriptHook>> script_hooks_;
+    };
+    inline NativeHooking* kNATIVE_HOOKING{};
+  }
+}
+#endif //GTA_BASE_NATIVE_HOOKING_HPP

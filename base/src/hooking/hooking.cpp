@@ -15,17 +15,21 @@ namespace gta_base {
   network_player_mgr_init_hook_("NetworkPlayerMgrInit", memory::kPOINTERS->NetworkPlayerMgrInit, &Hooks::NetworkPlayerMgrInit),
   network_player_mgr_shutdown_hook_("NetworkPlayerMgrShutdown", memory::kPOINTERS->NetworkPlayerMgrShutdown, &Hooks::NetworkPlayerMgrShutdown),
   assign_physical_index_hook_("AssignPhysicalIndex", memory::kPOINTERS->AssignPhysicalIdx, &Hooks::assign_physical_index)
+  gta_thread_start_hook_("GtaThreadStart", memory::kPOINTERS->GtaThreadStart, &Hooks::GtaThreadStart),
+  gta_thread_kill_hook_("GtaThreadKill", memory::kPOINTERS->GtaThreadKill, &Hooks::GtaThreadKill)
   {
     swap_chain_hook_.Hook("Present", Hooks::swapchain_present_index, &Hooks::Present);
     swap_chain_hook_.Hook("ResizeBuffers", Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
 
     kHOOKING = this;
+    native_hooking_inst_ = std::make_unique<hooking::NativeHooking>();
   }
 
   Hooking::~Hooking() {
     swap_chain_hook_.Unhook(Hooks::swapchain_present_index);
     swap_chain_hook_.Unhook(Hooks::swapchain_resizebuffers_index);
 
+    native_hooking_inst_.reset();
     kHOOKING = nullptr;
   }
 
@@ -38,12 +42,16 @@ namespace gta_base {
     network_player_mgr_init_hook_.Enable();
     network_player_mgr_shutdown_hook_.Enable();
     assign_physical_index_hook_.Enable();
+    gta_thread_start_hook_.Enable();
+    gta_thread_kill_hook_.Enable();
   }
 
   void Hooking::Disable() {
     swap_chain_hook_.Disable(Hooks::swapchain_resizebuffers_index);
     swap_chain_hook_.Disable(Hooks::swapchain_present_index);
 
+    gta_thread_kill_hook_.Disable();
+    gta_thread_start_hook_.Disable();
     assign_physical_index_hook_.Disable();
     network_player_mgr_shutdown_hook_.Disable();
     network_player_mgr_init_hook_.Disable();
@@ -70,5 +78,28 @@ namespace gta_base {
     }
 
     return kHOOKING->run_script_threads_hook_.GetOriginal<decltype(&Hooks::RunScriptThreads)>()(ops_to_execute);
+  }
+
+  GtaThread* Hooks::GtaThreadStart(unsigned int** a1, unsigned int a2) {
+    const auto res = kHOOKING->gta_thread_start_hook_.GetOriginal<decltype(&Hooks::GtaThreadStart)>()(a1, a2);
+    if (!res)
+      return res;
+
+    if (!std::string(res->m_name).empty()) {
+      LOG_DEBUG("Script thread '{}' was started", res->m_name);
+    }
+
+    hooking::kNATIVE_HOOKING->ThreadStart(res);
+
+    return res;
+  }
+
+  rage::eThreadState Hooks::GtaThreadKill(GtaThread* thread) {
+    const auto res = kHOOKING->gta_thread_kill_hook_.GetOriginal<decltype(&GtaThreadKill)>()(thread);
+    LOG_DEBUG("Script thread '{}' was killed", thread->m_name);
+
+    hooking::kNATIVE_HOOKING->ThreadKill(thread);
+
+    return res;
   }
 }

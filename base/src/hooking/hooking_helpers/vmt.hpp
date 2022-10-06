@@ -22,6 +22,7 @@ namespace gta_base {
 
       void Enable(std::size_t index);
       void Disable(std::size_t index);
+      void DisableAll();
 
       template<typename T>
       T GetOriginal(std::size_t index) {

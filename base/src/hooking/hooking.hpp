@@ -26,6 +26,9 @@ namespace gta_base {
     static void* assign_physical_index(CNetworkPlayerMgr* netPlayerMgr, CNetGamePlayer* player, uint8_t new_index);
 
     static bool RunScriptThreads(std::uint32_t ops_to_execute);
+
+    static GtaThread* GtaThreadStart(unsigned int** a1, unsigned int a2);
+    static rage::eThreadState GtaThreadKill(GtaThread* thread);
   };
 
   class Hooking {
@@ -35,6 +38,8 @@ namespace gta_base {
     hooking::DetourHook network_player_mgr_init_hook_;
     hooking::DetourHook network_player_mgr_shutdown_hook_;
     hooking::DetourHook assign_physical_index_hook_;
+    hooking::DetourHook gta_thread_start_hook_;
+    hooking::DetourHook gta_thread_kill_hook_;
 
   public:
     Hooking();
@@ -42,6 +47,9 @@ namespace gta_base {
 
     void Enable();
     void Disable();
+
+  private:
+    std::unique_ptr<hooking::NativeHooking> native_hooking_inst_;
   };
   inline Hooking* kHOOKING{};
 }

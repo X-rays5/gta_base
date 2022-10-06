@@ -7,6 +7,7 @@
 #define GTA_BASE_NATIVES_HPP
 #include <cstdint>
 #include <utility>
+#include <robin_hood.h>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "scr_vector.hpp"
@@ -62,7 +63,7 @@ namespace rage {
   };
   static_assert(sizeof(scrNativeCallContext) == 0xE0);
   using scrNativeHash = std::uint64_t;
-  using scrNativeMapping = std::pair<scrNativeHash, scrNativeHash>;
+  using scrNativeMapping = robin_hood::unordered_map<scrNativeHash, scrNativeHash>;
   using scrNativeHandler = void(*)(scrNativeCallContext*);
 
   class scrNativeRegistration {

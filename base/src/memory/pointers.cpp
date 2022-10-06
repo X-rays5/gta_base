@@ -76,6 +76,10 @@ namespace gta_base {
         GetNativeHandler = ptr.add(12).rip().as<decltype(GetNativeHandler)>();
       });
 
+      main_batch.add(VAR_NAME(script_programs_table), xorstr_("48 8B 1D ? ? ? ? 41 83 F8 FF"), [this](scanner::Handle ptr){
+        script_programs_table = ptr.add(3).rip().as<decltype(script_programs_table)>();
+      });
+
       main_batch.add(VAR_NAME(FixVectors), xorstr_("83 79 18 00 48 8B D1 74 4A FF 4A 18 48 63 4A 18 48 8D 41 04 48 8B 4C CA"), [this](scanner::Handle ptr){
         FixVectors = ptr.as<decltype(FixVectors)>();
       });
@@ -133,6 +137,14 @@ namespace gta_base {
 
       main_batch.add(VAR_NAME(script_globals_), xorstr_("48 8D 15 ? ? ? ? 4C 8B C0 E8 ? ? ? ? 48 85 FF 48 89 1D"), [this](scanner::Handle ptr) {
         script_globals_ = ptr.add(3).rip().as<decltype(script_globals_)>();
+      });
+
+      main_batch.add(VAR_NAME(GtaThreadStart), xorstr_("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 8B FA 85 D2 75 2A 8B 15"), [this](scanner::Handle ptr) {
+        GtaThreadStart = ptr.as<decltype(GtaThreadStart)>();
+      });
+
+      main_batch.add(VAR_NAME(GtaThreadKill), xorstr_("48 89 5C 24 ? 57 48 83 EC 20 48 83 B9 ? ? ? ? ? 48 8B D9 74 14"), [this](scanner::Handle ptr){
+        GtaThreadKill = ptr.as<decltype(GtaThreadKill)>();
       });
 
       auto mem_region = scanner::Module(nullptr);

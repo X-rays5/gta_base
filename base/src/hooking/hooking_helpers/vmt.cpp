@@ -69,6 +69,12 @@ namespace gta_base {
       }
     }
 
+    void VmtHook::DisableAll() {
+      for (auto&& hook : hooks_) {
+        Disable(hook.first);
+      }
+    }
+
     void VmtHook::FixHookAddress(const std::string& name, LPVOID target) {
       __try {
         auto ptr = memory::scanner::Handle(target);
