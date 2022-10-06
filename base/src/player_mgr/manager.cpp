@@ -210,7 +210,7 @@ namespace gta_base::player_mgr {
     }
 
     void Manager::Iterate(bool include_self, const std::function<void(const std::string&, const std::shared_ptr<Player>&)>& fn) {
-      for (auto&& player_entry: player_list_) {
+      for (auto&& player_entry : player_list_) {
         if (!include_self && player_entry.second->Id() == self_->Id())
           continue;
 

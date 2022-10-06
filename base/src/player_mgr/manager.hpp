@@ -15,7 +15,7 @@ namespace gta_base::player_mgr {
     class Manager {
     public:
       using player_ptr_t = std::shared_ptr<Player>;
-      using player_list_t = std::unordered_map<std::string, player_ptr_t>;
+      using player_list_t = robin_hood::unordered_map<std::string, player_ptr_t>;
 
     public:
       Manager();
