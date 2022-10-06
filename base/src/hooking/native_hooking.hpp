@@ -38,6 +38,9 @@ namespace gta_base {
     private:
       robin_hood::unordered_map<rage::joaat_t, robin_hood::unordered_map<rage::scrNativeHash, rage::scrNativeHandler>> detour_hooks_;
       robin_hood::unordered_map<rage::joaat_t, std::unique_ptr<ScriptHook>> script_hooks_;
+
+    private:
+      robin_hood::unordered_map<rage::scrNativeHash, rage::scrNativeHandler> GetNativeReplacements(rage::joaat_t script_hash);
     };
     inline NativeHooking* kNATIVE_HOOKING{};
   }
