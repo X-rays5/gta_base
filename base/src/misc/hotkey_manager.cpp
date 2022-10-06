@@ -34,6 +34,12 @@ namespace gta_base {
 
     bool HotkeyManager::AddKeyPressed(std::uint64_t key_id) {
       if (adding_hotkey_expire_ > common::GetEpoch() && key_id != VK_F1) {
+        if (key_id == VK_ESCAPE) {
+          ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Canceled hotkey creation for {}", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
+          adding_hotkey_expire_ = 0;
+          return true;
+        }
+
         if (AddHotkey(adding_hotkey_name_, key_id)) {
           ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("Hotkey for {} has been added", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
           adding_hotkey_expire_ = 0;
