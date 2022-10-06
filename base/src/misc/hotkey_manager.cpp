@@ -3,8 +3,8 @@
 //
 
 #include "hotkey_manager.hpp"
-#include <inireader/inireader.hpp>
 #include <utility>
+#include "json.hpp"
 #include "common.hpp"
 #include "../ui/manager.hpp"
 
@@ -88,38 +88,37 @@ namespace gta_base::misc {
     }
 
     void HotkeyManager::Load() {
-      auto path = common::GetSettingsDir() / "hotkeys.ini";
+      auto path = common::GetSettingsDir() / "hotkeys.json";
       if (!std::filesystem::is_regular_file(path))
         return;
 
-      ini::Parser ini;
-      ini.Parse(path);
+      auto json = json::FromFile(path);
+      if (!json.IsObject())
+        return;
 
-      for (auto&& hotkey : ini.GetRootSection()) {
-        if (!hotkey.second.is<std::int64_t>())
+      for (auto&& hotkey : json.GetObject()) {
+        if (!hotkey.value.Is<std::int64_t>())
           continue;
 
-        if (!AddHotkey(hotkey.first, hotkey.second.as<std::int64_t>()))
-          LOG_WARN("Failed to load {} hotkey from hotkeys file", hotkey.first);
+        if (!AddHotkey(hotkey.name.GetString(), hotkey.value.Get<std::int64_t>()))
+          LOG_WARN("Failed to load {} hotkey from hotkeys file", hotkey.name.GetString());
       }
     }
 
     void HotkeyManager::Save() {
-      auto path = common::GetSettingsDir() / "hotkeys.ini";
-      if (std::filesystem::is_regular_file(path))
-        std::filesystem::remove(path);
+      auto path = common::GetSettingsDir() / "hotkeys.json";
 
       std::ofstream writer(path);
 
-      if (writer.is_open()) {
-        ini::Parser ini;
-        for (auto&& hotkey : hotkeys_) {
-          ini.GetRootSection().Add(hotkey.second, hotkey.first);
-        }
+      rapidjson::Document json;
+      json.SetObject();
 
-        writer << ini.Stringify();
-        writer.close();
+      for (auto&& hotkey : hotkeys_) {
+        auto key = json::StringToJsonVal(hotkey.second, json.GetAllocator());
+        json.AddMember(key, hotkey.first, json.GetAllocator());
       }
+
+      json::ToFile(json, path);
     }
 
     std::string HotkeyManager::GetHotkeyKeyStr(std::uint64_t hotkey_id) {

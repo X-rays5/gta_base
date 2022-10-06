@@ -3,39 +3,40 @@
 //
 
 #include "translation_manager.hpp"
-#include <inireader/inireader.hpp>
+#include "../../misc/json.hpp"
 
 namespace gta_base::ui {
     Translation::Translation(const std::filesystem::path& path) {
       if (!std::filesystem::exists(path))
         return;
 
-      ini::Parser ini_reader;
-      ini_reader.Parse(path);
+      auto json = json::FromFile(path);
+      if (!json.IsObject()) {
+        *this = Translation();
+        return;
+      }
 
-      for (auto& [name, val] : ini_reader["translation"]) {
-        if (!val.is<std::string>())
+      for (auto&& [name, val] : json.GetObject()) {
+        if (!val.IsString())
           continue;
 
-        translation_[name] = val.as<std::string>();
+        translation_[name.GetString()] = val.GetString();
       }
     }
 
     bool Translation::SaveToFile(const std::filesystem::path& path) {
-      std::ofstream writer(path);
-      if (!writer.is_open())
-        return false;
 
-      ini::Parser ini_writer;
+      rapidjson::Document json;
+      json.SetObject();
 
-      auto section = ini_writer.AddSection("translation");
+      for (auto& [key, val] : translation_) {
+       auto json_key = json::StringToJsonVal(key, json.GetAllocator());
+       auto json_val = json::StringToJsonVal(val, json.GetAllocator());
 
-      for (auto& [key, val] : translation_)
-        section[key] = val;
+       json.AddMember(json_key, json_val, json.GetAllocator());
+      }
 
-      writer << ini_writer.Stringify();
-
-      return true;
+      return json::ToFile(json, path);
     }
 
     std::string_view Translation::operator[](const std::string& key) {
