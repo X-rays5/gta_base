@@ -9,10 +9,10 @@
 #include "../../../misc/globals.hpp"
 
 namespace gta_base {
-  void* Hooks::assign_physical_index(CNetworkPlayerMgr* netPlayerMgr, CNetGamePlayer* player, uint8_t new_index) {
+  void* Hooks::AssignPlayerPhysicalIdx(CNetworkPlayerMgr* netPlayerMgr, CNetGamePlayer* player, uint8_t new_index) {
     auto slot = player->m_player_id;
 
-    auto res = kHOOKING->assign_physical_index_hook_.GetOriginal<decltype(&Hooks::assign_physical_index)>()(netPlayerMgr, player, new_index);
+    auto res = kHOOKING->assign_physical_index_hook_.GetOriginal<decltype(&Hooks::AssignPlayerPhysicalIdx)>()(netPlayerMgr, player, new_index);
 
     // leaving
     if (new_index == 255) {

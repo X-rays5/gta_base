@@ -3,7 +3,7 @@
 //
 
 #include "manager.hpp"
-#include "../rage/util/execasscript.hpp"
+#include "../rage/util/exec_as_script.hpp"
 #include "../natives/invoker.hpp"
 
 namespace gta_base {
@@ -29,9 +29,6 @@ namespace gta_base {
     }
 
     void Manager::RunTick() {
-      static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
-      static bool ensure_native_handlers = (rage::kINVOKER.CacheHandlers(), true);
-
       std::lock_guard lock(mtx_);
       for (auto const& script : scripts_)
         script->Tick();

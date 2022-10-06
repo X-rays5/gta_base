@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_EXECASSCRIPT_HPP
-#define GTA_BASE_EXECASSCRIPT_HPP
+#ifndef GTA_BASE_EXEC_AS_SCRIPT_HPP
+#define GTA_BASE_EXEC_AS_SCRIPT_HPP
 #include "../joaat.hpp"
 #include "../../memory/pointers.hpp"
 
@@ -33,4 +33,4 @@ namespace rage {
     }
   }
 }
-#endif //GTA_BASE_EXECASSCRIPT_HPP
+#endif //GTA_BASE_EXEC_AS_SCRIPT_HPP

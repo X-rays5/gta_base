@@ -3,7 +3,7 @@
 //
 
 #include "scriptmanager.hpp"
-#include "../rage/util/execasscript.hpp"
+#include "../rage/util/exec_as_script.hpp"
 
 namespace gta_base {
   ScriptManager::ScriptManager() {

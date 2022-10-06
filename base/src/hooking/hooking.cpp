@@ -11,10 +11,10 @@
 namespace gta_base {
   Hooking::Hooking() :
   swap_chain_hook_(*memory::kPOINTERS->swap_chain_),
-  run_script_threads_hook_("RunScriptThreads", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads),
   network_player_mgr_init_hook_("NetworkPlayerMgrInit", memory::kPOINTERS->NetworkPlayerMgrInit, &Hooks::NetworkPlayerMgrInit),
   network_player_mgr_shutdown_hook_("NetworkPlayerMgrShutdown", memory::kPOINTERS->NetworkPlayerMgrShutdown, &Hooks::NetworkPlayerMgrShutdown),
-  assign_physical_index_hook_("AssignPhysicalIndex", memory::kPOINTERS->AssignPhysicalIdx, &Hooks::assign_physical_index)
+  assign_physical_index_hook_("AssignPhysicalIndex", memory::kPOINTERS->AssignPhysicalIdx, &Hooks::AssignPlayerPhysicalIdx),
+  run_script_threads_hook_("RunScriptThreads", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads),
   gta_thread_start_hook_("GtaThreadStart", memory::kPOINTERS->GtaThreadStart, &Hooks::GtaThreadStart),
   gta_thread_kill_hook_("GtaThreadKill", memory::kPOINTERS->GtaThreadKill, &Hooks::GtaThreadKill)
   {
@@ -38,10 +38,10 @@ namespace gta_base {
     swap_chain_hook_.Enable(Hooks::swapchain_present_index);
     swap_chain_hook_.Enable(Hooks::swapchain_resizebuffers_index);
 
-    run_script_threads_hook_.Enable();
     network_player_mgr_init_hook_.Enable();
     network_player_mgr_shutdown_hook_.Enable();
     assign_physical_index_hook_.Enable();
+    run_script_threads_hook_.Enable();
     gta_thread_start_hook_.Enable();
     gta_thread_kill_hook_.Enable();
   }
@@ -52,10 +52,10 @@ namespace gta_base {
 
     gta_thread_kill_hook_.Disable();
     gta_thread_start_hook_.Disable();
+    run_script_threads_hook_.Disable();
     assign_physical_index_hook_.Disable();
     network_player_mgr_shutdown_hook_.Disable();
     network_player_mgr_init_hook_.Disable();
-    run_script_threads_hook_.Disable();
 
     hooking::UnhookWndProc();
   }
@@ -70,6 +70,9 @@ namespace gta_base {
 
   bool Hooks::RunScriptThreads(std::uint32_t ops_to_execute) {
     try {
+      static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
+      static bool ensure_native_handlers = (rage::kINVOKER.CacheHandlers(), true);
+
       if (globals::running) {
         kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame);
       }

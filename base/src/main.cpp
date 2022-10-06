@@ -79,6 +79,7 @@ void BaseMain() {
   LOG_INFO("Hooks enabled");
 
   auto scripting_thread = std::thread([]{
+    LOG_INFO("scripting thread first tick");
     while(globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
       std::this_thread::yield();

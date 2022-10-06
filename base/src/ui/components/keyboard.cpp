@@ -40,6 +40,12 @@ namespace gta_base {
           ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
 
+        if (!keyboards_.empty()) {
+          globals::block_input = true;
+        } else {
+          globals::block_input = false;
+        }
+
         for (int i = 0; i < keyboards_.size(); i++) {
           auto&& keyboard = keyboards_[i];
 

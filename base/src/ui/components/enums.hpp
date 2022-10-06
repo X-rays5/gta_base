@@ -25,6 +25,7 @@ namespace gta_base {
       Misc,
       Settings,
       SettingsTheme,
+      SettingsHotkeys,
       SettingsUnloadConfirm,
       Debug,
       DebugTestComponents,

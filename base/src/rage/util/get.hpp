@@ -76,7 +76,7 @@ namespace rage {
   }
 
   inline Network* GetNetwork() {
-    auto network = (std::int64_t)*gta_base::memory::kPOINTERS->network_;
+    auto network = reinterpret_cast<int64_t>(*gta_base::memory::kPOINTERS->network_);
     if (gta_base::common::GetCurrentPlatform() == gta_base::common::Platform::kSteam)
       network += sizeof(rage::rlSessionInfo);
 
