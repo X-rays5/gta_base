@@ -25,6 +25,8 @@ namespace gta_base {
 
     void HotkeyManager::StartHotkeyAdd(const std::string& key_str) {
       if (adding_hotkey_expire_ <= common::GetEpoch()) {
+        globals::block_input = true;
+
         adding_hotkey_expire_ = common::GetEpoch() + 5000;
         adding_hotkey_name_ = key_str;
         LOG_DEBUG("Hotkey creation started for {}", key_str);
@@ -34,6 +36,8 @@ namespace gta_base {
 
     bool HotkeyManager::AddKeyPressed(std::uint64_t key_id) {
       if (adding_hotkey_expire_ > common::GetEpoch() && key_id != VK_F1) {
+        globals::block_input = false;
+
         if (key_id == VK_ESCAPE) {
           ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Canceled hotkey creation for {}", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
           adding_hotkey_expire_ = 0;
@@ -75,7 +79,6 @@ namespace gta_base {
       std::string key_str = GetHotkeyKeyStr(key_id);
 
       if (!key_str.empty()) {
-        LOG_DEBUG("receiving hotkey");
         if (ui::kMANAGER->HotkeyPressed(key_str)) {
           ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("{} has been triggered", ui::kTRANSLATION_MANAGER->Get(key_str)));
         } else {
