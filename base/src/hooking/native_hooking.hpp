@@ -16,7 +16,7 @@
 namespace gta_base {
   namespace hooking {
     struct NativeHooks {
-
+      static void NETWORK_BAIL(rage::scrNativeCallContext* ctx);
     };
 
     class NativeHooking {

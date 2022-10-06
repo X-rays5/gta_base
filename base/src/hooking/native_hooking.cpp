@@ -7,11 +7,13 @@
 #include "../misc/globals.hpp"
 #include "../natives/natives.hpp"
 #include "../rage/util/find_script_thread.hpp"
+#include "../ui/notification/notification.hpp"
 
 namespace gta_base {
   namespace hooking {
 
     NativeHooking::NativeHooking() {
+      AddDetour(RAGE_JOAAT("freemode"), 0x95914459A87EBA28, NativeHooks::NETWORK_BAIL);
 
       for (auto&& detours_for_script : detour_hooks_) {
         const auto thread = rage::FindScriptThread(detours_for_script.first);
@@ -68,12 +70,18 @@ namespace gta_base {
     }
 
     void NativeHooking::ThreadKill(const GtaThread* thread) {
+      LOG_DEBUG("t");
       if (!thread)
         return;
 
       if (script_hooks_.erase(thread->m_script_hash)) {
         LOG_INFO("{} script terminated, cleaning up hooks", thread->m_name);
       }
+    }
+
+    void NativeHooks::NETWORK_BAIL(rage::scrNativeCallContext* ctx) {
+      LOG_INFO("Prevented network bail from freemode script.");
+      ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Kick", "Blocked network bail kick from freemode script");
     }
   }
 }
