@@ -82,3 +82,231 @@ namespace rage
 
 
 03 C9 83 F9 14 77 18 8A 84 24 ? ? ? ? 80 A3 // random crash online 1.61
+
+// stuff
+class CGameScriptHandlerNetComponent
+	{
+	public:
+		virtual ~CGameScriptHandlerNetComponent() = default;
+
+		virtual bool _0x08(void*) = 0;
+
+		virtual void _0x10(CNetGamePlayer*) = 0; // creates a scriptId?
+
+		virtual void* player_left(CNetGamePlayer* player) = 0;
+
+		virtual void* send_host_migration_event(CNetGamePlayer* player) = 0;
+
+		virtual void* player_joined(scriptId**, void* msg_ctx) = 0;
+
+		virtual void* player_joined_ack(scriptId**, void* msg_ctx) = 0;
+
+		virtual bool _0x38(scriptId*, void*) = 0; // join_script?
+
+		virtual void* _0x40(void*, void*) = 0;          // all these functions below messes with host migration
+
+		virtual void* _0x48(void*, void*, void*) = 0;
+
+		virtual void* _0x50(void*, void*) = 0;
+
+		virtual void* _0x58(void*, void*) = 0;
+
+		virtual void* _0x60(void*, void*) = 0;
+
+		virtual void* _0x68(void*, void*) = 0;
+
+		virtual void _0x70(void*, void*) = 0;
+
+		virtual void _0x78(void*, void*) = 0;
+
+		virtual short _0x80(void*, void*) = 0;
+
+		virtual void* _0x88(void*, void*) = 0;
+
+		virtual void* _0x90(void*, void*) = 0; // HOST_MIGRATION_FAILED
+
+		virtual bool _0x98(void*, void*) = 0;
+
+		virtual void* _0xA0(void*, void*) = 0;
+
+		virtual void* _0xA8(void*, void*) = 0;
+
+		virtual short _0xB0(void*, void*) = 0;
+
+		virtual bool register_host_broadcast_data(void* data, int size, char* a3) = 0;
+
+		virtual bool register_player_broadcast_data(int a1, int size, bool a3) = 0;
+
+		virtual bool _0xC8() = 0; // something to do to joining session
+
+		virtual bool _0xD0() = 0; 
+
+		virtual bool add_player_to_script(CNetGamePlayer* player, short* outParticipantID, short* outSlot, int* outFailReason) = 0;
+
+		virtual bool add_player_to_script_internal(CNetGamePlayer* player, short participantID, short slot) = 0; // player aka participant
+
+		virtual bool remove_player_from_script(CNetGamePlayer* player) = 0;
+
+		virtual void* player_left_impl(CNetGamePlayer*, bool) = 0;
+
+		virtual bool do_host_migration(CNetGamePlayer* player, short host_token, bool unk) = 0; // aka _0xF8
+
+		virtual void* leave_from_script() = 0; // calls above function with player = 0
+
+		virtual bool _0x108() = 0;
+
+		virtual void* _0x110() = 0;
+
+		virtual bool _0x118() = 0; // related to above function
+
+		CGameScriptHandler* m_script_handler; //0x0008
+
+		char pad_0010[52]; //0x0010
+
+		std::int64_t m_host_token;
+
+		char padding[0x2];
+
+		CNetGamePlayer* m_host; //0x0048
+
+		char pad_0050[319]; //0x0050
+
+		uint8_t m_num_host_broadcast_arrays; //0x018F
+		uint8_t m_num_player_broadcast_arrays; //0x0190
+
+		char pad_0191[47]; //0x0191
+	};
+
+// already exists in script_handler.hpp, just modified one line
+class scriptHandler
+	{
+	public:
+		class atDScriptObjectNode : public atDNode<scriptHandlerObject*>
+		{
+		};
+	public:
+		virtual ~scriptHandler() = default;                                                                   //  0 (0x00)
+
+		virtual bool _0x08() = 0;                                                                             //  1 (0x08)
+
+		virtual void _0x10() = 0;                                                                             //  2 (0x10)
+
+		virtual void cleanup_objects() = 0;                                                                   //  3 (0x18)
+
+		virtual scriptId *_0x20() = 0;                                                                        //  4 (0x20)
+
+		virtual scriptId *get_id() = 0;                                                                       //  5 (0x28)
+
+		// Returns whether the script handler belongs to a networked script.
+		virtual bool is_networked() = 0;                                                                      //  6 (0x30)
+
+		// Initializes the network component for the script handler.
+		virtual void init_net_component() = 0;                                                                //  7 (0x38)
+
+		// Deletes the script handler's network component, if it exists.
+		virtual void reset_net_component() = 0;                                                               //  8 (0x40)
+
+		// Destroys the script handler.
+		virtual bool destroy() = 0;                                                                           //  9 (0x48)
+
+		// Adds the object to the script handler's list of objects.
+		virtual void add_object(scriptHandlerObject*, bool is_network, bool is_network_and_scriptcheck) = 0; // 10 (0x50)
+
+		// Something related to reservations.
+		virtual void _0x58(void*) = 0;                                                                        // 11 (0x58)
+
+		virtual void register_resource(scriptResource*, void*) = 0;                                           // 12 (0x60)
+
+		virtual void _0x68() = 0;                                                                             // 13 (0x68)
+
+		virtual void _0x70() = 0;                                                                             // 14 (0x70)
+
+		virtual void _0x78() = 0;                                                                             // 15 (0x78)
+
+		virtual void _0x80() = 0;                                                                             // 16 (0x80)
+
+		virtual void _0x88() = 0;                                                                             // 17 (0x88)
+
+		virtual void _0x90() = 0;                                                                             // 18 (0x90)
+
+		virtual void _0x98() = 0;                                                                             // 19 (0x98)
+	public:
+		void *m_0x08;                                // 0x08
+		void *m_0x10;                                // 0x10
+		scrThread *m_script_thread;                  // 0x18
+		atDList<atDScriptObjectNode> m_objects;      // 0x20
+		scriptResource *m_resource_list_head;        // 0x30
+		scriptResource *m_resource_list_tail;        // 0x38
+		void *m_0x40;                                // 0x40
+		CGameScriptHandlerNetComponent *m_net_component;  // 0x48 <<< this one
+		std::uint32_t m_0x50;                        // 0x50
+		std::uint32_t m_0x54;                        // 0x54
+		std::uint32_t m_0x58;                        // 0x58
+		std::uint32_t m_0x60;                        // 0x5C
+	};
+
+inline bool force_script_host(Player player, const char* script_name) 
+	{
+		if (NETWORK::NETWORK_GET_HOST_OF_SCRIPT(script_name, -1, 0) == player) 
+			return true;
+
+		if (NETWORK::NETWORK_GET_NUM_SCRIPT_PARTICIPANTS(script_name, -1, 0) == 0) 
+			return false;
+
+		if (auto freemode = gta_util::find_script_thread(rage::joaat(script_name))) 
+		{
+			auto plyr = g_player_service->get_by_id(player)->get_net_game_player();
+			if (plyr && freemode->m_handler)
+			{
+				auto handler = freemode->m_handler->m_net_component;
+				if (handler == NULL) 
+					return false;
+				handler->send_host_migration_event(plyr);
+				handler->do_host_migration(plyr, 0, true);
+				script::get_current()->yield();
+				for (int tries = 0; tries < 100; tries++) 
+				{
+					if (NETWORK::NETWORK_GET_HOST_OF_SCRIPT(script_name, -1, 0) == player) 
+						break;
+
+					handler->send_host_migration_event(plyr);
+					handler->do_host_migration(plyr, 0, true);
+					script::get_current()->yield(1ms);
+				}
+				return NETWORK::NETWORK_GET_HOST_OF_SCRIPT(script_name, -1, 0) == player;
+			}
+		}
+
+		return false;
+	}
+
+	inline bool force_script_host(Player player) 
+	{
+		return force_script_host(player, "freemode");
+	}
+
+static inline script_global gpbd_fm_3(1892703);
+static inline script_global gsbd_fm_events(1920255);
+
+namespace size
+{
+	constexpr int globalplayer_bd = 453;
+	constexpr int gpbd_fm_3 = 599;
+	constexpr int gpbd_fm_1 = 888;
+}
+
+
+inline void set_fm_event_index(int index)
+	{
+		force_script_host(self::id); // not really required but makes it faster
+
+		int idx = index / 32;
+		int bit = index % 32;
+		misc::set_bit(globals::gsbd_fm_events.at(11).at(341).at(idx, 1).as<int*>(), bit);
+		misc::set_bit(globals::gsbd_fm_events.at(11).at(348).at(idx, 1).as<int*>(), bit);
+		misc::set_bit(globals::gpbd_fm_3.at(self::id, globals::size::gpbd_fm_3).at(10).at(205).at(idx, 1).as<int*>(), bit);
+	}
+
+session::set_fm_event_index(9);
+session::set_fm_event_index(10);
+session::set_fm_event_index(11);
