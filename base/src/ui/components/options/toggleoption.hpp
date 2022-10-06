@@ -10,8 +10,8 @@
 namespace gta_base::ui::option {
       class ToggleOption : public BaseOption {
       public:
-        explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", hotkeyable), toggle_(toggle)
+        explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle, bool saveable = true, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), toggle_(toggle)
         {}
 
         void HandleKey(KeyInput key) final {
@@ -32,9 +32,19 @@ namespace gta_base::ui::option {
             return true;
           } else if (flag == OptionFlag::kToggled) {
             return *toggle_;
+          } else if (flag == OptionFlag::kSavable) {
+            return saveable_;
           }
 
           return false;
+        }
+
+        std::string GetSaveVal() final {
+          return std::to_string(*toggle_);
+        }
+
+        void SetSavedVal(const std::string& val) final {
+          *toggle_ = std::stoi(val);
         }
       private:
         bool* toggle_;

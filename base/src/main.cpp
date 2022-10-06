@@ -22,6 +22,7 @@
 #include "fiber/pool.hpp"
 #include "player_mgr/manager.hpp"
 #include "ui/components/keyboard.hpp"
+#include "misc/settings.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
@@ -107,6 +108,8 @@ void BaseMain() {
   });
   LOG_INFO("Scripting thread started");
 
+  settings::Load();
+
   LOG_INFO("Initialized");
   while (globals::running) {
     if (common::IsKeyDown(VK_DELETE))
@@ -115,6 +118,9 @@ void BaseMain() {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
   LOG_INFO("Unloading...");
+
+  if (kSETTINGS.menu.save_on_exit)
+    settings::Save();
 
   if (scripting_thread.joinable())
     scripting_thread.join();

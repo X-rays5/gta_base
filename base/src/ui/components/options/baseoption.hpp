@@ -18,8 +18,8 @@ namespace gta_base::ui::option {
       public:
         using on_event_t = std::function<void(Event)>;
 
-        BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", const std::string& icon_path = "", bool hotkeyable = true, on_event_t event_handler = nullptr) :
-          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), icon_path_(icon_path), hotkeyable_(hotkeyable), event_handler_(std::move(event_handler))
+        BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", const std::string& icon_path = "", bool saveable = true, bool hotkeyable = true, on_event_t event_handler = nullptr) :
+          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), icon_path_(icon_path), saveable_(saveable), hotkeyable_(hotkeyable), event_handler_(std::move(event_handler))
         {}
 
         inline std::string GetName() {
@@ -76,12 +76,15 @@ namespace gta_base::ui::option {
 
         virtual void HandleKey(KeyInput key) = 0;
         virtual bool HasFlag(OptionFlag flag) = 0;
+        virtual std::string GetSaveVal() {return {};};
+        virtual void SetSavedVal(const std::string& val) {};
       protected:
         std::string name_key_;
         std::string description_key_;
         std::string center_text_key_;
         std::string right_text_key_;
         std::filesystem::path icon_path_;
+        bool saveable_;
         bool hotkeyable_;
         on_event_t event_handler_;
 

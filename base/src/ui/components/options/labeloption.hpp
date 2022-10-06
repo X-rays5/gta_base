@@ -22,9 +22,9 @@ namespace gta_base::ui::option {
         bool HasFlag(OptionFlag flag) final {
           if (flag == OptionFlag::kLabel) {
             return true;
-          } else {
-            return false;
           }
+
+          return false;
         }
       };
     }

@@ -11,8 +11,8 @@ namespace gta_base::ui::option {
       template<typename T>
       class ListOption : public BaseOption {
       public:
-        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", hotkeyable), idx_(&idx), items_(&items)
+        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool saveable = true, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), idx_(&idx), items_(&items)
         {
           UpdateRightText();
         }
@@ -50,10 +50,25 @@ namespace gta_base::ui::option {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
             return hotkeyable_;
-          } else {
-            return false;
+          } else if (flag == OptionFlag::kSavable) {
+            return saveable_;
           }
+
+          return false;
         }
+
+        std::string GetSaveVal() final {
+          return std::to_string(*idx_);
+        }
+
+        void SetSavedVal(const std::string& val) final {
+          std::size_t tmp = std::stoull(val);
+          if (tmp < items_->size())
+            *idx_ = tmp;
+          else
+            LOG_WARN("{}: invalid idx saved", GetName());
+        }
+
       private:
         std::size_t* idx_;
         std::vector<T>* items_;

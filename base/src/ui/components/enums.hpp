@@ -36,7 +36,8 @@ namespace gta_base::ui {
       kHotkeyable,
       kLabel,
       kToggle,
-      kToggled
+      kToggled,
+      kSavable
     };
 
     enum class KeyInput {

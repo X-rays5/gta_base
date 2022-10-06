@@ -12,8 +12,8 @@ namespace gta_base::ui::option {
       requires std::integral<T> or std::floating_point<T>
       class ToggleNumberOption : public BaseOption {
       public:
-        explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", hotkeyable), toggle_(&toggle), value_(&value), step_(step), min_(min), max_(max)
+        explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max, bool saveable = true, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), toggle_(&toggle), value_(&value), step_(step), min_(min), max_(max)
         {
           UpdateRightText();
         }
@@ -63,10 +63,26 @@ namespace gta_base::ui::option {
             return true;
           } else if (flag == OptionFlag::kToggled) {
             return *toggle_;
-          } else {
-            return false;
+          } else if (flag == OptionFlag::kSavable) {
+            return saveable_;
+          }
+
+          return false;
+        }
+
+        std::string GetSaveVal() final {
+          return fmt::format("{}##{}", *value_, static_cast<int>(*toggle_));
+        }
+
+        void SetSavedVal(const std::string& val) final {
+          LOG_DEBUG("{}", val);
+          if (auto pos = val.find("##"); pos != std::string::npos) {
+            *value_ = std::stod(val.substr(0, pos));
+            LOG_DEBUG("{}", val.substr(pos + 1));
+            *toggle_ = std::stoi(val.substr(pos + 2));
           }
         }
+
       private:
         bool* toggle_;
         T* value_;

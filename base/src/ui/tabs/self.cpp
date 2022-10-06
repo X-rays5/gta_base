@@ -41,7 +41,7 @@ namespace gta_base::ui::tabs {
               rage::util::TeleportToObjective(true);
             });
           }));
-          sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "", &player->m_player_info->m_wanted_level, 1.f, 0.f, 5.f));
+          sub->AddOption(option::NumberOption<std::uint32_t>("option/wanted_level", "", &player->m_player_info->m_wanted_level, 1.f, 0.f, 5.f, false));
           sub->AddOption(option::ToggleOption("option/never_wanted", "", &kSETTINGS.player.never_wanted));
         });
 

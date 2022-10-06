@@ -60,6 +60,23 @@ namespace gta_base::ui {
         }
       }
 
+      inline void IterateAllOptions(std::function<void(std::shared_ptr<Submenu>, std::shared_ptr<option::BaseOption>)> cb) {
+        std::unique_lock lock(sub_mtx_);
+        for (auto&& sub_pair : submenus_) {
+          auto sub = sub_pair.second;
+
+          if (sub->GetOptionCount() == 0) {
+            sub->CreateOptions();
+            if (sub->GetOptionCount() == 0)
+              continue;
+          }
+
+          for (int i = 0; i < sub->GetOptionCount(); i++) {
+            std::invoke(cb, sub, sub->GetOption(i));
+          }
+        }
+      }
+
       inline bool HotkeyPressed(const std::string& name) {
         std::unique_lock lock(sub_mtx_);
         for (auto&& sub : submenus_) {

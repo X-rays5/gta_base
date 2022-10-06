@@ -18,8 +18,8 @@ namespace gta_base::ui::option {
       requires std::integral<T> or std::floating_point<T>
       class NumberOption : public BaseOption {
       public:
-        explicit NumberOption(const std::string& name_key, const std::string& description_key, T* value, T step, T min, T max, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", hotkeyable), value_(value), step_(step), min_(min), max_(max)
+        explicit NumberOption(const std::string& name_key, const std::string& description_key, T* value, T step, T min, T max, bool saveable = true, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), value_(value), step_(step), min_(min), max_(max)
         {
           UpdateRightText();
         }
@@ -36,12 +36,7 @@ namespace gta_base::ui::option {
                   return;
 
                 if (value) {
-                  constexpr static const bool is_float = std::is_floating_point_v<T>;
-                  if (is_float) {
-                    *value = std::clamp(common::WithinLimits<std::double_t, T>(std::stod(text)), min, max);
-                  } else {
-                    *value = std::clamp(common::WithinLimits<std::int64_t, T>(std::stoll(text)), min, max);
-                  }
+                  *value = FromString(text, min, max);
                 }
               });
 
@@ -90,9 +85,19 @@ namespace gta_base::ui::option {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
             return hotkeyable_;
-          } else {
-            return false;
+          } else if (flag == OptionFlag::kSavable) {
+            return saveable_;
           }
+
+          return false;
+        }
+
+        std::string GetSaveVal() final {
+          return std::to_string(*value_);
+        }
+
+        void SetSavedVal(const std::string& val) final {
+          *value_ = FromString(val, min_, max_);
         }
 
       private:
@@ -118,6 +123,18 @@ namespace gta_base::ui::option {
 
         inline void CheckValueBounds() {
           *value_ = std::clamp(*value_, min_, max_);
+        }
+
+        static inline T FromString(const std::string& val, T min, T max) {
+          T res;
+          constexpr static const bool is_float = std::is_floating_point_v<T>;
+          if (is_float) {
+            res = std::clamp(common::WithinLimits<std::double_t, T>(std::stod(val)), min, max);
+          } else {
+            res = std::clamp(common::WithinLimits<std::int64_t, T>(std::stoll(val)), min, max);
+          }
+
+          return res;
         }
       };
     }

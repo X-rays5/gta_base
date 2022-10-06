@@ -5,6 +5,7 @@
 #include "manager.hpp"
 #include "../d3d/texturemanager.hpp"
 #include "../d3d/renderer.hpp"
+#include "../misc/settings.hpp"
 #include "components/keyboard.hpp"
 #include "../logger/logger.hpp"
 #include "fonts/IconsFontAwesome6.h"

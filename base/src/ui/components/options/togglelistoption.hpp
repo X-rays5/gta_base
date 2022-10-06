@@ -11,8 +11,8 @@ namespace gta_base::ui::option {
       template<typename T>
       class ToggleListOption : public BaseOption {
       public:
-        explicit ToggleListOption(const std::string& name_key, const std::string& description_key, bool& toggle, std::size_t& idx, std::vector<T>& items, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", hotkeyable), toggle_(&toggle), idx_(&idx), items_(&items)
+        explicit ToggleListOption(const std::string& name_key, const std::string& description_key, bool& toggle, std::size_t& idx, std::vector<T>& items, bool saveable = true, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), toggle_(&toggle), idx_(&idx), items_(&items)
         {
           UpdateRightText();
         }
@@ -55,10 +55,28 @@ namespace gta_base::ui::option {
             return true;
           } else if (flag == OptionFlag::kToggled) {
             return *toggle_;
-          } else {
-            return false;
+          } else if (flag == OptionFlag::kSavable) {
+            return saveable_;
+          }
+
+          return false;
+        }
+
+        std::string GetSaveVal() final {
+          return fmt::format("{}##{}", *idx_, static_cast<int>(*toggle_));
+        }
+
+        void SetSavedVal(const std::string& val) final {
+          if (auto pos = val.find("##"); pos != std::string::npos) {
+            *toggle_ = std::stoi(val.substr(pos + 2));
+            std::size_t tmp = std::stoull(val.substr(0, pos));
+            if (tmp < items_->size())
+              *idx_ = tmp;
+            else
+              LOG_WARN("{}: invalid idx saved", GetName());
           }
         }
+
       private:
         bool* toggle_;
         std::size_t* idx_;
