@@ -8,6 +8,7 @@
 #include "../../rage/util/entity.hpp"
 #include "../../rage/util/streaming.hpp"
 #include "../../rage/enums.hpp"
+#include "../../rage/util/breakup_kick.hpp"
 
 namespace gta_base {
   namespace ui {
@@ -44,7 +45,7 @@ namespace gta_base {
           sub->AddOption(option::LabelOption("label/toxic_remote"));
           sub->AddOption(option::ExecuteOption("Kick", "", []{
             if (common::IsSessionStarted() && kPLAYER_MGR->GetSelectedPlayer() != kPLAYER_MGR->GetSelf()) {
-              //rage::BreakupKick(kPLAYER_MGR->GetSelectedPlayer());
+              rage::BreakupKick(kPLAYER_MGR->GetSelectedPlayer());
             }
           }));
         });
