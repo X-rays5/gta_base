@@ -31,17 +31,6 @@ void BaseMain() {
   auto ptr_inst = std::make_unique<memory::Pointers>();
   LOG_INFO("Pointers initialized");
 
-  if (*memory::kPOINTERS->game_state_ != eGameState::Playing) {
-    waited_for_game_load = true;
-    LOG_INFO("Waiting for the game to load...");
-  }
-  while(*memory::kPOINTERS->game_state_ != eGameState::Playing) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-  }
-  if (waited_for_game_load) {
-    LOG_INFO("Game loaded");
-  }
-
   MH_Initialize();
   auto hook_inst = std::make_unique<Hooking>();
   LOG_INFO("Hooking initialized");
@@ -65,6 +54,17 @@ void BaseMain() {
 
   auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(globals::target_window_class, globals::target_window_name));
   LOG_INFO("Renderer initialized");
+
+  if (*memory::kPOINTERS->game_state_ != eGameState::Playing) {
+    waited_for_game_load = true;
+    LOG_INFO("Waiting for the game to load...");
+  }
+  while(*memory::kPOINTERS->game_state_ != eGameState::Playing) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  }
+  if (waited_for_game_load) {
+    LOG_INFO("Game loaded");
+  }
 
   auto ui_manager_inst = std::make_unique<ui::Manager>();
   LOG_INFO("UI Manager initialized");
