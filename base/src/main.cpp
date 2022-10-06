@@ -11,7 +11,6 @@
 #include "d3d/renderer.hpp"
 #include "memory/pointers.hpp"
 #include "scriptmanager/scriptmanager.hpp"
-#include "scripts/scripting/discord.hpp"
 #include "scripts/scripting/uitick.hpp"
 #include "scripts/scripting/job_queue.hpp"
 #include "scripts/render/uidraw.hpp"
@@ -47,8 +46,7 @@ void BaseMain() {
 
   // render scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
-  // scripting scripts
-  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Discord>());
+  // main thread scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::JobQueue>());
   // game scripts
@@ -71,6 +69,23 @@ void BaseMain() {
 
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO("Discord initialized");
+
+  auto discord_thread = std::thread([]{
+    LOG_INFO("discord thread first tick");
+    while(globals::running) {
+      rpc::kDISCORD->SetLargeImage("gta-logo");
+      if (common::IsSessionStarted()) {
+        auto player_mgr = rage::GetNetworkPlayerMgr();
+        rpc::kDISCORD->SetStatus(fmt::format("Playing online ({} of {})", player_mgr->m_player_count, player_mgr->m_player_limit));
+      } else {
+        rpc::kDISCORD->SetStatus("Playing offline");
+      }
+
+      rpc::kDISCORD->Tick();
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+  });
+  LOG_INFO("Started Discord thread");
 
   auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
   LOG_INFO("Player Manager initialized");
@@ -104,7 +119,11 @@ void BaseMain() {
   LOG_INFO("Hooks disabled");
 
   player_mgr_inst.reset();
-  LOG_INFO("Player Manager unloaded");
+  LOG_INFO("Player Manager shutdown");
+
+  if (discord_thread.joinable())
+    discord_thread.join();
+  LOG_INFO("Discord thread stopped");
 
   discord_inst.reset();
   LOG_INFO("Discord shutdown");
