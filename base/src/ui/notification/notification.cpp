@@ -4,6 +4,7 @@
 
 #include "notification.hpp"
 #include "../manager.hpp"
+#include "../../d3d/renderer.hpp"
 
 namespace gta_base {
   namespace ui {
@@ -18,13 +19,16 @@ namespace gta_base {
     float Notification::NotificationData::Draw(const ImVec2& pos) {
       ImU32 color = GetColor();
       auto draw_list = kMANAGER->GetDrawList();
-      auto font = ImGui::GetFont();
+      auto font = d3d::kRENDERER->GetFont();
+      auto font_bold = d3d::kRENDERER->GetFontBold();
       auto title_tmp = title_;
       auto body_tmp = body_;
 
+      //ImGui::PushFont(font_bold);
       d3d::draw::WordWrap(font_size_title, title_tmp, x_size + 0.02f, 1);
+      //ImGui::PopFont();
 
-      auto y_size_char_title = d3d::draw::CalcTextSize(font, font_size_title, " ").y;
+      auto y_size_char_title = d3d::draw::CalcTextSize(font_bold, font_size_title, " ").y;
       auto y_size_char_body = d3d::draw::CalcTextSize(font, font_size_body, " ").y;
       float y_textbox_size = y_size;
       if (!title_tmp.empty())
@@ -47,7 +51,7 @@ namespace gta_base {
       draw_list->AddCommand(d3d::draw::Rect(pos, {x_size, y_top_bar_size}, color));
       draw_list->AddCommand(d3d::draw::Rect({pos.x, pos.y + y_top_bar_size}, {x_size, y_textbox_size}, ImColor(0,0,0,255)));
 
-      draw_list->AddCommand(d3d::draw::Text({pos.x + 0.002f, pos.y + 0.005f}, text_color, title_tmp, false, false, font_size_title));
+      draw_list->AddCommand(d3d::draw::Text({pos.x + 0.002f, pos.y + 0.005f}, text_color, title_tmp, false, false, font_size_title, font_bold));
       draw_list->AddCommand(d3d::draw::Text({pos.x + 0.002f, y_pos_body}, text_color, body_tmp, false, false, font_size_body));
 
       return y_textbox_size;

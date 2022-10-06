@@ -39,15 +39,19 @@ namespace gta_base {
       kMANAGER = nullptr;
     }
 
-    inline d3d::draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center) const {
-      return {{x_base + 0.002f, y_pos}, color, text, false, center, font_size};
+    inline d3d::draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center, ImFont* font) const {
+      return {{x_base + 0.002f, y_pos}, color, text, false, center, font_size, font};
     }
 
-    inline d3d::draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center) const {
+    inline d3d::draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center, ImFont* font) const {
       return {{x_base + x_size - 0.002f, y_pos}, color, text, true, center, font_size};
     }
 
-    inline d3d::draw::Text Manager::DrawTextCenter(float y_pos, ImColor color, const std::string& text) const {
+    inline d3d::draw::Text Manager::DrawTextCenter(float y_pos, ImColor color, const std::string& text, ImFont* font) const {
+      if (!font) {
+        font = ImGui::GetFont();
+      }
+
       auto text_size = d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, text);
       return {{x_base + (x_size - text_size.x) / 2, y_pos}, color, text, false, true, font_size};
     }
@@ -59,7 +63,7 @@ namespace gta_base {
     void Manager::DrawTopBar(const std::string& title, size_t option_current, size_t option_count) {
       draw_list_->AddCommand(d3d::draw::Rect({x_base, y_base}, {x_size, y_size_top_bar}, primary_color));
       draw_list_->AddCommand(d3d::draw::Rect({x_base, (y_base + y_size_top_bar) - (y_size_top_bar / 10)}, {x_size, y_size_top_bar / 10}, secondary_color));
-      draw_list_->AddCommand(DrawTextLeft(y_base - (y_size_top_bar / 4), text_color, title));
+      draw_list_->AddCommand(DrawTextLeft(y_base - (y_size_top_bar / 4), text_color, title, true, d3d::kRENDERER->GetFontBold()));
 
       std::stringstream option_count_str;
       option_count_str << option_current + 1 << '/' << option_count;
@@ -137,7 +141,7 @@ namespace gta_base {
           bool toggled = option->HasFlag(OptionFlag::kToggled);
 
           auto toggle_text = toggled ? ICON_FA_CHECK : ICON_FA_XMARK;
-          draw_list_->AddCommand(DrawTextRight(text_pos + (d3d::draw::CalcTextSize(nullptr, font_size, " ").y / 5), text_color_tmp, toggle_text));
+          draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, toggle_text));
           draw_list_->AddCommand(d3d::draw::Text({(x_base + x_size) - 0.013f, text_pos}, text_color_tmp, right_text, true, true, font_size));
         } else if (!right_text.empty()) {
           draw_list_->AddCommand(DrawTextRight(text_pos, text_color_tmp, right_text));

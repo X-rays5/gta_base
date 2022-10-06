@@ -131,9 +131,9 @@ namespace gta_base {
 
       float toggle_button_size_ = 0.01f;
     private:
-      inline d3d::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true) const;
-      inline d3d::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true) const;
-      inline d3d::draw::Text DrawTextCenter(float y_pos, ImColor color, const std::string& text) const;
+      inline d3d::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true, ImFont* font = nullptr) const;
+      inline d3d::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true, ImFont* font = nullptr) const;
+      inline d3d::draw::Text DrawTextCenter(float y_pos, ImColor color, const std::string& text, ImFont* font = nullptr) const;
       inline void DrawHeader();
       inline void DrawTopBar(const std::string& title, size_t option_current, size_t option_count);
       inline void DrawBottomBar(size_t option_count);

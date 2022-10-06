@@ -41,6 +41,10 @@ namespace gta_base {
         return roboto_;
       }
 
+      inline ImFont* GetFontBold() {
+        return roboto_bold_;
+      }
+
       static void WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
       static HRESULT Present(IDXGISwapChain *swap_chain, UINT sync_interval, UINT flags);
@@ -53,6 +57,7 @@ namespace gta_base {
       Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context_;
       HWND hwnd_;
       ImFont* roboto_ = nullptr;
+      ImFont* roboto_bold_ = nullptr;
 
     private:
       void InitD3D();

@@ -8,8 +8,9 @@
 #include <binary_bakery_decoder.h>
 #include "renderer.hpp"
 #include "../hooking/hooking.hpp"
-#include "../ui/fonts/roboto_mono.hpp"
-#include "../ui/fonts/fa.h"
+#include "../ui/fonts/fa.hpp"
+#include "../ui/fonts/roboto_regular.hpp"
+#include "../ui/fonts/roboto_bold.hpp"
 #include "../ui/fonts/IconsFontAwesome6.h"
 #include "../misc/globals.hpp"
 #include "../scriptmanager/scriptmanager.hpp"
@@ -44,6 +45,24 @@ namespace gta_base {
       ImGui::DestroyContext();
     }
 
+    ImFont* AddFont(const std::filesystem::path& path) {
+      ImFontConfig cfg;
+      cfg.FontDataOwnedByAtlas = false;
+      return ImGui::GetIO().Fonts->AddFontFromFileTTF(path.string().c_str(), 24, &cfg);
+    }
+
+    void MergeFa() {
+      static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+      ImFontConfig icons_config;
+      icons_config.MergeMode = true;
+      icons_config.PixelSnapH = true;
+      icons_config.FontDataOwnedByAtlas = false;
+      icons_config.GlyphOffset.y = 5;
+
+      static const auto font_awesome = bb::decode_to_vector<std::uint8_t>(bb::get_payload("fa-solid-900.ttf"));
+      ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_awesome.data(), font_awesome.size(), 24, &icons_config, icons_ranges);
+    }
+
     void Renderer::InitD3D() {
       IMGUI_CHECKVERSION();
       ImGui::CreateContext();
@@ -52,16 +71,10 @@ namespace gta_base {
 
       ImFontConfig cfg;
       cfg.FontDataOwnedByAtlas = false;
-      roboto_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_mono_compressed_data, roboto_mono_compressed_size, 24, &cfg);
-
-      static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-      ImFontConfig icons_config;
-      icons_config.MergeMode = true;
-      icons_config.PixelSnapH = true;
-      icons_config.FontDataOwnedByAtlas = false;
-
-      auto font_awesome = bb::decode_to_vector<std::uint8_t>(bb::get_payload("fa-solid-900.ttf"));
-      ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_awesome.data(), font_awesome.size(), 24, &icons_config, icons_ranges);
+      roboto_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_regular_compressed_data, roboto_regular_compressed_size, 24, &cfg);
+      MergeFa();
+      roboto_bold_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_bold_compressed_data, roboto_bold_compressed_size, 24, &cfg);
+      MergeFa();
       if (!ImGui::GetIO().Fonts->IsBuilt())
         ImGui::GetIO().Fonts->Build();
     }
