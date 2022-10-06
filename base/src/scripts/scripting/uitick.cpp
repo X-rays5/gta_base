@@ -6,8 +6,7 @@
 #include "../../ui/manager.hpp"
 #include "../../ui/tabs/main_tab.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     void UiTick::Init() {
       if (ui::kMANAGER) {
         initialized_ = true;
@@ -23,4 +22,3 @@ namespace gta_base {
       ui::kMANAGER->Draw();
     }
   }
-}

@@ -6,10 +6,9 @@
 #include "../../natives/natives.hpp"
 #include "../../ui/manager.hpp"
 
-namespace gta_base {
-  bool globals::block_input = false;
+bool gta_base::globals::block_input = false;
 
-  namespace scripts {
+namespace gta_base::scripts {
 
     void UIDisablePhone::Init() {
 
@@ -27,4 +26,3 @@ namespace gta_base {
       }
     }
   }
-}

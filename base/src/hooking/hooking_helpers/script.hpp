@@ -11,8 +11,7 @@
 #include "../../rage/classes/natives.hpp"
 #include "../../rage/classes/script_thread.hpp"
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     class ScriptHook {
     public:
       explicit ScriptHook(rage::joaat_t script_hash, robin_hood::unordered_map<rage::scrNativeHash, rage::scrNativeHandler> native_replacements);
@@ -32,5 +31,4 @@ namespace gta_base {
       robin_hood::unordered_map<rage::scrNativeHash, rage::scrNativeHandler*> native_handlers_ptrs_;
     };
   }
-}
 #endif //GTA_BASE_SCRIPT_HOOK_HPP

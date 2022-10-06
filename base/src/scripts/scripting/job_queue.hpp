@@ -12,8 +12,7 @@
 
 #undef AddJob
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     class JobQueue;
     inline JobQueue* kJOB_QUEUE{};
 
@@ -49,5 +48,4 @@ namespace gta_base {
       std::queue<job_t> jobs_;
     };
   }
-}
 #endif //GTA_BASE_JOB_QUEUE_HPP

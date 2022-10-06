@@ -7,9 +7,7 @@
 #define GTA_BASE_TOGGLEOPTION_HPP
 #include "baseoption.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       class ToggleOption : public BaseOption {
       public:
         explicit ToggleOption(const std::string& name_key, const std::string& description_key, bool* toggle, bool hotkeyable = true) :
@@ -42,6 +40,4 @@ namespace gta_base {
         bool* toggle_;
       };
     }
-  }
-}
 #endif //GTA_BASE_TOGGLEOPTION_HPP

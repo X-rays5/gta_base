@@ -5,9 +5,7 @@
 #include "script.hpp"
 #include <cassert>
 
-namespace gta_base {
-  namespace fiber {
-
+namespace gta_base::fiber {
     Script::Script(Script::func_t func) : func_(func) {
       script_fiber_ = CreateFiber(0, [](PVOID param){
         auto this_ = static_cast<Script*>(param);
@@ -67,4 +65,3 @@ namespace gta_base {
       }
     }
   }
-}

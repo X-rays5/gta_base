@@ -8,8 +8,7 @@
 #include <rage/vector.hpp>
 #include "../types.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     /// @note This should be called in a fiber job
     bool Teleport(rage::fvector3 coords, bool with_vehicle);
     /// @note This should be called in a fiber job
@@ -21,5 +20,4 @@ namespace rage {
     /// @note This should be called in a fiber job
     bool TeleportToObjective(bool with_vehicle);
   }
-}
 #endif //GTA_BASE_TELEPORT_HPP

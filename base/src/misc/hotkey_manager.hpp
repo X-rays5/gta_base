@@ -8,8 +8,7 @@
 #include <string>
 #include <robin_hood.h>
 
-namespace gta_base {
-  namespace misc {
+namespace gta_base::misc {
     class HotkeyManager {
     public:
       HotkeyManager();
@@ -37,5 +36,4 @@ namespace gta_base {
     };
     inline HotkeyManager* kHOTKEY_MANAGER{};
   }
-}
 #endif //GTA_BASE_HOTKEY_MANAGER_HPP

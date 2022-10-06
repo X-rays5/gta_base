@@ -10,11 +10,7 @@
 
 #include "baseoption.hpp"
 
-#define UI_EXECUTE_OPTION_ACTION_AND_ID(action) action, #action
-
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       class ExecuteOption : public BaseOption {
       public:
         using action_t = std::function<void()>;
@@ -48,6 +44,4 @@ namespace gta_base {
         action_t action_;
       };
     }
-  }
-}
 #endif //GTA_BASE_EXECUTEOPTION_HPP

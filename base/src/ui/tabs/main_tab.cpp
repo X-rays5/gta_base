@@ -12,9 +12,7 @@
 #include "world.hpp"
 #include "weapon.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace tabs {
+namespace gta_base::ui::tabs {
       void MainTab() {
         kMANAGER->AddSubmenu(Submenus::Home, "tab/title/home", [](Submenu* sub) {
           sub->AddOption(option::ExecuteOption("fix veh", "", []{
@@ -45,5 +43,3 @@ namespace gta_base {
         WeaponsTab();
       }
     }
-  }
-}

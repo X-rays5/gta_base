@@ -12,8 +12,7 @@
 #include "../../ui/notification/notification.hpp"
 #include "entity.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     bool Teleport(rage::fvector3 coords, bool with_vehicle) {
       if (PED::IS_PED_IN_ANY_VEHICLE(gta_base::globals::local_player.ped_id, false) && with_vehicle) {
         auto veh = PED::GET_VEHICLE_PED_IS_IN(gta_base::globals::local_player.ped_id, false);
@@ -83,4 +82,3 @@ namespace rage {
       return false;
     }
   }
-}

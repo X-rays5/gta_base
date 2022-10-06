@@ -7,8 +7,7 @@
 #include "discord.hpp"
 #include <xorstr.hpp>
 
-namespace gta_base {
-  namespace rpc {
+namespace gta_base::rpc {
     Discord::Discord() {
       DiscordEventHandlers handlers;
       std::memset(&handlers, 0, sizeof(handlers));
@@ -42,4 +41,3 @@ namespace gta_base {
       Discord_UpdatePresence(&discord_rpc);
     }
   }
-}

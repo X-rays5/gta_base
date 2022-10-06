@@ -6,8 +6,7 @@
 #include "../../natives/crossmap.hpp"
 #include "../../memory/pointers.hpp"
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     inline robin_hood::unordered_map<rage::scrProgram*, ScriptHook*> ScriptHook::map_;
 
     static bool MapNative(rage::scrNativeHash* hash) {
@@ -91,4 +90,3 @@ namespace gta_base {
       }
     }
   }
-}

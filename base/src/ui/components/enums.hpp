@@ -7,14 +7,11 @@
 #ifndef GTA_BASE_ENUMS_UI_HPP
 #define GTA_BASE_ENUMS_UI_HPP
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
     enum class Submenus {
       Home,
       Player,
       PlayerHealth,
-      PlayerTeleport,
-      TeleportSaved,
       Network,
       NetworkPlayerList,
       NetworkAllPlayers,
@@ -56,6 +53,5 @@ namespace gta_base {
       kSelect,
       kChange
     };
-  }// namespace ui
-}
+  }
 #endif //GTA_BASE_ENUMS_HPP

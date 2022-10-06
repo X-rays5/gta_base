@@ -7,9 +7,7 @@
 #define GTA_BASE_LISTOPTION_HPP
 #include "baseoption.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       template<typename T>
       class ListOption : public BaseOption {
       public:
@@ -66,6 +64,4 @@ namespace gta_base {
         }
       };
     }
-  }
-}
 #endif //GTA_BASE_LISTOPTION_HPP

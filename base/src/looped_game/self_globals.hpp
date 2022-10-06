@@ -5,9 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_SELF_GLOBALS_HPP
 #define GTA_BASE_SELF_GLOBALS_HPP
-namespace gta_base {
-  namespace looped_game {
+namespace gta_base::looped_game {
     void SetSelfGlobals();
   }
-}
 #endif //GTA_BASE_SELF_GLOBALS_HPP

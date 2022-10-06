@@ -9,8 +9,7 @@
 #include "../logger/logger.hpp"
 #include "fonts/IconsFontAwesome6.h"
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
     inline float ScaleFps(float number) {
       return number * (144.f / (ImGui::GetIO().Framerate / 2)); // framerate is 2x for some reason
     }
@@ -281,4 +280,3 @@ namespace gta_base {
       draw_list_->NextTargets();
     }
   }
-}

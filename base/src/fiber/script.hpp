@@ -11,8 +11,7 @@
 #undef Yield
 #include "../misc/common.hpp"
 
-namespace gta_base {
-  namespace fiber {
+namespace gta_base::fiber {
     class Script {
     public:
       using func_t = void(*)();
@@ -36,5 +35,4 @@ namespace gta_base {
       [[noreturn]] void FiberFunc();
     };
   }
-}
 #endif //GTA_BASE_SCRIPT_HPP

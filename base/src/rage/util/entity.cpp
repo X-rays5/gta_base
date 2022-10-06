@@ -6,8 +6,7 @@
 #include "../../fiber/script.hpp"
 #include "../../natives/natives.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     bool TakeControlOfEntity(Entity ent) {
       if (NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent)) return true;
       for (uint8_t i = 0; !NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent) && i < 10; i++)
@@ -24,4 +23,3 @@ namespace rage {
       return true;
     }
   }
-}

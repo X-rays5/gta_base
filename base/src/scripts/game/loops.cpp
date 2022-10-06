@@ -8,8 +8,7 @@
 #include "../../looped_game/weapon.hpp"
 #include "../../looped_game/transition_state.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
 
     void Loops::Init() {}
 
@@ -20,4 +19,3 @@ namespace gta_base {
       looped_game::TransitionState();
     }
   }
-}

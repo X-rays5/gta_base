@@ -6,8 +6,7 @@
 #include "../rage/util/exec_as_script.hpp"
 #include "../natives/invoker.hpp"
 
-namespace gta_base {
-  namespace fiber {
+namespace gta_base::fiber {
     Manager::Manager() {
       initialized_ = true;
 
@@ -40,4 +39,3 @@ namespace gta_base {
 
     void Manager::Init() {}
   }
-}

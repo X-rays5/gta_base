@@ -7,8 +7,7 @@
 #include "texturemanager.hpp"
 #include "renderer.hpp"
 
-namespace gta_base {
-  namespace d3d {
+namespace gta_base::d3d {
     TextureManager::TextureManager() {
       kTEXTURE_MANAGER = this;
     }
@@ -63,4 +62,3 @@ namespace gta_base {
       return true;
     }
   }
-}

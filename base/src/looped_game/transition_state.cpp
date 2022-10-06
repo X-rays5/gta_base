@@ -9,8 +9,7 @@
 #include "../rage/enums.hpp"
 #include "../rage/script/global.hpp"
 
-namespace gta_base {
-  namespace looped_game {
+namespace gta_base::looped_game {
     constexpr char transition_states[][48] = {
       "TRANSITION_STATE_EMPTY",
       "Singleplayer Swoop Up",
@@ -116,4 +115,3 @@ namespace gta_base {
       last_state = state;
     }
   }
-}

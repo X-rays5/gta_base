@@ -8,8 +8,7 @@
 #include "../rage/util/get.hpp"
 #include "../misc/globals.hpp"
 
-namespace gta_base {
-  namespace looped_game {
+namespace gta_base::looped_game {
     inline void GodMode() {
       ENTITY::SET_ENTITY_CAN_BE_DAMAGED(globals::local_player.ped_id, !kSETTINGS.player.god_mode);
     }
@@ -36,4 +35,3 @@ namespace gta_base {
       NeverWanted();
     }
   }
-}

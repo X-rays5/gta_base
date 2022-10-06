@@ -18,8 +18,7 @@
 #include "../misc/timedinput.hpp"
 #include "../d3d/draw.hpp"
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
     class Manager {
     public:
       Manager();
@@ -151,5 +150,4 @@ namespace gta_base {
     };
     inline Manager* kMANAGER;
   }
-}
 #endif //GTA_BASE_MANAGER_HPP

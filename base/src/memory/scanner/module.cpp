@@ -1,8 +1,6 @@
 #include "module.hpp"
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       Module::Module(HMODULE mod) : Range(mod, 0) {
       auto dosHeader = base_.as<IMAGE_DOS_HEADER*>();
       auto ntHeader = base_.add(dosHeader->e_lfanew).as<IMAGE_NT_HEADERS*>();
@@ -19,5 +17,3 @@ namespace gta_base {
       return GetProcAddress(base_.as<HMODULE>(), symbol_name.data());
     }
   }
-}
-}

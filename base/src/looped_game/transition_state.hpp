@@ -5,9 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_TRANSITION_STATE_HPP
 #define GTA_BASE_TRANSITION_STATE_HPP
-namespace gta_base {
-  namespace looped_game {
+namespace gta_base::looped_game {
     void TransitionState();
   }
-}
 #endif //GTA_BASE_TRANSITION_STATE_HPP

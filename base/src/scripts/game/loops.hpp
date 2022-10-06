@@ -7,8 +7,7 @@
 #define GTA_BASE_LOOPS_HPP
 #include "../../scriptmanager/base_script.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     class Loops : public scriptmanager::BaseScript {
     public:
       Loops() {
@@ -23,5 +22,4 @@ namespace gta_base {
       void RunTick() final;
     };
   }
-}
 #endif //GTA_BASE_LOOPS_HPP

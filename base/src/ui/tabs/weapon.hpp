@@ -5,11 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_WEAPON_HPP
 #define GTA_BASE_WEAPON_HPP
-namespace gta_base {
-  namespace ui {
-    namespace tabs {
+namespace gta_base::ui::tabs {
       void WeaponsTab();
     }
-  }
-}
 #endif //GTA_BASE_WEAPON_HPP

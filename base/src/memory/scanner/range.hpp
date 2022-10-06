@@ -3,9 +3,7 @@
 #include "pattern.hpp"
 #include "handle.hpp"
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       class Range {
       public:
         Range(Handle base, std::size_t size);
@@ -25,5 +23,3 @@ namespace gta_base {
         std::size_t size_;
       };
     }
-  }
-}

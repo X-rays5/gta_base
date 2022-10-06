@@ -7,8 +7,7 @@
 #include <utility>
 #include "../ui/manager.hpp"
 
-namespace gta_base {
-  namespace player_mgr {
+namespace gta_base::player_mgr {
     Manager::Manager() {
       kPLAYER_MGR = this;
 
@@ -239,4 +238,3 @@ namespace gta_base {
       return player_list_;
     }
   }
-}

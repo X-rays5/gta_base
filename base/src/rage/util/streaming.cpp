@@ -7,8 +7,7 @@
 #include "../../fiber/pool.hpp"
 #include "../../fiber/script.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     scrVector LoadGroundAtCoord(scrVector coords) {
       float ground_z;
       scrVector result = coords;
@@ -33,4 +32,3 @@ namespace rage {
       return result;
     }
   }
-}

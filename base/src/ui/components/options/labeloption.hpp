@@ -8,9 +8,7 @@
 #include <format>
 #include "baseoption.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       class LabelOption : public BaseOption {
       public:
         explicit LabelOption(const std::string& label_key) {
@@ -30,6 +28,4 @@ namespace gta_base {
         }
       };
     }
-  }
-}
 #endif //GTA_BASE_LABELOPTION_HPP

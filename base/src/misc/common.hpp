@@ -29,8 +29,7 @@
 
 #pragma warning(disable:4996)
 
-namespace gta_base {
-  namespace common {
+namespace gta_base::common {
     enum class Platform {
       kRockstar,
       kEpicGames,
@@ -84,6 +83,5 @@ namespace gta_base {
     bool IsKeyJustReleased(std::uint32_t key, std::uint64_t since_up = 100);
     void SetKeyState(std::uint32_t key, bool down);
   }
-}
 
 #endif //GTABASE_COMMON_HPP

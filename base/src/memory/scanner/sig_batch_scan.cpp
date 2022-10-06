@@ -3,9 +3,7 @@
 #include <windows.h>
 #include "../../logger/logger.hpp"
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       void Batch::add(std::string name, char* pattern, std::function<void(Handle)> callback) {
         add(std::move(name), Pattern(pattern), std::move(callback));
       }
@@ -46,5 +44,3 @@ namespace gta_base {
         }
       }
     }
-  }
-}

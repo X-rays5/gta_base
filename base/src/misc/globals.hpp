@@ -10,7 +10,7 @@
 #include <robin_hood.h>
 #include <unordered_map>
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <Windows.h>
 #include "../rage/types.hpp"
 #include "../fiber/pool.hpp"
 

@@ -7,8 +7,7 @@
 #define GTA_BASE_UITICK_HPP
 #include "../../scriptmanager/base_script.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     class UiTick : public scriptmanager::BaseScript {
     public:
       scriptmanager::ScriptType GetType() final {
@@ -19,5 +18,4 @@ namespace gta_base {
       void RunTick() final;
     };
   }
-}
 #endif //GTA_BASE_UITICK_HPP

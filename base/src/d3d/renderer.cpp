@@ -17,8 +17,7 @@
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-namespace gta_base {
-  namespace d3d {
+namespace gta_base::d3d {
     Renderer::Renderer(HWND hwnd) {
       swap_chain_ = *memory::kPOINTERS->swap_chain_;
       hwnd_ = hwnd;
@@ -114,4 +113,3 @@ namespace gta_base {
       }
     }
   }
-}

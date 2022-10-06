@@ -8,8 +8,7 @@
 #include <rage/vector.hpp>
 #include "../types.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     /// @note This should be called on the GTAV script thread
     rage::scrVector GetBlipLocation(int sprite, int color = -1);
     /// @note This should be called on the GTAV script thread
@@ -17,5 +16,4 @@ namespace rage {
     /// @note This should be called on the GTAV script thread
     rage::scrVector  GetObjectiveLocation();
   }
-}
 #endif //GTA_BASE_BLIP_HPP

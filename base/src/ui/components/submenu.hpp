@@ -15,8 +15,7 @@
 #include "options/baseoption.hpp"
 #include "enums.hpp"
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
     class Submenu {
     public:
       using constructor_cb = std::function<void(Submenu*)>;
@@ -138,5 +137,4 @@ namespace gta_base {
       std::int64_t selected_option_ = 0;
     };
   }
-}
 #endif //GTA_BASE_SUBMENU_HPP

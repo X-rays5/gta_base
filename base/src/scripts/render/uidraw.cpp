@@ -5,8 +5,7 @@
 #include "uidraw.hpp"
 #include "../../ui/manager.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     void UiDraw::Init() {
       initialized_ = true;
     }
@@ -16,4 +15,3 @@ namespace gta_base {
       ui::kMANAGER->should_tick = true;
     }
   }
-}

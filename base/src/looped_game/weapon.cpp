@@ -7,8 +7,7 @@
 #include "../misc/settings.hpp"
 #include "../misc/globals.hpp"
 
-namespace gta_base {
-  namespace looped_game {
+namespace gta_base::looped_game {
     void InfiniteAmmo() {
       if (kSETTINGS.player.weapon.infinite_ammo) {
         Hash wep;
@@ -42,4 +41,3 @@ namespace gta_base {
         InfiniteClip();
     }
   }
-}

@@ -13,8 +13,7 @@
 #include "imgui.h"
 #include "../../misc/common.hpp"
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
     class Notification {
     public:
       enum class Type {
@@ -79,5 +78,4 @@ namespace gta_base {
 
     inline Notification* kNOTIFICATIONS{};
   }
-}
 #endif //GTA_BASE_NOTIFICATION_HPP

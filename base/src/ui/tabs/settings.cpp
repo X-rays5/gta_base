@@ -5,9 +5,7 @@
 #include "settings.hpp"
 #include "tab_includes.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace tabs {
+namespace gta_base::ui::tabs {
       void SettingsTab() {
         kMANAGER->AddSubmenu(Submenus::Settings, "tab/title/setting", [](Submenu* sub){
           sub->AddOption(option::SubmenuOption("tab/title/theme", "", Submenus::SettingsTheme));
@@ -30,5 +28,3 @@ namespace gta_base {
         });
       }
     }
-  }
-}

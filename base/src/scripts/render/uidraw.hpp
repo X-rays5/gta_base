@@ -8,8 +8,7 @@
 #define GTABASE_RENDER_SCRIPT_HPP
 #include "../../scriptmanager/base_script.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     class UiDraw : public scriptmanager::BaseScript {
     public:
       scriptmanager::ScriptType GetType() final {
@@ -20,5 +19,4 @@ namespace gta_base {
       void RunTick() final;
     };
   }
-}
 #endif //GTABASE_RENDER_SCRIPT_HPP

@@ -6,8 +6,7 @@
 #include "vmt.hpp"
 #include "../../memory/scanner/handle.hpp"
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     VmtHook::VmtHook(LPVOID vtable) {
       vtable_ = *((LPVOID**)vtable);
     }
@@ -92,4 +91,3 @@ namespace gta_base {
       return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH;
     }
   }
-}

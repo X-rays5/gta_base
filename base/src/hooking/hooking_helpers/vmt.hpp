@@ -11,8 +11,7 @@
 #include <windows.h>
 #include "../../logger/logger.hpp"
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     class VmtHook {
     public:
       explicit VmtHook(LPVOID vtable);
@@ -51,5 +50,4 @@ namespace gta_base {
       DWORD ExpHandler(PEXCEPTION_POINTERS exp, const std::string& name);
     };
   }
-}
 #endif //GTA_BASE_VMT_HPP

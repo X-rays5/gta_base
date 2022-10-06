@@ -5,9 +5,7 @@
 #include "weapon.hpp"
 #include "tab_includes.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace tabs {
+namespace gta_base::ui::tabs {
       void WeaponsTab() {
         kMANAGER->AddSubmenu(Submenus::Weapon, "tab/title/weapon", [](Submenu* sub){
           sub->AddOption(option::ToggleOption("option/infinite_ammo", "", &kSETTINGS.player.weapon.infinite_ammo));
@@ -15,5 +13,3 @@ namespace gta_base {
         });
       }
     }
-  }
-}

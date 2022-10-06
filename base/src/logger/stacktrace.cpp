@@ -15,9 +15,7 @@
 
 #pragma comment(lib, "DbgHelp.lib")
 
-namespace gta_base {
-  namespace logger {
-    namespace stacktrace {
+namespace gta_base::logger::stacktrace {
       std::uint32_t RECURSIVE_CRASH_CHECK = 0;
 
       std::string ExceptionCodeToStr(std::uint32_t code) {
@@ -309,5 +307,3 @@ namespace gta_base {
         return RemoveDoubleSpaces(msg.str());
       }
     }
-  }
-}

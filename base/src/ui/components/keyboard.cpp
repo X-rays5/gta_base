@@ -6,9 +6,7 @@
 #include <utility>
 #include "../manager.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace keyboard {
+namespace gta_base::ui::keyboard {
       void Instance::Tick() {
         // Don't draw multiple times on 1 render tick
         if (last_render_write_target_ != ui::kMANAGER->GetDrawList()->GetWriteTarget() && state_ == Result::kNone) {
@@ -58,5 +56,3 @@ namespace gta_base {
         }
       }
     }
-  }
-}

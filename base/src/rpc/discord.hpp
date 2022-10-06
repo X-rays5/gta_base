@@ -9,8 +9,7 @@
 #include <memory>
 #include <string>
 
-namespace gta_base {
-  namespace rpc {
+namespace gta_base::rpc {
     class Discord {
     public:
       Discord();
@@ -52,5 +51,4 @@ namespace gta_base {
     };
     inline Discord* kDISCORD{};
   }
-}
 #endif //GTABASE_DISCORD_HPP

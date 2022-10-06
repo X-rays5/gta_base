@@ -6,8 +6,7 @@
 #include "../manager.hpp"
 #include "../../d3d/renderer.hpp"
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
     Notification::Notification() {
       kNOTIFICATIONS = this;
     }
@@ -90,4 +89,3 @@ namespace gta_base {
       mtx_.unlock();
     }
   }
-}

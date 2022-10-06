@@ -11,8 +11,7 @@
 #include "script.hpp"
 #include "../scriptmanager/base_script.hpp"
 
-namespace gta_base {
-  namespace fiber {
+namespace gta_base::fiber {
     class Manager final: public scriptmanager::BaseScript {
     public:
       using script_t = std::unique_ptr<Script>;
@@ -34,5 +33,4 @@ namespace gta_base {
     };
     inline Manager* kMANAGER{};
   }
-}
 #endif //GTA_BASE_FIBER_MANAGER_HPP

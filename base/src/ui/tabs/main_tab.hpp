@@ -6,11 +6,7 @@
 #ifndef GTA_BASE_MAIN_TAB_HPP
 #define GTA_BASE_MAIN_TAB_HPP
 
-namespace gta_base {
-  namespace ui {
-    namespace tabs {
+namespace gta_base::ui::tabs {
       void MainTab();
     }
-  }
-}
 #endif //GTA_BASE_MAIN_TAB_HPP

@@ -8,8 +8,7 @@
 #include "../joaat.hpp"
 #include "../../memory/pointers.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     template <typename F, typename ...Args>
     void ExecuteAsScript(rage::joaat_t script_hash, F &&callback, Args &&...args) {
       auto tls_ctx = rage::tlsContext::get();
@@ -32,5 +31,4 @@ namespace rage {
       }
     }
   }
-}
 #endif //GTA_BASE_EXEC_AS_SCRIPT_HPP

@@ -12,8 +12,7 @@
 #include "../natives/natives.hpp"
 #undef AddJob
 
-namespace gta_base {
-  namespace fiber {
+namespace gta_base::fiber {
     class Pool {
     public:
       using job_t = std::function<void()>;
@@ -33,5 +32,4 @@ namespace gta_base {
     };
     inline Pool* kPOOL{};
   }
-}
 #endif //GTA_BASE_POOL_HPP

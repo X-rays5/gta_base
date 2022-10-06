@@ -8,8 +8,7 @@
 
 #define VAR_NAME(var) xorstr_(#var)
 
-namespace gta_base {
-  namespace memory {
+namespace gta_base::memory {
     Pointers::Pointers() {
       kPOINTERS = this;
       scanner::Batch main_batch;
@@ -187,4 +186,3 @@ namespace gta_base {
       kPOINTERS = nullptr;
     }
   }
-}

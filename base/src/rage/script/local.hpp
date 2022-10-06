@@ -7,8 +7,7 @@
 #define GTA_BASE_LOCAL_HPP
 #include "../classes/script_thread.hpp"
 
-namespace rage {
-  namespace script {
+namespace rage::script {
     class Local {
     public:
       explicit Local(rage::scrThread* thread, std::size_t idx);
@@ -36,5 +35,4 @@ namespace rage {
       void* Get();
     };
   }
-}
 #endif //GTA_BASE_LOCAL_HPP

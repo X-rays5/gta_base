@@ -4,8 +4,7 @@
 
 #include "job_queue.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     void JobQueue::RunTick() {
       std::unique_lock lock(mtx_);
 
@@ -21,4 +20,3 @@ namespace gta_base {
       }
     }
   }
-}

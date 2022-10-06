@@ -14,8 +14,7 @@
 #include "texturemanager.hpp"
 #include "draw.hpp"
 
-namespace gta_base {
-  namespace d3d {
+namespace gta_base::d3d {
     class Renderer {
     public:
       explicit Renderer(HWND hwnd);
@@ -64,6 +63,5 @@ namespace gta_base {
     };
     inline Renderer* kRENDERER{};
   }
-}
 
 #endif //GTA_BASE_RENDERER_HPP

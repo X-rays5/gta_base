@@ -12,8 +12,7 @@
 #include <ped/CPed.hpp>
 #include <network/snSession.hpp>
 
-namespace gta_base {
-  namespace player_mgr {
+namespace gta_base::player_mgr {
     class Player {
     public:
       explicit Player(CNetGamePlayer* player) : self_(player) {}
@@ -52,6 +51,5 @@ namespace gta_base {
       CNetGamePlayer* self_;
     };
   }
-}
 
 #endif //GTA_BASE_PLAYER_HPP

@@ -13,9 +13,7 @@
 #undef max
 #undef min
 
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       template<typename T>
       requires std::integral<T> or std::floating_point<T>
       class NumberOption : public BaseOption {
@@ -34,17 +32,14 @@ namespace gta_base {
               T min = min_;
               T max = max_;
               keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [value, min, max](std::string text, keyboard::Result res) {
-                LOG_DEBUG("input");
                 if (res != keyboard::Result::kDone || text.empty())
                   return;
 
                 if (value) {
                   constexpr static const bool is_float = std::is_floating_point_v<T>;
                   if (is_float) {
-                    LOG_DEBUG("float");
                     *value = std::clamp(common::WithinLimits<std::double_t, T>(std::stod(text)), min, max);
                   } else {
-                    LOG_DEBUG("no float");
                     *value = std::clamp(common::WithinLimits<std::int64_t, T>(std::stoll(text)), min, max);
                   }
                 }
@@ -126,6 +121,4 @@ namespace gta_base {
         }
       };
     }
-  }
-}
 #endif //GTA_BASE_NUMBEROPTION_HPP

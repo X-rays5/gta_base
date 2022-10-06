@@ -7,9 +7,7 @@
 #define GTA_BASE_TOGGLENUMBEROPTION_HPP
 #include "baseoption.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       template<typename T>
       requires std::integral<T> or std::floating_point<T>
       class ToggleNumberOption : public BaseOption {
@@ -91,6 +89,4 @@ namespace gta_base {
         }
       };
     }
-  }
-}
 #endif //GTA_BASE_TOGGLENUMBEROPTION_HPP

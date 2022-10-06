@@ -1,8 +1,6 @@
 #include "pattern.hpp"
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       Pattern::Pattern(std::string_view ida_sig)
       {
         auto to_upper = [](char c) -> char {
@@ -78,5 +76,3 @@ namespace gta_base {
         }
       }
     }
-  }
-}

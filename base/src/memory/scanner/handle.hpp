@@ -3,9 +3,7 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       class Handle {
       public:
         Handle(void* ptr = nullptr);
@@ -81,5 +79,3 @@ namespace gta_base {
         return ptr_ != nullptr;
       }
     }
-  }
-}

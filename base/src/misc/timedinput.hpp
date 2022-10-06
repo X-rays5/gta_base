@@ -7,8 +7,7 @@
 #define GTA_BASE_TIMEDINPUT_HPP
 #include <cstdint>
 
-namespace gta_base {
-  namespace util {
+namespace gta_base::util {
     class TimedInput {
     public:
       TimedInput(int input, std::uint64_t timeout) : input_(input), timeout_(timeout) {}
@@ -22,5 +21,4 @@ namespace gta_base {
       std::uint64_t timeout_;
     };
   }
-}
 #endif //GTA_BASE_TIMEDINPUT_HPP

@@ -11,8 +11,7 @@
 #include "player.hpp"
 #include "../rage/util/get.hpp"
 
-namespace gta_base {
-  namespace player_mgr {
+namespace gta_base::player_mgr {
     class Manager {
     public:
       using player_ptr_t = std::shared_ptr<Player>;
@@ -66,6 +65,8 @@ namespace gta_base {
       player_ptr_t selected_player_ = std::make_shared<Player>(nullptr);
     };
   }
+
+namespace gta_base {
   inline player_mgr::Manager* kPLAYER_MGR{};
 }
 

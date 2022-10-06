@@ -5,8 +5,7 @@
 #include "translation_manager.hpp"
 #include <inireader/inireader.hpp>
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
     Translation::Translation(const std::filesystem::path& path) {
       if (!std::filesystem::exists(path))
         return;
@@ -49,4 +48,3 @@ namespace gta_base {
       }
     }
   }
-}

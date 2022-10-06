@@ -5,8 +5,7 @@
 #include "common.hpp"
 #include "../memory/pointers.hpp"
 
-namespace gta_base {
-  namespace common {
+namespace gta_base::common {
     Platform GetCurrentPlatform() {
       static const Platform cur_platform = GetModuleHandleA("steam_api64.dll") ? Platform::kSteam : GetModuleHandleA("EOSSDK-Win64-Shipping.dll") ? Platform::kEpicGames : Platform::kRockstar;
 
@@ -145,4 +144,3 @@ namespace gta_base {
       }
     }
   }
-}

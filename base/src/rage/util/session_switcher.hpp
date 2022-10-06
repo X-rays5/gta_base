@@ -9,8 +9,7 @@
 #include <fmt/format.h>
 #include "../enums.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     struct SessionType {
       eSessionType id;
       const char name[22];
@@ -32,7 +31,6 @@ namespace rage {
     /// @note This should be called in a fiber job
     void SessionSwitcher(eSessionType session_type);
   }
-}
 
 template<> struct fmt::formatter<rage::util::SessionType> : formatter<std::string> {
   template<typename FormatContext>

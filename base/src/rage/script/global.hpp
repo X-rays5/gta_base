@@ -10,8 +10,7 @@
 #include <type_traits>
 #include "../global_idx.hpp"
 
-namespace rage {
-  namespace script {
+namespace rage::script {
     class Global {
     public:
       template<typename T>
@@ -57,5 +56,4 @@ namespace rage {
       [[nodiscard]] void* Get() const;
     };
   }
-}
 #endif //GTA_BASE_GLOBAL_HPP

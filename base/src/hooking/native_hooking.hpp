@@ -13,8 +13,7 @@
 
 #define GTA_BASE_NATIVE_DETOUR_ALL_SCRIPTS RAGE_JOAAT("ALL_RUNNING_SCRIPTS")
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     struct NativeHooks {
       static void NETWORK_BAIL(rage::scrNativeCallContext* ctx);
     };
@@ -44,5 +43,4 @@ namespace gta_base {
     };
     inline NativeHooking* kNATIVE_HOOKING{};
   }
-}
 #endif //GTA_BASE_NATIVE_HOOKING_HPP

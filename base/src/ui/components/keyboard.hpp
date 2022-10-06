@@ -10,9 +10,7 @@
 #include <imgui.h>
 #include "../../misc/common.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace keyboard {
+namespace gta_base::ui::keyboard {
       enum class Result {
         kNone,
         kDone,
@@ -50,7 +48,7 @@ namespace gta_base {
         Result state_ = Result::kNone;
         callback_t cb_;
         char text_buf_[256]{};
-        std::size_t last_render_write_target_;
+        std::size_t last_render_write_target_{};
         constexpr static const ImVec2 size_ = {0.18f, 0.035f};
         constexpr static const ImVec2 pos_ = {0.5f - (size_.x / 2), 0.5f - (size_.y / 2)};
       };
@@ -82,6 +80,4 @@ namespace gta_base {
         std::vector<std::shared_ptr<Instance>> keyboards_;
       };
     }
-  }
-}
 #endif //GTA_BASE_KEYBOARD_MANAGER_HPP

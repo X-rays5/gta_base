@@ -11,9 +11,7 @@
 #include "baseoption.hpp"
 #include "../../manager.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       class SubmenuOption : public BaseOption {
       public:
         using action_t = std::function<void()>;
@@ -40,6 +38,4 @@ namespace gta_base {
         action_t action_;
       };
     }
-  }
-}
 #endif //GTA_BASE_SUBMENUOPTION_HPP

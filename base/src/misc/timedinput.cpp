@@ -5,9 +5,8 @@
 #include "timedinput.hpp"
 #include "common.hpp"
 
-namespace gta_base {
-  namespace util {
-    bool TimedInput::Get() { // TODO: only when foreground window
+namespace gta_base::util {
+    bool TimedInput::Get() {
       if ((common::GetEpoch() - last_input_) > timeout_) {
         if (common::IsKeyDown(input_)){
           last_input_ = common::GetEpoch();
@@ -17,4 +16,3 @@ namespace gta_base {
       return false;
     }
   }
-}

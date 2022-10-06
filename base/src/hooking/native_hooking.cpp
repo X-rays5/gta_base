@@ -6,12 +6,9 @@
 #include "../memory/pointers.hpp"
 #include "../misc/globals.hpp"
 #include "../natives/natives.hpp"
-#include "../rage/util/find_script_thread.hpp"
 #include "../ui/notification/notification.hpp"
 
-namespace gta_base {
-  namespace hooking {
-
+namespace gta_base::hooking {
     NativeHooking::NativeHooking() {
       AddDetour(RAGE_JOAAT("freemode"), 0x95914459A87EBA28, NativeHooks::NETWORK_BAIL);
 
@@ -87,4 +84,3 @@ namespace gta_base {
       ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Kick", "Blocked network bail kick from freemode script");
     }
   }
-}

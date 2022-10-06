@@ -6,8 +6,7 @@
 #include "../script/global.hpp"
 #include "../../fiber/script.hpp"
 
-namespace rage {
-  namespace util {
+namespace rage::util {
     void SessionSwitcher(eSessionType session_type) {
       script::Global(Globals::SessionSwitcher::kSpectatorMode).As<int>() = (session_type == eSessionType::SC_TV ? 1 : 0); // If SC TV Then Enable Spectator Mode
 
@@ -21,4 +20,3 @@ namespace rage {
       script::Global(Globals::SessionSwitcher::kSessionJoinerActive).As<int>() = 0;
     }
   }
-}

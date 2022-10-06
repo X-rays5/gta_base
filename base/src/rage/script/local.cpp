@@ -4,8 +4,7 @@
 
 #include "local.hpp"
 
-namespace rage {
-  namespace script {
+namespace rage::script {
     Local::Local(rage::scrThread* thread, std::size_t idx) : idx_(idx), stack_(thread->m_stack) {}
     Local::Local(PVOID stack, std::size_t idx) : idx_(idx), stack_(stack) {}
 
@@ -21,4 +20,3 @@ namespace rage {
       return reinterpret_cast<uintptr_t*>((uintptr_t)stack_ + (idx_ * sizeof(uintptr_t)));
     }
   }
-}

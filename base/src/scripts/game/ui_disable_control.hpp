@@ -7,8 +7,7 @@
 #define GTA_BASE_UI_DISABLE_CONTROL_HPP
 #include "../../scriptmanager/base_script.hpp"
 
-namespace gta_base {
-  namespace scripts {
+namespace gta_base::scripts {
     class UIDisablePhone : public scriptmanager::BaseScript {
     public:
       UIDisablePhone() {
@@ -23,5 +22,4 @@ namespace gta_base {
       void RunTick() final;
     };
   }
-}
 #endif //GTA_BASE_UI_DISABLE_CONTROL_HPP

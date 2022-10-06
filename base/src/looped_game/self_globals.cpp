@@ -7,9 +7,9 @@
 #include "../natives/natives.hpp"
 #include "../logger/logger.hpp"
 
-namespace gta_base {
-  common::LocalPlayer globals::local_player;
-  namespace looped_game {
+gta_base::common::LocalPlayer gta_base::globals::local_player;
+
+namespace gta_base::looped_game {
     void SetSelfGlobals() {
       using namespace globals;
 
@@ -47,4 +47,3 @@ namespace gta_base {
       }
     }
   }
-}

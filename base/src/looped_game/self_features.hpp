@@ -5,9 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_SELF_FEATURES_HPP
 #define GTA_BASE_SELF_FEATURES_HPP
-namespace gta_base {
-  namespace looped_game {
+namespace gta_base::looped_game {
     void SelfFeatures();
   }
-}
 #endif //GTA_BASE_SELF_FEATURES_HPP

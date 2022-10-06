@@ -6,8 +6,7 @@
 #include "../memory/pointers.hpp"
 #include "../rage/util/get.hpp"
 
-namespace gta_base {
- namespace player_mgr {
+namespace gta_base::player_mgr {
 
    CNetGamePlayer* Player::NetPlayer() {
      if (self_)
@@ -18,7 +17,7 @@ namespace gta_base {
 
    CNonPhysicalPlayerData* Player::NonPhysicalPlayer() {
      if (self_->m_non_physical_player)
-       self_->m_non_physical_player;
+       return self_->m_non_physical_player;
 
      return nullptr;
    }
@@ -188,4 +187,3 @@ namespace gta_base {
       return self_->m_player_id != other.self_->m_player_id;
    }
  }
-}

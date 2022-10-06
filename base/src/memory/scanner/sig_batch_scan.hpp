@@ -10,9 +10,7 @@
 #pragma message("WARNING: debug mode sig scanner is extremely slow")
 #endif
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       class Batch {
       public:
         explicit Batch() = default;
@@ -40,5 +38,3 @@ namespace gta_base {
       };
 
     }
-  }
-}

@@ -5,8 +5,7 @@
 #include "global.hpp"
 #include "../../memory/pointers.hpp"
 
-namespace rage {
-  namespace script {
+namespace rage::script {
     Global::Global(std::size_t idx): idx_(idx) {
     }
 
@@ -21,4 +20,3 @@ namespace rage {
       return gta_base::memory::kPOINTERS->script_globals_[idx_ >> 0x12 & 0x3F] + (idx_ & 0x3FFFF);
     }
   }
-}

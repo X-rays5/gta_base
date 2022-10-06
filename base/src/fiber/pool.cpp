@@ -6,8 +6,7 @@
 #include "script.hpp"
 #include "manager.hpp"
 
-namespace gta_base {
-  namespace fiber {
+namespace gta_base::fiber {
     Pool::Pool(std::size_t num_per_tick) {
       if (num_per_tick == 0)
         num_per_tick = 1;
@@ -47,4 +46,3 @@ namespace gta_base {
       }
     }
   }
-}

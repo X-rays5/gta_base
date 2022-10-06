@@ -12,8 +12,7 @@
 #include "../misc/common.hpp"
 #undef LoadImage
 
-namespace gta_base {
-  namespace d3d {
+namespace gta_base::d3d {
     class TextureManager {
     public:
       struct Texture {
@@ -51,5 +50,4 @@ namespace gta_base {
     };
     inline TextureManager* kTEXTURE_MANAGER{};
   }
-}
 #endif //GTA_BASE_TEXTUREMANAGER_HPP

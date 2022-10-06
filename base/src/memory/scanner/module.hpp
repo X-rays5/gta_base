@@ -4,9 +4,7 @@
 #include <windows.h>
 #include "range.hpp"
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       class Module : public Range {
       public:
         explicit Module(HMODULE mod);
@@ -17,5 +15,3 @@ namespace gta_base {
         [[maybe_unused]] Handle get_export(std::string_view symbol_name);
       };
     }
-  }
-}

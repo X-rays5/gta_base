@@ -1,9 +1,7 @@
 #include "range.hpp"
 #include "pattern.hpp"
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       Range::Range(Handle base, std::size_t size) : base_(base), size_(size) {}
 
       Handle Range::begin() {
@@ -65,5 +63,3 @@ namespace gta_base {
         return scan_all(Pattern(sig));
       }
     }
-  }
-}

@@ -9,8 +9,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     class DetourHook {
     public:
       explicit DetourHook(std::string name, void *target, void *detour);
@@ -44,5 +43,4 @@ namespace gta_base {
       static DWORD ExpHandler(PEXCEPTION_POINTERS exp, std::string const& name);
     };
   }
-}
 #endif //GTA_BASE_DETOUR_HPP

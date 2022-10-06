@@ -17,9 +17,7 @@
 #include <imgui.h>
 #include "../logger/logger.hpp"
 
-namespace gta_base {
-  namespace d3d {
-    namespace draw {
+namespace gta_base::d3d::draw {
       inline ImDrawList* GetDrawList() {
         return ImGui::GetForegroundDrawList();
       }
@@ -323,6 +321,4 @@ namespace gta_base {
         }
       };
     }
-  }
-}
 #endif //GTA_BASE_DRAW_HPP

@@ -7,8 +7,7 @@
 #include "../../logger/logger.hpp"
 #include "../../memory/scanner/handle.hpp"
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     DetourHook::DetourHook(std::string name, void* target, void* detour) : name_(std::move(name)), target_(target), detour_(detour) {
       FixHookAddress();
 
@@ -67,4 +66,3 @@ namespace gta_base {
       return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH;
     }
   }
-}

@@ -8,8 +8,7 @@
 #include "../d3d/renderer.hpp"
 #include "../misc/hotkey_manager.hpp"
 
-namespace gta_base {
-  namespace hooking {
+namespace gta_base::hooking {
     WNDPROC ORIGINAL_WNDPROC = nullptr;
     bool HookWndProc() {
       if (ORIGINAL_WNDPROC)
@@ -50,4 +49,3 @@ namespace gta_base {
       return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
     }
   }
-}

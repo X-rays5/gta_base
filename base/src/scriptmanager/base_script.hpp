@@ -9,8 +9,7 @@
 #include <queue>
 #include "enums.hpp"
 
-namespace gta_base {
-  namespace scriptmanager {
+namespace gta_base::scriptmanager {
     class BaseScript {
     public:
       virtual ~BaseScript() noexcept = default;
@@ -33,5 +32,4 @@ namespace gta_base {
       BaseScript() = default;
     };
   }
-}
 #endif //GTABASE_BASE_SCRIPT_HPP

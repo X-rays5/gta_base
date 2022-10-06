@@ -9,9 +9,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-namespace gta_base {
-  namespace logger {
-    namespace stacktrace {
+namespace gta_base::logger::stacktrace {
       extern std::uint32_t RECURSIVE_CRASH_CHECK;
 
       std::string ExceptionCodeToStr(std::uint32_t code);
@@ -19,6 +17,4 @@ namespace gta_base {
       std::string GetExceptionString(PEXCEPTION_POINTERS except);
       std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx);
     }
-  }
-}
 #endif //GTA_BASE_STACKTRACE_HPP

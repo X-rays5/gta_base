@@ -6,9 +6,7 @@
 #include "fwdec.hpp"
 #include "handle.hpp"
 
-namespace gta_base {
-  namespace memory {
-    namespace scanner {
+namespace gta_base::memory::scanner {
       class Pattern {
         friend Batch;
         friend Range;
@@ -24,5 +22,3 @@ namespace gta_base {
         std::vector<std::optional<std::uint8_t>> bytes_;
       };
     }
-  }
-}

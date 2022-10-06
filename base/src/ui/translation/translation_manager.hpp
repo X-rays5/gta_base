@@ -17,8 +17,7 @@
 
 #define ADD_TRANSLATION(key, trans) {xorstr_(key), xorstr_(trans)}
 
-namespace gta_base {
-  namespace ui {
+namespace gta_base::ui {
       class Translation {
       public:
         Translation() : translation_(default_translation) {}
@@ -123,7 +122,6 @@ namespace gta_base {
       std::shared_ptr<Translation> active_translation_;
     };
   }
-}
 
 #undef ADD_TRANSLATION
 #endif //GTA_BASE_TRANSLATION_MANAGER_HPP

@@ -13,9 +13,7 @@
 #include "../enums.hpp"
 #include "../../translation/translation_manager.hpp"
 
-namespace gta_base {
-  namespace ui {
-    namespace option {
+namespace gta_base::ui::option {
       class BaseOption {
       public:
         using on_event_t = std::function<void(Event)>;
@@ -94,6 +92,4 @@ namespace gta_base {
         }
       };
     }
-  }
-}
 #endif //GTA_BASE_BASEOPTION_HPP

@@ -20,8 +20,7 @@
 #include "../rage/classes/net_connection_peer.hpp"
 #include "../rage/classes/script_program.hpp"
 
-namespace gta_base {
-  namespace memory {
+namespace gta_base::memory {
     class Pointers {
     public:
       Pointers();
@@ -98,5 +97,4 @@ namespace gta_base {
     };
     inline Pointers* kPOINTERS{};
   }
-}
 #endif //GTABASE_POINTERS_HPP

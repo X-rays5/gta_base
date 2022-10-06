@@ -8,8 +8,7 @@
 #include "common.hpp"
 #include "../ui/manager.hpp"
 
-namespace gta_base {
-  namespace misc {
+namespace gta_base::misc {
     HotkeyManager::HotkeyManager() {
       Load();
       kHOTKEY_MANAGER = this;
@@ -133,4 +132,3 @@ namespace gta_base {
       return {};
     }
   }
-}
