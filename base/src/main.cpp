@@ -14,7 +14,6 @@
 #include "scripts/scripting/uitick.hpp"
 #include "scripts/scripting/job_queue.hpp"
 #include "scripts/render/uidraw.hpp"
-#include "scripts/scripting/keyboard.hpp"
 #include "scripts/game/ui_disable_control.hpp"
 #include "scripts/game/loops.hpp"
 #include "rpc/discord.hpp"
@@ -25,17 +24,23 @@
 #include "ui/components/keyboard.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
+static bool waited_for_game_load = false;
 void BaseMain() {
   using namespace gta_base;
 
   auto ptr_inst = std::make_unique<memory::Pointers>();
   LOG_INFO("Pointers initialized");
 
-  LOG_INFO("Waiting for the game to load...");
+  if (*memory::kPOINTERS->game_state_ != eGameState::Playing) {
+    waited_for_game_load = true;
+    LOG_INFO("Waiting for the game to load...");
+  }
   while(*memory::kPOINTERS->game_state_ != eGameState::Playing) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
-  LOG_INFO("Game loaded");
+  if (waited_for_game_load) {
+    LOG_INFO("Game loaded");
+  }
 
   MH_Initialize();
   auto hook_inst = std::make_unique<Hooking>();
