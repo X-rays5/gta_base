@@ -30,7 +30,14 @@ namespace gta_base::ui::option {
         }
 
         bool HasFlag(OptionFlag flag) final {
-          return flag == OptionFlag::kSubmenuLink || flag == OptionFlag::kRightText || flag == OptionFlag::kHotkeyable;
+          if (flag == OptionFlag::kSubmenuLink)
+            return true;
+          else if (flag == OptionFlag::kRightText)
+            return true;
+          else if (flag == OptionFlag::kHotkeyable)
+            return hotkeyable_;
+
+          return false;
         }
 
       private:
