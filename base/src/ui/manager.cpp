@@ -15,6 +15,34 @@ namespace gta_base::ui {
     return number * (144.f / (ImGui::GetIO().Framerate / 2)); // framerate is 2x for some reason
   }
 
+  inline size_t CorrectPrevOptIdx(size_t prev_opt_idx, size_t selected_opt_idx, size_t max_draw_options) {
+    // make sure prev_opt_idx is in range of selected_opt_idx with the range of max_draw_options
+    if (prev_opt_idx > selected_opt_idx) {
+      if (prev_opt_idx - selected_opt_idx > max_draw_options) {
+        prev_opt_idx = selected_opt_idx + max_draw_options;
+      }
+    } else if (prev_opt_idx < selected_opt_idx) {
+      if (selected_opt_idx - prev_opt_idx > max_draw_options) {
+        prev_opt_idx = selected_opt_idx - max_draw_options;
+      }
+    }
+
+    return prev_opt_idx;
+  }
+
+  inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, size_t& option_before_scroll, KeyInput where_to_scroll) {
+    // The only way this can result in an infinite loop is if the developer is stupid.
+    auto cur_opt = sub->GetOption(sub->GetSelectedOption());
+    while(cur_opt->HasFlag(OptionFlag::kLabel)) {
+      LOG_DEBUG("label {}", sub->GetSelectedOption());
+      sub->HandleKey(where_to_scroll);
+      cur_opt = sub->GetOption(sub->GetSelectedOption());
+      LOG_DEBUG("{}", sub->GetSelectedOption());
+
+      //option_before_scroll = sub->GetSelectedOption();
+    }
+  }
+
   Manager::Manager() {
     draw_list_ = std::make_shared<d3d::draw::DrawList>(3);
     input_open_ = std::make_unique<util::TimedInput>(VK_F4, 200);
@@ -56,8 +84,12 @@ namespace gta_base::ui {
     return {{x_base + (x_size - text_size.x) / 2, y_pos}, color, text, false, true, font_size};
   }
 
-  float Manager::CalcOptPos(size_t option_pos) {
+  float Manager::CalcOptPos(size_t option_pos) const {
     return y_base + (y_size_option * option_pos) + y_size_top_bar;
+  }
+
+  float Manager::CalcScrollbarPos(size_t option_pos, float y_size) const {
+    return y_base + (y_size * option_pos) + y_size_top_bar;
   }
 
   void Manager::DrawHeader() {
@@ -92,26 +124,29 @@ namespace gta_base::ui {
     draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), y_base + y_size_top_bar}, {x_size_scrollbar, scrollbar_y_area}, primary_color));
 
     float scroller_y_size = scrollbar_y_area / option_count;
-    DrawScrollBarScroller(y_base + (current_option * scroller_y_size) + y_size_top_bar, scroller_y_size);
+    DrawScrollBarScroller(CalcScrollbarPos(option_before_scroll_, scroller_y_size), CalcScrollbarPos(current_option, scroller_y_size), scroller_y_size);
   }
 
-  void Manager::DrawScrollBarScroller(float target_pos, float scroller_y_size) {
-    if (scrollbar_current_pos_ == -1.f || scrollbar_reset_) {
-      scrollbar_reset_ = false;
-      scrollbar_current_pos_ = target_pos;
+  void Manager::DrawScrollBarScroller(float prev_pos, float target_pos, float scroller_y_size) {
+    float pos{};
+    if (prev_pos == target_pos) {
+      pos = target_pos;
+    } else {
+      if (scrollbar_reset) {
+        scrollbar_reset = false;
+        scrollbar_animation = d3d::draw::Animate(prev_pos, target_pos, 0);
+        scrollbar_prev_pos = prev_pos;
+      }
+
+      if (scrollbar_prev_pos != prev_pos) {
+        scrollbar_animation = d3d::draw::Animate(prev_pos, target_pos, 100);
+        scrollbar_prev_pos = prev_pos;
+      }
+
+      pos = static_cast<float>(scrollbar_animation.GetNow());
     }
 
-    if (scrollbar_current_pos_ < target_pos) {
-      scrollbar_current_pos_ += d3d::draw::ScaleYFromScreen(ScaleFps(scrollbar_speed_));
-      if (scrollbar_current_pos_ > target_pos)
-        scrollbar_current_pos_ = target_pos;
-    } else if (scrollbar_current_pos_ > target_pos) {
-      scrollbar_current_pos_ -= d3d::draw::ScaleYFromScreen(ScaleFps(scrollbar_speed_));
-      if (scrollbar_current_pos_ < target_pos)
-        scrollbar_current_pos_ = target_pos;
-    }
-
-    draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), scrollbar_current_pos_}, {x_size_scrollbar, scroller_y_size}, secondary_color));
+    draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), pos}, {x_size_scrollbar, scroller_y_size}, secondary_color));
   }
 
   void Manager::DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
@@ -120,13 +155,6 @@ namespace gta_base::ui {
 
     ImColor text_color_tmp = text_color;
     if (selected) {
-      if (previous_selected_option_ == 0 && option_idx == (sub_option_count - 1)) {
-        ResetSmoothScrolling();
-      } else if (previous_selected_option_ == (sub_option_count - 1) && option_idx == 0) {
-        ResetSmoothScrolling();
-      }
-      previous_selected_option_ = (int)option_idx;
-
       auto prev_opt = option_before_scroll_;
       if (prev_opt > max_drawn_options)
         prev_opt = max_drawn_options;
@@ -161,20 +189,24 @@ namespace gta_base::ui {
   }
 
   bool Manager::DrawScroller(float prev_pos, float target_pos) {
-    if (scroller_first) {
-      scroller_first = false;
-      scroller_animation = d3d::draw::Animate(target_pos, target_pos, 0);
-      scroller_prev_pos = target_pos;
+
+    float pos{};
+    if (prev_pos == target_pos) {
+      pos = target_pos;
+    } else {
+      if (scroller_reset) {
+        scroller_reset = false;
+        scroller_animation = d3d::draw::Animate(prev_pos, target_pos, 0);
+        scroller_prev_pos = prev_pos;
+      }
+
+      if (scroller_prev_pos != prev_pos) {
+        scroller_animation = d3d::draw::Animate(prev_pos, target_pos, 100);
+        scroller_prev_pos = prev_pos;
+      }
+
+      pos = static_cast<float>(scroller_animation.GetNow());
     }
-
-    if (scroller_prev_pos != prev_pos) {
-      scroller_animation = d3d::draw::Animate(prev_pos, target_pos, 100);
-      scroller_prev_pos = prev_pos;
-    }
-
-    LOG_DEBUG("{} {}", prev_pos, target_pos);
-
-    auto pos = static_cast<float>(scroller_animation.GetNow());
 
     draw_list_->AddCommand(d3d::draw::Rect({x_base, pos}, {x_size, y_size_option}, scroller_color));
 
@@ -203,38 +235,36 @@ namespace gta_base::ui {
       option_before_scroll_ = cur_sub->GetSelectedOption();
       cur_sub->HandleKey(KeyInput::kUp);
 
-      // The only way this can result in an infinite loop is if the developer is stupid.
-      auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-      while(cur_opt->HasFlag(OptionFlag::kLabel)) {
-        ResetSmoothScrolling();
-        cur_sub->HandleKey(KeyInput::kUp);
-        cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-      }
+      SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kUp);
+
+      option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), max_drawn_options);
     } else if (input_down_->Get()) {
       option_before_scroll_ = cur_sub->GetSelectedOption();
       cur_sub->HandleKey(KeyInput::kDown);
 
-      // The only way this can result in an infinite loop is if the developer is stupid.
-      auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-      while(cur_opt->HasFlag(OptionFlag::kLabel)) {
-        ResetSmoothScrolling();
-        cur_sub->HandleKey(KeyInput::kDown);
-        cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-      }
+      SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kDown);
+
+      option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), max_drawn_options);
     } else if (input_return_->Get()) {
       cur_sub->HandleKey(KeyInput::kReturn);
       if (cur_sub != submenus_stack_.top()) {
         option_before_scroll_ = cur_sub->GetSelectedOption();
+        cur_sub->Clear();
         cur_sub = submenus_stack_.top();
-        ResetSmoothScrolling();
+
+        cur_sub->CreateOptions();
+        SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kDown);
+
+        option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), max_drawn_options);
       }
     } else if (input_back_->Get()) {
       cur_sub->HandleKey(KeyInput::kBackspace);
       if (submenus_stack_.size() > 1) {
         option_before_scroll_ = cur_sub->GetSelectedOption();
         submenus_stack_.pop();
-        cur_sub = submenus_stack_.top();
-        ResetSmoothScrolling();
+        cur_sub->Clear();
+
+        option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, submenus_stack_.top()->GetSelectedOption(), max_drawn_options);
       } else {
         show_ui = false;
       }
@@ -257,21 +287,25 @@ namespace gta_base::ui {
     keyboard::kMANAGER->Tick();
 
     if (!submenus_stack_.empty()) {
-      auto cur_sub = submenus_stack_.top();
-      cur_sub->Clear();
-      cur_sub->CreateOptions();
-
       if (input_open_->Get())
         show_ui = !show_ui;
 
       if (show_ui) {
+        auto cur_sub = submenus_stack_.top();
+        cur_sub->Clear();
+        cur_sub->CreateOptions();
+
         if (!keyboard::kMANAGER->KeyBoardActive())
           HandleKeyInput(cur_sub);
 
         DrawHeader();
         DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());
         DrawBottomBar(cur_sub->GetOptionCount());
-        //DrawScrollBar(cur_sub->GetOptionCount(), cur_sub->GetSelectedOption());
+
+        if (cur_sub->GetOptionCount() == 0)
+          return;
+
+        DrawScrollBar(cur_sub->GetOptionCount(), cur_sub->GetSelectedOption());
 
         std::size_t draw_options_from = 0;
         std::size_t draw_options_till = cur_sub->GetOptionCount() > max_drawn_options ? max_drawn_options : cur_sub->GetOptionCount();

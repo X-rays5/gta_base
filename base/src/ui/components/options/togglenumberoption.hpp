@@ -75,10 +75,8 @@ namespace gta_base::ui::option {
         }
 
         void SetSavedVal(const std::string& val) final {
-          LOG_DEBUG("{}", val);
           if (auto pos = val.find("##"); pos != std::string::npos) {
             *value_ = std::stod(val.substr(0, pos));
-            LOG_DEBUG("{}", val.substr(pos + 1));
             *toggle_ = std::stoi(val.substr(pos + 2));
           }
         }

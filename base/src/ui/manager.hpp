@@ -132,15 +132,14 @@ namespace gta_base::ui {
       std::unique_ptr<util::TimedInput> input_back_;
       std::unique_ptr<util::TimedInput> input_create_hotkey_;
 
-      int previous_selected_option_ = -1;
       size_t option_before_scroll_ = -1;
 
       d3d::draw::Animate scroller_animation{};
-      bool scroller_first = true;
+      bool scroller_reset = true;
       float scroller_prev_pos = -1;
-      bool scrollbar_reset_ = false;
-      float scrollbar_speed_ = 200;
-      float scrollbar_current_pos_ = -1;
+      d3d::draw::Animate scrollbar_animation{};
+      bool scrollbar_reset = true;
+      float scrollbar_prev_pos = -1;
 
       std::unique_ptr<Notification> notification_inst_;
       std::unique_ptr<TranslationManager> translation_manager_inst_;
@@ -151,20 +150,21 @@ namespace gta_base::ui {
       inline d3d::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true, ImFont* font = nullptr) const;
       inline d3d::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true, ImFont* font = nullptr) const;
       inline d3d::draw::Text DrawTextCenter(float y_pos, ImColor color, const std::string& text, ImFont* font = nullptr) const;
-      float CalcOptPos(size_t option_pos);
+      inline float CalcOptPos(size_t option_pos) const;
+      inline float CalcScrollbarPos(size_t option_pos, float y_size) const;
       inline void DrawHeader();
       inline void DrawTopBar(const std::string& title, size_t option_current, size_t option_count);
       inline void DrawBottomBar(size_t option_count);
       inline void DrawScrollBar(size_t option_count, int current_option);
-      inline void DrawScrollBarScroller(float target_pos, float scroller_y_size);
+      inline void DrawScrollBarScroller(float prev_pos, float target_pos, float scroller_y_size);
       inline void DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx);
       inline bool DrawScroller(float prev_pos, float target_pos);
       inline void DrawDescriptionText(const std::string& description, size_t option_count) const;
       inline void HandleKeyInput(std::shared_ptr<Submenu>& cur_sub);
 
       inline void ResetSmoothScrolling() {
-        //scroller_reset_ = true;
-        scrollbar_reset_ = true;
+        scroller_reset = true;
+        scrollbar_reset = true;
       }
     };
     inline Manager* kMANAGER;

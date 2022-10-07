@@ -34,7 +34,11 @@ namespace gta_base::ui {
 
       inline std::shared_ptr<option::BaseOption> GetOption(size_t index) {
         std::unique_lock lock(mtx_);
-        return options_[index];
+        if (index < options_.size()) {
+          return options_[index];
+        }
+
+        return nullptr;
       };
 
       inline size_t GetOptionCount() {
