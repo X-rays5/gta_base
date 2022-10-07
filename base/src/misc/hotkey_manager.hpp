@@ -23,10 +23,12 @@ namespace gta_base::misc {
 
       void KeyPressed(std::uint64_t key_id);
 
+      [[nodiscard]] robin_hood::unordered_map<std::uint64_t , std::string> GetAllHotkeys() const;
+
     private:
       uint64_t adding_hotkey_expire_ = 0;
       std::string adding_hotkey_name_;
-      robin_hood::unordered_map<std::uint64_t , std::string> hotkeys_;
+      robin_hood::unordered_map<std::uint64_t, std::string> hotkeys_;
 
     private:
       void Load();

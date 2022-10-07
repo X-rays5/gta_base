@@ -17,9 +17,6 @@ namespace gta_base::misc {
     HotkeyManager::~HotkeyManager() {
       kHOTKEY_MANAGER = nullptr;
       Save();
-      for (auto&& hotkey : hotkeys_) {
-        RemoveHotkey(hotkey.first);
-      }
     }
 
     void HotkeyManager::StartHotkeyAdd(const std::string& key_str) {
@@ -67,10 +64,14 @@ namespace gta_base::misc {
     }
 
     bool HotkeyManager::RemoveHotkey(std::uint64_t hotkey_id) {
-      if (GetHotkeyKeyStr(hotkey_id).empty())
+      auto hotkey_name = GetHotkeyKeyStr(hotkey_id);
+      if (hotkey_name.empty())
         return false;
 
       hotkeys_.erase(hotkeys_.find(hotkey_id));
+      ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("{} has been deleted", ui::kTRANSLATION_MANAGER->Get(hotkey_name)));
+      LOG_INFO("Deleted hotkey: {}", hotkey_name);
+
       return true;
     }
 
@@ -130,4 +131,8 @@ namespace gta_base::misc {
 
       return {};
     }
+
+  robin_hood::unordered_map<std::uint64_t, std::string> HotkeyManager::GetAllHotkeys() const {
+    return hotkeys_;
   }
+}
