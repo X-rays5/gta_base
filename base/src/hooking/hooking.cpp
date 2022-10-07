@@ -90,6 +90,8 @@ namespace gta_base {
 
     if (!std::string(res->m_name).empty()) {
       LOG_DEBUG("Script thread '{}' was started", res->m_name);
+    } else {
+      LOG_DEBUG("Script thread '{}' was started", res->m_script_hash);
     }
 
     hooking::kNATIVE_HOOKING->ThreadStart(res);
@@ -97,9 +99,12 @@ namespace gta_base {
     return res;
   }
 
+  static std::string last_kill{};
   rage::eThreadState Hooks::GtaThreadKill(GtaThread* thread) {
     const auto res = kHOOKING->gta_thread_kill_hook_.GetOriginal<decltype(&GtaThreadKill)>()(thread);
-    LOG_DEBUG("Script thread '{}' was killed", thread->m_name);
+    if (last_kill != thread->m_name)
+      LOG_DEBUG("Script thread '{}' was killed", thread->m_name);
+    last_kill = thread->m_name;
 
     hooking::kNATIVE_HOOKING->ThreadKill(thread);
 
