@@ -12,7 +12,6 @@
 #include <wrl/client.h>
 #include <d3d11.h>
 #include "texturemanager.hpp"
-#include "draw.hpp"
 
 namespace gta_base::d3d {
     class Renderer {
@@ -44,6 +43,22 @@ namespace gta_base::d3d {
         return roboto_bold_;
       }
 
+      [[nodiscard]] inline std::uint64_t GetDeltaTime() const {
+        return delta_time_;
+      }
+
+      inline void SetDeltaTime(std::uint64_t delta_time) {
+        delta_time_ = delta_time;
+      }
+
+      [[nodiscard]] inline std::uint64_t GetLastTime() const {
+        return last_time_;
+      }
+
+      inline void SetLastTime(std::uint64_t last_time) {
+        last_time_ = last_time;
+      }
+
       static void WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
       static HRESULT Present(IDXGISwapChain *swap_chain, UINT sync_interval, UINT flags);
@@ -57,6 +72,8 @@ namespace gta_base::d3d {
       HWND hwnd_;
       ImFont* roboto_ = nullptr;
       ImFont* roboto_bold_ = nullptr;
+      std::uint64_t delta_time_;
+      std::uint64_t last_time_;
 
     private:
       void InitD3D();

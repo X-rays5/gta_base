@@ -15,6 +15,7 @@
 #include <d3d11.h>
 #include <fmt/format.h>
 #include <imgui.h>
+#include "renderer.hpp"
 #include "../logger/logger.hpp"
 
 namespace gta_base::d3d::draw {
@@ -108,6 +109,45 @@ namespace gta_base::d3d::draw {
 
         return res;
       }
+
+  /*double GetNow() {
+    auto now = common::GetEpoch();
+    auto diff = now - start_time_;
+    if (diff >= duration_) {
+      return end_;
+    }
+    // calculate how much percentage diff is of duration
+    double percentage = ((double )(diff * 100) / (double)duration_) / 100;
+    LOG_DEBUG("{} {} {}", diff, duration_, percentage);
+
+    auto diff_pos = end_ - start_;
+
+    return start_ + (diff_pos * percentage);
+  }*/
+
+      class Animate {
+      public:
+        Animate() = default;
+        Animate(double start, double end, std::uint64_t duration) : start_(start), end_(end), start_time_(common::GetEpoch()), duration_(duration) {}
+
+        double GetNow() {
+          // use lerp to go from start to end
+          curr_time_ += kRENDERER->GetDeltaTime();
+          if (curr_time_ >= duration_) {
+            return end_;
+          }
+
+          double percentage = ((double )(curr_time_ * 100) / (double)duration_) / 100;
+
+          return std::lerp(start_, end_, percentage);
+        }
+      private:
+        double start_{};
+        double end_{};
+        std::uint64_t start_time_{};
+        std::uint64_t curr_time_{};
+        std::uint64_t duration_{};
+      };
 
       // FIXME: Make it work with non monospaced fonts.
       // 2 lines take 0.01 ms in debug so it's fine for now

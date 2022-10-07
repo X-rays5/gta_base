@@ -16,8 +16,8 @@ namespace gta_base::ui::option {
       public:
         using action_t = std::function<void()>;
 
-        SubmenuOption(const std::string& name_key, const std::string& description_key, Submenus sub_id, action_t action = nullptr, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", ">", "", false, hotkeyable), sub_id_(sub_id), action_(std::move(action))
+        SubmenuOption(const std::string& name_key, const std::string& description_key, Submenus sub_id, action_t action = nullptr) :
+          BaseOption(name_key, description_key, "", ">", "", false), sub_id_(sub_id), action_(std::move(action))
         {}
 
         void HandleKey(KeyInput key) final {
@@ -34,8 +34,6 @@ namespace gta_base::ui::option {
             return true;
           else if (flag == OptionFlag::kRightText)
             return true;
-          else if (flag == OptionFlag::kHotkeyable)
-            return hotkeyable_;
 
           return false;
         }

@@ -20,7 +20,7 @@ namespace gta_base::ui::tabs {
       for (auto&& hotkey : misc::kHOTKEY_MANAGER->GetAllHotkeys()) {
         sub->AddOption(option::SubmenuOption(hotkey.second, "", Submenus::HotkeysConfirmDelete, [=]{
           hotkey_delete_key_id = hotkey.first;
-        }, false))->SetRightTextKey(common::VkToStr(hotkey.first));
+        }))->SetRightTextKey(common::VkToStr(hotkey.first));
       }
     });
 

@@ -76,6 +76,8 @@ namespace gta_base::d3d {
       MergeFa();
       if (!ImGui::GetIO().Fonts->IsBuilt())
         ImGui::GetIO().Fonts->Build();
+
+      last_time_ = common::GetEpoch();
     }
 
     void Renderer::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -84,6 +86,10 @@ namespace gta_base::d3d {
 
     HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
       if (globals::running) {
+        std::uint64_t now = common::GetEpoch();
+        kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
+        kRENDERER->SetLastTime(now);
+
         ImGui_ImplWin32_NewFrame();
         ImGui_ImplDX11_NewFrame();
         ImGui::NewFrame();
