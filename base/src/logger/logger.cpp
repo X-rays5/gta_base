@@ -104,6 +104,8 @@ namespace gta_base {
         //exception_string_cpp_exception = logger::stacktrace::GetExceptionString(except);
 
         return EXCEPTION_CONTINUE_SEARCH;
+      } else if (err_code == DBG_PRINTEXCEPTION_C || err_code == DBG_PRINTEXCEPTION_WIDE_C) { // msg for debugger
+        return EXCEPTION_CONTINUE_SEARCH;
       } else if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") { // Without this the c++ try catch blocks will break
         LOG_DEBUG("Received unknown exception code: {}.", err_code);
 
