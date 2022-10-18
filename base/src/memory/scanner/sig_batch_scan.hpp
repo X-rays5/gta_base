@@ -6,10 +6,6 @@
 #include "range.hpp"
 #include "fwdec.hpp"
 
-#ifndef NDEBUG
-#pragma message("WARNING: debug mode sig scanner is extremely slow")
-#endif
-
 namespace gta_base::memory::scanner {
       class Batch {
       public:

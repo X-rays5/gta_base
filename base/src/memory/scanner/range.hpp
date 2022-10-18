@@ -16,6 +16,8 @@ namespace gta_base::memory::scanner {
 
         Handle scan(Pattern const& sig);
         Handle scan(char* sig);
+        Handle bruteforce_scan(Pattern const& sig);
+        Handle bruteforce_scan(char* sig);
         std::vector<Handle> scan_all(Pattern const& sig);
         std::vector<Handle> scan_all(char* sig);
       protected:

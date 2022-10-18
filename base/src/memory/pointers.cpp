@@ -154,13 +154,13 @@ namespace gta_base::memory {
 		*/
 
       LOG_DEBUG("freemode patch 1");
-      if (auto pat1 = mem_region.scan(xorstr_("3b 0a 0f 83 ? ? ? ? 48 ff c7"))) {
+      if (auto pat1 = mem_region.bruteforce_scan(xorstr_("3b 0a 0f 83 ? ? ? ? 48 ff c7"))) {
         *pat1.add(2).as<uint32_t*>() = 0xc9310272;
         *pat1.add(6).as<uint16_t*>() = 0x9090;
       }
 
       LOG_DEBUG("freemode patch 2");
-      if (auto pat2 = mem_region.scan(xorstr_("3b 0a 0f 83 ? ? ? ? 49 03 fa"))) {
+      if (auto pat2 = mem_region.bruteforce_scan(xorstr_("3b 0a 0f 83 ? ? ? ? 49 03 fa"))) {
         *pat2.add(2).as<uint32_t*>() = 0xc9310272;
         *pat2.add(6).as<uint16_t*>() = 0x9090;
       }

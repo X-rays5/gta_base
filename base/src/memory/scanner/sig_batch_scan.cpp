@@ -18,20 +18,14 @@ namespace gta_base::memory::scanner {
           if (auto result = region.scan(entry.pattern_)) {
             if (entry.cb_) {
               std::invoke(std::move(entry.cb_), result);
-#ifndef NDEBUG
               LOG_DEBUG("Found '{}' GTA5.exe+{:x}", entry.name_, (result.as<DWORD64>() - region.begin().as<DWORD64>()));
-#else
-              LOG_INFO("Found '{}'", entry.name_);
-#endif
-            }
-            else {
+            } else {
               all_found = false;
-              LOG_WARN("Failed to find '{}'.", entry.name_);
+              LOG_CRITICAL("Failed to find '{}'.", entry.name_);
             }
-          }
-          else {
+          } else {
             all_found = false;
-            LOG_WARN("Failed to find '{}'.", entry.name_);
+            LOG_CRITICAL("Failed to find '{}'.", entry.name_);
           }
         }
 

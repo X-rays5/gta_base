@@ -11,10 +11,8 @@ namespace gta_base::hooking {
     DetourHook::DetourHook(std::string name, void* target, void* detour) : name_(std::move(name)), target_(target), detour_(detour) {
       FixHookAddress();
 
-      if (auto status = MH_CreateHook(target_, detour_, &original_); status == MH_OK) {
-        LOG_INFO("Created hook '{}'.", name_);
-      } else {
-        LOG_FATAL("Failed to create hook '{}' at 0x{:X} (error: {})", name_, uintptr_t(target_), MH_StatusToString(status));
+      if (auto status = MH_CreateHook(target_, detour_, &original_); status != MH_OK) {
+        LOG_ERROR("Failed to create hook '{}' at 0x{:X} (error: {})", name_, uintptr_t(target_), MH_StatusToString(status));
       }
     }
 
@@ -22,8 +20,6 @@ namespace gta_base::hooking {
       if (target_) {
         MH_RemoveHook(target_);
       }
-
-      LOG_INFO("Removed hook '{}'.", name_);
     }
 
     std::string DetourHook::GetName() const {
@@ -32,20 +28,15 @@ namespace gta_base::hooking {
 
     void DetourHook::Enable() {
       if (auto status = MH_EnableHook(target_); status == MH_OK) {
-        LOG_INFO("Enabled hook '{}'.", name_);
         LOG_DEBUG("[{}] hooked src -> {}, dst -> {}, og -> {}", name_, (void*)target_, (void*)detour_, (void*)original_);
-      }
-      else {
-        LOG_FATAL("Failed to enable hook 0x{:X} ({})", uintptr_t(target_), MH_StatusToString(status));
+      } else {
+        LOG_ERROR("Failed to enable hook 0x{:X} ({})", uintptr_t(target_), MH_StatusToString(status));
       }
     }
 
     void DetourHook::Disable() {
-      if (auto status = MH_DisableHook(target_); status == MH_OK) {
-        LOG_INFO("Disabled hook '{}'.", name_);
-      }
-      else {
-        LOG_WARN("Failed to disable hook '{}'.", name_);
+      if (auto status = MH_DisableHook(target_); status != MH_OK) {
+        LOG_ERROR("Failed to disable hook '{}'.", name_);
       }
     }
 
