@@ -26,8 +26,8 @@ namespace gta_base::ui::tabs {
           sub->AddOption(option::LabelOption("label/teleport_remote"));
           sub->AddOption(option::ExecuteOption("option/teleport_to_selected", "", []{
             fiber::kPOOL->AddJob([]{
-              auto target = rage::util::LoadGroundAtCoord(kPLAYER_MGR->GetSelectedPlayer()->Ped()->m_position);
-              rage::util::Teleport((rage::fvector3)target, true);
+              rage::util::LoadGroundAtCoord(kPLAYER_MGR->GetSelectedPlayer()->Ped()->m_position);
+              rage::util::Teleport((rage::fvector3)kPLAYER_MGR->GetSelectedPlayer()->Ped()->m_position, true);
             });
           }));
           sub->AddOption(option::ExecuteOption("option/teleport_into_selected_vehicle", "", []{
