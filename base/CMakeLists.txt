@@ -9,14 +9,14 @@ file(GLOB IMGUI_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/*.cpp"
 )
 
-CPMAddPackage("gh:gabime/spdlog#f44fa31f5110331af196d0ed7f00ae1c7b8ef3cc")
+CPMAddPackage("gh:gabime/spdlog#77429b2e2e70feb5d2619374f2bc99326f6570dd")
 CPMAddPackage("gh:X-rays5/minhook#7f3cae16668187282f0a64df8d2918cd0e51258f")
 CPMAddPackage(NAME robin_hood GIT_REPOSITORY https://github.com/martinus/robin-hood-hashing.git GIT_TAG fb1483621fda28d4afb31c0097c1a4a457fdd35b)
-CPMAddPackage("gh:freetype/freetype#919561ca8c2a7b245644767b49d08e638d34d4eb")
-CPMAddPackage("gh:fmtlib/fmt#b6f4ceaed0a0a24ccf575fab6c56dd50ccf6f1a9")
-CPMAddPackage("gh:Yimura/GTAV-Classes#1da236c3c6ca5586dc9e1069dde1fbfd49641882")
+CPMAddPackage("gh:freetype/freetype#c943d408e08fbe6d3e12f647b4a10d94a8198e9b")
+CPMAddPackage("gh:fmtlib/fmt#8.1.1")
+CPMAddPackage("gh:Yimura/GTAV-Classes#ae182f14f3230600ef3600aee21c097a869eac08")
 CPMAddPackage("gh:Tencent/rapidjson#27c3a8dc0e2c9218fe94986d249a12b5ed838f1d")
-CPMAddPackage("gh:Neargye/magic_enum#1b1194bcd5e0f62047a43161689bae593b12e607")
+CPMAddPackage("gh:Neargye/magic_enum#159a35006d8e18172eb687b432b77e6f5baa61f6")
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/discord-rpc)
 
