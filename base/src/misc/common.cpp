@@ -4,6 +4,7 @@
 
 #include "common.hpp"
 #include "../memory/pointers.hpp"
+#include <network/CNetworkPlayerMgr.hpp>
 
 namespace gta_base::common {
   Platform GetCurrentPlatform() {
@@ -13,7 +14,7 @@ namespace gta_base::common {
   }
 
   bool IsSessionStarted() {
-    return *memory::kPOINTERS->is_session_started_;
+    return (*memory::kPOINTERS->network_player_mgr_)->m_local_net_player != nullptr;
   }
 
   std::string VkToStr(std::uint64_t vk) {
