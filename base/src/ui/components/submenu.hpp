@@ -107,16 +107,17 @@ namespace gta_base::ui {
 
       void CreateOptions() {
         std::unique_lock lock(mtx_);
-        std::invoke(create_options_, this);
+        if (options_.empty()) {
+          std::invoke(create_options_, this);
+        }
       }
 
       bool HotkeyPressed(const std::string& key) {
         std::unique_lock lock(mtx_);
-        if (options_.empty()) {
-          CreateOptions();
-          if (options_.empty())
-            return false;
-        }
+
+        CreateOptions();
+        if (options_.empty())
+          return false;
 
         for (auto&& opt : options_) {
           if (opt->GetNameKey() == key) {

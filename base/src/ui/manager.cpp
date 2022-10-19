@@ -15,19 +15,24 @@ namespace gta_base::ui {
     return number * (144.f / (ImGui::GetIO().Framerate / 2)); // framerate is 2x for some reason
   }
 
-  inline size_t CorrectPrevOptIdx(size_t prev_opt_idx, size_t selected_opt_idx, size_t max_draw_options) {
+  inline size_t CorrectPrevOptIdx(std::int64_t prev_opt_idx, std::int64_t selected_opt_idx, std::int64_t option_count, std::int64_t max_draw_options) {
     // make sure prev_opt_idx is in range of selected_opt_idx with the range of max_draw_options
-    if (prev_opt_idx > selected_opt_idx) {
-      if (prev_opt_idx - selected_opt_idx > max_draw_options) {
-        prev_opt_idx = selected_opt_idx + max_draw_options;
-      }
-    } else if (prev_opt_idx < selected_opt_idx) {
-      if (selected_opt_idx - prev_opt_idx > max_draw_options) {
-        prev_opt_idx = selected_opt_idx - max_draw_options;
-      }
+    // but there are only option_count options
+    std::int64_t res{};
+    if (prev_opt_idx < selected_opt_idx) {
+      res = std::clamp(prev_opt_idx, selected_opt_idx - max_draw_options, selected_opt_idx);
+    } else if (prev_opt_idx > selected_opt_idx) {
+      res = std::clamp(prev_opt_idx, selected_opt_idx, selected_opt_idx + max_draw_options);
+    } else {
+      res = prev_opt_idx;
     }
 
-    return prev_opt_idx;
+    if (prev_opt_idx > option_count) {
+      res = option_count - 1;
+    }
+
+    LOG_DEBUG(res + 1);
+    return res;
   }
 
   inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, size_t& option_before_scroll, KeyInput where_to_scroll) {
@@ -118,6 +123,10 @@ namespace gta_base::ui {
   }
 
   void Manager::DrawScrollBar(size_t option_count, int current_option) {
+    if (option_count <= max_drawn_options) {
+      return;
+    }
+
     std::uint32_t visible_options = option_count > max_drawn_options ? max_drawn_options : option_count;
     float scrollbar_y_area = (y_size_option * visible_options);
 
@@ -156,8 +165,8 @@ namespace gta_base::ui {
     ImColor text_color_tmp = text_color;
     if (selected) {
       auto prev_opt = option_before_scroll_;
-      if (prev_opt > max_drawn_options)
-        prev_opt = max_drawn_options;
+      if (prev_opt >= max_drawn_options)
+        prev_opt = option_pos;
       if (DrawScroller(CalcOptPos(prev_opt), pos))
         text_color_tmp = selected_text_color;
     }
@@ -237,14 +246,14 @@ namespace gta_base::ui {
 
       SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kUp);
 
-      option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), max_drawn_options);
+      option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
     } else if (input_down_->Get()) {
       option_before_scroll_ = cur_sub->GetSelectedOption();
       cur_sub->HandleKey(KeyInput::kDown);
 
       SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kDown);
 
-      option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), max_drawn_options);
+      option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
     } else if (input_return_->Get()) {
       cur_sub->HandleKey(KeyInput::kReturn);
       if (cur_sub != submenus_stack_.top()) {
@@ -255,7 +264,7 @@ namespace gta_base::ui {
         cur_sub->CreateOptions();
         SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kDown);
 
-        option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), max_drawn_options);
+        option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
       }
     } else if (input_back_->Get()) {
       cur_sub->HandleKey(KeyInput::kBackspace);
@@ -264,7 +273,9 @@ namespace gta_base::ui {
         submenus_stack_.pop();
         cur_sub->Clear();
 
-        option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, submenus_stack_.top()->GetSelectedOption(), max_drawn_options);
+        cur_sub = submenus_stack_.top();
+        cur_sub->CreateOptions();
+        option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
       } else {
         show_ui = false;
       }
@@ -298,13 +309,12 @@ namespace gta_base::ui {
         if (!keyboard::kMANAGER->KeyBoardActive())
           HandleKeyInput(cur_sub);
 
-        DrawHeader();
-        DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());
-        DrawBottomBar(cur_sub->GetOptionCount());
-
         if (cur_sub->GetOptionCount() == 0)
           return;
 
+        DrawHeader();
+        DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());
+        DrawBottomBar(cur_sub->GetOptionCount());
         DrawScrollBar(cur_sub->GetOptionCount(), cur_sub->GetSelectedOption());
 
         std::size_t draw_options_from = 0;

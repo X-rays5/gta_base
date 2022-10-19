@@ -128,7 +128,7 @@ namespace gta_base::d3d::draw {
       class Animate {
       public:
         Animate() = default;
-        Animate(double start, double end, std::uint64_t duration) : start_(start), end_(end), start_time_(common::GetEpoch()), duration_(duration) {}
+        Animate(double start, double end, std::uint64_t duration) : start_(start), end_(end), duration_(duration) {}
 
         double GetNow() {
           // use lerp to go from start to end
@@ -138,13 +138,14 @@ namespace gta_base::d3d::draw {
           }
 
           double percentage = ((double )(curr_time_ * 100) / (double)duration_) / 100;
+          if (percentage >= 1)
+            return end_;
 
           return std::lerp(start_, end_, percentage);
         }
       private:
         double start_{};
         double end_{};
-        std::uint64_t start_time_{};
         std::uint64_t curr_time_{};
         std::uint64_t duration_{};
       };

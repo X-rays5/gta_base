@@ -27,6 +27,7 @@ namespace gta_base::ui {
       SettingsUnloadConfirm,
       Debug,
       DebugTestComponents,
+      DebugLong,
     };
 
     enum class OptionFlag {
