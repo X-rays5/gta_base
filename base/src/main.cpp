@@ -77,7 +77,7 @@ void BaseMain() {
   LOG_INFO("Discord initialized");
 
   auto discord_thread = std::thread([]{
-    LOG_INFO("discord thread first tick");
+    LOG_DEBUG("discord thread first tick");
     while(globals::running) {
       rpc::kDISCORD->SetLargeImage("gta-logo");
       if (common::IsSessionStarted()) {
@@ -100,7 +100,7 @@ void BaseMain() {
   LOG_INFO("Hooks enabled");
 
   auto scripting_thread = std::thread([]{
-    LOG_INFO("scripting thread first tick");
+    LOG_DEBUG("scripting thread first tick");
     while(globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
       std::this_thread::yield();

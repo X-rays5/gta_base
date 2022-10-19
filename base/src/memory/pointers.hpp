@@ -79,14 +79,13 @@ namespace gta_base::memory {
       PVOID NetworkPlayerMgrShutdown{};
       PVOID AssignPhysicalIdx{};
 
-      bool* is_session_started_{};
       PUSHORT spectator_check_;
 
       using ptr_to_handle_t = Entity(*)(void* entity);
       ptr_to_handle_t PtrToHandle{};
 
       PVOID blame_explode_bypass_{};
-      void EnableBlameExplode(bool enable) {
+      inline void EnableBlameExplode(bool enable) const {
         *(unsigned short*)blame_explode_bypass_ = enable ? 0xE990 : 0x850F;
       }
 

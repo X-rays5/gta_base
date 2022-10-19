@@ -116,10 +116,6 @@ namespace gta_base::memory {
         AssignPhysicalIdx = ptr.as<decltype(AssignPhysicalIdx)>();
       });
 
-      main_batch.add(VAR_NAME(is_session_started_), xorstr_("40 38 35 ? ? ? ? 75 0E 4C 8B C3 49 8B D7 49 8B CE"), [this](scanner::Handle ptr){
-        is_session_started_ = ptr.add(3).rip().as<decltype(is_session_started_)>();
-      });
-
       // Request Control of Entity PATCH
       main_batch.add(VAR_NAME(spectator_check_), xorstr_("48 89 5C 24 ? 57 48 83 EC 20 8B D9 E8 ? ? ? ? ? ? ? ? 8B CB"), [this](scanner::Handle ptr){
         spectator_check_ = ptr.add(0x13).as<decltype(spectator_check_)>();
