@@ -34,13 +34,24 @@ namespace gta_base::hooking {
       }
 
       if (globals::running) {
-        if (message == WM_KEYDOWN) {
-          common::SetKeyState(parameter_uint_ptr, true);
-        } else if (message == WM_KEYUP) {
-          common::SetKeyState(parameter_uint_ptr, false);
+        switch(message) {
+          case WM_SYSKEYDOWN:
+          case WM_KEYDOWN: {
+            common::SetKeyState(parameter_uint_ptr, true);
+            break;
+          }
+          case WM_SYSKEYUP:
+          case WM_KEYUP: {
+            common::SetKeyState(parameter_uint_ptr, false);
 
-          if (!misc::kHOTKEY_MANAGER->AddKeyPressed(parameter_uint_ptr))
-            misc::kHOTKEY_MANAGER->KeyPressed(parameter_uint_ptr);
+            if (!misc::kHOTKEY_MANAGER->AddKeyPressed(parameter_uint_ptr))
+              misc::kHOTKEY_MANAGER->KeyPressed(parameter_uint_ptr);
+            break;
+          }
+
+          default: {
+            break;
+          }
         }
 
         d3d::Renderer::WndProc(window, message, parameter_uint_ptr, parameter_long_ptr);

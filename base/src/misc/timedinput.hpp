@@ -20,5 +20,19 @@ namespace gta_base::util {
       std::uint64_t last_input_ = NULL;
       std::uint64_t timeout_;
     };
+
+    class ModifierTimedInput {
+    public:
+      ModifierTimedInput(int modifier, int input, std::uint64_t timeout) : modifier_(modifier), input_(input), timeout_(timeout) {}
+
+      bool Get();
+
+    private:
+
+      int modifier_;
+      int input_;
+      std::uint64_t last_input_ = NULL;
+      std::uint64_t timeout_;
+    };
   }
 #endif //GTA_BASE_TIMEDINPUT_HPP
