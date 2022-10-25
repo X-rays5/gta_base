@@ -7,7 +7,6 @@
 #include "../d3d/renderer.hpp"
 #include "../misc/settings.hpp"
 #include "components/keyboard.hpp"
-#include "../logger/logger.hpp"
 #include "fonts/IconsFontAwesome6.h"
 
 namespace gta_base::ui {
@@ -31,7 +30,6 @@ namespace gta_base::ui {
       res = option_count - 1;
     }
 
-    LOG_DEBUG(res + 1);
     return res;
   }
 
@@ -39,10 +37,8 @@ namespace gta_base::ui {
     // The only way this can result in an infinite loop is if the developer is stupid.
     auto cur_opt = sub->GetOption(sub->GetSelectedOption());
     while(cur_opt->HasFlag(OptionFlag::kLabel)) {
-      LOG_DEBUG("label {}", sub->GetSelectedOption());
       sub->HandleKey(where_to_scroll);
       cur_opt = sub->GetOption(sub->GetSelectedOption());
-      LOG_DEBUG("{}", sub->GetSelectedOption());
 
       //option_before_scroll = sub->GetSelectedOption();
     }
@@ -53,8 +49,8 @@ namespace gta_base::ui {
     input_open_ = std::make_unique<util::TimedInput>(VK_F4, 200);
     input_left_ = std::make_unique<util::TimedInput>(VK_LEFT, 140);
     input_right_ = std::make_unique<util::TimedInput>(VK_RIGHT, 140);
-    input_up_ = std::make_unique<util::TimedInput>(VK_UP, 100);
-    input_down_ = std::make_unique<util::TimedInput>(VK_DOWN, 100);
+    input_up_ = std::make_unique<util::TimedInput>(VK_UP, time_between_scroll_ms);
+    input_down_ = std::make_unique<util::TimedInput>(VK_DOWN, time_between_scroll_ms);
     input_return_ = std::make_unique<util::TimedInput>(VK_RETURN, 300);
     input_back_ = std::make_unique<util::TimedInput>(VK_BACK, 300);
     input_create_hotkey_ = std::make_unique<util::TimedInput>(VK_F1, 300);
@@ -148,7 +144,7 @@ namespace gta_base::ui {
       }
 
       if (scrollbar_prev_pos != prev_pos) {
-        scrollbar_animation = d3d::draw::Animate(prev_pos, target_pos, 100);
+        scrollbar_animation = d3d::draw::Animate(prev_pos, target_pos, time_between_scroll_ms);
         scrollbar_prev_pos = prev_pos;
       }
 
@@ -210,7 +206,7 @@ namespace gta_base::ui {
       }
 
       if (scroller_prev_pos != prev_pos) {
-        scroller_animation = d3d::draw::Animate(prev_pos, target_pos, 100);
+        scroller_animation = d3d::draw::Animate(prev_pos, target_pos, time_between_scroll_ms);
         scroller_prev_pos = prev_pos;
       }
 

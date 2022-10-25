@@ -105,6 +105,7 @@ namespace gta_base::ui {
       float y_offset_description = 0.005f;
       float y_base = 0.185f;
       int max_drawn_options = 14;
+      int time_between_scroll_ms = 100;
 
       ImColor primary_color = ImColor(0,0,0);
       ImColor secondary_color = ImColor(255,255,255);
@@ -135,10 +136,10 @@ namespace gta_base::ui {
       size_t option_before_scroll_ = -1;
 
       d3d::draw::Animate scroller_animation{};
-      bool scroller_reset = true;
+      bool scroller_reset = false;
       float scroller_prev_pos = -1;
       d3d::draw::Animate scrollbar_animation{};
-      bool scrollbar_reset = true;
+      bool scrollbar_reset = false;
       float scrollbar_prev_pos = -1;
 
       std::unique_ptr<Notification> notification_inst_;
