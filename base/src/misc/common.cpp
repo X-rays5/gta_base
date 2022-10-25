@@ -184,7 +184,7 @@ namespace gta_base::common {
       if (!down)
         key_entry->second.released_at = GetEpoch();
     } else {
-      key_state[key] = {down, GetEpoch()};
+      key_state[key] = {down, 0};
     }
   }
 }

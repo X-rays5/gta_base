@@ -131,7 +131,7 @@ namespace gta_base::ui {
                 return res;
               } else {
                 options_.clear();
-                return std::nullopt;
+                return misc::HotkeyManager::HotkeyPressState();
               }
             }
           }
