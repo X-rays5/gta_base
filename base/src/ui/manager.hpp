@@ -133,6 +133,7 @@ namespace gta_base::ui {
       std::unique_ptr<util::TimedInput> input_return_;
       std::unique_ptr<util::TimedInput> input_back_;
       std::unique_ptr<util::TimedInput> input_create_hotkey_;
+      std::unique_ptr<util::ModifierTimedInput> input_modify_value_;
 
       size_t option_before_scroll_ = -1;
 

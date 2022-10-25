@@ -54,6 +54,7 @@ namespace gta_base::ui {
     input_return_ = std::make_unique<util::TimedInput>(VK_RETURN, 300);
     input_back_ = std::make_unique<util::TimedInput>(VK_BACK, 300);
     input_create_hotkey_ = std::make_unique<util::TimedInput>(VK_F1, 300);
+    input_modify_value_ = std::make_unique<util::ModifierTimedInput>(VK_CONTROL, VK_RETURN, 200);
 
     notification_inst_ = std::make_unique<Notification>();
     translation_manager_inst_ = std::make_unique<TranslationManager>(); // TODO: Set to translation from current language
@@ -282,6 +283,8 @@ namespace gta_base::ui {
       } else {
         notification_inst_->Create(Notification::Type::kFail, "Hotkey", "Current option doesn't support adding a hotkey");
       }
+    } else if (input_modify_value_->Get()) {
+      cur_sub->GetOption(cur_sub->GetSelectedOption())->HandleKey(KeyInput::kChangeValue);
     }
   }
 

@@ -49,6 +49,18 @@ namespace gta_base::ui::option {
               *value_ = max_;
             UpdateRightText();
             SendEvent(Event::kChange);
+          } else if (key == KeyInput::kChangeValue) {
+            T* value = value_;
+            T min = min_;
+            T max = max_;
+            keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [value, min, max](std::string text, keyboard::Result res) {
+              if (res != keyboard::Result::kDone || text.empty())
+                return;
+
+              if (value) {
+                *value = FromString(text, min, max);
+              }
+            });
           }
         }
 
@@ -100,6 +112,18 @@ namespace gta_base::ui::option {
           }
 
           SetRightTextKey(tmp_right_text);
+        }
+
+        static inline T FromString(const std::string& val, T min, T max) {
+          T res;
+          constexpr static const bool is_float = std::is_floating_point_v<T>;
+          if (is_float) {
+            res = std::clamp(common::WithinLimits<std::double_t, T>(std::stod(val)), min, max);
+          } else {
+            res = std::clamp(common::WithinLimits<std::int64_t, T>(std::stoll(val)), min, max);
+          }
+
+          return res;
         }
       };
     }

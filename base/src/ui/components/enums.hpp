@@ -50,6 +50,7 @@ namespace gta_base::ui {
       kReturn,
       kBackspace,
       kHotkey,
+      kChangeValue,
     };
 
     enum class Event {

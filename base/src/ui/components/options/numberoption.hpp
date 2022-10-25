@@ -26,8 +26,7 @@ namespace gta_base::ui::option {
 
         void HandleKey(KeyInput key) final {
           switch(key) {
-            case KeyInput::kReturn:
-            case KeyInput::kHotkey: {
+            case KeyInput::kChangeValue: {
               T* value = value_;
               T min = min_;
               T max = max_;
