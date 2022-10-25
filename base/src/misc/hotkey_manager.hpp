@@ -6,10 +6,18 @@
 #ifndef GTA_BASE_HOTKEY_MANAGER_HPP
 #define GTA_BASE_HOTKEY_MANAGER_HPP
 #include <string>
+#include <optional>
 #include <robin_hood.h>
 
 namespace gta_base::misc {
     class HotkeyManager {
+    public:
+      struct HotkeyPressState {
+        bool is_toggle = false;
+        bool toggle_state = false;
+      };
+      using HotkeyPressResult = std::optional<HotkeyPressState>;
+
     public:
       HotkeyManager();
       ~HotkeyManager();

@@ -14,6 +14,7 @@
 #include <mutex>
 #include "options/baseoption.hpp"
 #include "enums.hpp"
+#include "../../misc/hotkey_manager.hpp"
 
 namespace gta_base::ui {
     class Submenu {
@@ -112,26 +113,32 @@ namespace gta_base::ui {
         }
       }
 
-      bool HotkeyPressed(const std::string& key) {
+      misc::HotkeyManager::HotkeyPressResult HotkeyPressed(const std::string& key) {
         std::unique_lock lock(mtx_);
 
         CreateOptions();
         if (options_.empty())
-          return false;
+          return {};
 
         for (auto&& opt : options_) {
           if (opt->GetNameKey() == key) {
             if (opt->HasFlag(OptionFlag::kHotkeyable)) {
               opt->HandleKey(KeyInput::kHotkey);
 
-              options_.clear();
-              return true;
+              if (opt->HasFlag(OptionFlag::kToggle)) {
+                misc::HotkeyManager::HotkeyPressState res{true, opt->HasFlag(OptionFlag::kToggled)};
+                options_.clear();
+                return res;
+              } else {
+                options_.clear();
+                return std::nullopt;
+              }
             }
           }
         }
 
         options_.clear();
-        return false;
+        return {};
       }
 
     private:

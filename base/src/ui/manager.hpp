@@ -77,14 +77,15 @@ namespace gta_base::ui {
         }
       }
 
-      inline bool HotkeyPressed(const std::string& name) {
+      inline misc::HotkeyManager::HotkeyPressResult HotkeyPressed(const std::string& name) {
         std::unique_lock lock(sub_mtx_);
         for (auto&& sub : submenus_) {
-          if (sub.second->HotkeyPressed(name))
-            return true;
+          auto res = sub.second->HotkeyPressed(name);
+          if (res.has_value())
+            return res;
         }
 
-        return false;
+        return {};
       }
 
       inline std::shared_ptr<d3d::draw::DrawList> GetDrawList() const {

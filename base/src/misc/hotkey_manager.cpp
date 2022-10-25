@@ -79,8 +79,14 @@ namespace gta_base::misc {
       std::string key_str = GetHotkeyKeyStr(key_id);
 
       if (!key_str.empty()) {
-        if (ui::kMANAGER->HotkeyPressed(key_str)) {
-          ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("{} has been triggered", ui::kTRANSLATION_MANAGER->Get(key_str)));
+        if (auto press = ui::kMANAGER->HotkeyPressed(key_str); press.has_value()) {
+          std::string msg;
+          if (press->is_toggle)
+            msg = fmt::format("{} is now {}", ui::kTRANSLATION_MANAGER->Get(key_str), press->toggle_state);
+          else
+            msg = fmt::format("{} has been triggered.", ui::kTRANSLATION_MANAGER->Get(key_str));
+
+          ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", msg);
         } else {
           ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("failed to trigger {}", ui::kTRANSLATION_MANAGER->Get(key_str)));
           LOG_DEBUG("failed to trigger hotkey {}", key_str);
