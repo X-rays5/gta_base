@@ -14,7 +14,7 @@ CPMAddPackage("gh:X-rays5/minhook#7f3cae16668187282f0a64df8d2918cd0e51258f")
 CPMAddPackage(NAME robin_hood GIT_REPOSITORY https://github.com/martinus/robin-hood-hashing.git GIT_TAG fb1483621fda28d4afb31c0097c1a4a457fdd35b)
 CPMAddPackage("gh:freetype/freetype#c943d408e08fbe6d3e12f647b4a10d94a8198e9b")
 CPMAddPackage("gh:fmtlib/fmt#8.1.1")
-CPMAddPackage("gh:Yimura/GTAV-Classes#ae182f14f3230600ef3600aee21c097a869eac08")
+CPMAddPackage("gh:Yimura/GTAV-Classes#43744999f6e42e3c24fbaf03153143273e0ad817")
 CPMAddPackage("gh:Tencent/rapidjson#27c3a8dc0e2c9218fe94986d249a12b5ed838f1d")
 CPMAddPackage("gh:Neargye/magic_enum#159a35006d8e18172eb687b432b77e6f5baa61f6")
 
