@@ -4,7 +4,11 @@
 
 #include "common.hpp"
 #include "../memory/pointers.hpp"
+#include "../d3d/renderer.hpp"
+#include <robin_hood.h>
 #include <network/CNetworkPlayerMgr.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.hpp>
 
 namespace gta_base::common {
   Platform GetCurrentPlatform() {
@@ -15,6 +19,19 @@ namespace gta_base::common {
 
   bool IsSessionStarted() {
     return (*memory::kPOINTERS->network_player_mgr_)->m_local_net_player != nullptr;
+  }
+
+  std::string RemoveNonNumerical(std::string str) {
+    static const robin_hood::unordered_set<char> numbers = {'0','1','2','3','4','5','6','7','8','9'};
+
+    std::string result;
+    for (char& c : str) {
+      if (numbers.contains(c)) {
+        result += c;
+      }
+    }
+
+    return result;
   }
 
   std::string VkToStr(std::uint64_t vk) {

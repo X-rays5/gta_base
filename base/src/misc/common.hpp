@@ -14,8 +14,12 @@
 #include <algorithm>
 #include <limits>
 #include <fmt/format.h>
+#include <d3d11.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#ifdef LoadImage
+#undef LoadImage
+#endif
 #ifdef min
 #undef min
 #endif
@@ -49,16 +53,25 @@ namespace gta_base::common {
     std::istringstream iss;
     iss.str(str);
     iss >> res;
+
+    LOG_DEBUG("Lexical cast from {} to {} succeeded", str, typeid(T).name());
     return res;
   }
 
   template<typename in_t, typename ret_t>
   inline ret_t WithinLimits(in_t convert) {
-    constexpr static const in_t min = std::numeric_limits<ret_t>::min();
-    constexpr static const in_t max = std::numeric_limits<ret_t>::max();
+    constexpr static const ret_t min = std::numeric_limits<ret_t>::min();
+    constexpr static const ret_t max = std::numeric_limits<ret_t>::max();
 
-    return static_cast<ret_t>(std::clamp(convert, min, max));
+    if (convert < min)
+      return min;
+    else if (convert > max)
+      return max;
+    else
+      return static_cast<ret_t>(convert);
   }
+
+  std::string RemoveNonNumerical(std::string str);
 
   std::string VkToStr(std::uint64_t vk);
 

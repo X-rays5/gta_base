@@ -45,7 +45,7 @@ namespace gta_base {
 
       auto log_file_path = common::GetLogFile();
       if (std::filesystem::exists(log_file_path)) {
-        auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_crashed{}", common::GetEpoch(), log_file_path.stem().string(), log_file_path.extension().string());
+        auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", common::GetEpoch(), log_file_path.stem().string(), log_file_path.extension().string());
         std::filesystem::rename(log_file_path, log_file_path_tmp);
         SaveLogFile(log_file_path_tmp);
       }

@@ -101,6 +101,7 @@ void BaseMain() {
 
   auto scripting_thread = std::thread([]{
     LOG_DEBUG("scripting thread first tick");
+
     while(globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
       std::this_thread::yield();
@@ -109,6 +110,7 @@ void BaseMain() {
   LOG_INFO("Scripting thread started");
 
   settings::Load();
+  LOG_INFO("Settings loaded");
 
   LOG_INFO("Initialized");
   while (globals::running) {
@@ -119,8 +121,10 @@ void BaseMain() {
   }
   LOG_INFO("Unloading...");
 
-  if (kSETTINGS.menu.save_on_exit)
+  if (kSETTINGS.menu.save_on_exit) {
     settings::Save();
+    LOG_INFO("Settings saved");
+  }
 
   if (scripting_thread.joinable())
     scripting_thread.join();
