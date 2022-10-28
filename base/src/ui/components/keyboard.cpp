@@ -15,6 +15,8 @@ namespace gta_base::ui::keyboard {
             ImGui::SetNextWindowSize(d3d::draw::ScaleToScreen(size_));
             ImGui::SetNextWindowPos(d3d::draw::ScaleToScreen(pos_));
             if (ImGui::Begin(window_title_.c_str(), nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize)) {
+              if (ImGui::IsWindowFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0))
+                ImGui::SetKeyboardFocusHere();
               ImGui::InputText(input_title_.c_str(), (char*) &text_buf_, sizeof(text_buf_));
               ImGui::SameLine();
               if (ImGui::Button("Done")) {
@@ -51,6 +53,7 @@ namespace gta_base::ui::keyboard {
           if (keyboard->GetState() == Result::kDone) {
             keyboard->Callback();
           }
+
           if (keyboard->GetState() != Result::kNone)
             keyboards_.erase(keyboards_.begin() + i);
         }
