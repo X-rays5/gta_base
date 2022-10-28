@@ -20,5 +20,7 @@ namespace gta_base::scripts {
 
     void UiTick::RunTick() {
       ui::kMANAGER->Draw();
+      ui::kMANAGER->GetDrawList()->Draw();
+      ui::kMANAGER->should_tick = true;
     }
   }

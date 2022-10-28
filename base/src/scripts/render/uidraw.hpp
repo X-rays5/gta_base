@@ -17,6 +17,9 @@ namespace gta_base::scripts {
 
       void Init() final;
       void RunTick() final;
+
+    private:
+      std::size_t last_idx_{};
     };
   }
 #endif //GTABASE_RENDER_SCRIPT_HPP
