@@ -304,29 +304,29 @@ namespace gta_base::d3d::draw {
           for (std::size_t i = 0; i < draw_command_buffer_count; ++i) {
             draw_commands_.push_back(draw_list_t{});
           }
+          draw_list_idx_.resize(draw_command_buffer_count);
           draw_commands_.shrink_to_fit();
         }
 
         template<typename T>
         inline void AddCommand(T command) {
-          mtx_.lock();
-          draw_commands_[cur_write_target_].push_back(std::make_shared<T>(std::forward<T>(command)));
-          mtx_.unlock();
+          std::unique_lock lock(mtx_);
+          draw_commands_[cur_write_target_][draw_list_idx_[cur_write_target_]] = std::make_unique<T>(command);
+          draw_list_idx_[cur_write_target_] += 1;
         }
 
         inline void Draw() {
-          mtx_.lock();
-          for (auto& command : draw_commands_[cur_render_target_]) {
-            command->Draw();
+          std::unique_lock lock(mtx_);
+          for (auto&& command : draw_commands_[cur_render_target_]) {
+            if (command.get() != nullptr)
+              command->Draw();
           }
-          mtx_.unlock();
         }
 
         inline void NextTargets() {
-          mtx_.lock();
+          std::unique_lock lock(mtx_);
           NextRenderTarget();
           NextWriteTarget();
-          mtx_.unlock();
         }
 
         inline std::size_t GetWriteTarget() const {
@@ -338,15 +338,30 @@ namespace gta_base::d3d::draw {
         }
 
       private:
-        using draw_list_t = std::vector<std::shared_ptr<BaseDrawCommand>>;
+        // can queue 4096 draw commands per tick. This should be plenty and can always be increased. Since this won't use huge amounts of memory.
+        constexpr static const std::size_t max_draw_commands_ = 4096;
+
+        using draw_list_t = std::array<std::unique_ptr<BaseDrawCommand>, max_draw_commands_>;
         using draw_commands_t = std::vector<draw_list_t>;
 
-        std::mutex mtx_;
+        std::recursive_mutex mtx_;
         std::size_t cur_write_target_ = 1;
         std::size_t cur_render_target_ = 0;
         draw_commands_t draw_commands_;
+        std::vector<int> draw_list_idx_;
 
       private:
+        inline void ClearDrawList(std::size_t idx) {
+          draw_list_idx_[idx] = 0;
+          for (int i = 0; i < max_draw_commands_; i++) {
+            if (draw_commands_[idx][i]) {
+              draw_commands_[idx][i].reset();
+            } else {
+              break; // past data
+            }
+          }
+        }
+
         inline void NextRenderTarget() {
           cur_render_target_ += 1;
           if (cur_render_target_ >= draw_commands_.size())
@@ -358,7 +373,7 @@ namespace gta_base::d3d::draw {
           if (cur_write_target_ >= draw_commands_.size())
             cur_write_target_ = 0;
 
-          draw_commands_[cur_write_target_].clear();
+          ClearDrawList(cur_write_target_);
         }
       };
     }
