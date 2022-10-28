@@ -87,6 +87,27 @@ namespace gta_base::common {
   bool IsKeyDown(std::uint32_t key);
   bool IsKeyJustReleased(std::uint32_t key, std::uint64_t since_up = 100);
   void SetKeyState(std::uint32_t key, bool down);
+
+  struct ImageTexture {
+    std::uint32_t width = 0;
+    std::uint32_t height = 0;
+    ID3D11ShaderResourceView* texture = nullptr;
+
+    operator ID3D11ShaderResourceView*() const {
+      return texture;
+    }
+
+    operator bool() {
+      return texture != nullptr;
+    }
+
+    operator void*() = delete;
+    operator void*() const {
+      return texture;
+    }
+  };
+
+  bool LoadImage(const std::filesystem::path& file, ImageTexture* out_texture);
 }
 
 #endif //GTABASE_COMMON_HPP
