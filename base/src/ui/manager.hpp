@@ -103,6 +103,7 @@ namespace gta_base::ui {
       float y_size_top_bar = 0.025f;
       float y_size_bottom_bar = y_size_top_bar;
       float y_size_option = y_size_top_bar;
+      float y_size_header = 0.1f;
       float y_offset_description = 0.005f;
       float y_base = 0.185f;
       int max_drawn_options = 14;
@@ -149,6 +150,9 @@ namespace gta_base::ui {
       std::unique_ptr<misc::HotkeyManager> hotkey_manager_inst_;
 
       float toggle_button_size_ = 0.01f;
+
+      common::ImageTexture img_header;
+
     private:
       inline d3d::draw::Text DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center = true, ImFont* font = nullptr) const;
       inline d3d::draw::Text DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center = true, ImFont* font = nullptr) const;

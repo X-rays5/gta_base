@@ -3,7 +3,6 @@
 //
 
 #include "manager.hpp"
-#include "../d3d/texturemanager.hpp"
 #include "../d3d/renderer.hpp"
 #include "../misc/settings.hpp"
 #include "components/keyboard.hpp"
@@ -59,6 +58,9 @@ namespace gta_base::ui {
     notification_inst_ = std::make_unique<Notification>();
     translation_manager_inst_ = std::make_unique<TranslationManager>(); // TODO: Set to translation from current language
     hotkey_manager_inst_ = std::make_unique<misc::HotkeyManager>();
+
+    common::LoadImage("test.png", &img_header);
+
     kMANAGER = this;
   }
 
@@ -94,8 +96,31 @@ namespace gta_base::ui {
     return y_base + (y_size * option_pos) + y_size_top_bar;
   }
 
-  void Manager::DrawHeader() {
+  template <typename T = std::chrono::milliseconds>
+  class stopwatch {
+  public:
+    explicit stopwatch() : start_time_(std::chrono::high_resolution_clock::now())
+    {
+    }
 
+    ~stopwatch() {
+      LOG_DEBUG("{}ms", (std::chrono::duration_cast<T>(std::chrono::high_resolution_clock::now() - start_time_)).count());
+    }
+
+  private:
+    std::chrono::time_point<std::chrono::steady_clock> start_time_;
+  };
+
+  void Manager::DrawHeader() {
+    if (img_header) {
+      auto y_pos = y_base - y_size_header;
+      if (y_pos < 0)
+        y_pos = 0;
+      else if (y_pos > 1)
+        y_pos = 1;
+
+     draw_list_->AddCommand(d3d::draw::Image(img_header, {x_base, y_pos}, {x_size, y_size_header}));
+    }
   }
 
   void Manager::DrawTopBar(const std::string& title, size_t option_current, size_t option_count) {
