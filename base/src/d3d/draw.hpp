@@ -110,21 +110,6 @@ namespace gta_base::d3d::draw {
         return res;
       }
 
-  /*double GetNow() {
-    auto now = common::GetEpoch();
-    auto diff = now - start_time_;
-    if (diff >= duration_) {
-      return end_;
-    }
-    // calculate how much percentage diff is of duration
-    double percentage = ((double )(diff * 100) / (double)duration_) / 100;
-    LOG_DEBUG("{} {} {}", diff, duration_, percentage);
-
-    auto diff_pos = end_ - start_;
-
-    return start_ + (diff_pos * percentage);
-  }*/
-
       class Animate {
       public:
         Animate() = default;
@@ -311,15 +296,17 @@ namespace gta_base::d3d::draw {
         template<typename T>
         inline void AddCommand(T command) {
           std::unique_lock lock(mtx_);
-          draw_commands_[cur_write_target_][draw_list_idx_[cur_write_target_]] = std::make_unique<T>(command);
+          draw_commands_[cur_write_target_][draw_list_idx_[cur_write_target_]] = std::make_unique<T>(std::move(command));
           draw_list_idx_[cur_write_target_] += 1;
         }
 
         inline void Draw() {
           std::unique_lock lock(mtx_);
           for (auto&& command : draw_commands_[cur_render_target_]) {
-            if (command.get() != nullptr)
+            if (command != nullptr)
               command->Draw();
+            else
+              break;
           }
         }
 
@@ -329,11 +316,11 @@ namespace gta_base::d3d::draw {
           NextWriteTarget();
         }
 
-        inline std::size_t GetWriteTarget() const {
+        [[nodiscard]] inline std::size_t GetWriteTarget() const {
           return cur_write_target_;
         }
 
-        inline std::size_t GetRenderTarget() const {
+        [[nodiscard]] inline std::size_t GetRenderTarget() const {
           return cur_render_target_;
         }
 
