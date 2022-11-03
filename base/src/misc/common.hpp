@@ -44,6 +44,8 @@ namespace gta_base::common {
 
   bool IsSessionStarted();
 
+  std::string AddrToHex(uint64_t addr);
+
   template<typename T>
   inline T LexicalCast(const std::string& str) {
     if (str.empty())
@@ -96,6 +98,9 @@ namespace gta_base::common {
   HWND GetGameHwnd();
   bool IsForegroundWindow();
   bool IsTargetProcess();
+
+  std::uint64_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name);
+  std::string GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr);
 
   bool IsKeyDown(std::uint32_t key);
   bool IsKeyJustReleased(std::uint32_t key, std::uint64_t since_up = 100);

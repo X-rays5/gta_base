@@ -7,6 +7,7 @@
 #include "../d3d/renderer.hpp"
 #include <robin_hood.h>
 #include <network/CNetworkPlayerMgr.hpp>
+#include <TlHelp32.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.hpp>
 
@@ -19,6 +20,15 @@ namespace gta_base::common {
 
   bool IsSessionStarted() {
     return (*memory::kPOINTERS->network_player_mgr_)->m_local_net_player != nullptr;
+  }
+
+  std::string AddrToHex(uint64_t addr) {
+    if (!addr)
+      return "0x0";
+
+    std::ostringstream stream;
+    stream << "0x" << std::hex << std::uppercase << addr;
+    return stream.str();
   }
 
   std::string RemoveNonNumerical(std::string str) {
@@ -169,6 +179,44 @@ namespace gta_base::common {
 
   bool IsTargetProcess() {
     return GetGameHwnd() != nullptr;
+  }
+
+  std::uint64_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name) {
+    std::uint64_t mod_base_addr = 0;
+    HANDLE h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
+    if (h_snap != INVALID_HANDLE_VALUE) {
+      MODULEENTRY32 mod_entry;
+      mod_entry.dwSize = sizeof(mod_entry);
+      if (Module32First(h_snap, &mod_entry)) {
+        do {
+          if (!_stricmp(mod_entry.szModule, mod_name.c_str())) {
+            mod_base_addr = (std::uint64_t)mod_entry.modBaseAddr;
+            break;
+          }
+        } while (Module32Next(h_snap, &mod_entry));
+      }
+    }
+    CloseHandle(h_snap);
+    return mod_base_addr;
+  }
+
+  std::string GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr) {
+    std::string mod_name = "";
+    HANDLE h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
+    if (h_snap != INVALID_HANDLE_VALUE) {
+      MODULEENTRY32 mod_entry;
+      mod_entry.dwSize = sizeof(mod_entry);
+      if (Module32First(h_snap, &mod_entry)) {
+        do {
+          if ((std::uint64_t)mod_entry.modBaseAddr <= addr && addr <= (std::uint64_t)mod_entry.modBaseAddr + mod_entry.modBaseSize) {
+            mod_name = mod_entry.szModule;
+            break;
+          }
+        } while (Module32Next(h_snap, &mod_entry));
+      }
+    }
+    CloseHandle(h_snap);
+    return mod_name;
   }
 
   robin_hood::unordered_map<std::uint32_t, KeyState> key_state{};

@@ -12,12 +12,6 @@
 #include "stacktrace.hpp"
 
 namespace gta_base {
-  static std::string exception_string_cpp_exception;
-
-  void CallOgTerminateHandler() {
-    kLOGGER->GetOgCppTerminateHandler()();
-  }
-
   void SetConsoleMode(HANDLE console_handle) {
     DWORD console_mode;
     GetConsoleMode(console_handle, &console_mode);
@@ -61,6 +55,9 @@ namespace gta_base {
       logger->set_level(spdlog::level::trace);
       spdlog::register_logger(logger);
       spdlog::set_default_logger(logger);
+      spdlog::default_logger_raw()->set_error_handler([](const std::string& err){
+        LOG_CRITICAL(err);
+      });
 
       SetupExceptionHandler();
 
@@ -98,13 +95,24 @@ namespace gta_base {
 
   void Logger::SetupExceptionHandler() {
     auto handler = [](PEXCEPTION_POINTERS except) -> LONG {
+      if (!globals::running)
+        return EXCEPTION_CONTINUE_SEARCH;
+
       auto err_code = except->ExceptionRecord->ExceptionCode;
-      if (err_code == 3765269347) { // MSVC cpp exception code
-        LOG_DEBUG("Received a MSVC cpp exception. Storing stacktrace in case it's needed");
-        //exception_string_cpp_exception = logger::stacktrace::GetExceptionString(except);
+      if (err_code == 3765269347 && except->ExceptionRecord->ExceptionInformation[0] - 429065504 <= 2) { // MSVC cpp exception code
+        auto addr = except->ContextRecord->LastExceptionFromRip;
+        std::string file_name = common::GetModuleFromAddress(GetCurrentProcessId(), addr);
+        auto offset = addr - (uintptr_t)GetModuleHandleA(file_name.c_str());
+        auto exception = (std::exception*)except->ExceptionRecord->ExceptionInformation[1];
+
+        if (exception) {
+          LOG_ERROR("({}+0x{:X}): {}", file_name, offset, exception->what());
+        } else {
+          LOG_ERROR("cpp exception thrown at 0x{:X} ({}+0x{:X})", addr, file_name, offset);
+        }
 
         return EXCEPTION_CONTINUE_SEARCH;
-      } else if (err_code == DBG_PRINTEXCEPTION_C || err_code == DBG_PRINTEXCEPTION_WIDE_C) { // msg for debugger
+      }  else if (err_code == DBG_PRINTEXCEPTION_C || err_code == DBG_PRINTEXCEPTION_WIDE_C) { // msg for debugger
         return EXCEPTION_CONTINUE_SEARCH;
       } else if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") { // Without this the c++ try catch blocks will break
         LOG_DEBUG("Received unknown exception code: {}.", err_code);
@@ -121,28 +129,7 @@ namespace gta_base {
       return EXCEPTION_CONTINUE_SEARCH;
     };
 
-    auto cpp_handler = [] {
-      LOG_ERROR("Received a ignored cpp exception");
-      try {
-        std::rethrow_exception(std::current_exception());
-      } catch(std::filesystem::filesystem_error& e) {
-        LOG_ERROR("{}: {} path1: {} path2: ", typeid(std::current_exception()).name(), e.what(), e.path1().string(), e.path2().string());
-      } catch(std::exception& e) {
-        LOG_ERROR("{}: {}", typeid(std::current_exception()).name(), e.what());
-      } catch(...) {
-        LOG_ERROR("non std::exception derived exception: {}", typeid(std::current_exception()).name());
-      }
-      kLOGGER->Shutdown();
-      std::abort();
-      /*if (!exception_string_cpp_exception.empty()) {
-        LOG_ERROR(exception_string_cpp_exception);
-      }*/
-      //CallOgTerminateHandler();
-    };
-
-    og_terminate_handler_ = std::set_terminate(cpp_handler);
     vectored_exception_handler_h_ = AddVectoredExceptionHandler(false, handler);
-    og_unhandled_exception_filter_h_ = SetUnhandledExceptionFilter(handler);
 
     if (!vectored_exception_handler_h_) {
       LOG_CRITICAL("Failed to set vectored exception handler");
@@ -150,8 +137,6 @@ namespace gta_base {
   }
 
   void Logger::RemoveExceptionHandler() {
-    std::set_terminate(og_terminate_handler_);
     RemoveVectoredExceptionHandler(vectored_exception_handler_h_);
-    SetUnhandledExceptionFilter(og_unhandled_exception_filter_h_);
   }
 }

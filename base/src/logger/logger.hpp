@@ -32,14 +32,8 @@ namespace gta_base {
     Logger();
     ~Logger();
 
-    std::terminate_handler GetOgCppTerminateHandler() {
-      return og_terminate_handler_;
-    }
-
   private:
     PVOID vectored_exception_handler_h_;
-    LPTOP_LEVEL_EXCEPTION_FILTER  og_unhandled_exception_filter_h_;
-    std::terminate_handler og_terminate_handler_;
 
   private:
     void Shutdown();
