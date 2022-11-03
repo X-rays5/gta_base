@@ -23,6 +23,7 @@
 #include "player_mgr/manager.hpp"
 #include "ui/components/keyboard.hpp"
 #include "misc/settings.hpp"
+#include "misc/thread_pool.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
@@ -50,8 +51,11 @@ void BaseMain() {
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Loops>());
   LOG_INFO("kSCRIPT_MANAGER: added scripts now managing {} scripts", kSCRIPT_MANAGER->Count());
 
-  auto fiber_inst = std::make_shared<fiber::Pool>(12);
+  auto fiber_inst = std::make_unique<fiber::Pool>(12);
   LOG_INFO("Created fiber pool");
+
+  auto thread_pool_inst = std::make_unique<misc::ThreadPool>();
+  LOG_INFO("Created thread pool with {} threads", thread_pool_inst->GetThreadCount());
 
   auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(globals::target_window_class, globals::target_window_name));
   LOG_INFO("Renderer initialized");
@@ -151,6 +155,9 @@ void BaseMain() {
 
   renderer_inst.reset();
   LOG_INFO("Renderer shutdown");
+
+  thread_pool_inst.reset();
+  LOG_INFO("Thread pool shutdown");
 
   fiber_inst.reset();
   LOG_INFO("Fiber pool shutdown");
