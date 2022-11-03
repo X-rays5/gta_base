@@ -76,11 +76,7 @@ namespace rage {
   }
 
   inline Network* GetNetwork() {
-    auto network = reinterpret_cast<int64_t>(*gta_base::memory::kPOINTERS->network_);
-    if (gta_base::common::GetCurrentPlatform() == gta_base::common::Platform::kSteam)
-      network += sizeof(rage::rlSessionInfo);
-
-    return (Network*)network;
+    return *gta_base::memory::kPOINTERS->network_;
   }
 
   inline Entity PtrToHandle(rage::fwEntity* ent) {

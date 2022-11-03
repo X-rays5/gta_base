@@ -85,6 +85,7 @@ namespace gta_base::common {
   std::filesystem::path GetLogFile();
   std::filesystem::path GetLogSaveDir();
   std::filesystem::path GetDataDir();
+  std::filesystem::path GetCachedDir();
   std::filesystem::path GetSettingsDir();
   std::filesystem::path GetThemesDir();
   std::filesystem::path GetHotkeysDir();

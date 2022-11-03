@@ -111,6 +111,14 @@ namespace gta_base::common {
     return path;
   }
 
+  std::filesystem::path GetCachedDir() {
+    std::filesystem::path path = GetBaseDir() / "cached";
+    if (!std::filesystem::exists(path)) {
+      std::filesystem::create_directories(path);
+    }
+    return path;
+  }
+
   std::filesystem::path GetSettingsDir() {
     std::filesystem::path path = GetBaseDir() / "settings";
     if (!std::filesystem::exists(path)) {

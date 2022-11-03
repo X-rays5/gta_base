@@ -96,21 +96,6 @@ namespace gta_base::ui {
     return y_base + (y_size * option_pos) + y_size_top_bar;
   }
 
-  template <typename T = std::chrono::milliseconds>
-  class stopwatch {
-  public:
-    explicit stopwatch() : start_time_(std::chrono::high_resolution_clock::now())
-    {
-    }
-
-    ~stopwatch() {
-      LOG_DEBUG("{}ms", (std::chrono::duration_cast<T>(std::chrono::high_resolution_clock::now() - start_time_)).count());
-    }
-
-  private:
-    std::chrono::time_point<std::chrono::steady_clock> start_time_;
-  };
-
   void Manager::DrawHeader() {
     if (img_header) {
       auto y_pos = y_base - y_size_header;
