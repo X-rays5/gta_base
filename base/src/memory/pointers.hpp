@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GTABASE_POINTERS_HPP
-#define GTABASE_POINTERS_HPP
+#ifndef GTABASE_MEM_POINTERS_HPP
+#define GTABASE_MEM_POINTERS_HPP
 #include <memory>
 #include <d3d11.h>
 #include <ped/CPedFactory.hpp>
@@ -19,6 +19,7 @@
 #include "../rage/classes/net_connection_mgr.hpp"
 #include "../rage/classes/net_connection_peer.hpp"
 #include "../rage/classes/script_program.hpp"
+#include "../rage/classes/fidevice.hpp"
 
 namespace gta_base::memory {
     class Pointers {
@@ -93,7 +94,24 @@ namespace gta_base::memory {
 
       PVOID GtaThreadStart{};
       PVOID GtaThreadKill{};
+
+      const char* gta_build_version_{};
+      const char* gta_online_version_{};
+
+      using fidevice_get_device_t = rage::fiDevice*(*)(const char* path, bool allow_root);
+      fidevice_get_device_t FiDeviceGetDevice{};
+      using fipackfile_ctor_t = rage::fiPackfile*(*)(rage::fiPackfile* that);
+      fipackfile_ctor_t FiPackFileCtor{};
+      using fipackfile_open_archive_t = bool(*)(rage::fiPackfile* that, const char* archive, bool b_true, int type, intptr_t very_false);
+      fipackfile_open_archive_t FiPackFileOpenArchive{};
+      using fipackfile_mount_t = bool(*)(rage::fiPackfile* that, const char* mount_point);
+      fipackfile_mount_t FiPackFileMount{};
+      using fipackfile_unmount = bool(*)(const char* mount_point);
+      fipackfile_unmount FiPackFileUnmount{};
+      uintptr_t fidevices_{};
+      uint16_t* fidevices_len_{};
+      rage::fiPackfile** fipackfile_instances_{};
     };
     inline Pointers* kPOINTERS{};
   }
-#endif //GTABASE_POINTERS_HPP
+#endif //GTABASE_MEM_POINTERS_HPP

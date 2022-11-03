@@ -142,6 +142,37 @@ namespace gta_base::memory {
         GtaThreadKill = ptr.as<decltype(GtaThreadKill)>();
       });
 
+      main_batch.add(std::string(VAR_NAME(gta_build_version_)) + "/" + VAR_NAME(gta_online_version_), xorstr_("8B C3 33 D2 C6 44 24 20"), [this](scanner::Handle ptr){
+        gta_build_version_ = ptr.add(0x24).rip().as<const char*>();
+        gta_online_version_ = ptr.add(0x24).rip().add(0x20).as<const char*>();
+      });
+
+      main_batch.add(VAR_NAME(FiDeviceGetDevice), xorstr_("41 B8 07 00 00 00 48 8B F1 E8"), [this](scanner::Handle ptr){
+        FiDeviceGetDevice = ptr.sub(0x1F).as<decltype(FiDeviceGetDevice)>();
+      });
+
+      main_batch.add(std::string(VAR_NAME(FiPackFileCtor)) + "/" + VAR_NAME(fipackfile_instances_), xorstr_("44 89 41 28 4C 89 41 38 4C 89 41 50 48 8D"), [this](scanner::Handle ptr){
+        FiPackFileCtor = ptr.sub(0x1E).as<decltype(FiPackFileCtor)>();
+        fipackfile_instances_ = ptr.add(26).rip().as<decltype(fipackfile_instances_)>();
+      });
+
+      main_batch.add(VAR_NAME(FiPackFileOpenArchive), xorstr_("48 8D 68 98 48 81 EC 40 01 00 00 41 8B F9"), [this](scanner::Handle ptr){
+        FiPackFileOpenArchive = ptr.sub(0x18).as<decltype(FiPackFileOpenArchive)>();
+      });
+
+      main_batch.add(VAR_NAME(FiPackFileMount), xorstr_("84 C0 74 1D 48 85 DB 74 0F 48"), [this](scanner::Handle ptr){
+        FiPackFileMount = ptr.sub(0x1E).as<decltype(FiPackFileMount)>();
+      });
+
+      main_batch.add(VAR_NAME(FiPackFileUnmount), xorstr_("E8 ? ? ? ? 84 C0 74 37 80 3D"), [this](scanner::Handle ptr){
+        FiPackFileUnmount = ptr.add(1).rip().as<decltype(FiPackFileUnmount)>();
+      });
+
+      main_batch.add(VAR_NAME(fidevices_), xorstr_("74 1B 48 8D 0D ? ? ? ? 41 8B D6"), [this](scanner::Handle ptr){
+        fidevices_ = ptr.add(5).rip().as<decltype(fidevices_)>();
+        fidevices_len_ = ptr.add(26).rip().as<decltype(fidevices_len_)>();
+      });
+
       auto mem_region = scanner::Module(nullptr);
       main_batch.run(mem_region);
 
