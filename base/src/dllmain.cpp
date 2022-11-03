@@ -38,7 +38,8 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID) {
     }, nullptr, 0, nullptr);
   } else if (call_reason == DLL_PROCESS_DETACH) {
     globals::running = false;
-    spdlog::default_logger_raw()->flush();
+    if (spdlog::default_logger_raw())
+      spdlog::default_logger_raw()->flush();
   }
 
   return true;
