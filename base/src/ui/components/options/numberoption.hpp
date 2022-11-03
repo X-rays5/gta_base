@@ -35,7 +35,7 @@ namespace gta_base::ui::option {
                   return;
 
                 if (value) {
-                  *value = FromString(text, min, max);
+                  FromString(value, text, min, max);
                 }
               });
 
@@ -96,7 +96,7 @@ namespace gta_base::ui::option {
         }
 
         void SetSavedVal(const std::string& val) final {
-          *value_ = FromString(val, min_, max_);
+          FromString(value_, val, min_, max_);
         }
 
       private:
@@ -124,16 +124,12 @@ namespace gta_base::ui::option {
           *value_ = std::clamp(*value_, min_, max_);
         }
 
-        static inline T FromString(const std::string& val, T min, T max) {
-          T res;
-          constexpr static const bool is_float = std::is_floating_point_v<T>;
-          if (is_float) {
-            res = std::clamp(common::WithinLimits<std::double_t, T>(std::stod(val)), min, max);
-          } else {
-            res = std::clamp(common::WithinLimits<std::int64_t, T>(std::stoll(val)), min, max);
-          }
+        inline static void FromString(T* out_val, const std::string& val, T min, T max) {
+          auto tmp = common::RemoveNonNumerical(val);
+          if (tmp.empty())
+            return;
 
-          return res;
+          *out_val = std::clamp(common::LexicalCast<T>(val), min, max);
         }
       };
     }
