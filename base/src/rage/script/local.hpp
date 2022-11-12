@@ -5,13 +5,13 @@
 #pragma once
 #ifndef GTA_BASE_LOCAL_HPP
 #define GTA_BASE_LOCAL_HPP
-#include "../classes/script_thread.hpp"
+#include <script/scrThread.hpp>
 
 namespace rage::script {
     class Local {
     public:
       explicit Local(rage::scrThread* thread, std::size_t idx);
-      explicit Local(PVOID stack, std::size_t idx);
+      explicit Local(void* stack, std::size_t idx);
 
       Local At(std::ptrdiff_t idx);
       Local At(std::ptrdiff_t idx, std::size_t arr_size);
@@ -29,7 +29,7 @@ namespace rage::script {
 
     private:
       std::size_t idx_;
-      PVOID stack_;
+      void* stack_;
 
     private:
       void* Get();

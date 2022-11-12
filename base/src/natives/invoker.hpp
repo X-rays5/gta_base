@@ -6,7 +6,7 @@
 #ifndef GTA_BASE_INVOKER_HPP
 #define GTA_BASE_INVOKER_HPP
 #include <robin_hood.h>
-#include "../rage/classes/natives.hpp"
+#include <script/scrNativeHandler.hpp>
 
 namespace rage {
   class NativeCallContext : public rage::scrNativeCallContext {

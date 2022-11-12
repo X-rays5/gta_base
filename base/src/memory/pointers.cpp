@@ -173,6 +173,10 @@ namespace gta_base::memory {
         fidevices_len_ = ptr.add(26).rip().as<decltype(fidevices_len_)>();
       });
 
+      main_batch.add(VAR_NAME(GetFilenameForAudioConversation), xorstr_("40 53 48 83 EC 20 48 8B D9 48 8B D1 48 8D 0D ? ? ? ? E8 ? ? ? ? 84 C0 74 34"), [this](scanner::Handle ptr){
+        GetFilenameForAudioConversation = ptr.as<decltype(GetFilenameForAudioConversation)>();
+      });
+
       auto mem_region = scanner::Module(nullptr);
       main_batch.run(mem_region);
 

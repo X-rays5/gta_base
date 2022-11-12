@@ -6,10 +6,10 @@
 #ifndef GTA_BASE_SCRIPT_HOOK_HPP
 #define GTA_BASE_SCRIPT_HOOK_HPP
 #include <robin_hood.h>
+#include <script/scrProgram.hpp>
+#include <script/scrNativeHandler.hpp>
 #include "vmt.hpp"
 #include "../../rage/joaat.hpp"
-#include "../../rage/classes/natives.hpp"
-#include "../../rage/classes/script_thread.hpp"
 
 namespace gta_base::hooking {
     class ScriptHook {

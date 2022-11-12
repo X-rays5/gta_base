@@ -11,6 +11,7 @@
 #include <unordered_map>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#undef AddJob
 #include "../rage/types.hpp"
 #include "../fiber/pool.hpp"
 

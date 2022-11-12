@@ -6,7 +6,7 @@
 #ifndef GTA_BASE_AT_ARRAY_HPP
 #define GTA_BASE_AT_ARRAY_HPP
 #include <cstdint>
-#include "sys_mem_allocator.hpp"
+#include <rage/sysMemAllocator.hpp>
 #include "../types.hpp"
 #undef max
 
@@ -26,12 +26,12 @@ namespace rage {
       m_count = right.m_count;
       m_size = right.m_size;
 
-      m_data = (T*)rage::GetAllocator()->allocate(m_size * sizeof(T), 16, 0);
+      m_data = (T*)rage::GetAllocator()->Allocate(m_size * sizeof(T), 16, 0);
       std::uninitialized_copy(right.m_data, right.m_data + right.m_count, m_data);
     }
 
     explicit atArray(int capacity) {
-      m_data = (T*)rage::GetAllocator()->allocate(capacity * sizeof(T), 16, 0);
+      m_data = (T*)rage::GetAllocator()->Allocate(capacity * sizeof(T), 16, 0);
       m_count = 0;
       m_size = capacity;
     }
@@ -43,7 +43,7 @@ namespace rage {
 
       if (m_data)
       {
-        rage::GetAllocator()->free(m_data);
+        rage::GetAllocator()->Free(m_data);
 
         m_data = nullptr;
       }
@@ -136,7 +136,7 @@ namespace rage {
         return;
       }
 
-      T* newOffset = (T*)rage::GetAllocator()->allocate(newSize * sizeof(T), 16, 0);
+      T* newOffset = (T*)rage::GetAllocator()->Allocate(newSize * sizeof(T), 16, 0);
 
       // initialize the new entries
       std::uninitialized_fill(newOffset, newOffset + newSize, T());
@@ -146,7 +146,7 @@ namespace rage {
       {
         std::copy(m_data, m_data + m_size, newOffset);
 
-        rage::GetAllocator()->free(m_data);
+        rage::GetAllocator()->Free(m_data);
       }
 
       m_data = newOffset;

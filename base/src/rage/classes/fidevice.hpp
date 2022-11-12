@@ -6,7 +6,8 @@
 #ifndef GTA_BASE_FIDEVICE_HPP
 #define GTA_BASE_FIDEVICE_HPP
 #include <array>
-#include "sys_mem_allocator.hpp"
+#include <rage/sysMemAllocator.hpp>
+#include <minwindef.h>
 
 namespace rage
 {

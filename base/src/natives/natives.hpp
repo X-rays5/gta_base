@@ -17,6 +17,8 @@ SCR_REGISTER_SECURE_HONEYPOT(SEND_TU_SCRIPT_EVENT,0x2700c00f82c16bf0,  CommandWi
 // Generated on 9/19/2022, 2:35:34 PM
 // https://nativedb.spyral.dev
 
+#define BOOL bool
+
 namespace SYSTEM
 {
   // https://nativedb.spyral.dev/natives/0x4EDE34FBADD967A6
@@ -13074,3 +13076,5 @@ namespace ZONE
   // https://nativedb.spyral.dev/natives/0x7EE64D51E8498728
   static Hash GET_HASH_OF_MAP_AREA_AT_COORDS(float x, float y, float z) { return invoke<Hash>(0x7EE64D51E8498728, x, y, z); } // 0x7EE64D51E8498728 0xB5C5C99B b323
 }
+
+#undef BOOL

@@ -4,22 +4,29 @@
 
 #pragma once
 
-#ifndef GTABASE_MEM_POINTERS_HPP
-#define GTABASE_MEM_POINTERS_HPP
+#ifndef GTABASE_GAME_POINTERS_HPP
+#define GTABASE_GAME_POINTERS_HPP
 #include <memory>
 #include <d3d11.h>
 #include <ped/CPedFactory.hpp>
 #include <network/CNetGamePlayer.hpp>
+#include <network/CNetworkPlayerMgr.hpp>
 #include <network/snSession.hpp>
 #include <network/Network.hpp>
+#include <script/GtaThread.hpp>
+#include <script/scrProgram.hpp>
+#include <script/scrProgramTable.hpp>
+#include <script/scrNativeHandler.hpp>
+#include <script/scrNativeRegistrationTable.hpp>
 #include "../rage/enums.hpp"
-#include "../rage/classes/script_thread.hpp"
 #include "../rage/classes/at_array.hpp"
-#include "../rage/classes/natives.hpp"
 #include "../rage/classes/net_connection_mgr.hpp"
 #include "../rage/classes/net_connection_peer.hpp"
-#include "../rage/classes/script_program.hpp"
 #include "../rage/classes/fidevice.hpp"
+
+namespace rage {
+  class datBitBuffer;
+}
 
 namespace gta_base::memory {
     class Pointers {
@@ -111,7 +118,10 @@ namespace gta_base::memory {
       uintptr_t fidevices_{};
       uint16_t* fidevices_len_{};
       rage::fiPackfile** fipackfile_instances_{};
+
+      using get_filename_for_audio_conversation_t = const char*(*)(const char* label_name);
+      get_filename_for_audio_conversation_t GetFilenameForAudioConversation{};
     };
     inline Pointers* kPOINTERS{};
   }
-#endif //GTABASE_MEM_POINTERS_HPP
+#endif //GTABASE_GAME_POINTERS_HPP

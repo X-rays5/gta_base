@@ -6,9 +6,9 @@
 #ifndef GTA_BASE_NATIVE_HOOKING_HPP
 #define GTA_BASE_NATIVE_HOOKING_HPP
 #include <robin_hood.h>
+#include <script/GtaThread.hpp>
+#include <script/scrNativeHandler.hpp>
 #include "hooking_helpers/script.hpp"
-#include "../rage/classes/script_thread.hpp"
-#include "../rage/classes/natives.hpp"
 #include "../rage/joaat.hpp"
 
 #define GTA_BASE_NATIVE_DETOUR_ALL_SCRIPTS RAGE_JOAAT("ALL_RUNNING_SCRIPTS")

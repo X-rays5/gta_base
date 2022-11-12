@@ -5,11 +5,11 @@
 #pragma once
 #ifndef GTA_BASE_CROSSMAP_HPP
 #define GTA_BASE_CROSSMAP_HPP
-#include "../rage/classes/natives.hpp"
+#include <robin_hood.h>
 
 namespace rage
 {
-  inline static const rage::scrNativeMapping kCROSSMAP =
+  inline static const robin_hood::unordered_map<scrNativeHash, scrNativeHash> kCROSSMAP =
     {
       { 0xF7AF4F159FF99F97, 0xF7AF4F159FF99F97 },
       { 0x4EDE34FBADD967A6, 0x4EDE34FBADD967A6 },
