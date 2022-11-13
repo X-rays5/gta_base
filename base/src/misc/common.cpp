@@ -31,6 +31,44 @@ namespace gta_base::common {
     return stream.str();
   }
 
+  std::vector<std::string> SplitStr(const std::string& str, const std::string& delim) {
+    std::vector<std::string> res;
+    size_t start = 0;
+    size_t end = str.find(delim);
+
+    while (end != std::string::npos) {
+      res.push_back(str.substr(start, end - start));
+      start = end + delim.length();
+      end = str.find(delim, start);
+    }
+
+    res.push_back(str.substr(start, end));
+
+    return res;
+  }
+
+  std::string StripVarName(const std::string& str) {
+    std::string res = str;
+
+    // remove ptr access
+    if (res.find("->") != std::string::npos)
+      res = res.substr(res.find("->") + 2);
+
+    // remove array access
+    if (res.find("[") != std::string::npos)
+      res = res.substr(0, res.find("["));
+
+    // remove struct access
+    if (res.find(".") != std::string::npos)
+      res = res.substr(res.find(".") + 1);
+
+    // remove namespace
+    if (res.find("::") != std::string::npos)
+      res = res.substr(res.find("::") + 2);
+
+    return res;
+  }
+
   std::string RemoveNonNumerical(std::string str) {
     static const robin_hood::unordered_set<char> numbers = {'0','1','2','3','4','5','6','7','8','9'};
 

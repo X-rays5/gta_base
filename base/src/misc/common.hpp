@@ -63,6 +63,10 @@ namespace gta_base::common {
       return static_cast<ret_t>(convert);
   }
 
+  std::vector<std::string> SplitStr(const std::string& str, const std::string& delim);
+
+  std::string StripVarName(const std::string& str);
+
   std::string RemoveNonNumerical(std::string str);
 
   std::string VkToStr(std::uint64_t vk);
