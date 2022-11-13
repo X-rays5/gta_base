@@ -5,7 +5,6 @@
 #include "invoker.hpp"
 #include "crossmap.hpp"
 #include "../memory/pointers.hpp"
-#include "../logger/logger.hpp"
 
 extern "C" void	spoof_call(void* context, void* function, void* ret);
 

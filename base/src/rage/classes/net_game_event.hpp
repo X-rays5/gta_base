@@ -6,10 +6,8 @@
 #ifndef GTA_BASE_NET_GAME_EVENT_HPP
 #define GTA_BASE_NET_GAME_EVENT_HPP
 #pragma once
-#include <cstdint>
 #include "../../memory/pointers.hpp"
 #include "../types.hpp"
-//#include "fwddec.hpp"
 
 #pragma pack(push, 1)
 namespace rage

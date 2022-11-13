@@ -11,7 +11,6 @@
 #include <network/Network.hpp>
 #include <entities/fwEntity.hpp>
 #include "../../memory/pointers.hpp"
-#include "../../misc/common.hpp"
 #include "../types.hpp"
 
 namespace rage {

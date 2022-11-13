@@ -13,20 +13,10 @@
 #include <chrono>
 #include <algorithm>
 #include <limits>
-#include <fmt/format.h>
 #include <d3d11.h>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #ifdef LoadImage
 #undef LoadImage
 #endif
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
-#include "../logger/logger.hpp"
 #include "globals.hpp"
 
 #define GTA_BASE_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))

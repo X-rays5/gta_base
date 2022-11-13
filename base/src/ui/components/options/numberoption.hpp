@@ -6,7 +6,6 @@
 #ifndef GTA_BASE_NUMBEROPTION_HPP
 #define GTA_BASE_NUMBEROPTION_HPP
 #include "baseoption.hpp"
-#include "../../../misc/common.hpp"
 #include "../keyboard.hpp"
 #include "../../../scripts/scripting/job_queue.hpp"
 

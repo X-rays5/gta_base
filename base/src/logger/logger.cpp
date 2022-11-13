@@ -4,11 +4,7 @@
 
 #include <filesystem>
 #include <chrono>
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <fmt/format.h>
 #include "logger.hpp"
-#include "../misc/common.hpp"
 #include "stacktrace.hpp"
 
 namespace gta_base {

@@ -12,7 +12,6 @@
 #include <dbghelp.h>
 #include <process.h>
 #include <intrin.h>
-#include "../misc/common.hpp"
 
 #pragma comment(lib, "DbgHelp.lib")
 

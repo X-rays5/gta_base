@@ -6,8 +6,6 @@
 
 #ifndef GTABASE_WNDPROC_HPP
 #define GTABASE_WNDPROC_HPP
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 namespace gta_base::hooking {
     bool HookWndProc();

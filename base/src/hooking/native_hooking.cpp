@@ -4,8 +4,6 @@
 
 #include "native_hooking.hpp"
 #include "../memory/pointers.hpp"
-#include "../misc/globals.hpp"
-#include "../natives/natives.hpp"
 #include "../ui/notification/notification.hpp"
 
 namespace gta_base::hooking {

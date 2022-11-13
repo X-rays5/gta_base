@@ -12,9 +12,7 @@
 #include "../ui/fonts/roboto_regular.hpp"
 #include "../ui/fonts/roboto_bold.hpp"
 #include "../ui/fonts/IconsFontAwesome6.h"
-#include "../misc/globals.hpp"
 #include "../scriptmanager/scriptmanager.hpp"
-#include "../misc/common.hpp"
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

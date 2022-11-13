@@ -6,7 +6,6 @@
 
 #ifndef GTA_BASE_ENUMS_RAGE_HPP
 #define GTA_BASE_ENUMS_RAGE_HPP
-#include <cstdint>
 #include <player/CPlayerInfo.hpp>
 
 namespace rage {

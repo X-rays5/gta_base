@@ -6,7 +6,6 @@
 #ifndef GTA_BASE_JOAAT_HPP
 #define GTA_BASE_JOAAT_HPP
 #include <cstddef>
-#include <cstdint>
 #include <string_view>
 #include <type_traits>
 #include <rage/joaat.hpp>

@@ -3,7 +3,6 @@
 //
 
 #include "streaming.hpp"
-#include "../../natives/natives.hpp"
 #include "../../fiber/pool.hpp"
 #include "../../fiber/script.hpp"
 

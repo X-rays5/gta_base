@@ -9,7 +9,6 @@
 #include <filesystem>
 #include <utility>
 #include <functional>
-#include <fmt/format.h>
 #include "../enums.hpp"
 #include "../../translation/translation_manager.hpp"
 

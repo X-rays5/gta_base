@@ -1,7 +1,4 @@
 #include "sig_batch_scan.hpp"
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include "../../logger/logger.hpp"
 
 namespace gta_base::memory::scanner {
       void Batch::add(std::string name, char* pattern, std::function<void(Handle)> callback) {

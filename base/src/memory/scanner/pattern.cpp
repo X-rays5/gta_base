@@ -1,5 +1,4 @@
 #include "pattern.hpp"
-#include "../../logger/logger.hpp"
 
 namespace gta_base::memory::scanner {
   std::optional<std::uint8_t> to_hex(char const c) {

@@ -6,10 +6,7 @@
 #ifndef GTA_BASE_SCRIPT_HPP
 #define GTA_BASE_SCRIPT_HPP
 #include <optional>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #undef Yield
-#include "../misc/common.hpp"
 
 namespace gta_base::fiber {
     class Script {

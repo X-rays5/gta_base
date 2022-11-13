@@ -4,7 +4,6 @@
 
 #include "detour.hpp"
 #include <MinHook.h>
-#include "../../logger/logger.hpp"
 #include "../../memory/scanner/handle.hpp"
 
 namespace gta_base::hooking {

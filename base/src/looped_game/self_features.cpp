@@ -3,10 +3,8 @@
 //
 
 #include "self_features.hpp"
-#include "../misc/settings.hpp"
 #include "../fiber/pool.hpp"
 #include "../rage/util/get.hpp"
-#include "../misc/globals.hpp"
 
 namespace gta_base::looped_game {
     inline void GodMode() {

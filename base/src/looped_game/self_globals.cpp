@@ -3,9 +3,6 @@
 //
 
 #include "self_globals.hpp"
-#include "../misc/globals.hpp"
-#include "../natives/natives.hpp"
-#include "../logger/logger.hpp"
 
 gta_base::common::LocalPlayer gta_base::globals::local_player;
 

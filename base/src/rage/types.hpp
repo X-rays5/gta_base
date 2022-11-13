@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_TYPES_HPP
 #define GTA_BASE_TYPES_HPP
-#include <cstdint>
 #include "classes/scr_vector.hpp"
 
 using Void = void;

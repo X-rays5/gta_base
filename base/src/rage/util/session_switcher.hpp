@@ -6,7 +6,6 @@
 #ifndef GTA_BASE_SESSION_SWITCHER_HPP
 #define GTA_BASE_SESSION_SWITCHER_HPP
 #include <vector>
-#include <fmt/format.h>
 #include "../enums.hpp"
 
 namespace rage::util {

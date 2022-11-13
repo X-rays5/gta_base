@@ -5,11 +5,9 @@
 #pragma once
 #ifndef GTA_BASE_POOL_HPP
 #define GTA_BASE_POOL_HPP
-#include <cstdint>
 #include <functional>
 #include <mutex>
 #include <queue>
-#include "../natives/natives.hpp"
 #undef AddJob
 
 namespace gta_base::fiber {

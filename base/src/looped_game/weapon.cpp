@@ -3,9 +3,6 @@
 //
 
 #include "weapon.hpp"
-#include "../natives/natives.hpp"
-#include "../misc/settings.hpp"
-#include "../misc/globals.hpp"
 
 namespace gta_base::looped_game {
     void InfiniteAmmo() {

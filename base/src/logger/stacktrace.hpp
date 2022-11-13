@@ -6,8 +6,6 @@
 #ifndef GTA_BASE_STACKTRACE_HPP
 #define GTA_BASE_STACKTRACE_HPP
 #include <string>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 namespace gta_base::logger::stacktrace {
   extern std::uint32_t RECURSIVE_CRASH_CHECK;

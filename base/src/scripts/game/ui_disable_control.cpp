@@ -3,7 +3,6 @@
 //
 
 #include "ui_disable_control.hpp"
-#include "../../natives/natives.hpp"
 #include "../../ui/manager.hpp"
 
 bool gta_base::globals::block_input = false;

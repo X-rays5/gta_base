@@ -3,8 +3,6 @@
 //
 
 #include "wndproc.hpp"
-#include "../misc/common.hpp"
-#include "../logger/logger.hpp"
 #include "../d3d/renderer.hpp"
 #include "../misc/hotkey_manager.hpp"
 

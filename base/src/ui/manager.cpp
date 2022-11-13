@@ -4,7 +4,6 @@
 
 #include "manager.hpp"
 #include "../d3d/renderer.hpp"
-#include "../misc/settings.hpp"
 #include "components/keyboard.hpp"
 #include "fonts/IconsFontAwesome6.h"
 
@@ -33,7 +32,7 @@ namespace gta_base::ui {
   }
 
   inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, size_t& option_before_scroll, KeyInput where_to_scroll) {
-    // The only way this can result in an infinite loop is if the developer is stupid.
+    // Could cause issues when there are only label options
     auto cur_opt = sub->GetOption(sub->GetSelectedOption());
     while(cur_opt->HasFlag(OptionFlag::kLabel)) {
       sub->HandleKey(where_to_scroll);

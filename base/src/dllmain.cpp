@@ -4,11 +4,7 @@
 
 #include <stdexcept>
 #include <thread>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include "main.hpp"
-#include "misc/common.hpp"
-#include "logger/logger.hpp"
 
 HINSTANCE gta_base::globals::dll_handle = nullptr;
 

@@ -13,10 +13,8 @@
 #include <cassert>
 #include <utility>
 #include <d3d11.h>
-#include <fmt/format.h>
 #include <imgui.h>
 #include "renderer.hpp"
-#include "../logger/logger.hpp"
 
 namespace gta_base::d3d::draw {
       inline ImDrawList* GetDrawList() {

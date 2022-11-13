@@ -7,9 +7,6 @@
 #define GTA_BASE_VMT_HPP
 #include <memory>
 #include <robin_hood.h>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include "../../logger/logger.hpp"
 
 namespace gta_base::hooking {
     class VmtHook {

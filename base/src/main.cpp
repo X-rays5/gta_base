@@ -2,11 +2,6 @@
 // Created by X-ray on 3/6/2022.
 //
 
-#include <fstream>
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include "logger/logger.hpp"
-#include "misc/common.hpp"
 #include "hooking/hooking.hpp"
 #include "d3d/renderer.hpp"
 #include "memory/pointers.hpp"
@@ -22,7 +17,6 @@
 #include "fiber/pool.hpp"
 #include "player_mgr/manager.hpp"
 #include "ui/components/keyboard.hpp"
-#include "misc/settings.hpp"
 #include "misc/thread_pool.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;

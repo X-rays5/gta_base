@@ -12,7 +12,6 @@
 #include <fstream>
 #include <robin_hood.h>
 #include <xorstr.hpp>
-#include "../../logger/logger.hpp"
 
 
 #define ADD_TRANSLATION(key, trans) {xorstr_(key), xorstr_(trans)}

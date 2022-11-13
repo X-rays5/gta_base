@@ -7,7 +7,6 @@
 #include "../d3d/renderer.hpp"
 #include "../scriptmanager/scriptmanager.hpp"
 #include "../natives/invoker.hpp"
-#include "../misc/globals.hpp"
 
 namespace gta_base {
   Hooking::Hooking() :

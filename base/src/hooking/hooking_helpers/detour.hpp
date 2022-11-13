@@ -6,8 +6,6 @@
 #ifndef GTA_BASE_DETOUR_HPP
 #define GTA_BASE_DETOUR_HPP
 #include <string>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 namespace gta_base::hooking {
     class DetourHook {

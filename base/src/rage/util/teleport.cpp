@@ -4,11 +4,9 @@
 
 #include "teleport.hpp"
 #include "../../fiber/pool.hpp"
-#include "../../misc/globals.hpp"
 #include "get.hpp"
 #include "blip.hpp"
 #include "streaming.hpp"
-#include "../../misc/globals.hpp"
 #include "../../ui/notification/notification.hpp"
 #include "entity.hpp"
 

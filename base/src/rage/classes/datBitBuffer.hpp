@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_DATBITBUFFER_HPP
 #define GTA_BASE_DATBITBUFFER_HPP
-#include <cstdint>
 #include "../../memory/pointers.hpp"
 
 namespace rage {

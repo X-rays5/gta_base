@@ -5,8 +5,6 @@
 #include "../../hooking.hpp"
 #include "../../../player_mgr/manager.hpp"
 #include "../../../ui/manager.hpp"
-#include "../../../logger/logger.hpp"
-#include "../../../misc/globals.hpp"
 
 namespace gta_base {
   void* Hooks::AssignPlayerPhysicalIdx(CNetworkPlayerMgr* netPlayerMgr, CNetGamePlayer* player, uint8_t new_index) {

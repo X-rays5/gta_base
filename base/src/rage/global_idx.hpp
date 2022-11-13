@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_GLOBAL_IDX_HPP
 #define GTA_BASE_GLOBAL_IDX_HPP
-#include <cstdint>
 
 namespace rage {
   namespace Globals {

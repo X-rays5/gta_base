@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_AT_ARRAY_HPP
 #define GTA_BASE_AT_ARRAY_HPP
-#include <cstdint>
 #include <rage/sysMemAllocator.hpp>
 #include "../types.hpp"
 #undef max

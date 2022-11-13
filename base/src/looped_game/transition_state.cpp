@@ -3,9 +3,7 @@
 //
 
 #include "transition_state.hpp"
-#include <fmt/format.h>
 #include <magic_enum.hpp>
-#include "../natives/natives.hpp"
 #include "../rage/enums.hpp"
 #include "../rage/script/global.hpp"
 

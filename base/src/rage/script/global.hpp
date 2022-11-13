@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_GLOBAL_HPP
 #define GTA_BASE_GLOBAL_HPP
-#include <cstdint>
 #include <cstddef>
 #include <type_traits>
 #include "../global_idx.hpp"

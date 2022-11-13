@@ -3,7 +3,6 @@
 //
 
 #include "blip.hpp"
-#include "../../natives/natives.hpp"
 #include "../enums.hpp"
 
 namespace rage::util {

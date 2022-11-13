@@ -5,6 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_EXEC_AS_SCRIPT_HPP
 #define GTA_BASE_EXEC_AS_SCRIPT_HPP
+#include <script/tlsContext.hpp>
 #include "../joaat.hpp"
 #include "../../memory/pointers.hpp"
 

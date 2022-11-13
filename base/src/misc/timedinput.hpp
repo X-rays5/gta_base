@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_TIMEDINPUT_HPP
 #define GTA_BASE_TIMEDINPUT_HPP
-#include <cstdint>
 
 namespace gta_base::util {
     class TimedInput {

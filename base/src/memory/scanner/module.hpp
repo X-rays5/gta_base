@@ -1,7 +1,5 @@
 #pragma once
 #include <string_view>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include "range.hpp"
 
 namespace gta_base::memory::scanner {

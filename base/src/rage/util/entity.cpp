@@ -4,7 +4,6 @@
 
 #include "entity.hpp"
 #include "../../fiber/script.hpp"
-#include "../../natives/natives.hpp"
 
 namespace rage::util {
     bool TakeControlOfEntity(Entity ent) {
