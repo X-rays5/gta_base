@@ -7,7 +7,19 @@
 #define GTA_BASE_JSON_HPP
 #include <string>
 #include <filesystem>
-#include "rapidjson/document.h"
+#include <rapidjson/document.h>
+#include <rapidjson/prettywriter.h>
+#include <rapidjson/stringbuffer.h>
+#include "common.hpp"
+
+#define RAPIDJSON_WRITER_REMOVE_PTR_FROM_KEY(key) gta_base::common::StripVarName(key)
+#define RAPIDJSON_WRITER_K(key) writer.String(RAPIDJSON_WRITER_REMOVE_PTR_FROM_KEY(#key))
+#define RAPIDJSON_WRITER_KV_STR(val) RAPIDJSON_WRITER_K(val); writer.String(val)
+#define RAPIDJSON_WRITER_KV_UINT(val) RAPIDJSON_WRITER_K(val); writer.Uint(val)
+#define RAPIDJSON_WRITER_KV_INT(val) RAPIDJSON_WRITER_K(val); writer.Int(val)
+#define RAPIDJSON_WRITER_KV_UINT64(val) RAPIDJSON_WRITER_K(val); writer.Uint64(val)
+#define RAPIDJSON_WRITER_KV_INT64(val) RAPIDJSON_WRITER_K(val); writer.Int64(val)
+#define RAPIDJSON_WRITER_KV_BOOL(val) RAPIDJSON_WRITER_K(val); writer.Bool(val)
 
 namespace gta_base::json {
   template<typename T>

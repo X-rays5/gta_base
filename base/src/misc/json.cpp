@@ -8,7 +8,6 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/istreamwrapper.h>
 #include <magic_enum.hpp>
-#include "../logger/logger.hpp"
 
 namespace gta_base::json {
   rapidjson::Value StringToJsonVal(const std::string& str, RAPIDJSON_DEFAULT_ALLOCATOR allocator) {
