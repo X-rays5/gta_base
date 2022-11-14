@@ -12,6 +12,7 @@
 #undef AddJob
 #include "../rage/types.hpp"
 #include "../fiber/pool.hpp"
+#include "../rage/data/data_types.hpp"
 
 namespace gta_base {
   namespace common {
@@ -65,6 +66,7 @@ namespace gta_base {
     extern std::atomic<std::int64_t> session_join_time;
     extern std::atomic<std::int64_t> session_leave_time;
     extern common::LocalPlayer local_player;
+    extern rage::data::Data gta_data;
   }
 }
 #endif //GTABASE_GLOBALS_HPP

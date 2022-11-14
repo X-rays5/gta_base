@@ -12,7 +12,7 @@
 #include <rapidjson/stringbuffer.h>
 #include "common.hpp"
 
-#define RAPIDJSON_WRITER_REMOVE_PTR_FROM_KEY(key) gta_base::common::StripVarName(key)
+#define RAPIDJSON_WRITER_REMOVE_PTR_FROM_KEY(key) gta_base::common::StripVarName(key).c_str()
 #define RAPIDJSON_WRITER_K(key) writer.String(RAPIDJSON_WRITER_REMOVE_PTR_FROM_KEY(#key))
 #define RAPIDJSON_WRITER_KV_STR(val) RAPIDJSON_WRITER_K(val); writer.String(val)
 #define RAPIDJSON_WRITER_KV_UINT(val) RAPIDJSON_WRITER_K(val); writer.Uint(val)

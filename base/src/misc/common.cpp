@@ -50,6 +50,10 @@ namespace gta_base::common {
   std::string StripVarName(const std::string& str) {
     std::string res = str;
 
+    // remove c_str() from the end
+    if (res.find("c_str()") != std::string::npos)
+      res = res.substr(0, res.find("c_str()"));
+
     // remove ptr access
     if (res.find("->") != std::string::npos)
       res = res.substr(res.find("->") + 2);

@@ -18,9 +18,11 @@
 #include "player_mgr/manager.hpp"
 #include "ui/components/keyboard.hpp"
 #include "misc/thread_pool.hpp"
+#include "rage/data/data_loader.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
+rage::data::Data gta_base::globals::gta_data = {};
 void BaseMain() {
   using namespace gta_base;
 
@@ -64,6 +66,17 @@ void BaseMain() {
   if (waited_for_game_load) {
     LOG_INFO("Game loaded");
   }
+
+  auto gta_data_loader = std::make_unique<rage::data::Loader>();
+  fiber::kPOOL->AddJob([&]{
+    auto gta_data = gta_data_loader->Load();
+    if (!gta_data.has_value()) {
+      LOG_CRITICAL("Failed to load gta data");
+      return;
+    }
+    globals::gta_data = std::move(gta_data.value());
+    gta_data_loader.reset();
+  });
 
   auto ui_manager_inst = std::make_unique<ui::Manager>();
   LOG_INFO("UI Manager initialized");
@@ -109,6 +122,10 @@ void BaseMain() {
 
   settings::Load();
   LOG_INFO("Settings loaded");
+
+  while(globals::gta_data.IsEmpty()) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  }
 
   LOG_INFO("Initialized");
   while (globals::running) {

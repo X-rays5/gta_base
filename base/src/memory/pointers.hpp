@@ -111,7 +111,7 @@ namespace gta_base::memory {
       fipackfile_ctor_t FiPackFileCtor{};
       using fipackfile_open_archive_t = bool(*)(rage::fiPackfile* that, const char* archive, bool b_true, int type, intptr_t very_false);
       fipackfile_open_archive_t FiPackFileOpenArchive{};
-      using fipackfile_mount_t = bool(*)(rage::fiPackfile* that, const char* mount_point);
+      using fipackfile_mount_t = bool(*)(rage::fiPackfile* this_, const char* mount_point);
       fipackfile_mount_t FiPackFileMount{};
       using fipackfile_unmount = bool(*)(const char* mount_point);
       fipackfile_unmount FiPackFileUnmount{};

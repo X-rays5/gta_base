@@ -26,6 +26,10 @@ namespace rage {
     return gta_base::memory::kPOINTERS->FiDeviceGetDevice(path, allowRoot);
   }
 
+  void fiDevice::Unmount(const char* rootPath) {
+    gta_base::memory::kPOINTERS->FiPackFileUnmount(rootPath);
+  }
+
   uint64_t fiDeviceImplemented::Open(const char* fileName, bool) { PURECALL(); }
 
   uint64_t fiDeviceImplemented::OpenBulk(const char* fileName, uint64_t* ptr)

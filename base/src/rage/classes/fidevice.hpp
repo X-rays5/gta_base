@@ -9,6 +9,11 @@
 #include <rage/sysMemAllocator.hpp>
 #include <minwindef.h>
 
+#undef CreateDirectory
+#undef RemoveDirectory
+#undef GetFileAttributes
+#undef SetFileAttributes
+
 namespace rage
 {
   struct fiFindData
