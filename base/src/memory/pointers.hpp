@@ -119,8 +119,7 @@ namespace gta_base::memory {
       uint16_t* fidevices_len_{};
       rage::fiPackfile** fipackfile_instances_{};
 
-      using get_filename_for_audio_conversation_t = const char*(*)(const char* label_name);
-      get_filename_for_audio_conversation_t GetFilenameForAudioConversation{};
+      PVOID model_spawn_bypass_;
     };
     inline Pointers* kPOINTERS{};
   }

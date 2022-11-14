@@ -184,7 +184,7 @@ namespace gta_base::logger::stacktrace {
       callInformation.append(" ").append(std::string(symbol->Name, symbol->NameLen));
       if (SymGetLineFromAddr64(GetCurrentProcess(), addr, &displacement, &line)) {
         lineInformation.append(" ").append(line.FileName).append(" L: ");
-        lineInformation.append(std::to_string(line.LineNumber));
+        lineInformation.append(std::to_string(line.LineNumber - 1));
       }
       else {
         std::string moduleName = getModuleNameFromAddress(addr);

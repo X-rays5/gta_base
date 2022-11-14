@@ -36,7 +36,7 @@ add_library(${PROJECT_NAME} SHARED ${IMGUI_SOURCES} src/natives/spoof.asm src/ui
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/pch.hpp)
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE SPDLOG_FMT_EXTERNAL RAPIDJSON_HAS_STDSTRING=1 WIN32_LEAN_AND_MEAN NOMINMAX)
+target_compile_definitions(${PROJECT_NAME} PRIVATE SPDLOG_FMT_EXTERNAL WIN32_LEAN_AND_MEAN NOMINMAX)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${robin_hood_SOURCE_DIR}/src/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${freetype_SOURCE_DIR}/include)

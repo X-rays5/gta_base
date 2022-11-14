@@ -11,6 +11,7 @@
 #include "settings.hpp"
 #include "world.hpp"
 #include "weapon.hpp"
+#include "vehicle.hpp"
 
 namespace gta_base::ui::tabs {
       void MainTab() {
@@ -26,6 +27,7 @@ namespace gta_base::ui::tabs {
           }));
           sub->AddOption(option::SubmenuOption("tab/title/self", "", Submenus::Player));
           sub->AddOption(option::SubmenuOption("tab/title/weapon", "", Submenus::Weapon));
+          sub->AddOption(option::SubmenuOption("tab/title/vehicle", "", Submenus::Vehicle));
           sub->AddOption(option::SubmenuOption("tab/title/network", "", Submenus::Network));
           sub->AddOption(option::SubmenuOption("tab/title/misc", "", Submenus::Misc));
           sub->AddOption(option::SubmenuOption("tab/title/setting", "", Submenus::Settings));
@@ -41,5 +43,6 @@ namespace gta_base::ui::tabs {
         SettingsTab();
         WorldTab();
         WeaponsTab();
+        VehicleTab();
       }
     }
