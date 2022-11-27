@@ -18,8 +18,8 @@
 #include <script/scrProgramTable.hpp>
 #include <script/scrNativeHandler.hpp>
 #include <script/scrNativeRegistrationTable.hpp>
+#include <rage/atArray.hpp>
 #include "../rage/enums.hpp"
-#include "../rage/classes/at_array.hpp"
 #include "../rage/classes/net_connection_mgr.hpp"
 #include "../rage/classes/net_connection_peer.hpp"
 #include "../rage/classes/fidevice.hpp"

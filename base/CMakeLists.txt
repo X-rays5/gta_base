@@ -11,8 +11,8 @@ file(GLOB IMGUI_SOURCES
 
 CPMAddPackage(
         NAME GTAV-Classes
-        GIT_REPOSITORY https://github.com/X-rays5/GTAV-Classes
-        GIT_TAG c648856759bfe788a40fd9b12fbe02e16f871225
+        GIT_REPOSITORY https://github.com/Yimura/GTAV-Classes
+        GIT_TAG 257115997e5ecea9fafbc820a746d9c6f5889e57
         DOWNLOAD_ONLY YES
 )
 

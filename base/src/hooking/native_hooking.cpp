@@ -10,10 +10,10 @@ namespace gta_base::hooking {
     NativeHooking::NativeHooking() {
       AddDetour(RAGE_JOAAT("freemode"), 0x95914459A87EBA28, NativeHooks::NETWORK_BAIL);
 
-      for (const auto hash : memory::kPOINTERS->script_programs_table->all_script_hashes()) {
-        auto native_replacements = GetNativeReplacements(hash);
+      for (const auto entry : *memory::kPOINTERS->script_programs_table) {
+        auto native_replacements = GetNativeReplacements(entry.m_hash);
         if (!native_replacements.empty())
-          script_hooks_.emplace(hash, std::make_unique<ScriptHook>(hash, native_replacements));
+          script_hooks_.emplace(entry.m_hash, std::make_unique<ScriptHook>(entry.m_hash, native_replacements));
       }
 
       kNATIVE_HOOKING = this;
