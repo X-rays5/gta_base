@@ -127,10 +127,10 @@ namespace rage::data {
   using Vehicles = std::vector<Vehicle_ptr_t>;
 
   struct Weapon {
-    Weapon(std::string raw_name, std::string display_name, std::string type, bool is_throwable, bool is_gun, bool is_rechargeable, bool is_melee, bool is_unarmed, joaat_t hash, joaat_t reward_hash, joaat_t reward_ammo_hash) :
+    Weapon(std::string raw_name, std::string display_name, std::string type, bool is_throwable, bool is_gun, bool is_rechargeable, bool is_vehicle_weapon, bool is_melee, bool is_unarmed, joaat_t hash, joaat_t reward_hash, joaat_t reward_ammo_hash) :
       raw_name(std::move(raw_name)), display_name(std::move(display_name)),
       type(std::move(type)),
-      is_throwable(is_throwable), is_gun(is_gun), is_rechargeable(is_rechargeable), is_melee(is_melee), is_unarmed(is_unarmed),
+      is_throwable(is_throwable), is_gun(is_gun), is_rechargeable(is_rechargeable), is_vehicle_weapon(is_vehicle_weapon), is_melee(is_melee), is_unarmed(is_unarmed),
       model_hash(hash), reward_hash(reward_hash), reward_ammo_hash(reward_ammo_hash) {}
 
     explicit Weapon(rapidjson::Value& obj) {
@@ -144,6 +144,7 @@ namespace rage::data {
       const_cast<bool&>(is_throwable) = obj["is_throwable"].GetBool();
       const_cast<bool&>(is_gun) = obj["is_gun"].GetBool();
       const_cast<bool&>(is_rechargeable) = obj["is_rechargeable"].GetBool();
+      const_cast<bool&>(is_vehicle_weapon) = obj["is_vehicle_weapon"].GetBool();
       const_cast<bool&>(is_melee) = obj["is_melee"].GetBool();
       const_cast<bool&>(is_unarmed) = obj["is_unarmed"].GetBool();
       const_cast<joaat_t&>(model_hash) = obj["model_hash"].GetUint();
@@ -157,6 +158,7 @@ namespace rage::data {
     const bool is_throwable{};
     const bool is_gun{};
     const bool is_rechargeable{};
+    const bool is_vehicle_weapon{};
     const bool is_melee{};
     const bool is_unarmed{};
     const joaat_t model_hash{};

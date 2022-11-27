@@ -78,6 +78,7 @@ namespace rage::data {
         obj["is_throwable"] = weapon->is_throwable;
         obj["is_gun"] = weapon->is_gun;
         obj["is_rechargeable"] = weapon->is_rechargeable;
+        obj["is_vehicle_weapon"] = weapon->is_vehicle_weapon;
         obj["is_melee"] = weapon->is_melee;
         obj["is_unarmed"] = weapon->is_unarmed;
         obj["model_hash"] = weapon->model_hash;
@@ -230,6 +231,10 @@ namespace rage::data {
         if (tmp_type.size() > 6)
           type = tmp_type.substr(6);
 
+        if (type.empty() && std::string(name).starts_with("VEHICLE_"))
+          type = "VEHICLE";
+
+        const bool is_vehicle_weapon = type == "VEHICLE";
         const bool is_melee = type == "MELEE";
         const bool is_unarmed = type == "UNARMED";
 
@@ -245,7 +250,7 @@ namespace rage::data {
           }
         }
 
-        Weapon weapon(name, display_name, type, is_throwable, is_gun, is_rechargeable, is_melee, is_unarmed, hash, reward_hash, ammo_reward_hash);
+        Weapon weapon(name, display_name, type, is_throwable, is_gun, is_rechargeable, is_vehicle_weapon, is_melee, is_unarmed, hash, reward_hash, ammo_reward_hash);
         tmp_loading_wep_[hash] = std::make_shared<Weapon>(weapon);
       }
     });
