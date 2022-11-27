@@ -22,6 +22,9 @@ if (lua_ADDED)
         message(FATAL_ERROR "Failed to add sol2")
     endif()
 
+    target_include_directories(${PROJECT_NAME} PRIVATE ${sol2_SOURCE_DIR}/include)
+    target_link_libraries(${PROJECT_NAME} PRIVATE lua)
+
 else()
     message(FATAL_ERROR "Failed to add lua")
 endif()
