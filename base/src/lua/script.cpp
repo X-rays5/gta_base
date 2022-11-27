@@ -39,7 +39,6 @@ namespace gta_base::lua {
     // run init func if it exists
     sol::protected_function_result init_result = lua_state_["Init"]();
     if (!init_result.valid()) {
-      sol::error err = init_result;
       LOG_WARN(FormatSolError(init_result));
     } else {
       LOG_INFO("Successfully ran Init func for {}", script_path.filename().string());
@@ -49,7 +48,6 @@ namespace gta_base::lua {
   Script::~Script() {
     sol::protected_function_result shutdown_result = lua_state_["Shutdown"]();
     if (!shutdown_result.valid()) {
-      sol::error err = shutdown_result;
       LOG_WARN(FormatSolError(shutdown_result));
     } else {
       LOG_INFO("Successfully ran Shutdown func for {}", std::filesystem::path(GetInternalLuaVar(lua_state_.lua_state(), "script_path")).filename().string());
@@ -57,7 +55,11 @@ namespace gta_base::lua {
   }
 
   void Script::Tick() {
-    lua_state_["Tick"]();
+    if (!has_tick_func_)
+      return;
+
+    auto res = lua_state_["Tick"]();
+    has_tick_func_ = res.valid();
   }
 
   void Script::LoadLibraries() {

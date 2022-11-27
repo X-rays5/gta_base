@@ -20,6 +20,7 @@ namespace gta_base::lua {
     }
 
   private:
+    bool has_tick_func_ = true;
     sol::state lua_state_;
 
   private:

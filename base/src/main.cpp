@@ -88,6 +88,24 @@ void BaseMain() {
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO("Discord initialized");
 
+
+  auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
+  LOG_INFO("Player Manager initialized");
+
+  auto lua_manager_inst = std::make_unique<lua::Manager>();
+  lua_manager_inst->AddScript("test.lua");
+
+  kHOOKING->Enable();
+  LOG_INFO("Hooks enabled");
+
+
+  settings::Load();
+  LOG_INFO("Settings loaded");
+
+  while(globals::gta_data.IsEmpty()) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  }
+
   auto discord_thread = std::thread([]{
     LOG_DEBUG("discord thread first tick");
     while(globals::running) {
@@ -105,15 +123,6 @@ void BaseMain() {
   });
   LOG_INFO("Started Discord thread");
 
-  auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
-  LOG_INFO("Player Manager initialized");
-
-  auto lua_manager_inst = std::make_unique<lua::Manager>();
-  lua_manager_inst->AddScript("test.lua");
-
-  kHOOKING->Enable();
-  LOG_INFO("Hooks enabled");
-
   auto scripting_thread = std::thread([]{
     LOG_DEBUG("scripting thread first tick");
 
@@ -125,13 +134,6 @@ void BaseMain() {
   });
   LOG_INFO("Scripting thread started");
 
-  settings::Load();
-  LOG_INFO("Settings loaded");
-
-  while(globals::gta_data.IsEmpty()) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-  }
-
   LOG_INFO("Initialized");
   while (globals::running) {
     if (common::IsKeyDown(VK_DELETE))
@@ -141,24 +143,24 @@ void BaseMain() {
   }
   LOG_INFO("Unloading...");
 
+  if (scripting_thread.joinable())
+    scripting_thread.join();
+  LOG_INFO("Scripting thread stopped");
+
+  if (discord_thread.joinable())
+    discord_thread.join();
+  LOG_INFO("Discord thread stopped");
+
   if (kSETTINGS.menu.save_on_exit) {
     settings::Save();
     LOG_INFO("Settings saved");
   }
-
-  if (scripting_thread.joinable())
-    scripting_thread.join();
-  LOG_INFO("Scripting thread stopped");
 
   kHOOKING->Disable();
   LOG_INFO("Hooks disabled");
 
   player_mgr_inst.reset();
   LOG_INFO("Player Manager shutdown");
-
-  if (discord_thread.joinable())
-    discord_thread.join();
-  LOG_INFO("Discord thread stopped");
 
   discord_inst.reset();
   LOG_INFO("Discord shutdown");
