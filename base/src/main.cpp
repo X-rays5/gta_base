@@ -19,6 +19,7 @@
 #include "ui/components/keyboard.hpp"
 #include "misc/thread_pool.hpp"
 #include "rage/data/data_loader.hpp"
+#include "lua/manager.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
@@ -107,6 +108,9 @@ void BaseMain() {
   auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
   LOG_INFO("Player Manager initialized");
 
+  auto lua_manager_inst = std::make_unique<lua::Manager>();
+  lua_manager_inst->AddScript("test.lua");
+
   kHOOKING->Enable();
   LOG_INFO("Hooks enabled");
 
@@ -115,6 +119,7 @@ void BaseMain() {
 
     while(globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
+      lua::kMANAGER->RunScriptTick();
       std::this_thread::yield();
     }
   });

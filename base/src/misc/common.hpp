@@ -86,6 +86,8 @@ namespace gta_base::common {
   std::filesystem::path GetOptionsStateDir();
   std::filesystem::path GetTeleportsDir();
   std::filesystem::path GetTextureDir();
+  std::filesystem::path GetScriptsDir();
+  std::filesystem::path GetScriptsDataDir();
 
   std::uint64_t GetEpoch();
 

@@ -209,6 +209,22 @@ namespace gta_base::common {
     return path;
   }
 
+  std::filesystem::path GetScriptsDir() {
+    std::filesystem::path path = GetBaseDir() / "scripts";
+    if (!std::filesystem::exists(path)) {
+      std::filesystem::create_directories(path);
+    }
+    return path;
+  }
+
+  std::filesystem::path GetScriptsDataDir() {
+    std::filesystem::path path = GetDataDir() / "scripts";
+    if (!std::filesystem::exists(path)) {
+      std::filesystem::create_directories(path);
+    }
+    return path;
+  }
+
   std::uint64_t GetEpoch() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   }
