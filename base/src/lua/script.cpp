@@ -11,7 +11,7 @@ namespace gta_base::lua {
     inline std::string FormatSolError(const sol::error& err) {
       std::string result = err.what();
 
-      std::regex regex(R"((\w*.lua:\d*): ?(.*))");
+      std::regex regex(R"(([A-Za-z0-9_\-\.]+\.[A-Za-z0-9]+:\d*): ?(.*))");
       std::smatch match;
 
       if (std::regex_search(result, match, regex)) {
