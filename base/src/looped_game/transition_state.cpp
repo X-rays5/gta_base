@@ -105,8 +105,9 @@ namespace gta_base::looped_game {
 
       if ((int) state > 0) {
         HUD::BEGIN_TEXT_COMMAND_BUSYSPINNER_ON("STRING");
-        auto const spinner_text = fmt::format("{} | {}", transition_states[(int)state], magic_enum::enum_name(state));
-        HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(spinner_text.c_str());
+        const auto spinner_text = transition_states[(int)state];
+        LOG_INFO("Transition State: {} | {}", transition_states[(int)state], magic_enum::enum_name(state));
+        HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(spinner_text);
         HUD::END_TEXT_COMMAND_BUSYSPINNER_ON(5);
       }
 
