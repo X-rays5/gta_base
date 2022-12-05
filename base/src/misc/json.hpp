@@ -45,7 +45,8 @@ namespace gta_base::json {
   rapidjson::Value StringToJsonVal(const std::string& str, RAPIDJSON_DEFAULT_ALLOCATOR allocator);
 
   std::string Stringify(rapidjson::Document& json);
+  rapidjson::Document FromFileStream(std::ifstream& stream);
   rapidjson::Document FromFile(const std::filesystem::path& path);
-  bool ToFile(rapidjson::Document& json, const std::filesystem::path& path);
+  bool ToFile(rapidjson::Document& json, const std::filesystem::path& path, std::size_t indent = 4);
 }
 #endif //GTA_BASE_JSON_HPP

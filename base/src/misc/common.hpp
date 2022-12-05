@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <limits>
 #include <d3d11.h>
+#include <TlHelp32.h>
+
 #ifdef LoadImage
 #undef LoadImage
 #endif
@@ -65,6 +67,24 @@ namespace gta_base::common {
 
   std::vector<std::string> SplitStr(const std::string& str, const std::string& delim);
 
+  std::int64_t HexToIntFast(char number);
+  inline std::optional<std::int64_t> HexToInt(char number) {
+    if (number == '0')
+      return 0;
+
+    auto res = HexToIntFast(number);
+    if (res == 0)
+      return std::nullopt;
+
+    return res;
+  }
+
+  std::string GetFileMd5Hash(const std::filesystem::path& file_path);
+
+  std::string RemoveForbiddenFilenameChars(const std::filesystem::path& path);
+
+  std::filesystem::path PidToPath(std::size_t pid);
+
   std::string StripVarName(const std::string& str);
 
   std::string RemoveNonNumerical(std::string str);
@@ -80,6 +100,7 @@ namespace gta_base::common {
   std::filesystem::path GetLogSaveDir();
   std::filesystem::path GetDataDir();
   std::filesystem::path GetCachedDir();
+  std::filesystem::path GetCachedPatternsDir();
   std::filesystem::path GetSettingsDir();
   std::filesystem::path GetThemesDir();
   std::filesystem::path GetHotkeysDir();
@@ -96,8 +117,12 @@ namespace gta_base::common {
   bool IsForegroundWindow();
   bool IsTargetProcess();
 
+  MODULEENTRY32 GetModuleFromHModule(HMODULE mod);
   std::uint64_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name);
-  std::string GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr);
+  MODULEENTRY32 GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr);
+  inline std::string GetModuleNameFromAddress(std::uint32_t pid, std::uint64_t addr) {
+    return GetModuleFromAddress(pid, addr).szModule;
+  }
 
   bool IsKeyDown(std::uint32_t key);
   bool IsKeyJustReleased(std::uint32_t key, std::uint64_t since_up = 100);

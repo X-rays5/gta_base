@@ -10,6 +10,7 @@
 #include <TlHelp32.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <wincrypt.h>
 
 namespace gta_base::common {
   Platform GetCurrentPlatform() {
@@ -43,6 +44,138 @@ namespace gta_base::common {
     }
 
     res.push_back(str.substr(start, end));
+
+    return res;
+  }
+
+  struct HexToIntTable {
+    std::int64_t tab[128];
+    HexToIntTable() : tab {} {
+      tab['1'] = 1;
+      tab['2'] = 2;
+      tab['3'] = 3;
+      tab['4'] = 4;
+      tab['5'] = 5;
+      tab['6'] = 6;
+      tab['7'] = 7;
+      tab['8'] = 8;
+      tab['9'] = 9;
+      tab['a'] = 10;
+      tab['A'] = 10;
+      tab['b'] = 11;
+      tab['B'] = 11;
+      tab['c'] = 12;
+      tab['C'] = 12;
+      tab['d'] = 13;
+      tab['D'] = 13;
+      tab['e'] = 14;
+      tab['E'] = 14;
+      tab['f'] = 15;
+      tab['F'] = 15;
+    }
+    inline std::int64_t operator[](char const idx) const { return tab[(std::size_t) idx]; }
+  } hex_to_int_table;
+
+  std::int64_t HexToIntFast(char number) {
+    return hex_to_int_table[(std::size_t)number];
+  }
+
+  std::string GetFileMd5Hash(const std::filesystem::path& file_path) {
+    HCRYPTPROV hProv = 0;
+    HCRYPTHASH hHash = 0;
+    BYTE rgbHash[16];
+    DWORD cbHash = GTA_BASE_ARRAY_SIZE(rgbHash);
+    CHAR rgbDigits[] = "0123456789abcdef";
+    std::string res;
+
+    if (!CryptAcquireContextA(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
+      LOG_ERROR("CryptAcquireContextA failed: {}", GetLastError());
+      return res;
+    }
+
+    if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
+      LOG_ERROR("CryptCreateHash failed: {}", GetLastError());
+      CryptReleaseContext(hProv, 0);
+      return res;
+    }
+
+    std::ifstream file(file_path);
+
+    if (!file.is_open())
+      return res;
+
+    std::vector<char> buffer(1024);
+    while (file.read(buffer.data(), buffer.size())) {
+      if (!CryptHashData(hHash, (BYTE*)buffer.data(), buffer.size(), 0)) {
+        LOG_ERROR("CryptHashData failed: {}", GetLastError());
+        CryptReleaseContext(hProv, 0);
+        CryptDestroyHash(hHash);
+        return res;
+      }
+    }
+
+    if (!CryptHashData(hHash, (BYTE*)buffer.data(), file.gcount(), 0)) {
+      LOG_ERROR("CryptHashData failed: {}", GetLastError());
+      CryptReleaseContext(hProv, 0);
+      CryptDestroyHash(hHash);
+      return res;
+    }
+
+    if (!CryptGetHashParam(hHash, HP_HASHVAL, rgbHash, &cbHash, 0)) {
+      LOG_ERROR("CryptGetHashParam failed: {}", GetLastError());
+      CryptReleaseContext(hProv, 0);
+      CryptDestroyHash(hHash);
+      return res;
+    }
+
+    for (DWORD i = 0; i < cbHash; i++) {
+      res.push_back(rgbDigits[rgbHash[i] >> 4]);
+      res.push_back(rgbDigits[rgbHash[i] & 0xf]);
+    }
+
+    CryptDestroyHash(hHash);
+    CryptReleaseContext(hProv, 0);
+
+    return res;
+  }
+
+  std::string RemoveForbiddenFilenameChars(const std::filesystem::path& path) {
+    robin_hood::unordered_set<char> forbidden_chars = { '\\', '/', ':', '*', '?', '"', '<', '>', '|' };
+
+    std::string res = path.string();
+    for (std::size_t i = 0; i < res.size(); i++) {
+      if (forbidden_chars.contains(res[i])) {
+        res.erase(i, 1);
+        res.insert(i, "##");
+      }
+    }
+
+    return res;
+  }
+
+  std::filesystem::path PidToPath(std::size_t pid) {
+    std::filesystem::path res;
+
+    HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hProcessSnap == INVALID_HANDLE_VALUE)
+      return res;
+
+    PROCESSENTRY32 pe32;
+    pe32.dwSize = sizeof(PROCESSENTRY32);
+
+    if (!Process32First(hProcessSnap, &pe32)) {
+      CloseHandle(hProcessSnap);
+      return res;
+    }
+
+    do {
+      if (pe32.th32ProcessID == pid) {
+        res = pe32.szExeFile;
+        break;
+      }
+    } while (Process32Next(hProcessSnap, &pe32));
+
+    CloseHandle(hProcessSnap);
 
     return res;
   }
@@ -161,6 +294,14 @@ namespace gta_base::common {
     return path;
   }
 
+  std::filesystem::path GetCachedPatternsDir() {
+    std::filesystem::path path = GetCachedDir() / "patterns";
+    if (!std::filesystem::exists(path)) {
+      std::filesystem::create_directories(path);
+    }
+    return path;
+  }
+
   std::filesystem::path GetSettingsDir() {
     std::filesystem::path path = GetBaseDir() / "settings";
     if (!std::filesystem::exists(path)) {
@@ -247,6 +388,24 @@ namespace gta_base::common {
     return GetGameHwnd() != nullptr;
   }
 
+  MODULEENTRY32 GetModuleFromHModule(HMODULE mod) {
+    MODULEENTRY32 mod_entry{};
+    mod_entry.dwSize = sizeof(MODULEENTRY32);
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+    if (hSnapshot == INVALID_HANDLE_VALUE) {
+      return mod_entry;
+    }
+    if (Module32First(hSnapshot, &mod_entry)) {
+      do {
+        if (mod_entry.hModule == mod) {
+          break;
+        }
+      } while (Module32Next(hSnapshot, &mod_entry));
+    }
+    CloseHandle(hSnapshot);
+    return mod_entry;
+  }
+
   std::uint64_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name) {
     std::uint64_t mod_base_addr = 0;
     HANDLE h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
@@ -266,23 +425,21 @@ namespace gta_base::common {
     return mod_base_addr;
   }
 
-  std::string GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr) {
-    std::string mod_name = "";
+  MODULEENTRY32 GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr) {
+    MODULEENTRY32 mod_entry;
     HANDLE h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
     if (h_snap != INVALID_HANDLE_VALUE) {
-      MODULEENTRY32 mod_entry;
       mod_entry.dwSize = sizeof(mod_entry);
       if (Module32First(h_snap, &mod_entry)) {
         do {
           if ((std::uint64_t)mod_entry.modBaseAddr <= addr && addr <= (std::uint64_t)mod_entry.modBaseAddr + mod_entry.modBaseSize) {
-            mod_name = mod_entry.szModule;
             break;
           }
         } while (Module32Next(h_snap, &mod_entry));
       }
     }
     CloseHandle(h_snap);
-    return mod_name;
+    return mod_entry;
   }
 
   robin_hood::unordered_map<std::uint32_t, KeyState> key_state{};

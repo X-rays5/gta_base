@@ -97,7 +97,7 @@ namespace gta_base {
       auto err_code = except->ExceptionRecord->ExceptionCode;
       if (err_code == 3765269347 && except->ExceptionRecord->ExceptionInformation[0] - 429065504 <= 2) { // MSVC cpp exception code
         auto addr = except->ContextRecord->LastExceptionFromRip;
-        std::string file_name = common::GetModuleFromAddress(GetCurrentProcessId(), addr);
+        std::string file_name = common::GetModuleNameFromAddress(GetCurrentProcessId(), addr);
         auto offset = addr - (uintptr_t)GetModuleHandleA(file_name.c_str());
         auto exception = (std::exception*)except->ExceptionRecord->ExceptionInformation[1];
 

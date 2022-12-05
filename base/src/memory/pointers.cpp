@@ -11,7 +11,7 @@
 namespace gta_base::memory {
     Pointers::Pointers() {
       kPOINTERS = this;
-      scanner::Batch main_batch;
+      scanner::CachedBatch main_batch;
 
       main_batch.add(VAR_NAME(game_state_), xorstr_("83 3D ? ? ? ? ? 75 17 8B 43 20"), [this](scanner::Handle ptr){
         game_state_ = ptr.add(2).rip().as<decltype(game_state_)>();
@@ -178,7 +178,7 @@ namespace gta_base::memory {
       });
 
       auto mem_region = scanner::Module(nullptr);
-      main_batch.run(mem_region);
+      main_batch.Run(mem_region);
 
       /**
 		 * Freemode thread restorer through VM patch

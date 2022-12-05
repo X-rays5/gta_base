@@ -5,7 +5,7 @@
 #include "json.hpp"
 #include <fstream>
 #include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
+#include <rapidjson/prettywriter.h>
 #include <rapidjson/istreamwrapper.h>
 #include <magic_enum.hpp>
 
@@ -24,6 +24,17 @@ namespace gta_base::json {
     return strbuf.GetString();
   }
 
+  rapidjson::Document FromFileStream(std::ifstream& stream) {
+    rapidjson::IStreamWrapper json_file(stream);
+    rapidjson::Document json;
+    if (json.ParseStream(json_file).HasParseError()) {
+      LOG_ERROR("Failed to parse json: {}", magic_enum::enum_name(json.GetParseError()));
+      return {};
+    }
+
+    return json;
+  }
+
   rapidjson::Document FromFile(const std::filesystem::path& path) {
     if (!std::filesystem::exists(path)) {
       LOG_ERROR("File doesn't exist: {}", path.string());
@@ -35,17 +46,11 @@ namespace gta_base::json {
       LOG_ERROR("Failed to open reader: {}", path.string());
       return {};
     }
-    rapidjson::IStreamWrapper json_file(reader);
-    rapidjson::Document json;
-    if (json.ParseStream(json_file).HasParseError()) {
-      LOG_ERROR("Failed to parse json: {}", magic_enum::enum_name(json.GetParseError()));
-      return {};
-    }
 
-    return json;
+    return FromFileStream(reader);
   }
 
-  bool ToFile(rapidjson::Document& json, const std::filesystem::path& path) {
+  bool ToFile(rapidjson::Document& json, const std::filesystem::path& path, std::size_t indent) {
     std::ofstream writer(path);
     if (!writer.is_open()) {
       LOG_ERROR("Failed to open file {} for writing", path.string());
@@ -57,7 +62,8 @@ namespace gta_base::json {
 
     rapidjson::StringBuffer str_buf;
     str_buf.Clear();
-    rapidjson::Writer<rapidjson::StringBuffer> json_writer(str_buf);
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> json_writer(str_buf);
+    json_writer.SetIndent(' ', indent);
     json.Accept(json_writer);
 
     writer << str_buf.GetString();
