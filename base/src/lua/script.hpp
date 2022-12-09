@@ -38,6 +38,12 @@ namespace gta_base::lua {
 
     static int GetCurrentLine(lua_State* L);
     static int ReadOnly(lua_State* L);
+
+    static inline std::string StackValueToString(lua_State* L, std::size_t index) {
+      return luaL_tolstring(L, index, nullptr);
+    }
+
+    static std::string FormatLuaVariadicArgs(const std::string& format, sol::variadic_args va);
   };
 }
 #endif //GTA_BASE_LUA_SCRIPT_HPP

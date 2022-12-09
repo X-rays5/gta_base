@@ -3,6 +3,7 @@
 //
 
 #include <regex>
+#include <fmt/args.h>
 #include "script.hpp"
 #include "manager.hpp"
 
@@ -131,28 +132,32 @@ namespace gta_base::lua {
   void Script::AddFunctions() {
     auto logging_metatable = lua_state_.create_table_with();
 
-    logging_metatable.set_function("info", [&](const std::string& msg) {
-      LOG_INFO("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), msg);
+    logging_metatable.set_function("info", [&](const std::string& msg, sol::variadic_args va) {
+      LOG_INFO("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
     });
 
-    logging_metatable.set_function("warn", [&](const std::string& msg) {
-      LOG_WARN("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), msg);
+    logging_metatable.set_function("warn", [&](const std::string& msg, sol::variadic_args va) {
+      LOG_WARN("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
     });
 
-    logging_metatable.set_function("error", [&](const std::string& msg) {
-      LOG_ERROR("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), msg);
+    logging_metatable.set_function("error", [&](const std::string& msg, sol::variadic_args va) {
+      LOG_ERROR("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
     });
 
-    logging_metatable.set_function("fatal", [&](const std::string& msg) {
-      LOG_CRITICAL("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), msg);
+    logging_metatable.set_function("fatal", [&](const std::string& msg, sol::variadic_args va) {
+      LOG_FATAL("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
     });
 
-    logging_metatable.set_function("debug", [&](const std::string& msg) {
+    logging_metatable.set_function("debug", [&](const std::string& msg, sol::variadic_args va) {
 #ifndef NDEBUG
-      LOG_DEBUG("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), msg);
+      LOG_DEBUG("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
 #else
       LOG_WARN("[{}:{}] This function is meanth only for development builds", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_));
 #endif
+    });
+
+    logging_metatable.set_function("format", [&](const std::string& msg, sol::variadic_args va) {
+      return FormatLuaVariadicArgs(msg, va);
     });
 
     CreateReadOnlyTable("log", logging_metatable);
@@ -187,5 +192,19 @@ namespace gta_base::lua {
 
   int Script::ReadOnly(lua_State* L) {
     return luaL_error(L, "This table is read only");
+  }
+
+  std::string Script::FormatLuaVariadicArgs(const std::string& format, sol::variadic_args va) {
+    if (!va.size())
+      return format;
+
+    fmt::dynamic_format_arg_store<fmt::format_context> ds;
+    ds.reserve(va.size(), 0);
+
+    for (auto&& arg : va) {
+      ds.push_back(StackValueToString(arg.lua_state(), arg.stack_index()));
+    }
+
+    return fmt::vformat(format, ds);
   }
 }
