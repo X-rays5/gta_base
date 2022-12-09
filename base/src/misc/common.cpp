@@ -263,7 +263,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetBaseDir() {
-    std::filesystem::path path = GetKnownFolderPath(FOLDERID_RoamingAppData) / globals::name;
+    static const std::filesystem::path path = GetKnownFolderPath(FOLDERID_RoamingAppData) / globals::name;
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -271,7 +271,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetLogDir() {
-    std::filesystem::path path = GetBaseDir() / "logs";
+    static const std::filesystem::path path = GetBaseDir() / "logs";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -283,7 +283,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetLogSaveDir() {
-    std::filesystem::path path = GetLogDir() / "save";
+    static const std::filesystem::path path = GetLogDir() / "save";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -291,7 +291,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetDataDir() {
-    std::filesystem::path path = GetBaseDir() / "data";
+    static const std::filesystem::path path = GetBaseDir() / "data";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -299,7 +299,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetCachedDir() {
-    std::filesystem::path path = GetBaseDir() / "cached";
+    static const std::filesystem::path path = GetBaseDir() / "cached";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -307,7 +307,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetCachedPatternsDir() {
-    std::filesystem::path path = GetCachedDir() / "patterns";
+    static const std::filesystem::path path = GetCachedDir() / "patterns";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -315,7 +315,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetSettingsDir() {
-    std::filesystem::path path = GetBaseDir() / "settings";
+    static const std::filesystem::path path = GetBaseDir() / "settings";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -323,7 +323,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetThemesDir() {
-    std::filesystem::path path = GetSettingsDir() / "themes";
+    static const std::filesystem::path path = GetSettingsDir() / "themes";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -331,7 +331,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetHotkeysDir() {
-    std::filesystem::path path = GetDataDir() / "hotkeys";
+    static const std::filesystem::path path = GetDataDir() / "hotkeys";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -339,7 +339,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetOptionsStateDir() {
-    std::filesystem::path path = GetDataDir() / "options_state";
+    static const std::filesystem::path path = GetDataDir() / "options_state";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -347,7 +347,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetTeleportsDir() {
-    std::filesystem::path path = GetDataDir() / "teleports";
+    static const std::filesystem::path path = GetDataDir() / "teleports";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -355,7 +355,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetTextureDir() {
-    std::filesystem::path path = GetDataDir() / "textures";
+    static const std::filesystem::path path = GetDataDir() / "textures";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -363,7 +363,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetScriptsDir() {
-    std::filesystem::path path = GetBaseDir() / "scripts";
+    static const std::filesystem::path path = GetBaseDir() / "scripts";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -371,7 +371,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetScriptsDataDir() {
-    std::filesystem::path path = GetDataDir() / "scripts";
+    static const std::filesystem::path path = GetDataDir() / "scripts";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
