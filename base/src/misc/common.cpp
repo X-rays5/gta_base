@@ -250,8 +250,20 @@ namespace gta_base::common {
     return fmt::format("{:.{}f}", num, precision);
   }
 
+  std::filesystem::path GetKnownFolderPath(const KNOWNFOLDERID& folder_id) {
+    PWSTR path = nullptr;
+    if (SUCCEEDED(SHGetKnownFolderPath(folder_id, 0, nullptr, &path))) {
+      std::filesystem::path res = path;
+      CoTaskMemFree(path);
+      return res;
+    } else {
+      LOG_ERROR("Failed to get known folder path. win32 err code: {}", GetLastError());
+      return {};
+    }
+  }
+
   std::filesystem::path GetBaseDir() {
-    std::filesystem::path path = std::filesystem::path(std::getenv("APPDATA")) / globals::name;
+    std::filesystem::path path = GetKnownFolderPath(FOLDERID_RoamingAppData) / globals::name;
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }

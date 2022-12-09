@@ -15,6 +15,7 @@
 #include <limits>
 #include <d3d11.h>
 #include <TlHelp32.h>
+#include <Shlobj.h>
 
 #ifdef LoadImage
 #undef LoadImage
@@ -92,6 +93,8 @@ namespace gta_base::common {
   std::string VkToStr(std::uint64_t vk);
 
   std::string FloatPrecision(float num, std::size_t precision = 3);
+
+  std::filesystem::path GetKnownFolderPath(const KNOWNFOLDERID& folder_id);
 
   std::filesystem::path GetBaseDir();
   std::filesystem::path GetConfigDir();
