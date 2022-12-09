@@ -13,6 +13,7 @@ namespace gta_base::lua {
     explicit Script(const std::filesystem::path& script_path);
     ~Script();
 
+    void Init();
     void Tick();
 
     sol::state* GetState() {
@@ -20,6 +21,7 @@ namespace gta_base::lua {
     }
 
   private:
+    bool first_tick_ = true;
     bool has_tick_func_ = true;
     sol::state lua_state_;
 

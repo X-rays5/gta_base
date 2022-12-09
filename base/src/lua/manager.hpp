@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <memory>
 #include <optional>
+#include <mutex>
 #include <robin_hood.h>
 #include "script.hpp"
 
@@ -23,6 +24,7 @@ namespace gta_base::lua {
     void RunScriptTick();
 
   private:
+    std::recursive_mutex mutex_;
     robin_hood::unordered_map<std::filesystem::path, std::unique_ptr<Script>> running_scripts_;
 
   };

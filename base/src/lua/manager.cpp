@@ -14,6 +14,8 @@ namespace gta_base::lua {
   }
 
   std::optional<sol::state*> Manager::AddScript(const std::filesystem::path& path) {
+    std::unique_lock lock(mutex_);
+
     auto script_path = common::GetScriptsDir() / path;
 
     auto script = std::make_unique<Script>(script_path);
@@ -23,10 +25,13 @@ namespace gta_base::lua {
   }
 
   bool Manager::RemoveScript(const std::filesystem::path& path) {
+    std::unique_lock lock(mutex_);
+
     return running_scripts_.erase(path) > 0;
   }
 
   void Manager::RunScriptTick() {
+    std::unique_lock lock(mutex_);
     for (auto& [path, script] : running_scripts_)
       script->Tick();
   }

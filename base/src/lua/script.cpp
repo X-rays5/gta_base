@@ -35,14 +35,6 @@ namespace gta_base::lua {
       LOG_ERROR(FormatSolError(script));
       return;
     }
-
-    // run init func if it exists
-    sol::protected_function_result init_result = lua_state_["Init"]();
-    if (!init_result.valid()) {
-      LOG_WARN(FormatSolError(init_result));
-    } else {
-      LOG_INFO("Successfully ran Init func for {}", script_path.filename().string());
-    }
   }
 
   Script::~Script() {
@@ -54,7 +46,21 @@ namespace gta_base::lua {
     }
   }
 
+  void Script::Init() {
+    sol::protected_function_result init_result = lua_state_["Init"]();
+    if (!init_result.valid()) {
+      LOG_WARN(FormatSolError(init_result));
+    } else {
+      LOG_INFO("Successfully ran Init func for {}", GetInternalLuaVar(lua_state_.lua_state(), "script_path"));
+    }
+  }
+
   void Script::Tick() {
+    if (first_tick_) {
+      Init();
+      first_tick_ = false;
+    }
+
     if (!has_tick_func_)
       return;
 

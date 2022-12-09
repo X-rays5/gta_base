@@ -25,7 +25,7 @@ if (lua_ADDED)
     target_include_directories(${PROJECT_NAME} PRIVATE ${sol2_SOURCE_DIR}/include)
     target_link_libraries(${PROJECT_NAME} PRIVATE lua)
 
-    target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON SOL_DEFAULT_PASS_ON_ERROR)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON SOL_DEFAULT_PASS_ON_ERROR SOL_STRINGS_ARE_NUMBERS)
 
 else()
     message(FATAL_ERROR "Failed to add lua")

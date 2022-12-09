@@ -92,8 +92,6 @@ void BaseMain() {
   auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
   LOG_INFO("Player Manager initialized");
 
-  auto lua_manager_inst = std::make_unique<lua::Manager>();
-  lua_manager_inst->AddScript("test.lua");
 
   kHOOKING->Enable();
   LOG_INFO("Hooks enabled");
@@ -128,11 +126,17 @@ void BaseMain() {
 
     while(globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
-      lua::kMANAGER->RunScriptTick();
+      if (lua::kMANAGER) {
+        lua::kMANAGER->RunScriptTick();
+      }
       std::this_thread::yield();
     }
   });
   LOG_INFO("Scripting thread started");
+
+  auto lua_manager_inst = std::make_unique<lua::Manager>();
+  LOG_INFO("Lua Manager initialized");
+  lua_manager_inst->AddScript("test.lua");
 
   LOG_INFO("Initialized");
   while (globals::running) {
@@ -142,6 +146,9 @@ void BaseMain() {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
   LOG_INFO("Unloading...");
+
+  lua_manager_inst.reset();
+  LOG_INFO("Lua Manager unloaded");
 
   if (scripting_thread.joinable())
     scripting_thread.join();
