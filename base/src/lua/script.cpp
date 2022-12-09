@@ -10,16 +10,26 @@
 namespace gta_base::lua {
   namespace {
     inline std::string FormatSolError(const sol::error& err) {
-      std::string result = err.what();
+      //std::string result = err.what();
+      //LOG_DEBUG(result);
 
-      std::regex regex(R"(([A-Za-z0-9_\-\.]+\.[A-Za-z0-9]+:\d*): ?(.*))");
+      /*std::regex regex(R"(([A-Za-z0-9_\-\.]+\.[A-Za-z0-9]+:\d*): ?(.*))");
       std::smatch match;
 
       if (std::regex_search(result, match, regex)) {
         result = fmt::format("[{}] {}", match[1].str(), match[2].str());
+      }*/
+
+      // replace all \n with \r\n
+      std::string err_str = err.what();
+      for (std::size_t i = 0; i < err_str.size(); i++) {
+        if(err_str[i] == '\n') {
+          err_str.insert(i, "\r");
+          i++;
+        }
       }
 
-      return result;
+      return fmt::format("\r\n{}", err_str);
     }
   }
 
@@ -89,16 +99,6 @@ namespace gta_base::lua {
     lua_state_.set_panic(Panic);
 
     lua_state_.set_exception_handler([](lua_State* L, sol::optional<const std::exception&> maybe_exception, sol::string_view description) -> int {
-      std::string lua_err = "A lua error occurred: ";
-      if (maybe_exception) {
-        const std::exception& exception = maybe_exception.value();
-        lua_err += exception.what();
-      } else {
-        lua_err += description;
-      }
-
-      LOG_ERROR(lua_err);
-
       return sol::stack::push(L, description);
     });
   }
