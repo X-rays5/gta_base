@@ -43,9 +43,9 @@ namespace rage::data {
       kHelicopter, // VC_HELICOPTER
     };
 
-    Vehicle(const std::string& raw_name, const std::string& raw_make, const std::string& class_name, joaat_t hash) :
-      raw_name(raw_name), display_name(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_name.c_str())),
-      raw_make(raw_make), display_make(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_make.c_str())),
+    Vehicle(std::string raw_name, std::string  raw_make, const std::string& class_name, joaat_t hash) :
+      raw_name(std::move(raw_name)), display_name(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_name.c_str())),
+      raw_make(std::move(raw_make)), display_make(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_make.c_str())),
       class_name(CorrectClassName(class_name)), vehicle_class(GetClass(this->class_name)), model_hash(hash) {}
 
     explicit Vehicle(rapidjson::Value& obj) {
@@ -242,7 +242,7 @@ namespace rage::data {
       return vehicles_class_idx_.find(veh_class)->second;
     }
 
-    inline void IterateVehicleClasses(std::function<void(const std::string&, const Vehicles&)> func) {
+    inline void IterateVehicleClasses(const std::function<void(const std::string&, const Vehicles&)>& func) {
       for (const auto& [key, value] : vehicles_class_idx_) {
         func(key, value);
       }

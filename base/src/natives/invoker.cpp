@@ -14,7 +14,7 @@ namespace rage {
     m_args = &arg_stack_[0];
   }
 
-  void ExceptionHandler(PEXCEPTION_POINTERS e, rage::scrNativeHash hash) {
+  void ExceptionHandler([[maybe_unused]] PEXCEPTION_POINTERS e, rage::scrNativeHash hash) {
     LOG_WARN("Exception caught while trying to call native with hash: 0x{:X}", hash);
   }
 

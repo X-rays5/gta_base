@@ -8,10 +8,6 @@
 #include "fonts/IconsFontAwesome6.h"
 
 namespace gta_base::ui {
-  inline float ScaleFps(float number) {
-    return number * (144.f / (ImGui::GetIO().Framerate / 2)); // framerate is 2x for some reason
-  }
-
   inline size_t CorrectPrevOptIdx(std::int64_t prev_opt_idx, std::int64_t selected_opt_idx, std::int64_t option_count, std::int64_t max_draw_options) {
     // make sure prev_opt_idx is in range of selected_opt_idx with the range of max_draw_options
     // but there are only option_count options
@@ -31,14 +27,12 @@ namespace gta_base::ui {
     return res;
   }
 
-  inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, size_t& option_before_scroll, KeyInput where_to_scroll) {
+  inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, KeyInput where_to_scroll) {
     // Could cause issues when there are only label options
     auto cur_opt = sub->GetOption(sub->GetSelectedOption());
     while(cur_opt->HasFlag(OptionFlag::kLabel)) {
       sub->HandleKey(where_to_scroll);
       cur_opt = sub->GetOption(sub->GetSelectedOption());
-
-      //option_before_scroll = sub->GetSelectedOption();
     }
   }
 
@@ -75,7 +69,7 @@ namespace gta_base::ui {
   }
 
   inline d3d::draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center, ImFont* font) const {
-    return {{x_base + x_size - 0.002f, y_pos}, color, text, true, center, font_size};
+    return {{x_base + x_size - 0.002f, y_pos}, color, text, true, center, font_size, font};
   }
 
   inline d3d::draw::Text Manager::DrawTextCenter(float y_pos, ImColor color, const std::string& text, ImFont* font) const {
@@ -83,8 +77,8 @@ namespace gta_base::ui {
       font = ImGui::GetFont();
     }
 
-    auto text_size = d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, text);
-    return {{x_base + (x_size - text_size.x) / 2, y_pos}, color, text, false, true, font_size};
+    auto text_size = d3d::draw::CalcTextSize(font, font_size, text);
+    return {{x_base + (x_size - text_size.x) / 2, y_pos}, color, text, false, true, font_size, font};
   }
 
   float Manager::CalcOptPos(size_t option_pos) const {
@@ -147,12 +141,6 @@ namespace gta_base::ui {
     if (prev_pos == target_pos) {
       pos = target_pos;
     } else {
-      if (scrollbar_reset) {
-        scrollbar_reset = false;
-        scrollbar_animation = d3d::draw::Animate(prev_pos, target_pos, 0);
-        scrollbar_prev_pos = prev_pos;
-      }
-
       if (scrollbar_prev_pos != prev_pos) {
         scrollbar_animation = d3d::draw::Animate(prev_pos, target_pos, time_between_scroll_ms);
         scrollbar_prev_pos = prev_pos;
@@ -164,7 +152,7 @@ namespace gta_base::ui {
     draw_list_->AddCommand(d3d::draw::Rect({x_base + (x_size + scrollbar_offset), pos}, {x_size_scrollbar, scroller_y_size}, secondary_color));
   }
 
-  void Manager::DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count, size_t option_idx) {
+  void Manager::DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count) {
     float pos = CalcOptPos(option_pos);
     float text_pos = pos - (y_size_option / 4);
 
@@ -209,12 +197,6 @@ namespace gta_base::ui {
     if (prev_pos == target_pos) {
       pos = target_pos;
     } else {
-      if (scroller_reset) {
-        scroller_reset = false;
-        scroller_animation = d3d::draw::Animate(prev_pos, target_pos, 0);
-        scroller_prev_pos = prev_pos;
-      }
-
       if (scroller_prev_pos != prev_pos) {
         scroller_animation = d3d::draw::Animate(prev_pos, target_pos, time_between_scroll_ms);
         scroller_prev_pos = prev_pos;
@@ -250,14 +232,14 @@ namespace gta_base::ui {
       option_before_scroll_ = cur_sub->GetSelectedOption();
       cur_sub->HandleKey(KeyInput::kUp);
 
-      SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kUp);
+      SkipLabelOpt(cur_sub, KeyInput::kUp);
 
       option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
     } else if (input_down_->Get()) {
       option_before_scroll_ = cur_sub->GetSelectedOption();
       cur_sub->HandleKey(KeyInput::kDown);
 
-      SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kDown);
+      SkipLabelOpt(cur_sub, KeyInput::kDown);
 
       option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
     } else if (input_return_->Get()) {
@@ -268,7 +250,7 @@ namespace gta_base::ui {
         cur_sub = submenus_stack_.top();
 
         cur_sub->CreateOptions();
-        SkipLabelOpt(cur_sub, option_before_scroll_, KeyInput::kDown);
+        SkipLabelOpt(cur_sub, KeyInput::kDown);
 
         option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
       }
@@ -335,7 +317,7 @@ namespace gta_base::ui {
 
         draw_list_->AddCommand(d3d::draw::Rect({x_base, y_base + y_size_top_bar}, {x_size, (option_draw_count * y_size_option)}, primary_color));
         for (int i = 0; draw_options_from < draw_options_till; draw_options_from++) {
-          DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i, cur_sub->GetOptionCount(), draw_options_from);
+          DrawOption(cur_sub->GetOption(draw_options_from), draw_options_from == cur_sub->GetSelectedOption(), i, cur_sub->GetOptionCount());
 
           i += 1;
         }

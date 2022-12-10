@@ -88,7 +88,7 @@ namespace gta_base::common {
     CHAR rgbDigits[] = "0123456789abcdef";
     std::string res;
 
-    if (!CryptAcquireContextA(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
+    if (!CryptAcquireContextA(&hProv, nullptr, nullptr, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
       LOG_ERROR("CryptAcquireContextA failed: {}", GetLastError());
       return res;
     }
@@ -192,12 +192,12 @@ namespace gta_base::common {
       res = res.substr(res.find("->") + 2);
 
     // remove array access
-    if (res.find("[") != std::string::npos)
-      res = res.substr(0, res.find("["));
+    if (res.find('[') != std::string::npos)
+      res = res.substr(0, res.find('['));
 
     // remove struct access
-    if (res.find(".") != std::string::npos)
-      res = res.substr(res.find(".") + 1);
+    if (res.find('.') != std::string::npos)
+      res = res.substr(res.find('.') + 1);
 
     // remove namespace
     if (res.find("::") != std::string::npos)

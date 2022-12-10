@@ -116,10 +116,10 @@ namespace gta_base::logger::stacktrace {
                       GetCurrentThread(),
                       &frame,
                       context,
-                      NULL,
+                      nullptr,
                       SymFunctionTableAccess64,
                       SymGetModuleBase64,
-                      NULL)) {
+                      nullptr)) {
         frame_pointers[index] = frame.AddrPC.Offset;
       }
       else {
@@ -172,7 +172,7 @@ namespace gta_base::logger::stacktrace {
     DWORD64 displacement64;
     DWORD displacement;
     char symbol_buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME];
-    SYMBOL_INFO* symbol = reinterpret_cast<SYMBOL_INFO*>(symbol_buffer);
+    auto* symbol = reinterpret_cast<SYMBOL_INFO*>(symbol_buffer);
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
     symbol->MaxNameLen = MAX_SYM_NAME;
 
@@ -188,14 +188,14 @@ namespace gta_base::logger::stacktrace {
       }
       else {
         std::string moduleName = getModuleNameFromAddress(addr);
-        if (moduleName != "") {
+        if (!moduleName.empty()) {
           lineInformation.append(" ").append(moduleName);
         }
       }
     }
     else {
       std::string moduleName = getModuleNameFromAddress(addr);
-      if (moduleName != "") {
+      if (!moduleName.empty()) {
         lineInformation.append(" ").append(moduleName);
       }
       lineInformation.append(" ").append(common::AddrToHex(addr));

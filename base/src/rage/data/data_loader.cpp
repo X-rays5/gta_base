@@ -14,7 +14,7 @@ using namespace gta_base;
 
 namespace rage::data {
   namespace {
-    constexpr static const char* build_version_key = "build_version";
+    constexpr const char* build_version_key = "build_version";
     constexpr static const char* online_version_key = "online_version";
 
     std::uint32_t VersionStrToInt(const std::string& ver) {
