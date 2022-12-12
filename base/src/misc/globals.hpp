@@ -58,6 +58,7 @@ namespace gta_base {
     constexpr static const auto target_window_class = "grcWindow";
     constexpr static const auto compile_date = __DATE__;
     constexpr static const auto compile_time = __TIME__;
+    constexpr static const auto lua_manifest_file_name = "manifest.lua";
 
     extern std::atomic<bool> running;
     extern HINSTANCE dll_handle;

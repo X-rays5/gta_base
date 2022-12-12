@@ -10,7 +10,7 @@
 namespace gta_base::lua {
   class Script {
   public:
-    explicit Script(const std::filesystem::path& script_path);
+    explicit Script(const std::filesystem::path& script_dir, const std::filesystem::path& main_file);
     ~Script();
 
     void Init();

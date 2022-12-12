@@ -33,15 +33,16 @@ namespace gta_base::lua {
     }
   }
 
-  Script::Script(const std::filesystem::path& script_path) {
+  Script::Script(const std::filesystem::path& script_dir, const std::filesystem::path& main_file) {
     LoadLibraries();
     SetExceptionHandler();
     AddFunctions();
 
     lua_state_.create_named_table("__internal");
-    SetInternalLuaVar(lua_state_, "script_path", script_path.string());
+    SetInternalLuaVar(lua_state_, "script_path", script_dir.string());
+    SetInternalLuaVar(lua_state_, "script_main_file", main_file.string());
 
-    sol::protected_function_result script = lua_state_.safe_script_file(script_path.string());
+    sol::protected_function_result script = lua_state_.safe_script_file(main_file.string());
     if (!script.valid()) {
       LOG_ERROR(FormatSolError(script));
       return;
