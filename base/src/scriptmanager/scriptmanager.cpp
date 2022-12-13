@@ -21,13 +21,7 @@ namespace gta_base {
         if (!script->IsInitialized()) {
           script->Init();
         } else {
-          if (type == scriptmanager::ScriptType::kGame) {
-            rage::util::ExecuteAsScript(RAGE_JOAAT("main_persistent"), [&] {
-              script->RunTick();
-            });
-          } else {
-            script->RunTick();
-          }
+          script->RunTick();
         }
       }
     }

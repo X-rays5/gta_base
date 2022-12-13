@@ -4,11 +4,12 @@
 
 #include "cached_batch.hpp"
 
-/*
-{
-
-}
- */
+#define UPDATE_NO_CACHE(mem_reg) auto cache_res = LoadNoCache(region); \
+  if (!cache_res.empty()) { \
+    rapidjson::Document write_json; \
+    write_json.SetObject(); \
+    WriteCacheFile(write_json, mod.szExePath, common::GetFileMd5Hash(mod.szExePath), cache_res); \
+  }
 
 namespace gta_base::memory::scanner {
   namespace {
@@ -86,13 +87,13 @@ namespace gta_base::memory::scanner {
       auto json = json::FromFileStream(opt_file.value());
       if (!json.IsObject() && !json.HasMember("patterns")) {
         LOG_ERROR("Pattern cache json invalid rebuilding...");
-        LoadNoCache(region);
+        UPDATE_NO_CACHE(region);
         return;
       }
 
       if (json::GetSafe<const char*>(json.GetObj(), "md5") != common::GetFileMd5Hash(mod.szExePath)) {
         LOG_ERROR("Pattern cache md5 mismatch rebuilding...");
-        LoadNoCache(region);
+        UPDATE_NO_CACHE(region);
         return;
       }
 
@@ -104,13 +105,7 @@ namespace gta_base::memory::scanner {
       }
     }
     else {
-      auto res = LoadNoCache(region);
-      if (!res.empty()) {
-        rapidjson::Document json;
-        json.SetObject();
-
-        WriteCacheFile(json, mod.szExePath, common::GetFileMd5Hash(mod.szExePath), res);
-      }
+      UPDATE_NO_CACHE(region);
     }
   }
 

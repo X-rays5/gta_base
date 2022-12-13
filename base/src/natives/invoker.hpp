@@ -43,6 +43,11 @@ namespace rage {
 template <typename Ret, typename ...Args>
 __forceinline Ret invoke(rage::scrNativeHash hash, Args&& ...args)
 {
+  if constexpr (!std::is_same_v<Ret, void>) {
+    return {};
+  } else {
+    return;
+  }
   using namespace rage;
 
   kINVOKER.BeginCall();

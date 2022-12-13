@@ -220,7 +220,10 @@ namespace rage::data {
         if (human_name_hash == std::string("WT_INVALID"))
           continue;
 
-        const auto display_name = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(human_name_hash);
+        auto display_name = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(human_name_hash);
+        if (!display_name)
+          display_name = "**INVALID**";
+
         const auto weapon_flags = GetItemFlags(item.child("WeaponFlags").text().as_string());
         const bool is_throwable = weapon_flags.contains("Thrown");
         const bool is_gun = weapon_flags.contains("Gun");

@@ -7,6 +7,7 @@
 #include "../d3d/renderer.hpp"
 #include "../scriptmanager/scriptmanager.hpp"
 #include "../natives/invoker.hpp"
+#include "../rage/util/exec_as_script.hpp"
 
 namespace gta_base {
   Hooking::Hooking() :
@@ -68,8 +69,26 @@ namespace gta_base {
     return d3d::Renderer::SwapChainResizeBuffer(swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
   }
 
+  inline void ScriptThreadTick() {
+    static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
+    static bool ensure_native_handlers = (rage::kINVOKER.CacheHandlers(), true);
+
+    if (globals::running) {
+      rage::util::ExecuteAsScript(RAGE_JOAAT("main_persistent"), [&] {
+        kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame);
+      });
+    }
+  }
+
   bool Hooks::RunScriptThreads(std::uint32_t ops_to_execute) {
-    try {
+    __try {
+      ScriptThreadTick();
+
+      return kHOOKING->run_script_threads_hook_.GetOriginal<decltype(&Hooks::RunScriptThreads)>()(ops_to_execute);
+    } __except (LOG_ERROR("Exception in RunScriptThreads: {}", GetExceptionInformation()->ExceptionRecord->ExceptionCode), EXCEPTION_CONTINUE_EXECUTION) {
+      return false;
+    }
+    /*try {
       static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
       static bool ensure_native_handlers = (rage::kINVOKER.CacheHandlers(), true);
 
@@ -78,9 +97,7 @@ namespace gta_base {
       }
     } catch(...) {
       LOG_WARN("Exception was thrown in RunScriptThreads");
-    }
-
-    return kHOOKING->run_script_threads_hook_.GetOriginal<decltype(&Hooks::RunScriptThreads)>()(ops_to_execute);
+    }*/
   }
 
   GtaThread* Hooks::GtaThreadStart(unsigned int** a1, unsigned int a2) {

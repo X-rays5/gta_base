@@ -21,6 +21,7 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID) {
 
       auto logger_inst = std::make_unique<gta_base::Logger>();
       LOG_INFO("Logging initialized");
+      LOG_INFO("Build date: {}, time: {}", globals::compile_date, globals::compile_time);
       try {
         BaseMain();
       } catch (std::exception& e) {

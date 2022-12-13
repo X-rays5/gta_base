@@ -46,6 +46,8 @@ namespace gta_base::hooking {
     } else {
       if (auto status = MH_EnableHook(it->second.target); status != MH_OK)
         LOG_FATAL("Failed to enable hook at idx: {} with the name: {}", index, it->second.name);
+      else
+        LOG_DEBUG("Enabled hook at idx: {} with the name: {} src -> {}, dst -> {}, og -> {}", index, it->second.name, it->second.target, it->second.detour, it->second.original);
     }
   }
 
