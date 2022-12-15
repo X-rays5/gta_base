@@ -1,2 +1,2 @@
-CPMAddPackage("gh:Tencent/rapidjson#27c3a8dc0e2c9218fe94986d249a12b5ed838f1d")
+CPMAddPackage("gh:Tencent/rapidjson#80b6d1c83402a5785c486603c5611923159d0894")
 target_include_directories(${PROJECT_NAME} PRIVATE ${rapidjson_SOURCE_DIR}/include)
