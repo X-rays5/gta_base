@@ -14,8 +14,6 @@
 #include "../../misc/json.hpp"
 #include "../joaat.hpp"
 
-#define GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE(label_name) [&label_name](){auto res = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(label_name.c_str()); if (!res) {res = "**INVALID**";} return res;}()
-
 namespace rage::data {
   struct Vehicle {
     enum class Class {
@@ -45,10 +43,13 @@ namespace rage::data {
       kHelicopter, // VC_HELICOPTER
     };
 
-    Vehicle(std::string raw_name, std::string raw_make, const std::string& class_name, joaat_t hash) :
-      raw_name(std::move(raw_name)), display_name(GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE(raw_name)),
-      raw_make(std::move(raw_make)), display_make(GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE(raw_make)),
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "modernize-pass-by-value"
+    Vehicle(const std::string& raw_name, const std::string& raw_make, const std::string& class_name, joaat_t hash) :
+      raw_name(raw_name), display_name(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_name.c_str())),
+      raw_make(raw_make), display_make(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_make.c_str())),
       class_name(CorrectClassName(class_name)), vehicle_class(GetClass(this->class_name)), model_hash(hash) {}
+#pragma clang diagnostic pop
 
     explicit Vehicle(rapidjson::Value& obj) {
       if (!obj.IsObject())
@@ -296,7 +297,5 @@ namespace rage::data {
     void InitPedsIdx();
   };
 }
-
-#undef GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE
 
 #endif //GTA_BASE_DATA_TYPES_HPP
