@@ -67,6 +67,10 @@ namespace gta_base {
     Shutdown();
   }
 
+  void Logger::Flush() {
+    spdlog::default_logger_raw()->flush();
+  }
+
   void Logger::Shutdown() {
     kLOGGER = nullptr;
 

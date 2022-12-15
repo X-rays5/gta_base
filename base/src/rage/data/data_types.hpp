@@ -14,7 +14,7 @@
 #include "../../misc/json.hpp"
 #include "../joaat.hpp"
 
-#define GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE(label_name) [&label_name](){auto res = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(label_name.c_str()); if (!res) {res = "**INVALID**"; return res;}}()
+#define GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE(label_name) [&label_name](){auto res = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(label_name.c_str()); if (!res) {res = "**INVALID**";} return res;}()
 
 namespace rage::data {
   struct Vehicle {
@@ -297,6 +297,6 @@ namespace rage::data {
   };
 }
 
-#undef GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE;
+#undef GET_FILENAME_FOR_AUDIO_CONVERSATION_SAFE
 
 #endif //GTA_BASE_DATA_TYPES_HPP

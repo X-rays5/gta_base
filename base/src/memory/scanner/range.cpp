@@ -53,7 +53,7 @@ namespace gta_base::memory::scanner {
     }
 
     //Loop data
-    for (std::size_t current_idx{}; current_idx != module_size - length;)
+    for (std::size_t current_idx{}; current_idx <= module_size - length;)
     {
       for (std::size_t sig_idx{ max_idx }; true; --sig_idx)
       {

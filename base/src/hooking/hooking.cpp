@@ -70,11 +70,12 @@ namespace gta_base {
   }
 
   inline void ScriptThreadTick() {
-    static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
-    static bool ensure_native_handlers = (rage::kINVOKER.CacheHandlers(), true);
+    rage::kINVOKER.CacheHandlers();
 
     if (globals::running) {
       rage::util::ExecuteAsScript(RAGE_JOAAT("main_persistent"), [&] {
+        static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
+
         kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame);
       });
     }
@@ -88,16 +89,6 @@ namespace gta_base {
     } __except (LOG_ERROR("Exception in RunScriptThreads: {}", GetExceptionInformation()->ExceptionRecord->ExceptionCode), EXCEPTION_CONTINUE_EXECUTION) {
       return false;
     }
-    /*try {
-      static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
-      static bool ensure_native_handlers = (rage::kINVOKER.CacheHandlers(), true);
-
-      if (globals::running) {
-        kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kGame);
-      }
-    } catch(...) {
-      LOG_WARN("Exception was thrown in RunScriptThreads");
-    }*/
   }
 
   GtaThread* Hooks::GtaThreadStart(unsigned int** a1, unsigned int a2) {

@@ -29,6 +29,8 @@ namespace gta_base {
     Logger();
     ~Logger();
 
+    void Flush();
+
   private:
     PVOID vectored_exception_handler_h_;
 

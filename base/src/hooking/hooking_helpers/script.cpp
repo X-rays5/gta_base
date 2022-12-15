@@ -56,7 +56,7 @@ namespace gta_base::hooking {
       program_ = program;
       map_.emplace(program_, this);
       vmt_hook_ = std::make_unique<VmtHook>(program_);
-      vmt_hook_->Hook("ScrProgramDetour", 0, &ScrProgramDetour);
+      vmt_hook_->Hook("ScrProgramDetour", 6, &ScrProgramDetour);
 
       for (auto [replacement_hash, replacement_handler] : native_replacements_) {
         auto hash = replacement_hash;
@@ -82,7 +82,7 @@ namespace gta_base::hooking {
         hook->program_ = nullptr;
         map_.erase(it);
 
-        auto og_func = hook->vmt_hook_->GetOriginal<decltype(&ScrProgramDetour)>(0);
+        auto og_func = hook->vmt_hook_->GetOriginal<decltype(&ScrProgramDetour)>(6);
         hook->vmt_hook_->DisableAll();
         hook->vmt_hook_.reset();
 

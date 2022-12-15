@@ -58,8 +58,8 @@ namespace gta_base::logger::stacktrace {
 
   std::string GetRegisters(PCONTEXT ctx) {
     std::stringstream res;
-
     res << "\n\rDumping registers:\n\r";
+    res << "Rip: " << common::AddrToHex(ctx->Rip) << "\n\r";
     res << "Rax: " << common::AddrToHex(ctx->Rax) << "\n\r";
     res << "Rbx: " << common::AddrToHex(ctx->Rbx) << "\n\r";
     res << "Rcx: " << common::AddrToHex(ctx->Rcx) << "\n\r";
