@@ -10,8 +10,8 @@ namespace rage {
   namespace Globals {
     namespace SessionSwitcher {
       enum Globals : std::size_t {
-        kSpectatorMode = 2726795,
-        kSessionJoinerType = 1575015,
+        kSpectatorMode = 2695915,
+        kSessionJoinerType = 1575017,
         kSessionJoinerActive = 1574589,
       };
     }
@@ -43,7 +43,7 @@ namespace rage {
     }
     namespace Misc {
       enum Globals : std::size_t {
-        kTransitionState = 1574991,
+        kTransitionState = 1574993,
       };
     }
   }
