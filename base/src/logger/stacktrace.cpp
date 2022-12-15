@@ -58,24 +58,24 @@ namespace gta_base::logger::stacktrace {
 
   std::string GetRegisters(PCONTEXT ctx) {
     std::stringstream res;
-    res << "\n\rDumping registers:\n\r";
-    res << "Rip: " << common::AddrToHex(ctx->Rip) << "\n\r";
-    res << "Rax: " << common::AddrToHex(ctx->Rax) << "\n\r";
-    res << "Rbx: " << common::AddrToHex(ctx->Rbx) << "\n\r";
-    res << "Rcx: " << common::AddrToHex(ctx->Rcx) << "\n\r";
-    res << "Rdx: " << common::AddrToHex(ctx->Rdx) << "\n\r";
-    res << "Rsi: " << common::AddrToHex(ctx->Rsi) << "\n\r";
-    res << "Rdi: " << common::AddrToHex(ctx->Rdi) << "\n\r";
-    res << "RSp: " << common::AddrToHex(ctx->Rsp) << "\n\r";
-    res << "Rbp: " << common::AddrToHex(ctx->Rbp) << "\n\r";
-    res << "R8: " << common::AddrToHex(ctx->R8) << "\n\r";
-    res << "R9: " << common::AddrToHex(ctx->R9) << "\n\r";
-    res << "R10: " << common::AddrToHex(ctx->R10) << "\n\r";
-    res << "R11: " << common::AddrToHex(ctx->R11) << "\n\r";
-    res << "R12: " << common::AddrToHex(ctx->R12) << "\n\r";
-    res << "R13: " << common::AddrToHex(ctx->R13) << "\n\r";
-    res << "R14: " << common::AddrToHex(ctx->R14) << "\n\r";
-    res << "R15: " << common::AddrToHex(ctx->R15) << "\n\r";
+    res << "\nDumping registers:\n";
+    res << "Rip: " << common::AddrToHex(ctx->Rip) << "\n";
+    res << "Rax: " << common::AddrToHex(ctx->Rax) << "\n";
+    res << "Rbx: " << common::AddrToHex(ctx->Rbx) << "\n";
+    res << "Rcx: " << common::AddrToHex(ctx->Rcx) << "\n";
+    res << "Rdx: " << common::AddrToHex(ctx->Rdx) << "\n";
+    res << "Rsi: " << common::AddrToHex(ctx->Rsi) << "\n";
+    res << "Rdi: " << common::AddrToHex(ctx->Rdi) << "\n";
+    res << "RSp: " << common::AddrToHex(ctx->Rsp) << "\n";
+    res << "Rbp: " << common::AddrToHex(ctx->Rbp) << "\n";
+    res << "R8: " << common::AddrToHex(ctx->R8) << "\n";
+    res << "R9: " << common::AddrToHex(ctx->R9) << "\n";
+    res << "R10: " << common::AddrToHex(ctx->R10) << "\n";
+    res << "R11: " << common::AddrToHex(ctx->R11) << "\n";
+    res << "R12: " << common::AddrToHex(ctx->R12) << "\n";
+    res << "R13: " << common::AddrToHex(ctx->R13) << "\n";
+    res << "R14: " << common::AddrToHex(ctx->R14) << "\n";
+    res << "R15: " << common::AddrToHex(ctx->R15) << "\n";
 
     return res.str();
   }
@@ -210,7 +210,7 @@ namespace gta_base::logger::stacktrace {
     const size_t kSize = frame_pointers.size();
     for (size_t index = 0; index < kSize && frame_pointers[index]; ++index) {
       dump += getSymbolInformation(index, frame_pointers);
-      dump += "\n\r";
+      dump += "\n";
     }
     return dump;
   }
@@ -251,16 +251,16 @@ namespace gta_base::logger::stacktrace {
 #endif
 
     std::stringstream msg;
-    msg << "\n\r***** EXCEPTION RECEIVED *****\n";
-    msg << "\n\r***** Received fatal exception: " << ExceptionCodeToStr(except_rec->ExceptionCode) << " pid: " << _getpid() << " module: " << GetFileExceptionOccured(except_rec) << " *****\n";
-    msg << "\r***** Exception code: " << common::AddrToHex(except_rec->ExceptionCode) << " *****\n";
-    msg << "\r***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
-    msg << "\r***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
+    msg << "\n***** EXCEPTION RECEIVED *****\n";
+    msg << "\n***** Received fatal exception: " << ExceptionCodeToStr(except_rec->ExceptionCode) << " pid: " << _getpid() << " module: " << GetFileExceptionOccured(except_rec) << " *****\n";
+    msg << "***** Exception code: " << common::AddrToHex(except_rec->ExceptionCode) << " *****\n";
+    msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
+    msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
 
-    msg << "\n\r***** STACKDUMP *****\n";
+    msg << "\n***** STACKDUMP *****\n";
 
     if (RECURSIVE_CRASH_CHECK >= 2) {
-      msg << "\n\n\n\r***** Recursive crash detected aborting stackdump traversal. *****\n\n\n";
+      msg << "\n\n\n***** Recursive crash detected aborting stackdump traversal. *****\n\n\n";
       return msg.str();
     }
     RECURSIVE_CRASH_CHECK += 1;
@@ -277,12 +277,12 @@ namespace gta_base::logger::stacktrace {
         SymCleanup(GetCurrentProcess());
       });
 
-      msg << "\n\rLoaded Modules:\n\r";
+      msg << "\nLoaded Modules:\n";
       std::map<std::string, std::pair<uint64_t, uint64_t>> map;
       getAllModuleInfos(&map);
       for (auto const& [key, val] : map) {
         msg << key + " Base Address: " + common::AddrToHex(val.first) + " Size: " + common::AddrToHex(val.second);
-        msg << "\n\r";
+        msg << "\n";
       }
 
       msg << GetRegisters(ctx);
@@ -290,7 +290,7 @@ namespace gta_base::logger::stacktrace {
       const size_t kmax_frame_dump_size = 64;
       std::vector<uint64_t>  frame_pointers(kmax_frame_dump_size);
       captureStackTrace(ctx, frame_pointers);
-      msg << "\n\r" << convertFramesToText(frame_pointers) << "\n\r";
+      msg << "\n" << convertFramesToText(frame_pointers) << "\n";
 
       return RemoveDoubleSpaces(msg.str());
     }

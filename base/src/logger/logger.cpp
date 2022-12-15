@@ -11,7 +11,7 @@ namespace gta_base {
   void SetConsoleMode(HANDLE console_handle) {
     DWORD console_mode;
     GetConsoleMode(console_handle, &console_mode);
-    console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
+    console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     console_mode &= ~(ENABLE_QUICK_EDIT_MODE);
 
     ::SetConsoleMode(console_handle, console_mode);
