@@ -49,7 +49,6 @@ namespace gta_base::common {
     iss.str(str);
     iss >> res;
 
-    LOG_DEBUG("Lexical cast from {} to {} succeeded", str, typeid(T).name());
     return res;
   }
 

@@ -14,7 +14,6 @@
 namespace gta_base::memory::scanner {
   namespace {
     inline std::filesystem::path GetFilePath(const std::filesystem::path& mod_path) {
-      LOG_DEBUG("Getting file path for {}", common::RemoveForbiddenFilenameChars(mod_path));
       return fmt::format("{}/{}.patterns", common::GetCachedPatternsDir().string(), common::RemoveForbiddenFilenameChars(mod_path));
     }
 

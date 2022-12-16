@@ -105,7 +105,6 @@ void BaseMain() {
   }
 
   auto discord_thread = std::thread([]{
-    LOG_DEBUG("discord thread first tick");
     while(globals::running) {
       rpc::kDISCORD->SetLargeImage("gta-logo");
       if (common::IsSessionStarted()) {
@@ -122,8 +121,6 @@ void BaseMain() {
   LOG_INFO("Started Discord thread");
 
   auto scripting_thread = std::thread([]{
-    LOG_DEBUG("scripting thread first tick");
-
     while(globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
       if (lua::kMANAGER) {
