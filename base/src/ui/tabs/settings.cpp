@@ -45,7 +45,6 @@ namespace gta_base::ui::tabs {
       }
 
       for (std::size_t i = 0; i < lua_manifests.size(); i++) {
-        // This should be omitted from the script list
         if (lua_manifests[i].GetHiddenLib())
           continue;
 
@@ -73,7 +72,7 @@ namespace gta_base::ui::tabs {
         auto license_file = manifest.GetLicenseFile();
         sub->AddOption(option::ExecuteOption("option/lua_script_license", license_file.has_value() ? *license_file : "", nullptr, false))->SetRightTextKey(*license);
       }
-      if (auto authors = manifest.GetAuthors(); !authors.has_value()) {
+      if (auto authors = manifest.GetAuthors(); authors.has_value()) {
         sub->AddOption(option::LabelOption("label/lua_script_authors"));
         for (auto& author : *authors)
           sub->AddOption(option::ExecuteOption("option/lua_script_author", "", nullptr, false))->SetRightTextKey(author);
