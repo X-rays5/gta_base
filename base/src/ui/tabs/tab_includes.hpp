@@ -5,6 +5,7 @@
 #pragma once
 #ifndef GTA_BASE_TAB_INCLUDES_HPP
 #define GTA_BASE_TAB_INCLUDES_HPP
+#include "../components/options/disabled_option.hpp"
 #include "../components/options/execute_option.hpp"
 #include "../components/options/submenu_option.hpp"
 #include "../components/options/number_option.hpp"

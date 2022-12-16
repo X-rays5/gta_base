@@ -113,6 +113,7 @@ namespace gta_base::ui {
       ImColor secondary_color = ImColor(255,255,255);
       ImColor scroller_color = ImColor(255,255,255);
       ImColor text_color = ImColor(255,255,255);
+      ImColor text_color_disabled = ImColor(100,100,100);
       ImColor selected_text_color = ImColor(0,0,0);
 
       float font_size = 0.018f;

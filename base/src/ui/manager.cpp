@@ -30,7 +30,7 @@ namespace gta_base::ui {
   inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, KeyInput where_to_scroll) {
     // Could cause issues when there are only label options
     auto cur_opt = sub->GetOption(sub->GetSelectedOption());
-    while(cur_opt->HasFlag(OptionFlag::kLabel)) {
+    while(cur_opt->HasFlag(OptionFlag::kLabel) || cur_opt->HasFlag(OptionFlag::kDisabled)) {
       sub->HandleKey(where_to_scroll);
       cur_opt = sub->GetOption(sub->GetSelectedOption());
     }
@@ -163,6 +163,10 @@ namespace gta_base::ui {
         prev_opt = option_pos;
       if (DrawScroller(CalcOptPos(prev_opt), pos))
         text_color_tmp = selected_text_color;
+    }
+
+    if (option->HasFlag(OptionFlag::kDisabled)) {
+      text_color_tmp = text_color_disabled;
     }
 
     auto name = option->GetName();

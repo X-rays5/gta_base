@@ -40,6 +40,7 @@ namespace gta_base::ui::tabs {
             LOG_DEBUG("Test ExecuteOption");
           }));
           sub->AddOption(option::ToggleOption("Test ToggleOption", "", &test_value_b));
+          sub->AddOption(option::DisabledOption("Test DisabledOption"));
           sub->AddOption(option::NumberOption<float>("Test NumberOption", "", &test_value_f, 0.5, 0, 10))->OnEvent([](Event event){
             if (event == Event::kChange)
               LOG_DEBUG("Test NumberOption {}", test_value_f);
