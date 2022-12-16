@@ -12,7 +12,7 @@
 #include <memory>
 #include <functional>
 #include <mutex>
-#include "options/baseoption.hpp"
+#include "options/base_option.hpp"
 #include "enums.hpp"
 #include "../../misc/hotkey_manager.hpp"
 

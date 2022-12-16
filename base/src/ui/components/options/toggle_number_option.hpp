@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_TOGGLENUMBEROPTION_HPP
-#define GTA_BASE_TOGGLENUMBEROPTION_HPP
-#include "baseoption.hpp"
+#ifndef GTA_BASE_TOGGLE_NUMBER_OPTION_HPP
+#define GTA_BASE_TOGGLE_NUMBER_OPTION_HPP
+#include "base_option.hpp"
 
 namespace gta_base::ui::option {
       template<typename T>
@@ -123,4 +123,4 @@ namespace gta_base::ui::option {
         }
       };
     }
-#endif //GTA_BASE_TOGGLENUMBEROPTION_HPP
+#endif //GTA_BASE_TOGGLE_NUMBER_OPTION_HPP

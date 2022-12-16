@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_STACKTRACE_HPP
-#define GTA_BASE_STACKTRACE_HPP
+#ifndef GTA_BASE_STACK_TRACE_HPP
+#define GTA_BASE_STACK_TRACE_HPP
 #include <string>
 
 namespace gta_base::logger::stacktrace {
@@ -16,4 +16,4 @@ namespace gta_base::logger::stacktrace {
   std::string GetExceptionString(PEXCEPTION_POINTERS except);
   std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx);
 }
-#endif //GTA_BASE_STACKTRACE_HPP
+#endif //GTA_BASE_STACK_TRACE_HPP

@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_TOGGLEOPTION_HPP
-#define GTA_BASE_TOGGLEOPTION_HPP
-#include "baseoption.hpp"
+#ifndef GTA_BASE_TOGGLE_OPTION_HPP
+#define GTA_BASE_TOGGLE_OPTION_HPP
+#include "base_option.hpp"
 
 namespace gta_base::ui::option {
       class ToggleOption : public BaseOption {
@@ -50,4 +50,4 @@ namespace gta_base::ui::option {
         bool* toggle_;
       };
     }
-#endif //GTA_BASE_TOGGLEOPTION_HPP
+#endif //GTA_BASE_TOGGLE_OPTION_HPP

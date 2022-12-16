@@ -405,7 +405,17 @@ namespace gta_base::common {
   }
 
   bool IsTargetProcess() {
-    return GetGameHwnd() != nullptr;
+    auto exe_name = new CHAR[MAX_PATH];
+    std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name, MAX_PATH);
+
+    if (str_len == 0) {
+      LOG_ERROR("Failed to get module file name. win32 err code: {}", GetLastError());
+      return false;
+    }
+
+    bool is_target_process = std::filesystem::path(std::string(exe_name, str_len)).filename().string() == globals::target_process_name;
+    delete[] exe_name;
+    return is_target_process;
   }
 
   MODULEENTRY32 GetModuleFromHModule(HMODULE mod) {
@@ -462,7 +472,7 @@ namespace gta_base::common {
     return mod_entry;
   }
 
-  robin_hood::unordered_map<std::uint32_t, KeyState> key_state{};
+  static robin_hood::unordered_map<std::uint32_t, KeyState> key_state{};
   bool IsKeyDown(std::uint32_t key) {
     auto key_entry = key_state.find(key);
 

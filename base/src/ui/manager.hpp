@@ -15,7 +15,7 @@
 #include "notification/notification.hpp"
 #include "translation/translation_manager.hpp"
 #include "../misc/hotkey_manager.hpp"
-#include "../misc/timedinput.hpp"
+#include "../misc/timed_input.hpp"
 #include "../d3d/draw.hpp"
 
 namespace gta_base::ui {

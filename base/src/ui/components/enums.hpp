@@ -38,7 +38,6 @@ namespace gta_base::ui {
 
     enum class OptionFlag {
       kDisabled,
-      kRightIcon,
       kRightText,
       kSubmenuLink,
       kHotkeyable,

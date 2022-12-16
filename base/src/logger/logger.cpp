@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <chrono>
 #include "logger.hpp"
-#include "stacktrace.hpp"
+#include "stack_trace.hpp"
 
 namespace gta_base {
   void SetConsoleMode(HANDLE console_handle) {

@@ -2,7 +2,7 @@
 // Created by X-ray on 07/02/22.
 //
 
-#include "timedinput.hpp"
+#include "timed_input.hpp"
 #include "common.hpp"
 
 namespace gta_base::util {

@@ -1,25 +1,24 @@
 //
-// Created by X-ray on 08/26/22.
+// Created by X-ray on 07/30/22.
 //
 
 #pragma once
-#ifndef GTA_BASE_TOGGLELISTOPTION_HPP
-#define GTA_BASE_TOGGLELISTOPTION_HPP
-#include "baseoption.hpp"
+#ifndef GTA_BASE_LIST_OPTION_HPP
+#define GTA_BASE_LIST_OPTION_HPP
+#include "base_option.hpp"
 
 namespace gta_base::ui::option {
       template<typename T>
-      class ToggleListOption : public BaseOption {
+      class ListOption : public BaseOption {
       public:
-        explicit ToggleListOption(const std::string& name_key, const std::string& description_key, bool& toggle, std::size_t& idx, std::vector<T>& items, bool saveable = true, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), toggle_(&toggle), idx_(&idx), items_(&items)
+        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool saveable = true, bool hotkeyable = true) :
+          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), idx_(&idx), items_(&items)
         {
           UpdateRightText();
         }
 
         void HandleKey(KeyInput key) final {
           if (key == KeyInput::kReturn || key == KeyInput::kHotkey) {
-            *toggle_ = !*toggle_;
             SendEvent(Event::kSelect);
           } else if (key == KeyInput::kLeft) {
             if (*idx_ > 0) {
@@ -51,10 +50,6 @@ namespace gta_base::ui::option {
             return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
             return hotkeyable_;
-          } else if (flag == OptionFlag::kToggle) {
-            return true;
-          } else if (flag == OptionFlag::kToggled) {
-            return *toggle_;
           } else if (flag == OptionFlag::kSavable) {
             return saveable_;
           }
@@ -63,22 +58,18 @@ namespace gta_base::ui::option {
         }
 
         std::string GetSaveVal() final {
-          return fmt::format("{}##{}", *idx_, static_cast<int>(*toggle_));
+          return std::to_string(*idx_);
         }
 
         void SetSavedVal(const std::string& val) final {
-          if (auto pos = val.find("##"); pos != std::string::npos) {
-            *toggle_ = std::stoi(val.substr(pos + 2));
-            std::size_t tmp = std::stoull(val.substr(0, pos));
-            if (tmp < items_->size())
-              *idx_ = tmp;
-            else
-              LOG_WARN("{}: invalid idx saved", GetName());
-          }
+          std::size_t tmp = std::stoull(val);
+          if (tmp < items_->size())
+            *idx_ = tmp;
+          else
+            LOG_WARN("{}: invalid idx saved", GetName());
         }
 
       private:
-        bool* toggle_;
         std::size_t* idx_;
         std::vector<T>* items_;
 
@@ -88,4 +79,4 @@ namespace gta_base::ui::option {
         }
       };
     }
-#endif //GTA_BASE_TOGGLELISTOPTION_HPP
+#endif //GTA_BASE_LIST_OPTION_HPP

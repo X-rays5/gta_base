@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_NUMBEROPTION_HPP
-#define GTA_BASE_NUMBEROPTION_HPP
-#include "baseoption.hpp"
+#ifndef GTA_BASE_NUMBER_OPTION_HPP
+#define GTA_BASE_NUMBER_OPTION_HPP
+#include "base_option.hpp"
 #include "../keyboard.hpp"
 #include "../../../scripts/scripting/job_queue.hpp"
 
@@ -132,4 +132,4 @@ namespace gta_base::ui::option {
         }
       };
     }
-#endif //GTA_BASE_NUMBEROPTION_HPP
+#endif //GTA_BASE_NUMBER_OPTION_HPP

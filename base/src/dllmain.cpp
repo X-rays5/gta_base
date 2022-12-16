@@ -15,13 +15,16 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID) {
   if (call_reason == DLL_PROCESS_ATTACH) {
     globals::dll_handle = dll_handle;
     CreateThread(nullptr, 0, [](LPVOID) -> DWORD {
-      if (!IsTargetProcess()) {
-        FreeLibraryAndExitThread(globals::dll_handle, 0);
-      }
-
       auto logger_inst = std::make_unique<gta_base::Logger>();
       LOG_INFO("Logging initialized");
       LOG_INFO("Build date: {}, time: {}", globals::compile_date, globals::compile_time);
+
+      if (!IsTargetProcess()) {
+        LOG_INFO("Shutting logging down...");
+        logger_inst.reset();
+        FreeLibraryAndExitThread(globals::dll_handle, 0);
+      }
+
       try {
         BaseMain();
       } catch (std::exception& e) {

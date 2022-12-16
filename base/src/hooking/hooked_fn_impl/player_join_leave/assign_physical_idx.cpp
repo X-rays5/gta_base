@@ -9,7 +9,6 @@
 namespace gta_base {
   void* Hooks::AssignPlayerPhysicalIdx(CNetworkPlayerMgr* netPlayerMgr, CNetGamePlayer* player, uint8_t new_index) {
     auto slot = player->m_player_id;
-
     auto res = kHOOKING->assign_physical_index_hook_.GetOriginal<decltype(&Hooks::AssignPlayerPhysicalIdx)>()(netPlayerMgr, player, new_index);
 
     // leaving

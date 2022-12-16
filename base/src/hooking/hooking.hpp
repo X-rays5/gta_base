@@ -17,7 +17,6 @@
 
 namespace gta_base {
   struct Hooks {
-    static constexpr auto swapchain_num_funcs = 18;
     static constexpr auto swapchain_present_index = 8;
     static constexpr auto swapchain_resizebuffers_index = 13;
     static HRESULT Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags);

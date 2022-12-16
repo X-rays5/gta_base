@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_TIMEDINPUT_HPP
-#define GTA_BASE_TIMEDINPUT_HPP
+#ifndef GTA_BASE_TIMED_INPUT_HPP
+#define GTA_BASE_TIMED_INPUT_HPP
 
 namespace gta_base::util {
     class TimedInput {
@@ -34,4 +34,4 @@ namespace gta_base::util {
       std::uint64_t timeout_;
     };
   }
-#endif //GTA_BASE_TIMEDINPUT_HPP
+#endif //GTA_BASE_TIMED_INPUT_HPP

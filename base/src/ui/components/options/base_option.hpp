@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef GTA_BASE_BASEOPTION_HPP
-#define GTA_BASE_BASEOPTION_HPP
+#ifndef GTA_BASE_BASE_OPTION_HPP
+#define GTA_BASE_BASE_OPTION_HPP
 #include <filesystem>
 #include <utility>
 #include <functional>
@@ -17,8 +17,8 @@ namespace gta_base::ui::option {
       public:
         using on_event_t = std::function<void(Event)>;
 
-        explicit BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", const std::string& icon_path = "", bool saveable = true, bool hotkeyable = true, on_event_t event_handler = nullptr) :
-          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), icon_path_(icon_path), saveable_(saveable), hotkeyable_(hotkeyable), event_handler_(std::move(event_handler))
+        explicit BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", bool saveable = true, bool hotkeyable = true, on_event_t event_handler = nullptr) :
+          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), saveable_(saveable), hotkeyable_(hotkeyable), event_handler_(std::move(event_handler))
         {}
 
         inline std::string GetName() {
@@ -61,14 +61,6 @@ namespace gta_base::ui::option {
           right_text_key_ = std::move(right_text_key);
         }
 
-        inline std::filesystem::path GetIconPath() {
-          return icon_path_;
-        }
-
-        inline void SetIconPath(const std::filesystem::path& icon_path) {
-          icon_path_ = icon_path;
-        }
-
         inline void OnEvent(on_event_t handler) {
           event_handler_ = std::move(handler);
         }
@@ -82,7 +74,6 @@ namespace gta_base::ui::option {
         std::string description_key_;
         std::string center_text_key_;
         std::string right_text_key_;
-        std::filesystem::path icon_path_;
         bool saveable_;
         bool hotkeyable_;
         on_event_t event_handler_;
@@ -94,4 +85,4 @@ namespace gta_base::ui::option {
         }
       };
     }
-#endif //GTA_BASE_BASEOPTION_HPP
+#endif //GTA_BASE_BASE_OPTION_HPP

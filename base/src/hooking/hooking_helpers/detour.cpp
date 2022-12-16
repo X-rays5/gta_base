@@ -42,8 +42,9 @@ namespace gta_base::hooking {
     void DetourHook::FixHookAddress() {
       __try {
         auto ptr = memory::scanner::Handle(target_);
-        while (ptr.as<std::uint8_t&>() == 0xE9)
-        ptr = ptr.add(1).rip();
+        while (ptr.as<std::uint8_t&>() == 0xE9) {
+          ptr = ptr.add(1).rip();
+        }
         target_ = ptr.as<void*>();
       } __except (ExpHandler(GetExceptionInformation(), name_)) {
         [this]() {

@@ -3,10 +3,10 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_LABELOPTION_HPP
-#define GTA_BASE_LABELOPTION_HPP
+#ifndef GTA_BASE_LABEL_OPTION_HPP
+#define GTA_BASE_LABEL_OPTION_HPP
 #include <format>
-#include "baseoption.hpp"
+#include "base_option.hpp"
 
 namespace gta_base::ui::option {
       class LabelOption : public BaseOption {
@@ -28,4 +28,4 @@ namespace gta_base::ui::option {
         }
       };
     }
-#endif //GTA_BASE_LABELOPTION_HPP
+#endif //GTA_BASE_LABEL_OPTION_HPP

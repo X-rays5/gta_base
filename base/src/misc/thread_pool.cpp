@@ -21,8 +21,6 @@ namespace gta_base::misc {
       CreateThreads(thread_count);
     }
 
-    CreateThreads(thread_count);
-
     kTHREAD_POOL = this;
   }
 

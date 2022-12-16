@@ -67,8 +67,8 @@ namespace gta_base::d3d {
       HWND hwnd_;
       ImFont* roboto_ = nullptr;
       ImFont* roboto_bold_ = nullptr;
-      std::uint64_t delta_time_;
-      std::uint64_t last_time_;
+      std::uint64_t delta_time_{};
+      std::uint64_t last_time_{};
 
     private:
       void InitD3D();

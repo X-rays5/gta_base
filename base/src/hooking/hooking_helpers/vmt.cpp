@@ -70,8 +70,9 @@ namespace gta_base::hooking {
   void VmtHook::FixHookAddress(const std::string& name, LPVOID target) {
     __try {
       auto ptr = memory::scanner::Handle(target);
-      while (ptr.as<std::uint8_t&>() == 0xE9)
-      ptr = ptr.add(1).rip();
+      while (ptr.as<std::uint8_t&>() == 0xE9) {
+        ptr = ptr.add(1).rip();
+      }
       target = ptr.as<void*>();
     } __except (ExpHandler(GetExceptionInformation(), name)) {
       [&name]() {

@@ -4,11 +4,11 @@
 
 #pragma once
 
-#ifndef GTA_BASE_SUBMENUOPTION_HPP
-#define GTA_BASE_SUBMENUOPTION_HPP
+#ifndef GTA_BASE_SUBMENU_OPTION_HPP
+#define GTA_BASE_SUBMENU_OPTION_HPP
 #include <utility>
 
-#include "baseoption.hpp"
+#include "base_option.hpp"
 #include "../../manager.hpp"
 
 namespace gta_base::ui::option {
@@ -43,4 +43,4 @@ namespace gta_base::ui::option {
         action_t action_;
       };
     }
-#endif //GTA_BASE_SUBMENUOPTION_HPP
+#endif //GTA_BASE_SUBMENU_OPTION_HPP
