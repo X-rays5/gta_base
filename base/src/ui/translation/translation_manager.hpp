@@ -13,7 +13,6 @@
 #include <robin_hood.h>
 #include <xorstr.hpp>
 
-
 #define ADD_TRANSLATION(key, trans) {xorstr_(key), xorstr_(trans)}
 
 namespace gta_base::ui {

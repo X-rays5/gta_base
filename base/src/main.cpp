@@ -136,8 +136,6 @@ void BaseMain() {
 
   auto lua_manager_inst = std::make_unique<lua::Manager>();
   LOG_INFO("Lua Manager initialized");
-  lua_manager_inst->AddScriptRaw(common::GetScriptsDir() / "test.lua");
-  lua_manager_inst->AddScript("hello_world");
 
   LOG_INFO("Initialized");
   while (globals::running) {

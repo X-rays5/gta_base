@@ -23,7 +23,6 @@ namespace gta_base {
       std::vector<std::pair<std::string, std::string>> save_vals;
       ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt){
         if (opt->HasFlag(ui::OptionFlag::kSavable)) {
-          LOG_DEBUG("save {}", opt->GetName());
           std::pair<std::string, std::string> save = {std::string(opt->GetNameKey()), opt->GetSaveVal()};
           save_vals.emplace_back(save);
         }
