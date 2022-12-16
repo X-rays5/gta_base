@@ -306,6 +306,14 @@ namespace gta_base::common {
     return path;
   }
 
+  std::filesystem::path GetGtaDataCacheDir() {
+    static const std::filesystem::path path = GetCachedDir() / "gta_data";
+    if (!std::filesystem::exists(path)) {
+      std::filesystem::create_directories(path);
+    }
+    return path;
+  }
+
   std::filesystem::path GetCachedPatternsDir() {
     static const std::filesystem::path path = GetCachedDir() / "patterns";
     if (!std::filesystem::exists(path)) {

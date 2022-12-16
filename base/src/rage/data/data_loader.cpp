@@ -28,7 +28,7 @@ namespace rage::data {
       root[build_version_key] = VersionStrToInt(memory::kPOINTERS->gta_build_version_);
       root[online_version_key] = VersionStrToInt(memory::kPOINTERS->gta_online_version_);
 
-      auto cache_file = common::GetCachedDir() / "version.json";
+      auto cache_file = common::GetGtaDataCacheDir() / "version.json";
       std::ofstream out_file(cache_file);
       if (!out_file.is_open()) {
         LOG_ERROR("Failed to open {} for writing the cache version", cache_file.string());
@@ -55,7 +55,7 @@ namespace rage::data {
         root[i] = obj;
       }
 
-      auto cache_file = common::GetCachedDir() / "vehicles.json";
+      auto cache_file = common::GetGtaDataCacheDir() / "vehicles.json";
       std::ofstream out_file(cache_file);
       if (!out_file.is_open()) {
         LOG_ERROR("Failed to open {} for writing the vehicle cache", cache_file.string());
@@ -88,7 +88,7 @@ namespace rage::data {
         root[i] = obj;
       }
 
-      auto cache_file = common::GetCachedDir() / "weapons.json";
+      auto cache_file = common::GetGtaDataCacheDir() / "weapons.json";
       std::ofstream out_file(cache_file);
       if (!out_file.is_open()) {
         LOG_ERROR("Failed to open {} for writing the weapon cache", cache_file.string());
@@ -112,7 +112,7 @@ namespace rage::data {
         root[i] = obj;
       }
 
-      auto cache_file = common::GetCachedDir() / "peds.json";
+      auto cache_file = common::GetGtaDataCacheDir() / "peds.json";
       std::ofstream out_file(cache_file);
       if (!out_file.is_open()) {
         LOG_ERROR("Failed to open {} for writing the ped cache", cache_file.string());
@@ -123,15 +123,15 @@ namespace rage::data {
   }
 
   bool Loader::ShouldRebuildCache() {
-    auto vehicle_cache = common::GetCachedDir() / "vehicles.json";
-    auto weapon_cache = common::GetCachedDir() / "weapons.json";
-    auto ped_cache = common::GetCachedDir() / "peds.json";
+    auto vehicle_cache = common::GetGtaDataCacheDir() / "vehicles.json";
+    auto weapon_cache = common::GetGtaDataCacheDir() / "weapons.json";
+    auto ped_cache = common::GetGtaDataCacheDir() / "peds.json";
 
     if (!std::filesystem::exists(vehicle_cache) || !std::filesystem::exists(weapon_cache) || !std::filesystem::exists(ped_cache)) {
       return true;
     }
 
-    auto json = json::FromFile(common::GetCachedDir() / "version.json");
+    auto json = json::FromFile(common::GetGtaDataCacheDir() / "version.json");
     if (!json.IsObject())
       return true;
 
@@ -327,7 +327,7 @@ namespace rage::data {
   Vehicles Loader::LoadVehiclesFromCache() {
     LOG_INFO("Loading vehicles from cache");
     Vehicles res;
-    auto file = common::GetCachedDir() / "vehicles.json";
+    auto file = common::GetGtaDataCacheDir() / "vehicles.json";
     if (!std::filesystem::exists(file)) {
       LOG_ERROR("Failed to load vehicles from cache: file not found {}", file.string());
       return res;
@@ -349,7 +349,7 @@ namespace rage::data {
   Weapons Loader::LoadWeaponsFromCache() {
     LOG_INFO("Loading weapons from cache");
     Weapons res;
-    auto file = common::GetCachedDir() / "weapons.json";
+    auto file = common::GetGtaDataCacheDir() / "weapons.json";
     if (!std::filesystem::exists(file)) {
       LOG_ERROR("Failed to load weapons from cache: file not found {}", file.string());
       return res;
@@ -371,7 +371,7 @@ namespace rage::data {
   Peds Loader::LoadPedsFromCache() {
     LOG_INFO("Loading peds from cache");
     Peds res;
-    auto file = common::GetCachedDir() / "peds.json";
+    auto file = common::GetGtaDataCacheDir() / "peds.json";
     if (!std::filesystem::exists(file)) {
       LOG_ERROR("Failed to load peds from cache: file not found {}", file.string());
       return res;
