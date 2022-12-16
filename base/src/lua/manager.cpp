@@ -115,4 +115,20 @@ namespace gta_base::lua {
 
     return paths;
   }
+
+  std::vector<Manifest> Manager::GetScriptManifests() {
+    std::vector<Manifest> res;
+
+    for (auto&& path : GetScriptPaths()) {
+      Manifest manifest(path);
+      if (!manifest.Valid()) {
+        LOG_WARN("Failed to load manifest for: {}", path.string());
+        continue;
+      }
+
+      res.emplace_back(std::move(manifest));
+    }
+
+    return res;
+  }
 }

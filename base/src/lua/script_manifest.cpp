@@ -28,6 +28,8 @@ namespace gta_base::lua {
     }
     auto lua_state = std::move(*lua_state_opt);
 
+    root_path_ = script_dir;
+
     auto main_file = lua_state["main_file"];
     if (main_file.valid() && main_file.get_type() == sol::type::string) {
       main_file_ = (script_dir / main_file.get<std::string>()).string();

@@ -17,6 +17,7 @@ namespace gta_base::ui::tabs {
       globals::gta_data.IterateVehicleClasses([&](const std::string& class_name, const rage::data::Vehicles& vehicles){
         sub->AddOption(option::SubmenuOption(class_name, "", Submenus::VehicleSpawnerSelectedCategory, [&]{
           selected_category_spawner = class_name;
+          kMANAGER->GetSubmenu(Submenus::VehicleSpawnerSelectedCategory)->SetSelectedOption(0);
         }));
       });
     });

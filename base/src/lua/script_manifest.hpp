@@ -21,22 +21,26 @@ namespace gta_base::lua {
     explicit Manifest(const std::filesystem::path& script_dir);
 
     bool Valid() {
-      return !main_file_.empty() && !name_.empty() && !version_.empty() && !main_file_.empty();
+      return !main_file_.empty() && !name_.empty() && !version_.empty();
     }
 
-    [[nodiscard]] std::string_view GetMainFile() const {
+    [[nodiscard]] std::filesystem::path GetScriptDir() const {
+      return root_path_;
+    }
+
+    [[nodiscard]] std::string GetMainFile() const {
       return main_file_;
     }
 
-    [[nodiscard]] std::string_view GetName() const {
+    [[nodiscard]] std::string GetName() const {
       return name_;
     }
 
-    [[nodiscard]] std::optional<std::string_view> GetDescription() const {
+    [[nodiscard]] std::optional<std::string> GetDescription() const {
       return description_.empty() ? std::nullopt : std::optional(description_);
     }
 
-    [[nodiscard]] std::string_view GetVersion() const {
+    [[nodiscard]] std::string GetVersion() const {
       return version_;
     }
 
@@ -44,15 +48,15 @@ namespace gta_base::lua {
       return authors_.empty() ? std::nullopt : std::optional(authors_);
     }
 
-    [[nodiscard]] std::optional<std::string_view> GetRepository() const {
+    [[nodiscard]] std::optional<std::string> GetRepository() const {
       return repository_.empty() ? std::nullopt : std::optional(repository_);
     }
 
-    [[nodiscard]] std::optional<std::string_view> GetLicense() const {
+    [[nodiscard]] std::optional<std::string> GetLicense() const {
       return license_.empty() ? std::nullopt : std::optional(license_);
     }
 
-    [[nodiscard]] std::optional<std::string_view> GetLicenseFile() const {
+    [[nodiscard]] std::optional<std::string> GetLicenseFile() const {
       return license_file_.empty() ? std::nullopt : std::optional(license_file_);
     }
 
@@ -61,6 +65,8 @@ namespace gta_base::lua {
     }
 
   private:
+    /// Path to directory script is in
+    std::filesystem::path root_path_;
     /// File where the Init, Tick, Shutdown functions are located
     std::string main_file_;
     /// The name of the package.

@@ -32,6 +32,8 @@ namespace gta_base::lua {
 
     /// Get all scripts in the scripts directory
     static std::vector<std::filesystem::path> GetScriptPaths();
+    /// Get the manifests for all scripts in the scripts dir
+    static std::vector<Manifest> GetScriptManifests();
 
   private:
     std::recursive_mutex mutex_;
