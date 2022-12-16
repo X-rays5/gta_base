@@ -52,18 +52,14 @@ namespace gta_base::lua {
   Script::~Script() {
     sol::protected_function_result shutdown_result = lua_state_["Shutdown"]();
     if (!shutdown_result.valid()) {
-      LOG_WARN(FormatSolError(shutdown_result));
-    } else {
-      LOG_INFO("Successfully ran Shutdown func for {}", std::filesystem::path(GetInternalLuaVar(lua_state_.lua_state(), "script_path")).filename().string());
+      LOG_WARN("{} doesn't have a Shutdown function", GetInternalLuaVar(lua_state_, "script_main_file"));
     }
   }
 
   void Script::Init() {
     sol::protected_function_result init_result = lua_state_["Init"]();
     if (!init_result.valid()) {
-      LOG_WARN(FormatSolError(init_result));
-    } else {
-      LOG_INFO("Successfully ran Init func for {}", GetInternalLuaVar(lua_state_.lua_state(), "script_path"));
+      LOG_ERROR("{} doesn't have a Init function", GetInternalLuaVar(lua_state_, "script_main_file"));
     }
   }
 
