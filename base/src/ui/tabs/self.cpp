@@ -9,7 +9,6 @@
 namespace gta_base::ui::tabs {
       void SelfTab() {
         kMANAGER->AddSubmenu(Submenus::Player, "tab/title/self", [](Submenu* sub) {
-          sub->AddOption(option::LabelOption("test"));
           auto player = rage::GetLocalPed();
           sub->AddOption(option::SubmenuOption("tab/title/player_health", "", Submenus::PlayerHealth));
           sub->AddOption(option::ExecuteOption("option/teleport_to_last_vehicle", "", []{

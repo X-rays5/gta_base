@@ -57,6 +57,7 @@ namespace gta_base::ui::tabs {
       lua::Manifest& manifest = lua_manifests[selected_lua_manifest];
 
       sub->AddOption(option::ExecuteOption("option/load_lua_script", "", [&]{lua::kMANAGER->AddScript(manifest.GetScriptDir());}));
+      sub->AddOption(option::ExecuteOption("option/unload_lua_script", "", [&]{lua::kMANAGER->RemoveScript(manifest.GetScriptDir());}));
       sub->AddOption(option::ExecuteOption("option/reload_lua_script", "", [&]{
         lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
         lua::kMANAGER->AddScript(manifest.GetScriptDir());
