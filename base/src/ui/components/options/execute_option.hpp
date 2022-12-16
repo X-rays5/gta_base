@@ -15,8 +15,8 @@ namespace gta_base::ui::option {
       public:
         using action_t = std::function<void()>;
 
-        explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", false, hotkeyable), action_(std::move(action))
+        explicit ExecuteOption(const std::string& name_key, const std::string& description_key = "", action_t action = []{}, bool hotkey_able = true) :
+          BaseOption(name_key, description_key, "", "", false, hotkey_able), action_(std::move(action))
         {}
 
         void HandleKey(KeyInput key) final {
@@ -32,10 +32,8 @@ namespace gta_base::ui::option {
         bool HasFlag(OptionFlag flag) final {
           if (flag == OptionFlag::kRightText) {
             return right_text_key_.empty();
-          } else if (flag == OptionFlag::kRightIcon) {
-            return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return hotkeyable_;
+            return hotkey_able_;
           }
 
           return false;

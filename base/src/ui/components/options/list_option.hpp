@@ -11,8 +11,8 @@ namespace gta_base::ui::option {
       template<typename T>
       class ListOption : public BaseOption {
       public:
-        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool saveable = true, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), idx_(&idx), items_(&items)
+        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool save_able = true, bool hotkey_able = true) :
+          BaseOption(name_key, description_key, "", "", save_able, hotkey_able), idx_(&idx), items_(&items)
         {
           UpdateRightText();
         }
@@ -46,12 +46,10 @@ namespace gta_base::ui::option {
         bool HasFlag(OptionFlag flag) final {
           if (flag == OptionFlag::kRightText) {
             return right_text_key_.empty();
-          } else if (flag == OptionFlag::kRightIcon) {
-            return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return hotkeyable_;
+            return hotkey_able_;
           } else if (flag == OptionFlag::kSavable) {
-            return saveable_;
+            return save_able_;
           }
 
           return false;

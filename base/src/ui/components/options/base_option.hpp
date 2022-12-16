@@ -17,8 +17,8 @@ namespace gta_base::ui::option {
       public:
         using on_event_t = std::function<void(Event)>;
 
-        explicit BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", bool saveable = true, bool hotkeyable = true, on_event_t event_handler = nullptr) :
-          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), saveable_(saveable), hotkeyable_(hotkeyable), event_handler_(std::move(event_handler))
+        explicit BaseOption(std::string name_key = "", std::string description_key = "", std::string center_text_key_ = "", std::string right_text_key = "", bool save_able = true, bool hotkey_able = true, on_event_t event_handler = nullptr) :
+          name_key_(std::move(name_key)), description_key_(std::move(description_key)), center_text_key_(std::move(center_text_key_)), right_text_key_(std::move(right_text_key)), save_able_(save_able), hotkey_able_(hotkey_able), event_handler_(std::move(event_handler))
         {}
 
         inline std::string GetName() {
@@ -74,8 +74,8 @@ namespace gta_base::ui::option {
         std::string description_key_;
         std::string center_text_key_;
         std::string right_text_key_;
-        bool saveable_;
-        bool hotkeyable_;
+        bool save_able_;
+        bool hotkey_able_;
         on_event_t event_handler_;
 
       protected:

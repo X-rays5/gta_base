@@ -12,8 +12,8 @@ namespace gta_base::ui::option {
       requires std::integral<T> or std::floating_point<T>
       class ToggleNumberOption : public BaseOption {
       public:
-        explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max, bool saveable = true, bool hotkeyable = true) :
-          BaseOption(name_key, description_key, "", "", "", saveable, hotkeyable), toggle_(&toggle), value_(&value), step_(step), min_(min), max_(max)
+        explicit ToggleNumberOption(const std::string& name_key, const std::string& description_key, bool& toggle, T& value, T step, T min, T max, bool save_able = true, bool hotkey_able = true) :
+          BaseOption(name_key, description_key, "", "", save_able, hotkey_able), toggle_(&toggle), value_(&value), step_(step), min_(min), max_(max)
         {
           UpdateRightText();
         }
@@ -67,16 +67,14 @@ namespace gta_base::ui::option {
         bool HasFlag(OptionFlag flag) final {
           if (flag == OptionFlag::kRightText) {
             return right_text_key_.empty();
-          } else if (flag == OptionFlag::kRightIcon) {
-            return icon_path_.string().empty();
           } else if (flag == OptionFlag::kHotkeyable) {
-            return hotkeyable_;
+            return hotkey_able_;
           } else if (flag == OptionFlag::kToggle) {
             return true;
           } else if (flag == OptionFlag::kToggled) {
             return *toggle_;
           } else if (flag == OptionFlag::kSavable) {
-            return saveable_;
+            return save_able_;
           }
 
           return false;
