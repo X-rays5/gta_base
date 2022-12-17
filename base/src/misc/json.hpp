@@ -23,7 +23,7 @@
 
 namespace gta_base::json {
   template<typename T>
-  T GetSafe(rapidjson::Value& json, const std::string& key) {
+  inline T GetSafe(rapidjson::Value& json, const std::string& key) {
     if (!json.IsObject())
       return T{};
 

@@ -178,6 +178,8 @@ namespace gta_base::d3d::draw {
 
   class BaseDrawCommand {
   public:
+    virtual inline ~BaseDrawCommand() = default;
+
     virtual inline void Draw() = 0;
   };
 
