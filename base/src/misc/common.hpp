@@ -96,7 +96,7 @@ namespace gta_base::common {
   std::filesystem::path GetKnownFolderPath(const KNOWNFOLDERID& folder_id);
 
   std::filesystem::path GetBaseDir();
-  std::filesystem::path GetConfigDir();
+  std::filesystem::path GetTranslationDir();
   std::filesystem::path GetLogDir();
   std::filesystem::path GetLogFile();
   std::filesystem::path GetLogSaveDir();

@@ -6,6 +6,7 @@
 #include "../d3d/renderer.hpp"
 #include "components/keyboard.hpp"
 #include "fonts/IconsFontAwesome6.h"
+#include "../settings/profile.hpp"
 
 namespace gta_base::ui {
   inline size_t CorrectPrevOptIdx(std::int64_t prev_opt_idx, std::int64_t selected_opt_idx, std::int64_t option_count, std::int64_t max_draw_options) {
@@ -49,7 +50,19 @@ namespace gta_base::ui {
     input_modify_value_ = std::make_unique<util::ModifierTimedInput>(VK_CONTROL, VK_RETURN, 200);
 
     notification_inst_ = std::make_unique<Notification>();
-    translation_manager_inst_ = std::make_unique<TranslationManager>(); // TODO: Set to translation from current language
+
+    translation_manager_inst_ = std::make_unique<TranslationManager>();
+    auto translation_file = settings::profile::GetSelectedTranslation();
+    if (!translation_file.empty()) {
+      auto translation = std::make_shared<Translation>(std::filesystem::path(common::GetTranslationDir() / (translation_file + ".json")));
+      translation_manager_inst_->SetActiveTranslation(std::move(translation));
+      settings::profile::SetSelectedTranslation(translation_file);
+      LOG_INFO("Loaded translation file {}", translation_file);
+    } else {
+      translation_manager_inst_->SetActiveTranslation(std::move(std::make_shared<Translation>()));
+      settings::profile::SetSelectedTranslation("default");
+    }
+
     hotkey_manager_inst_ = std::make_unique<misc::HotkeyManager>();
 
     common::LoadImage("test.png", &img_header);

@@ -270,6 +270,14 @@ namespace gta_base::common {
     return path;
   }
 
+  std::filesystem::path GetTranslationDir() {
+    static const std::filesystem::path path = GetBaseDir() / "translations";
+    if (!std::filesystem::exists(path)) {
+      std::filesystem::create_directories(path);
+    }
+    return path;
+  }
+
   std::filesystem::path GetLogDir() {
     static const std::filesystem::path path = GetBaseDir() / "logs";
     if (!std::filesystem::exists(path)) {
@@ -339,7 +347,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetHotkeysDir() {
-    static const std::filesystem::path path = GetDataDir() / "hotkeys";
+    static const std::filesystem::path path = GetSettingsDir() / "hotkeys";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
@@ -347,7 +355,7 @@ namespace gta_base::common {
   }
 
   std::filesystem::path GetOptionsStateDir() {
-    static const std::filesystem::path path = GetDataDir() / "options_state";
+    static const std::filesystem::path path = GetSettingsDir() / "options_state";
     if (!std::filesystem::exists(path)) {
       std::filesystem::create_directories(path);
     }
