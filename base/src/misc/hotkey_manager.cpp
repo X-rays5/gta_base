@@ -145,10 +145,6 @@ namespace gta_base::misc {
     }
 
     void HotkeyManager::Save(const std::string& name) {
-      auto path = common::GetSettingsDir() / "hotkeys.json";
-
-      std::ofstream writer(path);
-
       rapidjson::Document json;
       json.SetObject();
 
