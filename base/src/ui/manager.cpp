@@ -57,18 +57,26 @@ namespace gta_base::ui {
     notification_inst_ = std::make_unique<Notification>();
 
     translation_manager_inst_ = std::make_unique<TranslationManager>();
-    auto translation_file = settings::profile::GetSelectedTranslation();
-    if (!translation_file.empty()) {
-      auto translation = std::make_shared<Translation>(std::filesystem::path(common::GetTranslationDir() / (translation_file + ".json")));
+    auto translation_name = settings::profile::GetSelectedTranslation();
+    if (!translation_name.empty()) {
+      auto translation = std::make_shared<Translation>(std::filesystem::path(common::GetTranslationDir() / (translation_name + ".json")));
       translation_manager_inst_->SetActiveTranslation(std::move(translation));
-      settings::profile::SetSelectedTranslation(translation_file);
-      LOG_INFO("Loaded translation file {}", translation_file);
+      settings::profile::SetSelectedTranslation(translation_name);
+      LOG_INFO("Loaded translation file {}", translation_name);
     } else {
       translation_manager_inst_->SetActiveTranslation(std::move(std::make_shared<Translation>()));
       settings::profile::SetSelectedTranslation("default");
     }
 
     hotkey_manager_inst_ = std::make_unique<misc::HotkeyManager>();
+    auto hotkey_profile_name = settings::profile::GetSelectedHotkeyProfile();
+    if (!hotkey_profile_name.empty()) {
+      hotkey_manager_inst_->Load(hotkey_profile_name);
+      LOG_INFO("Loaded hotkey profile file {}", hotkey_profile_name);
+    } else {
+      settings::profile::SetSelectedHotkeyProfile("default");
+      hotkey_manager_inst_->Load(hotkey_profile_name);
+    }
 
     common::LoadImage("test.png", &img_header);
 

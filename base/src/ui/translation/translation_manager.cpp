@@ -8,12 +8,18 @@
 
 namespace gta_base::ui {
   Translation::Translation() {
-    translation_ = translation::default_translation;
-
     auto default_translation_path = common::GetTranslationDir() / "default.json";
     if (!std::filesystem::exists(default_translation_path)) {
       LOG_INFO("Default translation file not found, creating one...");
       SaveToFile(default_translation_path);
+    } else {
+      bool outdated;
+      translation_ = MergeDefaultTranslation(translation_, &outdated);
+
+      if (outdated) {
+        LOG_INFO("Default translation file outdated, updating...");
+        SaveToFile(default_translation_path);
+      }
     }
   }
 

@@ -5,6 +5,7 @@
 #include "settings.hpp"
 #include "tab_includes.hpp"
 #include "../../lua/manager.hpp"
+#include "../components/keyboard.hpp"
 #include "../../settings/profile.hpp"
 
 namespace gta_base::ui::tabs {
@@ -16,6 +17,11 @@ namespace gta_base::ui::tabs {
 
     std::string active_translation;
     std::vector<std::filesystem::path> translation_paths{};
+
+    bool hotkey_save_on_exit = false;
+    bool hotkey_save_on_change = false;
+    std::string active_hotkey_profile;
+    std::vector<std::filesystem::path> hotkey_profile_paths{};
   }
 
   void SettingsTab() {
@@ -23,6 +29,11 @@ namespace gta_base::ui::tabs {
 
     active_translation = settings::profile::GetSelectedTranslation();
     translation_paths = TranslationManager::GetTranslationList();
+
+    hotkey_save_on_exit = misc::kHOTKEY_MANAGER->GetSaveOnExit();
+    hotkey_save_on_change = misc::kHOTKEY_MANAGER->GetSaveOnChange();
+    active_hotkey_profile = settings::profile::GetSelectedHotkeyProfile();
+    hotkey_profile_paths = misc::HotkeyManager::GetHotkeyProfileList();
 
     kMANAGER->AddSubmenu(Submenus::Settings, "tab/title/setting", [](Submenu* sub) {
       sub->AddOption(option::SubmenuOption("tab/title/lua_settings", "", Submenus::SettingsLua));
@@ -100,15 +111,73 @@ namespace gta_base::ui::tabs {
       }
     });
 
-    kMANAGER->AddSubmenu(Submenus::SettingsHotkeys, "tab/title/hotkeys", [](Submenu* sub){
-      for (auto&& hotkey : misc::kHOTKEY_MANAGER->GetAllHotkeys()) {
-        sub->AddOption(option::SubmenuOption(hotkey.second, "", Submenus::HotkeysConfirmDelete, [=]{
-          hotkey_delete_key_id = hotkey.first;
-        }))->SetRightTextKey(common::VkToStr(hotkey.first));
+    kMANAGER->AddSubmenu(Submenus::SettingsHotkeys, "tab/title/hotkeys", [](Submenu* sub) {
+      sub->AddOption(option::SubmenuOption("tab/title/hotkey_profiles", "", Submenus::HotkeyProfiles));
+      sub->AddOption(option::ToggleOption("option/hotkey_save_on_exit", "", &hotkey_save_on_exit, false, false))->OnEvent([](Event event){
+        if (event == Event::kChange) {
+          if (misc::kHOTKEY_MANAGER->GetSaveOnExit() == hotkey_save_on_exit) {
+            LOG_WARN("Hotkey manager and ui save_on_exit out of sync");
+          }
+          misc::kHOTKEY_MANAGER->SetSaveOnExit(hotkey_save_on_exit);
+          hotkey_save_on_change = misc::kHOTKEY_MANAGER->GetSaveOnChange();
+        }
+      });
+      sub->AddOption(option::ToggleOption("option/hotkey_save_on_change", "", &hotkey_save_on_change, false, false))->OnEvent([](Event event){
+        if (event == Event::kChange) {
+          if (misc::kHOTKEY_MANAGER->GetSaveOnChange() == hotkey_save_on_change) {
+            LOG_WARN("Hotkey manager and ui save_on_change out of sync");
+          }
+          misc::kHOTKEY_MANAGER->SetSaveOnChange(hotkey_save_on_change);
+          hotkey_save_on_exit = misc::kHOTKEY_MANAGER->GetSaveOnExit();
+        }
+      });
+      sub->AddOption(option::LabelOption("label/hotkey_list"));
+      const auto hotkeys = misc::kHOTKEY_MANAGER->GetAllHotkeys();
+      if (hotkeys.empty()) {
+        sub->AddOption(option::ExecuteOption("option/no_hotkeys", "", nullptr, false));
+        return;
+      } else {
+        for (auto&& hotkey : hotkeys) {
+          sub->AddOption(option::SubmenuOption(hotkey.second, "", Submenus::HotkeysConfirmDelete, [=]{
+            hotkey_delete_key_id = hotkey.first;
+          }))->SetRightTextKey(common::VkToStr(hotkey.first));
+        }
       }
     });
 
-    kMANAGER->AddSubmenu(Submenus::HotkeysConfirmDelete, ("tab/title/delete_hotkey"), [](Submenu* sub){
+    kMANAGER->AddSubmenu(Submenus::HotkeyProfiles, "tab/title/hotkey_profiles", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("option/active_hotkey_profile", "", nullptr, false))->SetRightTextKey(active_hotkey_profile);
+      sub->AddOption(option::ExecuteOption("option/refresh_hotkey_profile_list", "", []{hotkey_profile_paths = misc::HotkeyManager::GetHotkeyProfileList();}, false));
+      sub->AddOption(option::ExecuteOption("option/hotkey_save_current_as", "", []{
+        keyboard::kMANAGER->ShowKeyboard("hotkey_profile_name", [](const std::string& name, keyboard::Result res_state){
+          if (res_state == keyboard::Result::kDone && !name.empty()) {
+            misc::kTHREAD_POOL->AddJob([=]{
+              misc::kHOTKEY_MANAGER->Save(name);
+              settings::profile::SetSelectedHotkeyProfile(name);
+              hotkey_profile_paths = misc::HotkeyManager::GetHotkeyProfileList();
+            });
+          }
+        });
+      }, false));
+      sub->AddOption(option::LabelOption("label/hotkey_profile_list"));
+      if (hotkey_profile_paths.empty()) {
+        [[unlikely]]
+        sub->AddOption(option::ExecuteOption("option/no_hotkey_profiles", "", nullptr, false));
+        return;
+      } else {
+        [[likely]]
+        for (auto&& path : hotkey_profile_paths) {
+          sub->AddOption(option::ExecuteOption(path.stem().string(), "", [&] {
+            misc::kHOTKEY_MANAGER->Load(path.stem().string());
+
+            active_hotkey_profile = path.stem().string();
+            settings::profile::SetSelectedHotkeyProfile(active_hotkey_profile);
+          }, false));
+        }
+      }
+    });
+
+    kMANAGER->AddSubmenu(Submenus::HotkeysConfirmDelete, "tab/title/delete_hotkey", [](Submenu* sub){
       sub->AddOption(option::ExecuteOption("confirm/yes", "", []{
         misc::kHOTKEY_MANAGER->RemoveHotkey(hotkey_delete_key_id);
         kMANAGER->PopSubmenu();

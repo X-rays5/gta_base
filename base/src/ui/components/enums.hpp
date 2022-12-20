@@ -30,6 +30,7 @@ namespace gta_base::ui {
       SettingsTranslation,
       SettingsTheme,
       SettingsHotkeys,
+      HotkeyProfiles,
       HotkeysConfirmDelete,
       SettingsUnloadConfirm,
       Debug,

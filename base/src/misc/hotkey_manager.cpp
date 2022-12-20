@@ -7,16 +7,17 @@
 #include "json.hpp"
 #include "common.hpp"
 #include "../ui/manager.hpp"
+#include "../settings/profile.hpp"
 
 namespace gta_base::misc {
     HotkeyManager::HotkeyManager() {
-      Load();
       kHOTKEY_MANAGER = this;
     }
 
     HotkeyManager::~HotkeyManager() {
       kHOTKEY_MANAGER = nullptr;
-      Save();
+      if (!save_on_exit_)
+        Save(settings::profile::GetSelectedHotkeyProfile());
     }
 
     void HotkeyManager::StartHotkeyAdd(const std::string& key_str) {
@@ -52,7 +53,7 @@ namespace gta_base::misc {
       return false;
     }
 
-    bool HotkeyManager::AddHotkey(std::string key_str, std::uint64_t key_id) {
+    bool HotkeyManager::AddHotkey(const std::string& key_str, std::uint64_t key_id) {
       if (hotkey_list_.contains(key_str)) {
         ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Hotkey for {} already exists", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
         return false;
@@ -68,6 +69,9 @@ namespace gta_base::misc {
 
       LOG_INFO("Created hotkey for {} with id {}", ui::kTRANSLATION_MANAGER->Get(key_str), common::VkToStr(key_id));
 
+      if (save_on_change_)
+        Save(settings::profile::GetSelectedHotkeyProfile());
+
       return true;
     }
 
@@ -80,6 +84,9 @@ namespace gta_base::misc {
       hotkeys_.erase(hotkeys_.find(hotkey_id));
       ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("{} has been deleted", ui::kTRANSLATION_MANAGER->Get(hotkey_name)));
       LOG_INFO("Deleted hotkey: {}", hotkey_name);
+
+      if (save_on_change_)
+        Save(settings::profile::GetSelectedHotkeyProfile());
 
       return true;
     }
@@ -103,25 +110,41 @@ namespace gta_base::misc {
       }
     }
 
-    void HotkeyManager::Load() {
-      auto path = common::GetSettingsDir() / "hotkeys.json";
-      if (!std::filesystem::is_regular_file(path))
+    void HotkeyManager::Load(const std::string& name) {
+      if (name.empty())
         return;
+
+      auto path = common::GetHotkeysDir() / (name + ".json");
+      if (!std::filesystem::is_regular_file(path)) {
+        LOG_ERROR("Tried to load non-existent hotkey profile {}", path.string());
+        return;
+      }
 
       auto json = json::FromFile(path);
-      if (!json.IsObject())
+      if (!json.IsObject() || !json.HasMember("save_on_change") || !json.HasMember("save_on_exit") || !json.HasMember("hotkeys")) {
+        LOG_ERROR("Failed to load hotkey malformed profile {}", path.string());
         return;
+      }
 
-      for (auto&& hotkey : json.GetObject()) {
+      hotkeys_.clear();
+      hotkey_list_.clear();
+
+      for (auto&& hotkey : json["hotkeys"].GetObject()) {
         if (!hotkey.value.Is<std::int64_t>())
           continue;
 
         if (!AddHotkey(hotkey.name.GetString(), hotkey.value.Get<std::int64_t>()))
           LOG_WARN("Failed to load {} hotkey from hotkeys file", hotkey.name.GetString());
       }
+
+      // only set it here to avoid issues with saving while loading
+      save_on_change_ = json::GetSafe<bool>(json.GetObj(), "save_on_change");
+      save_on_exit_ = json::GetSafe<bool>(json.GetObj(), "save_on_exit");
+
+      settings::profile::SetSelectedHotkeyProfile(name);
     }
 
-    void HotkeyManager::Save() {
+    void HotkeyManager::Save(const std::string& name) {
       auto path = common::GetSettingsDir() / "hotkeys.json";
 
       std::ofstream writer(path);
@@ -129,12 +152,17 @@ namespace gta_base::misc {
       rapidjson::Document json;
       json.SetObject();
 
+      json.AddMember("save_on_change", save_on_change_, json.GetAllocator());
+      json.AddMember("save_on_exit", save_on_exit_, json.GetAllocator());
+
+      rapidjson::Value hotkeys(rapidjson::kObjectType);
       for (auto&& hotkey : hotkeys_) {
         auto key = json::StringToJsonVal(hotkey.second, json.GetAllocator());
-        json.AddMember(key, hotkey.first, json.GetAllocator());
+        hotkeys.AddMember(key, hotkey.first, json.GetAllocator());
       }
+      json.AddMember("hotkeys", hotkeys, json.GetAllocator());
 
-      json::ToFile(json, path);
+      json::ToFile(json, common::GetHotkeysDir() / (name + ".json"));
     }
 
     std::string HotkeyManager::GetHotkeyKeyStr(std::uint64_t hotkey_id) {
@@ -149,5 +177,16 @@ namespace gta_base::misc {
 
   robin_hood::unordered_map<std::uint64_t, std::string> HotkeyManager::GetAllHotkeys() const {
     return hotkeys_;
+  }
+
+  std::vector<std::filesystem::path> HotkeyManager::GetHotkeyProfileList() {
+    std::vector<std::filesystem::path> profiles;
+
+    for (auto&& file : std::filesystem::directory_iterator(common::GetHotkeysDir())) {
+      if (file.is_regular_file() && file.path().extension() == ".json")
+        profiles.push_back(file.path());
+    }
+
+    return profiles;
   }
 }
