@@ -64,7 +64,7 @@ namespace gta_base::misc {
       }
 
       hotkey_list_.insert(key_str);
-      hotkeys_[key_id] = std::move(key_str);
+      hotkeys_[key_id] = key_str;
 
       LOG_INFO("Created hotkey for {} with id {}", ui::kTRANSLATION_MANAGER->Get(key_str), common::VkToStr(key_id));
 
