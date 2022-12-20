@@ -26,6 +26,9 @@ namespace gta_base::misc {
       void StartHotkeyAdd(const std::string& key_str);
       bool AddKeyPressed(std::uint64_t key_id);
 
+      bool IsHotkey(const std::string& key_str) {
+        return hotkey_list_.contains(key_str);
+      }
       bool AddHotkey(std::string key_str, std::uint64_t key_id);
       bool RemoveHotkey(std::uint64_t hotkey_id);
 
@@ -36,6 +39,7 @@ namespace gta_base::misc {
     private:
       uint64_t adding_hotkey_expire_ = 0;
       std::string adding_hotkey_name_;
+      robin_hood::unordered_set<std::string> hotkey_list_;
       robin_hood::unordered_map<std::uint64_t, std::string> hotkeys_;
 
     private:

@@ -45,7 +45,6 @@ namespace gta_base::misc {
           adding_hotkey_expire_ = 0;
           return true;
         } else {
-          ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Hotkey for {} already exists", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
           adding_hotkey_expire_ = 0;
         }
       }
@@ -54,13 +53,22 @@ namespace gta_base::misc {
     }
 
     bool HotkeyManager::AddHotkey(std::string key_str, std::uint64_t key_id) {
-      auto entry = hotkeys_.find(key_id);
-      if (entry == hotkeys_.end()) {
-        hotkeys_[key_id] = std::move(key_str);
-        return true;
+      if (hotkey_list_.contains(key_str)) {
+        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Hotkey for {} already exists", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
+        return false;
       }
 
-      return false;
+      if (hotkeys_.contains(key_id)) {
+        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("A hotkey with the key {} already exists", common::VkToStr(key_id)));
+        return false;
+      }
+
+      hotkey_list_.insert(key_str);
+      hotkeys_[key_id] = std::move(key_str);
+
+      LOG_INFO("Created hotkey for {} with id {}", ui::kTRANSLATION_MANAGER->Get(key_str), common::VkToStr(key_id));
+
+      return true;
     }
 
     bool HotkeyManager::RemoveHotkey(std::uint64_t hotkey_id) {
@@ -68,6 +76,7 @@ namespace gta_base::misc {
       if (hotkey_name.empty())
         return false;
 
+      hotkey_list_.erase(hotkey_name);
       hotkeys_.erase(hotkeys_.find(hotkey_id));
       ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("{} has been deleted", ui::kTRANSLATION_MANAGER->Get(hotkey_name)));
       LOG_INFO("Deleted hotkey: {}", hotkey_name);

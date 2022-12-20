@@ -101,6 +101,7 @@ namespace gta_base::ui {
       float x_base = 0.025f;
       float x_size_scrollbar = 0.003f;
       float y_size_top_bar = 0.025f;
+      float y_size_separator = 0.002f;
       float y_size_bottom_bar = y_size_top_bar;
       float y_size_option = y_size_top_bar;
       float y_size_header = 0.1f;
@@ -135,6 +136,7 @@ namespace gta_base::ui {
       std::unique_ptr<util::TimedInput> input_return_;
       std::unique_ptr<util::TimedInput> input_back_;
       std::unique_ptr<util::TimedInput> input_create_hotkey_;
+      std::unique_ptr<util::TimedInput> input_save_opt;
       std::unique_ptr<util::ModifierTimedInput> input_modify_value_;
 
       size_t option_before_scroll_ = -1;
@@ -163,7 +165,8 @@ namespace gta_base::ui {
       inline void DrawScrollBarScroller(float prev_pos, float target_pos, float scroller_y_size);
       inline void DrawOption(const std::shared_ptr<option::BaseOption>& option, bool selected, size_t option_pos, size_t sub_option_count);
       inline bool DrawScroller(float prev_pos, float target_pos);
-      inline void DrawDescriptionText(const std::string& description, size_t option_count) const;
+      inline float DrawDescriptionText(const std::string& description, size_t option_count) const;
+      inline void DrawHintText(option::BaseOption* opt, size_t option_count, bool description_drawn, float y_size_description) const;
       inline void HandleKeyInput(std::shared_ptr<Submenu>& cur_sub);
     };
     inline Manager* kMANAGER;

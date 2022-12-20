@@ -82,5 +82,9 @@ namespace gta_base::ui {
     ADD_TRANSLATION("option/ypos/desc", "Set the Y position of the UI."),
     ADD_TRANSLATION("option/max_options", "Max Options"),
     ADD_TRANSLATION("option/max_options/desc", "Set the max options displayed at once."),
+    ADD_TRANSLATION("hint/keyboard_input", "ALT+ENTER to input value"),
+    ADD_TRANSLATION("hint/set_hotkey", "F1 to set hotkey"),
+    ADD_TRANSLATION("hint/hotkey_already_set", "Hotkey already set"),
+    ADD_TRANSLATION("hint/press_to_save", "Press F11 to save"),
   };
 }

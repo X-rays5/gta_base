@@ -47,6 +47,7 @@ namespace gta_base::ui {
     input_return_ = std::make_unique<util::TimedInput>(VK_RETURN, 300);
     input_back_ = std::make_unique<util::TimedInput>(VK_BACK, 300);
     input_create_hotkey_ = std::make_unique<util::TimedInput>(VK_F1, 300);
+    input_save_opt = std::make_unique<util::TimedInput>(VK_F11, 300);
     input_modify_value_ = std::make_unique<util::ModifierTimedInput>(VK_CONTROL, VK_RETURN, 200);
 
     notification_inst_ = std::make_unique<Notification>();
@@ -116,7 +117,7 @@ namespace gta_base::ui {
 
   void Manager::DrawTopBar(const std::string& title, size_t option_current, size_t option_count) {
     draw_list_->AddCommand(d3d::draw::Rect({x_base, y_base}, {x_size, y_size_top_bar}, primary_color));
-    draw_list_->AddCommand(d3d::draw::Rect({x_base, (y_base + y_size_top_bar) - (y_size_top_bar / 10)}, {x_size, y_size_top_bar / 10}, secondary_color));
+    draw_list_->AddCommand(d3d::draw::Rect({x_base, (y_base + y_size_top_bar) - (y_size_separator)}, {x_size, y_size_separator}, secondary_color));
     draw_list_->AddCommand(DrawTextLeft(y_base - (y_size_top_bar / 4), text_color, title, true, d3d::kRENDERER->GetFontBold()));
 
     std::stringstream option_count_str;
@@ -130,7 +131,7 @@ namespace gta_base::ui {
     float y_pos = (y_base + y_size_top_bar) + (y_size_option * visible_options);
 
     draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar}, primary_color));
-    draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar / 10}, secondary_color));
+    draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color));
     draw_list_->AddCommand(DrawTextRight(y_pos - (y_size_bottom_bar / 4), text_color, globals::version));
     draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color, fmt::format("FPS: {}", (int)(ImGui::GetIO().Framerate / 2))));
   }
@@ -203,8 +204,16 @@ namespace gta_base::ui {
       }
     }
 
-    if (selected && !option->GetDescription().empty()) {
-      DrawDescriptionText(option->GetDescription(), sub_option_count > max_drawn_options ? max_drawn_options : sub_option_count);
+    auto description = option->GetDescription();
+    if (selected) {
+      auto opt_count = sub_option_count > max_drawn_options ? max_drawn_options : sub_option_count;
+
+      float y_size_description{};
+      if (!description.empty()) {
+        y_size_description = DrawDescriptionText(description, opt_count);
+      }
+
+      DrawHintText(option.get(), opt_count, !description.empty(), y_size_description);
     }
   }
 
@@ -227,17 +236,48 @@ namespace gta_base::ui {
     return (pos > (target_pos - (y_size_option / 2.f)) && pos < (target_pos + (y_size_option / 2.f)));
   }
 
-  void Manager::DrawDescriptionText(const std::string& description, size_t option_count) const {
-    constexpr static const float y_size_separator = 0.0046f;
+  float Manager::DrawDescriptionText(const std::string& description, size_t option_count) const {
     float y_pos = (y_base + (y_size_option * option_count)) + (y_size_bottom_bar + y_offset_description) + y_size_top_bar;
     float y_pos_text_box = y_pos + y_size_separator;
 
     std::string description_tmp = description;
     d3d::draw::WordWrap(font_size, description_tmp, x_size + 0.01f, 3); // + 0.01f is needed to avoid unused space at the end of the text box
 
+    auto y_size_box = d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, description_tmp).y;
+
     draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color));
-    draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos_text_box}, {x_size, d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, description_tmp).y}, primary_color));
+    draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos_text_box}, {x_size, y_size_box}, primary_color));
     draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color, description_tmp, false));
+
+    // return y_space used by description
+    return y_size_separator + y_size_box;
+  }
+
+  void Manager::DrawHintText(option::BaseOption* opt, size_t option_count, bool description_drawn, float y_size_description) const {
+    float y_pos = (y_base + (y_size_option * option_count)) + (y_size_bottom_bar + y_offset_description) + y_size_top_bar;
+    if (description_drawn) {
+      y_pos += y_size_description + y_offset_description;
+    }
+    float y_pos_text_box = y_pos + y_size_separator;
+
+    std::string hint_text;
+    if (opt->HasFlag(OptionFlag::kInput))
+      hint_text.append(kTRANSLATION_MANAGER->Get("hint/keyboard_input") + "\n");
+    if (opt->HasFlag(OptionFlag::kHotkeyable)) {
+      auto text = misc::kHOTKEY_MANAGER->IsHotkey(std::string(opt->GetNameKey())) ? "hint/hotkey_already_set" : "hint/set_hotkey";
+      hint_text.append(kTRANSLATION_MANAGER->Get(text) + "\n");
+    }
+    if (!kSETTINGS.menu.save_on_exit && opt->HasFlag(OptionFlag::kSaveable))
+      hint_text.append(kTRANSLATION_MANAGER->Get("hint/press_to_save"));
+
+    if (hint_text.empty())
+      return;
+
+    auto y_size_box = d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, hint_text).y;
+
+    draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color));
+    draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos_text_box}, {x_size, y_size_box}, primary_color));
+    draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color, hint_text, false));
   }
 
   void Manager::HandleKeyInput(std::shared_ptr<Submenu>& cur_sub) {
@@ -293,6 +333,12 @@ namespace gta_base::ui {
       }
     } else if (input_modify_value_->Get()) {
       cur_sub->GetOption(cur_sub->GetSelectedOption())->HandleKey(KeyInput::kChangeValue);
+    } else if (input_save_opt->Get()) {
+      auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+      if (!kSETTINGS.menu.save_on_exit && cur_opt->HasFlag(OptionFlag::kSaveable)) {
+        auto save_val = cur_opt->GetSaveVal();
+        //TODO: actually save
+      }
     }
   }
 

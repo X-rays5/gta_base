@@ -75,6 +75,8 @@ namespace gta_base::ui::option {
             return *toggle_;
           } else if (flag == OptionFlag::kSaveable) {
             return save_able_;
+          } else if (flag == OptionFlag::kInput) {
+            return true;
           }
 
           return false;
