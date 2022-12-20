@@ -71,6 +71,19 @@ namespace gta_base::ui {
       return std::string((*active_translation_)[key]);
     }
 
+    inline static std::vector<std::filesystem::path> GetTranslationList() {
+      std::filesystem::directory_iterator it(common::GetTranslationDir());
+      std::vector<std::filesystem::path> translation_list;
+
+      for (const auto& entry : it) {
+        if (entry.is_regular_file() && entry.path().extension() == ".json") {
+          translation_list.push_back(entry.path());
+        }
+      }
+
+      return translation_list;
+    }
+
   private:
     std::shared_ptr<Translation> active_translation_;
   };
