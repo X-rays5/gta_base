@@ -56,19 +56,22 @@ namespace gta_base::ui {
     }
 
     inline std::shared_ptr<Translation> GetActiveTranslation() {
+      std::unique_lock lock(mtx_);
       return active_translation_;
     }
 
     inline void SetActiveTranslation(std::shared_ptr<Translation> translation) {
+      std::unique_lock lock(mtx_);
       active_translation_ = std::move(translation);
     }
 
     inline std::string Get(const std::string& key) {
+      std::unique_lock lock(mtx_);
       return std::string((*active_translation_)[key]);
     }
 
     inline std::string operator[](const std::string& key) {
-      return std::string((*active_translation_)[key]);
+      return Get(key);
     }
 
     inline static std::vector<std::filesystem::path> GetTranslationList() {
@@ -85,6 +88,7 @@ namespace gta_base::ui {
     }
 
   private:
+    std::recursive_mutex mtx_;
     std::shared_ptr<Translation> active_translation_;
   };
 }
