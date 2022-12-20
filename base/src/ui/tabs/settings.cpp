@@ -66,11 +66,21 @@ namespace gta_base::ui::tabs {
     kMANAGER->AddSubmenu(Submenus::LuaSelectedScript, lua_manifests[selected_lua_manifest].GetName(), [](Submenu* sub) {
       lua::Manifest& manifest = lua_manifests[selected_lua_manifest];
 
-      sub->AddOption(option::ExecuteOption("option/load_lua_script", "", [&]{lua::kMANAGER->AddScript(manifest.GetScriptDir());}));
-      sub->AddOption(option::ExecuteOption("option/unload_lua_script", "", [&]{lua::kMANAGER->RemoveScript(manifest.GetScriptDir());}));
+      sub->AddOption(option::ExecuteOption("option/load_lua_script", "", [&]{
+        misc::kTHREAD_POOL->AddJob([=]{
+          lua::kMANAGER->AddScript(manifest.GetScriptDir());
+        });
+      }));
+      sub->AddOption(option::ExecuteOption("option/unload_lua_script", "", [&]{
+        misc::kTHREAD_POOL->AddJob([=]{
+          lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
+        });
+      }));
       sub->AddOption(option::ExecuteOption("option/reload_lua_script", "", [&]{
-        lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
-        lua::kMANAGER->AddScript(manifest.GetScriptDir());
+        misc::kTHREAD_POOL->AddJob([=]{
+          lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
+          lua::kMANAGER->AddScript(manifest.GetScriptDir());
+        });
       }));
       sub->AddOption(option::LabelOption("label/lua_script_info"));
       sub->AddOption(option::ExecuteOption("option/lua_script_name", "", nullptr, false))->SetRightTextKey(manifest.GetName());
@@ -102,10 +112,12 @@ namespace gta_base::ui::tabs {
         [[likely]]
         for (auto&& path : translation_paths) {
           sub->AddOption(option::ExecuteOption(path.stem().string(), "", [&] {
-            kTRANSLATION_MANAGER->SetActiveTranslation(std::move(std::make_shared<Translation>(path)));
+            misc::kTHREAD_POOL->AddJob([=]{
+              kTRANSLATION_MANAGER->SetActiveTranslation(std::move(std::make_shared<Translation>(path)));
 
-            active_translation = path.stem().string();
-            settings::profile::SetSelectedTranslation(active_translation);
+              active_translation = path.stem().string();
+              settings::profile::SetSelectedTranslation(active_translation);
+            });
           }, false));
         }
       }
