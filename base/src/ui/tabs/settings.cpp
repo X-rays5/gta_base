@@ -4,24 +4,29 @@
 
 #include "settings.hpp"
 #include "tab_includes.hpp"
-#include "../../misc/hotkey_manager.hpp"
 #include "../../lua/manager.hpp"
+#include "../../settings/profile.hpp"
 
 namespace gta_base::ui::tabs {
   namespace {
     std::uint64_t hotkey_delete_key_id = 0;
 
-    bool lua_manifests_init = false;
     std::size_t selected_lua_manifest{};
     std::vector<lua::Manifest> lua_manifests{};
+
+    std::string active_translation;
+    std::vector<std::filesystem::path> translation_paths{};
   }
 
   void SettingsTab() {
-    lua_manifests_init = true;
     lua_manifests = gta_base::lua::Manager::GetScriptManifests();
+
+    active_translation = settings::profile::GetSelectedTranslation();
+    translation_paths = TranslationManager::GetTranslationList();
 
     kMANAGER->AddSubmenu(Submenus::Settings, "tab/title/setting", [](Submenu* sub) {
       sub->AddOption(option::SubmenuOption("tab/title/lua_settings", "", Submenus::SettingsLua));
+      sub->AddOption(option::SubmenuOption("tab/title/translation_settings", "", Submenus::SettingsTranslation));
       sub->AddOption(option::SubmenuOption("tab/title/hotkeys", "", Submenus::SettingsHotkeys));
       sub->AddOption(option::SubmenuOption("tab/title/theme", "", Submenus::SettingsTheme));
       sub->AddOption(option::SubmenuOption("tab/title/unload", "", Submenus::SettingsUnloadConfirm));
@@ -32,12 +37,7 @@ namespace gta_base::ui::tabs {
     });
 
     kMANAGER->AddSubmenu(Submenus::LuaScriptList, "tab/title/lua_script_list", [](Submenu* sub){
-      if (!lua_manifests_init) {
-        lua_manifests_init = true;
-        lua_manifests = gta_base::lua::Manager::GetScriptManifests();
-      }
-
-      sub->AddOption(option::ExecuteOption("option/refresh_lua_manifest", "", []{lua_manifests_init = false;}));
+      sub->AddOption(option::ExecuteOption("option/refresh_lua_manifest", "", []{lua_manifests = gta_base::lua::Manager::GetScriptManifests();}));
       sub->AddOption(option::LabelOption("label/lua_scripts_list"));
       if (lua_manifests.empty()) {
         sub->AddOption(option::ExecuteOption("option/no_lua_scripts", "", nullptr, false));
@@ -76,6 +76,27 @@ namespace gta_base::ui::tabs {
         sub->AddOption(option::LabelOption("label/lua_script_authors"));
         for (auto& author : *authors)
           sub->AddOption(option::ExecuteOption("option/lua_script_author", "", nullptr, false))->SetRightTextKey(author);
+      }
+    });
+
+    kMANAGER->AddSubmenu(Submenus::SettingsTranslation, "tab/title/translation_settings", [](Submenu* sub){
+      sub->AddOption(option::ExecuteOption("option/active_translation", "", nullptr))->SetRightTextKey(active_translation);
+      sub->AddOption(option::ExecuteOption("option/refresh_translation_list", "", []{translation_paths = TranslationManager::GetTranslationList();}));
+      sub->AddOption(option::LabelOption("label/translation_list"));
+      if (translation_paths.empty()) {
+        [[unlikely]]
+        sub->AddOption(option::ExecuteOption("option/no_translations", "", nullptr, false));
+        return;
+      } else {
+        [[likely]]
+        for (auto&& path : translation_paths) {
+          sub->AddOption(option::ExecuteOption(path.stem().string(), "", [&] {
+            kTRANSLATION_MANAGER->SetActiveTranslation(std::move(std::make_shared<Translation>(path)));
+
+            active_translation = path.stem().string();
+            settings::profile::SetSelectedTranslation(active_translation);
+          }, false));
+        }
       }
     });
 
