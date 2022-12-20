@@ -29,6 +29,10 @@ namespace gta_base::ui {
   }
 
   inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, KeyInput where_to_scroll) {
+    if (sub->GetOptionCount() == 0) {
+      return;
+    }
+
     // Could cause issues when there are only label options
     auto cur_opt = sub->GetOption(sub->GetSelectedOption());
     while(cur_opt->HasFlag(OptionFlag::kLabel) || cur_opt->HasFlag(OptionFlag::kDisabled)) {
@@ -356,11 +360,17 @@ namespace gta_base::ui {
 
       if (show_ui) {
         auto cur_sub = submenus_stack_.top();
+
         cur_sub->Clear();
         cur_sub->CreateOptions();
 
         if (!keyboard::kMANAGER->KeyBoardActive())
           HandleKeyInput(cur_sub);
+
+        if (cur_sub->GetOptionCount() == 0) {
+          LOG_WARN("Prevented submenu enter due to it being empty");
+          PopSubmenu();
+        }
 
         if (cur_sub->GetOptionCount() == 0)
           return;
@@ -385,6 +395,8 @@ namespace gta_base::ui {
           i += 1;
         }
       }
+    } else {
+      LOG_WARN("No submenus in stack");
     }
 
     should_tick = false;
