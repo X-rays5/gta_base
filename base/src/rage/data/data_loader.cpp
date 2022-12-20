@@ -171,11 +171,14 @@ namespace rage::data {
       LOG_INFO("Rebuilding gta data cache");
       auto data = LoadDataFromGameData();
 
-      LOG_INFO("Writing gta data cache");
-      WriteVersionFile();
-      WriteVehicles(data.vehicles_);
-      WriteWeapons(data.weapons_);
-      WritePeds(data.peds_);
+      misc::kTHREAD_POOL->AddJob([=]{
+        WriteVersionFile();
+        WriteVehicles(data.vehicles_);
+        WriteWeapons(data.weapons_);
+        WritePeds(data.peds_);
+
+        LOG_INFO("Saved gta data");
+      });
 
       return data;
     } else {
