@@ -30,7 +30,7 @@ namespace gta_base::ui::option {
             return true;
           } else if (flag == OptionFlag::kToggled) {
             return *toggle_;
-          } else if (flag == OptionFlag::kSavable) {
+          } else if (flag == OptionFlag::kSaveable) {
             return save_able_;
           }
 

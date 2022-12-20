@@ -81,7 +81,7 @@ namespace gta_base::ui::option {
             return right_text_key_.empty();
           } else if (flag == OptionFlag::kHotkeyable) {
             return hotkey_able_;
-          } else if (flag == OptionFlag::kSavable) {
+          } else if (flag == OptionFlag::kSaveable) {
             return save_able_;
           }
 
