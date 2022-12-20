@@ -25,7 +25,6 @@ namespace rage::data {
         LOG_INFO("Loaded {} vehicles", data_.vehicles_.size());
         LOG_INFO("Loaded {} weapons", data_.weapons_.size());
         LOG_INFO("Loaded {} peds", data_.peds_.size());
-        LOG_INFO("Game data loaded successfully");
 
         mtx_.unlock();
         return data_;

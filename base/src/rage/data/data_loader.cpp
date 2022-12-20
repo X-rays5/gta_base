@@ -182,7 +182,7 @@ namespace rage::data {
 
       return data;
     } else {
-      LOG_INFO("Loading gta data cache");
+      LOG_DEBUG("Loading gta data cache");
       return {LoadVehiclesFromCache(), LoadWeaponsFromCache(), LoadPedsFromCache()};
     }
   }
@@ -328,7 +328,7 @@ namespace rage::data {
   }
 
   Vehicles Loader::LoadVehiclesFromCache() {
-    LOG_INFO("Loading vehicles from cache");
+    LOG_DEBUG("Loading vehicles from cache");
     Vehicles res;
     auto file = common::GetGtaDataCacheDir() / "vehicles.json";
     if (!std::filesystem::exists(file)) {
@@ -350,7 +350,7 @@ namespace rage::data {
   }
 
   Weapons Loader::LoadWeaponsFromCache() {
-    LOG_INFO("Loading weapons from cache");
+    LOG_DEBUG("Loading weapons from cache");
     Weapons res;
     auto file = common::GetGtaDataCacheDir() / "weapons.json";
     if (!std::filesystem::exists(file)) {
@@ -372,7 +372,7 @@ namespace rage::data {
   }
 
   Peds Loader::LoadPedsFromCache() {
-    LOG_INFO("Loading peds from cache");
+    LOG_DEBUG("Loading peds from cache");
     Peds res;
     auto file = common::GetGtaDataCacheDir() / "peds.json";
     if (!std::filesystem::exists(file)) {
