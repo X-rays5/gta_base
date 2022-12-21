@@ -1,7 +1,7 @@
 CPMAddPackage(
         NAME GTAV-Classes
         GIT_REPOSITORY https://github.com/Yimura/GTAV-Classes
-        GIT_TAG 620948d00e390246f3f36b28595da80eb33b7d29
+        GIT_TAG 5ab30af647d7e64404d76ea6168e7f78f5e365af
         DOWNLOAD_ONLY YES
 )
 
