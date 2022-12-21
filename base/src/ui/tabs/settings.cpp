@@ -158,7 +158,7 @@ namespace gta_base::ui::tabs {
     });
 
     kMANAGER->AddSubmenu(Submenus::HotkeyProfiles, "tab/title/hotkey_profiles", [](Submenu* sub) {
-      sub->AddOption(option::ExecuteOption("option/active_hotkey_profile", "", nullptr, false))->SetRightTextKey(active_hotkey_profile);
+      sub->AddOption(option::ExecuteOption("option/active_hotkey_profile", "", nullptr))->SetRightTextKey(active_hotkey_profile);
       sub->AddOption(option::ExecuteOption("option/refresh_hotkey_profile_list", "", []{hotkey_profile_paths = misc::HotkeyManager::GetHotkeyProfileList();}, false));
       sub->AddOption(option::ExecuteOption("option/hotkey_save_current_as", "", []{
         keyboard::kMANAGER->ShowKeyboard("hotkey_profile_name", [](const std::string& name, keyboard::Result res_state){
@@ -193,10 +193,10 @@ namespace gta_base::ui::tabs {
       sub->AddOption(option::ExecuteOption("confirm/yes", "", []{
         misc::kHOTKEY_MANAGER->RemoveHotkey(hotkey_delete_key_id);
         kMANAGER->PopSubmenu();
-      }));
+      }, false));
       sub->AddOption(option::ExecuteOption("confirm/no", "", []{
         kMANAGER->PopSubmenu();
-      }));
+      }, false));
     });
 
     kMANAGER->AddSubmenu(Submenus::SettingsTheme, "tab/title/theme", [](Submenu* sub){
@@ -211,7 +211,7 @@ namespace gta_base::ui::tabs {
       }));
       sub->AddOption(option::ExecuteOption("confirm/no", "", [] {
         kMANAGER->PopSubmenu();
-      }));
+      }, false));
     });
   }
 }
