@@ -37,7 +37,7 @@ namespace gta_base::ui::tabs {
 
       auto& vehicle = globals::gta_data.GetVehiclesForClass(selected_category_spawner);
 
-      for (auto& veh : vehicle) {
+      for (auto& [_, veh] : vehicle) {
         sub->AddOption(option::ExecuteOption(veh->display_name, "", [&]{
           fiber::kPOOL->AddJob([&]{
             rage::util::vehicle::Spawn(veh->model_hash, rage::util::vehicle::GetSpawnLocation(false), ENTITY::GET_ENTITY_HEADING(globals::local_player.ped_id));

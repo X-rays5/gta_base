@@ -41,18 +41,20 @@ namespace rage::data {
       Json::StreamWriterBuilder json_writer_builder;
       Json::Value root;
 
-      for (int i = 0; i < vehicles.size(); i++) {
-        auto& vehicle = vehicles[i];
-
+      int i = 0;
+      for (auto& [name, vehicle] : vehicles) {
         Json::Value obj;
         obj["raw_name"] = vehicle->raw_name;
         obj["display_name"] = vehicle->display_name;
         obj["raw_make"] = vehicle->raw_make;
         obj["display_make"] = vehicle->display_make;
+        obj["dlc_name"] = vehicle->dlc_name;
         obj["class_name"] = vehicle->class_name;
         obj["model_hash"] = vehicle->model_hash;
 
         root[i] = obj;
+
+        i += 1;
       }
 
       auto cache_file = common::GetGtaDataCacheDir() / "vehicles.json";
@@ -74,6 +76,7 @@ namespace rage::data {
         Json::Value obj;
         obj["raw_name"] = weapon->raw_name;
         obj["display_name"] = weapon->display_name;
+        obj["dlc_name"] = weapon->dlc_name;
         obj["type"] = weapon->type;
         obj["is_throwable"] = weapon->is_throwable;
         obj["is_gun"] = weapon->is_gun;
@@ -106,6 +109,7 @@ namespace rage::data {
 
         Json::Value obj;
         obj["model_name"] = ped->model_name;
+        obj["dlc_name"] = ped->dlc_name;
         obj["ped_type"] = ped->ped_type;
         obj["model_hash"] = ped->model_hash;
 
@@ -144,7 +148,7 @@ namespace rage::data {
   }
 
   bool Loader::IsBadDlc(const std::string& dlc_name) {
-    static const robin_hood::unordered_set<std::string> bad_dlc_names = {"mpG9EC"};
+    static const robin_hood::unordered_set<std::string> bad_dlc_names = {"mpG9EC", "TitleUpdate"};
 
     if (bad_dlc_names.find(dlc_name) != bad_dlc_names.end()) {
       LOG_DEBUG("Skipping bad DLC: {}", dlc_name);
@@ -167,6 +171,12 @@ namespace rage::data {
   }
 
   Data Loader::LoadData() {
+    tmp_loading_veh_.clear();
+    tmp_loading_veh_dlc_.clear();
+    tmp_loading_wep_.clear();
+    tmp_loading_ped_.clear();
+    tmp_loading_ped_dlc_.clear();
+
     if (ShouldRebuildCache()) {
       LOG_INFO("Rebuilding gta data cache");
       auto data = LoadDataFromGameData();
@@ -188,20 +198,27 @@ namespace rage::data {
   }
 
   void Loader::ParseVehicles(const std::filesystem::path& file) {
+    if (tmp_loading_veh_dlc_.contains(cur_dlc_name_))
+      return;
+
+    tmp_loading_veh_dlc_.insert(cur_dlc_name_);
+
     cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc){
       const auto& items = doc.select_nodes("/CVehicleModelInfo__InitDataList/InitDatas/Item");
       for (const auto& item_node : items) {
         const auto item = item_node.node();
 
         const auto hash = joaat(item.child("modelName").text().as_string());
-        if (tmp_loading_veh_.contains(hash))
+        if (tmp_loading_veh_.contains(hash)) {
+          LOG_DEBUG("Found {} again in {}", item.child("modelName").text().as_string(), cur_dlc_name_);
           continue;
+        }
 
         const auto name = item.child("gameName").text().as_string();
         const auto make = item.child("vehicleMakeName").text().as_string();
         const auto class_name = item.child("vehicleClass").text().as_string();
 
-        Vehicle vehicle(name, make, class_name, hash);
+        Vehicle vehicle(name, make, DlcNameToPrettyName(cur_dlc_name_), class_name, hash);
         tmp_loading_veh_[hash] = std::make_shared<Vehicle>(vehicle);
       }
     });
@@ -256,13 +273,18 @@ namespace rage::data {
           }
         }
 
-        Weapon weapon(name, display_name, type, is_throwable, is_gun, is_rechargeable, is_vehicle_weapon, is_melee, is_unarmed, hash, reward_hash, ammo_reward_hash);
+        Weapon weapon(name, display_name, DlcNameToPrettyName(cur_dlc_name_), type, is_throwable, is_gun, is_rechargeable, is_vehicle_weapon, is_melee, is_unarmed, hash, reward_hash, ammo_reward_hash);
         tmp_loading_wep_[hash] = std::make_shared<Weapon>(weapon);
       }
     });
   }
 
   void Loader::ParsePeds(const std::filesystem::path& file) {
+    if (tmp_loading_ped_dlc_.contains(cur_dlc_name_))
+      return;
+
+    tmp_loading_ped_dlc_.insert(cur_dlc_name_);
+
     cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc){
       const auto items = doc.select_nodes("/CPedModelInfo__InitDataList/InitDatas/Item");
       for (const auto& item_node : items) {
@@ -276,7 +298,7 @@ namespace rage::data {
 
         const auto ped_type = item.child("Pedtype").text().as_string();
 
-        Ped ped(model_name, ped_type, hash);
+        Ped ped(model_name, DlcNameToPrettyName(cur_dlc_name_), ped_type, hash);
         tmp_loading_ped_[hash] = std::make_shared<Ped>(ped);
       }
     });
@@ -291,7 +313,6 @@ namespace rage::data {
           cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc){
             auto item = doc.select_node("/SSetupData/nameHash");
             cur_dlc_name_ = item.node().text().as_string();
-            LOG_DEBUG("Loading data from dlc: {}", cur_dlc_name_);
           });
 
           if (IsBadDlc(cur_dlc_name_)) {
@@ -311,7 +332,7 @@ namespace rage::data {
 
     Vehicles vehicles;
     for (auto&& vehicle : tmp_loading_veh_) {
-      vehicles.emplace_back(std::move(vehicle.second));
+      vehicles[vehicle.second->display_name] = std::move(vehicle.second);
     }
 
     Weapons weapons;
@@ -343,7 +364,9 @@ namespace rage::data {
     }
 
     for (auto&& vehicle_member : json.GetArray()) {
-      res.push_back(std::make_shared<Vehicle>(vehicle_member.GetObj()));
+      auto veh = std::make_shared<Vehicle>(vehicle_member.GetObj());
+
+      res[veh->display_name] = std::move(veh);
     }
 
     return res;
@@ -391,5 +414,59 @@ namespace rage::data {
     }
 
     return res;
+  }
+
+  std::string Loader::DlcNameToPrettyName(const std::string& dlc_name) {
+    if (dlc_name.empty())
+      return "Day 1";
+
+    static const robin_hood::unordered_map<std::string, std::string> name_map = {
+      {"mpSecurity", "The Contract"},
+      {"mpHalloween", "Halloween Surprise"},
+      {"MPBeach DLC", "Beach Bum"},
+      {"mpTuner", "Los Santos Tuners"},
+      {"mpLuxe2", "Ill-Gotten Gains Part 2"},
+      {"MPValentines DLC", "Valentine's Day"},
+      {"MPBusiness DLC", "Business"},
+      {"mpHeist", "Heists"},
+      {"mpChristmas2", "Festive Surprise"},
+      {"mpPilot", "San Andreas Flight School"},
+      {"mpHeist3", "Diamond Casino Heist"},
+      {"mpImportExport", "Import/Export"},
+      {"spUpgrade", "Day 1"}, // Items included in the special edition version of the game
+      {"mpGunRunning", "Gunrunning"},
+      {"MPSUM2", "Criminal Enterprises"},
+      {"mpSmuggler", "Smuggler's Run"},
+      {"mpLuxe", "Ill-Gotten Gains Part 1"},
+      {"mpJanuary2016", "January 2016"},
+      {"mpBiker", "Bikers"},
+      {"mpBattle", "After Hours"},
+      {"mpApartment", "Executives and Other Criminals"},
+      {"mpStunt", "Cunning Stunts Bonuses I"},
+      {"mpChristmas2018", "Arena War"},
+      {"mpSpecialRaces", "Cunning Stunts Part 2"},
+      {"mpValentines2", "Be My Valentine"},
+      {"mpSum", "Criminal Enterprises"},
+      {"mpBusiness2", "High Life"},
+      {"mpLowrider", "Lowriders"},
+      {"MPCHRISTMAS3", "Los Santos Drug Wars"},
+      {"mpLowrider2", "Lowriders: Custom Classics"},
+      {"mpAssault", "After Hours"},
+      {"mpIndependence", "Independence Day"},
+      {"mpxmas_604490", "Festive Surprise 2015"},
+      {"mpVinewood", "Diamond Casino & Resort"},
+      {"mpLTS", "Last Team Standing"},
+      {"mpHeist4", "Cayo Perico Heist"},
+      {"mpChristmas2017", "Doomsday Heist"},
+      {"mpExecutive", "Finance and Felony"},
+      {"MPHipster DLC", "\"I'm Not a Hipster\" Update"}
+    };
+
+    auto it = name_map.find(dlc_name);
+
+    if (it != name_map.end())
+      return it->second;
+
+    return dlc_name;
   }
 }

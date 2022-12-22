@@ -42,6 +42,8 @@ namespace rage::data {
       return data_;
     }
 
+    static std::string DlcNameToPrettyName(const std::string& dlc_name);
+
   private:
     std::recursive_mutex mtx_;
     Data data_;
@@ -49,8 +51,10 @@ namespace rage::data {
     std::string cur_dlc_name_;
 
     robin_hood::unordered_map<joaat_t, Vehicle_ptr_t> tmp_loading_veh_;
+    robin_hood::unordered_set<std::string> tmp_loading_veh_dlc_;
     robin_hood::unordered_map<joaat_t, Weapon_ptr_t> tmp_loading_wep_;
     robin_hood::unordered_map<joaat_t, Ped_ptr_t> tmp_loading_ped_;
+    robin_hood::unordered_set<std::string> tmp_loading_ped_dlc_;
 
   private:
     static bool ShouldRebuildCache();

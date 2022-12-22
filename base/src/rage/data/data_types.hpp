@@ -45,9 +45,10 @@ namespace rage::data {
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "modernize-pass-by-value"
-    Vehicle(const std::string& raw_name, const std::string& raw_make, const std::string& class_name, joaat_t hash) :
+    Vehicle(const std::string& raw_name, const std::string& raw_make, const std::string& dlc_name, const std::string& class_name, joaat_t hash) :
       raw_name(raw_name), display_name(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_name.c_str())),
       raw_make(raw_make), display_make(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_make.c_str())),
+      dlc_name(dlc_name),
       class_name(CorrectClassName(class_name)), vehicle_class(GetClass(this->class_name)), model_hash(hash) {}
 #pragma clang diagnostic pop
 
@@ -59,6 +60,7 @@ namespace rage::data {
       const_cast<std::string&>(display_name) = obj["display_name"].GetString();
       const_cast<std::string&>(raw_make) = obj["raw_make"].GetString();
       const_cast<std::string&>(display_make) = obj["display_make"].GetString();
+      const_cast<std::string&>(dlc_name) = obj["dlc_name"].GetString();
       const_cast<std::string&>(class_name) = obj["class_name"].GetString();
       const_cast<Class&>(vehicle_class) = GetClass(class_name);
       const_cast<joaat_t&>(model_hash) = obj["model_hash"].GetUint64();
@@ -68,6 +70,7 @@ namespace rage::data {
     const std::string display_name;
     const std::string raw_make;
     const std::string display_make;
+    const std::string dlc_name;
     const std::string class_name;
     const Class vehicle_class{};
     const joaat_t model_hash{};
@@ -80,7 +83,10 @@ namespace rage::data {
         res = res.substr(3);
 
       static const robin_hood::unordered_map<std::string, std::string> class_map_ = {
-        {"COMPACTS", "COMPACT"}
+        {"COMPACTS", "COMPACT"},
+        {"OFF_ROAD", "OFFROAD"},
+        {"OPEN_WHEEL", "OPEN WHEEL"},
+        {"SPORT_CLASSIC", "SPORT CLASSIC"}
       };
 
       if (class_map_.contains(res))
@@ -94,6 +100,7 @@ namespace rage::data {
         {"SUPER", Class::kSuper},
         {"SPORT", Class::kSport},
         {"SPORT_CLASSIC", Class::kSportClassic},
+        {"SPORT CLASSIC", Class::kSportClassic},
         {"MUSCLE", Class::kMuscle},
         {"SEDAN", Class::kSedan},
         {"COMPACT", Class::kCompact},
@@ -101,7 +108,9 @@ namespace rage::data {
         {"COMPACTS", Class::kCompact},
         {"SUV", Class::kSuv},
         {"OFF_ROAD", Class::kOffroad},
+        {"OFFROAD", Class::kOffroad},
         {"OPEN_WHEEL", Class::kOpenWheel},
+        {"OPEN WHEEL", Class::kOpenWheel},
         {"VAN", Class::kVan},
         {"MOTORCYCLE", Class::kMotorcycle},
         {"CYCLE", Class::kCycle},
@@ -127,12 +136,12 @@ namespace rage::data {
     }
   };
   using Vehicle_ptr_t = std::shared_ptr<Vehicle>;
-  using Vehicles = std::vector<Vehicle_ptr_t>;
+  using Vehicles = std::map<std::string, Vehicle_ptr_t>;
 
   struct Weapon {
-    Weapon(std::string raw_name, std::string display_name, std::string type, bool is_throwable, bool is_gun, bool is_rechargeable, bool is_vehicle_weapon, bool is_melee, bool is_unarmed, joaat_t hash, joaat_t reward_hash, joaat_t reward_ammo_hash) :
+    Weapon(std::string raw_name, std::string display_name, std::string dlc_name, std::string type, bool is_throwable, bool is_gun, bool is_rechargeable, bool is_vehicle_weapon, bool is_melee, bool is_unarmed, joaat_t hash, joaat_t reward_hash, joaat_t reward_ammo_hash) :
       raw_name(std::move(raw_name)), display_name(std::move(display_name)),
-      type(std::move(type)),
+      dlc_name(std::move(dlc_name)), type(std::move(type)),
       is_throwable(is_throwable), is_gun(is_gun), is_rechargeable(is_rechargeable), is_vehicle_weapon(is_vehicle_weapon), is_melee(is_melee), is_unarmed(is_unarmed),
       model_hash(hash), reward_hash(reward_hash), reward_ammo_hash(reward_ammo_hash) {}
 
@@ -142,6 +151,7 @@ namespace rage::data {
 
       const_cast<std::string&>(raw_name) = obj["raw_name"].GetString();
       const_cast<std::string&>(display_name) = obj["display_name"].GetString();
+      const_cast<std::string&>(dlc_name) = obj["dlc_name"].GetString();
       robin_hood::unordered_set<std::string> tmp_flags;
       const_cast<std::string&>(type) = obj["type"].GetString();
       const_cast<bool&>(is_throwable) = obj["is_throwable"].GetBool();
@@ -157,6 +167,7 @@ namespace rage::data {
 
     const std::string raw_name;
     const std::string display_name;
+    const std::string dlc_name;
     const std::string type;
     const bool is_throwable{};
     const bool is_gun{};
@@ -172,20 +183,22 @@ namespace rage::data {
   using Weapons = std::vector<Weapon_ptr_t>;
 
   struct Ped {
-    Ped(std::string model_name, std::string ped_type, joaat_t hash) :
-      model_name(std::move(model_name)), ped_type(std::move(ped_type)),
-      model_hash(hash) {}
+    Ped(std::string model_name, std::string dlc_name, std::string ped_type, joaat_t hash) :
+      model_name(std::move(model_name)), dlc_name(std::move(dlc_name)),
+      ped_type(std::move(ped_type)), model_hash(hash) {}
 
     explicit Ped(rapidjson::Value& obj) {
       if (!obj.IsObject())
         LOG_ERROR("Failed to parse ped data, invalid json object");
 
       const_cast<std::string&>(model_name) = obj["model_name"].GetString();
+      const_cast<std::string&>(dlc_name) = obj["dlc_name"].GetString();
       const_cast<std::string&>(ped_type) = obj["ped_type"].GetString();
       const_cast<joaat_t&>(model_hash) = obj["model_hash"].GetUint();
     }
 
     const std::string model_name;
+    const std::string dlc_name;
     const std::string ped_type;
     const joaat_t model_hash{};
   };
@@ -201,7 +214,6 @@ namespace rage::data {
   public:
     Data() = default;
     Data(Vehicles vehicles, Weapons weapons, Peds peds) {
-      vehicles.shrink_to_fit();
       weapons.shrink_to_fit();
       peds.shrink_to_fit();
 
@@ -251,6 +263,16 @@ namespace rage::data {
       }
     }
 
+    inline const Vehicles& GetVehiclesForDlc(const std::string& dlc_name) {
+      return vehicles_dlc_idx_.find(dlc_name)->second;
+    }
+
+    inline void IterateVehicleDlcs(const std::function<void(const std::string&, const Vehicles&)>& func) {
+      for (const auto& [key, value] : vehicles_dlc_idx_) {
+        func(key, value);
+      }
+    }
+
     inline Vehicle_ptr_t GetVehicleByHash(rage::joaat_t hash) {
       return vehicles_model_hash_idx_.find(hash)->second;
     }
@@ -269,6 +291,12 @@ namespace rage::data {
       return GetWeaponByHash(rage::joaat(name));
     }
 
+    inline void IterateWeapons(const std::function<void(const Weapon_ptr_t&)>& func) {
+      for (const auto& weapon : weapons_) {
+        func(weapon);
+      }
+    }
+
     inline Ped_ptr_t GetPedByHash(rage::joaat_t hash) {
       return peds_model_hash_idx_.find(hash)->second;
     }
@@ -278,17 +306,26 @@ namespace rage::data {
       return GetPedByHash(rage::joaat(name));
     }
 
+    inline void IteratePeds(const std::function<void(const Ped_ptr_t&)>& func) {
+      for (const auto& ped : peds_) {
+        func(ped);
+      }
+    }
+
     inline bool IsEmpty() {
       return vehicles_.empty() && weapons_.empty() && peds_.empty();
     }
 
   private:
     robin_hood::unordered_map<joaat_t, Vehicle_ptr_t> vehicles_model_hash_idx_;
+    std::map<std::string, Vehicles> vehicles_dlc_idx_;
     std::map<std::string, Vehicles> vehicles_class_idx_;
 
     robin_hood::unordered_map<joaat_t, Weapon_ptr_t> weapons_model_hash_idx_;
+    std::map<std::string, Weapons> weapons_dlc_idx_;
 
     robin_hood::unordered_map<joaat_t, Ped_ptr_t> peds_model_hash_idx_;
+    std::map<std::string, Peds> peds_dlc_idx_;
 
   private:
 
