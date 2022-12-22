@@ -12,7 +12,7 @@ namespace gta_base::ui {
     ADD_TRANSLATION("tab/title/player_health", "Health"),
     ADD_TRANSLATION("tab/title/weapon", "Weapon"),
     ADD_TRANSLATION("tab/title/vehicle", "Vehicle"),
-    ADD_TRANSLATION("tab/vehicle/vehicle_spawner", "Vehicle Spawner"),
+    ADD_TRANSLATION("tab/title/vehicle_spawner", "Vehicle Spawner"),
     ADD_TRANSLATION("tab/title/network", "Network"),
     ADD_TRANSLATION("tab/title/player_list", "Player List"),
     ADD_TRANSLATION("tab/title/all_players", "All Players"),

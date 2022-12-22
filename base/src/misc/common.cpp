@@ -250,6 +250,20 @@ namespace gta_base::common {
     return fmt::format("{:.{}f}", num, precision);
   }
 
+  std::string ProperCapitalization(const std::string& str) {
+    std::string res = str;
+
+    for (std::size_t i = 0; i < res.size(); i++) {
+      if (i == 0) {
+        res[i] = std::toupper(res[i]);
+      } else {
+        res[i] = std::tolower(res[i]);
+      }
+    }
+
+    return res;
+  }
+
   std::filesystem::path GetKnownFolderPath(const KNOWNFOLDERID& folder_id) {
     PWSTR path = nullptr;
     if (SUCCEEDED(SHGetKnownFolderPath(folder_id, 0, nullptr, &path))) {
