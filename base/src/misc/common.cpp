@@ -220,6 +220,9 @@ namespace gta_base::common {
   }
 
   std::string VkToStr(std::uint64_t vk) {
+    if (vk >= VK_F13 && vk <= VK_F24)
+      return fmt::format("F{}", vk - VK_F1 + 1);
+
     std::uint32_t scanCode = MapVirtualKeyA(vk, MAPVK_VK_TO_VSC);
 
     char szName[128];
@@ -240,7 +243,7 @@ namespace gta_base::common {
 
     if(result == 0) {
       LOG_ERROR("Failed to convert vk key: {} to char. win32 err code: {}", vk, GetLastError());
-      return {};
+      return "unk";
     }
 
     return szName;
