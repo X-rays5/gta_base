@@ -13,4 +13,12 @@
 #include "misc/common.hpp"
 #include "misc/globals.hpp"
 #include "misc/settings.hpp"
+
+#ifdef _MSC_VER
+#define FORCE_INLINE __forceinline
+#elif defined(__clang__) || defined(__GNUC__)
+#define FORCE_INLINE __attribute__((always_inline)) inline
+#elif
+#define FORCE_INLINE
+#endif
 #endif //GTA_BASE_PCH_HPP

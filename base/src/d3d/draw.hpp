@@ -17,16 +17,16 @@
 #include "renderer.hpp"
 
 namespace gta_base::d3d::draw {
-  inline ImDrawList* GetDrawList() {
+  FORCE_INLINE ImDrawList* GetDrawList() {
     return ImGui::GetForegroundDrawList();
   }
 
-  inline ImVec2 GetSize(ImVec2 pos, ImVec2 size) {
+  FORCE_INLINE ImVec2 GetSize(ImVec2 pos, ImVec2 size) {
     return {pos.x + size.x, pos.y + size.y};
   }
 
   // scale float in range [0, 1] to [0, screen_size]
-  inline ImVec2 ScaleToScreen(ImVec2 xy) {
+  FORCE_INLINE ImVec2 ScaleToScreen(ImVec2 xy) {
     if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
       LOG_WARN("ScaleToScreen: xy out of range: {} {}", xy.x, xy.y);
     }
@@ -40,7 +40,7 @@ namespace gta_base::d3d::draw {
   }
 
   // scale float in range [0, screen_size] to [0, 1]
-  inline ImVec2 ScaleFromScreen(ImVec2 xy) {
+  FORCE_INLINE ImVec2 ScaleFromScreen(ImVec2 xy) {
     ImVec2 cur_res = ImGui::GetIO().DisplaySize;
     if (cur_res.x == 0 || cur_res.y == 0) {
       return {}; // Happens when the window is minimized.
@@ -56,32 +56,32 @@ namespace gta_base::d3d::draw {
     return xy;
   }
 
-  inline float ScaleXToScreen(float x) {
+  FORCE_INLINE float ScaleXToScreen(float x) {
     return ScaleToScreen({x, 0}).x;
   }
 
-  inline float ScaleXFromScreen(float x) {
+  FORCE_INLINE float ScaleXFromScreen(float x) {
     return ScaleFromScreen({x, 0}).x;
   }
 
-  inline float ScaleYToScreen(float y) {
+  FORCE_INLINE float ScaleYToScreen(float y) {
     return ScaleToScreen({0, y}).y;
   }
 
-  inline float ScaleYFromScreen(float y) {
+  FORCE_INLINE float ScaleYFromScreen(float y) {
     return ScaleFromScreen({0, y}).y;
   }
 
-  inline ImVec2 ScaleSquare(float y) {
+  FORCE_INLINE ImVec2 ScaleSquare(float y) {
     auto tmp = ScaleYToScreen(y);
     return ScaleFromScreen({tmp, tmp});
   }
 
-  inline float ScaleFont(float size) {
+  FORCE_INLINE float ScaleFont(float size) {
     return ScaleYToScreen(size);
   }
 
-  inline ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
+  FORCE_INLINE ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
     if (!font)
       font = ImGui::GetFont();
 
@@ -91,11 +91,11 @@ namespace gta_base::d3d::draw {
     return text_size;
   }
 
-  inline ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
+  FORCE_INLINE ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
     return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
   }
 
-  inline std::string WordWrapGetString(std::string* lines, std::uint32_t line_count) {
+  FORCE_INLINE std::string WordWrapGetString(std::string* lines, std::uint32_t line_count) {
     std::string res;
     for (std::uint32_t i = 0; i < line_count; i++) {
       auto line = lines[i];
@@ -156,7 +156,7 @@ namespace gta_base::d3d::draw {
     Animate() = default;
     Animate(double start, double end, std::uint64_t duration) : start_(start), end_(end), duration_(duration) {}
 
-    double GetNow() {
+    FORCE_INLINE double GetNow() {
       // use lerp to go from start to end
       curr_time_ += kRENDERER->GetDeltaTime();
       if (curr_time_ >= duration_) {
@@ -178,18 +178,18 @@ namespace gta_base::d3d::draw {
 
   class BaseDrawCommand {
   public:
-    virtual inline ~BaseDrawCommand() = default;
+    virtual ~BaseDrawCommand() = default;
 
-    virtual inline void Draw() = 0;
+    virtual void Draw() = 0;
   };
 
   // This can be used to execute code that should run on the render thread on render of a draw list
   // Also usable to draw ImGui windows
   class DrawCallback : public BaseDrawCommand {
   public:
-    inline explicit DrawCallback(std::function<void()> cb) : cb_(std::move(cb)) {}
+    FORCE_INLINE explicit DrawCallback(std::function<void()> cb) : cb_(std::move(cb)) {}
 
-    inline void Draw() final {
+    FORCE_INLINE void Draw() final {
       cb_();
     };
 
@@ -199,9 +199,9 @@ namespace gta_base::d3d::draw {
 
   class Rect : public BaseDrawCommand {
   public:
-    inline Rect(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
+    FORCE_INLINE Rect(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
 
-    inline void Draw() final {
+    FORCE_INLINE void Draw() final {
       GetDrawList()->AddRectFilled(ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), color_);
     }
 
@@ -213,9 +213,9 @@ namespace gta_base::d3d::draw {
 
   class RectOutline : public BaseDrawCommand {
   public:
-    inline RectOutline(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
+    FORCE_INLINE RectOutline(ImVec2 pos, ImVec2 size, ImU32 color) : pos_(pos), size_(size), color_(color) {}
 
-    inline void Draw() final {
+    FORCE_INLINE void Draw() final {
       GetDrawList()->AddRect(ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), color_);
     }
 
@@ -227,11 +227,11 @@ namespace gta_base::d3d::draw {
 
   class Text : public BaseDrawCommand {
   public:
-    inline Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font)
+    FORCE_INLINE Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font)
     {
     }
 
-    inline void Draw() final {
+    FORCE_INLINE void Draw() final {
       if (!font_) {
         font_ = ImGui::GetFont();
       }
@@ -260,11 +260,11 @@ namespace gta_base::d3d::draw {
 
   class Image : public BaseDrawCommand {
   public:
-    inline Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col)
+    FORCE_INLINE Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col)
     {
     }
 
-    inline void Draw() final {
+    FORCE_INLINE void Draw() final {
       GetDrawList()->AddImage((void*)texture_, ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
@@ -279,7 +279,7 @@ namespace gta_base::d3d::draw {
 
   class DrawList {
   public:
-    inline explicit DrawList(std::size_t draw_command_buffer_count) {
+    explicit DrawList(std::size_t draw_command_buffer_count) {
       assert(draw_command_buffer_count >= 2);
 
       for (std::size_t i = 0; i < draw_command_buffer_count; ++i) {
@@ -290,13 +290,13 @@ namespace gta_base::d3d::draw {
     }
 
     template<typename T>
-    inline void AddCommand(T command) {
+    FORCE_INLINE void AddCommand(T command) {
       std::unique_lock lock(mtx_);
       draw_commands_[cur_write_target_][draw_list_idx_[cur_write_target_]] = std::make_unique<T>(std::move(command));
       draw_list_idx_[cur_write_target_] += 1;
     }
 
-    inline void Draw() {
+    FORCE_INLINE void Draw() {
       std::unique_lock lock(mtx_);
       for (auto&& command : draw_commands_[cur_render_target_]) {
         if (command != nullptr)
@@ -306,17 +306,17 @@ namespace gta_base::d3d::draw {
       }
     }
 
-    inline void NextTargets() {
+    FORCE_INLINE void NextTargets() {
       std::unique_lock lock(mtx_);
       NextRenderTarget();
       NextWriteTarget();
     }
 
-    [[nodiscard]] inline std::size_t GetWriteTarget() const {
+    [[nodiscard]] FORCE_INLINE std::size_t GetWriteTarget() const {
       return cur_write_target_;
     }
 
-    [[nodiscard]] inline std::size_t GetRenderTarget() const {
+    [[nodiscard]] FORCE_INLINE std::size_t GetRenderTarget() const {
       return cur_render_target_;
     }
 
@@ -334,7 +334,7 @@ namespace gta_base::d3d::draw {
     std::vector<int> draw_list_idx_;
 
   private:
-    inline void ClearDrawList(std::size_t idx) {
+    FORCE_INLINE void ClearDrawList(std::size_t idx) {
       draw_list_idx_[idx] = 0;
       for (int i = 0; i < max_draw_commands_; i++) {
         if (draw_commands_[idx][i]) {
@@ -345,13 +345,13 @@ namespace gta_base::d3d::draw {
       }
     }
 
-    inline void NextRenderTarget() {
+    FORCE_INLINE void NextRenderTarget() {
       cur_render_target_ += 1;
       if (cur_render_target_ >= draw_commands_.size())
         cur_render_target_ = 0;
     }
 
-    inline void NextWriteTarget() {
+    FORCE_INLINE void NextWriteTarget() {
       cur_write_target_ += 1;
       if (cur_write_target_ >= draw_commands_.size())
         cur_write_target_ = 0;

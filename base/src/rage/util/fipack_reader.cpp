@@ -16,7 +16,6 @@ namespace rage::util {
       std::uint16_t mounted_devices_len = *memory::kPOINTERS->fidevices_len_;
       if (mounted_devices_len)
       {
-        auto devices_arr = *(uint64_t*)memory::kPOINTERS->fidevices_;
         uint8_t** current_device_mount_name_ptr = *(unsigned __int8***)memory::kPOINTERS->fidevices_;
         auto device_i = 0;
 
