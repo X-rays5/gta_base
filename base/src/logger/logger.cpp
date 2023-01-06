@@ -74,24 +74,34 @@ namespace gta_base {
   }
 
   void Logger::RegisterThreadException(std::thread::id thread_id, std::uintptr_t address) {
-    thread_exception_info_[thread_id] = {common::GetEpoch(), address};
+    auto it = thread_exception_info_.find(thread_id);
+
+    if (it != thread_exception_info_.end()) {
+      auto* info = &it->second;
+
+      // Check if too long since last exception
+      if (info->last_exception_time + ThreadExceptionInfo::MAX_REPEATING_EXCEPTIONS_TIME < common::GetEpoch()) {
+        info->last_exception_time = common::GetEpoch();
+        info->exception_count = 0;
+        info->last_exception_address = address;
+      } else {
+        info->last_exception_time = common::GetEpoch();
+        info->last_exception_address = address;
+        info->exception_count++;
+      }
+    } else {
+      thread_exception_info_.emplace(thread_id, ThreadExceptionInfo{common::GetEpoch(), address, 0});
+    }
   }
 
   bool Logger::ThreadTooManyExceptions(std::thread::id thread_id) {
-    auto& info = thread_exception_info_[thread_id];
-    if (info.last_exception_address == 0)
-      return false;
+    auto it = thread_exception_info_.find(thread_id);
 
-    if (common::GetEpoch() - info.last_exception_time < ThreadExceptionInfo::MAX_REPEATING_EXCEPTIONS_TIME) {
-      if (++info.exception_count >= ThreadExceptionInfo::MAX_REPEATING_EXCEPTIONS) {
-        info.exception_count = 0;
-        return true;
-      }
-    } else {
-      info.exception_count = 0;
+    if (it != thread_exception_info_.end()) {
+      auto* info = &it->second;
+      return info->exception_count >= ThreadExceptionInfo::MAX_REPEATING_EXCEPTIONS;
     }
 
-    info.last_exception_time = common::GetEpoch();
     return false;
   }
 
@@ -159,6 +169,7 @@ namespace gta_base {
         }
       }
 
+      LOG_CRITICAL("EXCEPTION Recovery: failed to recover from crash exceeded recursive exception limit");
       LOG_ERROR(logger::stacktrace::GetExceptionString(except));
 
       // make sure the stacktrace is saved on disk
