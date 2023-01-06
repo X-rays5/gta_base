@@ -8,6 +8,7 @@
 #include <functional>
 #include <mutex>
 #include <queue>
+#include <future>
 #undef AddJob
 
 namespace gta_base::fiber {
@@ -20,6 +21,17 @@ namespace gta_base::fiber {
       ~Pool();
 
       void AddJob(const job_t& job);
+      template<typename T>
+      [[nodiscard]] __forceinline std::future<T> AddJobFuture(std::function<T()> job) {
+        auto task = std::make_shared<std::packaged_task<T()>>([job = std::move(job)]() -> T {
+          return job();
+        });
+        std::future<T> future = task->get_future();
+
+        AddJob([=]() {(*task)();});
+
+        return future;
+      }
 
       void Tick();
       [[noreturn]] static void FiberFunc();

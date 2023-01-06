@@ -37,11 +37,10 @@ namespace gta_base::misc {
     }
   }
 
-  void ThreadPool::AddJob(ThreadPool::job_t task, ThreadPool::cb_t callback) {
-    Job job{std::move(task), std::move(callback)};
+  void ThreadPool::AddJob(std::function<void()> task) {
     {
       std::unique_lock<std::mutex> lock(mtx_);
-      tasks_.push(job);
+      tasks_.push(task);
     }
     job_notify_.notify_one();
   }
@@ -69,16 +68,13 @@ namespace gta_base::misc {
       pool->tasks_.pop();
       lock.unlock();
 
-      std::invoke(task.job);
-      if (task.cb) {
-        std::invoke(task.cb);
-      }
+      std::invoke(task);
     }
   }
 
   void ThreadPool::CreateThreads(std::size_t thread_count) {
     for (std::size_t i = 0; i < thread_count; i++) {
-      threads_.emplace_back(std::thread(WorkerLoop, this));
+      threads_.emplace_back(WorkerLoop, this);
     }
   }
 }

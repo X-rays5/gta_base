@@ -18,33 +18,34 @@
 namespace gta_base::misc {
   class ThreadPool {
   public:
-    using job_t = std::function<void()>;
-    using cb_t = std::function<void()>;
-
-    struct Job {
-      job_t job;
-      cb_t cb;
-    };
-
-  public:
     ThreadPool();
     explicit ThreadPool(std::size_t thread_count);
     ~ThreadPool();
 
-    void AddJob(job_t task, cb_t callback = nullptr);
+    void AddJob(std::function<void()> task);
+    template<typename T>
+    [[nodiscard]] FORCE_INLINE std::future<T> AddJobFuture(std::function<T()> task) {
+      auto task_wrapper = std::make_shared<std::packaged_task<T()>>([task = std::move(task)]() -> T {
+        return task();
+      });
+      std::future<T> future = task_wrapper->get_future();
+
+      AddJob([=]() {(*task_wrapper)();});
+
+      return future;
+    }
 
     std::size_t GetThreadCount() const;
   private:
     std::mutex mtx_;
     std::atomic<bool> running_ = true;
-    std::queue<Job> tasks_;
+    std::queue<std::function<void()>> tasks_;
     std::vector<std::thread> threads_;
     std::condition_variable job_notify_;
 
   private:
     static void WorkerLoop(ThreadPool* pool);
     void CreateThreads(std::size_t thread_count);
-
   };
   inline ThreadPool* kTHREAD_POOL{};
 }
