@@ -133,7 +133,9 @@ namespace gta_base {
 
       // ignore non fatal exceptions
       if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") {
-        LOG_DEBUG("Ignoring vectored exception call with code: {}", err_code);
+        if (err_code != DBG_PRINTEXCEPTION_C || err_code != DBG_PRINTEXCEPTION_WIDE_C)
+          LOG_DEBUG("Ignoring vectored exception call with code: {}", err_code);
+
         return EXCEPTION_CONTINUE_SEARCH;
       }
 
