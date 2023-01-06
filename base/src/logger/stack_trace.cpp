@@ -255,6 +255,7 @@ namespace gta_base::logger::stacktrace {
     msg << "\n***** Received fatal exception: " << ExceptionCodeToStr(except_rec->ExceptionCode) << " pid: " << _getpid() << " module: " << GetFileExceptionOccured(except_rec) << " *****\n";
     msg << "***** Exception code: " << common::AddrToHex(except_rec->ExceptionCode) << " *****\n";
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
+    msg << "***** Exception instruction: " << common::GetInstructionStr(ctx->Rip) << " *****\n";
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
 
     msg << "\n***** STACKDUMP *****\n";
