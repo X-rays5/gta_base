@@ -64,7 +64,8 @@ namespace gta_base::ui {
       settings::profile::SetSelectedTranslation(translation_name);
       LOG_INFO("Loaded translation file {}", translation_name);
     } else {
-      translation_manager_inst_->SetActiveTranslation(std::move(std::make_shared<Translation>()));
+      LOG_INFO("No translation profiles found init");
+      translation_manager_inst_->SetActiveTranslation(std::move(std::make_shared<Translation>(translation::default_translation)));
       settings::profile::SetSelectedTranslation("default");
     }
 
