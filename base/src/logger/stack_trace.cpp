@@ -42,6 +42,7 @@ namespace gta_base::logger::stacktrace {
       case EXCEPTION_INVALID_DISPOSITION: return "EXCEPTION_INVALID_DISPOSITION";
       case EXCEPTION_GUARD_PAGE: return "EXCEPTION_GUARD_PAGE";
       case EXCEPTION_INVALID_HANDLE: return "EXCEPTION_INVALID_HANDLE";
+      case 3765269347: return "EXCEPTION_MSVC_CPP";
       default: return "UNKNOWN";
     }
   }

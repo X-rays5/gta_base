@@ -26,11 +26,6 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason , LPVOID) {
       }
 
       try {
-        int* test = nullptr;
-        *test = 5;
-
-        LOG_DEBUG("{}", *test);
-
         BaseMain();
       } catch (std::exception& e) {
         LOG_FATAL(e.what());

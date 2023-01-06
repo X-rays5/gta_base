@@ -119,12 +119,17 @@ namespace gta_base {
 
   void Logger::SetupExceptionHandler() {
     auto handler = [](PEXCEPTION_POINTERS except) -> LONG {
-      if (!globals::running)
-        return EXCEPTION_CONTINUE_SEARCH;
-
       auto err_code = except->ExceptionRecord->ExceptionCode;
-      if (err_code == 3765269347 && except->ExceptionRecord->ExceptionInformation[0] - 429065504 <= 2) { // MSVC cpp exception code
-        auto addr = except->ContextRecord->LastExceptionFromRip;
+
+      // ignore non fatal exceptions
+      if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") {
+        LOG_DEBUG("Ignoring vectored exception call with code: {}", err_code);
+        return EXCEPTION_CONTINUE_SEARCH;
+      }
+
+      // MSVC cpp exception
+      if (err_code == 3765269347) {
+        auto addr = (std::uintptr_t)except->ExceptionRecord->ExceptionAddress;
         std::string file_name = common::GetModuleNameFromAddress(GetCurrentProcessId(), addr);
         auto offset = addr - (uintptr_t)GetModuleHandleA(file_name.c_str());
         auto exception = (std::exception*)except->ExceptionRecord->ExceptionInformation[1];
@@ -135,12 +140,8 @@ namespace gta_base {
           LOG_ERROR("cpp exception thrown at 0x{:X} ({}+0x{:X})", addr, file_name, offset);
         }
 
-        return EXCEPTION_CONTINUE_SEARCH;
-      }  else if (err_code == DBG_PRINTEXCEPTION_C || err_code == DBG_PRINTEXCEPTION_WIDE_C) { // msg for debugger
-        return EXCEPTION_CONTINUE_SEARCH;
-      } else if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") { // Without this the c++ try catch blocks will break
-        LOG_DEBUG("Received unknown exception code: {}.", err_code);
-
+        // Can't try to recover here because this code runs before try catch blocks.
+        // Since MSVC uses a UnhandledExceptionFilter for that.
         return EXCEPTION_CONTINUE_SEARCH;
       }
 
@@ -160,9 +161,9 @@ namespace gta_base {
 
       LOG_ERROR(logger::stacktrace::GetExceptionString(except));
 
-      std::this_thread::sleep_for(std::chrono::seconds(10));
-      kLOGGER->Shutdown();
-      std::this_thread::sleep_for(std::chrono::milliseconds(500));
+      // make sure the stacktrace is saved on disk
+      kLOGGER->Flush();
+      globals::running = false;
 
       return EXCEPTION_CONTINUE_SEARCH;
     };
