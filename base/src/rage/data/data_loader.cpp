@@ -193,9 +193,9 @@ namespace rage::data {
       return data;
     } else {
       LOG_DEBUG("Loading gta data cache");
-      auto vehicles_fut = misc::kTHREAD_POOL->AddJobPromise<Vehicles>(LoadVehiclesFromCache);
-      auto weapons_fut = misc::kTHREAD_POOL->AddJobPromise<Weapons>(LoadWeaponsFromCache);
-      auto peds_fut = misc::kTHREAD_POOL->AddJobPromise<Peds>(LoadPedsFromCache);
+      auto vehicles_fut = misc::kTHREAD_POOL->AddJobFuture<Vehicles>(LoadVehiclesFromCache);
+      auto weapons_fut = misc::kTHREAD_POOL->AddJobFuture<Weapons>(LoadWeaponsFromCache);
+      auto peds_fut = misc::kTHREAD_POOL->AddJobFuture<Peds>(LoadPedsFromCache);
 
       return {vehicles_fut.get(), weapons_fut.get(), peds_fut.get()};
     }

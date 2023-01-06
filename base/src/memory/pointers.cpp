@@ -184,31 +184,39 @@ namespace gta_base::memory {
 		 * Freemode thread restorer through VM patch
 		*/
 
-      LOG_DEBUG("freemode patch 1");
-      if (auto pat1 = mem_region.bruteforce_scan(xorstr_("3b 0a 0f 83 ? ? ? ? 48 ff c7"))) {
-        *pat1.add(2).as<uint32_t*>() = 0xc9310272;
-        *pat1.add(6).as<uint16_t*>() = 0x9090;
-      }
+      volatile auto fut_1 = std::async(std::launch::async, [&]() {
+        LOG_DEBUG("freemode patch 1");
+        if (auto pat1 = mem_region.bruteforce_scan(xorstr_("3b 0a 0f 83 ? ? ? ? 48 ff c7"))) {
+          *pat1.add(2).as<uint32_t*>() = 0xc9310272;
+          *pat1.add(6).as<uint16_t*>() = 0x9090;
+        }
+      });
 
-      LOG_DEBUG("freemode patch 2");
-      if (auto pat2 = mem_region.bruteforce_scan(xorstr_("3b 0a 0f 83 ? ? ? ? 49 03 fa"))) {
-        *pat2.add(2).as<uint32_t*>() = 0xc9310272;
-        *pat2.add(6).as<uint16_t*>() = 0x9090;
-      }
+      volatile auto fut_2 = std::async(std::launch::async, [&]() {
+        LOG_DEBUG("freemode patch 2");
+        if (auto pat2 = mem_region.bruteforce_scan(xorstr_("3b 0a 0f 83 ? ? ? ? 49 03 fa"))) {
+          *pat2.add(2).as<uint32_t*>() = 0xc9310272;
+          *pat2.add(6).as<uint16_t*>() = 0x9090;
+        }
+      });
 
-      LOG_DEBUG("freemode patch 3");
-      auto pat3 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 48 ff c7"));
-      for (auto& handle : pat3) {
-        *handle.add(2).as<uint32_t*>() = 0xd2310272;
-        *handle.add(6).as<uint16_t*>() = 0x9090;
-      }
+      volatile auto fut_3 = std::async(std::launch::async, [&]() {
+        LOG_DEBUG("freemode patch 3");
+        auto pat3 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 48 ff c7"));
+        for (auto& handle : pat3) {
+          *handle.add(2).as<uint32_t*>() = 0xd2310272;
+          *handle.add(6).as<uint16_t*>() = 0x9090;
+        }
+      });
 
-      LOG_DEBUG("freemode patch 4");
-      auto pat4 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 49 03 fa"));
-      for (auto& handle : pat4) {
-        *handle.add(2).as<uint32_t*>() = 0xd2310272;
-        *handle.add(6).as<uint16_t*>() = 0x9090;
-      }
+      volatile auto fut_4 = std::async(std::launch::async, [&]() {
+        LOG_DEBUG("freemode patch 4");
+        auto pat4 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 49 03 fa"));
+        for(auto& handle: pat4) {
+          *handle.add(2).as<uint32_t*>() = 0xd2310272;
+          *handle.add(6).as<uint16_t*>() = 0x9090;
+        }
+      });
     }
 
     Pointers::~Pointers() {

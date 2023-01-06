@@ -27,6 +27,9 @@ rage::data::Data gta_base::globals::gta_data = {};
 void BaseMain() {
   using namespace gta_base;
 
+  auto thread_pool_inst = std::make_unique<misc::ThreadPool>();
+  LOG_INFO("Created thread pool with {} threads", thread_pool_inst->GetThreadCount());
+
   auto ptr_inst = std::make_unique<memory::Pointers>();
   LOG_INFO("Pointers initialized");
 
@@ -50,9 +53,6 @@ void BaseMain() {
 
   auto fiber_inst = std::make_unique<fiber::Pool>(12);
   LOG_INFO("Created fiber pool");
-
-  auto thread_pool_inst = std::make_unique<misc::ThreadPool>();
-  LOG_INFO("Created thread pool with {} threads", thread_pool_inst->GetThreadCount());
 
   auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(globals::target_window_class, globals::target_window_name));
   LOG_INFO("Renderer initialized");
@@ -177,9 +177,6 @@ void BaseMain() {
   renderer_inst.reset();
   LOG_INFO("Renderer shutdown");
 
-  thread_pool_inst.reset();
-  LOG_INFO("Thread pool shutdown");
-
   fiber_inst.reset();
   LOG_INFO("Fiber pool shutdown");
 
@@ -192,4 +189,7 @@ void BaseMain() {
 
   ptr_inst.reset();
   LOG_INFO("Pointers shutdown");
+
+  thread_pool_inst.reset();
+  LOG_INFO("Thread pool shutdown");
 }
