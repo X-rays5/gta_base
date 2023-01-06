@@ -7,9 +7,10 @@
 #include "components/keyboard.hpp"
 #include "fonts/IconsFontAwesome6.h"
 #include "../settings/profile.hpp"
+#include "../settings/option_state.hpp"
 
 namespace gta_base::ui {
-  inline size_t CorrectPrevOptIdx(std::int64_t prev_opt_idx, std::int64_t selected_opt_idx, std::int64_t option_count, std::int64_t max_draw_options) {
+  FORCE_INLINE size_t CorrectPrevOptIdx(std::int64_t prev_opt_idx, std::int64_t selected_opt_idx, std::int64_t option_count, std::int64_t max_draw_options) {
     // make sure prev_opt_idx is in range of selected_opt_idx with the range of max_draw_options
     // but there are only option_count options
     std::int64_t res{};
@@ -28,7 +29,7 @@ namespace gta_base::ui {
     return res;
   }
 
-  inline void SkipLabelOpt(std::shared_ptr<Submenu>& sub, KeyInput where_to_scroll) {
+  FORCE_INLINE void SkipLabelOpt(std::shared_ptr<Submenu>& sub, KeyInput where_to_scroll) {
     if (sub->GetOptionCount() == 0) {
       return;
     }
@@ -91,15 +92,15 @@ namespace gta_base::ui {
     kMANAGER = nullptr;
   }
 
-  inline d3d::draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center, ImFont* font) const {
+  FORCE_INLINE d3d::draw::Text Manager::DrawTextLeft(float y_pos, ImColor color, const std::string& text, bool center, ImFont* font) const {
     return {{x_base + 0.002f, y_pos}, color, text, false, center, font_size, font};
   }
 
-  inline d3d::draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center, ImFont* font) const {
+  FORCE_INLINE d3d::draw::Text Manager::DrawTextRight(float y_pos, ImColor color, const std::string& text, bool center, ImFont* font) const {
     return {{x_base + x_size - 0.002f, y_pos}, color, text, true, center, font_size, font};
   }
 
-  inline d3d::draw::Text Manager::DrawTextCenter(float y_pos, ImColor color, const std::string& text, ImFont* font) const {
+  FORCE_INLINE d3d::draw::Text Manager::DrawTextCenter(float y_pos, ImColor color, const std::string& text, ImFont* font) const {
     if (!font) {
       font = ImGui::GetFont();
     }
@@ -280,7 +281,7 @@ namespace gta_base::ui {
       auto text = misc::kHOTKEY_MANAGER->IsHotkey(std::string(opt->GetNameKey())) ? "hint/hotkey_already_set" : "hint/set_hotkey";
       hint_text.append(kTRANSLATION_MANAGER->Get(text) + "\n");
     }
-    if (!kSETTINGS.menu.save_on_exit && opt->HasFlag(OptionFlag::kSaveable))
+    if (!kSETTINGS.menu.save_option_state_on_exit && opt->HasFlag(OptionFlag::kSaveable))
       hint_text.append(kTRANSLATION_MANAGER->Get("hint/press_to_save"));
 
     if (hint_text.empty())
@@ -348,9 +349,8 @@ namespace gta_base::ui {
       cur_sub->GetOption(cur_sub->GetSelectedOption())->HandleKey(KeyInput::kChangeValue);
     } else if (input_save_opt->Get()) {
       auto cur_opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
-      if (!kSETTINGS.menu.save_on_exit && cur_opt->HasFlag(OptionFlag::kSaveable)) {
-        auto save_val = cur_opt->GetSaveVal();
-        //TODO: actually save
+      if (!kSETTINGS.menu.save_option_state_on_exit && cur_opt->HasFlag(OptionFlag::kSaveable)) {
+        settings::option_state::SaveSingle(settings::option_state::GetSavePath(), cur_opt->GetNameKey().data(), cur_opt->GetSaveVal());
       }
     }
   }
@@ -379,10 +379,10 @@ namespace gta_base::ui {
         if (cur_sub->GetOptionCount() == 0) {
           LOG_WARN("Prevented submenu enter due to it being empty");
           PopSubmenu();
-        }
 
-        if (cur_sub->GetOptionCount() == 0)
-          return;
+          if (cur_sub->GetOptionCount() == 0)
+            return;
+        }
 
         DrawHeader();
         DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());

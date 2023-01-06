@@ -181,8 +181,8 @@ namespace gta_base::memory {
       main_batch.Run(mem_region);
 
       /**
-		 * Freemode thread restorer through VM patch
-		*/
+		  * Freemode thread restorer through VM patch
+		  */
 
       volatile auto fut_1 = std::async(std::launch::async, [&]() {
         LOG_DEBUG("freemode patch 1");

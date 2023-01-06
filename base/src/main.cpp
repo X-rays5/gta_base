@@ -20,6 +20,8 @@
 #include "misc/thread_pool.hpp"
 #include "rage/data/data_loader.hpp"
 #include "lua/manager.hpp"
+#include "settings/option_state.hpp"
+#include "settings/profile.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
@@ -92,12 +94,10 @@ void BaseMain() {
   auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
   LOG_INFO("Player Manager initialized");
 
-
   kHOOKING->Enable();
   LOG_INFO("Hooks enabled");
 
-
-  settings::Load();
+  settings::option_state::Load(settings::option_state::GetSavePath());
   LOG_INFO("Settings loaded");
 
   while(globals::gta_data.IsEmpty()) {
@@ -154,8 +154,8 @@ void BaseMain() {
     discord_thread.join();
   LOG_INFO("Discord thread stopped");
 
-  if (kSETTINGS.menu.save_on_exit) {
-    settings::Save();
+  if (kSETTINGS.menu.save_option_state_on_exit) {
+    settings::option_state::Save(settings::option_state::GetSavePath());
     LOG_INFO("Settings saved");
   }
 

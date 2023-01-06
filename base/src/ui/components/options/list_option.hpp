@@ -11,7 +11,7 @@ namespace gta_base::ui::option {
       template<typename T>
       class ListOption : public BaseOption {
       public:
-        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool save_able = true, bool hotkey_able = true) :
+        explicit ListOption(const std::string& name_key, const std::string& description_key, std::size_t& idx, std::vector<T>& items, bool save_able = true, bool hotkey_able = false) :
           BaseOption(name_key, description_key, "", "", save_able, hotkey_able), idx_(&idx), items_(&items)
         {
           UpdateRightText();

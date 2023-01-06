@@ -12,7 +12,7 @@
 #include "logger/logger.hpp"
 #include "misc/common.hpp"
 #include "misc/globals.hpp"
-#include "misc/settings.hpp"
+#include "settings/settings.hpp"
 
 #ifdef _MSC_VER
 #define FORCE_INLINE __forceinline

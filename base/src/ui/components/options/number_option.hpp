@@ -17,7 +17,7 @@ namespace gta_base::ui::option {
       requires std::integral<T> or std::floating_point<T>
       class NumberOption : public BaseOption {
       public:
-        explicit NumberOption(const std::string& name_key, const std::string& description_key, T* value, T step, T min, T max, bool save_able = true, bool hotkey_able = true) :
+        explicit NumberOption(const std::string& name_key, const std::string& description_key, T* value, T step, T min, T max, bool save_able = true, bool hotkey_able = false) :
           BaseOption(name_key, description_key, "", "", save_able, hotkey_able), value_(value), step_(step), min_(min), max_(max)
         {
           UpdateRightText();
@@ -25,6 +25,11 @@ namespace gta_base::ui::option {
 
         void HandleKey(KeyInput key) final {
           switch(key) {
+            case KeyInput::kHotkey:
+            case KeyInput::kReturn: {
+              SendEvent(Event::kSelect);
+              break;
+            }
             case KeyInput::kChangeValue: {
               T* value = value_;
               T min = min_;
@@ -32,7 +37,6 @@ namespace gta_base::ui::option {
               keyboard::kMANAGER->ShowKeyboard(std::to_string(common::GetEpoch()), [value, min, max](std::string text, keyboard::Result res) {
                 if (res != keyboard::Result::kDone || text.empty())
                   return;
-
                 if (value) {
                   FromString(value, text, min, max);
                 }
