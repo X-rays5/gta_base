@@ -4,8 +4,10 @@
 
 #include <filesystem>
 #include <chrono>
+#include <Zydis/Zydis.h>
 #include "logger.hpp"
 #include "stack_trace.hpp"
+#include "../misc/common.hpp"
 
 namespace gta_base {
   void SetConsoleMode(HANDLE console_handle) {
@@ -71,6 +73,28 @@ namespace gta_base {
     spdlog::default_logger_raw()->flush();
   }
 
+  void Logger::RegisterThreadException(std::thread::id thread_id, std::uintptr_t address) {
+    thread_exception_info_[thread_id] = {common::GetEpoch(), address};
+  }
+
+  bool Logger::ThreadTooManyExceptions(std::thread::id thread_id) {
+    auto& info = thread_exception_info_[thread_id];
+    if (info.last_exception_address == 0)
+      return false;
+
+    if (common::GetEpoch() - info.last_exception_time < ThreadExceptionInfo::MAX_REPEATING_EXCEPTIONS_TIME) {
+      if (++info.exception_count >= ThreadExceptionInfo::MAX_REPEATING_EXCEPTIONS) {
+        info.exception_count = 0;
+        return true;
+      }
+    } else {
+      info.exception_count = 0;
+    }
+
+    info.last_exception_time = common::GetEpoch();
+    return false;
+  }
+
   void Logger::Shutdown() {
     kLOGGER = nullptr;
 
@@ -118,6 +142,20 @@ namespace gta_base {
         LOG_DEBUG("Received unknown exception code: {}.", err_code);
 
         return EXCEPTION_CONTINUE_SEARCH;
+      }
+
+      if (!kLOGGER->ThreadTooManyExceptions(std::this_thread::get_id())) {
+        auto instruction = common::GetInstructionAtAddr(except->ContextRecord->Rip);
+
+        if (instruction.instruction.length) {
+          kLOGGER->RegisterThreadException(std::this_thread::get_id(), except->ContextRecord->Rip);
+
+          auto next_instruction = except->ContextRecord->Rip + instruction.instruction.length;
+          LOG_WARN("EXCEPTION Recovery: {} ({:X}) -> {} ({:X})", common::GetInstructionStr(except->ContextRecord->Rip, instruction), except->ContextRecord->Rip, common::GetInstructionStr(next_instruction), next_instruction);
+          except->ContextRecord->Rip = next_instruction;
+
+          return EXCEPTION_CONTINUE_EXECUTION;
+        }
       }
 
       LOG_ERROR(logger::stacktrace::GetExceptionString(except));
