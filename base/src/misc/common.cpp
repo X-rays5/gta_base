@@ -32,6 +32,37 @@ namespace gta_base::common {
     return stream.str();
   }
 
+  ZydisInstruction GetInstructionAtAddr(std::uintptr_t addr) {
+    ZydisDecoder decoder;
+#ifdef _M_AMD64
+    if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64)))
+#else
+    if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
+#endif
+      return {};
+
+    ZydisInstruction instruction{};
+    if (ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, reinterpret_cast<void*>(addr), 15, &instruction.instruction, instruction.operands))) {
+      return instruction;
+    }
+
+    return {};
+  }
+
+  std::string GetInstructionStr(std::uintptr_t addr, const ZydisInstruction& instruction) {
+    ZydisFormatter formatter;
+    ZydisFormatterInit(&formatter, ZYDIS_FORMATTER_STYLE_INTEL);
+
+    char buffer[256];
+    ZydisFormatterFormatInstruction(&formatter, &instruction.instruction, instruction.operands, instruction.instruction.operand_count_visible, buffer, sizeof(buffer), addr, ZYAN_NULL);
+
+    return buffer;
+  }
+
+  std::string GetInstructionStr(std::uintptr_t addr) {
+    return GetInstructionStr(addr, GetInstructionAtAddr(addr));
+  }
+
   std::vector<std::string> SplitStr(const std::string& str, const std::string& delim) {
     std::vector<std::string> res;
     size_t start = 0;

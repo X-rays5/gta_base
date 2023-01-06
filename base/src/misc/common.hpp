@@ -16,6 +16,7 @@
 #include <d3d11.h>
 #include <TlHelp32.h>
 #include <Shlobj.h>
+#include <Zydis/Zydis.h>
 
 #ifdef LoadImage
 #undef LoadImage
@@ -78,6 +79,15 @@ namespace gta_base::common {
 
     return res;
   }
+
+  struct ZydisInstruction {
+    ZydisDecodedInstruction instruction;
+    ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT];
+  };
+
+  ZydisInstruction GetInstructionAtAddr(std::uintptr_t addr);
+  std::string GetInstructionStr(std::uintptr_t addr, const ZydisInstruction& instruction);
+  std::string GetInstructionStr(std::uintptr_t addr);
 
   std::string GetFileMd5Hash(const std::filesystem::path& file_path);
 

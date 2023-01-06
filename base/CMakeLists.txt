@@ -29,6 +29,7 @@ include(../vendor/magic_enum.cmake)
 include(../vendor/pugixml.cmake)
 include(../vendor/stb.cmake)
 include(../vendor/xorstr.cmake)
+include(../vendor/zydis.cmake)
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/pch.hpp)
 
