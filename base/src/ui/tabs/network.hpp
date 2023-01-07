@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_NETWORK_HPP
 #define GTA_BASE_NETWORK_HPP
 namespace gta_base::ui::tabs {
-      void NetworkTab();
-    }
+void NetworkTab();
+}
 #endif //GTA_BASE_NETWORK_HPP

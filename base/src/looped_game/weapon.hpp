@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_WEAPON_LOOPED_HPP
 #define GTA_BASE_WEAPON_LOOPED_HPP
 namespace gta_base::looped_game {
-    void Weapons();
-  }
+void Weapons();
+}
 #endif //GTA_BASE_WEAPON_LOOPED_HPP

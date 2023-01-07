@@ -10,10 +10,10 @@
 #include "script.hpp"
 
 namespace gta_base::lua {
-  struct ScriptInfo {
-    Manifest manifest;
-    std::filesystem::path script_dir;
-    std::unique_ptr<Script> lua_script_inst;
-  };
+struct ScriptInfo {
+  Manifest manifest;
+  std::filesystem::path script_dir;
+  std::unique_ptr<Script> lua_script_inst;
+};
 }
 #endif //GTA_BASE_SCRIPT_INFO_HPP

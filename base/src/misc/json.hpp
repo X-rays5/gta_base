@@ -22,31 +22,31 @@
 #define RAPIDJSON_WRITER_KV_BOOL(val) RAPIDJSON_WRITER_K(val); writer.Bool(val)
 
 namespace gta_base::json {
-  template<typename T>
-  inline T GetSafe(rapidjson::Value& json, const std::string& key) {
-    if (!json.IsObject())
-      return T{};
-
-    if (json.HasMember(key.c_str()))
-      if (json[key.c_str()].Is<T>())
-        return json[key.c_str()].Get<T>();
-
+template<typename T>
+inline T GetSafe(rapidjson::Value &json, const std::string &key) {
+  if (!json.IsObject())
     return T{};
-  }
 
-  template<typename T>
-  inline T GetSafe(rapidjson::Document& json, const std::string& key) {
-    if (!json.IsObject())
-      return T{};
+  if (json.HasMember(key.c_str()))
+    if (json[key.c_str()].Is<T>())
+      return json[key.c_str()].Get<T>();
 
-    return GetSafe<T>(json.GetObj(), key);
-  }
+  return T{};
+}
 
-  rapidjson::Value StringToJsonVal(const std::string& str, RAPIDJSON_DEFAULT_ALLOCATOR allocator);
+template<typename T>
+inline T GetSafe(rapidjson::Document &json, const std::string &key) {
+  if (!json.IsObject())
+    return T{};
 
-  std::string Stringify(rapidjson::Document& json);
-  rapidjson::Document FromFileStream(std::ifstream& stream);
-  rapidjson::Document FromFile(const std::filesystem::path& path);
-  bool ToFile(rapidjson::Document& json, const std::filesystem::path& path, std::size_t indent = 4);
+  return GetSafe<T>(json.GetObj(), key);
+}
+
+rapidjson::Value StringToJsonVal(const std::string &str, RAPIDJSON_DEFAULT_ALLOCATOR allocator);
+
+std::string Stringify(rapidjson::Document &json);
+rapidjson::Document FromFileStream(std::ifstream &stream);
+rapidjson::Document FromFile(const std::filesystem::path &path);
+bool ToFile(rapidjson::Document &json, const std::filesystem::path &path, std::size_t indent = 4);
 }
 #endif //GTA_BASE_JSON_HPP

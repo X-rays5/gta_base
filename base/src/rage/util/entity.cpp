@@ -6,19 +6,18 @@
 #include "../../fiber/script.hpp"
 
 namespace rage::util {
-    bool TakeControlOfEntity(Entity ent) {
-      if (NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent)) return true;
-      for (uint8_t i = 0; !NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent) && i < 10; i++)
-      {
-        NETWORK::NETWORK_REQUEST_CONTROL_OF_ENTITY(ent);
+bool TakeControlOfEntity(Entity ent) {
+  if (NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent)) return true;
+  for (uint8_t i = 0; !NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent) && i < 10; i++) {
+    NETWORK::NETWORK_REQUEST_CONTROL_OF_ENTITY(ent);
 
-        gta_base::fiber::Script::GetCurr()->Yield(5);
-      }
-      if (!NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent)) return false;
-
-      int netHandle = NETWORK::NETWORK_GET_NETWORK_ID_FROM_ENTITY(ent);
-      NETWORK::SET_NETWORK_ID_CAN_MIGRATE(netHandle, true);
-
-      return true;
-    }
+    gta_base::fiber::Script::GetCurr()->Yield(5);
   }
+  if (!NETWORK::NETWORK_HAS_CONTROL_OF_ENTITY(ent)) return false;
+
+  int netHandle = NETWORK::NETWORK_GET_NETWORK_ID_FROM_ENTITY(ent);
+  NETWORK::SET_NETWORK_ID_CAN_MIGRATE(netHandle, true);
+
+  return true;
+}
+}

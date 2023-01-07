@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_DEBUG_HPP
 #define GTA_BASE_DEBUG_HPP
 namespace gta_base::ui::tabs {
-      void DebugTab();
-    }
+void DebugTab();
+}
 #endif //GTA_BASE_DEBUG_HPP

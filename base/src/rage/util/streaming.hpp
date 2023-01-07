@@ -8,7 +8,7 @@
 #include "../classes/scr_vector.hpp"
 
 namespace rage::util {
-    /// @note This should be called in a fiber job
-    scrVector LoadGroundAtCoord(scrVector coords);
-  }
+/// @note This should be called in a fiber job
+scrVector LoadGroundAtCoord(scrVector coords);
+}
 #endif //GTA_BASE_STREAMING_HPP

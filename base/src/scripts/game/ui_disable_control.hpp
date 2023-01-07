@@ -8,18 +8,18 @@
 #include "../../scriptmanager/base_script.hpp"
 
 namespace gta_base::scripts {
-    class UIDisablePhone : public scriptmanager::BaseScript {
-    public:
-      UIDisablePhone() {
-        initialized_ = true;
-      }
-
-      scriptmanager::ScriptType GetType() final {
-        return scriptmanager::ScriptType::kGame;
-      }
-
-      void Init() final;
-      void RunTick() final;
-    };
+class UIDisablePhone : public scriptmanager::BaseScript {
+ public:
+  UIDisablePhone() {
+    initialized_ = true;
   }
+
+  scriptmanager::ScriptType GetType() final {
+    return scriptmanager::ScriptType::kGame;
+  }
+
+  void Init() final;
+  void RunTick() final;
+};
+}
 #endif //GTA_BASE_UI_DISABLE_CONTROL_HPP

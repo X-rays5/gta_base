@@ -8,12 +8,12 @@
 #include <string>
 
 namespace gta_base::logger::stacktrace {
-  extern std::uint32_t RECURSIVE_CRASH_CHECK;
+extern std::uint32_t RECURSIVE_CRASH_CHECK;
 
-  std::string ExceptionCodeToStr(std::uint32_t code);
-  std::string GetFileExceptionOccured(PEXCEPTION_RECORD except_rec);
+std::string ExceptionCodeToStr(std::uint32_t code);
+std::string GetFileExceptionOccured(PEXCEPTION_RECORD except_rec);
 
-  std::string GetExceptionString(PEXCEPTION_POINTERS except);
-  std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx);
+std::string GetExceptionString(PEXCEPTION_POINTERS except);
+std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx);
 }
 #endif //GTA_BASE_STACK_TRACE_HPP

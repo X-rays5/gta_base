@@ -9,15 +9,15 @@
 #include "../types.hpp"
 
 namespace rage::util {
-    /// @note This should be called in a fiber job
-    bool Teleport(rage::fvector3 coords, bool with_vehicle);
-    /// @note This should be called in a fiber job
-    bool TeleportIntoVehicle(Vehicle veh_id);
-    /// @note This should be called in a fiber job
-    bool TeleportToBlip(int sprite, bool with_vehicle);
-    /// @note This should be called in a fiber job
-    bool TeleportToWayPoint(bool with_vehicle);
-    /// @note This should be called in a fiber job
-    bool TeleportToObjective(bool with_vehicle);
-  }
+/// @note This should be called in a fiber job
+bool Teleport(rage::fvector3 coords, bool with_vehicle);
+/// @note This should be called in a fiber job
+bool TeleportIntoVehicle(Vehicle veh_id);
+/// @note This should be called in a fiber job
+bool TeleportToBlip(int sprite, bool with_vehicle);
+/// @note This should be called in a fiber job
+bool TeleportToWayPoint(bool with_vehicle);
+/// @note This should be called in a fiber job
+bool TeleportToObjective(bool with_vehicle);
+}
 #endif //GTA_BASE_TELEPORT_HPP

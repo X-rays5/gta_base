@@ -5,5 +5,5 @@
 #include "settings.hpp"
 
 namespace gta_base {
-  settings::Settings kSETTINGS{};
+settings::Settings kSETTINGS{};
 }
