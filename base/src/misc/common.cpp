@@ -8,6 +8,7 @@
 #include <robin_hood.h>
 #include <network/CNetworkPlayerMgr.hpp>
 #include <TlHelp32.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <wincrypt.h>
@@ -34,11 +35,11 @@ namespace gta_base::common {
 
   ZydisInstruction GetInstructionAtAddr(std::uintptr_t addr) {
     ZydisDecoder decoder;
-#ifdef _M_AMD64
+    #ifdef _M_AMD64
     if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64)))
-#else
-    if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
-#endif
+      #else
+      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
+      #endif
       return {};
 
     ZydisInstruction instruction{};
@@ -81,7 +82,8 @@ namespace gta_base::common {
 
   struct HexToIntTable {
     std::int64_t tab[128];
-    HexToIntTable() : tab {} {
+
+    HexToIntTable() : tab{} {
       tab['1'] = 1;
       tab['2'] = 2;
       tab['3'] = 3;
@@ -104,11 +106,12 @@ namespace gta_base::common {
       tab['f'] = 15;
       tab['F'] = 15;
     }
+
     inline std::int64_t operator[](char const idx) const { return tab[(std::size_t) idx]; }
   } hex_to_int_table;
 
   std::int64_t HexToIntFast(char number) {
-    return hex_to_int_table[(std::size_t)number];
+    return hex_to_int_table[(std::size_t) number];
   }
 
   std::string GetFileMd5Hash(const std::filesystem::path& file_path) {
@@ -137,7 +140,7 @@ namespace gta_base::common {
 
     std::vector<char> buffer(1024);
     while (file.read(buffer.data(), buffer.size())) {
-      if (!CryptHashData(hHash, (BYTE*)buffer.data(), buffer.size(), 0)) {
+      if (!CryptHashData(hHash, (BYTE*) buffer.data(), buffer.size(), 0)) {
         LOG_ERROR("CryptHashData failed: {}", GetLastError());
         CryptReleaseContext(hProv, 0);
         CryptDestroyHash(hHash);
@@ -145,7 +148,7 @@ namespace gta_base::common {
       }
     }
 
-    if (!CryptHashData(hHash, (BYTE*)buffer.data(), file.gcount(), 0)) {
+    if (!CryptHashData(hHash, (BYTE*) buffer.data(), file.gcount(), 0)) {
       LOG_ERROR("CryptHashData failed: {}", GetLastError());
       CryptReleaseContext(hProv, 0);
       CryptDestroyHash(hHash);
@@ -171,7 +174,7 @@ namespace gta_base::common {
   }
 
   std::string RemoveForbiddenFilenameChars(const std::filesystem::path& path) {
-    robin_hood::unordered_set<char> forbidden_chars = { '\\', '/', ':', '*', '?', '"', '<', '>', '|' };
+    robin_hood::unordered_set<char> forbidden_chars = {'\\', '/', ':', '*', '?', '"', '<', '>', '|'};
 
     std::string res = path.string();
     for (std::size_t i = 0; i < res.size(); i++) {
@@ -238,10 +241,10 @@ namespace gta_base::common {
   }
 
   std::string RemoveNonNumerical(std::string str) {
-    static const robin_hood::unordered_set<char> numbers = {'0','1','2','3','4','5','6','7','8','9'};
+    static const robin_hood::unordered_set<char> numbers = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     std::string result;
-    for (char& c : str) {
+    for (char& c: str) {
       if (numbers.contains(c)) {
         result += c;
       }
@@ -259,12 +262,21 @@ namespace gta_base::common {
     char szName[128];
     std::int32_t result{};
     switch (vk) {
-      case VK_LEFT: case VK_UP: case VK_RIGHT: case VK_DOWN:
-      case VK_RCONTROL: case VK_RMENU:
-      case VK_LWIN: case VK_RWIN: case VK_APPS:
-      case VK_PRIOR: case VK_NEXT:
-      case VK_END: case VK_HOME:
-      case VK_INSERT: case VK_DELETE:
+      case VK_LEFT:
+      case VK_UP:
+      case VK_RIGHT:
+      case VK_DOWN:
+      case VK_RCONTROL:
+      case VK_RMENU:
+      case VK_LWIN:
+      case VK_RWIN:
+      case VK_APPS:
+      case VK_PRIOR:
+      case VK_NEXT:
+      case VK_END:
+      case VK_HOME:
+      case VK_INSERT:
+      case VK_DELETE:
       case VK_DIVIDE:
       case VK_NUMLOCK:
         scanCode |= KF_EXTENDED;
@@ -272,7 +284,7 @@ namespace gta_base::common {
         result = GetKeyNameTextA(scanCode << 16, szName, 128);
     }
 
-    if(result == 0) {
+    if (result == 0) {
       LOG_ERROR("Failed to convert vk key: {} to char. win32 err code: {}", vk, GetLastError());
       return "unk";
     }
@@ -501,7 +513,7 @@ namespace gta_base::common {
       if (Module32First(h_snap, &mod_entry)) {
         do {
           if (!_stricmp(mod_entry.szModule, mod_name.c_str())) {
-            mod_base_addr = (std::uint64_t)mod_entry.modBaseAddr;
+            mod_base_addr = (std::uint64_t) mod_entry.modBaseAddr;
             break;
           }
         } while (Module32Next(h_snap, &mod_entry));
@@ -518,7 +530,7 @@ namespace gta_base::common {
       mod_entry.dwSize = sizeof(mod_entry);
       if (Module32First(h_snap, &mod_entry)) {
         do {
-          if ((std::uint64_t)mod_entry.modBaseAddr <= addr && addr <= (std::uint64_t)mod_entry.modBaseAddr + mod_entry.modBaseSize) {
+          if ((std::uint64_t) mod_entry.modBaseAddr <= addr && addr <= (std::uint64_t) mod_entry.modBaseAddr + mod_entry.modBaseSize) {
             break;
           }
         } while (Module32Next(h_snap, &mod_entry));
@@ -529,6 +541,7 @@ namespace gta_base::common {
   }
 
   static robin_hood::unordered_map<std::uint32_t, KeyState> key_state{};
+
   bool IsKeyDown(std::uint32_t key) {
     auto key_entry = key_state.find(key);
 
@@ -566,11 +579,11 @@ namespace gta_base::common {
   bool LoadImage(const std::filesystem::path& file, ImageTexture* out_texture) {
     auto path = GetTextureDir() / file;
 
-#ifdef NDEBUG
+    #ifdef NDEBUG
     LOG_INFO("Loading image: {}", file.string());
-#else
+    #else
     LOG_DEBUG("Loading image: {}", path.string());
-#endif
+    #endif
 
     // Load from disk into a raw RGBA buffer
     int image_width = 0;

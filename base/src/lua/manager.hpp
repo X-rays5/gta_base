@@ -41,6 +41,7 @@ namespace gta_base::lua {
     robin_hood::unordered_map<std::filesystem::path, ScriptInfo> running_scripts_;
   private:
   };
+
   inline Manager* kMANAGER{};
 }
 #endif //GTA_BASE_LUA_MANAGER_HPP

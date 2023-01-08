@@ -26,6 +26,7 @@
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
 rage::data::Data gta_base::globals::gta_data = {};
+
 void BaseMain() {
   using namespace gta_base;
 
@@ -63,7 +64,7 @@ void BaseMain() {
     waited_for_game_load = true;
     LOG_INFO("Waiting for the game to load...");
   }
-  while(*memory::kPOINTERS->game_state_ != eGameState::Playing) {
+  while (*memory::kPOINTERS->game_state_ != eGameState::Playing) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
   if (waited_for_game_load) {
@@ -71,7 +72,7 @@ void BaseMain() {
   }
 
   auto gta_data_loader = std::make_unique<rage::data::Loader>();
-  fiber::kPOOL->AddJob([&]{
+  fiber::kPOOL->AddJob([&] {
     auto gta_data = gta_data_loader->Load();
     if (!gta_data.has_value()) {
       LOG_CRITICAL("Failed to load gta data");
@@ -90,7 +91,6 @@ void BaseMain() {
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO("Discord initialized");
 
-
   auto player_mgr_inst = std::make_unique<player_mgr::Manager>();
   LOG_INFO("Player Manager initialized");
 
@@ -100,12 +100,12 @@ void BaseMain() {
   settings::option_state::Load(settings::option_state::GetSavePath());
   LOG_INFO("Settings loaded");
 
-  while(globals::gta_data.IsEmpty()) {
+  while (globals::gta_data.IsEmpty()) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
 
-  auto discord_thread = std::thread([]{
-    while(globals::running) {
+  auto discord_thread = std::thread([] {
+    while (globals::running) {
       rpc::kDISCORD->SetLargeImage("gta-logo");
       if (common::IsSessionStarted()) {
         auto player_mgr = rage::GetNetworkPlayerMgr();
@@ -120,8 +120,8 @@ void BaseMain() {
   });
   LOG_INFO("Started Discord thread");
 
-  auto scripting_thread = std::thread([]{
-    while(globals::running) {
+  auto scripting_thread = std::thread([] {
+    while (globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
       if (lua::kMANAGER) {
         lua::kMANAGER->RunScriptTick();

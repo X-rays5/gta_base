@@ -16,7 +16,7 @@ namespace gta_base {
 
   void ScriptManager::Tick(scriptmanager::ScriptType type) {
     std::lock_guard mtx_lock(mtx_);
-    for (auto&& script : scripts_) {
+    for (auto&& script: scripts_) {
       if (script->GetType() == type) {
         if (!script->IsInitialized()) {
           script->Init();

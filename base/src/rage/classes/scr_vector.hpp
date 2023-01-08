@@ -7,22 +7,20 @@
 #define GTA_BASE_SCR_VECTOR_HPP
 #include <rage/vector.hpp>
 
-namespace rage
-{
+namespace rage {
 
-#pragma pack(push, 1)
+  #pragma pack(push, 1)
+
   class scrVector {
   public:
     scrVector() = default;
 
     [[maybe_unused]] scrVector(float x, float y, float z) :
-      x(x), y(y), z(z)
-    {}
+      x(x), y(y), z(z) {}
 
     scrVector(fvector3& vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
-    scrVector operator+(const scrVector& other) const
-    {
+    scrVector operator+(const scrVector& other) const {
       scrVector vec;
       vec.x = this->x + other.x;
       vec.y = this->y + other.y;
@@ -30,8 +28,7 @@ namespace rage
       return vec;
     }
 
-    scrVector operator-(const scrVector& other) const
-    {
+    scrVector operator-(const scrVector& other) const {
       scrVector vec;
       vec.x = this->x - other.x;
       vec.y = this->y - other.y;
@@ -39,8 +36,7 @@ namespace rage
       return vec;
     }
 
-    scrVector operator*(const scrVector& other) const
-    {
+    scrVector operator*(const scrVector& other) const {
       scrVector vec;
       vec.x = this->x * other.x;
       vec.y = this->y * other.y;
@@ -48,8 +44,7 @@ namespace rage
       return vec;
     }
 
-    scrVector operator*(const float& other) const
-    {
+    scrVector operator*(const float& other) const {
       scrVector vec;
       vec.x = this->x * other;
       vec.y = this->y * other;
@@ -70,7 +65,7 @@ namespace rage
     }
 
     explicit operator fvector3() const {
-      return {x,y,z};
+      return {x, y, z};
     }
 
   public:
@@ -86,7 +81,8 @@ namespace rage
   private:
     char m_padding3[0x04]{};
   };
-#pragma pack(pop)
+
+  #pragma pack(pop)
 }
 
 #endif //GTA_BASE_SCR_VECTOR_HPP

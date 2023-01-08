@@ -11,14 +11,13 @@
 
 namespace gta_base {
   Hooking::Hooking() :
-  swap_chain_hook_(*memory::kPOINTERS->swap_chain_),
-  network_player_mgr_init_hook_("NetworkPlayerMgrInit", memory::kPOINTERS->NetworkPlayerMgrInit, &Hooks::NetworkPlayerMgrInit),
-  network_player_mgr_shutdown_hook_("NetworkPlayerMgrShutdown", memory::kPOINTERS->NetworkPlayerMgrShutdown, &Hooks::NetworkPlayerMgrShutdown),
-  assign_physical_index_hook_("AssignPhysicalIndex", memory::kPOINTERS->AssignPhysicalIdx, &Hooks::AssignPlayerPhysicalIdx),
-  run_script_threads_hook_("RunScriptThreads", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads),
-  gta_thread_start_hook_("GtaThreadStart", memory::kPOINTERS->GtaThreadStart, &Hooks::GtaThreadStart),
-  gta_thread_kill_hook_("GtaThreadKill", memory::kPOINTERS->GtaThreadKill, &Hooks::GtaThreadKill)
-  {
+    swap_chain_hook_(*memory::kPOINTERS->swap_chain_),
+    network_player_mgr_init_hook_("NetworkPlayerMgrInit", memory::kPOINTERS->NetworkPlayerMgrInit, &Hooks::NetworkPlayerMgrInit),
+    network_player_mgr_shutdown_hook_("NetworkPlayerMgrShutdown", memory::kPOINTERS->NetworkPlayerMgrShutdown, &Hooks::NetworkPlayerMgrShutdown),
+    assign_physical_index_hook_("AssignPhysicalIndex", memory::kPOINTERS->AssignPhysicalIdx, &Hooks::AssignPlayerPhysicalIdx),
+    run_script_threads_hook_("RunScriptThreads", memory::kPOINTERS->RunScriptThreads, &Hooks::RunScriptThreads),
+    gta_thread_start_hook_("GtaThreadStart", memory::kPOINTERS->GtaThreadStart, &Hooks::GtaThreadStart),
+    gta_thread_kill_hook_("GtaThreadKill", memory::kPOINTERS->GtaThreadKill, &Hooks::GtaThreadKill) {
     swap_chain_hook_.Hook("Present", Hooks::swapchain_present_index, &Hooks::Present);
     swap_chain_hook_.Hook("ResizeBuffers", Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
 
@@ -82,11 +81,13 @@ namespace gta_base {
   }
 
   bool Hooks::RunScriptThreads(std::uint32_t ops_to_execute) {
-    __try {
+    __try{
       ScriptThreadTick();
 
       return kHOOKING->run_script_threads_hook_.GetOriginal<decltype(&Hooks::RunScriptThreads)>()(ops_to_execute);
-    } __except (LOG_ERROR("Exception in RunScriptThreads: {}", GetExceptionInformation()->ExceptionRecord->ExceptionCode), EXCEPTION_CONTINUE_EXECUTION) {
+    }
+    __except(LOG_ERROR("Exception in RunScriptThreads: {}", GetExceptionInformation()->ExceptionRecord->ExceptionCode), EXCEPTION_CONTINUE_EXECUTION)
+    {
       return false;
     }
   }

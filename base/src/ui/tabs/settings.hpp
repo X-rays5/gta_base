@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_SETTINGS_UI_TAB_HPP
 #define GTA_BASE_SETTINGS_UI_TAB_HPP
 namespace gta_base::ui::tabs {
-      void SettingsTab();
-    }
+  void SettingsTab();
+}
 #endif //GTA_BASE_SETTINGS_UI_TAB_HPP

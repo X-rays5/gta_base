@@ -7,30 +7,28 @@
 #include "fwdec.hpp"
 
 namespace gta_base::memory::scanner {
-      class Batch {
-      public:
-        explicit Batch() = default;
-        ~Batch() noexcept = default;
+  class Batch {
+  public:
+    explicit Batch() = default;
+    ~Batch() noexcept = default;
 
-        void add(std::string name, char* pattern, std::function<void(Handle)> callback);
-        void add(std::string name, Pattern pattern, std::function<void(Handle)> callback);
-        void run(Range region);
+    void add(std::string name, char* pattern, std::function<void(Handle)> callback);
+    void add(std::string name, Pattern pattern, std::function<void(Handle)> callback);
+    void run(Range region);
 
-        struct entry
-        {
-          std::string name_;
-          Pattern pattern_;
-          std::function<void(Handle)> cb_;
+    struct entry {
+      std::string name_;
+      Pattern pattern_;
+      std::function<void(Handle)> cb_;
 
-          explicit entry(std::string name, Pattern pattern, std::function<void(Handle)> callback) :
-            name_(std::move(name)),
-            pattern_(std::move(pattern)),
-            cb_(std::move(callback))
-          {}
-        };
+      explicit entry(std::string name, Pattern pattern, std::function<void(Handle)> callback) :
+        name_(std::move(name)),
+        pattern_(std::move(pattern)),
+        cb_(std::move(callback)) {}
+    };
 
-      private:
-        std::vector<entry> entries_;
-      };
+  private:
+    std::vector<entry> entries_;
+  };
 
-    }
+}

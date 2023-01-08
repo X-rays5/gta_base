@@ -24,8 +24,7 @@ using Camera = Entity;
 using ScrHandle = Entity;
 using Vector3 = rage::scrVector;
 
-struct vector2
-{
+struct vector2 {
   float x{};
   float y{};
 };

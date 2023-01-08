@@ -8,7 +8,7 @@
 #include "../types.hpp"
 
 namespace rage::util {
-    /// @note This should be called in a fiber job
-    bool TakeControlOfEntity(Entity ent);
-  }
+  /// @note This should be called in a fiber job
+  bool TakeControlOfEntity(Entity ent);
+}
 #endif //GTA_BASE_ENTITY_HPP

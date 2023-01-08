@@ -42,7 +42,7 @@ namespace rage::data {
       Json::Value root;
 
       int i = 0;
-      for (auto& [name, vehicle] : vehicles) {
+      for (auto& [name, vehicle]: vehicles) {
         Json::Value obj;
         obj["raw_name"] = vehicle->raw_name;
         obj["display_name"] = vehicle->display_name;
@@ -161,7 +161,7 @@ namespace rage::data {
   robin_hood::unordered_set<std::string> Loader::GetItemFlags(const std::string& flag_str) {
     auto flags = common::SplitStr(flag_str, " ");
     robin_hood::unordered_set<std::string> ret;
-    for (auto& flag : flags) {
+    for (auto& flag: flags) {
       if (flag.empty())
         continue;
       ret.insert(flag.c_str());
@@ -181,7 +181,7 @@ namespace rage::data {
       LOG_INFO("Rebuilding gta data cache");
       auto data = LoadDataFromGameData();
 
-      misc::kTHREAD_POOL->AddJob([=]{
+      misc::kTHREAD_POOL->AddJob([=] {
         WriteVersionFile();
         WriteVehicles(data.vehicles_);
         WriteWeapons(data.weapons_);
@@ -207,9 +207,9 @@ namespace rage::data {
 
     tmp_loading_veh_dlc_.insert(cur_dlc_name_);
 
-    cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc){
+    cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc) {
       const auto& items = doc.select_nodes("/CVehicleModelInfo__InitDataList/InitDatas/Item");
-      for (const auto& item_node : items) {
+      for (const auto& item_node: items) {
         const auto item = item_node.node();
 
         const auto hash = joaat(item.child("modelName").text().as_string());
@@ -229,9 +229,9 @@ namespace rage::data {
   }
 
   void Loader::ParseWeapons(const std::filesystem::path& file) {
-    cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc){
+    cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc) {
       const auto items = doc.select_nodes("/CWeaponInfoBlob/Infos/Item/Infos/Item[@type='CWeaponInfo']");
-      for (const auto& item_node : items) {
+      for (const auto& item_node: items) {
         const auto item = item_node.node();
 
         const auto name = item.child("Name").text().as_string();
@@ -289,9 +289,9 @@ namespace rage::data {
 
     tmp_loading_ped_dlc_.insert(cur_dlc_name_);
 
-    cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc){
+    cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc) {
       const auto items = doc.select_nodes("/CPedModelInfo__InitDataList/InitDatas/Item");
-      for (const auto& item_node : items) {
+      for (const auto& item_node: items) {
         const auto item = item_node.node();
 
         const auto model_name = item.child("Name").text().as_string();
@@ -312,9 +312,9 @@ namespace rage::data {
     util::FipackReader::ForEachFipackFile([&](util::FipackReader& rpf_wrapper) -> std::size_t {
       cur_rpf_wrapper_ = &rpf_wrapper;
       const std::vector<std::filesystem::path> files = cur_rpf_wrapper_->GetFilePaths();
-      for (const auto& file : files) {
+      for (const auto& file: files) {
         if (file.filename() == "setup2.xml") {
-          cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc){
+          cur_rpf_wrapper_->ReadXmlFile(file, [&](const pugi::xml_document& doc) {
             auto item = doc.select_node("/SSetupData/nameHash");
             cur_dlc_name_ = item.node().text().as_string();
           });
@@ -335,17 +335,17 @@ namespace rage::data {
     });
 
     Vehicles vehicles;
-    for (auto&& vehicle : tmp_loading_veh_) {
+    for (auto&& vehicle: tmp_loading_veh_) {
       vehicles[vehicle.second->display_name] = std::move(vehicle.second);
     }
 
     Weapons weapons;
-    for (auto&& weapon : tmp_loading_wep_) {
+    for (auto&& weapon: tmp_loading_wep_) {
       weapons.emplace_back(std::move(weapon.second));
     }
 
     Peds peds;
-    for (auto&& ped : tmp_loading_ped_) {
+    for (auto&& ped: tmp_loading_ped_) {
       peds.emplace_back(std::move(ped.second));
     }
 
@@ -367,7 +367,7 @@ namespace rage::data {
       return res;
     }
 
-    for (auto&& vehicle_member : json.GetArray()) {
+    for (auto&& vehicle_member: json.GetArray()) {
       auto veh = std::make_shared<Vehicle>(vehicle_member.GetObj());
 
       res[veh->display_name] = std::move(veh);
@@ -391,7 +391,7 @@ namespace rage::data {
       return res;
     }
 
-    for (auto&& weapon_member : json.GetArray()) {
+    for (auto&& weapon_member: json.GetArray()) {
       res.push_back(std::make_shared<Weapon>(weapon_member.GetObj()));
     }
 
@@ -413,7 +413,7 @@ namespace rage::data {
       return res;
     }
 
-    for (auto&& ped_member : json.GetArray()) {
+    for (auto&& ped_member: json.GetArray()) {
       res.push_back(std::make_shared<Ped>(ped_member.GetObj()));
     }
 
@@ -425,45 +425,45 @@ namespace rage::data {
       return "Day 1";
 
     static const robin_hood::unordered_map<std::string, std::string> name_map = {
-      {"mpSecurity", "The Contract"},
-      {"mpHalloween", "Halloween Surprise"},
-      {"MPBeach DLC", "Beach Bum"},
-      {"mpTuner", "Los Santos Tuners"},
-      {"mpLuxe2", "Ill-Gotten Gains Part 2"},
+      {"mpSecurity",       "The Contract"},
+      {"mpHalloween",      "Halloween Surprise"},
+      {"MPBeach DLC",      "Beach Bum"},
+      {"mpTuner",          "Los Santos Tuners"},
+      {"mpLuxe2",          "Ill-Gotten Gains Part 2"},
       {"MPValentines DLC", "Valentine's Day"},
-      {"MPBusiness DLC", "Business"},
-      {"mpHeist", "Heists"},
-      {"mpChristmas2", "Festive Surprise"},
-      {"mpPilot", "San Andreas Flight School"},
-      {"mpHeist3", "Diamond Casino Heist"},
-      {"mpImportExport", "Import/Export"},
-      {"spUpgrade", "Day 1"}, // Items included in the special edition version of the game
-      {"mpGunRunning", "Gunrunning"},
-      {"MPSUM2", "Criminal Enterprises"},
-      {"mpSmuggler", "Smuggler's Run"},
-      {"mpLuxe", "Ill-Gotten Gains Part 1"},
-      {"mpJanuary2016", "January 2016"},
-      {"mpBiker", "Bikers"},
-      {"mpBattle", "After Hours"},
-      {"mpApartment", "Executives and Other Criminals"},
-      {"mpStunt", "Cunning Stunts Bonuses I"},
-      {"mpChristmas2018", "Arena War"},
-      {"mpSpecialRaces", "Cunning Stunts Part 2"},
-      {"mpValentines2", "Be My Valentine"},
-      {"mpSum", "Criminal Enterprises"},
-      {"mpBusiness2", "High Life"},
-      {"mpLowrider", "Lowriders"},
-      {"MPCHRISTMAS3", "Los Santos Drug Wars"},
-      {"mpLowrider2", "Lowriders: Custom Classics"},
-      {"mpAssault", "After Hours"},
-      {"mpIndependence", "Independence Day"},
-      {"mpxmas_604490", "Festive Surprise 2015"},
-      {"mpVinewood", "Diamond Casino & Resort"},
-      {"mpLTS", "Last Team Standing"},
-      {"mpHeist4", "Cayo Perico Heist"},
-      {"mpChristmas2017", "Doomsday Heist"},
-      {"mpExecutive", "Finance and Felony"},
-      {"MPHipster DLC", "\"I'm Not a Hipster\" Update"}
+      {"MPBusiness DLC",   "Business"},
+      {"mpHeist",          "Heists"},
+      {"mpChristmas2",     "Festive Surprise"},
+      {"mpPilot",          "San Andreas Flight School"},
+      {"mpHeist3",         "Diamond Casino Heist"},
+      {"mpImportExport",   "Import/Export"},
+      {"spUpgrade",        "Day 1"}, // Items included in the special edition version of the game
+      {"mpGunRunning",     "Gunrunning"},
+      {"MPSUM2",           "Criminal Enterprises"},
+      {"mpSmuggler",       "Smuggler's Run"},
+      {"mpLuxe",           "Ill-Gotten Gains Part 1"},
+      {"mpJanuary2016",    "January 2016"},
+      {"mpBiker",          "Bikers"},
+      {"mpBattle",         "After Hours"},
+      {"mpApartment",      "Executives and Other Criminals"},
+      {"mpStunt",          "Cunning Stunts Bonuses I"},
+      {"mpChristmas2018",  "Arena War"},
+      {"mpSpecialRaces",   "Cunning Stunts Part 2"},
+      {"mpValentines2",    "Be My Valentine"},
+      {"mpSum",            "Criminal Enterprises"},
+      {"mpBusiness2",      "High Life"},
+      {"mpLowrider",       "Lowriders"},
+      {"MPCHRISTMAS3",     "Los Santos Drug Wars"},
+      {"mpLowrider2",      "Lowriders: Custom Classics"},
+      {"mpAssault",        "After Hours"},
+      {"mpIndependence",   "Independence Day"},
+      {"mpxmas_604490",    "Festive Surprise 2015"},
+      {"mpVinewood",       "Diamond Casino & Resort"},
+      {"mpLTS",            "Last Team Standing"},
+      {"mpHeist4",         "Cayo Perico Heist"},
+      {"mpChristmas2017",  "Doomsday Heist"},
+      {"mpExecutive",      "Finance and Felony"},
+      {"MPHipster DLC",    "\"I'm Not a Hipster\" Update"}
     };
 
     auto it = name_map.find(dlc_name);

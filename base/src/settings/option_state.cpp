@@ -12,7 +12,7 @@ namespace gta_base::settings::option_state {
     LOG_INFO("Saving settings {}", file.stem().string());
 
     std::vector<std::pair<std::string, std::string>> save_vals;
-    ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt){
+    ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt) {
       if (opt->HasFlag(ui::OptionFlag::kSaveable)) {
         std::pair<std::string, std::string> save = {std::string(opt->GetNameKey()), opt->GetSaveVal()};
         save_vals.emplace_back(save);
@@ -22,7 +22,7 @@ namespace gta_base::settings::option_state {
     try {
       rapidjson::Document json;
       json.SetObject();
-      for (auto&& save_entry : save_vals) {
+      for (auto&& save_entry: save_vals) {
         auto key = json::StringToJsonVal(save_entry.first, json.GetAllocator());
         auto val = json::StringToJsonVal(save_entry.second, json.GetAllocator());
         json.AddMember(key, val, json.GetAllocator());
@@ -48,13 +48,13 @@ namespace gta_base::settings::option_state {
       json.AddMember(json::StringToJsonVal(key, json.GetAllocator()), json::StringToJsonVal(val, json.GetAllocator()), json.GetAllocator());
 
       json::ToFile(json, file);
-    } catch (std::exception &e) {
+    } catch (std::exception& e) {
       LOG_ERROR(e.what());
     }
   }
 
-  void Load(const std::filesystem::path& file ) {
-    if(!std::filesystem::exists(file))
+  void Load(const std::filesystem::path& file) {
+    if (!std::filesystem::exists(file))
       return;
 
     LOG_INFO("Loading settings {}", file.stem().string());
@@ -63,17 +63,17 @@ namespace gta_base::settings::option_state {
 
     try {
       auto json = json::FromFile(file);
-      if(!json.IsObject())
+      if (!json.IsObject())
         return;
 
       ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt) {
-        if(opt->HasFlag(ui::OptionFlag::kSaveable)) {
-          if(json.HasMember(opt->GetNameKey().data())) {
+        if (opt->HasFlag(ui::OptionFlag::kSaveable)) {
+          if (json.HasMember(opt->GetNameKey().data())) {
             opt->SetSavedVal(json[opt->GetNameKey().data()].GetString());
           }
         }
       });
-    } catch(std::exception& e) {
+    } catch (std::exception& e) {
       LOG_ERROR(e.what());
     }
   }

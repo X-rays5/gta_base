@@ -19,31 +19,55 @@ namespace gta_base::logger::stacktrace {
   std::uint32_t RECURSIVE_CRASH_CHECK = 0;
 
   std::string ExceptionCodeToStr(std::uint32_t code) {
-    switch(code) {
-      case EXCEPTION_ACCESS_VIOLATION: return "EXCEPTION_ACCESS_VIOLATION";
-      case EXCEPTION_DATATYPE_MISALIGNMENT: return "EXCEPTION_DATATYPE_MISALIGNMENT";
-      case EXCEPTION_BREAKPOINT: return "EXCEPTION_BREAKPOINT";
-      case EXCEPTION_SINGLE_STEP: return "EXCEPTION_SINGLE_STEP";
-      case EXCEPTION_ARRAY_BOUNDS_EXCEEDED: return "EXCEPTION_ARRAY_BOUNDS_EXCEEDED";
-      case EXCEPTION_FLT_DENORMAL_OPERAND: return "EXCEPTION_FLT_DENORMAL_OPERAND";
-      case EXCEPTION_FLT_DIVIDE_BY_ZERO: return "EXCEPTION_FLT_DIVIDE_BY_ZERO";
-      case EXCEPTION_FLT_INEXACT_RESULT: return "EXCEPTION_FLT_INEXACT_RESULT";
-      case EXCEPTION_FLT_INVALID_OPERATION: return "EXCEPTION_FLT_INVALID_OPERATION";
-      case EXCEPTION_FLT_OVERFLOW: return "EXCEPTION_FLT_OVERFLOW";
-      case EXCEPTION_FLT_STACK_CHECK: return "EXCEPTION_FLT_STACK_CHECK";
-      case EXCEPTION_FLT_UNDERFLOW: return "EXCEPTION_FLT_UNDERFLOW";
-      case EXCEPTION_INT_DIVIDE_BY_ZERO: return "EXCEPTION_INT_DIVIDE_BY_ZERO";
-      case EXCEPTION_INT_OVERFLOW: return "EXCEPTION_INT_OVERFLOW";
-      case EXCEPTION_PRIV_INSTRUCTION: return "EXCEPTION_PRIV_INSTRUCTION";
-      case EXCEPTION_IN_PAGE_ERROR: return "EXCEPTION_IN_PAGE_ERROR";
-      case EXCEPTION_ILLEGAL_INSTRUCTION: return "EXCEPTION_ILLEGAL_INSTRUCTION";
-      case EXCEPTION_NONCONTINUABLE_EXCEPTION: return "EXCEPTION_NONCONTINUABLE_EXCEPTION";
-      case EXCEPTION_STACK_OVERFLOW: return "EXCEPTION_STACK_OVERFLOW";
-      case EXCEPTION_INVALID_DISPOSITION: return "EXCEPTION_INVALID_DISPOSITION";
-      case EXCEPTION_GUARD_PAGE: return "EXCEPTION_GUARD_PAGE";
-      case EXCEPTION_INVALID_HANDLE: return "EXCEPTION_INVALID_HANDLE";
-      case 3765269347: return "EXCEPTION_MSVC_CPP";
-      default: return "UNKNOWN";
+    switch (code) {
+      case EXCEPTION_ACCESS_VIOLATION:
+        return "EXCEPTION_ACCESS_VIOLATION";
+      case EXCEPTION_DATATYPE_MISALIGNMENT:
+        return "EXCEPTION_DATATYPE_MISALIGNMENT";
+      case EXCEPTION_BREAKPOINT:
+        return "EXCEPTION_BREAKPOINT";
+      case EXCEPTION_SINGLE_STEP:
+        return "EXCEPTION_SINGLE_STEP";
+      case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
+        return "EXCEPTION_ARRAY_BOUNDS_EXCEEDED";
+      case EXCEPTION_FLT_DENORMAL_OPERAND:
+        return "EXCEPTION_FLT_DENORMAL_OPERAND";
+      case EXCEPTION_FLT_DIVIDE_BY_ZERO:
+        return "EXCEPTION_FLT_DIVIDE_BY_ZERO";
+      case EXCEPTION_FLT_INEXACT_RESULT:
+        return "EXCEPTION_FLT_INEXACT_RESULT";
+      case EXCEPTION_FLT_INVALID_OPERATION:
+        return "EXCEPTION_FLT_INVALID_OPERATION";
+      case EXCEPTION_FLT_OVERFLOW:
+        return "EXCEPTION_FLT_OVERFLOW";
+      case EXCEPTION_FLT_STACK_CHECK:
+        return "EXCEPTION_FLT_STACK_CHECK";
+      case EXCEPTION_FLT_UNDERFLOW:
+        return "EXCEPTION_FLT_UNDERFLOW";
+      case EXCEPTION_INT_DIVIDE_BY_ZERO:
+        return "EXCEPTION_INT_DIVIDE_BY_ZERO";
+      case EXCEPTION_INT_OVERFLOW:
+        return "EXCEPTION_INT_OVERFLOW";
+      case EXCEPTION_PRIV_INSTRUCTION:
+        return "EXCEPTION_PRIV_INSTRUCTION";
+      case EXCEPTION_IN_PAGE_ERROR:
+        return "EXCEPTION_IN_PAGE_ERROR";
+      case EXCEPTION_ILLEGAL_INSTRUCTION:
+        return "EXCEPTION_ILLEGAL_INSTRUCTION";
+      case EXCEPTION_NONCONTINUABLE_EXCEPTION:
+        return "EXCEPTION_NONCONTINUABLE_EXCEPTION";
+      case EXCEPTION_STACK_OVERFLOW:
+        return "EXCEPTION_STACK_OVERFLOW";
+      case EXCEPTION_INVALID_DISPOSITION:
+        return "EXCEPTION_INVALID_DISPOSITION";
+      case EXCEPTION_GUARD_PAGE:
+        return "EXCEPTION_GUARD_PAGE";
+      case EXCEPTION_INVALID_HANDLE:
+        return "EXCEPTION_INVALID_HANDLE";
+      case 3765269347:
+        return "EXCEPTION_MSVC_CPP";
+      default:
+        return "UNKNOWN";
     }
   }
 
@@ -89,29 +113,28 @@ namespace gta_base::logger::stacktrace {
     frame.AddrPC.Mode = AddrModeFlat;
     frame.AddrFrame.Mode = AddrModeFlat;
     frame.AddrStack.Mode = AddrModeFlat;
-#if defined(_M_ARM64)
+    #if defined(_M_ARM64)
     frame.AddrPC.Offset = context->Pc;
         frame.AddrFrame.Offset = context->Fp;
         frame.AddrStack.Offset = context->Sp;
         machine_type = IMAGE_FILE_MACHINE_ARM64;
-#elif defined(_M_ARM)
+    #elif defined(_M_ARM)
     frame.AddrPC.Offset = context->Pc;
         frame.AddrFrame.Offset = context->R11;
         frame.AddrStack.Offset = context->Sp;
         machine_type = IMAGE_FILE_MACHINE_ARM;
-#elif defined(_M_X64)
+    #elif defined(_M_X64)
     frame.AddrPC.Offset = context->Rip;
     frame.AddrFrame.Offset = context->Rbp;
     frame.AddrStack.Offset = context->Rsp;
     machine_type = IMAGE_FILE_MACHINE_AMD64;
-#else
+    #else
     frame.AddrPC.Offset = context->Eip;
         frame.AddrPC.Offset = context->Ebp;
         frame.AddrPC.Offset = context->Esp;
         machine_type = IMAGE_FILE_MACHINE_I386;
-#endif
-    for (size_t index = 0; index < frame_pointers.size(); ++index)
-    {
+    #endif
+    for (size_t index = 0; index < frame_pointers.size(); ++index) {
       if (StackWalk64(machine_type,
                       GetCurrentProcess(),
                       GetCurrentThread(),
@@ -122,8 +145,7 @@ namespace gta_base::logger::stacktrace {
                       SymGetModuleBase64,
                       nullptr)) {
         frame_pointers[index] = frame.AddrPC.Offset;
-      }
-      else {
+      } else {
         break;
       }
     }
@@ -143,7 +165,7 @@ namespace gta_base::logger::stacktrace {
           MODULEINFO info;
           if (GetModuleInformation(hProcess, hMods[i], &info, sizeof(MODULEINFO))) {
             std::map<uint64_t, uint64_t> modInfo;
-            map->emplace(modName, std::make_pair((uint64_t)info.lpBaseOfDll, (uint64_t)info.SizeOfImage));
+            map->emplace(modName, std::make_pair((uint64_t) info.lpBaseOfDll, (uint64_t) info.SizeOfImage));
           }
         }
       }
@@ -154,7 +176,7 @@ namespace gta_base::logger::stacktrace {
   std::string getModuleNameFromAddress(uint64_t address) {
     std::map<std::string, std::pair<uint64_t, uint64_t>> map;
     getAllModuleInfos(&map);
-    for (auto const& [key, val] : map) {
+    for (auto const& [key, val]: map) {
       if (address > val.first && address < (val.first + val.second)) {
         std::string retn = key + "+" + common::AddrToHex(address - val.first);
         return retn;
@@ -162,7 +184,6 @@ namespace gta_base::logger::stacktrace {
     }
     return "";
   }
-
 
   // extract readable text from a given stack frame. All thanks to
   // using SymFromAddr and SymGetLineFromAddr64 with the stack pointer
@@ -186,15 +207,13 @@ namespace gta_base::logger::stacktrace {
       if (SymGetLineFromAddr64(GetCurrentProcess(), addr, &displacement, &line)) {
         lineInformation.append(" ").append(line.FileName).append(" L: ");
         lineInformation.append(std::to_string(line.LineNumber - 1));
-      }
-      else {
+      } else {
         std::string moduleName = getModuleNameFromAddress(addr);
         if (!moduleName.empty()) {
           lineInformation.append(" ").append(moduleName);
         }
       }
-    }
-    else {
+    } else {
       std::string moduleName = getModuleNameFromAddress(addr);
       if (!moduleName.empty()) {
         lineInformation.append(" ").append(moduleName);
@@ -247,16 +266,16 @@ namespace gta_base::logger::stacktrace {
   }
 
   std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx) {
-#ifndef NDEBUG
+    #ifndef NDEBUG
     //__debugbreak();
-#endif
+    #endif
 
     std::stringstream msg;
     msg << "\n***** EXCEPTION RECEIVED *****\n";
     msg << "\n***** Received fatal exception: " << ExceptionCodeToStr(except_rec->ExceptionCode) << " pid: " << _getpid() << " module: " << GetFileExceptionOccured(except_rec) << " *****\n";
     msg << "***** Exception code: " << common::AddrToHex(except_rec->ExceptionCode) << " *****\n";
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
-    msg << "***** Exception instruction: " << common::GetInstructionStr((std::uintptr_t)except_rec->ExceptionAddress) << " *****\n";
+    msg << "***** Exception instruction: " << common::GetInstructionStr((std::uintptr_t) except_rec->ExceptionAddress) << " *****\n";
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
 
     msg << "\n***** STACKDUMP *****\n";
@@ -275,14 +294,14 @@ namespace gta_base::logger::stacktrace {
         return "GetExceptionString() error: Failed to init SymInitialize() for retrieving symbols in stack";
       }
 
-      std::shared_ptr<void> RaiiSymCleaner(nullptr, [&](void*){
+      std::shared_ptr<void> RaiiSymCleaner(nullptr, [&](void*) {
         SymCleanup(GetCurrentProcess());
       });
 
       msg << "\nLoaded Modules:\n";
       std::map<std::string, std::pair<uint64_t, uint64_t>> map;
       getAllModuleInfos(&map);
-      for (auto const& [key, val] : map) {
+      for (auto const& [key, val]: map) {
         msg << key + " Base Address: " + common::AddrToHex(val.first) + " Size: " + common::AddrToHex(val.second);
         msg << "\n";
       }
@@ -290,7 +309,7 @@ namespace gta_base::logger::stacktrace {
       msg << GetRegisters(ctx);
 
       const size_t kmax_frame_dump_size = 64;
-      std::vector<uint64_t>  frame_pointers(kmax_frame_dump_size);
+      std::vector<uint64_t> frame_pointers(kmax_frame_dump_size);
       captureStackTrace(ctx, frame_pointers);
       msg << "\n" << convertFramesToText(frame_pointers) << "\n";
 

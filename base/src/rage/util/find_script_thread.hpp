@@ -11,7 +11,7 @@
 
 namespace rage {
   inline GtaThread* FindScriptThread(rage::joaat_t script_hash) {
-    for (auto thread : *gta_base::memory::kPOINTERS->script_threads_) {
+    for (auto thread: *gta_base::memory::kPOINTERS->script_threads_) {
       if (thread->m_context.m_script_hash == script_hash)
         return thread;
     }

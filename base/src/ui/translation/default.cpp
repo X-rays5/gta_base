@@ -6,7 +6,7 @@
 #define ADD_TRANSLATION(key, trans) {xorstr_(key), xorstr_(trans)}
 
 namespace gta_base::ui {
-   const robin_hood::unordered_map<std::string, std::string> translation::default_translation = {
+  const robin_hood::unordered_map<std::string, std::string> translation::default_translation = {
     ADD_TRANSLATION("tab/title/home", "Home"),
     ADD_TRANSLATION("tab/title/self", "Player"),
     ADD_TRANSLATION("tab/title/player_health", "Health"),

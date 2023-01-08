@@ -36,7 +36,7 @@ namespace gta_base::ui {
 
     // Could cause issues when there are only label options
     auto cur_opt = sub->GetOption(sub->GetSelectedOption());
-    while(cur_opt->HasFlag(OptionFlag::kLabel) || cur_opt->HasFlag(OptionFlag::kDisabled)) {
+    while (cur_opt->HasFlag(OptionFlag::kLabel) || cur_opt->HasFlag(OptionFlag::kDisabled)) {
       sub->HandleKey(where_to_scroll);
       cur_opt = sub->GetOption(sub->GetSelectedOption());
     }
@@ -125,7 +125,7 @@ namespace gta_base::ui {
       else if (y_pos > 1)
         y_pos = 1;
 
-     draw_list_->AddCommand(d3d::draw::Image(img_header, {x_base, y_pos}, {x_size, y_size_header}));
+      draw_list_->AddCommand(d3d::draw::Image(img_header, {x_base, y_pos}, {x_size, y_size_header}));
     }
   }
 
@@ -147,7 +147,7 @@ namespace gta_base::ui {
     draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_bottom_bar}, primary_color));
     draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color));
     draw_list_->AddCommand(DrawTextRight(y_pos - (y_size_bottom_bar / 4), text_color, globals::version));
-    draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color, fmt::format("FPS: {}", (int)(ImGui::GetIO().Framerate / 2))));
+    draw_list_->AddCommand(DrawTextLeft(y_pos - (y_size_bottom_bar / 4), text_color, fmt::format("FPS: {}", (int) (ImGui::GetIO().Framerate / 2))));
   }
 
   void Manager::DrawScrollBar(size_t option_count, int current_option) {

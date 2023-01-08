@@ -23,7 +23,7 @@ namespace gta_base::lua {
       // replace all \n with \r\n
       std::string err_str = err.what();
       for (std::size_t i = 0; i < err_str.size(); i++) {
-        if(err_str[i] == '\n') {
+        if (err_str[i] == '\n') {
           err_str.insert(i, "\r");
           i++;
         }
@@ -125,7 +125,6 @@ namespace gta_base::lua {
     return val;
   }
 
-
   void Script::AddFunctions() {
     auto logging_metatable = lua_state_.create_table_with();
 
@@ -146,11 +145,11 @@ namespace gta_base::lua {
     });
 
     logging_metatable.set_function("debug", [&](const std::string& msg, sol::variadic_args va) {
-#ifndef NDEBUG
+      #ifndef NDEBUG
       LOG_DEBUG("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
-#else
+      #else
       LOG_WARN("[{}:{}] This function is meanth only for development builds", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_));
-#endif
+      #endif
     });
 
     logging_metatable.set_function("format", [&](const std::string& msg, sol::variadic_args va) {
@@ -198,7 +197,7 @@ namespace gta_base::lua {
     fmt::dynamic_format_arg_store<fmt::format_context> ds;
     ds.reserve(va.size(), 0);
 
-    for (auto&& arg : va) {
+    for (auto&& arg: va) {
       ds.push_back(StackValueToString(arg.lua_state(), arg.stack_index()));
     }
 

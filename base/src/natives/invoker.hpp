@@ -37,21 +37,21 @@ namespace rage {
     NativeCallContext call_context_;
     robin_hood::unordered_map<rage::scrNativeHash, rage::scrNativeHandler> handler_cache_;
   };
+
   inline Invoker kINVOKER;
 }
 
-template <typename Ret, typename ...Args>
-__forceinline Ret invoke(rage::scrNativeHash hash, Args&& ...args)
-{
+template<typename Ret, typename ...Args>
+__forceinline Ret invoke(rage::scrNativeHash hash, Args&& ...args) {
   using namespace rage;
 
   kINVOKER.BeginCall();
   (kINVOKER.PushArg(std::forward<Args>(args)), ...);
   kINVOKER.EndCall(hash);
 
-  if constexpr (!std::is_same_v<Ret, void>)
-  {
+  if constexpr (!std::is_same_v<Ret, void>) {
     return kINVOKER.GetRetVal<Ret>();
   }
 }
+
 #endif //GTA_BASE_INVOKER_HPP

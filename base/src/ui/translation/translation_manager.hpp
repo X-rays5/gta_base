@@ -40,12 +40,13 @@ namespace gta_base::ui {
   };
 
   class TranslationManager;
+
   inline TranslationManager* kTRANSLATION_MANAGER{};
 
   class TranslationManager {
   public:
     template<class... Args>
-    explicit TranslationManager(Args&&... args) {
+    explicit TranslationManager(Args&& ... args) {
       active_translation_ = std::make_unique<Translation>(std::forward<Args>(args)...);
 
       kTRANSLATION_MANAGER = this;
@@ -78,7 +79,7 @@ namespace gta_base::ui {
       std::filesystem::directory_iterator it(common::GetTranslationDir());
       std::vector<std::filesystem::path> translation_list;
 
-      for (const auto& entry : it) {
+      for (const auto& entry: it) {
         if (entry.is_regular_file() && entry.path().extension() == ".json") {
           translation_list.push_back(entry.path());
         }

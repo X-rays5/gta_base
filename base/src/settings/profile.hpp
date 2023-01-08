@@ -39,7 +39,9 @@ namespace gta_base::settings::profile {
     }
   }
 
-  FORCE_INLINE std::string GetSelectedProfileVal(const std::string& key) {
+  FORCE_INLINE std::string
+
+  GetSelectedProfileVal(const std::string& key) {
     std::unique_lock lock(profile_mutex);
     EnsureFile();
     auto doc = json::FromFile(selected_profiles_path);
@@ -65,7 +67,9 @@ namespace gta_base::settings::profile {
     json::ToFile(doc, selected_profiles_path);
   }
 
-  FORCE_INLINE std::string GetSelectedHotkeyProfile() {
+  FORCE_INLINE std::string
+
+  GetSelectedHotkeyProfile() {
     if (hotkey_profile_init) {
       hotkey_profile_val = GetSelectedProfileVal(hotkey_profile_key);
       hotkey_profile_init = false;
@@ -79,7 +83,9 @@ namespace gta_base::settings::profile {
     SaveSelectedProfileVal(hotkey_profile_key, name);
   }
 
-  FORCE_INLINE std::string GetSelectedOptionStateProfile() {
+  FORCE_INLINE std::string
+
+  GetSelectedOptionStateProfile() {
     if (option_state_profile_init) {
       option_state_profile_val = GetSelectedProfileVal(option_state_profile_key);
       option_state_profile_init = false;
@@ -87,13 +93,16 @@ namespace gta_base::settings::profile {
 
     return option_state_profile_val;
   }
+
   FORCE_INLINE void SetSelectedOptionProfile(const std::string& name) {
     option_state_profile_val = name;
 
     SaveSelectedProfileVal(option_state_profile_key, name);
   }
 
-  FORCE_INLINE std::string GetSelectedTranslation() {
+  FORCE_INLINE std::string
+
+  GetSelectedTranslation() {
     if (translation_init) {
       translation_val = GetSelectedProfileVal(translation_key);
       translation_init = false;
@@ -101,13 +110,16 @@ namespace gta_base::settings::profile {
 
     return translation_val;
   }
+
   FORCE_INLINE void SetSelectedTranslation(const std::string& name) {
     translation_val = name;
 
     SaveSelectedProfileVal(translation_key, name);
   }
 
-  FORCE_INLINE std::string GetSelectedTheme() {
+  FORCE_INLINE std::string
+
+  GetSelectedTheme() {
     if (theme_init) {
       theme_val = GetSelectedProfileVal(theme_key);
       theme_init = false;
@@ -115,6 +127,7 @@ namespace gta_base::settings::profile {
 
     return theme_val;
   }
+
   FORCE_INLINE void SetSelectedTheme(const std::string& name) {
     theme_val = name;
 

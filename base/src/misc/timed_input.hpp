@@ -7,31 +7,31 @@
 #define GTA_BASE_TIMED_INPUT_HPP
 
 namespace gta_base::util {
-    class TimedInput {
-    public:
-      TimedInput(int input, std::uint64_t timeout) : input_(input), timeout_(timeout) {}
+  class TimedInput {
+  public:
+    TimedInput(int input, std::uint64_t timeout) : input_(input), timeout_(timeout) {}
 
-      bool Get();
+    bool Get();
 
-    private:
+  private:
 
-      int input_;
-      std::uint64_t last_input_ = NULL;
-      std::uint64_t timeout_;
-    };
+    int input_;
+    std::uint64_t last_input_ = NULL;
+    std::uint64_t timeout_;
+  };
 
-    class ModifierTimedInput {
-    public:
-      ModifierTimedInput(int modifier, int input, std::uint64_t timeout) : modifier_(modifier), input_(input), timeout_(timeout) {}
+  class ModifierTimedInput {
+  public:
+    ModifierTimedInput(int modifier, int input, std::uint64_t timeout) : modifier_(modifier), input_(input), timeout_(timeout) {}
 
-      bool Get();
+    bool Get();
 
-    private:
+  private:
 
-      int modifier_;
-      int input_;
-      std::uint64_t last_input_ = NULL;
-      std::uint64_t timeout_;
-    };
-  }
+    int modifier_;
+    int input_;
+    std::uint64_t last_input_ = NULL;
+    std::uint64_t timeout_;
+  };
+}
 #endif //GTA_BASE_TIMED_INPUT_HPP

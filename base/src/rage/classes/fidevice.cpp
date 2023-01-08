@@ -6,19 +6,16 @@
 #include "../../memory/pointers.hpp"
 
 namespace rage {
-#define PURECALL() LOG_CRITICAL("pure fiDevice call ({})", __FUNCTION__); return 0
+  #define PURECALL() LOG_CRITICAL("pure fiDevice call ({})", __FUNCTION__); return 0
 
-  fiDeviceImplemented::fiDeviceImplemented()
-  {
+  fiDeviceImplemented::fiDeviceImplemented() {
   }
 
-  fiDeviceImplemented::~fiDeviceImplemented()
-  {
+  fiDeviceImplemented::~fiDeviceImplemented() {
 
   }
 
-  fiDevice::~fiDevice()
-  {
+  fiDevice::~fiDevice() {
 
   }
 
@@ -32,243 +29,195 @@ namespace rage {
 
   uint64_t fiDeviceImplemented::Open(const char* fileName, bool) { PURECALL(); }
 
-  uint64_t fiDeviceImplemented::OpenBulk(const char* fileName, uint64_t* ptr)
-  {
+  uint64_t fiDeviceImplemented::OpenBulk(const char* fileName, uint64_t* ptr) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::OpenBulkWrap(const char* fileName, uint64_t* ptr, void* a3)
-  {
+  uint64_t fiDeviceImplemented::OpenBulkWrap(const char* fileName, uint64_t* ptr, void* a3) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::CreateLocal(const char* fileName)
-  {
+  uint64_t fiDeviceImplemented::CreateLocal(const char* fileName) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::Create(const char*)
-  {
+  uint64_t fiDeviceImplemented::Create(const char*) {
     PURECALL();
   }
 
-  uint32_t fiDeviceImplemented::Read(uint64_t handle, void* buffer, uint32_t toRead)
-  {
+  uint32_t fiDeviceImplemented::Read(uint64_t handle, void* buffer, uint32_t toRead) {
     PURECALL();
   }
 
-  uint32_t fiDeviceImplemented::ReadBulk(uint64_t handle, uint64_t ptr, void* buffer, uint32_t toRead)
-  {
+  uint32_t fiDeviceImplemented::ReadBulk(uint64_t handle, uint64_t ptr, void* buffer, uint32_t toRead) {
     PURECALL();
   }
 
-  uint32_t fiDeviceImplemented::WriteBulk(uint64_t, int, int, int, int)
-  {
+  uint32_t fiDeviceImplemented::WriteBulk(uint64_t, int, int, int, int) {
     PURECALL();
   }
 
-  uint32_t fiDeviceImplemented::Write(uint64_t, void*, int)
-  {
+  uint32_t fiDeviceImplemented::Write(uint64_t, void*, int) {
     PURECALL();
   }
 
-  uint32_t fiDeviceImplemented::Seek(uint64_t handle, int32_t distance, uint32_t method)
-  {
+  uint32_t fiDeviceImplemented::Seek(uint64_t handle, int32_t distance, uint32_t method) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::SeekLong(uint64_t handle, int64_t distance, uint32_t method)
-  {
+  uint64_t fiDeviceImplemented::SeekLong(uint64_t handle, int64_t distance, uint32_t method) {
     PURECALL();
   }
 
-  int32_t fiDeviceImplemented::Close(uint64_t handle)
-  {
+  int32_t fiDeviceImplemented::Close(uint64_t handle) {
     PURECALL();
   }
 
-  int32_t fiDeviceImplemented::CloseBulk(uint64_t handle)
-  {
+  int32_t fiDeviceImplemented::CloseBulk(uint64_t handle) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::GetFileLength(uint64_t handle)
-  {
+  int fiDeviceImplemented::GetFileLength(uint64_t handle) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::m_40(int)
-  {
+  int fiDeviceImplemented::m_40(int) {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::RemoveFile(const char* file)
-  {
+  bool fiDeviceImplemented::RemoveFile(const char* file) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::RenameFile(const char* from, const char* to)
-  {
+  int fiDeviceImplemented::RenameFile(const char* from, const char* to) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::CreateDirectory(const char* dir)
-  {
+  int fiDeviceImplemented::CreateDirectory(const char* dir) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::RemoveDirectory(const char* dir)
-  {
+  int fiDeviceImplemented::RemoveDirectory(const char* dir) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::GetFileLengthUInt64(uint64_t file)
-  {
+  uint64_t fiDeviceImplemented::GetFileLengthUInt64(uint64_t file) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::GetFileLengthLong(const char* fileName)
-  {
+  uint64_t fiDeviceImplemented::GetFileLengthLong(const char* fileName) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::GetFileTime(const char* file)
-  {
+  uint64_t fiDeviceImplemented::GetFileTime(const char* file) {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::SetFileTime(const char* file, FILETIME fileTime)
-  {
+  bool fiDeviceImplemented::SetFileTime(const char* file, FILETIME fileTime) {
     PURECALL();
   }
 
-  uint64_t fiDeviceImplemented::FindFirst(const char* path, fiFindData* findData)
-  {
+  uint64_t fiDeviceImplemented::FindFirst(const char* path, fiFindData* findData) {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::FindNext(uint64_t handle, fiFindData* findData)
-  {
+  bool fiDeviceImplemented::FindNext(uint64_t handle, fiFindData* findData) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::FindClose(uint64_t handle)
-  {
+  int fiDeviceImplemented::FindClose(uint64_t handle) {
     PURECALL();
   }
 
-  rage::fiDevice* fiDeviceImplemented::GetUnkDevice()
-  {
+  rage::fiDevice* fiDeviceImplemented::GetUnkDevice() {
     PURECALL();
   }
 
-  void* fiDeviceImplemented::m_xy(void* a1, int a2, void* a3)
-  {
+  void* fiDeviceImplemented::m_xy(void* a1, int a2, void* a3) {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::Truncate(uint64_t handle)
-  {
+  bool fiDeviceImplemented::Truncate(uint64_t handle) {
     PURECALL();
   }
 
-  uint32_t fiDeviceImplemented::GetFileAttributes(const char* path)
-  {
+  uint32_t fiDeviceImplemented::GetFileAttributes(const char* path) {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::m_xz()
-  {
+  bool fiDeviceImplemented::m_xz() {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::SetFileAttributes(const char* file, uint32_t FileAttributes)
-  {
+  bool fiDeviceImplemented::SetFileAttributes(const char* file, uint32_t FileAttributes) {
     PURECALL();
   }
 
-  void fiDeviceImplemented::m_xx()
-  {
+  void fiDeviceImplemented::m_xx() {
     return;
   }
 
-  bool fiDeviceImplemented::ReadFull(uint64_t handle, void* buffer, uint32_t length)
-  {
+  bool fiDeviceImplemented::ReadFull(uint64_t handle, void* buffer, uint32_t length) {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::WriteFull(uint64_t handle, void* buffer, uint32_t length)
-  {
+  bool fiDeviceImplemented::WriteFull(uint64_t handle, void* buffer, uint32_t length) {
     PURECALL();
   }
 
-  int32_t fiDeviceImplemented::GetResourceVersion(const char* fileName, ResourceFlags* flags)
-  {
+  int32_t fiDeviceImplemented::GetResourceVersion(const char* fileName, ResourceFlags* flags) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::m_yx()
-  {
+  int fiDeviceImplemented::m_yx() {
     PURECALL();
   }
 
-  int fiDeviceImplemented::m_yy()
-  {
+  int fiDeviceImplemented::m_yy() {
     PURECALL();
   }
 
-  int fiDeviceImplemented::m_yz(void*)
-  {
+  int fiDeviceImplemented::m_yz(void*) {
     PURECALL();
   }
 
-  int fiDeviceImplemented::m_zx(void*)
-  {
+  int fiDeviceImplemented::m_zx(void*) {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::IsCollection()
-  {
+  bool fiDeviceImplemented::IsCollection() {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::m_addedIn1290()
-  {
+  bool fiDeviceImplemented::m_addedIn1290() {
     PURECALL();
   }
 
-  fiDevice* fiDeviceImplemented::GetCollection()
-  {
+  fiDevice* fiDeviceImplemented::GetCollection() {
     PURECALL();
   }
 
-  bool fiDeviceImplemented::m_ax()
-  {
+  bool fiDeviceImplemented::m_ax() {
     PURECALL();
   }
 
-  int fiDeviceImplemented::GetCollectionId()
-  {
+  int fiDeviceImplemented::GetCollectionId() {
     PURECALL();
   }
 
-  const char* fiDeviceImplemented::GetName()
-  {
+  const char* fiDeviceImplemented::GetName() {
     PURECALL();
   }
 
-  fiPackfile::fiPackfile()
-  {
+  fiPackfile::fiPackfile() {
     gta_base::memory::kPOINTERS->FiPackFileCtor(this);
   }
 
-  bool fiPackfile::OpenPackfile(const char* archive, bool b_true, int type, intptr_t very_false)
-  {
+  bool fiPackfile::OpenPackfile(const char* archive, bool b_true, int type, intptr_t very_false) {
     return gta_base::memory::kPOINTERS->FiPackFileOpenArchive(this, archive, b_true, type, very_false);
   }
 
-  bool fiPackfile::Mount(const char* mount_point)
-  {
+  bool fiPackfile::Mount(const char* mount_point) {
     return gta_base::memory::kPOINTERS->FiPackFileMount(this, mount_point);
   }
 }

@@ -510,9 +510,9 @@ namespace rage {
   enum class BlipRenderBits {
     BlipIsOnScreen = (1 << 6)
   };
-// blip enums end
+  // blip enums end
 
-// explosion enums start
+  // explosion enums start
   enum eExplosionType {
     DONTCARE = -1,
     GRENADE,
@@ -601,9 +601,9 @@ namespace rage {
     EMPLAUNCHER_EMP
   };
 
-// explosion enums end
+  // explosion enums end
 
-// sessiontype enums start
+  // sessiontype enums start
   enum class eSessionType {
     JOIN_PUBLIC = 0,
     NEW_PUBLIC = 1,
@@ -618,9 +618,9 @@ namespace rage {
     LEAVE_ONLINE = -1
   };
 
-// sessiontype enums end
+  // sessiontype enums end
 
-// transitionstate enum start
+  // transitionstate enum start
   enum class eTransitionState {
     TRANSITION_STATE_EMPTY,
     TRANSITION_STATE_SP_SWOOP_UP,

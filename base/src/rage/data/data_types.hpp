@@ -43,14 +43,16 @@ namespace rage::data {
       kHelicopter, // VC_HELICOPTER
     };
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "modernize-pass-by-value"
+    #pragma clang diagnostic push
+    #pragma ide diagnostic ignored "modernize-pass-by-value"
+
     Vehicle(const std::string& raw_name, const std::string& raw_make, const std::string& dlc_name, const std::string& class_name, joaat_t hash) :
       raw_name(raw_name), display_name(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_name.c_str())),
       raw_make(raw_make), display_make(HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(raw_make.c_str())),
       dlc_name(dlc_name),
       class_name(CorrectClassName(class_name)), vehicle_class(GetClass(this->class_name)), model_hash(hash) {}
-#pragma clang diagnostic pop
+
+    #pragma clang diagnostic pop
 
     explicit Vehicle(rapidjson::Value& obj) {
       if (!obj.IsObject())
@@ -83,9 +85,9 @@ namespace rage::data {
         res = res.substr(3);
 
       static const robin_hood::unordered_map<std::string, std::string> class_map_ = {
-        {"COMPACTS", "COMPACT"},
-        {"OFF_ROAD", "OFFROAD"},
-        {"OPEN_WHEEL", "OPEN WHEEL"},
+        {"COMPACTS",      "COMPACT"},
+        {"OFF_ROAD",      "OFFROAD"},
+        {"OPEN_WHEEL",    "OPEN WHEEL"},
         {"SPORT_CLASSIC", "SPORT CLASSIC"}
       };
 
@@ -97,33 +99,33 @@ namespace rage::data {
 
     static Class GetClass(const std::string& class_name) {
       static const robin_hood::unordered_map<std::string, Class> class_map_ = {
-        {"SUPER", Class::kSuper},
-        {"SPORT", Class::kSport},
+        {"SUPER",         Class::kSuper},
+        {"SPORT",         Class::kSport},
         {"SPORT_CLASSIC", Class::kSportClassic},
         {"SPORT CLASSIC", Class::kSportClassic},
-        {"MUSCLE", Class::kMuscle},
-        {"SEDAN", Class::kSedan},
-        {"COMPACT", Class::kCompact},
-        {"COUPE", Class::kCoupe},
-        {"COMPACTS", Class::kCompact},
-        {"SUV", Class::kSuv},
-        {"OFF_ROAD", Class::kOffroad},
-        {"OFFROAD", Class::kOffroad},
-        {"OPEN_WHEEL", Class::kOpenWheel},
-        {"OPEN WHEEL", Class::kOpenWheel},
-        {"VAN", Class::kVan},
-        {"MOTORCYCLE", Class::kMotorcycle},
-        {"CYCLE", Class::kCycle},
-        {"SERVICE", Class::kService},
-        {"UTILITY", Class::kUtility},
-        {"INDUSTRIAL", Class::kIndustrial},
-        {"COMMERCIAL", Class::kCommercial},
-        {"EMERGENCY", Class::kEmergency},
-        {"MILITARY", Class::kMilitary},
-        {"RAIL", Class::kRail},
-        {"BOAT", Class::kBoat},
-        {"PLANE", Class::kPlane},
-        {"HELICOPTER", Class::kHelicopter},
+        {"MUSCLE",        Class::kMuscle},
+        {"SEDAN",         Class::kSedan},
+        {"COMPACT",       Class::kCompact},
+        {"COUPE",         Class::kCoupe},
+        {"COMPACTS",      Class::kCompact},
+        {"SUV",           Class::kSuv},
+        {"OFF_ROAD",      Class::kOffroad},
+        {"OFFROAD",       Class::kOffroad},
+        {"OPEN_WHEEL",    Class::kOpenWheel},
+        {"OPEN WHEEL",    Class::kOpenWheel},
+        {"VAN",           Class::kVan},
+        {"MOTORCYCLE",    Class::kMotorcycle},
+        {"CYCLE",         Class::kCycle},
+        {"SERVICE",       Class::kService},
+        {"UTILITY",       Class::kUtility},
+        {"INDUSTRIAL",    Class::kIndustrial},
+        {"COMMERCIAL",    Class::kCommercial},
+        {"EMERGENCY",     Class::kEmergency},
+        {"MILITARY",      Class::kMilitary},
+        {"RAIL",          Class::kRail},
+        {"BOAT",          Class::kBoat},
+        {"PLANE",         Class::kPlane},
+        {"HELICOPTER",    Class::kHelicopter},
       };
 
       auto itr = class_map_.find(class_name);
@@ -135,6 +137,7 @@ namespace rage::data {
       return Class::kUnknown;
     }
   };
+
   using Vehicle_ptr_t = std::shared_ptr<Vehicle>;
   using Vehicles = std::map<std::string, Vehicle_ptr_t>;
 
@@ -179,6 +182,7 @@ namespace rage::data {
     const joaat_t reward_hash{};
     const joaat_t reward_ammo_hash{};
   };
+
   using Weapon_ptr_t = std::shared_ptr<Weapon>;
   using Weapons = std::vector<Weapon_ptr_t>;
 
@@ -202,6 +206,7 @@ namespace rage::data {
     const std::string ped_type;
     const joaat_t model_hash{};
   };
+
   using Ped_ptr_t = std::shared_ptr<Ped>;
   using Peds = std::vector<Ped_ptr_t>;
 
@@ -213,6 +218,7 @@ namespace rage::data {
 
   public:
     Data() = default;
+
     Data(Vehicles vehicles, Weapons weapons, Peds peds) {
       weapons.shrink_to_fit();
       peds.shrink_to_fit();
@@ -258,7 +264,7 @@ namespace rage::data {
     }
 
     inline void IterateVehicleClasses(const std::function<void(const std::string&, const Vehicles&)>& func) {
-      for (const auto& [key, value] : vehicles_class_idx_) {
+      for (const auto& [key, value]: vehicles_class_idx_) {
         func(key, value);
       }
     }
@@ -268,7 +274,7 @@ namespace rage::data {
     }
 
     inline void IterateVehicleDlcs(const std::function<void(const std::string&, const Vehicles&)>& func) {
-      for (const auto& [key, value] : vehicles_dlc_idx_) {
+      for (const auto& [key, value]: vehicles_dlc_idx_) {
         func(key, value);
       }
     }
@@ -292,7 +298,7 @@ namespace rage::data {
     }
 
     inline void IterateWeapons(const std::function<void(const Weapon_ptr_t&)>& func) {
-      for (const auto& weapon : weapons_) {
+      for (const auto& weapon: weapons_) {
         func(weapon);
       }
     }
@@ -307,7 +313,7 @@ namespace rage::data {
     }
 
     inline void IteratePeds(const std::function<void(const Ped_ptr_t&)>& func) {
-      for (const auto& ped : peds_) {
+      for (const auto& ped: peds_) {
         func(ped);
       }
     }

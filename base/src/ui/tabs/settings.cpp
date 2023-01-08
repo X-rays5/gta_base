@@ -43,12 +43,12 @@ namespace gta_base::ui::tabs {
       sub->AddOption(option::SubmenuOption("tab/title/unload", "", Submenus::SettingsUnloadConfirm));
     });
 
-    kMANAGER->AddSubmenu(Submenus::SettingsLua, "tab/title/lua_settings", [](Submenu* sub){
+    kMANAGER->AddSubmenu(Submenus::SettingsLua, "tab/title/lua_settings", [](Submenu* sub) {
       sub->AddOption(option::SubmenuOption("tab/title/lua_script_list", "", Submenus::LuaScriptList));
     });
 
-    kMANAGER->AddSubmenu(Submenus::LuaScriptList, "tab/title/lua_script_list", [](Submenu* sub){
-      sub->AddOption(option::ExecuteOption("option/refresh_lua_manifest", "", []{lua_manifests = gta_base::lua::Manager::GetScriptManifests();}));
+    kMANAGER->AddSubmenu(Submenus::LuaScriptList, "tab/title/lua_script_list", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("option/refresh_lua_manifest", "", [] { lua_manifests = gta_base::lua::Manager::GetScriptManifests(); }));
       sub->AddOption(option::LabelOption("label/lua_scripts_list"));
       if (lua_manifests.empty()) {
         sub->AddOption(option::ExecuteOption("option/no_lua_scripts", "", nullptr, false));
@@ -59,25 +59,28 @@ namespace gta_base::ui::tabs {
         if (lua_manifests[i].GetHiddenLib())
           continue;
 
-        sub->AddOption(option::SubmenuOption(lua_manifests[i].GetName(), "", Submenus::LuaSelectedScript, [=]{selected_lua_manifest = i; kMANAGER->GetSubmenu(Submenus::LuaSelectedScript)->SetSelectedOption(0);}));
+        sub->AddOption(option::SubmenuOption(lua_manifests[i].GetName(), "", Submenus::LuaSelectedScript, [=] {
+          selected_lua_manifest = i;
+          kMANAGER->GetSubmenu(Submenus::LuaSelectedScript)->SetSelectedOption(0);
+        }));
       }
     });
 
     kMANAGER->AddSubmenu(Submenus::LuaSelectedScript, lua_manifests[selected_lua_manifest].GetName(), [](Submenu* sub) {
       lua::Manifest& manifest = lua_manifests[selected_lua_manifest];
 
-      sub->AddOption(option::ExecuteOption("option/load_lua_script", "", [&]{
-        misc::kTHREAD_POOL->AddJob([=]{
+      sub->AddOption(option::ExecuteOption("option/load_lua_script", "", [&] {
+        misc::kTHREAD_POOL->AddJob([=] {
           lua::kMANAGER->AddScript(manifest.GetScriptDir());
         });
       }));
-      sub->AddOption(option::ExecuteOption("option/unload_lua_script", "", [&]{
-        misc::kTHREAD_POOL->AddJob([=]{
+      sub->AddOption(option::ExecuteOption("option/unload_lua_script", "", [&] {
+        misc::kTHREAD_POOL->AddJob([=] {
           lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
         });
       }));
-      sub->AddOption(option::ExecuteOption("option/reload_lua_script", "", [&]{
-        misc::kTHREAD_POOL->AddJob([=]{
+      sub->AddOption(option::ExecuteOption("option/reload_lua_script", "", [&] {
+        misc::kTHREAD_POOL->AddJob([=] {
           lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
           lua::kMANAGER->AddScript(manifest.GetScriptDir());
         });
@@ -95,24 +98,24 @@ namespace gta_base::ui::tabs {
       }
       if (auto authors = manifest.GetAuthors(); authors.has_value()) {
         sub->AddOption(option::LabelOption("label/lua_script_authors"));
-        for (auto& author : *authors)
+        for (auto& author: *authors)
           sub->AddOption(option::ExecuteOption("option/lua_script_author", "", nullptr, false))->SetRightTextKey(author);
       }
     });
 
-    kMANAGER->AddSubmenu(Submenus::SettingsTranslation, "tab/title/translation_settings", [](Submenu* sub){
+    kMANAGER->AddSubmenu(Submenus::SettingsTranslation, "tab/title/translation_settings", [](Submenu* sub) {
       sub->AddOption(option::ExecuteOption("option/active_translation", "", nullptr))->SetRightTextKey(active_translation);
-      sub->AddOption(option::ExecuteOption("option/refresh_translation_list", "", []{translation_paths = TranslationManager::GetTranslationList();}));
+      sub->AddOption(option::ExecuteOption("option/refresh_translation_list", "", [] { translation_paths = TranslationManager::GetTranslationList(); }));
       sub->AddOption(option::LabelOption("label/translation_list"));
       if (translation_paths.empty()) {
         [[unlikely]]
-        sub->AddOption(option::ExecuteOption("option/no_translations", "", nullptr, false));
+          sub->AddOption(option::ExecuteOption("option/no_translations", "", nullptr, false));
         return;
       } else {
         [[likely]]
-        for (auto&& path : translation_paths) {
+        for (auto&& path: translation_paths) {
           sub->AddOption(option::ExecuteOption(path.stem().string(), "", [&] {
-            misc::kTHREAD_POOL->AddJob([=]{
+            misc::kTHREAD_POOL->AddJob([=] {
               kTRANSLATION_MANAGER->SetActiveTranslation(std::move(std::make_shared<Translation>(path)));
 
               active_translation = path.stem().string();
@@ -125,7 +128,7 @@ namespace gta_base::ui::tabs {
 
     kMANAGER->AddSubmenu(Submenus::SettingsHotkeys, "tab/title/hotkeys", [](Submenu* sub) {
       sub->AddOption(option::SubmenuOption("tab/title/hotkey_profiles", "", Submenus::HotkeyProfiles));
-      sub->AddOption(option::ToggleOption("option/hotkey_save_on_exit", "", &hotkey_save_on_exit, false, false))->OnEvent([](Event event){
+      sub->AddOption(option::ToggleOption("option/hotkey_save_on_exit", "", &hotkey_save_on_exit, false, false))->OnEvent([](Event event) {
         if (event == Event::kChange) {
           if (misc::kHOTKEY_MANAGER->GetSaveOnExit() == hotkey_save_on_exit) {
             LOG_WARN("Hotkey manager and ui save_on_exit out of sync");
@@ -134,7 +137,7 @@ namespace gta_base::ui::tabs {
           hotkey_save_on_change = misc::kHOTKEY_MANAGER->GetSaveOnChange();
         }
       });
-      sub->AddOption(option::ToggleOption("option/hotkey_save_on_change", "", &hotkey_save_on_change, false, false))->OnEvent([](Event event){
+      sub->AddOption(option::ToggleOption("option/hotkey_save_on_change", "", &hotkey_save_on_change, false, false))->OnEvent([](Event event) {
         if (event == Event::kChange) {
           if (misc::kHOTKEY_MANAGER->GetSaveOnChange() == hotkey_save_on_change) {
             LOG_WARN("Hotkey manager and ui save_on_change out of sync");
@@ -149,8 +152,8 @@ namespace gta_base::ui::tabs {
         sub->AddOption(option::ExecuteOption("option/no_hotkeys", "", nullptr, false));
         return;
       } else {
-        for (auto&& hotkey : hotkeys) {
-          sub->AddOption(option::SubmenuOption(hotkey.second, "", Submenus::HotkeysConfirmDelete, [=]{
+        for (auto&& hotkey: hotkeys) {
+          sub->AddOption(option::SubmenuOption(hotkey.second, "", Submenus::HotkeysConfirmDelete, [=] {
             hotkey_delete_key_id = hotkey.first;
           }))->SetRightTextKey(common::VkToStr(hotkey.first));
         }
@@ -159,11 +162,11 @@ namespace gta_base::ui::tabs {
 
     kMANAGER->AddSubmenu(Submenus::HotkeyProfiles, "tab/title/hotkey_profiles", [](Submenu* sub) {
       sub->AddOption(option::ExecuteOption("option/active_hotkey_profile", "", nullptr))->SetRightTextKey(active_hotkey_profile);
-      sub->AddOption(option::ExecuteOption("option/refresh_hotkey_profile_list", "", []{hotkey_profile_paths = misc::HotkeyManager::GetHotkeyProfileList();}, false));
-      sub->AddOption(option::ExecuteOption("option/hotkey_save_current_as", "", []{
-        keyboard::kMANAGER->ShowKeyboard("hotkey_profile_name", [](const std::string& name, keyboard::Result res_state){
+      sub->AddOption(option::ExecuteOption("option/refresh_hotkey_profile_list", "", [] { hotkey_profile_paths = misc::HotkeyManager::GetHotkeyProfileList(); }, false));
+      sub->AddOption(option::ExecuteOption("option/hotkey_save_current_as", "", [] {
+        keyboard::kMANAGER->ShowKeyboard("hotkey_profile_name", [](const std::string& name, keyboard::Result res_state) {
           if (res_state == keyboard::Result::kDone && !name.empty()) {
-            misc::kTHREAD_POOL->AddJob([=]{
+            misc::kTHREAD_POOL->AddJob([=] {
               misc::kHOTKEY_MANAGER->Save(name);
               settings::profile::SetSelectedHotkeyProfile(name);
               hotkey_profile_paths = misc::HotkeyManager::GetHotkeyProfileList();
@@ -174,11 +177,11 @@ namespace gta_base::ui::tabs {
       sub->AddOption(option::LabelOption("label/hotkey_profile_list"));
       if (hotkey_profile_paths.empty()) {
         [[unlikely]]
-        sub->AddOption(option::ExecuteOption("option/no_hotkey_profiles", "", nullptr, false));
+          sub->AddOption(option::ExecuteOption("option/no_hotkey_profiles", "", nullptr, false));
         return;
       } else {
         [[likely]]
-        for (auto&& path : hotkey_profile_paths) {
+        for (auto&& path: hotkey_profile_paths) {
           sub->AddOption(option::ExecuteOption(path.stem().string(), "", [&] {
             misc::kHOTKEY_MANAGER->Load(path.stem().string());
 
@@ -189,17 +192,17 @@ namespace gta_base::ui::tabs {
       }
     });
 
-    kMANAGER->AddSubmenu(Submenus::HotkeysConfirmDelete, "tab/title/delete_hotkey", [](Submenu* sub){
-      sub->AddOption(option::ExecuteOption("confirm/yes", "", []{
+    kMANAGER->AddSubmenu(Submenus::HotkeysConfirmDelete, "tab/title/delete_hotkey", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("confirm/yes", "", [] {
         misc::kHOTKEY_MANAGER->RemoveHotkey(hotkey_delete_key_id);
         kMANAGER->PopSubmenu();
       }, false));
-      sub->AddOption(option::ExecuteOption("confirm/no", "", []{
+      sub->AddOption(option::ExecuteOption("confirm/no", "", [] {
         kMANAGER->PopSubmenu();
       }, false));
     });
 
-    kMANAGER->AddSubmenu(Submenus::SettingsTheme, "tab/title/theme", [](Submenu* sub){
+    kMANAGER->AddSubmenu(Submenus::SettingsTheme, "tab/title/theme", [](Submenu* sub) {
       sub->AddOption(option::NumberOption<float>("option/xpos", "option/xpos/desc", &kMANAGER->x_base, 0.005f, 0.f, 1.f - kMANAGER->x_size, false));
       sub->AddOption(option::NumberOption<float>("option/ypos", "option/ypos/desc", &kMANAGER->y_base, 0.005f, 0.f, 1.f, false));
       sub->AddOption(option::NumberOption<int>("option/max_options", "option/max_options/desc", &kMANAGER->max_drawn_options, 1, 1, 30, false));

@@ -13,43 +13,43 @@
 #include <network/snSession.hpp>
 
 namespace gta_base::player_mgr {
-    class Player {
-    public:
-      explicit Player(CNetGamePlayer* player) : self_(player) {}
+  class Player {
+  public:
+    explicit Player(CNetGamePlayer* player) : self_(player) {}
 
-      [[nodiscard]] CNetGamePlayer* NetPlayer();
-      [[nodiscard]] CNonPhysicalPlayerData* NonPhysicalPlayer();
-      [[nodiscard]] rage::rlGamerInfo* NetData();
-      [[nodiscard]] CPlayerInfo* Info();
-      [[nodiscard]] CPed* Ped();
-      [[nodiscard]] CVehicle* Vehicle();
-      [[nodiscard]] ClanData* Clan();
-      [[nodiscard]] rage::snPlayer* SessionPlayer();
-      [[nodiscard]] rage::snPeer* SessionPeer();
+    [[nodiscard]] CNetGamePlayer* NetPlayer();
+    [[nodiscard]] CNonPhysicalPlayerData* NonPhysicalPlayer();
+    [[nodiscard]] rage::rlGamerInfo* NetData();
+    [[nodiscard]] CPlayerInfo* Info();
+    [[nodiscard]] CPed* Ped();
+    [[nodiscard]] CVehicle* Vehicle();
+    [[nodiscard]] ClanData* Clan();
+    [[nodiscard]] rage::snPlayer* SessionPlayer();
+    [[nodiscard]] rage::snPeer* SessionPeer();
 
-      [[nodiscard]] std::string Name();
-      [[nodiscard]] std::string NameLowerCase();
+    [[nodiscard]] std::string Name();
+    [[nodiscard]] std::string NameLowerCase();
 
-      [[nodiscard]] std::uint8_t Id() const;
-      [[nodiscard]] bool Host() const;
-      [[nodiscard]] bool Valid() const;
+    [[nodiscard]] std::uint8_t Id() const;
+    [[nodiscard]] bool Host() const;
+    [[nodiscard]] bool Valid() const;
 
-      bool operator==(CNetGamePlayer* other) const;
-      bool operator==(CNetGamePlayer& other) const;
-      bool operator==(const CNetGamePlayer& other) const;
-      bool operator!=(CNetGamePlayer* other) const;
-      bool operator!=(CNetGamePlayer& other) const;
-      bool operator!=(const CNetGamePlayer& other) const;
-      bool operator==(Player* other) const;
-      bool operator==(Player& other) const;
-      bool operator==(const Player& other) const;
-      bool operator!=(Player* other) const;
-      bool operator!=(Player& other) const;
-      bool operator!=(const Player& other) const;
+    bool operator==(CNetGamePlayer* other) const;
+    bool operator==(CNetGamePlayer& other) const;
+    bool operator==(const CNetGamePlayer& other) const;
+    bool operator!=(CNetGamePlayer* other) const;
+    bool operator!=(CNetGamePlayer& other) const;
+    bool operator!=(const CNetGamePlayer& other) const;
+    bool operator==(Player* other) const;
+    bool operator==(Player& other) const;
+    bool operator==(const Player& other) const;
+    bool operator!=(Player* other) const;
+    bool operator!=(Player& other) const;
+    bool operator!=(const Player& other) const;
 
-    private:
-      CNetGamePlayer* self_;
-    };
-  }
+  private:
+    CNetGamePlayer* self_;
+  };
+}
 
 #endif //GTA_BASE_PLAYER_HPP

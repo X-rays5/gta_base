@@ -8,7 +8,7 @@
 
 namespace gta_base::hooking {
   VmtHook::VmtHook(LPVOID vtable) {
-    vtable_ = *((LPVOID**)vtable);
+    vtable_ = *((LPVOID**) vtable);
   }
 
   void VmtHook::Hook(const std::string& name, std::size_t index, LPVOID detour) {
@@ -62,19 +62,21 @@ namespace gta_base::hooking {
   }
 
   void VmtHook::DisableAll() {
-    for (auto&& hook : hooks_) {
+    for (auto&& hook: hooks_) {
       Disable(hook.first);
     }
   }
 
   void VmtHook::FixHookAddress(const std::string& name, LPVOID target) {
-    __try {
+    __try{
       auto ptr = memory::scanner::Handle(target);
       while (ptr.as<std::uint8_t&>() == 0xE9) {
         ptr = ptr.add(1).rip();
       }
       target = ptr.as<void*>();
-    } __except (ExpHandler(GetExceptionInformation(), name)) {
+    }
+    __except(ExpHandler(GetExceptionInformation(), name))
+    {
       [&name]() {
         LOG_FATAL("Failed to fix hook address for '{}'", name);
       }();

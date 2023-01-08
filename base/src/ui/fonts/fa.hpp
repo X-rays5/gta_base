@@ -4,7 +4,7 @@
 
 #include <type_traits> // std::is_constant_evaluated
 
-namespace bb{
+namespace bb {
   static constexpr uint64_t bb_fa_solid_900_ttf[]{
     0x0000000000000000, 0x0005f4740005f474, 0x80000d0000000100, 0x4d54464650000300,
     0x58f40500ae2f7d9c, 0x464544471c000000, 0x40f4050000002500, 0x322f534f18000000,
@@ -12207,9 +12207,8 @@ namespace bb{
 
   [[nodiscard]] static constexpr auto get_payload(
     [[maybe_unused]] std::string_view name
-  ) -> const uint64_t*
-  {
-    if(name == "fa-solid-900.ttf")
+  ) -> const uint64_t* {
+    if (name == "fa-solid-900.ttf")
       return &bb_fa_solid_900_ttf[0];
     else
       return nullptr;

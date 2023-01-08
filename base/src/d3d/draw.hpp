@@ -86,7 +86,7 @@ namespace gta_base::d3d::draw {
       font = ImGui::GetFont();
 
     ImVec2 text_size = font->CalcTextSizeA(ScaleFont(font_size), ImGui::GetIO().DisplaySize.x, wrap_width, text.c_str());
-    text_size.x = ((float)(int)(text_size.x + 0.99999f));
+    text_size.x = ((float) (int) (text_size.x + 0.99999f));
 
     return text_size;
   }
@@ -118,7 +118,7 @@ namespace gta_base::d3d::draw {
     }
 
     auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
-    auto chars_per_line = (std::uint32_t)(real_max_x / char_x_size);
+    auto chars_per_line = (std::uint32_t) (real_max_x / char_x_size);
 
     auto* lines = new std::string[max_lines];
     std::uint32_t line_count = 0;
@@ -154,6 +154,7 @@ namespace gta_base::d3d::draw {
   class Animate {
   public:
     Animate() = default;
+
     Animate(double start, double end, std::uint64_t duration) : start_(start), end_(end), duration_(duration) {}
 
     FORCE_INLINE double GetNow() {
@@ -163,12 +164,13 @@ namespace gta_base::d3d::draw {
         return end_;
       }
 
-      double percentage = ((double )(curr_time_ * 100) / (double)duration_) / 100;
+      double percentage = ((double) (curr_time_ * 100) / (double) duration_) / 100;
       if (percentage >= 1)
         return end_;
 
       return std::lerp(start_, end_, percentage);
     }
+
   private:
     double start_{};
     double end_{};
@@ -227,8 +229,7 @@ namespace gta_base::d3d::draw {
 
   class Text : public BaseDrawCommand {
   public:
-    FORCE_INLINE Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font)
-    {
+    FORCE_INLINE Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) : pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font) {
     }
 
     FORCE_INLINE void Draw() final {
@@ -260,12 +261,11 @@ namespace gta_base::d3d::draw {
 
   class Image : public BaseDrawCommand {
   public:
-    FORCE_INLINE Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col)
-    {
+    FORCE_INLINE Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) : texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {
     }
 
     FORCE_INLINE void Draw() final {
-      GetDrawList()->AddImage((void*)texture_, ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+      GetDrawList()->AddImage((void*) texture_, ScaleToScreen(pos_), ScaleToScreen(GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
   private:
@@ -298,7 +298,7 @@ namespace gta_base::d3d::draw {
 
     FORCE_INLINE void Draw() {
       std::unique_lock lock(mtx_);
-      for (auto&& command : draw_commands_[cur_render_target_]) {
+      for (auto&& command: draw_commands_[cur_render_target_]) {
         if (command != nullptr)
           command->Draw();
         else

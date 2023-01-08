@@ -47,13 +47,13 @@ namespace gta_base {
       auto console_logger = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
       auto file_logger = std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_file_path.string());
 
-      std::vector<spdlog::sink_ptr> sinks {console_logger, file_logger};
+      std::vector<spdlog::sink_ptr> sinks{console_logger, file_logger};
       auto logger = std::make_shared<spdlog::async_logger>("main_logger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
       logger->set_pattern("[%T] [%^%l%$] [Thread: %t] [%s:%#] %v");
       logger->set_level(spdlog::level::trace);
       spdlog::register_logger(logger);
       spdlog::set_default_logger(logger);
-      spdlog::default_logger_raw()->set_error_handler([](const std::string& err){
+      spdlog::default_logger_raw()->set_error_handler([](const std::string& err) {
         LOG_CRITICAL(err);
       });
 
@@ -141,10 +141,10 @@ namespace gta_base {
 
       // MSVC cpp exception
       if (err_code == 3765269347) {
-        auto addr = (std::uintptr_t)except->ExceptionRecord->ExceptionAddress;
+        auto addr = (std::uintptr_t) except->ExceptionRecord->ExceptionAddress;
         std::string file_name = common::GetModuleNameFromAddress(GetCurrentProcessId(), addr);
-        auto offset = addr - (uintptr_t)GetModuleHandleA(file_name.c_str());
-        auto exception = (std::exception*)except->ExceptionRecord->ExceptionInformation[1];
+        auto offset = addr - (uintptr_t) GetModuleHandleA(file_name.c_str());
+        auto exception = (std::exception*) except->ExceptionRecord->ExceptionInformation[1];
 
         if (exception) {
           LOG_ERROR("({}+0x{:X}): {}", file_name, offset, exception->what());

@@ -69,6 +69,7 @@ namespace gta_base::common {
   std::vector<std::string> SplitStr(const std::string& str, const std::string& delim);
 
   std::int64_t HexToIntFast(char number);
+
   inline std::optional<std::int64_t> HexToInt(char number) {
     if (number == '0')
       return 0;
@@ -135,6 +136,7 @@ namespace gta_base::common {
   MODULEENTRY32 GetModuleFromHModule(HMODULE mod);
   std::uint64_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name);
   MODULEENTRY32 GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr);
+
   inline std::string GetModuleNameFromAddress(std::uint32_t pid, std::uint64_t addr) {
     return GetModuleFromAddress(pid, addr).szModule;
   }
@@ -157,6 +159,7 @@ namespace gta_base::common {
     }
 
     operator void*() = delete;
+
     operator void*() const {
       return texture;
     }

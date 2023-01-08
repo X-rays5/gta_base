@@ -19,8 +19,7 @@ SCR_REGISTER_SECURE_HONEYPOT(SEND_TU_SCRIPT_EVENT,0x2700c00f82c16bf0,  CommandWi
 
 #define BOOL bool
 
-namespace SYSTEM
-{
+namespace SYSTEM {
   // https://nativedb.spyral.dev/natives/0x4EDE34FBADD967A6
   static void WAIT(int ms) { invoke<void>(0x4EDE34FBADD967A6, ms); } // 0x4EDE34FBADD967A6 0x7715C03B b323
   // https://nativedb.spyral.dev/natives/0xE81651AD79516E48
@@ -75,8 +74,7 @@ namespace SYSTEM
   static void SET_THREAD_PRIORITY(int priority) { invoke<void>(0x42B65DEEF2EDF2A1, priority); } // 0x42B65DEEF2EDF2A1  b877
 }
 
-namespace APP
-{
+namespace APP {
   // https://nativedb.spyral.dev/natives/0x846AA8E7D55EE5B6
   static BOOL APP_DATA_VALID() { return invoke<BOOL>(0x846AA8E7D55EE5B6); } // 0x846AA8E7D55EE5B6 0x72BDE002 b323
   // https://nativedb.spyral.dev/natives/0xD3A58A12C77D9D4B
@@ -113,8 +111,7 @@ namespace APP
   static BOOL APP_DELETE_APP_DATA(const char* appName) { return invoke<BOOL>(0x44151AEA95C8A003, appName); } // 0x44151AEA95C8A003 0x2A2FBD1C b323
 }
 
-namespace AUDIO
-{
+namespace AUDIO {
   // https://nativedb.spyral.dev/natives/0xF9E56683CA8E11A5
   static void PLAY_PED_RINGTONE(const char* ringtoneName, Ped ped, BOOL p2) { invoke<void>(0xF9E56683CA8E11A5, ringtoneName, ped, p2); } // 0xF9E56683CA8E11A5 0x1D530E47 b323
   // https://nativedb.spyral.dev/natives/0x1E8E5E20937E3137
@@ -667,8 +664,7 @@ namespace AUDIO
   static void SET_VEHICLE_HORN_SOUND_INDEX(Vehicle vehicle, int value) { invoke<void>(0x0350E7E17BA767D0, vehicle, value); } // 0x0350E7E17BA767D0  b1365
 }
 
-namespace BRAIN
-{
+namespace BRAIN {
   // https://nativedb.spyral.dev/natives/0x4EE5367468A65CCC
   static void ADD_SCRIPT_TO_RANDOM_PED(const char* name, Hash model, float p2, float p3) { invoke<void>(0x4EE5367468A65CCC, name, model, p2, p3); } // 0x4EE5367468A65CCC 0xECC76C3D b323
   // https://nativedb.spyral.dev/natives/0x0BE84C318BA6EC22
@@ -693,8 +689,7 @@ namespace BRAIN
   static void REACTIVATE_NAMED_OBJECT_BRAINS_WAITING_TILL_OUT_OF_RANGE(const char* scriptName) { invoke<void>(0x6E91B04E08773030, scriptName); } // 0x6E91B04E08773030 0x29CE8BAA b323
 }
 
-namespace CAM
-{
+namespace CAM {
   // https://nativedb.spyral.dev/natives/0x07E5B515DB0636FC
   static void RENDER_SCRIPT_CAMS(BOOL render, BOOL ease, int easeTime, BOOL p3, BOOL p4, Any p5) { invoke<void>(0x07E5B515DB0636FC, render, ease, easeTime, p3, p4, p5); } // 0x07E5B515DB0636FC 0x74337969 b323
   // https://nativedb.spyral.dev/natives/0xC819F3CBB62BF692
@@ -1183,8 +1178,7 @@ namespace CAM
   static float REPLAY_GET_MAX_DISTANCE_ALLOWED_FROM_PLAYER() { return invoke<float>(0x8BFCEB5EA1B161B6); } // 0x8BFCEB5EA1B161B6  b323
 }
 
-namespace CLOCK
-{
+namespace CLOCK {
   // https://nativedb.spyral.dev/natives/0x47C3B5848C3E45D8
   static void SET_CLOCK_TIME(int hour, int minute, int second) { invoke<void>(0x47C3B5848C3E45D8, hour, minute, second); } // 0x47C3B5848C3E45D8 0x26F6AF14 b323
   // https://nativedb.spyral.dev/natives/0x4055E40BD2DBEC1D
@@ -1219,8 +1213,7 @@ namespace CLOCK
   static void GET_LOCAL_TIME(int* year, int* month, int* day, int* hour, int* minute, int* second) { invoke<void>(0x50C7A99057A69748, year, month, day, hour, minute, second); } // 0x50C7A99057A69748 0x124BCFA2 b323
 }
 
-namespace CUTSCENE
-{
+namespace CUTSCENE {
   // https://nativedb.spyral.dev/natives/0x7A86743F475D9E09
   static void REQUEST_CUTSCENE(const char* cutsceneName, int flags) { invoke<void>(0x7A86743F475D9E09, cutsceneName, flags); } // 0x7A86743F475D9E09 0xB5977853 b323
   // https://nativedb.spyral.dev/natives/0xC23DE0E91C30B58C
@@ -1329,8 +1322,7 @@ namespace CUTSCENE
   static BOOL HAS_CUTSCENE_CUT_THIS_FRAME() { return invoke<BOOL>(0x708BDD8CD795B043); } // 0x708BDD8CD795B043 0x4315A7C5 b323
 }
 
-namespace DATAFILE
-{
+namespace DATAFILE {
   // https://nativedb.spyral.dev/natives/0xAD6875BBC0FC899C
   static void DATAFILE_WATCH_REQUEST_ID(int id) { invoke<void>(0xAD6875BBC0FC899C, id); } // 0xAD6875BBC0FC899C 0x621388FF b323
   // https://nativedb.spyral.dev/natives/0x6CC86E78358D5119
@@ -1447,8 +1439,7 @@ namespace DATAFILE
   static int DATAARRAY_GET_TYPE(Any* arrayData, int arrayIndex) { return invoke<int>(0x3A0014ADB172A3C5, arrayData, arrayIndex); } // 0x3A0014ADB172A3C5 0xFA2402C8 b323
 }
 
-namespace DECORATOR
-{
+namespace DECORATOR {
   // https://nativedb.spyral.dev/natives/0x95AED7B8E39ECAA4
   static BOOL DECOR_SET_TIME(Entity entity, const char* propertyName, int timestamp) { return invoke<BOOL>(0x95AED7B8E39ECAA4, entity, propertyName, timestamp); } // 0x95AED7B8E39ECAA4 0xBBAEEF94 b323
   // https://nativedb.spyral.dev/natives/0x6B1E8E2ED1335B71
@@ -1475,8 +1466,7 @@ namespace DECORATOR
   static void DECOR_REGISTER_LOCK() { invoke<void>(0xA9D14EEA259F9248); } // 0xA9D14EEA259F9248 0x7F3F1C02 b323
 }
 
-namespace DLC
-{
+namespace DLC {
   // https://nativedb.spyral.dev/natives/0x241FCA5B1AA14F75
   static BOOL ARE_ANY_CCS_PENDING() { return invoke<BOOL>(0x241FCA5B1AA14F75); } // 0x241FCA5B1AA14F75 0x0AF83036 b323
   // https://nativedb.spyral.dev/natives/0x812595A0644CE1DE
@@ -1501,8 +1491,7 @@ namespace DLC
   static void ON_ENTER_MP() { invoke<void>(0x0888C3502DBBEEF5); } // 0x0888C3502DBBEEF5 0xC65586A9 b323
 }
 
-namespace ENTITY
-{
+namespace ENTITY {
   // https://nativedb.spyral.dev/natives/0x7239B21A38F536BA
   static BOOL DOES_ENTITY_EXIST(Entity entity) { return invoke<BOOL>(0x7239B21A38F536BA, entity); } // 0x7239B21A38F536BA 0x3AC90869 b323
   // https://nativedb.spyral.dev/natives/0xDDE6DF5AE89981D2
@@ -1873,8 +1862,7 @@ namespace ENTITY
   static void SET_PICK_UP_BY_CARGOBOB_DISABLED(Entity entity, BOOL toggle) { invoke<void>(0xD7B80E7C3BEFC396, entity, toggle); } // 0xD7B80E7C3BEFC396  b1180
 }
 
-namespace EVENT
-{
+namespace EVENT {
   // https://nativedb.spyral.dev/natives/0xB604A2942ADED0EE
   static void SET_DECISION_MAKER(Ped ped, Hash name) { invoke<void>(0xB604A2942ADED0EE, ped, name); } // 0xB604A2942ADED0EE 0x19CEAC9E b323
   // https://nativedb.spyral.dev/natives/0x4FC9381A7AEE8968
@@ -1903,8 +1891,7 @@ namespace EVENT
   static void SUPPRESS_AGITATION_EVENTS_NEXT_FRAME() { invoke<void>(0x5F3B7749C112D552); } // 0x5F3B7749C112D552 0x80340396 b323
 }
 
-namespace FILES
-{
+namespace FILES {
   // https://nativedb.spyral.dev/natives/0x278F76C3B0A8F109
   static int GET_NUM_TATTOO_SHOP_DLC_ITEMS(int character) { return invoke<int>(0x278F76C3B0A8F109, character); } // 0x278F76C3B0A8F109 0x71D0CF3E b323
   // https://nativedb.spyral.dev/natives/0xFF56381874F82086
@@ -2005,8 +1992,7 @@ namespace FILES
   static void REVERT_CONTENT_CHANGESET_GROUP_FOR_ALL(Hash hash) { invoke<void>(0x3C1978285B036B25, hash); } // 0x3C1978285B036B25  b1604
 }
 
-namespace FIRE
-{
+namespace FIRE {
   // https://nativedb.spyral.dev/natives/0x6B83617E04503888
   static FireId START_SCRIPT_FIRE(float X, float Y, float Z, int maxChildren, BOOL isGasFire) { return invoke<FireId>(0x6B83617E04503888, X, Y, Z, maxChildren, isGasFire); } // 0x6B83617E04503888 0xE7529357 b323
   // https://nativedb.spyral.dev/natives/0x7FF548385680673F
@@ -2045,8 +2031,7 @@ namespace FIRE
   static Entity GET_OWNER_OF_EXPLOSION_IN_ANGLED_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float radius) { return invoke<Entity>(0x14BA4BA137AF6CEC, explosionType, x1, y1, z1, x2, y2, z2, radius); } // 0x14BA4BA137AF6CEC 0xAEC0D176 b323
 }
 
-namespace GRAPHICS
-{
+namespace GRAPHICS {
   // https://nativedb.spyral.dev/natives/0x175B6BFC15CDD0C5
   static void SET_DEBUG_LINES_AND_SPHERES_DRAWING_ACTIVE(BOOL enabled) { invoke<void>(0x175B6BFC15CDD0C5, enabled); } // 0x175B6BFC15CDD0C5 0x1418CA37 b323
   // https://nativedb.spyral.dev/natives/0x7FDFADE676AA3CB0
@@ -2833,8 +2818,7 @@ namespace GRAPHICS
   static void ANIMPOSTFX_STOP_AND_FLUSH_REQUESTS(const char* effectName) { invoke<void>(0xD2209BE128B5418C, effectName); } // 0xD2209BE128B5418C  b323
 }
 
-namespace HUD
-{
+namespace HUD {
   // https://nativedb.spyral.dev/natives/0xABA17D7CE615ADBF
   static void BEGIN_TEXT_COMMAND_BUSYSPINNER_ON(const char* string) { invoke<void>(0xABA17D7CE615ADBF, string); } // 0xABA17D7CE615ADBF 0xCB7C8994 b323
   // https://nativedb.spyral.dev/natives/0xBD12F8228410D9B4
@@ -3853,8 +3837,7 @@ namespace HUD
   static void HIDE_HUDMARKERS_THIS_FRAME() { invoke<void>(0x243296A510B562B6); } // 0x243296A510B562B6  b2060
 }
 
-namespace INTERIOR
-{
+namespace INTERIOR {
   // https://nativedb.spyral.dev/natives/0xF49B58631D9E22D9
   static float GET_INTERIOR_HEADING(Interior interior) { return invoke<float>(0xF49B58631D9E22D9, interior); } // 0xF49B58631D9E22D9  b1493
   // https://nativedb.spyral.dev/natives/0x252BDC06B73FA6EA
@@ -3947,8 +3930,7 @@ namespace INTERIOR
   static void SET_IS_EXTERIOR_ONLY(Entity entity, BOOL toggle) { invoke<void>(0x7241CCB7D020DB69, entity, toggle); } // 0x7241CCB7D020DB69  b791
 }
 
-namespace ITEMSET
-{
+namespace ITEMSET {
   // https://nativedb.spyral.dev/natives/0x35AD299F50D91B24
   static ScrHandle CREATE_ITEMSET(BOOL p0) { return invoke<ScrHandle>(0x35AD299F50D91B24, p0); } // 0x35AD299F50D91B24 0x0A113B2C b323
   // https://nativedb.spyral.dev/natives/0xDE18220B1C183EDA
@@ -3969,8 +3951,7 @@ namespace ITEMSET
   static void CLEAN_ITEMSET(ScrHandle itemset) { invoke<void>(0x41BC0D722FC04221, itemset); } // 0x41BC0D722FC04221 0x919A4858 b323
 }
 
-namespace LOADINGSCREEN
-{
+namespace LOADINGSCREEN {
   // https://nativedb.spyral.dev/natives/0xF2CA003F167E21D2
   static int LOBBY_AUTO_MULTIPLAYER_MENU() { return invoke<int>(0xF2CA003F167E21D2); } // 0xF2CA003F167E21D2 0x106C8317 b323
   // https://nativedb.spyral.dev/natives/0xEF7D17BC6C85264C
@@ -3989,8 +3970,7 @@ namespace LOADINGSCREEN
   static void SHUTDOWN_SESSION_CLEARS_AUTO_MULTIPLAYER(BOOL toggle) { invoke<void>(0xFA1E0E893D915215, toggle); } // 0xFA1E0E893D915215 0x5C350D78 b323
 }
 
-namespace LOCALIZATION
-{
+namespace LOCALIZATION {
   // https://nativedb.spyral.dev/natives/0x497420E022796B3F
   static int LOCALIZATION_GET_SYSTEM_LANGUAGE() { return invoke<int>(0x497420E022796B3F); } // 0x497420E022796B3F  b877
   // https://nativedb.spyral.dev/natives/0x2BDD44CC428A7EAE
@@ -3999,8 +3979,7 @@ namespace LOCALIZATION
   static int LOCALIZATION_GET_SYSTEM_DATE_TYPE() { return invoke<int>(0xA8AE43AEC1A61314); } // 0xA8AE43AEC1A61314  b323
 }
 
-namespace MISC
-{
+namespace MISC {
   // https://nativedb.spyral.dev/natives/0x8B3CA62B1EF19B62
   static int GET_ALLOCATED_STACK_SIZE() { return invoke<int>(0x8B3CA62B1EF19B62); } // 0x8B3CA62B1EF19B62 0x4E9CA30A b323
   // https://nativedb.spyral.dev/natives/0xFEAD16FC8F9DFC0F
@@ -4661,8 +4640,7 @@ namespace MISC
   static int GET_CONTENT_ID_INDEX(Hash contentId) { return invoke<int>(0xECF041186C5A94DC, contentId); } // 0xECF041186C5A94DC  b2612
 }
 
-namespace MOBILE
-{
+namespace MOBILE {
   // https://nativedb.spyral.dev/natives/0xA4E8E696C532FBC7
   static void CREATE_MOBILE_PHONE(int phoneType) { invoke<void>(0xA4E8E696C532FBC7, phoneType); } // 0xA4E8E696C532FBC7 0x5BBC5E23 b323
   // https://nativedb.spyral.dev/natives/0x3BC861DF703E5097
@@ -4715,8 +4693,7 @@ namespace MOBILE
   static void GET_MOBILE_PHONE_RENDER_ID(int* renderId) { invoke<void>(0xB4A53E05F68B6FA1, renderId); } // 0xB4A53E05F68B6FA1 0x88E4FECE b323
 }
 
-namespace MONEY
-{
+namespace MONEY {
   // https://nativedb.spyral.dev/natives/0x3DA5ECD1A56CBA6D
   static void NETWORK_INITIALIZE_CASH(int wallet, int bank) { invoke<void>(0x3DA5ECD1A56CBA6D, wallet, bank); } // 0x3DA5ECD1A56CBA6D 0x66DA9935 b323
   // https://nativedb.spyral.dev/natives/0x05A50AF38947EB8D
@@ -5355,8 +5332,7 @@ namespace MONEY
   static BOOL WAS_VC_WITHDRAWAL_SUCCESSFUL(Any p0) { return invoke<BOOL>(0x6FCF8DDEA146C45B, p0); } // 0x6FCF8DDEA146C45B 0xB96C7ABE b323
 }
 
-namespace NETSHOPPING
-{
+namespace NETSHOPPING {
   // https://nativedb.spyral.dev/natives/0x7D2708796355B20B
   static BOOL NET_GAMESERVER_USE_SERVER_TRANSACTIONS() { return invoke<BOOL>(0x7D2708796355B20B); } // 0x7D2708796355B20B  b1290
   // https://nativedb.spyral.dev/natives/0xBD4D7EAF8A30F637
@@ -5439,8 +5415,7 @@ namespace NETSHOPPING
   static BOOL NET_GAMESERVER_SET_TELEMETRY_NONCE_SEED(int p0) { return invoke<BOOL>(0x9507D4271988E1AE, p0); } // 0x9507D4271988E1AE  b323
 }
 
-namespace NETWORK
-{
+namespace NETWORK {
   // https://nativedb.spyral.dev/natives/0xFCA9373EF340AC0A
   static const char* GET_ONLINE_VERSION() { return invoke<const char*>(0xFCA9373EF340AC0A); } // 0xFCA9373EF340AC0A  b323
   // https://nativedb.spyral.dev/natives/0x054354A99211EB96
@@ -7103,8 +7078,7 @@ namespace NETWORK
   static void NETWORK_UGC_NAV(Any p0, Any p1) { invoke<void>(0xC1447451DDB512F0, p0, p1); } // 0xC1447451DDB512F0  b2372
 }
 
-namespace OBJECT
-{
+namespace OBJECT {
   // https://nativedb.spyral.dev/natives/0x509D5878EB39E842
   static Object CREATE_OBJECT(Hash modelHash, float x, float y, float z, BOOL isNetwork, BOOL bScriptHostObj, BOOL dynamic) { return invoke<Object>(0x509D5878EB39E842, modelHash, x, y, z, isNetwork, bScriptHostObj, dynamic); } // 0x509D5878EB39E842 0x2F7AA05C b323
   // https://nativedb.spyral.dev/natives/0x9A294B2138ABB884
@@ -7433,8 +7407,7 @@ namespace OBJECT
   static void SET_IS_OBJECT_BALL(Object object, BOOL toggle) { invoke<void>(0xB5B7742424BD4445, object, toggle); } // 0xB5B7742424BD4445  b1604
 }
 
-namespace PAD
-{
+namespace PAD {
   // https://nativedb.spyral.dev/natives/0x1CEA6BFDF248E5D9
   static BOOL IS_CONTROL_ENABLED(int padIndex, int control) { return invoke<BOOL>(0x1CEA6BFDF248E5D9, padIndex, control); } // 0x1CEA6BFDF248E5D9 0x9174AF84 b323
   // https://nativedb.spyral.dev/natives/0xF3A21BCD95725A4A
@@ -7533,8 +7506,7 @@ namespace PAD
   static void ALLOW_ALTERNATIVE_SCRIPT_CONTROLS_LAYOUT(int padIndex) { invoke<void>(0x7F4724035FDCA1DD, padIndex); } // 0x7F4724035FDCA1DD 0x2CEDE6C5 b323
 }
 
-namespace PATHFIND
-{
+namespace PATHFIND {
   // https://nativedb.spyral.dev/natives/0xBF1A602B5BA52FEE
   static void SET_ROADS_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL nodeEnabled, BOOL unknown2) { invoke<void>(0xBF1A602B5BA52FEE, x1, y1, z1, x2, y2, z2, nodeEnabled, unknown2); } // 0xBF1A602B5BA52FEE 0xEBC7B918 b323
   // https://nativedb.spyral.dev/natives/0x1A5AA1208AF5DB59
@@ -7653,8 +7625,7 @@ namespace PATHFIND
   static float CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS(float x1, float y1, float z1, float x2, float y2, float z2) { return invoke<float>(0xADD95C7005C4A197, x1, y1, z1, x2, y2, z2); } // 0xADD95C7005C4A197 0xB114489B b323
 }
 
-namespace PED
-{
+namespace PED {
   // https://nativedb.spyral.dev/natives/0xD49F9B0955C367DE
   static Ped CREATE_PED(int pedType, Hash modelHash, float x, float y, float z, float heading, BOOL isNetwork, BOOL bScriptHostPed) { return invoke<Ped>(0xD49F9B0955C367DE, pedType, modelHash, x, y, z, heading, isNetwork, bScriptHostPed); } // 0xD49F9B0955C367DE 0x0389EF71 b323
   // https://nativedb.spyral.dev/natives/0x9614299DCB53E54B
@@ -8875,8 +8846,7 @@ namespace PED
   static void SET_ALLOW_STUNT_JUMP_CAMERA(Ped ped, BOOL toggle) { invoke<void>(0xFAB944D4D481ACCB, ped, toggle); } // 0xFAB944D4D481ACCB  b1734
 }
 
-namespace PHYSICS
-{
+namespace PHYSICS {
   // https://nativedb.spyral.dev/natives/0xE832D760399EB220
   static int ADD_ROPE(float x, float y, float z, float rotX, float rotY, float rotZ, float length, int ropeType, float maxLength, float minLength, float windingSpeed, BOOL p11, BOOL p12, BOOL rigid, float p14, BOOL breakWhenShot, Any* unkPtr) { return invoke<int>(0xE832D760399EB220, x, y, z, rotX, rotY, rotZ, length, ropeType, maxLength, minLength, windingSpeed, p11, p12, rigid, p14, breakWhenShot, unkPtr); } // 0xE832D760399EB220 0xA592EC74 b323
   // https://nativedb.spyral.dev/natives/0x52B4829281364649
@@ -8975,8 +8945,7 @@ namespace PHYSICS
   static void SET_IN_ARENA_MODE(BOOL toggle) { invoke<void>(0xAA6A6098851C396F, toggle); } // 0xAA6A6098851C396F  b1604
 }
 
-namespace PLAYER
-{
+namespace PLAYER {
   // https://nativedb.spyral.dev/natives/0x43A66C31C68491C0
   static Ped GET_PLAYER_PED(Player player) { return invoke<Ped>(0x43A66C31C68491C0, player); } // 0x43A66C31C68491C0 0x6E31E993 b323
   // https://nativedb.spyral.dev/natives/0x50FAC3A3E030A6E1
@@ -9475,8 +9444,7 @@ namespace PLAYER
   static void SET_SCRIPT_FIRE_POSITION(float coordX, float coordY, float coordZ) { invoke<void>(0x70A382ADEC069DD3, coordX, coordY, coordZ); } // 0x70A382ADEC069DD3  b1604
 }
 
-namespace RECORDING
-{
+namespace RECORDING {
   // https://nativedb.spyral.dev/natives/0x48621C9FCA3EBD28
   static void REPLAY_START_EVENT(int p0) { invoke<void>(0x48621C9FCA3EBD28, p0); } // 0x48621C9FCA3EBD28  b323
   // https://nativedb.spyral.dev/natives/0x81CBAE94390F9F89
@@ -9513,8 +9481,7 @@ namespace RECORDING
   static BOOL IS_REPLAY_RECORD_SPACE_AVAILABLE(BOOL p0) { return invoke<BOOL>(0x33D47E85B476ABCD, p0); } // 0x33D47E85B476ABCD  b323
 }
 
-namespace REPLAY
-{
+namespace REPLAY {
   // https://nativedb.spyral.dev/natives/0x7E2BD3EF6C205F09
   static void REGISTER_EFFECT_FOR_REPLAY_EDITOR(const char* p0, BOOL p1) { invoke<void>(0x7E2BD3EF6C205F09, p0, p1); } // 0x7E2BD3EF6C205F09  b323
   // https://nativedb.spyral.dev/natives/0x95AB8B5C992C7B58
@@ -9529,8 +9496,7 @@ namespace REPLAY
   static void ACTIVATE_ROCKSTAR_EDITOR(int p0) { invoke<void>(0x49DA8145672B2725, p0); } // 0x49DA8145672B2725  b323
 }
 
-namespace SAVEMIGRATION
-{
+namespace SAVEMIGRATION {
   // https://nativedb.spyral.dev/natives/0x84B418E93894AC1C
   static BOOL SAVEMIGRATION_IS_MP_ENABLED() { return invoke<BOOL>(0x84B418E93894AC1C); } // 0x84B418E93894AC1C  b2372
   // https://nativedb.spyral.dev/natives/0x85F41F9225D08C72
@@ -9547,8 +9513,7 @@ namespace SAVEMIGRATION
   static int SAVEMIGRATION_MP_GET_STATUS() { return invoke<int>(0x690B76BD2763E068); } // 0x690B76BD2763E068  b2372
 }
 
-namespace SCRIPT
-{
+namespace SCRIPT {
   // https://nativedb.spyral.dev/natives/0x6EB5F71AA68F2E8E
   static void REQUEST_SCRIPT(const char* scriptName) { invoke<void>(0x6EB5F71AA68F2E8E, scriptName); } // 0x6EB5F71AA68F2E8E 0xE26B2666 b323
   // https://nativedb.spyral.dev/natives/0xC90D2DCACD56184C
@@ -9625,8 +9590,7 @@ namespace SCRIPT
   static void SEND_TU_SCRIPT_EVENT(int eventGroup, Any* eventData, int eventDataSize, int playerBits) { invoke<void>(0xA40CC53DF8E50837, eventGroup, eventData, eventDataSize, playerBits); } // 0xA40CC53DF8E50837  b1103
 }
 
-namespace SECURITY
-{
+namespace SECURITY {
   // https://nativedb.spyral.dev/natives/0x40EB1EFD921822BC
   static void REGISTER_SCRIPT_VARIABLE(Any* variable) { invoke<void>(0x40EB1EFD921822BC, variable); } // 0x40EB1EFD921822BC  b2545
   // https://nativedb.spyral.dev/natives/0x340A36A700E99699
@@ -9635,8 +9599,7 @@ namespace SECURITY
   static void FORCE_CHECK_SCRIPT_VARIABLES() { invoke<void>(0x8E580AB902917360); } // 0x8E580AB902917360  b2545
 }
 
-namespace SHAPETEST
-{
+namespace SHAPETEST {
   // https://nativedb.spyral.dev/natives/0x7EE9F5D83DD4F90E
   static int START_SHAPE_TEST_LOS_PROBE(float x1, float y1, float z1, float x2, float y2, float z2, int flags, Entity entity, int p8) { return invoke<int>(0x7EE9F5D83DD4F90E, x1, y1, z1, x2, y2, z2, flags, entity, p8); } // 0x7EE9F5D83DD4F90E 0xEFAF4BA6 b323
   // https://nativedb.spyral.dev/natives/0x377906D8A31E5586
@@ -9661,8 +9624,7 @@ namespace SHAPETEST
   static void RELEASE_SCRIPT_GUID_FROM_ENTITY(Entity entityHit) { invoke<void>(0x2B3334BCA57CD799, entityHit); } // 0x2B3334BCA57CD799 0xEC2AAF06 b323
 }
 
-namespace SOCIALCLUB
-{
+namespace SOCIALCLUB {
   // https://nativedb.spyral.dev/natives/0x03A93FF1A2CA0864
   static int SC_INBOX_GET_TOTAL_NUM_MESSAGES() { return invoke<int>(0x03A93FF1A2CA0864); } // 0x03A93FF1A2CA0864 0x6BE5DF29 b323
   // https://nativedb.spyral.dev/natives/0xBB8EA16ECBC976C4
@@ -9831,8 +9793,7 @@ namespace SOCIALCLUB
   static BOOL SC_HAS_ACHIEVEMENT_BEEN_PASSED(int achievementId) { return invoke<BOOL>(0x418DC16FAE452C1C, achievementId); } // 0x418DC16FAE452C1C  b323
 }
 
-namespace STATS
-{
+namespace STATS {
   // https://nativedb.spyral.dev/natives/0xEB0A72181D4AA4AD
   static Any STAT_CLEAR_SLOT_FOR_RELOAD(int statSlot) { return invoke<Any>(0xEB0A72181D4AA4AD, statSlot); } // 0xEB0A72181D4AA4AD 0x84BDD475 b323
   // https://nativedb.spyral.dev/natives/0xA651443F437B1CE6
@@ -10457,8 +10418,7 @@ namespace STATS
   static void PLAYSTATS_INVENTORY(Any p0) { invoke<void>(0x887DAD63CF5B7908, p0); } // 0x887DAD63CF5B7908  b2699
 }
 
-namespace STREAMING
-{
+namespace STREAMING {
   // https://nativedb.spyral.dev/natives/0xBD6E84632DD4CB3F
   static void LOAD_ALL_OBJECTS_NOW() { invoke<void>(0xBD6E84632DD4CB3F); } // 0xBD6E84632DD4CB3F 0xC9DBDA90 b323
   // https://nativedb.spyral.dev/natives/0x4448EB75B4904BDB
@@ -10701,8 +10661,7 @@ namespace STREAMING
   static void SET_ISLAND_ENABLED(const char* name, BOOL toggle) { invoke<void>(0x9A9D1BA639675CF1, name, toggle); } // 0x9A9D1BA639675CF1  b2189
 }
 
-namespace TASK
-{
+namespace TASK {
   // https://nativedb.spyral.dev/natives/0xE73A266DB0CA9042
   static void TASK_PAUSE(Ped ped, int ms) { invoke<void>(0xE73A266DB0CA9042, ped, ms); } // 0xE73A266DB0CA9042 0x17A64668 b323
   // https://nativedb.spyral.dev/natives/0x919BE13EED931959
@@ -11317,8 +11276,7 @@ namespace TASK
   static BOOL IS_PED_CUFFED(Ped ped) { return invoke<BOOL>(0x74E559B3BC910685, ped); } // 0x74E559B3BC910685 0x511CE741 b323
 }
 
-namespace VEHICLE
-{
+namespace VEHICLE {
   // https://nativedb.spyral.dev/natives/0xAF35D0D2583051B0
   static Vehicle CREATE_VEHICLE(Hash modelHash, float x, float y, float z, float heading, BOOL isNetwork, BOOL bScriptHostVeh, BOOL p7) { return invoke<Vehicle>(0xAF35D0D2583051B0, modelHash, x, y, z, heading, isNetwork, bScriptHostVeh, p7); } // 0xAF35D0D2583051B0 0xDD75460A b323
   // https://nativedb.spyral.dev/natives/0xEA386986E786A54F
@@ -12791,8 +12749,7 @@ namespace VEHICLE
   static void SET_CHECK_FOR_ENOUGH_ROOM_FOR_PED(Vehicle vehicle, BOOL p1) { invoke<void>(0xEF9D388F8D377F44, vehicle, p1); } // 0xEF9D388F8D377F44  b2699
 }
 
-namespace WATER
-{
+namespace WATER {
   // https://nativedb.spyral.dev/natives/0xF6829842C06AE524
   static BOOL GET_WATER_HEIGHT(float x, float y, float z, float* height) { return invoke<BOOL>(0xF6829842C06AE524, x, y, z, height); } // 0xF6829842C06AE524 0xD864E17C b323
   // https://nativedb.spyral.dev/natives/0x8EE6B53CE13A9794
@@ -12819,8 +12776,7 @@ namespace WATER
   static void RESET_DEEP_OCEAN_SCALER() { invoke<void>(0x5E5E99285AE812DB); } // 0x5E5E99285AE812DB 0x4AD23212 b323
 }
 
-namespace WEAPON
-{
+namespace WEAPON {
   // https://nativedb.spyral.dev/natives/0xC8B46D7727D864AA
   static void ENABLE_LASER_SIGHT_RENDERING(BOOL toggle) { invoke<void>(0xC8B46D7727D864AA, toggle); } // 0xC8B46D7727D864AA 0xE3438955 b323
   // https://nativedb.spyral.dev/natives/0x0DB57B41EC1DB083
@@ -13055,8 +13011,7 @@ namespace WEAPON
   static void SET_CAN_PED_SELECT_ALL_WEAPONS(Ped ped, BOOL toggle) { invoke<void>(0xEFF296097FF1E509, ped, toggle); } // 0xEFF296097FF1E509  b1103
 }
 
-namespace ZONE
-{
+namespace ZONE {
   // https://nativedb.spyral.dev/natives/0x27040C25DE6CB2F4
   static int GET_ZONE_AT_COORDS(float x, float y, float z) { return invoke<int>(0x27040C25DE6CB2F4, x, y, z); } // 0x27040C25DE6CB2F4 0xC9018181 b323
   // https://nativedb.spyral.dev/natives/0x98CD1D2934B76CC1

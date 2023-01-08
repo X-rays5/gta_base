@@ -7,13 +7,13 @@
 #include "../../rage/util/session_switcher.hpp"
 
 namespace gta_base::ui::tabs {
-      void MiscTab() {
-        kMANAGER->AddSubmenu(Submenus::Misc, "tab/title/misc", [](Submenu* sub){
-          sub->AddOption(option::ExecuteOption("option/skip_cutscene", "", []{
-            fiber::kPOOL->AddJob([]{
-              CUTSCENE::STOP_CUTSCENE_IMMEDIATELY();
-            });
-          }));
+  void MiscTab() {
+    kMANAGER->AddSubmenu(Submenus::Misc, "tab/title/misc", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("option/skip_cutscene", "", [] {
+        fiber::kPOOL->AddJob([] {
+          CUTSCENE::STOP_CUTSCENE_IMMEDIATELY();
         });
-      }
-    }
+      }));
+    });
+  }
+}

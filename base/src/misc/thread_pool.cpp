@@ -30,7 +30,7 @@ namespace gta_base::misc {
     running_ = false;
     job_notify_.notify_all();
 
-    for (auto& thread : threads_) {
+    for (auto& thread: threads_) {
       if (thread.joinable()) {
         thread.join();
       }

@@ -14,18 +14,15 @@
 #undef GetFileAttributes
 #undef SetFileAttributes
 
-namespace rage
-{
-  struct fiFindData
-  {
+namespace rage {
+  struct fiFindData {
     char fileName[256];
     uint64_t fileSize;
     FILETIME lastWriteTime;
     DWORD fileAttributes;
   };
 
-  struct ResourceFlags
-  {
+  struct ResourceFlags {
     // TODO: figure out which is physical and which is virtual
     uint32_t flag1;
     uint32_t flag2;
@@ -33,8 +30,7 @@ namespace rage
 
   // since Payne, RAGE devices are thread-safe (might not apply to V?)
   // in V, RAGE devices use UTF-8
-  class fiDevice
-  {
+  class fiDevice {
   public:
     static inline fiDevice* GetDevice(const char* path, bool allowRoot);
 
@@ -137,8 +133,7 @@ namespace rage
     virtual const char* GetName() = 0;
   };
 
-  class fiDeviceImplemented : public fiDevice
-  {
+  class fiDeviceImplemented : public fiDevice {
   protected:
     fiDeviceImplemented();
 
@@ -235,8 +230,7 @@ namespace rage
     virtual const char* GetName();
   };
 
-  class fiDeviceRelative : public fiDeviceImplemented
-  {
+  class fiDeviceRelative : public fiDeviceImplemented {
   private:
     char m_pad[272];
   public:
@@ -246,8 +240,7 @@ namespace rage
     void SetPath(const char* relativeTo, rage::fiDevice* baseDevice, bool allowRoot);
 
     // compatibility wrapper for NY code
-    inline void SetPath(const char* relativeTo, bool allowRoot)
-    {
+    inline void SetPath(const char* relativeTo, bool allowRoot) {
       SetPath(relativeTo, nullptr, allowRoot);
     }
 
@@ -255,8 +248,7 @@ namespace rage
     void Mount(const char* mountPoint);
   };
 
-  class fiEncryptingDevice : public fiDeviceImplemented
-  {
+  class fiEncryptingDevice : public fiDeviceImplemented {
   private:
     void* m_keyState;
     void* m_0010;
@@ -273,8 +265,7 @@ namespace rage
     void FreeKeyState();
   };
 
-  class fiPackfile : public fiDeviceImplemented
-  {
+  class fiPackfile : public fiDeviceImplemented {
   private:
     char m_pad[368 + (0x650 - 0x590)];
   public:

@@ -23,6 +23,7 @@ namespace gta_base::misc {
     ~ThreadPool();
 
     void AddJob(std::function<void()> task);
+
     template<typename T>
     [[nodiscard]] FORCE_INLINE std::future<T> AddJobFuture(std::function<T()> task) {
       auto task_wrapper = std::make_shared<std::packaged_task<T()>>([task = std::move(task)]() -> T {
@@ -30,7 +31,7 @@ namespace gta_base::misc {
       });
       std::future<T> future = task_wrapper->get_future();
 
-      AddJob([=]() {(*task_wrapper)();});
+      AddJob([=]() { (*task_wrapper)(); });
 
       return future;
     }
@@ -47,6 +48,7 @@ namespace gta_base::misc {
     static void WorkerLoop(ThreadPool* pool);
     void CreateThreads(std::size_t thread_count);
   };
+
   inline ThreadPool* kTHREAD_POOL{};
 }
 #endif //GTA_BASE_THREAD_POOL_HPP

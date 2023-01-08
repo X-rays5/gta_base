@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_VEHICLE_HPP
 #define GTA_BASE_VEHICLE_HPP
 namespace gta_base::ui::tabs {
-      void VehicleTab();
+  void VehicleTab();
 }
 #endif //GTA_BASE_VEHICLE_HPP

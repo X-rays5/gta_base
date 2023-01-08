@@ -6,7 +6,7 @@
 #include "crossmap.hpp"
 #include "../memory/pointers.hpp"
 
-extern "C" void	spoof_call(void* context, void* function, void* ret);
+extern "C" void spoof_call(void* context, void* function, void* ret);
 
 //#define DEBUG_INVOKER
 
@@ -20,7 +20,7 @@ namespace rage {
     if (!handler_cache_.empty())
       return;
 
-    for (const auto& mapping : kCROSSMAP) {
+    for (const auto& mapping: kCROSSMAP) {
       rage::scrNativeHandler handler = gta_base::memory::kPOINTERS->GetNativeHandler(gta_base::memory::kPOINTERS->native_registration_table_, mapping.second);
       if (!handler) {
         LOG_ERROR("{:X}:{:X} handler invalid: {:X}", mapping.first, mapping.second, reinterpret_cast<std::uintptr_t>(static_cast<void*>(handler)));
@@ -36,15 +36,17 @@ namespace rage {
   }
 
   void CallNative(rage::scrNativeHash hash, NativeCallContext* call_context, scrNativeHandler handler) {
-    __try {
+    __try{
       spoof_call(call_context, handler, gta_base::memory::kPOINTERS->native_return_);
-#ifdef DEBUG_INVOKER
+      #ifdef DEBUG_INVOKER
       LOG_DEBUG("calling native: {:X} handler: {:X}", hash, reinterpret_cast<std::uintptr_t>(static_cast<void*>(handler)));
       gta_base::kLOGGER->Flush();
-#endif
+      #endif
 
       gta_base::memory::kPOINTERS->FixVectors(call_context);
-    } __except(EXCEPTION_EXECUTE_HANDLER) {
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
       LOG_WARN("Exception caught while trying to call native. hash: {}, handler: {}", hash, reinterpret_cast<std::uintptr_t>(static_cast<void*>(handler)));
     }
   }

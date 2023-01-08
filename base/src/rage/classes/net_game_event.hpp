@@ -10,8 +10,7 @@
 #include "../types.hpp"
 
 #pragma pack(push, 1)
-namespace rage
-{
+namespace rage {
   class netPlayer;
 
   enum class eNetMessage : uint32_t {
@@ -127,8 +126,7 @@ namespace rage
     CMsg_0x86 = 0x86,
   };
   namespace netConnection {
-    class InFrame
-    {
+    class InFrame {
     public:
       virtual ~InFrame() = default;
 
@@ -147,8 +145,7 @@ namespace rage
     };
   }
 
-  class CEventNetwork
-  {
+  class CEventNetwork {
   public:
     virtual ~CEventNetwork() = default;
     virtual void unk_0x8() = 0;
@@ -160,38 +157,49 @@ namespace rage
     virtual void unk_0x38() = 0;
   };
 
-  class netGameEvent
-  {
+  class netGameEvent {
   public:
     virtual ~netGameEvent() = default;
 
     virtual const char* get_name() { return 0; };
+
     virtual bool is_in_scope(netPlayer* player) { return 0; };
+
     virtual bool time_to_resend(std::uint32_t time) { return 0; };
+
     virtual bool can_change_scope() { return 0; };
 
     virtual void prepare_data(datBitBuffer* buffer, netPlayer* source_player, netPlayer* target_player) {};
+
     virtual void handle_data(datBitBuffer* buffer, netPlayer* source_player, netPlayer* target_player) {};
 
     virtual bool decide(netPlayer* source_player, netPlayer* target_player) { return 0; };
 
     virtual void prepare_reply(datBitBuffer* buffer, netPlayer* reply_player) {};
+
     virtual void handle_reply(datBitBuffer* buffer, netPlayer* souce_player) {};
 
     virtual void prepare_extra_data(datBitBuffer* buffer, bool is_reply, netPlayer* player, netPlayer* player2) {};
+
     virtual void handle_extra_data(datBitBuffer* buffer, bool is_reply, netPlayer* player, netPlayer* player2) {};
 
   private:
     virtual void unk_0x60() {};
+
     virtual void unk_0x68() {};
+
     virtual void unk_0x70() {};
+
     virtual void unk_0x78() {};
   public:
     virtual bool operator==(netGameEvent const& other) { return 0; };
+
     virtual bool operator!=(netGameEvent const& other) { return 0; };
 
     virtual bool must_persist() { return 0; };
+
     virtual bool must_persist_when_out_of_scope() { return 0; };
+
     virtual bool has_timed_out() { return 0; };
   public:
     std::uint16_t m_id;          // 0x08
@@ -211,8 +219,7 @@ namespace rage
   };
 }
 
-class CScriptedGameEvent : public rage::netGameEvent
-{
+class CScriptedGameEvent : public rage::netGameEvent {
 public:
   char m_padding[0x40];      // 0x30
   std::int64_t m_args[54];   // 0x70
@@ -220,11 +227,11 @@ public:
   std::uint32_t m_args_size; // 0x224
 };
 
-class CNetworkIncrementStatEvent : public rage::netGameEvent
-{
+class CNetworkIncrementStatEvent : public rage::netGameEvent {
 public:
   rage::Hash m_stat;    // 0x30
   std::uint32_t m_amount; // 0x34
 };
+
 #pragma pack(pop)
 #endif //GTA_BASE_NET_GAME_EVENT_HPP

@@ -11,7 +11,7 @@ namespace gta_base::lua {
       if (auto authors_opt = manifest.GetAuthors(); authors_opt.has_value()) {
         auto authors = std::move(*authors_opt);
         print += " by ";
-        for (auto&& author : authors) {
+        for (auto&& author: authors) {
           print = fmt::format("{}{}, ", print, author);
         }
 
@@ -95,7 +95,7 @@ namespace gta_base::lua {
 
   void Manager::RunScriptTick() {
     std::unique_lock lock(mutex_);
-    for (auto& [path, script] : running_scripts_)
+    for (auto& [path, script]: running_scripts_)
       script.lua_script_inst->Tick();
   }
 
@@ -103,7 +103,7 @@ namespace gta_base::lua {
     std::filesystem::directory_iterator dir_iter(common::GetScriptsDir());
     std::vector<std::filesystem::path> paths;
 
-    for (auto& entry : dir_iter) {
+    for (auto& entry: dir_iter) {
       if (entry.is_directory()) {
         if (std::filesystem::exists(entry.path() / globals::lua_manifest_file_name)) {
           paths.push_back(entry.path());
@@ -119,7 +119,7 @@ namespace gta_base::lua {
   std::vector<Manifest> Manager::GetScriptManifests() {
     std::vector<Manifest> res;
 
-    for (auto&& path : GetScriptPaths()) {
+    for (auto&& path: GetScriptPaths()) {
       Manifest manifest(path);
       if (!manifest.Valid()) {
         LOG_WARN("Failed to load manifest for: {}", path.string());

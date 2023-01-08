@@ -13,23 +13,19 @@
 namespace rage {
   using joaat_t = std::uint32_t;
 
-  template <std::size_t CharCount>
-  struct constexpr_joaat
-  {
+  template<std::size_t CharCount>
+  struct constexpr_joaat {
     char data[CharCount];
 
-    template <std::size_t... Indices>
-    constexpr constexpr_joaat(const char *str, std::index_sequence<Indices...>) :
-      data{ (str[Indices])... }
-    {
+    template<std::size_t... Indices>
+    constexpr constexpr_joaat(const char* str, std::index_sequence<Indices...>) :
+      data{(str[Indices])...} {
     }
 
-    constexpr joaat_t operator()()
-    {
+    constexpr joaat_t operator()() {
       joaat_t hash = 0;
 
-      for (std::size_t i = 0; i < CharCount; ++i)
-      {
+      for (std::size_t i = 0; i < CharCount; ++i) {
         hash += joaat_to_lower(data[i]);
         hash += (hash << 10);
         hash ^= (hash >> 6);
@@ -43,12 +39,10 @@ namespace rage {
     }
   };
 
-  inline joaat_t joaat(const char *str)
-  {
+  inline joaat_t joaat(const char* str) {
     joaat_t hash = 0;
 
-    while (*str)
-    {
+    while (*str) {
       hash += joaat_to_lower(*(str++));
       hash += (hash << 10);
       hash ^= (hash >> 6);

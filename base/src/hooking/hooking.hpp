@@ -52,6 +52,7 @@ namespace gta_base {
   private:
     std::unique_ptr<hooking::NativeHooking> native_hooking_inst_;
   };
+
   inline Hooking* kHOOKING{};
 }
 #endif //GTABASE_HOOKING_HPP

@@ -21,7 +21,7 @@ namespace gta_base::memory::scanner {
     }
   }
 
-  Pattern::Pattern(const void *bytes, std::string_view mask) {
+  Pattern::Pattern(const void* bytes, std::string_view mask) {
     for (std::size_t i = 0; i < mask.size(); ++i) {
       if (mask[i] != '?')
         bytes_.emplace_back(static_cast<const std::uint8_t*>(bytes)[i]);

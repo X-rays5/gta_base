@@ -14,14 +14,12 @@ namespace rage::util {
       std::vector<std::string> non_dlc_mounted_devices_names;
 
       std::uint16_t mounted_devices_len = *memory::kPOINTERS->fidevices_len_;
-      if (mounted_devices_len)
-      {
-        uint8_t** current_device_mount_name_ptr = *(unsigned __int8***)memory::kPOINTERS->fidevices_;
+      if (mounted_devices_len) {
+        uint8_t** current_device_mount_name_ptr = *(unsigned __int8***) memory::kPOINTERS->fidevices_;
         auto device_i = 0;
 
-        while (true)
-        {
-          non_dlc_mounted_devices_names.push_back(*(const char**)current_device_mount_name_ptr);
+        while (true) {
+          non_dlc_mounted_devices_names.push_back(*(const char**) current_device_mount_name_ptr);
 
           ++device_i;
           current_device_mount_name_ptr += 4;
@@ -49,7 +47,7 @@ namespace rage::util {
     constexpr std::size_t yield_increment = 80;
 
     std::size_t i = 1;
-    while(memory::kPOINTERS->fipackfile_instances_[i]) {
+    while (memory::kPOINTERS->fipackfile_instances_[i]) {
       rage::fiPackfile* rpf = memory::kPOINTERS->fipackfile_instances_[i];
 
       // it's hard coded in the binary?
@@ -60,7 +58,7 @@ namespace rage::util {
       FipackReader rpf_wrapper = {rpf, default_mount_name};
 
       bool already_mounted = false;
-      for (const auto& non_dlc_mounted_device_name : non_dlc_mounted_devices_names) {
+      for (const auto& non_dlc_mounted_device_name: non_dlc_mounted_devices_names) {
         rage::fiDevice* non_dlc_mounted_device = memory::kPOINTERS->FiDeviceGetDevice(non_dlc_mounted_device_name.c_str(), true);
 
         if (rpf == non_dlc_mounted_device) {
@@ -138,18 +136,13 @@ namespace rage::util {
 
     rage::fiFindData find_data{0};
     std::uint64_t file_h = rpf_->FindFirst(parent.c_str(), &find_data);
-    if (file_h != -1)
-    {
-      do
-      {
+    if (file_h != -1) {
+      do {
         std::string fn = std::string(parent.c_str()) + std::string("/") + std::string(find_data.fileName);
 
-        if (find_data.fileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-        {
+        if (find_data.fileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
           dirs.push_back(fn);
-        }
-        else
-        {
+        } else {
           file_paths.push_back(fn);
         }
       } while (rpf_->FindNext(file_h, &find_data));
@@ -157,8 +150,7 @@ namespace rage::util {
       rpf_->FindClose(file_h);
     }
 
-    for (auto& directory : dirs)
-    {
+    for (auto& directory: dirs) {
       auto files = GetFilePaths(directory);
 
       file_paths.insert(file_paths.end(), files.begin(), files.end());
@@ -168,8 +160,7 @@ namespace rage::util {
   }
 
   void FipackReader::ReadFile(const std::filesystem::path& path, FipackReader::file_contents_cb_t&& cb) {
-    if (const auto handle = rpf_->Open(path.string().c_str(), true); handle != -1)
-    {
+    if (const auto handle = rpf_->Open(path.string().c_str(), true); handle != -1) {
       const auto data_length = rpf_->GetFileLength(handle);
       const auto file_content = std::make_unique<std::uint8_t[]>(data_length);
 
@@ -182,7 +173,7 @@ namespace rage::util {
   }
 
   void FipackReader::ReadXmlFile(const std::filesystem::path& path, FipackReader::xml_file_contents_cb_t cb) {
-    ReadFile(path, [&](const std::unique_ptr<std::uint8_t[]>& file_content, const std::int32_t data_size){
+    ReadFile(path, [&](const std::unique_ptr<std::uint8_t[]>& file_content, const std::int32_t data_size) {
       pugi::xml_document doc;
       if (doc.load_buffer(file_content.get(), data_size).status == pugi::xml_parse_status::status_ok) {
         cb(doc);

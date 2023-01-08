@@ -55,6 +55,7 @@ namespace gta_base {
     void SetupExceptionHandler();
     void RemoveExceptionHandler();
   };
+
   inline Logger* kLOGGER{};
 }
 

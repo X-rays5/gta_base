@@ -9,6 +9,7 @@
 #include <atomic>
 #include <robin_hood.h>
 #include <unordered_map>
+
 #undef AddJob
 #include "../rage/types.hpp"
 #include "../fiber/pool.hpp"
@@ -42,7 +43,7 @@ namespace gta_base {
 
         while (entry != event_handlers.end()) {
           auto handler = entry->second;
-          fiber::kPOOL->AddJob([&handler]{
+          fiber::kPOOL->AddJob([&handler] {
             std::invoke(handler);
           });
           entry++;

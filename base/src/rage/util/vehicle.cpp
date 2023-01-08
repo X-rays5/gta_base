@@ -18,12 +18,9 @@ namespace rage::util::vehicle {
   Vector3 GetSpawnLocation(bool spawn_inside) {
     float y_offset = 0;
 
-    if (gta_base::globals::local_player.vehicle_id != 0)
-    {
+    if (gta_base::globals::local_player.vehicle_id != 0) {
       y_offset = 10.f;
-    }
-    else if (!spawn_inside)
-    {
+    } else if (!spawn_inside) {
       y_offset = 5.f;
     }
 
@@ -41,9 +38,9 @@ namespace rage::util::vehicle {
       return 0;
     }
 
-    *(unsigned short*)gta_base::memory::kPOINTERS->model_spawn_bypass_ = 0x9090;
+    *(unsigned short*) gta_base::memory::kPOINTERS->model_spawn_bypass_ = 0x9090;
     auto veh = VEHICLE::CREATE_VEHICLE(hash, pos.x, pos.y, pos.z, heading, is_networked, false, false);
-    *(unsigned short*)gta_base::memory::kPOINTERS->model_spawn_bypass_ = 0x0574;
+    *(unsigned short*) gta_base::memory::kPOINTERS->model_spawn_bypass_ = 0x0574;
 
     gta_base::fiber::Script::GetCurr()->Yield();
 
