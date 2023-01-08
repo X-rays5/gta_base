@@ -22,6 +22,7 @@
 #include "lua/manager.hpp"
 #include "settings/option_state.hpp"
 #include "settings/profile.hpp"
+#include "commands/command_manager.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
@@ -81,6 +82,9 @@ void BaseMain() {
     globals::gta_data = std::move(gta_data.value());
     gta_data_loader.reset();
   });
+
+  auto command_manager_inst = std::make_unique<commands::CommandManager>();
+  LOG_INFO("Command Manager initialized");
 
   auto ui_manager_inst = std::make_unique<ui::Manager>();
   LOG_INFO("UI Manager initialized");
@@ -173,6 +177,9 @@ void BaseMain() {
 
   ui_manager_inst.reset();
   LOG_INFO("UI Manager shutdown");
+
+  command_manager_inst.reset();
+  LOG_INFO("Command Manager shutdown");
 
   renderer_inst.reset();
   LOG_INFO("Renderer shutdown");

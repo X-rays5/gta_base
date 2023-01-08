@@ -21,4 +21,14 @@
 #elif
 #define FORCE_INLINE
 #endif
+
+template<size_t N>
+struct template_str {
+  constexpr template_str(const char(& str)[N]) {
+    std::copy_n(str, N, value);
+  }
+
+  char value[N];
+};
+
 #endif //GTA_BASE_PCH_HPP
