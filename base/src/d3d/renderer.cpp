@@ -24,7 +24,7 @@ namespace gta_base::d3d {
 
     void* device{};
     if (FAILED(swap_chain_->GetDevice(__uuidof(ID3D11Device), &device))) {
-      LOG_FATAL("Failed to get device from swap chain");
+      LOG_CRITICAL("Failed to get device from swap chain");
     }
     device_.Attach(static_cast<ID3D11Device*>(device));
     device_->GetImmediateContext(device_context_.GetAddressOf());

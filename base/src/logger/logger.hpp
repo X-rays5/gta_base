@@ -36,6 +36,7 @@ namespace gta_base {
 
   public:
     Logger();
+
     ~Logger();
 
     void Flush();
@@ -53,17 +54,49 @@ namespace gta_base {
     void Shutdown();
 
     void SetupExceptionHandler();
+
     void RemoveExceptionHandler();
   };
 
   inline Logger* kLOGGER{};
 }
 
-#define LOG_TRACE(...) SPDLOG_TRACE(__VA_ARGS__)
-#define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__)
-#define LOG_INFO(...)  SPDLOG_INFO(__VA_ARGS__)
-#define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
-#define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
-#define LOG_CRITICAL(...) SPDLOG_CRITICAL(__VA_ARGS__)
-#define LOG_FATAL(...) SPDLOG_CRITICAL(__VA_ARGS__)
+#define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, "redacted"}, level, __VA_ARGS__)
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
+#define LOG_TRACE(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::trace, __VA_ARGS__)
+#else
+#define LOG_TRACE(...)  (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
+#define LOG_DEBUG(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::debug, __VA_ARGS__)
+#else
+#define LOG_DEBUG(...)  (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO
+#define LOG_INFO(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::info, __VA_ARGS__)
+#else
+#define LOG_INFO(...)  (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_WARN
+#define LOG_WARN(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::warn, __VA_ARGS__)
+#else
+#define LOG_WARN(...)  (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_ERROR
+#define LOG_ERROR(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::err, __VA_ARGS__)
+#else
+#define LOG_ERROR(...)  (void)0
+#endif
+
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL
+#define LOG_CRITICAL(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::critical, __VA_ARGS__)
+#else
+#define LOG_CRITICAL(...)  (void)0
+#endif
+
 #endif //GTABASE_LOGGER_HPP
