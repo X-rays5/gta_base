@@ -8,7 +8,7 @@
 #include "../rage/script/global.hpp"
 
 namespace gta_base::looped_game {
-constexpr char transition_states[][48] = {
+  constexpr char transition_states[][48] = {
     "TRANSITION_STATE_EMPTY",
     "Singleplayer Swoop Up",
     "Multiplayer Swoop Up",
@@ -78,39 +78,40 @@ constexpr char transition_states[][48] = {
     "Terminate Maintransition",
     "Wait For Dirty Load Confirm",
     "DLC Intro Bink",
-};
+  };
 
-auto transition_state = rage::script::Global(rage::Globals::Misc::kTransitionState);
-rage::eTransitionState last_state = rage::eTransitionState::TRANSITION_STATE_EMPTY;
-void TransitionState() {
-  const auto state = *transition_state.As<rage::eTransitionState>();
+  auto transition_state = rage::script::Global(rage::Globals::Misc::kTransitionState);
+  rage::eTransitionState last_state = rage::eTransitionState::TRANSITION_STATE_EMPTY;
 
-  // When freemode script loaded remove loading screen.
-  if (state == rage::eTransitionState::TRANSITION_STATE_WAIT_JOIN_FM_SESSION && DLC::GET_IS_LOADING_SCREEN_ACTIVE()) {
-    SCRIPT::SHUTDOWN_LOADING_SCREEN();
+  void TransitionState() {
+    const auto state = *transition_state.As<rage::eTransitionState>();
+
+    // When freemode script loaded remove loading screen.
+    if (state == rage::eTransitionState::TRANSITION_STATE_WAIT_JOIN_FM_SESSION && DLC::GET_IS_LOADING_SCREEN_ACTIVE()) {
+      SCRIPT::SHUTDOWN_LOADING_SCREEN();
+    }
+
+    if (last_state == state || state == rage::eTransitionState::TRANSITION_STATE_EMPTY || state > rage::eTransitionState::TRANSITION_STATE_DLC_INTRO_BINK) {
+      return;
+    }
+
+    if (HUD::BUSYSPINNER_IS_ON()) {
+      HUD::BUSYSPINNER_OFF();
+    }
+
+    // sometimes when going into a single player mission or transition this one remains on screen permanently
+    if (state == rage::eTransitionState::TRANSITION_STATE_TERMINATE_MAINTRANSITION) {
+      return;
+    }
+
+    if ((int) state > 0) {
+      HUD::BEGIN_TEXT_COMMAND_BUSYSPINNER_ON("STRING");
+      const auto spinner_text = transition_states[(int) state];
+      LOG_INFO("Transition State: {} | {}", transition_states[(int) state], magic_enum::enum_name(state));
+      HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(spinner_text);
+      HUD::END_TEXT_COMMAND_BUSYSPINNER_ON(5);
+    }
+
+    last_state = state;
   }
-
-  if (last_state == state || state == rage::eTransitionState::TRANSITION_STATE_EMPTY || state > rage::eTransitionState::TRANSITION_STATE_DLC_INTRO_BINK) {
-    return;
-  }
-
-  if (HUD::BUSYSPINNER_IS_ON()) {
-    HUD::BUSYSPINNER_OFF();
-  }
-
-  // sometimes when going into a single player mission or transition this one remains on screen permanently
-  if (state == rage::eTransitionState::TRANSITION_STATE_TERMINATE_MAINTRANSITION) {
-    return;
-  }
-
-  if ((int) state > 0) {
-    HUD::BEGIN_TEXT_COMMAND_BUSYSPINNER_ON("STRING");
-    const auto spinner_text = transition_states[(int) state];
-    LOG_INFO("Transition State: {} | {}", transition_states[(int) state], magic_enum::enum_name(state));
-    HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(spinner_text);
-    HUD::END_TEXT_COMMAND_BUSYSPINNER_ON(5);
-  }
-
-  last_state = state;
-}
 }

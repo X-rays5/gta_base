@@ -13,39 +13,40 @@
 #undef AddJob
 
 namespace gta_base::scripts {
-class JobQueue;
-inline JobQueue *kJOB_QUEUE{};
+  class JobQueue;
 
-class JobQueue : public scriptmanager::BaseScript {
- public:
-  using job_t = std::function<void()>;
+  inline JobQueue* kJOB_QUEUE{};
 
- public:
-  JobQueue() {
-    kJOB_QUEUE = this;
-    initialized_ = true;
-  }
+  class JobQueue : public scriptmanager::BaseScript {
+  public:
+    using job_t = std::function<void()>;
 
-  ~JobQueue() {
-    kJOB_QUEUE = nullptr;
-  }
+  public:
+    JobQueue() {
+      kJOB_QUEUE = this;
+      initialized_ = true;
+    }
 
-  scriptmanager::ScriptType GetType() final {
-    return scriptmanager::ScriptType::kScripting;
-  }
+    ~JobQueue() {
+      kJOB_QUEUE = nullptr;
+    }
 
-  void AddJob(job_t job) {
-    mtx_.lock();
-    jobs_.push(std::move(job));
-    mtx_.unlock();
-  }
+    scriptmanager::ScriptType GetType() final {
+      return scriptmanager::ScriptType::kScripting;
+    }
 
-  void Init() final {};
-  void RunTick() final;
+    void AddJob(job_t job) {
+      mtx_.lock();
+      jobs_.push(std::move(job));
+      mtx_.unlock();
+    }
 
- private:
-  std::mutex mtx_;
-  std::queue<job_t> jobs_;
-};
+    void Init() final {};
+    void RunTick() final;
+
+  private:
+    std::mutex mtx_;
+    std::queue<job_t> jobs_;
+  };
 }
 #endif //GTA_BASE_JOB_QUEUE_HPP

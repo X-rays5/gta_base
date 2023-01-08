@@ -10,12 +10,12 @@
 
 namespace gta_base::scripts {
 
-void Loops::Init() {}
+  void Loops::Init() {}
 
-void Loops::RunTick() {
-  looped_game::SetSelfGlobals();
-  looped_game::SelfFeatures();
-  looped_game::Weapons();
-  looped_game::TransitionState();
-}
+  void Loops::RunTick() {
+    looped_game::SetSelfGlobals();
+    looped_game::SelfFeatures();
+    looped_game::Weapons();
+    looped_game::TransitionState();
+  }
 }

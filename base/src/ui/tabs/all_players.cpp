@@ -6,9 +6,9 @@
 #include "tab_includes.hpp"
 
 namespace gta_base::ui::tabs {
-void AllPlayersTab() {
-  kMANAGER->AddSubmenu(Submenus::NetworkAllPlayers, "tab/title/all_players", [](Submenu *sub) {
-    sub->AddOption(option::ExecuteOption("placeholder"));
-  });
-}
+  void AllPlayersTab() {
+    kMANAGER->AddSubmenu(Submenus::NetworkAllPlayers, "tab/title/all_players", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("placeholder"));
+    });
+  }
 }

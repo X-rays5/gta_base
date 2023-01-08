@@ -3,6 +3,6 @@
 //
 
 namespace gta_base::globals {
-constexpr const char compile_date[] = __DATE__;
-constexpr const char compile_time[] = __TIME__;
+  constexpr const char compile_date[] = __DATE__;
+  constexpr const char compile_time[] = __TIME__;
 }

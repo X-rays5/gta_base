@@ -12,29 +12,31 @@
 #include "base_script.hpp"
 
 namespace gta_base {
-class ScriptManager {
- public:
-  ScriptManager();
-  ~ScriptManager();
+  class ScriptManager {
+  public:
+    ScriptManager();
+    ~ScriptManager();
 
-  void Tick(scriptmanager::ScriptType type);
-  void AddScript(const std::shared_ptr<scriptmanager::BaseScript> &script);
-  void RemoveScript(const std::shared_ptr<scriptmanager::BaseScript> &script);
-  std::size_t Count() {
-    mtx_.lock();
-    auto script_count = scripts_.size();
-    mtx_.unlock();
-    return script_count;
-  }
+    void Tick(scriptmanager::ScriptType type);
+    void AddScript(const std::shared_ptr<scriptmanager::BaseScript>& script);
+    void RemoveScript(const std::shared_ptr<scriptmanager::BaseScript>& script);
 
- private:
-  std::mutex mtx_;
-  std::vector<std::shared_ptr<scriptmanager::BaseScript>> scripts_;
+    std::size_t Count() {
+      mtx_.lock();
+      auto script_count = scripts_.size();
+      mtx_.unlock();
+      return script_count;
+    }
 
- private:
+  private:
+    std::mutex mtx_;
+    std::vector<std::shared_ptr<scriptmanager::BaseScript>> scripts_;
 
-};
-inline ScriptManager *kSCRIPT_MANAGER{};
+  private:
+
+  };
+
+  inline ScriptManager* kSCRIPT_MANAGER{};
 }
 
 #endif //GTABASE_THREADS_HPP

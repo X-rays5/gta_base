@@ -26,6 +26,7 @@
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
 rage::data::Data gta_base::globals::gta_data = {};
+
 void BaseMain() {
   using namespace gta_base;
 

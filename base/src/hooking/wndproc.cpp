@@ -7,54 +7,55 @@
 #include "../misc/hotkey_manager.hpp"
 
 namespace gta_base::hooking {
-WNDPROC ORIGINAL_WNDPROC = nullptr;
-bool HookWndProc() {
-  if (ORIGINAL_WNDPROC)
-    throw std::runtime_error("WndProc already hooked");
+  WNDPROC ORIGINAL_WNDPROC = nullptr;
 
-  ORIGINAL_WNDPROC = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WndProc)));
+  bool HookWndProc() {
+    if (ORIGINAL_WNDPROC)
+      throw std::runtime_error("WndProc already hooked");
 
-  return ORIGINAL_WNDPROC;
-}
+    ORIGINAL_WNDPROC = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WndProc)));
 
-bool UnhookWndProc() {
-  if (!ORIGINAL_WNDPROC)
-    throw std::runtime_error("WndProc is not hooked");
-
-  LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(ORIGINAL_WNDPROC));
-
-  return success;
-}
-
-LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM parameter_uint_ptr, LPARAM parameter_long_ptr) {
-  if (!ORIGINAL_WNDPROC) {
-    return 0;
+    return ORIGINAL_WNDPROC;
   }
 
-  if (globals::running) {
-    switch (message) {
-      case WM_SYSKEYDOWN:
-      case WM_KEYDOWN: {
-        common::SetKeyState(parameter_uint_ptr, true);
-        break;
-      }
-      case WM_SYSKEYUP:
-      case WM_KEYUP: {
-        common::SetKeyState(parameter_uint_ptr, false);
+  bool UnhookWndProc() {
+    if (!ORIGINAL_WNDPROC)
+      throw std::runtime_error("WndProc is not hooked");
 
-        if (!misc::kHOTKEY_MANAGER->AddKeyPressed(parameter_uint_ptr))
-          misc::kHOTKEY_MANAGER->KeyPressed(parameter_uint_ptr);
-        break;
-      }
+    LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(ORIGINAL_WNDPROC));
 
-      default: {
-        break;
-      }
+    return success;
+  }
+
+  LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM parameter_uint_ptr, LPARAM parameter_long_ptr) {
+    if (!ORIGINAL_WNDPROC) {
+      return 0;
     }
 
-    d3d::Renderer::WndProc(window, message, parameter_uint_ptr, parameter_long_ptr);
-  }
+    if (globals::running) {
+      switch (message) {
+        case WM_SYSKEYDOWN:
+        case WM_KEYDOWN: {
+          common::SetKeyState(parameter_uint_ptr, true);
+          break;
+        }
+        case WM_SYSKEYUP:
+        case WM_KEYUP: {
+          common::SetKeyState(parameter_uint_ptr, false);
 
-  return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
-}
+          if (!misc::kHOTKEY_MANAGER->AddKeyPressed(parameter_uint_ptr))
+            misc::kHOTKEY_MANAGER->KeyPressed(parameter_uint_ptr);
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+
+      d3d::Renderer::WndProc(window, message, parameter_uint_ptr, parameter_long_ptr);
+    }
+
+    return CallWindowProcA(ORIGINAL_WNDPROC, window, message, parameter_uint_ptr, parameter_long_ptr);
+  }
 }

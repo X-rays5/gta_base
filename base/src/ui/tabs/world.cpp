@@ -6,7 +6,7 @@
 #include "tab_includes.hpp"
 
 namespace gta_base::ui::tabs {
-void WorldTab() {
+  void WorldTab() {
 
-}
+  }
 }

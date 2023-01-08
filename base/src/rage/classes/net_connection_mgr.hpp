@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_NET_CONNECTION_MGR_HPP
 #define GTA_BASE_NET_CONNECTION_MGR_HPP
 namespace rage {
-class netConnectionManager;
+  class netConnectionManager;
 }
 #endif //GTA_BASE_NET_CONNECTION_MGR_HPP

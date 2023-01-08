@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_WORLD_HPP
 #define GTA_BASE_WORLD_HPP
 namespace gta_base::ui::tabs {
-void WorldTab();
+  void WorldTab();
 }
 #endif //GTA_BASE_WORLD_HPP

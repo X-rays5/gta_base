@@ -10,64 +10,64 @@
 #include <magic_enum.hpp>
 
 namespace gta_base::json {
-rapidjson::Value StringToJsonVal(const std::string &str, RAPIDJSON_DEFAULT_ALLOCATOR allocator) {
-  return {str.c_str(), static_cast<rapidjson::SizeType>(str.size()), allocator};
-}
-
-std::string Stringify(rapidjson::Document &json) {
-  rapidjson::StringBuffer strbuf;
-  strbuf.Clear();
-
-  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-  json.Accept(writer);
-
-  return strbuf.GetString();
-}
-
-rapidjson::Document FromFileStream(std::ifstream &stream) {
-  rapidjson::IStreamWrapper json_file(stream);
-  rapidjson::Document json;
-  if (json.ParseStream(json_file).HasParseError()) {
-    LOG_ERROR("Failed to parse json: {}", magic_enum::enum_name(json.GetParseError()));
-    return {};
+  rapidjson::Value StringToJsonVal(const std::string& str, RAPIDJSON_DEFAULT_ALLOCATOR allocator) {
+    return {str.c_str(), static_cast<rapidjson::SizeType>(str.size()), allocator};
   }
 
-  return json;
-}
+  std::string Stringify(rapidjson::Document& json) {
+    rapidjson::StringBuffer strbuf;
+    strbuf.Clear();
 
-rapidjson::Document FromFile(const std::filesystem::path &path) {
-  if (!std::filesystem::exists(path)) {
-    LOG_ERROR("File doesn't exist: {}", path.string());
-    return {};
+    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+    json.Accept(writer);
+
+    return strbuf.GetString();
   }
 
-  std::ifstream reader(path);
-  if (!reader.is_open()) {
-    LOG_ERROR("Failed to open reader: {}", path.string());
-    return {};
+  rapidjson::Document FromFileStream(std::ifstream& stream) {
+    rapidjson::IStreamWrapper json_file(stream);
+    rapidjson::Document json;
+    if (json.ParseStream(json_file).HasParseError()) {
+      LOG_ERROR("Failed to parse json: {}", magic_enum::enum_name(json.GetParseError()));
+      return {};
+    }
+
+    return json;
   }
 
-  return FromFileStream(reader);
-}
+  rapidjson::Document FromFile(const std::filesystem::path& path) {
+    if (!std::filesystem::exists(path)) {
+      LOG_ERROR("File doesn't exist: {}", path.string());
+      return {};
+    }
 
-bool ToFile(rapidjson::Document &json, const std::filesystem::path &path, std::size_t indent) {
-  std::ofstream writer(path);
-  if (!writer.is_open()) {
-    LOG_ERROR("Failed to open file {} for writing", path.string());
-    return false;
+    std::ifstream reader(path);
+    if (!reader.is_open()) {
+      LOG_ERROR("Failed to open reader: {}", path.string());
+      return {};
+    }
+
+    return FromFileStream(reader);
   }
 
-  if (!json.IsObject())
-    json.SetObject();
+  bool ToFile(rapidjson::Document& json, const std::filesystem::path& path, std::size_t indent) {
+    std::ofstream writer(path);
+    if (!writer.is_open()) {
+      LOG_ERROR("Failed to open file {} for writing", path.string());
+      return false;
+    }
 
-  rapidjson::StringBuffer str_buf;
-  str_buf.Clear();
-  rapidjson::PrettyWriter<rapidjson::StringBuffer> json_writer(str_buf);
-  json_writer.SetIndent(' ', indent);
-  json.Accept(json_writer);
+    if (!json.IsObject())
+      json.SetObject();
 
-  writer << str_buf.GetString();
+    rapidjson::StringBuffer str_buf;
+    str_buf.Clear();
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> json_writer(str_buf);
+    json_writer.SetIndent(' ', indent);
+    json.Accept(json_writer);
 
-  return true;
-}
+    writer << str_buf.GetString();
+
+    return true;
+  }
 }

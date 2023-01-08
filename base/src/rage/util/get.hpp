@@ -14,72 +14,72 @@
 #include "../types.hpp"
 
 namespace rage {
-inline CPed *GetLocalPed() {
-  if (auto ped_factory = *gta_base::memory::kPOINTERS->ped_factory_) {
-    return ped_factory->m_local_ped;
+  inline CPed* GetLocalPed() {
+    if (auto ped_factory = *gta_base::memory::kPOINTERS->ped_factory_) {
+      return ped_factory->m_local_ped;
+    }
+
+    return nullptr;
   }
 
-  return nullptr;
-}
+  inline CPedWeaponManager* GetLocalWeaponManager() {
+    if (auto ped = GetLocalPed()) {
+      return ped->m_weapon_manager;
+    }
 
-inline CPedWeaponManager *GetLocalWeaponManager() {
-  if (auto ped = GetLocalPed()) {
-    return ped->m_weapon_manager;
+    return nullptr;
   }
 
-  return nullptr;
-}
+  inline CPlayerInfo* GetLocalPlayerInfo() {
+    if (auto ped = GetLocalPed()) {
+      return ped->m_player_info;
+    }
 
-inline CPlayerInfo *GetLocalPlayerInfo() {
-  if (auto ped = GetLocalPed()) {
-    return ped->m_player_info;
+    return nullptr;
   }
 
-  return nullptr;
-}
+  inline CVehicle* GetLocalVehicle() {
+    if (auto player_info = GetLocalPed()) {
+      return player_info->m_vehicle;
+    }
 
-inline CVehicle *GetLocalVehicle() {
-  if (auto player_info = GetLocalPed()) {
-    return player_info->m_vehicle;
+    return nullptr;
   }
 
-  return nullptr;
-}
+  inline rlGamerInfo* GetLocalGamerInfo() {
+    if (auto info = GetLocalPlayerInfo()) {
+      return &info->m_net_player_data;
+    }
 
-inline rlGamerInfo *GetLocalGamerInfo() {
-  if (auto info = GetLocalPlayerInfo()) {
-    return &info->m_net_player_data;
+    return nullptr;
   }
 
-  return nullptr;
-}
-
-inline CNetworkPlayerMgr *GetNetworkPlayerMgr() {
-  return *gta_base::memory::kPOINTERS->network_player_mgr_;
-}
-
-inline ::CNetGamePlayer *GetPlayerAtidx(int idx) {
-  if (auto player_mgr = GetNetworkPlayerMgr()) {
-    return &player_mgr->m_net_players[idx];
+  inline CNetworkPlayerMgr* GetNetworkPlayerMgr() {
+    return *gta_base::memory::kPOINTERS->network_player_mgr_;
   }
 
-  return nullptr;
-}
+  inline ::CNetGamePlayer* GetPlayerAtidx(int idx) {
+    if (auto player_mgr = GetNetworkPlayerMgr()) {
+      return &player_mgr->m_net_players[idx];
+    }
 
-inline ::CNetGamePlayer *GetLocalNetGamePlayer() {
-  if (auto player_mgr = GetNetworkPlayerMgr()) {
-    return reinterpret_cast<::CNetGamePlayer *>(player_mgr->m_local_net_player);
+    return nullptr;
   }
 
-  return nullptr;
-}
+  inline ::CNetGamePlayer* GetLocalNetGamePlayer() {
+    if (auto player_mgr = GetNetworkPlayerMgr()) {
+      return reinterpret_cast<::CNetGamePlayer*>(player_mgr->m_local_net_player);
+    }
 
-inline Network *GetNetwork() {
-  return *gta_base::memory::kPOINTERS->network_;
-}
+    return nullptr;
+  }
 
-inline Entity PtrToHandle(rage::fwEntity *ent) {
-  return gta_base::memory::kPOINTERS->PtrToHandle(ent);
-}
+  inline Network* GetNetwork() {
+    return *gta_base::memory::kPOINTERS->network_;
+  }
+
+  inline Entity PtrToHandle(rage::fwEntity* ent) {
+    return gta_base::memory::kPOINTERS->PtrToHandle(ent);
+  }
 }
 #endif //GTA_BASE_GET_HPP

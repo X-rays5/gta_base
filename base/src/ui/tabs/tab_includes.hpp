@@ -23,4 +23,5 @@
 #include "../../rage/global_idx.hpp"
 #include "../../rage/script/global.hpp"
 #include "../../misc/thread_pool.hpp"
+
 #endif //GTA_BASE_TAB_INCLUDES_HPP

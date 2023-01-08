@@ -6,6 +6,6 @@
 #ifndef GTA_BASE_NET_CONNECTION_PEER_HPP
 #define GTA_BASE_NET_CONNECTION_PEER_HPP
 namespace rage {
-class netConnectionPeer;
+  class netConnectionPeer;
 }
 #endif //GTA_BASE_NET_CONNECTION_PEER_HPP
