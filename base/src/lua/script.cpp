@@ -141,7 +141,7 @@ namespace gta_base::lua {
     });
 
     logging_metatable.set_function("fatal", [&](const std::string& msg, sol::variadic_args va) {
-      LOG_FATAL("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
+      LOG_CRITICAL("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
     });
 
     logging_metatable.set_function("debug", [&](const std::string& msg, sol::variadic_args va) {
