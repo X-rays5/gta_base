@@ -51,16 +51,6 @@ namespace gta_base::ui {
     return json::ToFile(json, path);
   }
 
-  std::string_view Translation::operator[](const std::string& key) {
-    auto it = translation_.find(key);
-
-    if (it != translation_.end()) {
-      return it->second;
-    } else {
-      return key;
-    }
-  }
-
   Translation::translation_t Translation::LoadFromJson(const std::filesystem::path& path) {
     LOG_DEBUG("Loading translation from file: {}", path.string());
     if (!std::filesystem::exists(path))
