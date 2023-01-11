@@ -24,18 +24,29 @@ namespace gta_base::ui {
 
   public:
     Translation();
+
     explicit Translation(const translation_t& translation);
+
     explicit Translation(const std::filesystem::path& path);
 
     bool SaveToFile(const std::filesystem::path& path);
 
-    std::string_view operator[](const std::string& key);
+    FORCE_INLINE std::string_view operator[](const std::string& key) {
+      auto it = translation_.find(key);
+
+      if (it != translation_.end()) {
+        return it->second;
+      } else {
+        return key;
+      }
+    }
 
   private:
     translation_t translation_;
 
   private:
     static translation_t LoadFromJson(const std::filesystem::path& path);
+
     static translation_t MergeDefaultTranslation(const translation_t& merge_into_default, bool* outdated);
   };
 
@@ -46,7 +57,7 @@ namespace gta_base::ui {
   class TranslationManager {
   public:
     template<class... Args>
-    explicit TranslationManager(Args&& ... args) {
+    FORCE_INLINE explicit TranslationManager(Args&& ... args) {
       active_translation_ = std::make_unique<Translation>(std::forward<Args>(args)...);
 
       kTRANSLATION_MANAGER = this;
@@ -56,26 +67,26 @@ namespace gta_base::ui {
       kTRANSLATION_MANAGER = nullptr;
     }
 
-    inline std::shared_ptr<Translation> GetActiveTranslation() {
+    FORCE_INLINE std::shared_ptr<Translation> GetActiveTranslation() {
       std::unique_lock lock(mtx_);
       return active_translation_;
     }
 
-    inline void SetActiveTranslation(std::shared_ptr<Translation> translation) {
+    FORCE_INLINE void SetActiveTranslation(std::shared_ptr<Translation> translation) {
       std::unique_lock lock(mtx_);
       active_translation_ = std::move(translation);
     }
 
-    inline std::string Get(const std::string& key) {
+    FORCE_INLINE std::string Get(const std::string& key) {
       std::unique_lock lock(mtx_);
       return std::string((*active_translation_)[key]);
     }
 
-    inline std::string operator[](const std::string& key) {
+    FORCE_INLINE std::string operator[](const std::string& key) {
       return Get(key);
     }
 
-    inline static std::vector<std::filesystem::path> GetTranslationList() {
+    FORCE_INLINE static std::vector<std::filesystem::path> GetTranslationList() {
       std::filesystem::directory_iterator it(common::GetTranslationDir());
       std::vector<std::filesystem::path> translation_list;
 
@@ -92,6 +103,14 @@ namespace gta_base::ui {
     std::recursive_mutex mtx_;
     std::shared_ptr<Translation> active_translation_;
   };
+}
+
+FORCE_INLINE std::string operator ""_Translate(const char* str, std::size_t) {
+  return gta_base::ui::kTRANSLATION_MANAGER->Get(str);
+}
+
+FORCE_INLINE std::string operator ""_T(const char* str, std::size_t) {
+  return gta_base::ui::kTRANSLATION_MANAGER->Get(str);
 }
 
 #endif //GTA_BASE_TRANSLATION_MANAGER_HPP
