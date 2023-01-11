@@ -32,7 +32,7 @@ namespace gta_base::player_mgr {
 
   void Manager::SetSelf(CNetGamePlayer* self) {
     if (!self) {
-      LOG_DEBUG("Manager::SetSelf called with a nullptr");
+      LOG_ERROR("nullptr");
       return;
     }
 
@@ -45,7 +45,7 @@ namespace gta_base::player_mgr {
 
   void Manager::AddPlayer(CNetGamePlayer* player) {
     if (!player) {
-      LOG_DEBUG("Manager::AddPlayer called with a nullptr");
+      LOG_ERROR("nullptr");
       return;
     }
 
@@ -57,7 +57,7 @@ namespace gta_base::player_mgr {
 
   void Manager::RemovePlayer(CNetGamePlayer* player) {
     if (!player) {
-      LOG_DEBUG("Manager::RemovePlayer called with a nullptr");
+      LOG_ERROR("nullptr");
       return;
     }
 

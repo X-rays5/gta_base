@@ -105,4 +105,12 @@ namespace gta_base::ui {
   };
 }
 
+FORCE_INLINE std::string operator ""_Translate(const char* str, std::size_t) {
+  return gta_base::ui::kTRANSLATION_MANAGER->Get(str);
+}
+
+FORCE_INLINE std::string operator ""_T(const char* str, std::size_t) {
+  return gta_base::ui::kTRANSLATION_MANAGER->Get(str);
+}
+
 #endif //GTA_BASE_TRANSLATION_MANAGER_HPP
