@@ -50,7 +50,7 @@ namespace gta_base::hooking {
     __except(ExpHandler(GetExceptionInformation(), name_))
     {
       [this]() {
-        LOG_FATAL("Failed to fix hook address for '{}'", name_);
+        LOG_CRITICAL("Failed to fix hook address for '{}'", name_);
       }();
     }
   }

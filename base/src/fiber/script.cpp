@@ -47,7 +47,7 @@ namespace gta_base::fiber {
       offset = ((DWORD64) e->ExceptionRecord->ExceptionAddress - (DWORD64) mod);
       GetModuleFileNameA(mod, buffer, MAX_PATH - 1);
     }
-    LOG_FATAL("Exception Code: 0x{} Exception Offset: 0x{} Fault Module Name: {}", e->ExceptionRecord->ExceptionCode, offset, buffer);
+    LOG_CRITICAL("Exception Code: 0x{} Exception Offset: 0x{} Fault Module Name: {}", e->ExceptionRecord->ExceptionCode, offset, buffer);
   }
 
   [[noreturn]] void Script::FiberFunc() {
