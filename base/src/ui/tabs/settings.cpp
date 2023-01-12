@@ -48,7 +48,7 @@ namespace gta_base::ui::tabs {
     });
 
     kMANAGER->AddSubmenu(Submenus::LuaScriptList, "tab/title/lua_script_list", [](Submenu* sub) {
-      sub->AddOption(option::ExecuteOption("option/refresh_lua_manifest", "", [] { lua_manifests = gta_base::lua::Manager::GetScriptManifests(); }));
+      sub->AddOption(option::ExecuteOption("option/refresh_lua_manifest", "", [] { lua_manifests = gta_base::lua::Manager::GetScriptManifests(); }, false));
       sub->AddOption(option::LabelOption("label/lua_scripts_list"));
       if (lua_manifests.empty()) {
         sub->AddOption(option::ExecuteOption("option/no_lua_scripts", "", nullptr, false));
@@ -73,18 +73,18 @@ namespace gta_base::ui::tabs {
         misc::kTHREAD_POOL->AddJob([=] {
           lua::kMANAGER->AddScript(manifest.GetScriptDir());
         });
-      }));
+      }, false));
       sub->AddOption(option::ExecuteOption("option/unload_lua_script", "", [&] {
         misc::kTHREAD_POOL->AddJob([=] {
           lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
         });
-      }));
+      }, false));
       sub->AddOption(option::ExecuteOption("option/reload_lua_script", "", [&] {
         misc::kTHREAD_POOL->AddJob([=] {
           lua::kMANAGER->RemoveScript(manifest.GetScriptDir());
           lua::kMANAGER->AddScript(manifest.GetScriptDir());
         });
-      }));
+      }, false));
       sub->AddOption(option::LabelOption("label/lua_script_info"));
       sub->AddOption(option::ExecuteOption("option/lua_script_name", "", nullptr, false))->SetRightTextKey(manifest.GetName());
       sub->AddOption(option::ExecuteOption("option/lua_script_version", "", nullptr, false))->SetRightTextKey(manifest.GetVersion());
@@ -98,7 +98,7 @@ namespace gta_base::ui::tabs {
       }
       if (auto authors = manifest.GetAuthors(); authors.has_value()) {
         sub->AddOption(option::LabelOption("label/lua_script_authors"));
-        for (auto& author: *authors)
+        for (auto& author : *authors)
           sub->AddOption(option::ExecuteOption("option/lua_script_author", "", nullptr, false))->SetRightTextKey(author);
       }
     });

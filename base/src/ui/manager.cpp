@@ -43,6 +43,8 @@ namespace gta_base::ui {
   }
 
   Manager::Manager() {
+    kMANAGER = this;
+
     draw_list_ = std::make_shared<d3d::draw::DrawList>(3);
     input_open_ = std::make_unique<util::TimedInput>(VK_F4, 200);
     input_left_ = std::make_unique<util::TimedInput>(VK_LEFT, 140);
@@ -81,8 +83,6 @@ namespace gta_base::ui {
     }
 
     common::LoadImage("test.png", &img_header);
-
-    kMANAGER = this;
   }
 
   Manager::~Manager() {
@@ -384,6 +384,7 @@ namespace gta_base::ui {
             return;
         }
 
+
         DrawHeader();
         DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());
         DrawBottomBar(cur_sub->GetOptionCount());
@@ -405,7 +406,7 @@ namespace gta_base::ui {
         }
       }
     } else {
-      LOG_WARN("No submenus in stack");
+      LOG_ERROR("No submenus in stack");
     }
 
     should_tick = false;

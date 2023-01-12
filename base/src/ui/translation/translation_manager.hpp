@@ -90,7 +90,7 @@ namespace gta_base::ui {
       std::filesystem::directory_iterator it(common::GetTranslationDir());
       std::vector<std::filesystem::path> translation_list;
 
-      for (const auto& entry: it) {
+      for (const auto& entry : it) {
         if (entry.is_regular_file() && entry.path().extension() == ".json") {
           translation_list.push_back(entry.path());
         }

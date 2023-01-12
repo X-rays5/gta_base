@@ -20,21 +20,33 @@ namespace gta_base::misc {
 
   public:
     HotkeyManager();
+
     ~HotkeyManager();
 
     void StartHotkeyAdd(const std::string& key_str);
+
     bool AddKeyPressed(std::uint64_t key_id);
 
     bool IsHotkey(const std::string& key_str) {
-      return hotkey_list_.contains(key_str);
+      return hotkeys_reversed_.contains(key_str);
     }
 
-    bool AddHotkey(const std::string& key_str, std::uint64_t key_id);
+    std::string GetKeyForHotkey(const std::string& key_str) {
+      if (IsHotkey(key_str)) {
+        return common::VkToStr(hotkeys_reversed_[key_str]);
+      }
+
+      return {};
+    }
+
+    bool AddHotkey(const std::string& key_str, std::uint64_t key_id, bool check_allowed = true);
+
     bool RemoveHotkey(std::uint64_t hotkey_id);
 
     void KeyPressed(std::uint64_t key_id);
 
     void Load(const std::string& name);
+
     void Save(const std::string& name);
 
     inline void SetSaveOnExit(bool save_on_exit) {
@@ -58,13 +70,13 @@ namespace gta_base::misc {
     [[nodiscard]] robin_hood::unordered_map<std::uint64_t, std::string> GetAllHotkeys() const;
 
     static std::vector<std::filesystem::path> GetHotkeyProfileList();
+
   private:
     bool save_on_exit_ = false;
     bool save_on_change_ = true;
     uint64_t adding_hotkey_expire_ = 0;
     std::string adding_hotkey_name_;
-    robin_hood::unordered_set<std::string> hotkey_list_;
-
+    robin_hood::unordered_map<std::string, std::uint64_t> hotkeys_reversed_;
     robin_hood::unordered_map<std::uint64_t, std::string> hotkeys_;
   private:
 
