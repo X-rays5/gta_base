@@ -16,6 +16,7 @@
 #include "fiber/pool.hpp"
 #include "player_mgr/manager.hpp"
 #include "ui/components/keyboard.hpp"
+#include "ui/console/on_screen_console.hpp"
 #include "misc/thread_pool.hpp"
 #include "rage/data/data_loader.hpp"
 #include "lua/manager.hpp"
@@ -85,6 +86,9 @@ void BaseMain() {
 
   auto keyboard_manager_inst = std::make_unique<ui::keyboard::Manager>();
   LOG_INFO("Keyboard Manager initialized");
+
+  auto on_screen_console_inst = std::make_unique<ui::OnScreenConsoleDefault>();
+  LOG_INFO("On Screen Console initialized");
 
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO("Discord initialized");
@@ -180,6 +184,9 @@ void BaseMain() {
 
   discord_inst.reset();
   LOG_INFO("Discord shutdown");
+
+  on_screen_console_inst.reset();
+  LOG_INFO("On Screen Console shutdown");
 
   keyboard_manager_inst.reset();
   LOG_INFO("Keyboard Manager shutdown");

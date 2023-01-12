@@ -37,9 +37,9 @@ namespace gta_base::common {
     ZydisDecoder decoder;
     #ifdef _M_AMD64
     if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64)))
-      #else
+    #else
       if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
-      #endif
+    #endif
       return {};
 
     ZydisInstruction instruction{};
@@ -244,7 +244,7 @@ namespace gta_base::common {
     static const robin_hood::unordered_set<char> numbers = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     std::string result;
-    for (char& c: str) {
+    for (char& c : str) {
       if (numbers.contains(c)) {
         result += c;
       }
