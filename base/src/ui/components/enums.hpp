@@ -28,6 +28,8 @@ namespace gta_base::ui {
     LuaScriptList,
     LuaSelectedScript,
     SettingsTranslation,
+    TranslationSelected,
+    TranslationConfirmDelete,
     SettingsTheme,
     SettingsHotkeys,
     HotkeyProfiles,

@@ -7,7 +7,6 @@
 #define GTA_BASE_NUMBER_OPTION_HPP
 #include "base_option.hpp"
 #include "../keyboard.hpp"
-#include "../../../scripts/scripting/job_queue.hpp"
 
 #undef max
 #undef min
@@ -17,7 +16,7 @@ namespace gta_base::ui::option {
   class NumberOption : public BaseOption {
   public:
     explicit NumberOption(const std::string& name_key, const std::string& description_key, T* value, T step, T min, T max, bool save_able = true, bool hotkey_able = false) :
-      BaseOption(name_key, description_key, "", "", save_able, hotkey_able), value_(value), step_(step), min_(min), max_(max) {
+    BaseOption(name_key, description_key, "", "", save_able, hotkey_able), value_(value), step_(step), min_(min), max_(max) {
       UpdateRightText();
     }
 

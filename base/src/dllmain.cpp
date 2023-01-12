@@ -27,8 +27,10 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason, LPVOID) {
 
       try {
         BaseMain();
+      } catch (std::filesystem::filesystem_error& e) {
+        LOG_CRITICAL("{}\nPath 1: {}\nPath 2: {}", e.what(), e.path1().string(), e.path2().string());
       } catch (std::exception& e) {
-        LOG_CRITICAL(e.what());
+        LOG_CRITICAL("{}", e.what());
       }
 
       LOG_INFO("Shutting logging down...");

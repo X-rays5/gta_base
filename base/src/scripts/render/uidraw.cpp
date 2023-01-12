@@ -13,11 +13,15 @@ namespace gta_base::scripts {
   }
 
   void UiDraw::RunTick() {
-    /*if (last_idx_ != ui::kMANAGER->GetDrawList()->GetRenderTarget()) {
-      ui::kMANAGER->GetDrawList()->Draw();
-      ui::kMANAGER->should_tick = true;
+    if (!ui::kMANAGER || !ui::kMANAGER->GetDrawList()) {
+      return;
+    }
 
-      last_idx_ = ui::kMANAGER->GetDrawList()->GetRenderTarget();
-    }*/
+    auto draw_list = ui::kMANAGER->GetDrawList();
+    if (last_idx_ != draw_list->GetRenderTarget()) {
+      last_idx_ = draw_list->GetRenderTarget();
+      draw_list->Draw();
+      ui::kMANAGER->should_tick = true;
+    }
   }
 }

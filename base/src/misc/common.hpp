@@ -87,7 +87,9 @@ namespace gta_base::common {
   };
 
   ZydisInstruction GetInstructionAtAddr(std::uintptr_t addr);
+
   std::string GetInstructionStr(std::uintptr_t addr, const ZydisInstruction& instruction);
+
   std::string GetInstructionStr(std::uintptr_t addr);
 
   std::string GetFileMd5Hash(const std::filesystem::path& file_path);
@@ -109,40 +111,68 @@ namespace gta_base::common {
   std::string ProperCapitalization(const std::string& str);
 
   std::filesystem::path GetBaseDir();
+
   std::filesystem::path GetTranslationDir();
+
   std::filesystem::path GetLogDir();
+
   std::filesystem::path GetLogFile();
+
   std::filesystem::path GetLogSaveDir();
+
   std::filesystem::path GetDataDir();
+
   std::filesystem::path GetCachedDir();
+
   std::filesystem::path GetGtaDataCacheDir();
+
   std::filesystem::path GetCachedPatternsDir();
+
   std::filesystem::path GetSettingsDir();
+
   std::filesystem::path GetThemesDir();
+
   std::filesystem::path GetHotkeysDir();
+
   std::filesystem::path GetOptionsStateDir();
+
   std::filesystem::path GetTeleportsDir();
+
   std::filesystem::path GetTextureDir();
+
   std::filesystem::path GetScriptsDir();
+
   std::filesystem::path GetScriptsDataDir();
 
   std::uint64_t GetEpoch();
 
   HWND GetHwnd(const char* class_name, const char* window_name);
+
   HWND GetGameHwnd();
+
   bool IsForegroundWindow();
+
   bool IsTargetProcess();
 
   MODULEENTRY32 GetModuleFromHModule(HMODULE mod);
+
   std::uint64_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name);
+
   MODULEENTRY32 GetModuleFromAddress(std::uint32_t pid, std::uint64_t addr);
 
   inline std::string GetModuleNameFromAddress(std::uint32_t pid, std::uint64_t addr) {
     return GetModuleFromAddress(pid, addr).szModule;
   }
 
+  inline std::uint64_t GetModuleOffsetFromAddress(std::uint32_t pid, std::uint64_t addr) {
+    auto mod = GetModuleFromAddress(pid, addr);
+    return addr - (std::uintptr_t) mod.modBaseAddr;
+  }
+
   bool IsKeyDown(std::uint32_t key);
+
   bool IsKeyJustReleased(std::uint32_t key, std::uint64_t since_up = 100);
+
   void SetKeyState(std::uint32_t key, bool down);
 
   struct ImageTexture {

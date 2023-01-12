@@ -12,6 +12,7 @@
 #include <fstream>
 #include <robin_hood.h>
 #include <xorstr.hpp>
+#include "../../settings/profile.hpp"
 
 namespace gta_base::ui {
   namespace translation {
@@ -90,13 +91,19 @@ namespace gta_base::ui {
       std::filesystem::directory_iterator it(common::GetTranslationDir());
       std::vector<std::filesystem::path> translation_list;
 
-      for (const auto& entry: it) {
+      for (const auto& entry : it) {
         if (entry.is_regular_file() && entry.path().extension() == ".json") {
           translation_list.push_back(entry.path());
         }
       }
 
       return translation_list;
+    }
+
+    FORCE_INLINE static void CreateDefaultProfile() {
+      Translation trans(translation::default_translation);
+      trans.SaveToFile(common::GetTranslationDir() / "default.json");
+      kTRANSLATION_MANAGER->SetActiveTranslation(std::make_shared<Translation>(trans));
     }
 
   private:

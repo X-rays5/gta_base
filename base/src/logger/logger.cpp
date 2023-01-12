@@ -8,6 +8,9 @@
 #include "logger.hpp"
 #include "stack_trace.hpp"
 #include "../misc/common.hpp"
+#include "sinks/on_screen_console.hpp"
+
+//#define DISABLE_EXCEPTION_RECOVERY
 
 namespace gta_base {
   void SetConsoleMode(HANDLE console_handle) {
@@ -46,13 +49,17 @@ namespace gta_base {
 
       auto console_logger = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
       auto file_logger = std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_file_path.string());
+      auto on_screen_console_logger = std::make_shared<logger::sinks::OnScreenConsole_mt>();
 
-      std::vector<spdlog::sink_ptr> sinks{console_logger, file_logger};
+      std::vector<spdlog::sink_ptr> sinks{console_logger, file_logger, on_screen_console_logger};
       auto logger = std::make_shared<spdlog::async_logger>("main_logger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
-      logger->set_pattern("[%T] [%^%l%$] [Thread: %t] [%s:%#] %v");
+
+      logger->set_pattern("[%T] [%^%l%$] [thread: %t] [%s:%#] %v");
       logger->set_level(spdlog::level::trace);
+
       spdlog::register_logger(logger);
       spdlog::set_default_logger(logger);
+
       spdlog::default_logger_raw()->set_error_handler([](const std::string& err) {
         LOG_CRITICAL(err);
       });
@@ -106,8 +113,6 @@ namespace gta_base {
   }
 
   void Logger::Shutdown() {
-    kLOGGER = nullptr;
-
     RemoveExceptionHandler();
 
     spdlog::default_logger_raw()->flush();
@@ -125,6 +130,8 @@ namespace gta_base {
     } catch (std::filesystem::filesystem_error& e) {
       MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK);
     }
+
+    kLOGGER = nullptr;
   }
 
   void Logger::SetupExceptionHandler() {
@@ -133,20 +140,23 @@ namespace gta_base {
 
       // ignore non fatal exceptions
       if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") {
-        if (err_code != DBG_PRINTEXCEPTION_C || err_code != DBG_PRINTEXCEPTION_WIDE_C)
+        if (err_code != DBG_PRINTEXCEPTION_C || err_code != DBG_PRINTEXCEPTION_WIDE_C) {
           LOG_DEBUG("Ignoring vectored exception call with code: {}", err_code);
+        }
 
         return EXCEPTION_CONTINUE_SEARCH;
       }
 
       // MSVC cpp exception
       if (err_code == 3765269347) {
-        auto addr = (std::uintptr_t) except->ExceptionRecord->ExceptionAddress;
+        auto addr = (std::uintptr_t) except->ContextRecord->Rip;
         std::string file_name = common::GetModuleNameFromAddress(GetCurrentProcessId(), addr);
-        auto offset = addr - (uintptr_t) GetModuleHandleA(file_name.c_str());
+        auto offset = common::GetModuleOffsetFromAddress(GetCurrentProcessId(), addr);
         auto exception = (std::exception*) except->ExceptionRecord->ExceptionInformation[1];
 
-        if (exception) {
+        if (auto file_err = dynamic_cast<std::filesystem::filesystem_error*>(exception); file_err) {
+          LOG_ERROR("({}+0x{:X}): {}\nPath 1: {}\nPath 2: {}", file_name, offset, file_err->what(), file_err->path1().string(), file_err->path2().string());
+        } else if (exception) {
           LOG_ERROR("({}+0x{:X}): {}", file_name, offset, exception->what());
         } else {
           LOG_ERROR("cpp exception thrown at 0x{:X} ({}+0x{:X})", addr, file_name, offset);
@@ -157,26 +167,28 @@ namespace gta_base {
         return EXCEPTION_CONTINUE_SEARCH;
       }
 
-      if (!kLOGGER->ThreadTooManyExceptions(std::this_thread::get_id())) {
-        auto instruction = common::GetInstructionAtAddr(except->ContextRecord->Rip);
+      #ifndef DISABLE_EXCEPTION_RECOVERY
+      if (except->ExceptionRecord->ExceptionAddress && except->ContextRecord->Rip) {
+        if (!kLOGGER->ThreadTooManyExceptions(std::this_thread::get_id())) {
+          auto instruction = common::GetInstructionAtAddr(except->ContextRecord->Rip);
 
-        if (instruction.instruction.length) {
-          kLOGGER->RegisterThreadException(std::this_thread::get_id(), except->ContextRecord->Rip);
+          if (instruction.instruction.length) {
+            kLOGGER->RegisterThreadException(std::this_thread::get_id(), except->ContextRecord->Rip);
 
-          auto next_instruction = except->ContextRecord->Rip + instruction.instruction.length;
-          LOG_WARN("EXCEPTION Recovery: {} ({:X}) -> {} ({:X})", common::GetInstructionStr(except->ContextRecord->Rip, instruction), except->ContextRecord->Rip, common::GetInstructionStr(next_instruction), next_instruction);
-          except->ContextRecord->Rip = next_instruction;
+            auto next_instruction = except->ContextRecord->Rip + instruction.instruction.length;
+            LOG_WARN("{} Recovery: {} ({:X}) -> {} ({:X})", logger::stacktrace::ExceptionCodeToStr(err_code), common::GetInstructionStr(except->ContextRecord->Rip, instruction), except->ContextRecord->Rip, common::GetInstructionStr(next_instruction), next_instruction);
+            except->ContextRecord->Rip = next_instruction;
 
-          return EXCEPTION_CONTINUE_EXECUTION;
+            return EXCEPTION_CONTINUE_EXECUTION;
+          }
         }
       }
+      #endif
 
-      LOG_CRITICAL("EXCEPTION Recovery: failed to recover from crash exceeded recursive exception limit");
+      LOG_CRITICAL("EXCEPTION Recovery: failed to recover from crash");
       LOG_ERROR(logger::stacktrace::GetExceptionString(except));
 
-      // make sure the stacktrace is saved on disk
-      kLOGGER->Flush();
-      globals::running = false;
+      kLOGGER->Shutdown();
 
       return EXCEPTION_CONTINUE_SEARCH;
     };

@@ -11,10 +11,11 @@ namespace gta_base::scripts {
   class UiTick : public scriptmanager::BaseScript {
   public:
     scriptmanager::ScriptType GetType() final {
-      return scriptmanager::ScriptType::kRenderer;
+      return scriptmanager::ScriptType::kScripting;
     }
 
     void Init() final;
+
     void RunTick() final;
   };
 }

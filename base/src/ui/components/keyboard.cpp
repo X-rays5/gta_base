@@ -33,18 +33,8 @@ namespace gta_base::ui::keyboard {
   }
 
   void Manager::Tick() {
-    ImGui::GetIO().MouseDrawCursor = !keyboards_.empty();
-    if (ImGui::GetIO().MouseDrawCursor) {
-      ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
-    } else {
-      ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
-    }
-
-    if (!keyboards_.empty()) {
-      globals::block_input = true;
-    } else {
-      globals::block_input = false;
-    }
+    if (keyboards_.empty())
+      return;
 
     for (int i = 0; i < keyboards_.size(); i++) {
       auto&& keyboard = keyboards_[i];

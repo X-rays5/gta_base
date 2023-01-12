@@ -22,7 +22,7 @@ namespace gta_base::misc {
 
   void HotkeyManager::StartHotkeyAdd(const std::string& key_str) {
     if (adding_hotkey_expire_ <= common::GetEpoch()) {
-      globals::block_input = true;
+      ui::kMANAGER->PushBlockInput();
 
       adding_hotkey_expire_ = common::GetEpoch() + 5000;
       adding_hotkey_name_ = key_str;
@@ -33,7 +33,7 @@ namespace gta_base::misc {
 
   bool HotkeyManager::AddKeyPressed(std::uint64_t key_id) {
     if (adding_hotkey_expire_ > common::GetEpoch() && key_id != VK_F1) {
-      globals::block_input = false;
+      ui::kMANAGER->PopBlockInput();
 
       if (key_id == VK_ESCAPE) {
         ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Canceled hotkey creation for {}", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
@@ -53,8 +53,8 @@ namespace gta_base::misc {
     return false;
   }
 
-  bool HotkeyManager::AddHotkey(const std::string& key_str, std::uint64_t key_id) {
-    if (hotkey_list_.contains(key_str)) {
+  bool HotkeyManager::AddHotkey(const std::string& key_str, std::uint64_t key_id, bool check_allowed) {
+    if (hotkeys_reversed_.contains(key_str)) {
       ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Hotkey for {} already exists", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
       return false;
     }
@@ -64,10 +64,18 @@ namespace gta_base::misc {
       return false;
     }
 
-    hotkey_list_.insert(key_str);
+    if (check_allowed && !ui::kMANAGER->IsOptionHotkeyAble(key_str)) {
+      ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("{} doesn't support hotkeys", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
+      return false;
+    }
+
     hotkeys_[key_id] = key_str;
+    hotkeys_reversed_[key_str] = key_id;
 
     LOG_INFO("Created hotkey for {} with id {}", ui::kTRANSLATION_MANAGER->Get(key_str), common::VkToStr(key_id));
+
+    // check if running
+    ui::kMANAGER->UpdateCurOptHintTxt();
 
     if (save_on_change_)
       Save(settings::profile::GetSelectedHotkeyProfile());
@@ -80,8 +88,8 @@ namespace gta_base::misc {
     if (hotkey_name.empty())
       return false;
 
-    hotkey_list_.erase(hotkey_name);
-    hotkeys_.erase(hotkeys_.find(hotkey_id));
+    hotkeys_.erase(hotkey_id);
+    hotkeys_reversed_.erase(hotkey_name);
     ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("{} has been deleted", ui::kTRANSLATION_MANAGER->Get(hotkey_name)));
     LOG_INFO("Deleted hotkey: {}", hotkey_name);
 
@@ -127,13 +135,13 @@ namespace gta_base::misc {
     }
 
     hotkeys_.clear();
-    hotkey_list_.clear();
+    hotkeys_reversed_.clear();
 
-    for (auto&& hotkey: json["hotkeys"].GetObject()) {
+    for (auto&& hotkey : json["hotkeys"].GetObject()) {
       if (!hotkey.value.Is<std::int64_t>())
         continue;
 
-      if (!AddHotkey(hotkey.name.GetString(), hotkey.value.Get<std::int64_t>()))
+      if (!AddHotkey(hotkey.name.GetString(), hotkey.value.Get<std::int64_t>(), false))
         LOG_WARN("Failed to load {} hotkey from hotkeys file", hotkey.name.GetString());
     }
 
@@ -152,7 +160,7 @@ namespace gta_base::misc {
     json.AddMember("save_on_exit", save_on_exit_, json.GetAllocator());
 
     rapidjson::Value hotkeys(rapidjson::kObjectType);
-    for (auto&& hotkey: hotkeys_) {
+    for (auto&& hotkey : hotkeys_) {
       auto key = json::StringToJsonVal(hotkey.second, json.GetAllocator());
       hotkeys.AddMember(key, hotkey.first, json.GetAllocator());
     }
@@ -178,7 +186,7 @@ namespace gta_base::misc {
   std::vector<std::filesystem::path> HotkeyManager::GetHotkeyProfileList() {
     std::vector<std::filesystem::path> profiles;
 
-    for (auto&& file: std::filesystem::directory_iterator(common::GetHotkeysDir())) {
+    for (auto&& file : std::filesystem::directory_iterator(common::GetHotkeysDir())) {
       if (file.is_regular_file() && file.path().extension() == ".json")
         profiles.push_back(file.path());
     }

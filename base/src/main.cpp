@@ -7,7 +7,6 @@
 #include "memory/pointers.hpp"
 #include "scriptmanager/scriptmanager.hpp"
 #include "scripts/scripting/uitick.hpp"
-#include "scripts/scripting/job_queue.hpp"
 #include "scripts/render/uidraw.hpp"
 #include "scripts/game/ui_disable_control.hpp"
 #include "scripts/game/loops.hpp"
@@ -17,6 +16,7 @@
 #include "fiber/pool.hpp"
 #include "player_mgr/manager.hpp"
 #include "ui/components/keyboard.hpp"
+#include "ui/console/on_screen_console.hpp"
 #include "misc/thread_pool.hpp"
 #include "rage/data/data_loader.hpp"
 #include "lua/manager.hpp"
@@ -48,7 +48,6 @@ void BaseMain() {
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiDraw>());
   // main thread scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UiTick>());
-  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::JobQueue>());
   // game scripts
   kSCRIPT_MANAGER->AddScript(std::make_shared<fiber::Manager>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UIDisablePhone>());
@@ -92,6 +91,9 @@ void BaseMain() {
   auto keyboard_manager_inst = std::make_unique<ui::keyboard::Manager>();
   LOG_INFO("Keyboard Manager initialized");
 
+  auto on_screen_console_inst = std::make_unique<ui::OnScreenConsoleDefault>();
+  LOG_INFO("On Screen Console initialized");
+
   auto discord_inst = std::make_unique<rpc::Discord>();
   LOG_INFO("Discord initialized");
 
@@ -109,6 +111,8 @@ void BaseMain() {
   }
 
   auto discord_thread = std::thread([] {
+    LOG_INFO("Started Discord thread");
+
     while (globals::running) {
       rpc::kDISCORD->SetLargeImage("gta-logo");
       if (common::IsSessionStarted()) {
@@ -122,21 +126,32 @@ void BaseMain() {
       std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
   });
-  LOG_INFO("Started Discord thread");
 
   auto scripting_thread = std::thread([] {
+    LOG_INFO("Scripting thread started");
+
     while (globals::running) {
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kScripting);
+      std::this_thread::yield();
+    }
+  });
+
+  auto lua_thread = std::thread([] {
+    LOG_INFO("Lua thread started");
+
+    auto lua_manager_inst = std::make_unique<lua::Manager>();
+    LOG_INFO("Lua Manager initialized");
+
+    while (globals::running) {
       if (lua::kMANAGER) {
         lua::kMANAGER->RunScriptTick();
       }
       std::this_thread::yield();
     }
-  });
-  LOG_INFO("Scripting thread started");
 
-  auto lua_manager_inst = std::make_unique<lua::Manager>();
-  LOG_INFO("Lua Manager initialized");
+    lua_manager_inst.reset();
+    LOG_INFO("Lua Manager unloaded");
+  });
 
   LOG_INFO("Initialized");
   while (globals::running) {
@@ -147,8 +162,10 @@ void BaseMain() {
   }
   LOG_INFO("Unloading...");
 
-  lua_manager_inst.reset();
-  LOG_INFO("Lua Manager unloaded");
+  if (lua_thread.joinable()) {
+    lua_thread.join();
+  }
+  LOG_INFO("Lua thread stopped");
 
   if (scripting_thread.joinable())
     scripting_thread.join();
@@ -171,6 +188,9 @@ void BaseMain() {
 
   discord_inst.reset();
   LOG_INFO("Discord shutdown");
+
+  on_screen_console_inst.reset();
+  LOG_INFO("On Screen Console shutdown");
 
   keyboard_manager_inst.reset();
   LOG_INFO("Keyboard Manager shutdown");

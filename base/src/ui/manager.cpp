@@ -5,6 +5,7 @@
 #include "manager.hpp"
 #include "../d3d/renderer.hpp"
 #include "components/keyboard.hpp"
+#include "console/on_screen_console.hpp"
 #include "fonts/IconsFontAwesome6.h"
 #include "../settings/profile.hpp"
 #include "../settings/option_state.hpp"
@@ -43,6 +44,8 @@ namespace gta_base::ui {
   }
 
   Manager::Manager() {
+    kMANAGER = this;
+
     draw_list_ = std::make_shared<d3d::draw::DrawList>(3);
     input_open_ = std::make_unique<util::TimedInput>(VK_F4, 200);
     input_left_ = std::make_unique<util::TimedInput>(VK_LEFT, 140);
@@ -81,8 +84,6 @@ namespace gta_base::ui {
     }
 
     common::LoadImage("test.png", &img_header);
-
-    kMANAGER = this;
   }
 
   Manager::~Manager() {
@@ -268,30 +269,20 @@ namespace gta_base::ui {
   }
 
   void Manager::DrawHintText(option::BaseOption* opt, size_t option_count, bool description_drawn, float y_size_description) const {
+    if (cur_opt_hint_txt.empty())
+      return;
+
     float y_pos = (y_base + (y_size_option * option_count)) + (y_size_bottom_bar + y_offset_description) + y_size_top_bar;
     if (description_drawn) {
       y_pos += y_size_description + y_offset_description;
     }
     float y_pos_text_box = y_pos + y_size_separator;
 
-    std::string hint_text;
-    if (opt->HasFlag(OptionFlag::kInput))
-      hint_text.append(kTRANSLATION_MANAGER->Get("hint/keyboard_input") + "\n");
-    if (opt->HasFlag(OptionFlag::kHotkeyable)) {
-      auto text = misc::kHOTKEY_MANAGER->IsHotkey(std::string(opt->GetNameKey())) ? "hint/hotkey_already_set" : "hint/set_hotkey";
-      hint_text.append(kTRANSLATION_MANAGER->Get(text) + "\n");
-    }
-    if (!kSETTINGS.menu.save_option_state_on_exit && opt->HasFlag(OptionFlag::kSaveable))
-      hint_text.append(kTRANSLATION_MANAGER->Get("hint/press_to_save"));
-
-    if (hint_text.empty())
-      return;
-
-    auto y_size_box = d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, hint_text).y;
+    auto y_size_box = d3d::draw::CalcTextSize(ImGui::GetFont(), font_size, cur_opt_hint_txt).y;
 
     draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos}, {x_size, y_size_separator}, secondary_color));
     draw_list_->AddCommand(d3d::draw::Rect({x_base, y_pos_text_box}, {x_size, y_size_box}, primary_color));
-    draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color, hint_text, false));
+    draw_list_->AddCommand(DrawTextLeft(y_pos_text_box, text_color, cur_opt_hint_txt, false));
   }
 
   void Manager::HandleKeyInput(std::shared_ptr<Submenu>& cur_sub) {
@@ -316,11 +307,6 @@ namespace gta_base::ui {
     } else if (input_return_->Get()) {
       cur_sub->HandleKey(KeyInput::kReturn);
       if (cur_sub != submenus_stack_.top()) {
-        option_before_scroll_ = cur_sub->GetSelectedOption();
-        cur_sub->Clear();
-        cur_sub = submenus_stack_.top();
-
-        cur_sub->CreateOptions();
         SkipLabelOpt(cur_sub, KeyInput::kDown);
 
         option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
@@ -329,11 +315,8 @@ namespace gta_base::ui {
       cur_sub->HandleKey(KeyInput::kBackspace);
       if (submenus_stack_.size() > 1) {
         option_before_scroll_ = cur_sub->GetSelectedOption();
-        submenus_stack_.pop();
-        cur_sub->Clear();
+        PopSubmenu();
 
-        cur_sub = submenus_stack_.top();
-        cur_sub->CreateOptions();
         option_before_scroll_ = CorrectPrevOptIdx(option_before_scroll_, cur_sub->GetSelectedOption(), cur_sub->GetOptionCount(), max_drawn_options);
       } else {
         show_ui = false;
@@ -362,7 +345,17 @@ namespace gta_base::ui {
 
     kNOTIFICATIONS->Tick();
     keyboard::kMANAGER->Tick();
+    kON_SCREEN_CONSOLE->Tick();
 
+    bool block_input = block_input_count_;
+    ImGui::GetIO().MouseDrawCursor = block_input;
+    if (block_input) {
+      ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+    } else {
+      ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    }
+
+    std::unique_lock lock(mtx_);
     if (!submenus_stack_.empty()) {
       if (input_open_->Get())
         show_ui = !show_ui;
@@ -373,16 +366,26 @@ namespace gta_base::ui {
         cur_sub->Clear();
         cur_sub->CreateOptions();
 
-        if (!keyboard::kMANAGER->KeyBoardActive())
-          HandleKeyInput(cur_sub);
-
-        if (cur_sub->GetOptionCount() == 0) {
-          LOG_WARN("Prevented submenu enter due to it being empty");
+        // don't draw when empty
+        if (!cur_sub->GetOptionCount()) {
           PopSubmenu();
 
-          if (cur_sub->GetOptionCount() == 0)
-            return;
+          LOG_WARN("Leaving empty sub");
+          return;
         }
+
+        if (first_tick_) {
+          UpdateCurOptHintTxt();
+          first_tick_ = false;
+        }
+
+        auto cur_opt_idx = cur_sub->GetSelectedOption();
+
+        if (block_input)
+          HandleKeyInput(cur_sub);
+
+        if (cur_opt_idx != cur_sub->GetSelectedOption())
+          UpdateCurOptHintTxt();
 
         DrawHeader();
         DrawTopBar(cur_sub->GetName(), cur_sub->GetSelectedOption(), cur_sub->GetOptionCount());
@@ -405,10 +408,47 @@ namespace gta_base::ui {
         }
       }
     } else {
-      LOG_WARN("No submenus in stack");
+      LOG_ERROR("No submenus in stack");
     }
 
     should_tick = false;
     draw_list_->NextTargets();
+  }
+
+  void Manager::UpdateCurOptHintTxt() {
+    std::unique_lock lock(mtx_);
+
+    // Even tough this function might fail.
+    // We clear it here since if this functions is called cur_opt_hint_txt is no longer valid.
+    cur_opt_hint_txt.clear();
+
+    if (submenus_stack_.empty())
+      return;
+
+    auto cur_sub = submenus_stack_.top();
+    if (!cur_sub)
+      return;
+
+    bool clear_opt = false;
+    if (!cur_sub->GetOptionCount()) {
+      clear_opt = true;
+      cur_sub->CreateOptions();
+
+      if (!cur_sub->GetOptionCount())
+        return;
+    }
+    auto opt = cur_sub->GetOption(cur_sub->GetSelectedOption());
+
+    if (opt->HasFlag(OptionFlag::kInput))
+      cur_opt_hint_txt.append("hint/keyboard_input"_T + "\n");
+    if (opt->HasFlag(OptionFlag::kHotkeyable)) {
+      auto text = misc::kHOTKEY_MANAGER->IsHotkey(opt->GetNameKey().data()) ? fmt::format("{} {}", "hint/hotkey_already_set"_T, misc::kHOTKEY_MANAGER->GetKeyForHotkey(opt->GetNameKey().data())) : "hint/set_hotkey"_T;
+      cur_opt_hint_txt.append(text + "\n");
+    }
+    if (!kSETTINGS.menu.save_option_state_on_exit && opt->HasFlag(OptionFlag::kSaveable))
+      cur_opt_hint_txt.append("hint/press_to_save"_T);
+
+    if (clear_opt)
+      cur_sub->Clear();
   }
 }

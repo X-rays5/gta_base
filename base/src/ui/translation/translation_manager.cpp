@@ -37,11 +37,11 @@ namespace gta_base::ui {
 
     // While this slows it down a bit. Saving doesn't need to be extremely fast. And at least the output will be consistent.
     std::map<std::string, std::string> sorted_translation;
-    for (const auto& [key, value]: translation_) {
+    for (const auto& [key, value] : translation_) {
       sorted_translation[key] = value;
     }
 
-    for (auto& [key, val]: sorted_translation) {
+    for (auto& [key, val] : sorted_translation) {
       auto json_key = json::StringToJsonVal(key, json.GetAllocator());
       auto json_val = json::StringToJsonVal(val, json.GetAllocator());
 
@@ -62,7 +62,7 @@ namespace gta_base::ui {
     }
 
     translation_t translation;
-    for (auto&& [name, val]: json.GetObject()) {
+    for (auto&& [name, val] : json.GetObject()) {
       if (!val.IsString())
         continue;
 
@@ -76,7 +76,7 @@ namespace gta_base::ui {
     translation_t translation = translation::default_translation;
 
     std::size_t valid{};
-    for (auto&& [orig, trans]: merge_into_default) {
+    for (auto&& [orig, trans] : merge_into_default) {
       if (translation.find(orig) != translation.end()) {
         valid++;
       } else {
