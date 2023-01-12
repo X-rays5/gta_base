@@ -47,8 +47,7 @@ namespace gta_base {
 
   private:
     robin_hood::unordered_map<std::thread::id, ThreadExceptionInfo> thread_exception_info_;
-
-    PVOID vectored_exception_handler_h_;
+    PVOID vectored_exception_handler_h_{};
 
   private:
     void Shutdown();
