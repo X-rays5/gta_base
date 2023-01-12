@@ -362,7 +362,17 @@ namespace gta_base::ui {
 
     kNOTIFICATIONS->Tick();
     keyboard::kMANAGER->Tick();
+    kON_SCREEN_CONSOLE->Tick();
 
+    bool block_input = block_input_count_;
+    ImGui::GetIO().MouseDrawCursor = block_input;
+    if (block_input) {
+      ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+    } else {
+      ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    }
+
+    std::unique_lock lock(mtx_);
     if (!submenus_stack_.empty()) {
       if (input_open_->Get())
         show_ui = !show_ui;

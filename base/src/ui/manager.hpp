@@ -133,9 +133,23 @@ namespace gta_base::ui {
       return &mtx_;
     }
 
+    FORCE_INLINE void PushBlockInput() {
+      block_input_count_ += 1;
+    }
+
+    FORCE_INLINE void PopBlockInput() {
+      if (block_input_count_ > 0) {
+        block_input_count_ -= 1;
+      }
+    }
+
+    FORCE_INLINE std::size_t GetBlockInputCount() const {
+      return block_input_count_;
+    }
 
     void Draw();
 
+    void UpdateCurOptHintTxt();
 
   public:
     std::atomic<bool> should_tick = true;
@@ -165,6 +179,7 @@ namespace gta_base::ui {
   private:
     std::recursive_mutex mtx_;
 
+    std::atomic<std::size_t> block_input_count_;
 
     float scrollbar_offset = 0.002f;
 
