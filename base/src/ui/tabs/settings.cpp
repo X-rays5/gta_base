@@ -16,6 +16,7 @@ namespace gta_base::ui::tabs {
     std::vector<lua::Manifest> lua_manifests{};
 
     std::string active_translation;
+    std::filesystem::path selected_translation;
     std::vector<std::filesystem::path> translation_paths{};
 
     bool hotkey_save_on_exit = false;
@@ -104,26 +105,58 @@ namespace gta_base::ui::tabs {
     });
 
     kMANAGER->AddSubmenu(Submenus::SettingsTranslation, "tab/title/translation_settings", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("option/create_new_translation", "", [] {
+        ui::Translation(ui::translation::default_translation).SaveToFile(common::GetTranslationDir() / fmt::format("default_{}.json", common::GetEpoch()));
+        translation_paths = TranslationManager::GetTranslationList();
+      }));
       sub->AddOption(option::ExecuteOption("option/active_translation", "", nullptr))->SetRightTextKey(active_translation);
       sub->AddOption(option::ExecuteOption("option/refresh_translation_list", "", [] { translation_paths = TranslationManager::GetTranslationList(); }));
       sub->AddOption(option::LabelOption("label/translation_list"));
       if (translation_paths.empty()) {
         [[unlikely]]
-          sub->AddOption(option::ExecuteOption("option/no_translations", "", nullptr, false));
+        sub->AddOption(option::ExecuteOption("option/no_translations", "", nullptr, false));
+        TranslationManager::CreateDefaultProfile();
+        translation_paths = TranslationManager::GetTranslationList();
         return;
       } else {
         [[likely]]
-        for (auto&& path: translation_paths) {
-          sub->AddOption(option::ExecuteOption(path.stem().string(), "", [&] {
-            misc::kTHREAD_POOL->AddJob([=] {
-              kTRANSLATION_MANAGER->SetActiveTranslation(std::move(std::make_shared<Translation>(path)));
-
-              active_translation = path.stem().string();
-              settings::profile::SetSelectedTranslation(active_translation);
-            });
-          }, false));
+        for (auto&& path : translation_paths) {
+          sub->AddOption(option::SubmenuOption(path.stem().string(), "", Submenus::TranslationSelected, [&] {
+            selected_translation = path;
+            kMANAGER->GetSubmenu(Submenus::TranslationSelected)->SetNameKey(path.stem().string());
+          }));
         }
       }
+    });
+
+    kMANAGER->AddSubmenu(Submenus::TranslationSelected, "", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("option/translation_set_active", "", [&] {
+        active_translation = selected_translation.stem().string();
+        misc::kTHREAD_POOL->AddJob([=] {
+          kTRANSLATION_MANAGER->SetActiveTranslation(std::move(std::make_shared<Translation>(selected_translation)));
+          settings::profile::SetSelectedTranslation(active_translation);
+        });
+      }, false));
+      sub->AddOption(option::SubmenuOption("tab/title/delete_translation", "", Submenus::TranslationConfirmDelete));
+    });
+
+    kMANAGER->AddSubmenu(Submenus::TranslationConfirmDelete, "tab/title/delete_translation", [](Submenu* sub) {
+      sub->AddOption(option::ExecuteOption("option/translation_delete", "", [&] {
+        std::filesystem::remove(selected_translation);
+        translation_paths = TranslationManager::GetTranslationList();
+        active_translation = "txt/deleted_translation"_T;
+        settings::profile::SetSelectedTranslation("default");
+        if (translation_paths.empty()) {
+          TranslationManager::CreateDefaultProfile();
+          active_translation = "default";
+        }
+        translation_paths = TranslationManager::GetTranslationList();
+        kMANAGER->PopSubmenu();
+        kMANAGER->PopSubmenu();
+      }, false));
+      sub->AddOption(option::ExecuteOption("option/translation_cancel_delete", "", [&] {
+        kMANAGER->PopSubmenu();
+      }, false));
     });
 
     kMANAGER->AddSubmenu(Submenus::SettingsHotkeys, "tab/title/hotkeys", [](Submenu* sub) {
@@ -152,7 +185,7 @@ namespace gta_base::ui::tabs {
         sub->AddOption(option::ExecuteOption("option/no_hotkeys", "", nullptr, false));
         return;
       } else {
-        for (auto&& hotkey: hotkeys) {
+        for (auto&& hotkey : hotkeys) {
           sub->AddOption(option::SubmenuOption(hotkey.second, "", Submenus::HotkeysConfirmDelete, [=] {
             hotkey_delete_key_id = hotkey.first;
           }))->SetRightTextKey(common::VkToStr(hotkey.first));
@@ -177,11 +210,11 @@ namespace gta_base::ui::tabs {
       sub->AddOption(option::LabelOption("label/hotkey_profile_list"));
       if (hotkey_profile_paths.empty()) {
         [[unlikely]]
-          sub->AddOption(option::ExecuteOption("option/no_hotkey_profiles", "", nullptr, false));
+        sub->AddOption(option::ExecuteOption("option/no_hotkey_profiles", "", nullptr, false));
         return;
       } else {
         [[likely]]
-        for (auto&& path: hotkey_profile_paths) {
+        for (auto&& path : hotkey_profile_paths) {
           sub->AddOption(option::ExecuteOption(path.stem().string(), "", [&] {
             misc::kHOTKEY_MANAGER->Load(path.stem().string());
 

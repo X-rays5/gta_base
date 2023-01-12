@@ -12,6 +12,7 @@
 #include <fstream>
 #include <robin_hood.h>
 #include <xorstr.hpp>
+#include "../../settings/profile.hpp"
 
 namespace gta_base::ui {
   namespace translation {
@@ -97,6 +98,12 @@ namespace gta_base::ui {
       }
 
       return translation_list;
+    }
+
+    FORCE_INLINE static void CreateDefaultProfile() {
+      Translation trans(translation::default_translation);
+      trans.SaveToFile(common::GetTranslationDir() / "default.json");
+      kTRANSLATION_MANAGER->SetActiveTranslation(std::make_shared<Translation>(trans));
     }
 
   private:
