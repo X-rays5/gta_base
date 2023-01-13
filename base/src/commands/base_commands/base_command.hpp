@@ -8,6 +8,7 @@
 #include <string>
 #include "../../rage/joaat.hpp"
 #include "../../ui/translation/translation_manager.hpp"
+#include "../../ui/notification/notification.hpp"
 
 namespace gta_base::commands::base_commands {
   class Base {
@@ -34,12 +35,35 @@ namespace gta_base::commands::base_commands {
       return description_key_;
     }
 
+    FORCE_INLINE void Run(const std::string& args) {
+      if ((args.empty() || args == " ") && num_args_ == 0) {
+        Execute({});
+        return;
+      }
+
+      auto args_vec = common::SplitStr(args, " ");
+      if (args_vec.size() < num_args_) {
+        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Command", "Not enough arguments");
+        return;
+      }
+
+      if (args_vec.size() > num_args_) {
+        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Command", "Too many arguments");
+        return;
+      }
+
+      Execute(args_vec);
+    }
+
   protected:
     rage::joaat_t id_;
     std::string name_key_;
     std::string description_key_;
-    std::size_t num_args_;
+    std::size_t num_args_{};
     bool fiber_pool_;
+
+  protected:
+    virtual void Execute(std::vector<std::string> args) = 0;
   };
 }
 #endif //GTA_BASE_BASE_COMMAND_0C15A5CE2F4F4F498EC0FC1BCA49E4B2_HPP

@@ -12,6 +12,6 @@ namespace gta_base::commands::base_commands {
     description_key_ = description_key;
     num_args_ = num_args;
     fiber_pool_ = fiber_pool;
-    kCOMMAND_MANAGER->RegisterCommand(this);
+    kCOMMAND_MANAGER.RegisterCommand(this);
   }
 }

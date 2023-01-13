@@ -10,20 +10,8 @@
 #include "../pch.hpp"
 
 namespace gta_base::commands {
-  class CommandManager;
-
-  inline CommandManager* kCOMMAND_MANAGER;
-
   class CommandManager {
   public:
-    FORCE_INLINE CommandManager() {
-      kCOMMAND_MANAGER = this;
-    }
-
-    FORCE_INLINE ~CommandManager() {
-      kCOMMAND_MANAGER = nullptr;
-    }
-
     FORCE_INLINE base_commands::Base* GetCommand(rage::joaat_t id) {
       std::unique_lock lock(mtx_);
 
@@ -49,9 +37,15 @@ namespace gta_base::commands {
       mtx_.unlock();
     }
 
+    FORCE_INLINE std::size_t GetCommandCount() {
+      return commands_.size();
+    }
+
   private:
     std::recursive_mutex mtx_;
     robin_hood::unordered_map<rage::joaat_t, base_commands::Base*> commands_;
   };
+
+  inline CommandManager kCOMMAND_MANAGER;
 }
 #endif //GTA_BASE_COMMAND_MANAGER_565B5EF63BD84BDF91F1B079B46176EE_HPP

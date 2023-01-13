@@ -5,11 +5,13 @@
 #pragma once
 #ifndef GTA_BASE_ON_SCREEN_CONSOLE_C13ACFACDEAF44CBB876D2D0517CAD37_HPP
 #define GTA_BASE_ON_SCREEN_CONSOLE_C13ACFACDEAF44CBB876D2D0517CAD37_HPP
-#include "imgui.h"
+#include <imgui.h>
+#include <imgui_stdlib.h>
 #include "../../d3d/draw.hpp"
 #include "../../misc/thread_pool.hpp"
 #include "../../misc/timed_input.hpp"
 #include "../manager.hpp"
+#include "../../commands/command_manager.hpp"
 
 namespace gta_base::ui {
   // log_buff_size amount: of lines to store before needing to make room
@@ -99,7 +101,10 @@ namespace gta_base::ui {
 
             if (ImGui::BeginChild("##logs", {space.x, log_child_y_size}, true)) {
               mtx_.lock();
-              for (std::size_t i = log_idx_ - 1; i > 0; i--) {
+              for (std::size_t i = 0; i < log_buff_size; ++i) {
+                if (log_buff_[i].empty())
+                  continue;
+
                 ImGui::TextWrapped(log_buff_[i].c_str());
               }
               mtx_.unlock();
@@ -111,10 +116,32 @@ namespace gta_base::ui {
                   ImGui::SetKeyboardFocusHere();
 
                 ImGui::PushItemWidth(space.x * 0.92f);
-                ImGui::InputText("##cmd_input", (char*) &cmd_buff, GTA_BASE_ARRAY_SIZE(cmd_buff));
+                ImGui::InputText("##cmd_input", &cmd_buff_);
                 ImGui::SameLine();
                 if (ImGui::Button("Execute##cmd_box")) {
-                  memset(&cmd_buff, 0, GTA_BASE_ARRAY_SIZE(cmd_buff));
+                  misc::kTHREAD_POOL->AddJob([cmd = cmd_buff_] {
+                    std::string cmd_id;
+                    std::string cmd_args;
+                    LOG_DEBUG("{}", cmd);
+                    if (auto pos = cmd.find(' '); pos != std::string::npos) {
+                      cmd_id = cmd.substr(0, pos);
+                      if (pos + 1 < cmd.size())
+                        cmd_args = cmd.substr(pos + 1);
+                    } else {
+                      cmd_id = cmd;
+                    }
+
+                    while (!cmd_args.empty() && (cmd_args.back() == ' ' || cmd_args.back() == '\n')) {
+                      cmd_args.pop_back();
+                    }
+                    
+                    auto cmd_ptr = commands::kCOMMAND_MANAGER.GetCommand(cmd_id);
+                    if (!cmd_ptr)
+                      return;
+
+                    cmd_ptr->Run(cmd_args);
+                  });
+                  cmd_buff_.clear();
                 }
 
                 ImGui::EndChild();
@@ -131,7 +158,7 @@ namespace gta_base::ui {
     std::atomic<bool> render_window_ = false;
     std::atomic<std::size_t> log_idx_{};
     std::string log_buff_[log_buff_size];
-    char cmd_buff[256]{};
+    std::string cmd_buff_;
     std::unique_ptr<util::TimedInput> input_show_window_;
 
   private:
