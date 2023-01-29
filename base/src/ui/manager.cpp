@@ -381,7 +381,7 @@ namespace gta_base::ui {
 
         auto cur_opt_idx = cur_sub->GetSelectedOption();
 
-        if (block_input)
+        if (!block_input)
           HandleKeyInput(cur_sub);
 
         if (cur_opt_idx != cur_sub->GetSelectedOption())
