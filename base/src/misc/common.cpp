@@ -486,6 +486,26 @@ namespace gta_base::common {
     return is_target_process;
   }
 
+  std::vector<MODULEENTRY32> GetProcessModules(DWORD pid) {
+    std::vector<MODULEENTRY32> modules;
+    MODULEENTRY32 mod_entry{};
+    mod_entry.dwSize = sizeof(MODULEENTRY32);
+
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
+    if (hSnapshot == INVALID_HANDLE_VALUE) {
+      return modules;
+    }
+
+    if (Module32First(hSnapshot, &mod_entry)) {
+      do {
+        modules.push_back(mod_entry);
+      } while (Module32Next(hSnapshot, &mod_entry));
+    }
+
+    CloseHandle(hSnapshot);
+    return modules;
+  }
+
   MODULEENTRY32 GetModuleFromHModule(HMODULE mod) {
     MODULEENTRY32 mod_entry{};
     mod_entry.dwSize = sizeof(MODULEENTRY32);

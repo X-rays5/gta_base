@@ -154,6 +154,8 @@ namespace gta_base::common {
 
   bool IsTargetProcess();
 
+  std::vector<MODULEENTRY32> GetProcessModules(DWORD pid);
+
   MODULEENTRY32 GetModuleFromHModule(HMODULE mod);
 
   std::uint64_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name);
