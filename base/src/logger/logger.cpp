@@ -4,10 +4,8 @@
 
 #include <filesystem>
 #include <chrono>
-#include <Zydis/Zydis.h>
 #include "logger.hpp"
 #include "stack_trace.hpp"
-#include "../misc/common.hpp"
 #include "sinks/on_screen_console.hpp"
 
 //#define DISABLE_EXCEPTION_RECOVERY
@@ -162,6 +160,8 @@ namespace gta_base {
           LOG_ERROR("cpp exception thrown at 0x{:X} ({}+0x{:X})", addr, file_name, offset);
         }
 
+        LOG_DEBUG(logger::stacktrace::GetExceptionString(except));
+
         // Can't try to recover here because this code runs before try catch blocks.
         // Since MSVC uses a UnhandledExceptionFilter for that.
         return EXCEPTION_CONTINUE_SEARCH;
@@ -177,6 +177,8 @@ namespace gta_base {
 
             auto next_instruction = except->ContextRecord->Rip + instruction.instruction.length;
             LOG_WARN("{} Recovery: {} ({:X}) -> {} ({:X})", logger::stacktrace::ExceptionCodeToStr(err_code), common::GetInstructionStr(except->ContextRecord->Rip, instruction), except->ContextRecord->Rip, common::GetInstructionStr(next_instruction), next_instruction);
+            LOG_DEBUG(logger::stacktrace::GetExceptionString(except));
+
             except->ContextRecord->Rip = next_instruction;
 
             return EXCEPTION_CONTINUE_EXECUTION;
@@ -187,6 +189,9 @@ namespace gta_base {
 
       LOG_CRITICAL("EXCEPTION Recovery: failed to recover from crash");
       LOG_ERROR(logger::stacktrace::GetExceptionString(except));
+
+      kLOGGER->Flush();
+      std::this_thread::sleep_for(std::chrono::seconds(10));
 
       kLOGGER->Shutdown();
 

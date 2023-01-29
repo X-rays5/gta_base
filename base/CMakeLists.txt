@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(base)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 enable_language(ASM_MASM)
 
 file(GLOB IMGUI_SOURCES
