@@ -92,14 +92,19 @@ namespace gta_base::ui {
           ImGui::SetNextWindowSize(d3d::draw::ScaleToScreen({0.5, 0.8}), ImGuiCond_Once);
           ImGui::SetNextWindowPos(d3d::draw::ScaleToScreen({0.05, 0.05}), ImGuiCond_Once);
 
+          ImGui::SetNextWindowSizeConstraints(d3d::draw::ScaleToScreen({0.2, 0.2}), d3d::draw::ScaleToScreen({1.f, 1.f}));
           if (ImGui::Begin(window_title.c_str(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar)) {
             ImGui::SetWindowFontScale(0.85);
+            ImGui::SetScrollY(0);
 
+            auto style = ImGui::GetStyle();
             auto space = ImGui::GetContentRegionAvail();
-            auto log_child_y_size = space.y * 0.96f;
-            auto cmd_child_y_size = space.y - log_child_y_size;
 
-            if (ImGui::BeginChild("##logs", {space.x, log_child_y_size}, true)) {
+            auto cmd_y_size = ImGui::CalcTextSize("Execute").y + (style.FramePadding.y * 2) + (style.ItemSpacing.y * 2);
+            auto cmd_button_x_size = ImGui::CalcTextSize("Execute").x + (style.FramePadding.x * 2);
+            auto log_y_size = space.y - cmd_y_size;
+
+            if (ImGui::BeginChild("##logs", {space.x, log_y_size}, false)) {
               mtx_.lock();
               for (std::size_t i = 0; i < log_buff_size; ++i) {
                 if (log_buff_[i].empty())
@@ -108,20 +113,23 @@ namespace gta_base::ui {
                 ImGui::TextWrapped(log_buff_[i].c_str());
               }
               mtx_.unlock();
-              ImGui::SetScrollHereY(1);
               ImGui::EndChild();
 
-              if (ImGui::BeginChild("##cmd_child", {space.x, cmd_child_y_size}, true, ImGuiWindowFlags_NoScrollbar)) {
+              if (ImGui::BeginChild("##cmd_child", {space.x, log_y_size}, false, ImGuiWindowFlags_NoScrollbar)) {
                 if (ImGui::IsWindowFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0))
                   ImGui::SetKeyboardFocusHere();
 
-                ImGui::PushItemWidth(space.x * 0.92f);
+                ImGui::PushItemWidth(ImGui::GetWindowContentRegionWidth() - cmd_button_x_size - style.ItemSpacing.x);
                 ImGui::InputText("##cmd_input", &cmd_buff_);
                 ImGui::SameLine();
                 if (ImGui::Button("Execute##cmd_box")) {
                   misc::kTHREAD_POOL->AddJob([cmd = cmd_buff_] {
                     std::string cmd_id;
                     std::string cmd_args;
+
+                    if (cmd.empty())
+                      return;
+
                     LOG_DEBUG("{}", cmd);
                     if (auto pos = cmd.find(' '); pos != std::string::npos) {
                       cmd_id = cmd.substr(0, pos);
@@ -134,7 +142,7 @@ namespace gta_base::ui {
                     while (!cmd_args.empty() && (cmd_args.back() == ' ' || cmd_args.back() == '\n')) {
                       cmd_args.pop_back();
                     }
-                    
+
                     auto cmd_ptr = commands::kCOMMAND_MANAGER.GetCommand(cmd_id);
                     if (!cmd_ptr)
                       return;
@@ -143,6 +151,7 @@ namespace gta_base::ui {
                   });
                   cmd_buff_.clear();
                 }
+                ImGui::PopItemWidth();
 
                 ImGui::EndChild();
               }
