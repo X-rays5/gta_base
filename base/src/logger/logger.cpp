@@ -59,7 +59,7 @@ namespace gta_base {
       spdlog::set_default_logger(logger);
 
       spdlog::default_logger_raw()->set_error_handler([](const std::string& err) {
-        LOG_CRITICAL(err);
+        LOG_CRITICAL("spdlog: {}", err);
       });
 
       SetupExceptionHandler();
@@ -138,33 +138,22 @@ namespace gta_base {
 
       // ignore non fatal exceptions
       if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") {
-        if (err_code != DBG_PRINTEXCEPTION_C || err_code != DBG_PRINTEXCEPTION_WIDE_C) {
+        // check for output debug string
+        if (err_code != 1073807366) {
           LOG_DEBUG("Ignoring vectored exception call with code: {}", err_code);
         }
 
         return EXCEPTION_CONTINUE_SEARCH;
       }
 
-      // MSVC cpp exception
-      if (err_code == 3765269347) {
-        auto addr = (std::uintptr_t) except->ContextRecord->Rip;
-        std::string file_name = common::GetModuleNameFromAddress(GetCurrentProcessId(), addr);
-        auto offset = common::GetModuleOffsetFromAddress(GetCurrentProcessId(), addr);
-        auto exception = (std::exception*) except->ExceptionRecord->ExceptionInformation[1];
+      if (err_code == 3765269347 && except->ExceptionRecord->NumberParameters >= 3) {
+        if (except->ExceptionRecord->ExceptionInformation[0] == 26820608) {
+          MSVCException(except);
 
-        if (auto file_err = dynamic_cast<std::filesystem::filesystem_error*>(exception); file_err) {
-          LOG_ERROR("({}+0x{:X}): {}\nPath 1: {}\nPath 2: {}", file_name, offset, file_err->what(), file_err->path1().string(), file_err->path2().string());
-        } else if (exception) {
-          LOG_ERROR("({}+0x{:X}): {}", file_name, offset, exception->what());
+          return EXCEPTION_CONTINUE_SEARCH;
         } else {
-          LOG_ERROR("cpp exception thrown at 0x{:X} ({}+0x{:X})", addr, file_name, offset);
+          LOG_WARN("MSVC Exception with wrong arg[0] num: {}", except->ExceptionRecord->ExceptionInformation[0]);
         }
-
-        LOG_DEBUG(logger::stacktrace::GetExceptionString(except));
-
-        // Can't try to recover here because this code runs before try catch blocks.
-        // Since MSVC uses a UnhandledExceptionFilter for that.
-        return EXCEPTION_CONTINUE_SEARCH;
       }
 
       #ifndef DISABLE_EXCEPTION_RECOVERY
@@ -177,7 +166,7 @@ namespace gta_base {
 
             auto next_instruction = except->ContextRecord->Rip + instruction.instruction.length;
             LOG_WARN("{} Recovery: {} ({:X}) -> {} ({:X})", logger::stacktrace::ExceptionCodeToStr(err_code), common::GetInstructionStr(except->ContextRecord->Rip, instruction), except->ContextRecord->Rip, common::GetInstructionStr(next_instruction), next_instruction);
-            LOG_DEBUG(logger::stacktrace::GetExceptionString(except));
+            LOG_DEBUG(logger::stacktrace::GetExceptionString(except, 7));
 
             except->ContextRecord->Rip = next_instruction;
 
@@ -188,7 +177,7 @@ namespace gta_base {
       #endif
 
       LOG_CRITICAL("EXCEPTION Recovery: failed to recover from crash");
-      LOG_ERROR(logger::stacktrace::GetExceptionString(except));
+      LOG_ERROR(logger::stacktrace::GetExceptionString(except, 7));
 
       kLOGGER->Flush();
       std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -207,5 +196,19 @@ namespace gta_base {
 
   void Logger::RemoveExceptionHandler() {
     RemoveVectoredExceptionHandler(vectored_exception_handler_h_);
+  }
+
+  void Logger::MSVCException(PEXCEPTION_POINTERS except) {
+    std::string file_name = common::GetModuleNameFromAddress(GetCurrentProcessId(), except->ContextRecord->Rip);
+    auto offset = common::GetModuleOffsetFromAddress(GetCurrentProcessId(), except->ContextRecord->Rip);
+    auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
+
+    if (exception && exception->what()) {
+      LOG_ERROR("{}+{}: {}", file_name, offset, exception->what());
+    } else {
+      LOG_ERROR("{}+{}: cpp exception thrown");
+    }
+
+    LOG_DEBUG(logger::stacktrace::GetExceptionString(except, 8));
   }
 }

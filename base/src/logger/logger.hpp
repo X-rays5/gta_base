@@ -27,8 +27,8 @@ namespace gta_base {
   class Logger {
   public:
     struct ThreadExceptionInfo {
-      static const std::size_t MAX_REPEATING_EXCEPTIONS = 10;
-      static const std::uint64_t MAX_REPEATING_EXCEPTIONS_TIME = 2; // ms
+      static const std::size_t MAX_REPEATING_EXCEPTIONS = 5;
+      static const std::uint64_t MAX_REPEATING_EXCEPTIONS_TIME = 10; // ms
       std::uint64_t last_exception_time{};
       std::uintptr_t last_exception_address{};
       std::size_t exception_count{};
@@ -36,22 +36,21 @@ namespace gta_base {
 
   public:
     Logger();
-
     ~Logger();
 
     void Flush();
 
     void RegisterThreadException(std::thread::id thread_id, std::uintptr_t address);
-
     bool ThreadTooManyExceptions(std::thread::id thread_id);
+
+    static void MSVCException(PEXCEPTION_POINTERS except);
 
   private:
     robin_hood::unordered_map<std::thread::id, ThreadExceptionInfo> thread_exception_info_;
     PVOID vectored_exception_handler_h_{};
-
   private:
-    void Shutdown();
 
+    void Shutdown();
     void SetupExceptionHandler();
 
     void RemoveExceptionHandler();

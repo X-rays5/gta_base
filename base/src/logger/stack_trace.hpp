@@ -10,10 +10,7 @@
 namespace gta_base::logger::stacktrace {
   std::string ExceptionCodeToStr(std::uint32_t code);
 
-  std::string GetFileExceptionOccured(PEXCEPTION_RECORD except_rec);
-
-  std::string GetExceptionString(PEXCEPTION_POINTERS except);
-
-  std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx);
+  std::string GetExceptionString(PEXCEPTION_POINTERS except, std::size_t stacktrace_skip_count);
+  std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count);
 }
 #endif //GTA_BASE_STACK_TRACE_HPP

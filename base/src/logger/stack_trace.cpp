@@ -56,6 +56,8 @@ namespace gta_base::logger::stacktrace {
         return "EXCEPTION_GUARD_PAGE";
       case EXCEPTION_INVALID_HANDLE:
         return "EXCEPTION_INVALID_HANDLE";
+      case 3221225474:
+        return "STATUS_NOT_IMPLEMENTED";
       case 3765269347:
         return "EXCEPTION_MSVC_CPP";
       default:
@@ -97,11 +99,11 @@ namespace gta_base::logger::stacktrace {
     return res.str();
   }
 
-  std::string GetExceptionString(PEXCEPTION_POINTERS except) {
-    return GetExceptionString(except->ExceptionRecord, except->ContextRecord);
+  std::string GetExceptionString(PEXCEPTION_POINTERS except, std::size_t stacktrace_skip_count) {
+    return GetExceptionString(except->ExceptionRecord, except->ContextRecord, stacktrace_skip_count);
   }
 
-  std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx) {
+  std::string GetExceptionString(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
     #ifndef NDEBUG
     //__debugbreak();
     #endif
