@@ -8,10 +8,13 @@
 #include <robin_hood.h>
 #include <script/scrNativeHandler.hpp>
 
+//#define DISABLE_INVOKER
+
 namespace rage {
   class NativeCallContext : public rage::scrNativeCallContext {
   public:
     NativeCallContext();
+
   private:
     std::uint64_t return_stack_[10];
     std::uint64_t arg_stack_[100];
@@ -20,7 +23,9 @@ namespace rage {
   class Invoker {
   public:
     void CacheHandlers();
+
     void BeginCall();
+
     void EndCall(rage::scrNativeHash hash);
 
     template<typename T>
@@ -43,6 +48,14 @@ namespace rage {
 
 template<typename Ret, typename ...Args>
 __forceinline Ret invoke(rage::scrNativeHash hash, Args&& ...args) {
+  #ifdef DISABLE_INVOKER
+  if constexpr (!std::is_same_v<Ret, void>) {
+    return {};
+  } else {
+    return;
+  }
+  #endif
+
   using namespace rage;
 
   kINVOKER.BeginCall();

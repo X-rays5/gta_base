@@ -17,6 +17,10 @@ namespace rage {
   }
 
   void Invoker::CacheHandlers() {
+    #ifdef DISABLE_INVOKER
+    return;
+    #endif
+
     if (!handler_cache_.empty())
       return;
 
