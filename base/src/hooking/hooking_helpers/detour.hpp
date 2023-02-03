@@ -10,16 +10,17 @@
 namespace gta_base::hooking {
   class DetourHook {
   public:
+    explicit DetourHook() : target_(nullptr), detour_(nullptr) {}
     explicit DetourHook(std::string name, void* target, void* detour);
+    explicit DetourHook(std::string name, std::string module_name, std::string func_name, void* detour);
 
     ~DetourHook() noexcept;
-
     DetourHook(DetourHook&& that) = delete;
     DetourHook& operator=(DetourHook&& that) = delete;
     DetourHook(DetourHook const&) = delete;
     DetourHook& operator=(DetourHook const&) = delete;
 
-    inline std::string GetName() const;
+    [[nodiscard]] inline std::string GetName() const;
 
     void Enable();
 

@@ -12,6 +12,7 @@
 #include <numeric>
 #include <cassert>
 #include <utility>
+#include <stacktrace>
 #include <d3d11.h>
 #include <imgui.h>
 #include "renderer.hpp"
@@ -28,7 +29,7 @@ namespace gta_base::d3d::draw {
   // scale float in range [0, 1] to [0, screen_size]
   FORCE_INLINE ImVec2 ScaleToScreen(ImVec2 xy) {
     if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-      LOG_WARN("ScaleToScreen: xy out of range: {} {}", xy.x, xy.y);
+      LOG_WARN("ScaleToScreen: xy out of range: {} {}\n{}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
     }
 
     ImVec2 cur_res = ImGui::GetIO().DisplaySize;
@@ -47,7 +48,7 @@ namespace gta_base::d3d::draw {
     }
 
     if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-      LOG_WARN("ScaleFromScreen: xy out of range: {} {}", xy.x, xy.y);
+      LOG_WARN("ScaleFromScreen: xy out of range: {} {}\n {}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
     }
 
     xy.x = (xy.x / cur_res.x);
@@ -298,7 +299,7 @@ namespace gta_base::d3d::draw {
 
     FORCE_INLINE void Draw() {
       std::unique_lock lock(mtx_);
-      for (auto&& command: draw_commands_[cur_render_target_]) {
+      for (auto&& command : draw_commands_[cur_render_target_]) {
         if (command != nullptr)
           command->Draw();
         else

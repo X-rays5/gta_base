@@ -15,6 +15,25 @@ namespace gta_base::hooking {
     }
   }
 
+  DetourHook::DetourHook(std::string name, std::string module_name, std::string func_name, void* detour) : name_(name), detour_(detour) {
+    auto target_dll = GetModuleHandleA(module_name.c_str());
+    if (!target_dll) {
+      LOG_ERROR("Failed to get module handle for '{}'", module_name);
+      return;
+    }
+
+    target_ = GetProcAddress(target_dll, func_name.c_str());
+    if (!target_) {
+      LOG_ERROR("Failed to get address of '{}' in '{}'", func_name, module_name);
+      return;
+    }
+
+
+    if (auto status = MH_CreateHook(target_, detour_, &original_); status != MH_OK) {
+      LOG_ERROR("Failed to create hook '{}' at 0x{:X} (error: {})", name_, uintptr_t(target_), MH_StatusToString(status));
+    }
+  }
+
   DetourHook::~DetourHook() noexcept {
     if (target_) {
       MH_RemoveHook(target_);
