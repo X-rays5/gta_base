@@ -32,7 +32,7 @@ namespace gta_base::lua {
   }
 
   std::optional<sol::state*> Manager::AddScriptRaw(const std::filesystem::path& path) {
-    std::unique_lock lock(mutex_);
+    std::unique_lock lock(mtx_);
 
     if (running_scripts_.contains(path)) {
       LOG_ERROR("Script {} is already running", path.string());
@@ -41,7 +41,7 @@ namespace gta_base::lua {
 
     ScriptInfo info;
     info.script_dir = path.parent_path();
-    info.lua_script_inst = std::make_unique<Script>(info.script_dir, path);
+    info.lua_script_inst = std::make_unique<Script>(path.filename().stem().string(), info.script_dir, path);
 
     running_scripts_[path] = std::move(info);
 
@@ -49,7 +49,7 @@ namespace gta_base::lua {
   }
 
   std::optional<sol::state*> Manager::AddScript(const std::filesystem::path& path) {
-    std::unique_lock lock(mutex_);
+    std::unique_lock lock(mtx_);
 
     std::filesystem::path script_dir;
     if (std::filesystem::is_directory(common::GetScriptsDir() / path)) {
@@ -80,7 +80,7 @@ namespace gta_base::lua {
     ScriptInfo info;
     info.manifest = manifest;
     info.script_dir = script_dir;
-    info.lua_script_inst = std::make_unique<Script>(info.script_dir, info.manifest.GetMainFile());
+    info.lua_script_inst = std::make_unique<Script>(info.manifest.GetName(), info.script_dir, info.manifest.GetMainFile());
 
     running_scripts_[script_dir] = std::move(info);
 
@@ -88,13 +88,18 @@ namespace gta_base::lua {
   }
 
   bool Manager::RemoveScript(const std::filesystem::path& path) {
-    std::unique_lock lock(mutex_);
+    std::unique_lock lock(mtx_);
 
-    return running_scripts_.erase(path) > 0;
+    if (running_scripts_.erase(path) > 0) {
+      LOG_INFO("Unloading script {}", path.string());
+      return true;
+    }
+
+    return false;
   }
 
   void Manager::RunScriptTick() {
-    std::unique_lock lock(mutex_);
+    std::unique_lock lock(mtx_);
     for (auto& [path, script] : running_scripts_)
       script.lua_script_inst->Tick();
   }

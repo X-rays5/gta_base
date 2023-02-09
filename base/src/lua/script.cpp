@@ -49,7 +49,7 @@ namespace gta_base::lua {
 
     sol::protected_function_result script = lua_state_.safe_script_file(main_file.string());
     if (!script.valid()) {
-      LOG_ERROR(FormatSolError(script));
+      LUA_LOG_ERROR(logger_, FormatSolError(script));
       return;
     }
   }
@@ -134,26 +134,26 @@ namespace gta_base::lua {
     auto logging_metatable = lua_state_.create_table_with();
 
     logging_metatable.set_function("info", [&](const std::string& msg, sol::variadic_args va) {
-      LOG_INFO("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
+      LUA_LOG_INFO(logger_, FormatLuaVariadicArgs(msg, va));
     });
 
     logging_metatable.set_function("warn", [&](const std::string& msg, sol::variadic_args va) {
-      LOG_WARN("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
+      LUA_LOG_WARN(logger_, FormatLuaVariadicArgs(msg, va));
     });
 
     logging_metatable.set_function("error", [&](const std::string& msg, sol::variadic_args va) {
-      LOG_ERROR("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
+      LUA_LOG_ERROR(logger_, FormatLuaVariadicArgs(msg, va));
     });
 
-    logging_metatable.set_function("fatal", [&](const std::string& msg, sol::variadic_args va) {
-      LOG_CRITICAL("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
+    logging_metatable.set_function("critical", [&](const std::string& msg, sol::variadic_args va) {
+      LUA_LOG_CRITICAL(logger_, FormatLuaVariadicArgs(msg, va));
     });
 
     logging_metatable.set_function("debug", [&](const std::string& msg, sol::variadic_args va) {
       #ifndef NDEBUG
-      LOG_DEBUG("[{}:{}] {}", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), FormatLuaVariadicArgs(msg, va));
+      LUA_LOG_DEBUG(logger_, FormatLuaVariadicArgs(msg, va));
       #else
-      LOG_WARN("[{}:{}] This function is meanth only for development builds", GetCurrentFile(lua_state_), GetCurrentLine(lua_state_));
+      LUA_LOG_WARN(logger_, "This function is meant only for development builds");
       #endif
     });
 

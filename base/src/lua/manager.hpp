@@ -23,8 +23,19 @@ namespace gta_base::lua {
     std::optional<sol::state*> AddScript(const std::filesystem::path& path);
     bool RemoveScript(const std::filesystem::path& path);
 
+    [[nodiscard]] std::optional<Manifest> GetScriptManifest(const std::filesystem::path& path) {
+      std::unique_lock lock(mtx_);
+
+      auto it = running_scripts_.find(path);
+      if (it != running_scripts_.end()) {
+        return it->second.manifest;
+      }
+
+      return std::nullopt;
+    }
+
     [[nodiscard]] bool IsScriptRunning(const std::filesystem::path& path) {
-      std::unique_lock lock(mutex_);
+      std::unique_lock lock(mtx_);
       return running_scripts_.contains(path);
     }
 
@@ -36,7 +47,7 @@ namespace gta_base::lua {
     static std::vector<Manifest> GetScriptManifests();
 
   private:
-    std::recursive_mutex mutex_;
+    std::recursive_mutex mtx_;
 
     robin_hood::unordered_map<std::filesystem::path, ScriptInfo> running_scripts_;
   private:
