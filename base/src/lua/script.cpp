@@ -161,6 +161,9 @@ namespace gta_base::lua {
       return FormatLuaVariadicArgs(msg, va);
     });
 
+    auto natives = lua_natives::CreateSol2Bindings(lua_state_);
+
+    CreateReadOnlyTable("natives", natives);
     CreateReadOnlyTable("log", logging_metatable);
   }
 
