@@ -10,6 +10,7 @@
 #include "scripts/render/uidraw.hpp"
 #include "scripts/game/ui_disable_control.hpp"
 #include "scripts/game/loops.hpp"
+#include "scripts/game/lua.hpp"
 #include "rpc/discord.hpp"
 #include "ui/manager.hpp"
 #include "fiber/manager.hpp"
@@ -51,6 +52,7 @@ void BaseMain() {
   kSCRIPT_MANAGER->AddScript(std::make_shared<fiber::Manager>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::UIDisablePhone>());
   kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::Loops>());
+  kSCRIPT_MANAGER->AddScript(std::make_shared<scripts::LuaScriptThread>());
   LOG_INFO("kSCRIPT_MANAGER: added scripts now managing {} scripts", kSCRIPT_MANAGER->Count());
 
   auto fiber_inst = std::make_unique<fiber::Pool>(12);
@@ -132,22 +134,8 @@ void BaseMain() {
     }
   });
 
-  auto lua_thread = std::thread([] {
-    LOG_INFO("Lua thread started");
-
-    auto lua_manager_inst = std::make_unique<lua::Manager>();
-    LOG_INFO("Lua Manager initialized");
-
-    while (globals::running) {
-      if (lua::kMANAGER) {
-        lua::kMANAGER->RunScriptTick();
-      }
-      std::this_thread::yield();
-    }
-
-    lua_manager_inst.reset();
-    LOG_INFO("Lua Manager unloaded");
-  });
+  auto lua_manager_inst = std::make_unique<lua::Manager>();
+  LOG_INFO("Lua Manager initialized");
 
   LOG_INFO("Initialized");
   while (globals::running) {
@@ -158,10 +146,8 @@ void BaseMain() {
   }
   LOG_INFO("Unloading...");
 
-  if (lua_thread.joinable()) {
-    lua_thread.join();
-  }
-  LOG_INFO("Lua thread stopped");
+  lua_manager_inst.reset();
+  LOG_INFO("Lua Manager unloaded");
 
   if (scripting_thread.joinable())
     scripting_thread.join();
