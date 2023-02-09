@@ -131,40 +131,11 @@ namespace gta_base::lua {
   }
 
   void Script::AddFunctions() {
-    auto logging_metatable = lua_state_.create_table_with();
-
-    logging_metatable.set_function("info", [&](const std::string& msg, sol::variadic_args va) {
-      LUA_LOG_INFO(logger_, FormatLuaVariadicArgs(msg, va));
-    });
-
-    logging_metatable.set_function("warn", [&](const std::string& msg, sol::variadic_args va) {
-      LUA_LOG_WARN(logger_, FormatLuaVariadicArgs(msg, va));
-    });
-
-    logging_metatable.set_function("error", [&](const std::string& msg, sol::variadic_args va) {
-      LUA_LOG_ERROR(logger_, FormatLuaVariadicArgs(msg, va));
-    });
-
-    logging_metatable.set_function("critical", [&](const std::string& msg, sol::variadic_args va) {
-      LUA_LOG_CRITICAL(logger_, FormatLuaVariadicArgs(msg, va));
-    });
-
-    logging_metatable.set_function("debug", [&](const std::string& msg, sol::variadic_args va) {
-      #ifndef NDEBUG
-      LUA_LOG_DEBUG(logger_, FormatLuaVariadicArgs(msg, va));
-      #else
-      LUA_LOG_WARN(logger_, "This function is meant only for development builds");
-      #endif
-    });
-
-    logging_metatable.set_function("format", [&](const std::string& msg, sol::variadic_args va) {
-      return FormatLuaVariadicArgs(msg, va);
-    });
-
     auto natives = lua_natives::CreateSol2Bindings(lua_state_);
-
     CreateReadOnlyTable("natives", natives);
-    CreateReadOnlyTable("log", logging_metatable);
+
+    auto logging = CreateLoggingFunctions();
+    CreateReadOnlyTable("log", logging);
   }
 
   sol::table Script::CreateReadOnlyTable(const std::string& name, sol::table& meta_table) {
@@ -245,6 +216,39 @@ namespace gta_base::lua {
   }
   void Script::SetMainFile(const std::filesystem::path& path) {
     SetInternalLuaVar(lua_state_, "script_main_file", path.string());
+  }
+  sol::table Script::CreateLoggingFunctions() {
+    auto logging = lua_state_.create_table_with();
+
+    logging.set_function("info", [&](const std::string& msg, sol::variadic_args va) {
+      LUA_LOG_INFO(logger_, FormatLuaVariadicArgs(msg, va));
+    });
+
+    logging.set_function("warn", [&](const std::string& msg, sol::variadic_args va) {
+      LUA_LOG_WARN(logger_, FormatLuaVariadicArgs(msg, va));
+    });
+
+    logging.set_function("error", [&](const std::string& msg, sol::variadic_args va) {
+      LUA_LOG_ERROR(logger_, FormatLuaVariadicArgs(msg, va));
+    });
+
+    logging.set_function("critical", [&](const std::string& msg, sol::variadic_args va) {
+      LUA_LOG_CRITICAL(logger_, FormatLuaVariadicArgs(msg, va));
+    });
+
+    logging.set_function("debug", [&](const std::string& msg, sol::variadic_args va) {
+      #ifndef NDEBUG
+      LUA_LOG_DEBUG(logger_, FormatLuaVariadicArgs(msg, va));
+      #else
+      LUA_LOG_WARN(logger_, "This function is meant only for development builds");
+      #endif
+    });
+
+    logging.set_function("format", [&](const std::string& msg, sol::variadic_args va) {
+      return FormatLuaVariadicArgs(msg, va);
+    });
+
+    return logging;
   }
 }
 
