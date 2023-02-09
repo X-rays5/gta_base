@@ -11,6 +11,7 @@
 #include <robin_hood.h>
 #include <magic_enum.hpp>
 #include <map>
+#include "../../natives/natives.hpp"
 #include "../../misc/json.hpp"
 #include "../joaat.hpp"
 

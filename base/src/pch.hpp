@@ -5,7 +5,6 @@
 #pragma once
 #ifndef GTA_BASE_PCH_HPP
 #define GTA_BASE_PCH_HPP
-#include "natives/natives.hpp"
 #include <Windows.h>
 #include <fmt/format.h>
 #include <cstdint>
