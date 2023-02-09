@@ -4,8 +4,11 @@
 
 #include <regex>
 #include <fmt/args.h>
+#include <stacktrace>
 #include "script.hpp"
 #include "manager.hpp"
+
+#define PROTECTED_FUNCTION_RESULT_LOG_SAFE(result) if (lua_type(result.lua_state(), result.stack_index()) == LUA_TSTRING) {LOG_ERROR(result);}
 
 namespace gta_base::lua {
   namespace {
@@ -33,14 +36,16 @@ namespace gta_base::lua {
     }
   }
 
-  Script::Script(const std::filesystem::path& script_dir, const std::filesystem::path& main_file) {
+  Script::Script(const std::string& name, const std::filesystem::path& script_dir, const std::filesystem::path& main_file) : logger_(&lua_state_, name) {
     LoadLibraries();
     SetExceptionHandler();
     AddFunctions();
 
-    lua_state_.create_named_table("__internal");
-    SetInternalLuaVar(lua_state_, "script_path", script_dir.string());
-    SetInternalLuaVar(lua_state_, "script_main_file", main_file.string());
+    auto script_info_table = lua_state_.create_named_table("SCRIPT_INFO");
+
+    SetScriptName(name);
+    SetScriptPath(script_dir);
+    SetMainFile(main_file);
 
     sol::protected_function_result script = lua_state_.safe_script_file(main_file.string());
     if (!script.valid()) {
@@ -50,16 +55,22 @@ namespace gta_base::lua {
   }
 
   Script::~Script() {
-    sol::protected_function_result shutdown_result = lua_state_["Shutdown"]();
-    if (!shutdown_result.valid()) {
-      LOG_WARN("{} doesn't have a Shutdown function", GetInternalLuaVar(lua_state_, "script_main_file"));
+    auto result = CallLuaFunction(lua_state_, "Shutdown");
+
+    if (result.has_value() && !result->valid()) {
+      LUA_LOG_WARN(logger_, "{} doesn't have a Shutdown function", GetInternalLuaVar(lua_state_, "script_main_file"));
+
+      PROTECTED_FUNCTION_RESULT_LOG_SAFE((*result))
     }
   }
 
   void Script::Init() {
-    sol::protected_function_result init_result = lua_state_["Init"]();
-    if (!init_result.valid()) {
+    auto result = CallLuaFunction(lua_state_, "Init");
+
+    if (result.has_value() && !result->valid()) {
       LOG_ERROR("{} doesn't have a Init function", GetInternalLuaVar(lua_state_, "script_main_file"));
+
+      PROTECTED_FUNCTION_RESULT_LOG_SAFE((*result))
     }
   }
 
@@ -72,57 +83,51 @@ namespace gta_base::lua {
     if (!has_tick_func_)
       return;
 
-    auto res = lua_state_["Tick"]();
-    has_tick_func_ = res.valid();
+    auto result = CallLuaFunction(lua_state_, "Tick");
+    has_tick_func_ = result.has_value() && result->valid();
   }
 
   void Script::LoadLibraries() {
     lua_state_.open_libraries(
-      sol::lib::base,
-      sol::lib::package,
-      sol::lib::coroutine,
-      sol::lib::string,
-      sol::lib::os,
-      sol::lib::math,
-      sol::lib::table,
-      sol::lib::debug,
-      sol::lib::bit32,
-      sol::lib::io,
-      sol::lib::utf8
+    sol::lib::base,
+    sol::lib::package,
+    sol::lib::coroutine,
+    sol::lib::string,
+    sol::lib::os,
+    sol::lib::math,
+    sol::lib::table,
+    sol::lib::debug,
+    sol::lib::bit32,
+    sol::lib::io,
+    sol::lib::utf8
     );
   }
 
   void Script::SetExceptionHandler() {
-    lua_state_.set_panic(Panic);
-
     lua_state_.set_exception_handler([](lua_State* L, sol::optional<const std::exception&> maybe_exception, sol::string_view description) -> int {
+      std::string err_msg = description.data();
+      if (maybe_exception.has_value())
+        err_msg = fmt::format("{}\n{}", *maybe_exception->what(), err_msg);
+
+      LOG_ERROR("lua exception: {}\n{}", err_msg, std::to_string(std::stacktrace::current(1)));
+
+      kLOGGER->Flush();
+
       return sol::stack::push(L, description);
     });
   }
 
-  int Script::Panic(lua_State* L) {
-    LOG_ERROR("A lua panic occurred: {}", lua_tostring(L, -1));
-
-    auto script_path = GetInternalLuaVar(L, "script_path");
-    kMANAGER->RemoveScript(script_path);
-
-    lua_close(L);
-
-    return 0;
-  }
-
-  void Script::SetInternalLuaVar(lua_State* L, const std::string& name, const std::string& val) {
-    lua_getglobal(L, "__internal");
+  FORCE_INLINE void Script::SetInternalLuaVar(lua_State* L, const std::string& name, const std::string& val) {
+    lua_getglobal(L, "SCRIPT_INFO");
     lua_pushstring(L, val.c_str());
     lua_setfield(L, -2, name.c_str());
   }
 
-  std::string Script::GetInternalLuaVar(lua_State* L, const std::string& name) {
-    lua_getglobal(L, "__internal");
+  FORCE_INLINE std::string Script::GetInternalLuaVar(lua_State* L, const std::string& name) {
+    lua_getglobal(L, "SCRIPT_INFO");
     lua_getfield(L, -1, name.c_str());
-    std::string val = lua_tostring(L, -1);
 
-    return val;
+    return StackValueToString(L, -1);
   }
 
   void Script::AddFunctions() {
@@ -197,10 +202,47 @@ namespace gta_base::lua {
     fmt::dynamic_format_arg_store<fmt::format_context> ds;
     ds.reserve(va.size(), 0);
 
-    for (auto&& arg: va) {
+    for (auto&& arg : va) {
       ds.push_back(StackValueToString(arg.lua_state(), arg.stack_index()));
     }
 
     return fmt::vformat(format, ds);
   }
+
+  std::optional<sol::protected_function_result> Script::CallLuaFunction(sol::state& L, const std::string& fn_name) {
+    try {
+      return sol::protected_function(L[fn_name])();
+    } catch (sol::error& e) {
+      LUA_LOG_ERROR(logger_, "LUA: {}", e.what());
+    } catch (std::exception& e) {
+      LUA_LOG_ERROR(logger_, e.what());
+    } catch (...) {
+      LUA_LOG_ERROR(logger_, "Unknown exception occurred.");
+    }
+
+    return std::nullopt;
+  }
+
+  std::string Script::GetScriptName() {
+    return GetInternalLuaVar(lua_state_, "script_name");
+  }
+  void Script::SetScriptName(const std::string& name) {
+    SetInternalLuaVar(lua_state_, "script_name", name);
+  }
+
+  std::filesystem::path Script::GetScriptPath() {
+    return GetInternalLuaVar(lua_state_, "script_dir");
+  }
+  void Script::SetScriptPath(const std::filesystem::path& path) {
+    SetInternalLuaVar(lua_state_, "script_dir", path.string());
+  }
+
+  std::filesystem::path Script::GetMainFile() {
+    return GetInternalLuaVar(lua_state_, "script_main_file");
+  }
+  void Script::SetMainFile(const std::filesystem::path& path) {
+    SetInternalLuaVar(lua_state_, "script_main_file", path.string());
+  }
 }
+
+#undef PROTECTED_FUNCTION_RESULT_LOG_SAFE
