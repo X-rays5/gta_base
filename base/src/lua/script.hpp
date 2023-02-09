@@ -30,15 +30,13 @@ namespace gta_base::lua {
   private:
     void LoadLibraries();
     void SetExceptionHandler();
-    void AddFunctions();
-    sol::table CreateReadOnlyTable(const std::string& name, sol::table& meta_table);
 
-    static void SetInternalLuaVar(lua_State* L, const std::string& name, const std::string& val);
-    static std::string GetInternalLuaVar(lua_State* L, const std::string& name);
-    static std::string GetCurrentFile(lua_State* L);
+    void SetInternalLuaVar(const std::string& name, const std::string& val);
 
-    std::optional<sol::protected_function_result> CallLuaFunction(sol::state& L, const std::string& fn_name);
+    std::string GetInternalLuaVar(const std::string& name);
+    std::string GetCurrentFile();
 
+    int GetCurrentLine();
     std::string GetScriptName();
 
     void SetScriptName(const std::string& name);
@@ -49,14 +47,17 @@ namespace gta_base::lua {
 
     void SetMainFile(const std::filesystem::path& path);
 
-    static int GetCurrentLine(lua_State* L);
+    void AddFunctions();
+    sol::table CreateLoggingFunctions();
+
+    sol::table CreateReadOnlyTable(const std::string& name, sol::table& meta_table);
+    std::optional<sol::protected_function_result> CallLuaFunction(sol::state& L, const std::string& fn_name);
+    static std::string FormatLuaVariadicArgs(const std::string& format, sol::variadic_args va);
     static int ReadOnly(lua_State* L);
 
-    static inline std::string StackValueToString(lua_State* L, std::size_t index) {
+    static FORCE_INLINE std::string StackValueToString(lua_State* L, std::size_t index) {
       return luaL_tolstring(L, index, nullptr);
     }
-
-    static std::string FormatLuaVariadicArgs(const std::string& format, sol::variadic_args va);
   };
 }
 #endif //GTA_BASE_LUA_SCRIPT_HPP

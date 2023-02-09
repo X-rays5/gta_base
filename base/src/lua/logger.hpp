@@ -83,7 +83,7 @@ namespace gta_base::lua {
   };
 }
 
-#define LUA_LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{}, level, fmt::format("[{}/{}:{}] {}", GetScriptName(), GetCurrentFile(lua_state_), GetCurrentLine(lua_state_), __VA_ARGS__))
+#define LUA_LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{}, level, fmt::format("[{}/{}:{}] {}", GetScriptName(), GetCurrentFile(), GetCurrentLine(), __VA_ARGS__))
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
 #define LUA_LOG_TRACE(logger_inst, ...) LUA_LOGGER_LOG(logger_inst.GetLogger(), spdlog::level::trace, __VA_ARGS__)
