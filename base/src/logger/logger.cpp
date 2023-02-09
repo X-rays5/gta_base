@@ -147,13 +147,9 @@ namespace gta_base {
       }
 
       if (err_code == 3765269347 && except->ExceptionRecord->NumberParameters >= 3) {
-        if (except->ExceptionRecord->ExceptionInformation[0] == 26820608) {
-          MSVCException(except);
+        MSVCException(except);
 
-          return EXCEPTION_CONTINUE_SEARCH;
-        } else {
-          LOG_WARN("MSVC Exception with wrong arg[0] num: {}", except->ExceptionRecord->ExceptionInformation[0]);
-        }
+        return EXCEPTION_CONTINUE_SEARCH;
       }
 
       #ifndef DISABLE_EXCEPTION_RECOVERY
