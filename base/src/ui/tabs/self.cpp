@@ -6,6 +6,7 @@
 #include "tab_includes.hpp"
 #include "../../rage/util/teleport.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   void SelfTab() {
     kMANAGER->AddSubmenu(Submenus::Player, "tab/title/self", [](Submenu* sub) {
@@ -68,3 +69,4 @@ namespace gta_base::ui::tabs {
     });
   }
 }
+ */

@@ -5,6 +5,7 @@
 #include "all_players.hpp"
 #include "tab_includes.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   void AllPlayersTab() {
     kMANAGER->AddSubmenu(Submenus::NetworkAllPlayers, "tab/title/all_players", [](Submenu* sub) {
@@ -12,3 +13,4 @@ namespace gta_base::ui::tabs {
     });
   }
 }
+ */

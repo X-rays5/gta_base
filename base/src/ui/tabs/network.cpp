@@ -8,6 +8,7 @@
 #include "selected_player.hpp"
 #include "../../rage/util/session_switcher.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   static std::size_t session_switcher_idx = 0;
 
@@ -66,3 +67,4 @@ namespace gta_base::ui::tabs {
     SelectedPlayerTab();
   }
 }
+ */

@@ -5,8 +5,10 @@
 #include "world.hpp"
 #include "tab_includes.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   void WorldTab() {
 
   }
 }
+ */

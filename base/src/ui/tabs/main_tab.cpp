@@ -13,6 +13,7 @@
 #include "weapon.hpp"
 #include "vehicle.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   void MainTab() {
     try {
@@ -52,3 +53,4 @@ namespace gta_base::ui::tabs {
     }
   }
 }
+ */

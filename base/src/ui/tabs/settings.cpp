@@ -8,6 +8,7 @@
 #include "../components/keyboard.hpp"
 #include "../../settings/profile.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   namespace {
     std::uint64_t hotkey_delete_key_id = 0;
@@ -251,3 +252,4 @@ namespace gta_base::ui::tabs {
     });
   }
 }
+ */

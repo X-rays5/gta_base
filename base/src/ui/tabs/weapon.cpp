@@ -5,6 +5,7 @@
 #include "weapon.hpp"
 #include "tab_includes.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   void WeaponsTab() {
     kMANAGER->AddSubmenu(Submenus::Weapon, "tab/title/weapon", [](Submenu* sub) {
@@ -13,3 +14,4 @@ namespace gta_base::ui::tabs {
     });
   }
 }
+ */

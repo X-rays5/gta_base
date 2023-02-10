@@ -6,6 +6,7 @@
 #include "tab_includes.hpp"
 #include "../../rage/util/vehicle.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   namespace {
     std::string selected_category_spawner;
@@ -47,3 +48,4 @@ namespace gta_base::ui::tabs {
     });
   }
 }
+ */

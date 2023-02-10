@@ -5,6 +5,7 @@
 #include "debug.hpp"
 #include "tab_includes.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   namespace {
     float test_value_f = 1;
@@ -59,3 +60,4 @@ namespace gta_base::ui::tabs {
     });
   }
 }
+ */

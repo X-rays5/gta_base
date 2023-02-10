@@ -10,6 +10,7 @@
 #include "../../rage/enums.hpp"
 #include "../../rage/util/breakup_kick.hpp"
 
+/*
 namespace gta_base::ui::tabs {
   void SelectedPlayerTab() {
     kMANAGER->AddSubmenu(Submenus::NetworkPlayerList, "tab/title/player_list", [](Submenu* sub) {
@@ -49,3 +50,4 @@ namespace gta_base::ui::tabs {
     });
   }
 }
+ */
