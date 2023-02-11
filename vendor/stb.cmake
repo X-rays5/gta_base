@@ -1,3 +1,3 @@
-CPMAddPackage("gh:nothings/stb#8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55")
+cpmaddpackage("gh:nothings/stb#5736b15f7ea0ffb08dd38af21067c314d6a3aae9")
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${stb_SOURCE_DIR})

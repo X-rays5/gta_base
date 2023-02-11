@@ -13,9 +13,9 @@
 #include "misc/globals.hpp"
 #include "settings/settings.hpp"
 
-#ifdef _MSC_VER
+#ifdef MSVC
 #define FORCE_INLINE __forceinline
-#elif defined(__clang__) || defined(__GNUC__)
+#elif defined(GNU)
 #define FORCE_INLINE __attribute__((always_inline)) inline
 #elif
 #define FORCE_INLINE

@@ -55,6 +55,10 @@ namespace gta_base::commands::base_commands {
       Execute(args_vec);
     }
 
+    FORCE_INLINE void operator()(const std::string& args) {
+      Run(args);
+    }
+
   protected:
     rage::joaat_t id_;
     std::string name_key_;

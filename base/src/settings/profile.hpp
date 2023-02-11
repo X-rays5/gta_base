@@ -14,19 +14,19 @@ namespace gta_base::settings::profile {
     const std::filesystem::path selected_profiles_path = common::GetSettingsDir() / "selected_profiles.json";
     std::recursive_mutex profile_mutex;
 
-    constexpr static const char* hotkey_profile_key = "hotkey_profile";
+    constexpr const char* hotkey_profile_key = "hotkey_profile";
     bool hotkey_profile_init = true;
     std::string hotkey_profile_val;
 
-    constexpr static const char* option_state_profile_key = "option_state_profile";
+    constexpr const char* option_state_profile_key = "option_state_profile";
     bool option_state_profile_init = true;
     std::string option_state_profile_val;
 
-    constexpr static const char* translation_key = "translation";
+    constexpr const char* translation_key = "translation";
     bool translation_init = true;
     std::string translation_val;
 
-    constexpr static const char* theme_key = "theme";
+    constexpr const char* theme_key = "theme";
     bool theme_init = true;
     std::string theme_val;
   }
@@ -39,9 +39,7 @@ namespace gta_base::settings::profile {
     }
   }
 
-  FORCE_INLINE std::string
-
-  GetSelectedProfileVal(const std::string& key) {
+  FORCE_INLINE std::string GetSelectedProfileVal(const std::string& key) {
     std::unique_lock lock(profile_mutex);
     EnsureFile();
     auto doc = json::FromFile(selected_profiles_path);
@@ -67,9 +65,7 @@ namespace gta_base::settings::profile {
     json::ToFile(doc, selected_profiles_path);
   }
 
-  FORCE_INLINE std::string
-
-  GetSelectedHotkeyProfile() {
+  FORCE_INLINE std::string GetSelectedHotkeyProfile() {
     if (hotkey_profile_init) {
       hotkey_profile_val = GetSelectedProfileVal(hotkey_profile_key);
       hotkey_profile_init = false;
@@ -83,9 +79,7 @@ namespace gta_base::settings::profile {
     SaveSelectedProfileVal(hotkey_profile_key, name);
   }
 
-  FORCE_INLINE std::string
-
-  GetSelectedOptionStateProfile() {
+  FORCE_INLINE std::string GetSelectedOptionStateProfile() {
     if (option_state_profile_init) {
       option_state_profile_val = GetSelectedProfileVal(option_state_profile_key);
       option_state_profile_init = false;
@@ -100,9 +94,7 @@ namespace gta_base::settings::profile {
     SaveSelectedProfileVal(option_state_profile_key, name);
   }
 
-  FORCE_INLINE std::string
-
-  GetSelectedTranslation() {
+  FORCE_INLINE std::string GetSelectedTranslation() {
     if (translation_init) {
       translation_val = GetSelectedProfileVal(translation_key);
       translation_init = false;
@@ -117,9 +109,7 @@ namespace gta_base::settings::profile {
     SaveSelectedProfileVal(translation_key, name);
   }
 
-  FORCE_INLINE std::string
-
-  GetSelectedTheme() {
+  FORCE_INLINE std::string GetSelectedTheme() {
     if (theme_init) {
       theme_val = GetSelectedProfileVal(theme_key);
       theme_init = false;
