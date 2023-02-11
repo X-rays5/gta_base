@@ -10,10 +10,15 @@
 #include <string>
 #include <ctime>
 #include <mutex>
-#include "imgui.h"
+#include <imgui.h>
+#include "../../d3d/draw.hpp"
 
 namespace gta_base::ui {
-  class Notification {
+  class NotificationManager;
+
+  inline NotificationManager* kNOTIFICATIONS{};
+
+  class NotificationManager {
   public:
     enum class Type {
       kSuccess,
@@ -23,7 +28,7 @@ namespace gta_base::ui {
 
     struct NotificationData {
     public:
-      NotificationData(Type type, std::string title, std::string body, std::uint64_t duration) : type_(type), title_(std::move(title)), body_(std::move(body)), duration_(duration) {}
+      NotificationData(Type type, std::string title, std::string body, std::uint64_t duration) : type_(type), title_(std::move(title)), body_(std::move(body)), duration_(duration), draw_list_(kNOTIFICATIONS->GetDrawList()) {}
 
       float Draw(const ImVec2& pos);
 
@@ -32,6 +37,7 @@ namespace gta_base::ui {
       std::string body_;
       std::uint64_t duration_;
       std::uint64_t start_time_ = common::GetEpoch();
+      d3d::draw::DrawList* draw_list_;
 
     private:
       [[nodiscard]] inline ImU32 GetColor() const {
@@ -52,12 +58,18 @@ namespace gta_base::ui {
       static constexpr const auto info_color = ImColor(255.f, 255.f, 255.f);
     };
 
-    Notification();
-    ~Notification();
+  public:
+    explicit NotificationManager(d3d::draw::DrawList* draw_list);
+    ~NotificationManager();
 
     void Create(Type type, std::string title, std::string description, std::uint32_t duration = 3000);
 
     void Tick();
+
+  protected:
+    FORCE_INLINE d3d::draw::DrawList* GetDrawList() {
+      return draw_list_;
+    }
 
   private:
     constexpr static const float x_size = 0.16f;
@@ -72,9 +84,8 @@ namespace gta_base::ui {
     constexpr static const ImU32 text_color = 0xffffffff;
 
     std::vector<NotificationData> notifications_;
+    d3d::draw::DrawList* draw_list_;
     std::mutex mtx_;
   };
-
-  inline Notification* kNOTIFICATIONS{};
 }
 #endif //GTA_BASE_NOTIFICATION_HPP

@@ -10,7 +10,6 @@
 #include "../../d3d/draw.hpp"
 #include "../../misc/thread_pool.hpp"
 #include "../../misc/timed_input.hpp"
-#include "../manager.hpp"
 #include "../../commands/command_manager.hpp"
 
 namespace gta_base::ui {
@@ -25,7 +24,7 @@ namespace gta_base::ui {
   template<std::size_t log_buff_size, std::size_t log_buff_scroll_count>
   class OnScreenConsole {
   public:
-    OnScreenConsole() {
+    OnScreenConsole(d3d::draw::DrawList* draw_list) : draw_list_(draw_list) {
       static_assert(log_buff_size > 1);
       static_assert(log_buff_scroll_count > 1);
 
@@ -88,7 +87,7 @@ namespace gta_base::ui {
         ToggleWindow();
 
       if (render_window_) {
-        ui::kMANAGER->GetDrawList()->AddCommand(d3d::draw::DrawCallback([=] {
+        draw_list_->AddCommand(d3d::draw::DrawCallback([=] {
           ImGui::SetNextWindowSize(d3d::draw::ScaleToScreen({0.5, 0.8}), ImGuiCond_Once);
           ImGui::SetNextWindowPos(d3d::draw::ScaleToScreen({0.05, 0.05}), ImGuiCond_Once);
 
@@ -147,7 +146,7 @@ namespace gta_base::ui {
                     if (!cmd_ptr)
                       return;
 
-                    cmd_ptr->Run(cmd_args);
+                    (*cmd_ptr)(cmd_args);
                   });
                   cmd_buff_.clear();
                 }
@@ -169,6 +168,7 @@ namespace gta_base::ui {
     std::string log_buff_[log_buff_size];
     std::string cmd_buff_;
     std::unique_ptr<util::TimedInput> input_show_window_;
+    d3d::draw::DrawList* draw_list_;
 
   private:
     FORCE_INLINE void ProcessedPrint(std::string_view str) {

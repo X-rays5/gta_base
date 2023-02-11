@@ -3,21 +3,19 @@
 //
 
 #include "notification.hpp"
-#include "../manager.hpp"
 #include "../../d3d/renderer.hpp"
 
 namespace gta_base::ui {
-  Notification::Notification() {
+  NotificationManager::NotificationManager(d3d::draw::DrawList* draw_list) : draw_list_(draw_list) {
     kNOTIFICATIONS = this;
   }
 
-  Notification::~Notification() {
+  NotificationManager::~NotificationManager() {
     kNOTIFICATIONS = nullptr;
   }
 
-  float Notification::NotificationData::Draw(const ImVec2& pos) {
+  float NotificationManager::NotificationData::Draw(const ImVec2& pos) {
     ImU32 color = GetColor();
-    auto draw_list = kMANAGER->GetDrawList();
     auto font = d3d::kRENDERER->GetFont();
     auto font_bold = d3d::kRENDERER->GetFontBold();
     auto title_tmp = title_;
@@ -47,22 +45,22 @@ namespace gta_base::ui {
       y_textbox_size -= y_size_char_body * 1.25f;
     }
 
-    draw_list->AddCommand(d3d::draw::Rect(pos, {x_size, y_top_bar_size}, color));
-    draw_list->AddCommand(d3d::draw::Rect({pos.x, pos.y + y_top_bar_size}, {x_size, y_textbox_size}, ImColor(0, 0, 0, 255)));
+    draw_list_->AddCommand(d3d::draw::Rect(pos, {x_size, y_top_bar_size}, color));
+    draw_list_->AddCommand(d3d::draw::Rect({pos.x, pos.y + y_top_bar_size}, {x_size, y_textbox_size}, ImColor(0, 0, 0, 255)));
 
-    draw_list->AddCommand(d3d::draw::Text({pos.x + 0.002f, pos.y + 0.005f}, text_color, title_tmp, false, false, font_size_title, font_bold));
-    draw_list->AddCommand(d3d::draw::Text({pos.x + 0.002f, y_pos_body}, text_color, body_tmp, false, false, font_size_body));
+    draw_list_->AddCommand(d3d::draw::Text({pos.x + 0.002f, pos.y + 0.005f}, text_color, title_tmp, false, false, font_size_title, font_bold));
+    draw_list_->AddCommand(d3d::draw::Text({pos.x + 0.002f, y_pos_body}, text_color, body_tmp, false, false, font_size_body));
 
     return y_textbox_size;
   }
 
-  void Notification::Create(Type type, std::string title, std::string description, std::uint32_t duration) {
+  void NotificationManager::Create(Type type, std::string title, std::string description, std::uint32_t duration) {
     mtx_.lock();
     notifications_.emplace_back(NotificationData(type, std::move(title), std::move(description), duration));
     mtx_.unlock();
   }
 
-  void Notification::Tick() {
+  void NotificationManager::Tick() {
     float x_base;
     if (kMANAGER->x_base <= 0.5f)
       x_base = x_base_right;
