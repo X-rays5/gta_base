@@ -1,0 +1,2 @@
+target_compile_definitions(${PROJECT_NAME} PRIVATE CMAKE_HOST_SYSTEM_PROCESSOR)
+message(STATUS "arch: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
