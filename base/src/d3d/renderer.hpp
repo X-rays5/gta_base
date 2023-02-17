@@ -16,15 +16,15 @@ namespace gta_base::d3d {
     explicit Renderer(HWND hwnd);
     ~Renderer();
 
-    inline Microsoft::WRL::ComPtr<ID3D11Device> GetDevice() {
+    inline Microsoft::WRL::ComPtr <ID3D11Device> GetDevice() {
       return device_;
     }
 
-    inline Microsoft::WRL::ComPtr<ID3D11DeviceContext> GetDeviceContext() {
+    inline Microsoft::WRL::ComPtr <ID3D11DeviceContext> GetDeviceContext() {
       return device_context_;
     }
 
-    inline Microsoft::WRL::ComPtr<IDXGISwapChain> GetSwapChain() {
+    inline Microsoft::WRL::ComPtr <IDXGISwapChain> GetSwapChain() {
       return swap_chain_;
     }
 
@@ -56,14 +56,12 @@ namespace gta_base::d3d {
       last_time_ = last_time;
     }
 
-    static void WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-
     static HRESULT Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags);
     static HRESULT SwapChainResizeBuffer(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags);
   private:
-    Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain_;
-    Microsoft::WRL::ComPtr<ID3D11Device> device_;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context_;
+    Microsoft::WRL::ComPtr <IDXGISwapChain> swap_chain_;
+    Microsoft::WRL::ComPtr <ID3D11Device> device_;
+    Microsoft::WRL::ComPtr <ID3D11DeviceContext> device_context_;
     HWND hwnd_;
     ImFont* roboto_ = nullptr;
     ImFont* roboto_bold_ = nullptr;

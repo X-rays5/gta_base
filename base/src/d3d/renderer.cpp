@@ -14,6 +14,7 @@
 #include "../ui/fonts/roboto_bold.hpp"
 #include "../ui/fonts/IconsFontAwesome6.h"
 #include "../scriptmanager/scriptmanager.hpp"
+#include "../hooking/wndproc.hpp"
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -32,6 +33,7 @@ namespace gta_base::d3d {
     InitD3D();
 
     kRENDERER = this;
+    hooking::kWND_PROC_HOOK->AddHandler(ImGui_ImplWin32_WndProcHandler);
   }
 
   Renderer::~Renderer() {
@@ -76,10 +78,6 @@ namespace gta_base::d3d {
       ImGui::GetIO().Fonts->Build();
 
     last_time_ = common::GetEpoch();
-  }
-
-  void Renderer::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-    ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {

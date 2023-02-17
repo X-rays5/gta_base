@@ -14,6 +14,7 @@
 #include "hooking_helpers/detour.hpp"
 #include "native_hooking.hpp"
 #include "../memory/pointers.hpp"
+#include "wndproc.hpp"
 
 namespace gta_base {
   struct Hooks {
@@ -51,6 +52,7 @@ namespace gta_base {
 
   private:
     std::unique_ptr<hooking::NativeHooking> native_hooking_inst_;
+    std::unique_ptr<hooking::WndProcHook> wnd_proc_hook_inst_;
   };
 
   inline Hooking* kHOOKING{};
