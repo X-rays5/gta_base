@@ -11,6 +11,7 @@
 #include "../../misc/thread_pool.hpp"
 #include "../../misc/timed_input.hpp"
 #include "../../commands/command_manager.hpp"
+#include "../../key_input/manager.hpp"
 
 namespace gta_base::ui {
   // log_buff_size amount: of lines to store before needing to make room
@@ -67,9 +68,9 @@ namespace gta_base::ui {
     FORCE_INLINE void SetShowWindow(bool val) {
       if (render_window_ != val) {
         if (render_window_) {
-          kMANAGER->PopBlockInput();
+          key_input::kINPUT_MGR->PopBlockInput();
         } else {
-          kMANAGER->PushBlockInput();
+          key_input::kINPUT_MGR->PushBlockInput();
         }
       }
 

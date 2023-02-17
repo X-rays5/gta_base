@@ -23,6 +23,7 @@
 #include "lua/manager.hpp"
 #include "settings/option_state.hpp"
 #include "settings/profile.hpp"
+#include "key_input/manager.hpp"
 
 std::atomic<bool> gta_base::globals::running = true;
 static bool waited_for_game_load = false;
@@ -60,6 +61,9 @@ void BaseMain() {
 
   auto renderer_inst = std::make_unique<d3d::Renderer>(common::GetHwnd(globals::target_window_class, globals::target_window_name));
   LOG_INFO("Renderer initialized");
+
+  auto key_input_inst = std::make_unique<key_input::Manager>();
+  LOG_INFO("Key Input Manager initialized");
 
   if (*memory::kPOINTERS->game_state_ != eGameState::Playing) {
     waited_for_game_load = true;
@@ -179,6 +183,9 @@ void BaseMain() {
 
   ui_manager_inst.reset();
   LOG_INFO("UI Manager shutdown");
+
+  key_input_inst.reset();
+  LOG_INFO("Key Input Manager shutdown");
 
   renderer_inst.reset();
   LOG_INFO("Renderer shutdown");
