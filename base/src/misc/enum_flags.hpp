@@ -47,7 +47,7 @@ namespace gta_base::misc {
       Flags res(*this);
       res &= val;
 
-      //GTA_BASE_ASSERT(res.bitset_.count() <= 1, "{}", res.bitset_.count());
+      GTA_BASE_ASSERT(res.bitset_.count() <= 1, "{}", res.bitset_.count());
 
       return res;
     }
@@ -63,7 +63,7 @@ namespace gta_base::misc {
       Flags res(*this);
       res |= val;
 
-      //GTA_BASE_ASSERT(res.bitset_.count() >= 1, "{}", res.bitset_.count());
+      GTA_BASE_ASSERT(res.bitset_.count() >= 1, "{}", res.bitset_.count());
 
       return res;
     }

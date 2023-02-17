@@ -112,7 +112,7 @@ namespace gta_base {
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
-#define GTA_BASE_ASSERT(condition, ...) LOG_DEBUG_CONDITIONAL(!(condition), __VA_ARGS__)
+#define GTA_BASE_ASSERT(condition, ...) LOG_DEBUG_CONDITIONAL(!(condition), fmt::format("assertion failed ({}): ", #condition).append(fmt::format(__VA_ARGS__)))
 #endif
 
 #endif //GTABASE_LOGGER_HPP
