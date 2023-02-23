@@ -17,7 +17,7 @@
 #define FORCE_INLINE __forceinline
 #elif defined(GNU)
 #define FORCE_INLINE __attribute__((always_inline)) inline
-#elif
+#else
 #define FORCE_INLINE
 #endif
 

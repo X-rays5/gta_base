@@ -8,6 +8,7 @@
 #include "common.hpp"
 #include "../ui/manager.hpp"
 #include "../settings/profile.hpp"
+#include "../key_input/manager.hpp"
 
 namespace gta_base::misc {
   HotkeyManager::HotkeyManager() {
@@ -22,27 +23,27 @@ namespace gta_base::misc {
 
   void HotkeyManager::StartHotkeyAdd(const std::string& key_str) {
     if (adding_hotkey_expire_ <= common::GetEpoch()) {
-      ui::kMANAGER->PushBlockInput();
+      key_input::kINPUT_MGR->PushBlockInput();
 
       adding_hotkey_expire_ = common::GetEpoch() + 5000;
       adding_hotkey_name_ = key_str;
       LOG_DEBUG("Hotkey creation started for {}", key_str);
-      ui::kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "Hotkey", "Press any key within 5 seconds to add a hotkey");
+      ui::kNOTIFICATIONS->Create(ui::NotificationType::kInfo, "Hotkey", "Press any key within 5 seconds to add a hotkey");
     }
   }
 
   bool HotkeyManager::AddKeyPressed(std::uint64_t key_id) {
     if (adding_hotkey_expire_ > common::GetEpoch() && key_id != VK_F1) {
-      ui::kMANAGER->PopBlockInput();
+      key_input::kINPUT_MGR->PopBlockInput();
 
       if (key_id == VK_ESCAPE) {
-        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Canceled hotkey creation for {}", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
+        ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Hotkey", fmt::format("Canceled hotkey creation for {}", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
         adding_hotkey_expire_ = 0;
         return true;
       }
 
       if (AddHotkey(adding_hotkey_name_, key_id)) {
-        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("Hotkey for {} has been added", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
+        ui::kNOTIFICATIONS->Create(ui::NotificationType::kSuccess, "Hotkey", fmt::format("Hotkey for {} has been added", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
         adding_hotkey_expire_ = 0;
         return true;
       } else {
@@ -55,17 +56,17 @@ namespace gta_base::misc {
 
   bool HotkeyManager::AddHotkey(const std::string& key_str, std::uint64_t key_id, bool check_allowed) {
     if (hotkeys_reversed_.contains(key_str)) {
-      ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("Hotkey for {} already exists", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
+      ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Hotkey", fmt::format("Hotkey for {} already exists", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
       return false;
     }
 
     if (hotkeys_.contains(key_id)) {
-      ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("A hotkey with the key {} already exists", common::VkToStr(key_id)));
+      ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Hotkey", fmt::format("A hotkey with the key {} already exists", common::VkToStr(key_id)));
       return false;
     }
 
     if (check_allowed && !ui::kMANAGER->IsOptionHotkeyAble(key_str)) {
-      ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("{} doesn't support hotkeys", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
+      ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Hotkey", fmt::format("{} doesn't support hotkeys", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
       return false;
     }
 
@@ -90,7 +91,7 @@ namespace gta_base::misc {
 
     hotkeys_.erase(hotkey_id);
     hotkeys_reversed_.erase(hotkey_name);
-    ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", fmt::format("{} has been deleted", ui::kTRANSLATION_MANAGER->Get(hotkey_name)));
+    ui::kNOTIFICATIONS->Create(ui::NotificationType::kSuccess, "Hotkey", fmt::format("{} has been deleted", ui::kTRANSLATION_MANAGER->Get(hotkey_name)));
     LOG_INFO("Deleted hotkey: {}", hotkey_name);
 
     if (save_on_change_)
@@ -103,16 +104,16 @@ namespace gta_base::misc {
     std::string key_str = GetHotkeyKeyStr(key_id);
 
     if (!key_str.empty()) {
-      if (auto press = ui::kMANAGER->HotkeyPressed(key_str); press.has_value()) {
+      if (auto press = ui::kUI_MANAGER->GetUI()->TriggerHotkey(key_str); press.has_value()) {
         std::string msg;
         if (press->is_toggle)
           msg = fmt::format("{} is now {}", ui::kTRANSLATION_MANAGER->Get(key_str), press->toggle_state);
         else
           msg = fmt::format("{} has been triggered.", ui::kTRANSLATION_MANAGER->Get(key_str));
 
-        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Hotkey", msg);
+        ui::kNOTIFICATIONS->Create(ui::NotificationType::kSuccess, "Hotkey", msg);
       } else {
-        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Hotkey", fmt::format("failed to trigger {}", ui::kTRANSLATION_MANAGER->Get(key_str)));
+        ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Hotkey", fmt::format("failed to trigger {}", ui::kTRANSLATION_MANAGER->Get(key_str)));
         LOG_DEBUG("failed to trigger hotkey {}", key_str);
       }
     }

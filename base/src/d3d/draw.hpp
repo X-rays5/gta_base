@@ -299,6 +299,7 @@ namespace gta_base::d3d::draw {
 
     FORCE_INLINE void Draw() {
       std::unique_lock lock(mtx_);
+      has_drawn_ = true;
       for (auto&& command : draw_commands_[cur_render_target_]) {
         if (command != nullptr)
           command->Draw();
@@ -309,8 +310,13 @@ namespace gta_base::d3d::draw {
 
     FORCE_INLINE void NextTargets() {
       std::unique_lock lock(mtx_);
+      has_drawn_ = false;
       NextRenderTarget();
       NextWriteTarget();
+    }
+
+    [[nodiscard]] FORCE_INLINE bool HasDrawn() const {
+      return has_drawn_;
     }
 
     [[nodiscard]] FORCE_INLINE std::size_t GetWriteTarget() const {
@@ -331,6 +337,7 @@ namespace gta_base::d3d::draw {
     std::recursive_mutex mtx_;
     std::size_t cur_write_target_ = 1;
     std::size_t cur_render_target_ = 0;
+    bool has_drawn_ = false;
     draw_commands_t draw_commands_;
     std::vector<int> draw_list_idx_;
 

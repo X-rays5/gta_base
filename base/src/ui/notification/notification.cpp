@@ -3,6 +3,7 @@
 //
 
 #include "notification.hpp"
+#include "../draw/ui.hpp"
 #include "../../d3d/renderer.hpp"
 
 namespace gta_base::ui {
@@ -54,15 +55,15 @@ namespace gta_base::ui {
     return y_textbox_size;
   }
 
-  void NotificationManager::Create(Type type, std::string title, std::string description, std::uint32_t duration) {
+  void NotificationManager::Create(NotificationType type, std::string title, std::string description, std::uint32_t duration) {
     mtx_.lock();
-    notifications_.emplace_back(NotificationData(type, std::move(title), std::move(description), duration));
+    notifications_.emplace_back(type, std::move(title), std::move(description), duration);
     mtx_.unlock();
   }
 
   void NotificationManager::Tick() {
     float x_base;
-    if (kMANAGER->x_base <= 0.5f)
+    if (draw::kUI->GetTheme()->base_x <= 0.5f)
       x_base = x_base_right;
     else
       x_base = x_base_left;

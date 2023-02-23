@@ -15,7 +15,7 @@ namespace rage::util {
     if (PED::IS_PED_IN_ANY_VEHICLE(gta_base::globals::local_player.ped_id, false) && with_vehicle) {
       auto veh = PED::GET_VEHICLE_PED_IS_IN(gta_base::globals::local_player.ped_id, false);
       if (!TakeControlOfEntity(veh)) {
-        gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kInfo, "Teleport", "Failed to take control of vehicle. Teleporting might not work.");
+        gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::NotificationType::kInfo, "Teleport", "Failed to take control of vehicle. Teleporting might not work.");
       }
       ENTITY::SET_ENTITY_COORDS(veh, coords.x, coords.y, coords.z, 1, 0, 0, 1);
       VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(veh, 5.f);
@@ -24,13 +24,13 @@ namespace rage::util {
       ENTITY::SET_ENTITY_COORDS(gta_base::globals::local_player.ped_id, coords.x, coords.y, coords.z, 1, 0, 0, 0);
       return true;
     }
-    gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "Teleport", "Call to Teleport has failed");
+    gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::NotificationType::kFail, "Teleport", "Call to Teleport has failed");
     return false;
   }
 
   bool TeleportIntoVehicle(Vehicle veh_id) {
     if (!ENTITY::IS_ENTITY_A_VEHICLE(veh_id)) {
-      gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportIntoVehicle", "Supplied veh_id is not a vehicle");
+      gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::NotificationType::kFail, "TeleportIntoVehicle", "Supplied veh_id is not a vehicle");
       return false;
     }
 
@@ -41,7 +41,7 @@ namespace rage::util {
       seat_idx = -2;
 
     if (seat_idx == 255) {
-      gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportIntoVehicle", "The target vehicle doesn't have any free seats");
+      gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::NotificationType::kFail, "TeleportIntoVehicle", "The target vehicle doesn't have any free seats");
       return false;
     }
 
@@ -54,7 +54,7 @@ namespace rage::util {
     rage::scrVector location;
 
     if (!(location = GetBlipLocation(sprite))) {
-      gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportToBlip", "Failed to get blip location");
+      gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::NotificationType::kFail, "TeleportToBlip", "Failed to get blip location");
     }
 
     return Teleport((fvector3) LoadGroundAtCoord(location), with_vehicle);
@@ -66,7 +66,7 @@ namespace rage::util {
       return Teleport((fvector3) LoadGroundAtCoord(coords), with_vehicle);
     }
 
-    gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportToWayPoint", "Failed to get waypoint location");
+    gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::NotificationType::kFail, "TeleportToWayPoint", "Failed to get waypoint location");
     return false;
   }
 
@@ -76,7 +76,7 @@ namespace rage::util {
       return Teleport((fvector3) LoadGroundAtCoord(coords), with_vehicle);
     }
 
-    gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::Notification::Type::kFail, "TeleportToObjective", "Failed to get objective location");
+    gta_base::ui::kNOTIFICATIONS->Create(gta_base::ui::NotificationType::kFail, "TeleportToObjective", "Failed to get objective location");
     return false;
   }
 }

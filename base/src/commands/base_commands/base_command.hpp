@@ -43,12 +43,12 @@ namespace gta_base::commands::base_commands {
 
       auto args_vec = common::SplitStr(args, " ");
       if (args_vec.size() < num_args_) {
-        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Command", "Not enough arguments");
+        ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Command", "Not enough arguments");
         return;
       }
 
       if (args_vec.size() > num_args_) {
-        ui::kNOTIFICATIONS->Create(ui::Notification::Type::kFail, "Command", "Too many arguments");
+        ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Command", "Too many arguments");
         return;
       }
 

@@ -18,21 +18,21 @@ namespace gta_base::ui {
 
   inline NotificationManager* kNOTIFICATIONS{};
 
+  enum class NotificationType {
+    kSuccess,
+    kFail,
+    kInfo
+  };
+
   class NotificationManager {
   public:
-    enum class Type {
-      kSuccess,
-      kFail,
-      kInfo
-    };
-
     struct NotificationData {
     public:
-      NotificationData(Type type, std::string title, std::string body, std::uint64_t duration) : type_(type), title_(std::move(title)), body_(std::move(body)), duration_(duration), draw_list_(kNOTIFICATIONS->GetDrawList()) {}
+      NotificationData(NotificationType type, std::string title, std::string body, std::uint64_t duration) : type_(type), title_(std::move(title)), body_(std::move(body)), duration_(duration), draw_list_(kNOTIFICATIONS->GetDrawList()) {}
 
       float Draw(const ImVec2& pos);
 
-      Type type_;
+      NotificationType type_;
       std::string title_;
       std::string body_;
       std::uint64_t duration_;
@@ -42,11 +42,11 @@ namespace gta_base::ui {
     private:
       [[nodiscard]] inline ImU32 GetColor() const {
         switch (type_) {
-          case Type::kSuccess:
+          case NotificationType::kSuccess:
             return success_color;
-          case Type::kFail:
+          case NotificationType::kFail:
             return fail_color;
-          case Type::kInfo:
+          case NotificationType::kInfo:
             return info_color;
         }
 
@@ -62,7 +62,7 @@ namespace gta_base::ui {
     explicit NotificationManager(d3d::draw::DrawList* draw_list);
     ~NotificationManager();
 
-    void Create(Type type, std::string title, std::string description, std::uint32_t duration = 3000);
+    void Create(NotificationType type, std::string title, std::string description, std::uint32_t duration = 3000);
 
     void Tick();
 

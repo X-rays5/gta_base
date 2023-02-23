@@ -16,7 +16,6 @@
 #include "fiber/manager.hpp"
 #include "fiber/pool.hpp"
 #include "player_mgr/manager.hpp"
-#include "ui/components/keyboard.hpp"
 #include "ui/console/on_screen_console.hpp"
 #include "misc/thread_pool.hpp"
 #include "rage/data/data_loader.hpp"
@@ -89,9 +88,6 @@ void BaseMain() {
 
   auto ui_manager_inst = std::make_unique<ui::Manager>();
   LOG_INFO("UI Manager initialized");
-
-  auto keyboard_manager_inst = std::make_unique<ui::keyboard::Manager>();
-  LOG_INFO("Keyboard Manager initialized");
 
   auto on_screen_console_inst = std::make_unique<ui::OnScreenConsoleDefault>();
   LOG_INFO("On Screen Console initialized");
@@ -177,9 +173,6 @@ void BaseMain() {
 
   on_screen_console_inst.reset();
   LOG_INFO("On Screen Console shutdown");
-
-  keyboard_manager_inst.reset();
-  LOG_INFO("Keyboard Manager shutdown");
 
   ui_manager_inst.reset();
   LOG_INFO("UI Manager shutdown");

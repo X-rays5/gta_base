@@ -12,17 +12,17 @@ namespace gta_base::settings::option_state {
     LOG_INFO("Saving settings {}", file.stem().string());
 
     std::vector<std::pair<std::string, std::string>> save_vals;
-    ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt) {
+    /*ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt) {
       if (opt->HasFlag(ui::OptionFlag::kSaveable)) {
         std::pair<std::string, std::string> save = {std::string(opt->GetNameKey()), opt->GetSaveVal()};
         save_vals.emplace_back(save);
       }
-    });
+    });*/
 
     try {
       rapidjson::Document json;
       json.SetObject();
-      for (auto&& save_entry: save_vals) {
+      for (auto&& save_entry : save_vals) {
         auto key = json::StringToJsonVal(save_entry.first, json.GetAllocator());
         auto val = json::StringToJsonVal(save_entry.second, json.GetAllocator());
         json.AddMember(key, val, json.GetAllocator());
@@ -66,13 +66,13 @@ namespace gta_base::settings::option_state {
       if (!json.IsObject())
         return;
 
-      ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt) {
+      /*ui::kMANAGER->IterateAllOptions([&](const std::shared_ptr<ui::Submenu>& sub, const std::shared_ptr<ui::option::BaseOption>& opt) {
         if (opt->HasFlag(ui::OptionFlag::kSaveable)) {
           if (json.HasMember(opt->GetNameKey().data())) {
             opt->SetSavedVal(json[opt->GetNameKey().data()].GetString());
           }
         }
-      });
+      });*/
     } catch (std::exception& e) {
       LOG_ERROR(e.what());
     }

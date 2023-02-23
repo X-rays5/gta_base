@@ -77,9 +77,11 @@ namespace gta_base::key_input {
 
     KeyBinding binding = {
     keyboard_bind,
-    controller_bind
+    controller_bind,
     };
     key_binds_[key_bind_id] = std::move(binding);
+
+    return true;
   }
 
   void Manager::RemoveKeybinding(std::uint32_t key_bind_id) {

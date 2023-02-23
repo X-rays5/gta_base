@@ -25,9 +25,44 @@
 
 #define GTA_BASE_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
+#define GTA_BASE_ENUM_OPERATORS(enum_name) \
+  inline enum_name operator|(enum_name a, enum_name b) {return static_cast<enum_name>(static_cast<std::underlying_type_t<enum_name>>(a) | static_cast<std::underlying_type_t<enum_name>>(b));} \
+  inline bool operator&(enum_name a, enum_name b)  {return static_cast<std::underlying_type_t<enum_name>>(a) & static_cast<std::underlying_type_t<enum_name>>(b);}                             \
+  inline enum_name operator&(enum_name a, std::underlying_type_t<enum_name> b) {return static_cast<enum_name>(static_cast<std::underlying_type_t<enum_name>>(a) & b);}
+
 #pragma warning(disable:4996)
 
 namespace gta_base::common {
+  template<typename arr_t, typename access_t = std::size_t>
+  concept has_array_operator = requires(arr_t t) {
+    t.operator[](access_t{});
+  };
+
+  template<typename T>
+  concept has_size_method = requires(T t) {
+    t.size();
+  };
+
+  template<typename from_t, typename to_t>
+  concept can_cast_to = requires() {
+    std::constructible_from<to_t, from_t> or std::convertible_to<from_t, to_t>;
+  };
+
+  template<typename T>
+  concept can_convert_to_string = requires(T t) {
+    can_cast_to<T, std::string> or std::to_string(t);
+  };
+
+  template<typename T>
+  requires can_convert_to_string<T>
+  inline std::string ToString(T val) {
+    if constexpr (can_cast_to<T, std::string>) {
+      return val;
+    } else {
+      return std::to_string(val);
+    }
+  }
+
   enum class Platform {
     kRockstar,
     kEpicGames,

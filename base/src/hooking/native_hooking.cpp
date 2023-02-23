@@ -10,7 +10,7 @@ namespace gta_base::hooking {
   NativeHooking::NativeHooking() {
     AddDetour(RAGE_JOAAT("freemode"), 0x95914459A87EBA28, NativeHooks::NETWORK_BAIL);
 
-    for (const auto entry: *memory::kPOINTERS->script_programs_table) {
+    for (const auto entry : *memory::kPOINTERS->script_programs_table) {
       auto native_replacements = GetNativeReplacements(entry.m_hash);
       if (!native_replacements.empty())
         script_hooks_.emplace(entry.m_hash, std::make_unique<ScriptHook>(entry.m_hash, native_replacements));
@@ -66,12 +66,12 @@ namespace gta_base::hooking {
 
     // Functions that need to be detoured for all scripts
     if (const auto& pair = detour_hooks_.find(GTA_BASE_NATIVE_DETOUR_ALL_SCRIPTS); pair != detour_hooks_.end())
-      for (const auto& native_hook_reg: pair->second)
+      for (const auto& native_hook_reg : pair->second)
         native_replacements.insert(native_hook_reg);
 
     // Functions that only need to be detoured for a specific script
     if (const auto& pair = detour_hooks_.find(script_hash); pair != detour_hooks_.end())
-      for (const auto& native_hook_reg: pair->second)
+      for (const auto& native_hook_reg : pair->second)
         native_replacements.insert(native_hook_reg);
 
     return native_replacements;
@@ -79,6 +79,6 @@ namespace gta_base::hooking {
 
   void NativeHooks::NETWORK_BAIL(rage::scrNativeCallContext* ctx) {
     LOG_INFO("Prevented network bail from freemode script.");
-    ui::kNOTIFICATIONS->Create(ui::Notification::Type::kSuccess, "Kick", "Blocked network bail kick from freemode script");
+    ui::kNOTIFICATIONS->Create(ui::NotificationType::kSuccess, "Kick", "Blocked network bail kick from freemode script");
   }
 }

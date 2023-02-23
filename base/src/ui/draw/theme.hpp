@@ -11,7 +11,7 @@
 namespace gta_base::ui::draw {
   struct Theme {
   public:
-
+    std::atomic<float> base_x = 0.0f;
     static void SaveTheme(Theme theme) {
       rapidjson::Document json;
 
@@ -25,7 +25,7 @@ namespace gta_base::ui::draw {
 
   private:
     static inline std::filesystem::path GetPath() {
-      return common::GetThemesDir() / settings::profile::GetSelectedTheme() + ".json";
+      return common::GetThemesDir() / (settings::profile::GetSelectedTheme() + ".json");
     }
   };
 }

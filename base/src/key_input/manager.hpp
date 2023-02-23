@@ -7,10 +7,20 @@
 #define GTA_BASE_MANAGER_808024A174394D97AB8B6B732D0FAB3A_HPP
 #include "keyboard.hpp"
 #include "controller.hpp"
+#include "cooldown_input.hpp"
 
 namespace gta_base::key_input {
   enum class KeyBinds : std::uint32_t {
-
+    ui_toggle,
+    ui_up,
+    ui_down,
+    ui_left,
+    ui_right,
+    ui_select,
+    ui_back,
+    ui_create_hotkey,
+    ui_save_option,
+    ui_modify_value,
   };
 
   class Manager {
