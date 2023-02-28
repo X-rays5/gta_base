@@ -5,6 +5,44 @@
 #include "manager.hpp"
 
 namespace gta_base::key_input {
+  namespace {
+    FORCE_INLINE bool IsKeyboardPressed(Keyboard* keyboard, const std::vector<Keyboard::INPUT>& keyboard_input) {
+      for (auto&& key : keyboard_input) {
+        if (!keyboard->IsKeyDown(key))
+          return false;
+      }
+
+      return true;
+    }
+
+    FORCE_INLINE bool IsKeyboardJustReleased(Keyboard* keyboard, const std::vector<Keyboard::INPUT>& keyboard_input) {
+      for (auto&& key : keyboard_input) {
+        if (!keyboard->KeyJustReleased(key))
+          return false;
+      }
+
+      return true;
+    }
+
+    FORCE_INLINE bool IsControllerPressed(Controller* controller, const std::vector<Controller::INPUT>& controller_input) {
+      for (auto&& key : controller_input) {
+        if (!controller->IsKeyDown(key))
+          return false;
+      }
+
+      return true;
+    }
+
+    FORCE_INLINE bool IsControllerJustReleased(Controller* controller, const std::vector<Controller::INPUT>& controller_input) {
+      for (auto&& key : controller_input) {
+        if (!controller->KeyJustReleased(key))
+          return false;
+      }
+
+      return true;
+    }
+  }
+
   Manager::Manager() {
     kINPUT_MGR = this;
   }
@@ -21,20 +59,9 @@ namespace gta_base::key_input {
 
     auto it = key_binds_.find(key_bind_id);
     if (it != key_binds_.end()) {
-      bool down = true;
-      for (auto&& keyboard_key : it->second.keyboard_key_bind) {
-        if (!keyboard_.IsKeyDown(keyboard_key))
-          down = false;
-      }
-      if (down)
+      if (IsKeyboardPressed(&keyboard_, it->second.keyboard_key_bind))
         return true;
-
-      down = true;
-      for (auto&& controller_key : it->second.controller_key_bind) {
-        if (!controller_.IsKeyDown(controller_key))
-          down = false;
-      }
-      if (down)
+      else if (IsControllerPressed(&controller_, it->second.controller_key_bind))
         return true;
     }
 
@@ -48,20 +75,9 @@ namespace gta_base::key_input {
 
     auto it = key_binds_.find(key_bind_id);
     if (it != key_binds_.end()) {
-      bool down = true;
-      for (auto&& keyboard_key : it->second.keyboard_key_bind) {
-        if (!keyboard_.KeyJustReleased(keyboard_key))
-          down = false;
-      }
-      if (down)
+      if (IsKeyboardJustReleased(&keyboard_, it->second.keyboard_key_bind))
         return true;
-
-      down = true;
-      for (auto&& controller_key : it->second.controller_key_bind) {
-        if (!controller_.KeyJustReleased(controller_key))
-          down = false;
-      }
-      if (down)
+      else if (IsControllerJustReleased(&controller_, it->second.controller_key_bind))
         return true;
     }
 
