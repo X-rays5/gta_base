@@ -18,7 +18,7 @@ namespace gta_base::ui::draw::components {
     }
 
     std::string Serialize() override {
-      return common::ToString(*arr_idx_);
+      return common::ToString(arr_idx_);
     }
 
     void Deserialize(const std::string& val) override {

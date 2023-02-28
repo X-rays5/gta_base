@@ -11,7 +11,7 @@
 namespace gta_base::ui::draw::components {
   class SubmenuLink final : public BaseOption {
   public:
-    SubmenuLink(sub_id_t link_to, std::string name, std::string description, BaseOption::event_cb_t event_cb = nullptr) : link_to_(link_to), BaseOption(std::move(name), std::move(description), event_cb, flags::OptionFlags::kSubmenuLink) {}
+    SubmenuLink(sub_id_t link_to, std::string name, std::string description, BaseOption::event_cb_t event_cb = nullptr) : link_to_(link_to), BaseOption(std::move(name), std::move(description), std::move(event_cb), flags::OptionFlags::kSubmenuLink) {}
 
     std::string Serialize() override { return {}; }
     void Deserialize(const std::string& val) override {}
