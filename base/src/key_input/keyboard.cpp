@@ -62,6 +62,7 @@ namespace gta_base::key_input {
         kKEYBOARD->SetKeyState(wParam, false);
         break;
       default:
+        break;
     }
   }
 }

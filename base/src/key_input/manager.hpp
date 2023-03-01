@@ -11,7 +11,7 @@
 
 namespace gta_base::key_input {
   enum class KeyBinds : std::uint32_t {
-    ui_toggle,
+    ui_toggle = 0,
     ui_up,
     ui_down,
     ui_left,
@@ -21,6 +21,7 @@ namespace gta_base::key_input {
     ui_create_hotkey,
     ui_save_option,
     ui_modify_value,
+    // ui reserved till 20
   };
 
   class Manager {
@@ -56,8 +57,11 @@ namespace gta_base::key_input {
     bool IsControlPressed(std::uint32_t key_bind_id);
     bool IsControlJustPressed(std::uint32_t key_bind_id);
 
-    bool AddKeybinding(std::uint32_t key_bind_id, std::initializer_list<Keyboard::INPUT> keyboard_bind, std::initializer_list<Controller::INPUT> controller_bind);
+    bool AddKeybinding(std::uint32_t key_bind_id, std::vector<Keyboard::INPUT> keyboard_bind, std::vector<Controller::INPUT> controller_bind, bool silent = false);
     void RemoveKeybinding(std::uint32_t key_bind_id);
+
+    static void Save(Manager* manager, const std::filesystem::path& file);
+    static void Load(Manager* manager, const std::filesystem::path& file);
 
   private:
     misc::Spinlock block_input_lock_;
