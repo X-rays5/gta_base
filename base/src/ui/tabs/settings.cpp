@@ -5,7 +5,6 @@
 #include "settings.hpp"
 #include "tab_includes.hpp"
 #include "../../lua/manager.hpp"
-#include "../components/keyboard.hpp"
 #include "../../settings/profile.hpp"
 
 /*

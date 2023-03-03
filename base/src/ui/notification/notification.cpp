@@ -3,7 +3,7 @@
 //
 
 #include "notification.hpp"
-#include "../draw/ui.hpp"
+#include "../manager.hpp"
 #include "../../d3d/renderer.hpp"
 
 namespace gta_base::ui {
@@ -56,6 +56,7 @@ namespace gta_base::ui {
   }
 
   void NotificationManager::Create(NotificationType type, std::string title, std::string description, std::uint32_t duration) {
+    LOG_INFO("[NOTIFICATION]: {}\nTitle: {}\n Body: {}", magic_enum::enum_name(type), title, description);
     mtx_.lock();
     notifications_.emplace_back(type, std::move(title), std::move(description), duration);
     mtx_.unlock();
@@ -63,7 +64,7 @@ namespace gta_base::ui {
 
   void NotificationManager::Tick() {
     float x_base;
-    if (draw::kUI->GetTheme()->base_x <= 0.5f)
+    if (kUI_MANAGER->GetUI()->GetTheme()->base_x <= 0.5f)
       x_base = x_base_right;
     else
       x_base = x_base_left;

@@ -9,6 +9,7 @@
 #include "../ui/manager.hpp"
 #include "../settings/profile.hpp"
 #include "../key_input/manager.hpp"
+#include "../ui/draw/components/options/bool_option.hpp"
 
 namespace gta_base::misc {
   HotkeyManager::HotkeyManager() {
@@ -65,7 +66,13 @@ namespace gta_base::misc {
       return false;
     }
 
-    if (check_allowed && !ui::kMANAGER->IsOptionHotkeyAble(key_str)) {
+    auto opt = ui::kUI_MANAGER->GetUI()->GetOptionByName(key_str);
+    if (!opt.has_value()) {
+      LOG_ERROR("opt {} doesn't exist", key_str);
+      return false;
+    }
+
+    if (check_allowed && (*opt)->HasFlag(ui::flags::OptionFlags::kHotkeyAble)) {
       ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Hotkey", fmt::format("{} doesn't support hotkeys", ui::kTRANSLATION_MANAGER->Get(adding_hotkey_name_)));
       return false;
     }
@@ -74,9 +81,6 @@ namespace gta_base::misc {
     hotkeys_reversed_[key_str] = key_id;
 
     LOG_INFO("Created hotkey for {} with id {}", ui::kTRANSLATION_MANAGER->Get(key_str), common::VkToStr(key_id));
-
-    // check if running
-    ui::kMANAGER->UpdateCurOptHintTxt();
 
     if (save_on_change_)
       Save(settings::profile::GetSelectedHotkeyProfile());
@@ -104,14 +108,16 @@ namespace gta_base::misc {
     std::string key_str = GetHotkeyKeyStr(key_id);
 
     if (!key_str.empty()) {
-      if (auto press = ui::kUI_MANAGER->GetUI()->TriggerHotkey(key_str); press.has_value()) {
-        std::string msg;
-        if (press->is_toggle)
-          msg = fmt::format("{} is now {}", ui::kTRANSLATION_MANAGER->Get(key_str), press->toggle_state);
-        else
-          msg = fmt::format("{} has been triggered.", ui::kTRANSLATION_MANAGER->Get(key_str));
+      if (auto press = ui::kUI_MANAGER->GetUI()->TriggerHotkey(key_str); press) {
+        auto opt = *ui::kUI_MANAGER->GetUI()->GetOptionByName(key_str);
 
-        ui::kNOTIFICATIONS->Create(ui::NotificationType::kSuccess, "Hotkey", msg);
+        auto bool_opt = dynamic_cast<ui::draw::components::BoolOption*>(opt.get());
+        if (bool_opt) {
+          ui::kNOTIFICATIONS->Create(ui::NotificationType::kSuccess, "Hotkey", fmt::format("{} is now {}", opt->GetName(), bool_opt->GetState()));
+          return;
+        }
+
+        ui::kNOTIFICATIONS->Create(ui::NotificationType::kSuccess, "Hotkey", fmt::format("{} has been triggered.", ui::kTRANSLATION_MANAGER->Get(key_str)));
       } else {
         ui::kNOTIFICATIONS->Create(ui::NotificationType::kFail, "Hotkey", fmt::format("failed to trigger {}", ui::kTRANSLATION_MANAGER->Get(key_str)));
         LOG_DEBUG("failed to trigger hotkey {}", key_str);

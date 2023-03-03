@@ -27,13 +27,11 @@ namespace gta_base::ui {
 
     FORCE_INLINE void Tick() {
       ui_inst_->Tick();
-      on_screen_console_inst_->Tick();
       notification_mgr_inst_->Tick();
     }
 
   private:
     std::unique_ptr<d3d::draw::DrawList> ui_draw_list_;
-    std::unique_ptr<OnScreenConsoleDefault> on_screen_console_inst_;
     std::unique_ptr<NotificationManager> notification_mgr_inst_;
     std::unique_ptr<draw::UI> ui_inst_;
 

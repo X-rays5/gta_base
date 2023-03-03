@@ -16,7 +16,7 @@ namespace gta_base {
 
     globals::session_join_time = common::GetEpoch();
 
-    ui::kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "Entering session");
+    ui::kNOTIFICATIONS->Create(ui::NotificationType::kInfo, "", "Entering session");
     LOG_INFO("NetworkPlayerMgrInit: Entering session");
 
     auto player = reinterpret_cast<::CNetGamePlayer*>(that->m_local_net_player);
@@ -27,7 +27,7 @@ namespace gta_base {
   void Hooks::NetworkPlayerMgrShutdown(CNetworkPlayerMgr* that) {
     globals::session_leave_time = common::GetEpoch();
 
-    ui::kNOTIFICATIONS->Create(ui::Notification::Type::kInfo, "", "Leaving session");
+    ui::kNOTIFICATIONS->Create(ui::NotificationType::kInfo, "", "Leaving session");
     LOG_INFO("NetworkPlayerMgrShutdown: Leaving session");
 
     kPLAYER_MGR->Clear();

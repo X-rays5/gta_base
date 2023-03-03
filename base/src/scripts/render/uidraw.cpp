@@ -4,6 +4,7 @@
 
 #include "uidraw.hpp"
 #include "../../ui/manager.hpp"
+#include "../../ui/console/on_screen_console.hpp"
 
 namespace gta_base::scripts {
   void UiDraw::Init() {
@@ -13,11 +14,14 @@ namespace gta_base::scripts {
   }
 
   void UiDraw::RunTick() {
-    if (!ui::kUI_MANAGER || !ui::kUI_MANAGER->GetDrawList()) {
+    auto draw_list = ui::kUI_MANAGER->GetDrawList();
+    if (!ui::kUI_MANAGER || !draw_list) {
       return;
     }
 
-    auto draw_list = ui::kUI_MANAGER->GetDrawList();
+    if (ui::kON_SCREEN_CONSOLE)
+      ui::kON_SCREEN_CONSOLE->Tick(draw_list);
+
     if (last_idx_ != draw_list->GetRenderTarget()) {
       last_idx_ = draw_list->GetRenderTarget();
       draw_list->Draw();

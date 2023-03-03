@@ -3,7 +3,6 @@
 //
 
 #include "ui.hpp"
-#include "list_ui.hpp"
 #include "components/options/submenu_link.hpp"
 #include "../../settings/option_state.hpp"
 #include "../../misc/hotkey_manager.hpp"
@@ -25,17 +24,45 @@ namespace gta_base::ui::draw {
       LOG_CRITICAL("Current submenu is a nullptr");
       return;
     }
-    list_ui::Draw(&theme_, cur_sub->get(), draw_list_);
   }
 
-  void UI::TriggerHotkey(const std::string& opt_name) {
+  std::optional<std::shared_ptr<components::BaseOption>> UI::GetOptionByName(const std::string& name) {
     misc::ScopedSpinlock lock(lock_);
+
+    std::shared_ptr<components::BaseOption> ret_val;
     for (auto&& sub : submenus_) {
       sub.second->IterateOptions([&](const std::shared_ptr<components::BaseOption>& opt) {
-        if (opt->GetNameRaw() == opt_name && opt->HasFlag(flags::OptionFlags::kHotkeyAble))
-          opt->HandleKey(key_input::KeyBinds::ui_select);
+        if (name == opt->GetNameRaw()) {
+          ret_val = opt;
+          return;
+        }
       });
+
+      if (ret_val)
+        return ret_val;
     }
+
+    return std::nullopt;
+  }
+
+  bool UI::TriggerHotkey(const std::string& opt_name) {
+    misc::ScopedSpinlock lock(lock_);
+
+    bool success = false;
+    for (auto&& sub : submenus_) {
+      sub.second->IterateOptions([&](const std::shared_ptr<components::BaseOption>& opt) {
+        if (opt->GetNameRaw() == opt_name && opt->HasFlag(flags::OptionFlags::kHotkeyAble)) {
+          opt->HandleKey(key_input::KeyBinds::ui_select);
+          success = true;
+          return;
+        }
+      });
+
+      if (success)
+        return success;
+    }
+
+    return false;
   }
 
   void UI::HandleKeyInput() {
@@ -43,6 +70,7 @@ namespace gta_base::ui::draw {
       show_ui_ = !show_ui_;
       return;
     }
+
     if (!show_ui_)
       return;
 
@@ -94,5 +122,9 @@ namespace gta_base::ui::draw {
     key_input::kINPUT_MGR->AddKeybinding((std::uint32_t) key_input::KeyBinds::ui_create_hotkey, {key_input::Keyboard::INPUT::F1}, {key_input::Controller::INPUT::RIGHT_SHOULDER, key_input::Controller::INPUT::DPAD_UP});
     key_input::kINPUT_MGR->AddKeybinding((std::uint32_t) key_input::KeyBinds::ui_save_option, {key_input::Keyboard::INPUT::F11}, {key_input::Controller::INPUT::RIGHT_SHOULDER, key_input::Controller::INPUT::DPAD_DOWN});
     key_input::kINPUT_MGR->AddKeybinding((std::uint32_t) key_input::KeyBinds::ui_modify_value, {key_input::Keyboard::INPUT::SHIFT, key_input::Keyboard::INPUT::F5}, {key_input::Controller::INPUT::RIGHT_SHOULDER, key_input::Controller::INPUT::DPAD_LEFT});
+  }
+
+  void UI::DrawListUI() {
+
   }
 }

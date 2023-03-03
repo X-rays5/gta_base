@@ -9,13 +9,11 @@
 
 namespace gta_base::ui::draw::components {
   template<typename arr_t, typename access_t> requires common::has_array_operator<arr_t, access_t> and common::can_convert_to_string<access_t> and std::is_arithmetic_v<access_t> and common::has_size_method<arr_t>
-  class ListOption : public BaseOption {
+  class ListOption : public virtual BaseOption {
   public:
-    ListOption(std::string name, std::string description, arr_t& array, access_t& arr_idx, flags::OptionFlags flags = flags::OptionFlags::kNone) :
+    ListOption(std::string name, std::string description, arr_t& array, access_t& arr_idx, flags::OptionFlags flags = flags::OptionFlags::kSaveAble) :
     array_(std::move(array)), arr_size_(array_->size()), arr_idx_(arr_idx),
-    BaseOption(name, description, nullptr, flags::OptionFlags::kSaveAble | flags)
-    {
-    }
+    BaseOption(name, description, nullptr, flags) {}
 
     std::string Serialize() override {
       return common::ToString(arr_idx_);
@@ -37,13 +35,16 @@ namespace gta_base::ui::draw::components {
         }
         case key_input::KeyBinds::ui_left: {
           ScrollLeft();
+          this->SendEvent(OptionEvent::kChange);
           break;
         }
         case key_input::KeyBinds::ui_right: {
           ScrollRight();
+          this->SendEvent(OptionEvent::kChange);
           break;
         }
         default:
+          break;
       }
     }
 
@@ -52,7 +53,6 @@ namespace gta_base::ui::draw::components {
     access_t& arr_idx_{};
     std::size_t arr_size_{};
 
-  protected:
     inline void ScrollLeft() {
       if (arr_idx_ == 0)
         arr_idx_ = arr_size_ - 1;

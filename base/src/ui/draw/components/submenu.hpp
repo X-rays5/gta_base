@@ -87,7 +87,7 @@ namespace gta_base::ui::draw::components {
       selected_option_idx_ -= 1;
     }
 
-    void IterateOptions(std::function<void(std::shared_ptr<BaseOption>)> cb) {
+    void IterateOptions(const std::function<void(std::shared_ptr<BaseOption>)>& cb) {
       misc::ScopedSpinlock lock(lock_);
       for (auto&& opt : options_)
         cb(opt);

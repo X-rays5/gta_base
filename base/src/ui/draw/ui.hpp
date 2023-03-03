@@ -26,7 +26,11 @@ namespace gta_base::ui::draw {
 
     void Tick();
 
-    void TriggerHotkey(const std::string& opt_name);
+    /**
+     * @note Only read functions should be used on the return. Since the class instance this points to might not be the rendered one.
+     */
+    std::optional<std::shared_ptr<components::BaseOption>> GetOptionByName(const std::string& name);
+    bool TriggerHotkey(const std::string& opt_name);
 
     inline sub_id_t CreateSubmenu(const std::string& name, const components::Submenu::create_options_cb_t& create_options_cb) {
       misc::ScopedSpinlock lock(lock_);
@@ -88,9 +92,13 @@ namespace gta_base::ui::draw {
       submenus_stack_.pop();
     }
 
+    inline bool ShowUI() {
+      return show_ui_;
+    }
+
   private:
     misc::Spinlock lock_;
-    std::atomic<bool> show_ui_{true};
+    std::atomic<bool> show_ui_{false};
     sub_id_t next_sub_id_{}; // While this could technically run out of IDs, it's unlikely to happen.
     std::stack<submenu_ptr> submenus_stack_;
     robin_hood::unordered_map<sub_id_t, submenu_ptr> submenus_;
@@ -116,6 +124,9 @@ namespace gta_base::ui::draw {
 
     void HandleKeyInput();
     static void RegisterKeyBinds();
+
+    // List ui
+    void DrawListUI();
   };
 }
 #endif //GTA_BASE_UI_27F54B7D9A92484F85FD37DD872BC063_HPP

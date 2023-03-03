@@ -25,7 +25,7 @@ namespace gta_base::ui {
   template<std::size_t log_buff_size, std::size_t log_buff_scroll_count>
   class OnScreenConsole {
   public:
-    OnScreenConsole(d3d::draw::DrawList* draw_list) : draw_list_(draw_list) {
+    OnScreenConsole() {
       static_assert(log_buff_size > 1);
       static_assert(log_buff_scroll_count > 1);
 
@@ -81,14 +81,14 @@ namespace gta_base::ui {
       SetShowWindow(!GetShowWindow());
     }
 
-    void Tick() {
+    void Tick(d3d::draw::DrawList* draw_list) {
       static const std::string window_title = fmt::format("{}##console_window", globals::name);
 
       if (input_show_window_->Get())
         ToggleWindow();
 
       if (render_window_) {
-        draw_list_->AddCommand(d3d::draw::DrawCallback([=] {
+        draw_list->AddCommand(d3d::draw::DrawCallback([=] {
           ImGui::SetNextWindowSize(d3d::draw::ScaleToScreen({0.5, 0.8}), ImGuiCond_Once);
           ImGui::SetNextWindowPos(d3d::draw::ScaleToScreen({0.05, 0.05}), ImGuiCond_Once);
 
@@ -169,7 +169,6 @@ namespace gta_base::ui {
     std::string log_buff_[log_buff_size];
     std::string cmd_buff_;
     std::unique_ptr<util::TimedInput> input_show_window_;
-    d3d::draw::DrawList* draw_list_;
 
   private:
     FORCE_INLINE void ProcessedPrint(std::string_view str) {

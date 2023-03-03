@@ -9,10 +9,10 @@
 
 namespace gta_base::ui::draw::components {
   template<typename T> requires std::is_arithmetic_v<T>
-  class NumberOption : public BaseOption {
+  class NumberOption : public virtual BaseOption {
   public:
-    NumberOption(std::string name, std::string description, T& val, T step, T min_val, T max_val, flags::OptionFlags flags = flags::OptionFlags::kNone) : val_(val), step_(step), min_val_(min_val), max_val_(max_val),
-    BaseOption(std::move(name), std::move(description), nullptr, flags::OptionFlags::kSaveAble | flags) {}
+    NumberOption(std::string name, std::string description, T& val, T step, T min_val, T max_val, flags::OptionFlags flags = flags::OptionFlags::kSaveAble) : val_(val), step_(step), min_val_(min_val), max_val_(max_val),
+    BaseOption(std::move(name), std::move(description), nullptr, flags) {}
 
     std::string Serialize() override {
       return common::ToString(val_);
@@ -33,14 +33,16 @@ namespace gta_base::ui::draw::components {
           break;
         }
         case key_input::KeyBinds::ui_left: {
-          ScrollLeft();
+          this->SendEvent(OptionEvent::kChange);
           break;
         }
         case key_input::KeyBinds::ui_right: {
           ScrollRight();
+          this->SendEvent(OptionEvent::kChange);
           break;
         }
         default:
+          break;
       }
     }
 
