@@ -45,7 +45,7 @@ namespace gta_base::memory::scanner {
       } else {
         patterns = &json["patterns"];
       }
-      for (auto&& entry: to_update) {
+      for (auto&& entry : to_update) {
         auto key = rapidjson::Value(entry.joaat.c_str(), static_cast<rapidjson::SizeType>(entry.joaat.size()), json.GetAllocator());
         patterns->AddMember(key, entry.offset, json.GetAllocator());
       }
@@ -91,7 +91,7 @@ namespace gta_base::memory::scanner {
       }
 
       if (json::GetSafe<const char*>(json.GetObj(), "md5") != common::GetFileMd5Hash(mod.szExePath)) {
-        LOG_ERROR("Pattern cache md5 mismatch rebuilding...");
+        LOG_INFO("Pattern cache md5 mismatch rebuilding...");
         UPDATE_NO_CACHE(region);
         return;
       }
@@ -111,7 +111,7 @@ namespace gta_base::memory::scanner {
     bool all_found = true;
     to_update_t to_update;
 
-    for (auto&& entry: entries_) {
+    for (auto&& entry : entries_) {
       if (!json.HasMember(std::to_string(entry.pattern_joaat).c_str())) {
         LOG_DEBUG("Cache miss for pattern '{}'", entry.entry.name_);
         cache_invalid:
@@ -162,7 +162,7 @@ namespace gta_base::memory::scanner {
     bool all_found = true;
     to_update_t to_update;
 
-    for (auto&& entry: entries_) {
+    for (auto&& entry : entries_) {
       auto addr = FindPattern(region, entry.entry);
       if (addr == nullptr) {
         all_found = false;

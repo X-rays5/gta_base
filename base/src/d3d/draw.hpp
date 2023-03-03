@@ -86,6 +86,11 @@ namespace gta_base::d3d::draw {
     if (!font)
       font = ImGui::GetFont();
 
+    if (!font) {
+      LOG_CRITICAL("No valid fonts are loaded");
+      return {};
+    }
+
     ImVec2 text_size = font->CalcTextSizeA(ScaleFont(font_size), ImGui::GetIO().DisplaySize.x, wrap_width, text.c_str());
     text_size.x = ((float) (int) (text_size.x + 0.99999f));
 

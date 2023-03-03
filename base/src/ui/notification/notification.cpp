@@ -56,7 +56,7 @@ namespace gta_base::ui {
   }
 
   void NotificationManager::Create(NotificationType type, std::string title, std::string description, std::uint32_t duration) {
-    LOG_INFO("[NOTIFICATION]: {}\nTitle: {}\n Body: {}", magic_enum::enum_name(type), title, description);
+    LOG_INFO("[NOTIFICATION]: type: {}\nTitle: {}\nBody: {}", magic_enum::enum_name(type), title, description);
     mtx_.lock();
     notifications_.emplace_back(type, std::move(title), std::move(description), duration);
     mtx_.unlock();

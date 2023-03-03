@@ -37,7 +37,7 @@ namespace gta_base::memory {
       ReadBitBufString = ptr.add(1).rip().as<decltype(ReadBitBufString)>();
     });
 
-    main_batch.add(VAR_NAME(ReadBitBufBool), xorstr_("E8 ? ? ? ? 84 C0 74 2D 48 8D 57 20"), [this](scanner::Handle ptr) {
+    main_batch.add(VAR_NAME(ReadBitBufBool), xorstr_("E8 ? ? ? ? 84 C0 74 41 48 8D 56 2C"), [this](scanner::Handle ptr) {
       ReadBitBufBool = ptr.add(1).rip().as<decltype(ReadBitBufBool)>();
     });
 
@@ -203,7 +203,7 @@ namespace gta_base::memory {
     volatile auto fut_3 = std::async(std::launch::async, [&]() {
       LOG_DEBUG("freemode patch 3");
       auto pat3 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 48 ff c7"));
-      for (auto& handle: pat3) {
+      for (auto& handle : pat3) {
         *handle.add(2).as<uint32_t*>() = 0xd2310272;
         *handle.add(6).as<uint16_t*>() = 0x9090;
       }
@@ -212,7 +212,7 @@ namespace gta_base::memory {
     volatile auto fut_4 = std::async(std::launch::async, [&]() {
       LOG_DEBUG("freemode patch 4");
       auto pat4 = mem_region.scan_all(xorstr_("3b 11 0f 83 ? ? ? ? 49 03 fa"));
-      for (auto& handle: pat4) {
+      for (auto& handle : pat4) {
         *handle.add(2).as<uint32_t*>() = 0xd2310272;
         *handle.add(6).as<uint16_t*>() = 0x9090;
       }
