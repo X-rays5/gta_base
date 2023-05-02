@@ -23,6 +23,22 @@ namespace gta_base::hooking {
       wnd_proc_handlers_.emplace_back(wndproc);
     }
 
+    inline void Enable() {
+      if (og_wndproc_)
+        return;
+
+      og_wndproc_ = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProcHook::WndProc)));
+    }
+
+    inline void Disable() {
+      if (!og_wndproc_)
+        return;
+
+      LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(og_wndproc_));
+      LOG_ERROR_CONDITIONAL(!success, "Failed to restore original WndProc: {}", success);
+      og_wndproc_ = nullptr;
+    }
+
   private:
     misc::Spinlock spinlock_;
     WNDPROC og_wndproc_;

@@ -52,32 +52,45 @@ namespace gta_base::d3d {
 
   void MergeFa() {
     static const ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
+    static const float size_pixels = 24;
+
     ImFontConfig icons_config;
     icons_config.MergeMode = true;
     icons_config.PixelSnapH = true;
     icons_config.FontDataOwnedByAtlas = false;
     icons_config.GlyphOffset.y = 5;
+    icons_config.GlyphMinAdvanceX = size_pixels; // make monospaced
 
     static const auto font_awesome = bb::decode_to_vector<std::uint8_t>(bb::get_payload("fa-solid-900.ttf"));
-    ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*) font_awesome.data(), font_awesome.size(), 24, &icons_config, icons_ranges);
+    ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*) font_awesome.data(), font_awesome.size(), size_pixels, &icons_config, icons_ranges);
   }
 
   void Renderer::InitD3D() {
+    LOG_DEBUG("d3d init");
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui_ImplWin32_Init(hwnd_);
     ImGui_ImplDX11_Init(device_.Get(), device_context_.Get());
 
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->Clear();
+
     ImFontConfig cfg;
     cfg.FontDataOwnedByAtlas = false;
-    roboto_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_regular_compressed_data, roboto_regular_compressed_size, 24, &cfg);
+    roboto_ = io.Fonts->AddFontFromMemoryCompressedTTF(roboto_regular_compressed_data, roboto_regular_compressed_size, 24, &cfg);
     MergeFa();
-    roboto_bold_ = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(roboto_bold_compressed_data, roboto_bold_compressed_size, 24, &cfg);
+    roboto_bold_ = io.Fonts->AddFontFromMemoryCompressedTTF(roboto_bold_compressed_data, roboto_bold_compressed_size, 24, &cfg);
     MergeFa();
-    if (!ImGui::GetIO().Fonts->IsBuilt())
-      ImGui::GetIO().Fonts->Build();
+
+    io.Fonts->Build();
 
     last_time_ = common::GetEpoch();
+
+    LOG_CRITICAL_CONDITIONAL(!roboto_, "Main font failed to load");
+    LOG_CRITICAL_CONDITIONAL(!roboto_bold_, "Bold font failed to load");
+
+    LOG_INFO("Loaded {} fonts.", ImGui::GetIO().Fonts->Fonts.size());
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
@@ -86,13 +99,11 @@ namespace gta_base::d3d {
       kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
       kRENDERER->SetLastTime(now);
 
-      ImGui_ImplWin32_NewFrame();
       ImGui_ImplDX11_NewFrame();
+      ImGui_ImplWin32_NewFrame();
       ImGui::NewFrame();
 
-      ImGui::PushFont(kRENDERER->GetFont());
       kSCRIPT_MANAGER->Tick(scriptmanager::ScriptType::kRenderer);
-      ImGui::PopFont();
 
       ImGui::Render();
       ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

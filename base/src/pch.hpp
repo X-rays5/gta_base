@@ -5,9 +5,10 @@
 #pragma once
 #ifndef GTA_BASE_PCH_HPP
 #define GTA_BASE_PCH_HPP
+#include <cstdint>
 #include <Windows.h>
 #include <fmt/format.h>
-#include <cstdint>
+#include <xorstr.hpp>
 #include "logger/logger.hpp"
 #include "misc/common.hpp"
 #include "misc/globals.hpp"

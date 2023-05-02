@@ -8,22 +8,22 @@
 
 namespace gta_base::hooking {
   WndProcHook::WndProcHook() {
-    og_wndproc_ = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProcHook::WndProc)));
-
     kWND_PROC_HOOK = this;
   }
 
   WndProcHook::~WndProcHook() {
     kWND_PROC_HOOK = nullptr;
 
-    LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(og_wndproc_));
-    LOG_ERROR_CONDITIONAL(!success, "Failed to restore original WndProc: {}", success);
+    Disable();
   }
 
   LRESULT CALLBACK WndProcHook::WndProc(HWND window, UINT message, WPARAM parameter_uint_ptr, LPARAM parameter_long_ptr) {
     if (!kWND_PROC_HOOK->og_wndproc_) {
+      LOG_CRITICAL("og wndproc nullptr");
       return 0;
     }
+
+    LRESULT ret_val = CallWindowProcA(kWND_PROC_HOOK->og_wndproc_, window, message, parameter_uint_ptr, parameter_long_ptr);
 
     if (globals::running) {
       kWND_PROC_HOOK->spinlock_.Lock();
@@ -33,6 +33,6 @@ namespace gta_base::hooking {
       kWND_PROC_HOOK->spinlock_.Unlock();
     }
 
-    return CallWindowProcA(kWND_PROC_HOOK->og_wndproc_, window, message, parameter_uint_ptr, parameter_long_ptr);
+    return ret_val;
   }
 }

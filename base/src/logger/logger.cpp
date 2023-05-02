@@ -11,18 +11,20 @@
 //#define DISABLE_EXCEPTION_RECOVERY
 
 namespace gta_base {
-  void SetConsoleMode(HANDLE console_handle) {
-    DWORD console_mode;
-    GetConsoleMode(console_handle, &console_mode);
-    console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-    console_mode &= ~(ENABLE_QUICK_EDIT_MODE);
+  namespace {
+    void SetConsoleMode(HANDLE console_handle) {
+      DWORD console_mode;
+      GetConsoleMode(console_handle, &console_mode);
+      console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+      console_mode &= ~(ENABLE_QUICK_EDIT_MODE);
 
-    ::SetConsoleMode(console_handle, console_mode);
-  }
+      ::SetConsoleMode(console_handle, console_mode);
+    }
 
-  void SaveLogFile(const std::filesystem::path& path) {
-    auto save_path = common::GetLogSaveDir() / path.filename();
-    std::filesystem::rename(path, save_path);
+    void SaveLogFile(const std::filesystem::path& path) {
+      auto save_path = common::GetLogSaveDir() / path.filename();
+      std::filesystem::rename(path, save_path);
+    }
   }
 
   Logger::Logger() {
@@ -135,6 +137,16 @@ namespace gta_base {
   void Logger::SetupExceptionHandler() {
     auto handler = [](PEXCEPTION_POINTERS except) -> LONG {
       auto err_code = except->ExceptionRecord->ExceptionCode;
+
+      if (err_code == EXCEPTION_BREAKPOINT) {
+        #ifdef NDEBUG
+        std::exit(-1);
+        #else
+        LOG_DEBUG("{}\n{}", xorstr_("BREAKPOINT"), logger::stacktrace::GetExceptionString(except, 7));
+        kLOGGER->Flush();
+        return EXCEPTION_CONTINUE_SEARCH;
+        #endif
+      }
 
       // ignore non fatal exceptions
       if (logger::stacktrace::ExceptionCodeToStr(err_code) == "UNKNOWN") {

@@ -9,13 +9,12 @@
 namespace gta_base::scripts {
   void UiDraw::Init() {
     initialized_ = true;
-
-    last_idx_ = ui::kUI_MANAGER->GetDrawList()->GetRenderTarget();
   }
 
   void UiDraw::RunTick() {
     auto draw_list = ui::kUI_MANAGER->GetDrawList();
     if (!ui::kUI_MANAGER || !draw_list) {
+      LOG_WARN("kUI_MANAGER or draw_list is not initialized");
       return;
     }
 

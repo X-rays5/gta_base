@@ -8,6 +8,9 @@
 
 namespace gta_base::scripts {
   void UiTick::Init() {
+    if (!d3d::kRENDERER) // avoid crashes since this can run too early
+      return;
+
     if (ui::kUI_MANAGER) {
       initialized_ = true;
 

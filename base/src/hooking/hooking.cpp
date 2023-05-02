@@ -26,6 +26,8 @@ namespace gta_base {
   }
 
   Hooking::~Hooking() {
+    wnd_proc_hook_inst_.reset();
+
     swap_chain_hook_.Unhook(Hooks::swapchain_present_index);
     swap_chain_hook_.Unhook(Hooks::swapchain_resizebuffers_index);
 
@@ -34,6 +36,8 @@ namespace gta_base {
   }
 
   void Hooking::Enable() {
+    wnd_proc_hook_inst_->Enable();
+
     swap_chain_hook_.Enable(Hooks::swapchain_present_index);
     swap_chain_hook_.Enable(Hooks::swapchain_resizebuffers_index);
 
@@ -46,15 +50,17 @@ namespace gta_base {
   }
 
   void Hooking::Disable() {
-    swap_chain_hook_.Disable(Hooks::swapchain_resizebuffers_index);
-    swap_chain_hook_.Disable(Hooks::swapchain_present_index);
-
     gta_thread_kill_hook_.Disable();
     gta_thread_start_hook_.Disable();
     run_script_threads_hook_.Disable();
     assign_physical_index_hook_.Disable();
     network_player_mgr_shutdown_hook_.Disable();
     network_player_mgr_init_hook_.Disable();
+
+    swap_chain_hook_.Disable(Hooks::swapchain_resizebuffers_index);
+    swap_chain_hook_.Disable(Hooks::swapchain_present_index);
+
+    wnd_proc_hook_inst_->Disable();
   }
 
   HRESULT Hooks::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {

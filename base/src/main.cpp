@@ -139,7 +139,9 @@ void BaseMain() {
 
   LOG_INFO("Initialized");
   while (globals::running) {
-    if (common::IsKeyDown(VK_DELETE))
+    // TODO: uncomment this when input works
+    //if (key_input::kKEYBOARD->IsKeyDown(key_input::Keyboard::INPUT::DELETE))
+    if (GetAsyncKeyState(VK_DELETE))
       globals::running = false;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));

@@ -3,18 +3,20 @@
 //
 
 #pragma once
+#include <cstddef>
+
 #ifndef GTA_BASE_DRAW_HPP
 #define GTA_BASE_DRAW_HPP
 #include <string>
 #include <memory>
 #include <iostream>
-#include <mutex>
 #include <numeric>
 #include <cassert>
 #include <utility>
 #include <stacktrace>
 #include <d3d11.h>
 #include <imgui.h>
+#include "../misc/spinlock.hpp"
 #include "renderer.hpp"
 
 namespace gta_base::d3d::draw {
@@ -84,7 +86,7 @@ namespace gta_base::d3d::draw {
 
   FORCE_INLINE ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
     if (!font)
-      font = ImGui::GetFont();
+      font = kRENDERER->GetFont();
 
     if (!font) {
       LOG_CRITICAL("No valid fonts are loaded");
@@ -105,6 +107,9 @@ namespace gta_base::d3d::draw {
     std::string res;
     for (std::uint32_t i = 0; i < line_count; i++) {
       auto line = lines[i];
+      if (line.empty())
+        continue;
+
       while (line.back() == ' ') {
         line.pop_back();
       }
@@ -119,11 +124,11 @@ namespace gta_base::d3d::draw {
   inline std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::uint32_t max_lines) {
     auto real_max_x = ScaleXToScreen(max_x);
 
-    if (str.empty() || CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
+    if (str.empty() || CalcTextSizeRaw(kRENDERER->GetFont(), font_size, str).x <= real_max_x) {
       return 1; // Wrapping is not needed so just return that there is 1 line
     }
 
-    auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
+    auto char_x_size = CalcTextSizeRaw(kRENDERER->GetFont(), font_size, " ").x;
     auto chars_per_line = (std::uint32_t) (real_max_x / char_x_size);
 
     auto* lines = new std::string[max_lines];
@@ -131,6 +136,9 @@ namespace gta_base::d3d::draw {
     while (!str.empty()) {
       if (line_count >= max_lines) {
         auto last_line = lines[max_lines - 1];
+        if (last_line.size() <= 3)
+          break;
+
         last_line.replace(last_line.end() - 3, last_line.end(), "...");
         lines[max_lines - 1] = last_line;
         break;
@@ -146,7 +154,7 @@ namespace gta_base::d3d::draw {
       }
       line_count += 1;
 
-      if (str.empty() && CalcTextSizeRaw(ImGui::GetFont(), font_size, lines[line_count - 1]).x <= real_max_x) {
+      if (str.empty() && CalcTextSizeRaw(kRENDERER->GetFont(), font_size, lines[line_count - 1]).x <= real_max_x) {
         break;
       }
     }
@@ -240,7 +248,7 @@ namespace gta_base::d3d::draw {
 
     FORCE_INLINE void Draw() final {
       if (!font_) {
-        font_ = ImGui::GetFont();
+        font_ = kRENDERER->GetFont();
       }
 
       if (right_align_) {
@@ -288,24 +296,27 @@ namespace gta_base::d3d::draw {
     explicit DrawList(std::size_t draw_command_buffer_count) {
       assert(draw_command_buffer_count >= 2);
 
-      for (std::size_t i = 0; i < draw_command_buffer_count; ++i) {
-        draw_commands_.push_back(draw_list_t{});
-      }
+      draw_lists_.resize(draw_command_buffer_count);
       draw_list_idx_.resize(draw_command_buffer_count);
-      draw_commands_.shrink_to_fit();
+      for (auto&& draw_list : draw_lists_) {
+        draw_list.resize(initial_draw_commands);
+      }
     }
 
     template<typename T>
+    requires std::is_base_of_v<BaseDrawCommand, T>
     FORCE_INLINE void AddCommand(T command) {
-      std::unique_lock lock(mtx_);
-      draw_commands_[cur_write_target_][draw_list_idx_[cur_write_target_]] = std::make_unique<T>(std::move(command));
-      draw_list_idx_[cur_write_target_] += 1;
+      lock_.Lock();
+
+      GetDrawListAt(GetWriteTarget())[GetWriteIdx()] = std::move(std::make_unique<T>(command));
+
+      lock_.Unlock();
     }
 
     FORCE_INLINE void Draw() {
-      std::unique_lock lock(mtx_);
+      misc::ScopedSpinlock lock(lock_);
       has_drawn_ = true;
-      for (auto&& command : draw_commands_[cur_render_target_]) {
+      for (auto&& command : GetDrawListAt(GetRenderTarget())) {
         if (command != nullptr)
           command->Draw();
         else
@@ -314,10 +325,11 @@ namespace gta_base::d3d::draw {
     }
 
     FORCE_INLINE void NextTargets() {
-      std::unique_lock lock(mtx_);
+      lock_.Lock();
       has_drawn_ = false;
       NextRenderTarget();
       NextWriteTarget();
+      lock_.Unlock();
     }
 
     [[nodiscard]] FORCE_INLINE bool HasDrawn() const {
@@ -333,43 +345,52 @@ namespace gta_base::d3d::draw {
     }
 
   private:
-    // can queue 4096 draw commands per tick. This should be plenty and can always be increased. Since this won't use huge amounts of memory.
-    constexpr static const std::size_t max_draw_commands_ = 4096;
+    constexpr static const std::size_t initial_draw_commands = 4096;
 
-    using draw_list_t = std::array<std::unique_ptr<BaseDrawCommand>, max_draw_commands_>;
-    using draw_commands_t = std::vector<draw_list_t>;
+    using draw_list_t = std::vector<std::unique_ptr<BaseDrawCommand>>;
 
-    std::recursive_mutex mtx_;
+    misc::RecursiveSpinlock lock_;
+
+    /// id of draw_list currently being written to.
     std::size_t cur_write_target_ = 1;
+    /// id of draw_list commands should currently be rendered from
     std::size_t cur_render_target_ = 0;
-    bool has_drawn_ = false;
-    draw_commands_t draw_commands_;
-    std::vector<int> draw_list_idx_;
+
+    std::atomic<bool> has_drawn_ = false;
+
+    std::vector<draw_list_t> draw_lists_;
+    /// Stores the next position in a draw_list to read/write.
+    /// Access with the draw_list id.
+    std::vector<std::size_t> draw_list_idx_;
 
   private:
     FORCE_INLINE void ClearDrawList(std::size_t idx) {
-      draw_list_idx_[idx] = 0;
-      for (int i = 0; i < max_draw_commands_; i++) {
-        if (draw_commands_[idx][i]) {
-          draw_commands_[idx][i].reset();
-        } else {
-          break; // past data
-        }
-      }
+      GetDrawListAt(GetWriteTarget()).clear();
+      GetDrawListAt(GetWriteTarget()).resize(initial_draw_commands);
     }
 
     FORCE_INLINE void NextRenderTarget() {
       cur_render_target_ += 1;
-      if (cur_render_target_ >= draw_commands_.size())
+      if (cur_render_target_ >= draw_lists_.size())
         cur_render_target_ = 0;
     }
 
     FORCE_INLINE void NextWriteTarget() {
       cur_write_target_ += 1;
-      if (cur_write_target_ >= draw_commands_.size())
+      if (cur_write_target_ >= draw_lists_.size())
         cur_write_target_ = 0;
 
       ClearDrawList(cur_write_target_);
+    }
+
+    FORCE_INLINE draw_list_t& GetDrawListAt(std::size_t idx) {
+      LOG_CRITICAL_CONDITIONAL(idx >= draw_lists_.size(), "Requested draw list at idx: {}. Max index: {}", idx, draw_lists_.size() - 1);
+
+      return draw_lists_[idx];
+    }
+
+    FORCE_INLINE std::size_t GetWriteIdx() {
+      return draw_list_idx_[GetWriteTarget()];
     }
   };
 }

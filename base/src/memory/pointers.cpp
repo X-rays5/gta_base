@@ -3,7 +3,6 @@
 //
 
 #include "pointers.hpp"
-#include <xorstr.hpp>
 #include "scanner/all.hpp"
 
 #define VAR_NAME(var) xorstr_(#var)
