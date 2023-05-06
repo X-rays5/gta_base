@@ -12,6 +12,8 @@ namespace gta_base::scripts {
   }
 
   void UiDraw::RunTick() {
+    return;
+
     auto draw_list = ui::kUI_MANAGER->GetDrawList();
     if (!ui::kUI_MANAGER || !draw_list) {
       LOG_WARN("kUI_MANAGER or draw_list is not initialized");

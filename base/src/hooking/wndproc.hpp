@@ -27,21 +27,27 @@ namespace gta_base::hooking {
       if (og_wndproc_)
         return;
 
-      og_wndproc_ = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProcHook::WndProc)));
+      og_wndproc_ = (WNDPROC) SetWindowLongPtr(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, (LONG_PTR) WndProcHook::WndProc);
     }
 
     inline void Disable() {
       if (!og_wndproc_)
         return;
 
-      LONG_PTR success = SetWindowLongPtrW(common::GetHwnd(globals::target_window_class, globals::target_window_name), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(og_wndproc_));
-      LOG_ERROR_CONDITIONAL(!success, "Failed to restore original WndProc: {}", success);
+      auto hwnd = common::GetHwnd(globals::target_window_class, globals::target_window_name);
+
+      LONG_PTR old_wndproc = SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR) og_wndproc_);
+      if ((LONG_PTR) og_wndproc_ != old_wndproc)
+        LOG_DEBUG("WNDPROC unhooked");
+      else
+        LOG_CRITICAL("Failed to disable WNDPROC hook (0x{:X} != 0x{:X})", (LONG_PTR) og_wndproc_, old_wndproc);
+
       og_wndproc_ = nullptr;
     }
 
   private:
     misc::Spinlock spinlock_;
-    WNDPROC og_wndproc_;
+    WNDPROC og_wndproc_ = nullptr;
     std::vector<wnd_proc_t> wnd_proc_handlers_;
 
   private:

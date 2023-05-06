@@ -23,7 +23,7 @@ namespace gta_base::hooking {
       return 0;
     }
 
-    LRESULT ret_val = CallWindowProcA(kWND_PROC_HOOK->og_wndproc_, window, message, parameter_uint_ptr, parameter_long_ptr);
+    LRESULT ret_val = CallWindowProc(kWND_PROC_HOOK->og_wndproc_, window, message, parameter_uint_ptr, parameter_long_ptr);
 
     if (globals::running) {
       kWND_PROC_HOOK->spinlock_.Lock();

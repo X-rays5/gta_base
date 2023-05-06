@@ -94,7 +94,7 @@ namespace gta_base::d3d {
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
-    if (globals::running) {
+    /*if (globals::running && kRENDERER) {
       std::uint64_t now = common::GetEpoch();
       kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
       kRENDERER->SetLastTime(now);
@@ -107,13 +107,13 @@ namespace gta_base::d3d {
 
       ImGui::Render();
       ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-    }
+    }*/
 
     return kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::Present)>(Hooks::swapchain_present_index)(swap_chain, sync_interval, flags);
   }
 
   HRESULT Renderer::SwapChainResizeBuffer(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags) {
-    if (globals::running) {
+    if (globals::running && kRENDERER) {
       ImGui_ImplDX11_InvalidateDeviceObjects();
 
       auto res = kHOOKING->swap_chain_hook_.GetOriginal<decltype(&Hooks::ResizeBuffers)>(Hooks::swapchain_resizebuffers_index)(swap_chain, buffer_count, width, height, new_format, swapchain_flags);

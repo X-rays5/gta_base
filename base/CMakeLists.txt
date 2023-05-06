@@ -51,4 +51,4 @@ target_include_directories(${PROJECT_NAME} PRIVATE ../vendor/binary_bakery)
 target_include_directories(${PROJECT_NAME} PRIVATE ../vendor/discord-rpc/include)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE discord-rpc)
-target_link_libraries(${PROJECT_NAME} PRIVATE xinput)
+#target_link_libraries(${PROJECT_NAME} PRIVATE xinput)

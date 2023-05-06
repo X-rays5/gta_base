@@ -5,10 +5,11 @@
 #include <filesystem>
 #include <chrono>
 #include "logger.hpp"
+#include "spdlog/spdlog.h"
 #include "stack_trace.hpp"
 #include "sinks/on_screen_console.hpp"
 
-//#define DISABLE_EXCEPTION_RECOVERY
+#define DISABLE_EXCEPTION_RECOVERY
 
 namespace gta_base {
   namespace {
@@ -136,6 +137,9 @@ namespace gta_base {
 
   void Logger::SetupExceptionHandler() {
     auto handler = [](PEXCEPTION_POINTERS except) -> LONG {
+      if (!spdlog::default_logger_raw())
+        return EXCEPTION_CONTINUE_SEARCH;
+
       auto err_code = except->ExceptionRecord->ExceptionCode;
 
       if (err_code == EXCEPTION_BREAKPOINT) {
@@ -165,26 +169,27 @@ namespace gta_base {
       }
 
       #ifndef DISABLE_EXCEPTION_RECOVERY
-      if (except->ExceptionRecord->ExceptionAddress && except->ContextRecord->Rip) {
-        if (!kLOGGER->ThreadTooManyExceptions(std::this_thread::get_id())) {
-          auto instruction = common::GetInstructionAtAddr(except->ContextRecord->Rip);
+        if (except->ExceptionRecord->ExceptionAddress && except->ContextRecord->Rip) {
+          if (!kLOGGER->ThreadTooManyExceptions(std::this_thread::get_id())) {
+            auto instruction = common::GetInstructionAtAddr(except->ContextRecord->Rip);
 
-          if (instruction.instruction.length) {
-            kLOGGER->RegisterThreadException(std::this_thread::get_id(), except->ContextRecord->Rip);
+            if (instruction.instruction.length) {
+              kLOGGER->RegisterThreadException(std::this_thread::get_id(), except->ContextRecord->Rip);
 
-            auto next_instruction = except->ContextRecord->Rip + instruction.instruction.length;
-            LOG_WARN("{} Recovery: {} ({:X}) -> {} ({:X})", logger::stacktrace::ExceptionCodeToStr(err_code), common::GetInstructionStr(except->ContextRecord->Rip, instruction), except->ContextRecord->Rip, common::GetInstructionStr(next_instruction), next_instruction);
-            LOG_DEBUG(logger::stacktrace::GetExceptionString(except, 7));
+              auto next_instruction = except->ContextRecord->Rip + instruction.instruction.length;
+              LOG_WARN("{} Recovery: {} ({:X}) -> {} ({:X})", logger::stacktrace::ExceptionCodeToStr(err_code), common::GetInstructionStr(except->ContextRecord->Rip, instruction), except->ContextRecord->Rip, common::GetInstructionStr(next_instruction), next_instruction);
+              LOG_DEBUG(logger::stacktrace::GetExceptionString(except, 7));
 
-            except->ContextRecord->Rip = next_instruction;
+              except->ContextRecord->Rip = next_instruction;
 
-            return EXCEPTION_CONTINUE_EXECUTION;
+              return EXCEPTION_CONTINUE_EXECUTION;
+            }
           }
         }
-      }
-      #endif
 
       LOG_CRITICAL("EXCEPTION Recovery: failed to recover from crash");
+      #endif
+
       LOG_ERROR(logger::stacktrace::GetExceptionString(except, 7));
 
       kLOGGER->Flush();

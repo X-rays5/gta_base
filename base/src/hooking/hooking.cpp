@@ -36,8 +36,6 @@ namespace gta_base {
   }
 
   void Hooking::Enable() {
-    wnd_proc_hook_inst_->Enable();
-
     swap_chain_hook_.Enable(Hooks::swapchain_present_index);
     swap_chain_hook_.Enable(Hooks::swapchain_resizebuffers_index);
 
@@ -47,9 +45,13 @@ namespace gta_base {
     run_script_threads_hook_.Enable();
     gta_thread_start_hook_.Enable();
     gta_thread_kill_hook_.Enable();
+
+    wnd_proc_hook_inst_->Enable();
   }
 
   void Hooking::Disable() {
+    wnd_proc_hook_inst_->Disable();
+
     gta_thread_kill_hook_.Disable();
     gta_thread_start_hook_.Disable();
     run_script_threads_hook_.Disable();
@@ -59,8 +61,6 @@ namespace gta_base {
 
     swap_chain_hook_.Disable(Hooks::swapchain_resizebuffers_index);
     swap_chain_hook_.Disable(Hooks::swapchain_present_index);
-
-    wnd_proc_hook_inst_->Disable();
   }
 
   HRESULT Hooks::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
@@ -74,7 +74,7 @@ namespace gta_base {
   inline void ScriptThreadTick() {
     rage::kINVOKER.CacheHandlers();
 
-    if (globals::running) {
+    if (globals::running && kSCRIPT_MANAGER) {
       rage::util::ExecuteAsScript(RAGE_JOAAT("main_persistent"), [&] {
         static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
 

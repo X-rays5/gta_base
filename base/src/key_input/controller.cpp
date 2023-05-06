@@ -41,7 +41,8 @@ namespace gta_base::key_input {
       XINPUT_KEYSTROKE keystroke;
       ZeroMemory(&keystroke, sizeof(XINPUT_KEYSTROKE));
 
-      auto res_code = XInputGetKeystroke(XUSER_INDEX_ANY, NULL, &keystroke);
+      //auto res_code = XInputGetKeystroke(XUSER_INDEX_ANY, NULL, &keystroke);
+      int res_code = 1;
       if (res_code == ERROR_SUCCESS) {
         if (magic_enum::enum_contains<INPUT>(keystroke.VirtualKey)) {
           misc::ScopedSpinlock scoped_spinlock(that->lock_);

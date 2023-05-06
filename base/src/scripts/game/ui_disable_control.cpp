@@ -13,6 +13,9 @@ namespace gta_base::scripts {
   }
 
   void UIDisablePhone::RunTick() {
+    if (!ui::kUI_MANAGER || !key_input::kINPUT_MGR)
+      return;
+
     if (ui::kUI_MANAGER->GetUI()->ShowUI()) {
       PAD::DISABLE_CONTROL_ACTION(0, 27, true); // disable phone
       PAD::DISABLE_CONTROL_ACTION(0, 288, true); // INPUT_REPLAY_START_STOP_RECORDING

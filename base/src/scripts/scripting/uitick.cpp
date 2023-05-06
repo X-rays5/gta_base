@@ -22,6 +22,7 @@ namespace gta_base::scripts {
   }
 
   void UiTick::RunTick() {
+    return;
     ui::kUI_MANAGER->Tick();
   }
 }

@@ -55,12 +55,12 @@ namespace gta_base::key_input {
     switch (message) {
       case WM_SYSKEYDOWN:
       case WM_KEYDOWN:
-        LOG_DEBUG("{} true", wParam);
+        LOG_DEBUG("{} true", common::VkToStr(wParam));
         kKEYBOARD->SetKeyState(wParam, true);
         break;
       case WM_SYSKEYUP:
       case WM_KEYUP:
-        LOG_DEBUG("{} false");
+        LOG_DEBUG("{} false", common::VkToStr(wParam));
         kKEYBOARD->SetKeyState(wParam, false);
         break;
       default:

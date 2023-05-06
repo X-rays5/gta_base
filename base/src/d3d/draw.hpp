@@ -32,6 +32,8 @@ namespace gta_base::d3d::draw {
   FORCE_INLINE ImVec2 ScaleToScreen(ImVec2 xy) {
     if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
       LOG_WARN("ScaleToScreen: xy out of range: {} {}\n{}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
+
+      return {0, 0};
     }
 
     ImVec2 cur_res = ImGui::GetIO().DisplaySize;
@@ -51,6 +53,8 @@ namespace gta_base::d3d::draw {
 
     if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) { // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
       LOG_WARN("ScaleFromScreen: xy out of range: {} {}\n {}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
+
+      return {0, 0};
     }
 
     xy.x = (xy.x / cur_res.x);
@@ -100,6 +104,9 @@ namespace gta_base::d3d::draw {
   }
 
   FORCE_INLINE ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f) {
+    if (text.empty())
+      return {0, 0};
+
     return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
   }
 
