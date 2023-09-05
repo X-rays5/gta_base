@@ -3,8 +3,19 @@
 //
 
 #pragma once
-#ifndef GTA_BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP
-#define GTA_BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP
+#ifndef BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP
+#define BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP
 #include <Windows.h>
+#include <fmt/format.h>
+#include <xorstr.hpp>
+#include "logging/logging_macro.hpp"
 
-#endif //GTA_BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP
+#ifdef MSVC
+#define FORCE_INLINE __forceinline
+#elif defined(GNU)
+#define FORCE_INLINE __attribute__((always_inline)) inline
+#elif
+#define FORCE_INLINE
+#endif
+
+#endif //BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP

@@ -4,6 +4,7 @@
 
 #include "main.hpp"
 
-int main() {
+int base::menu_main() {
 
+  return 0;
 }
