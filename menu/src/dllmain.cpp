@@ -4,6 +4,7 @@
 
 #include <Windows.h>
 #include "main.hpp"
+#include "util/vfs.hpp"
 
 namespace {
   HINSTANCE dll_inst;
@@ -13,6 +14,8 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason, LPVOID) {
   if (call_reason == DLL_PROCESS_ATTACH) {
     dll_inst = dll_handle;
     CreateThread(nullptr, 0, [](LPVOID) -> DWORD {
+
+      base::util::vfs::SetWorkingDir();
       int exit_code = base::menu_main();
 
       FreeLibraryAndExitThread(dll_inst, exit_code);
