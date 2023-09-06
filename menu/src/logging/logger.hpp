@@ -13,10 +13,9 @@ namespace base::logging {
     ~Manager();
 
   private:
-    void Init();
-    void Shutdown();
+    static void Init();
+    static void Shutdown();
   };
-
   inline Manager* kMANAGER{};
 }
 

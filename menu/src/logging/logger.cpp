@@ -3,12 +3,21 @@
 //
 
 #include "logger.hpp"
+#include <vector>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/async.h>
+#include "../util/vfs.hpp"
+#include "../util/common.hpp"
 
 namespace base::logging {
   namespace {
-    bool SetConsoleMode(HANDLE console_handle) {
+    inline bool SetConsoleMode(HANDLE console_handle) {
       DWORD console_mode;
-      GetConsoleMode(console_handle, &console_mode);
+      if (!GetConsoleMode(console_handle, &console_mode))
+        return false;
+
       console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
       console_mode &= ~(ENABLE_QUICK_EDIT_MODE);
 
@@ -21,15 +30,52 @@ namespace base::logging {
         if (!console_handle)
           return false;
 
-        SetConsoleTitleA("GTAV Base");
+        SetConsoleTitleA(globals::kBASE_NAME);
         SetConsoleOutputCP(CP_UTF8);
 
-        SetConsoleMode(console_handle);
-
-        return true;
+        return SetConsoleMode(console_handle);
       }
 
       return false;
+    }
+
+    inline void SaveLogFile(const std::filesystem::path& path) {
+      auto save_path = util::vfs::GetLoggingSaveDir() / path.filename();
+      std::filesystem::rename(path, save_path);
+    }
+
+    inline std::filesystem::path GetLogFile() {
+      static const auto log_file = std::string(globals::kBASE_NAME) + ".log";
+
+      return util::vfs::GetLoggingDir() / log_file;
+    }
+
+    void MovePossibleCrashLog() {
+      auto log_file_path = GetLogFile();
+      if (std::filesystem::exists(log_file_path)) {
+        auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", util::common::GetTimeStamp(), log_file_path.stem().string(), log_file_path.extension().string());
+        std::filesystem::rename(log_file_path, log_file_path_tmp);
+        SaveLogFile(log_file_path_tmp);
+      }
+    }
+
+    std::shared_ptr<spdlog::async_logger> SetupLoggerInst(const std::string& logger_name) {
+      auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+      auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(GetLogFile().string());
+
+      std::vector<spdlog::sink_ptr> sinks{console_sink, file_sink};
+      auto logger = std::make_shared<spdlog::async_logger>(logger_name, sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+
+      logger->set_pattern("[%T] [%^%l%$] [thread: %t] [%s:%#] %v");
+      logger->set_level(spdlog::level::trace);
+
+      spdlog::register_logger(logger);
+
+      logger->set_error_handler([&](const std::string& err) {
+        logger->critical("spdlog: {}", err);
+      });
+
+      return logger;
     }
   }
 
@@ -49,9 +95,33 @@ namespace base::logging {
       abort();
     }
 
+    MovePossibleCrashLog();
+
+    spdlog::init_thread_pool(spdlog::details::default_async_q_size, 2);
+
+    auto logger = SetupLoggerInst(fmt::format("{}_main_logger", globals::kBASE_NAME));
+    spdlog::set_default_logger(logger);
   }
 
   void Manager::Shutdown() {
+    spdlog::default_logger_raw()->flush();
+    spdlog::drop_all();
+    spdlog::shutdown();
 
+    FreeConsole();
+
+    try {
+      auto log_file = GetLogFile();
+      if (std::filesystem::exists(log_file)) {
+        auto log_file_tmp = log_file.parent_path() / fmt::format("{}_{}{}", util::common::GetTimeStamp(), log_file.stem().string(), log_file.extension().string());
+        std::filesystem::rename(log_file, log_file_tmp);
+
+        SaveLogFile(log_file_tmp);
+      }
+    } catch (std::filesystem::filesystem_error& e) {
+      MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+    }
+
+    kMANAGER = nullptr;
   }
 }

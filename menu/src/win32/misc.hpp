@@ -8,10 +8,10 @@
 
 namespace base::win32 {
   enum class KNOWN_FOLDER_ID : uint32_t {
-    kDocuments, // %USERPROFILE%\Documents
-    kFonts, // %windir%\Fonts
-    kLocalAppData, // %LOCALAPPDATA%
-    kRoamingAppData, // %APPDATA%
+    kDocuments, /// %USERPROFILE%/Documents
+    kFonts, /// %windir%/Fonts
+    kLocalAppData, /// %LOCALAPPDATA%
+    kRoamingAppData, /// %APPDATA%
   };
 
   std::filesystem::path GetKnownFolderPath(KNOWN_FOLDER_ID folder_id);

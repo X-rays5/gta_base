@@ -20,6 +20,9 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/win32/all.hpp
             src/win32/misc.cpp
             src/win32/misc.hpp
+            src/globals.hpp
+            src/util/common.cpp
+            src/util/common.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)

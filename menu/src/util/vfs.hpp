@@ -14,8 +14,8 @@
  }
 
 namespace base::util::vfs {
-  void SetWorkingDir() {
-    auto appdata_path = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData) / "base";
+  inline void SetWorkingDir() {
+    auto appdata_path = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData) / globals::kBASE_NAME;
 
     std::filesystem::create_directories(appdata_path);
     std::filesystem::current_path(appdata_path);

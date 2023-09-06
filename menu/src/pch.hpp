@@ -8,6 +8,7 @@
 #include <Windows.h>
 #include <fmt/format.h>
 #include <xorstr.hpp>
+#include "globals.hpp"
 #include "logging/logging_macro.hpp"
 #include "win32/all.hpp"
 
