@@ -1,0 +1,19 @@
+//
+// Created by xray on 06/09/2023.
+//
+
+#ifndef GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP
+#define GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP
+#include <filesystem>
+
+namespace base::win32 {
+  enum class KNOWN_FOLDER_ID : uint32_t {
+    kDocuments,
+    kFonts,
+    kLocalAppData,
+    kRoamingAppData,
+  };
+
+  std::filesystem::path GetKnownFolderPath(KNOWN_FOLDER_ID folder_id);
+}
+#endif //GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP

@@ -9,6 +9,7 @@
 #include <fmt/format.h>
 #include <xorstr.hpp>
 #include "logging/logging_macro.hpp"
+#include "win32/all.hpp"
 
 #ifdef MSVC
 #define FORCE_INLINE __forceinline
