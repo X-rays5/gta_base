@@ -7,6 +7,8 @@
 
 namespace base::util::common {
   std::uint64_t GetTimeStamp();
+
+  std::string AddrToHex(uint64_t addr);
 }
 
 #endif //GTA_BASE_COMMON_475366A25D554F19A9F0C4ADBC01FCAA_HPP

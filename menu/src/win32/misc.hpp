@@ -15,5 +15,7 @@ namespace base::win32 {
   };
 
   std::filesystem::path GetKnownFolderPath(KNOWN_FOLDER_ID folder_id);
+
+  std::vector<MODULEENTRY32> GetProcessModules(std::uint32_t pid);
 }
 #endif //GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP

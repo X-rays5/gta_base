@@ -23,6 +23,8 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/globals.hpp
             src/util/common.cpp
             src/util/common.hpp
+            src/win32/memory.cpp
+            src/win32/memory.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
