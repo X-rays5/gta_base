@@ -22,12 +22,11 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
 
+include(../vendor/fmt.cmake)
+include(../vendor/spdlog.cmake)
+include(../vendor/xorstr.cmake)
 set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret)
 target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.hpp)
-
-include(../vendor/fmt.cmake)
-include(../vendor/spdlog.cmake)
-include(../vendor/xorstr.cmake)
