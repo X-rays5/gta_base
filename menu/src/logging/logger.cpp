@@ -10,6 +10,7 @@
 #include <spdlog/async.h>
 #include "../util/vfs.hpp"
 #include "../util/common.hpp"
+#include "exception/vectored_handler.hpp"
 
 namespace base::logging {
   namespace {
@@ -81,10 +82,8 @@ namespace base::logging {
 
   Manager::Manager() {
     Init();
-    kMANAGER = this;
   }
   Manager::~Manager() {
-    kMANAGER = nullptr;
     Shutdown();
   }
 
@@ -101,9 +100,13 @@ namespace base::logging {
 
     auto logger = SetupLoggerInst(fmt::format("{}_main_logger", globals::kBASE_NAME));
     spdlog::set_default_logger(logger);
+
+    exception::EnableHandler();
   }
 
   void Manager::Shutdown() {
+    exception::DisableHandler();
+
     spdlog::default_logger_raw()->flush();
     spdlog::drop_all();
     spdlog::shutdown();
@@ -121,7 +124,5 @@ namespace base::logging {
     } catch (std::filesystem::filesystem_error& e) {
       MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
     }
-
-    kMANAGER = nullptr;
   }
 }

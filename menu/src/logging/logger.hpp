@@ -12,11 +12,11 @@ namespace base::logging {
     Manager();
     ~Manager();
 
+    static void Shutdown();
+
   private:
     static void Init();
-    static void Shutdown();
   };
-  inline Manager* kMANAGER{};
 }
 
 #endif //GTA_BASE_LOGGER_B10F4F65142242508AED522F616DA0DA_HPP

@@ -23,8 +23,14 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/globals.hpp
             src/util/common.cpp
             src/util/common.hpp
+            src/logging/exception/stacktrace.cpp
+            src/logging/exception/stacktrace.hpp
+            src/logging/exception/vectored_handler.cpp
+            src/logging/exception/vectored_handler.hpp
             src/win32/memory.cpp
             src/win32/memory.hpp
+            src/logging/exception/util.hpp
+            src/logging/exception/util.cpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
