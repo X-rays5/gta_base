@@ -41,6 +41,8 @@ include(../vendor/spdlog.cmake)
 include(../vendor/xorstr.cmake)
 include(../vendor/robin_hood.cmake)
 include(../vendor/kiero.cmake)
+include(../vendor/imgui.cmake)
+
 set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret)
