@@ -4,6 +4,8 @@
 
 #include "main.hpp"
 
+std::atomic<bool> base::globals::kRUNNING = false;
+
 int base::menu_main() {
 
   return 0;

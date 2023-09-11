@@ -49,4 +49,32 @@ namespace base::win32 {
     CloseHandle(hSnapshot);
     return modules;
   }
+
+  HWND GetHwnd(const char* class_name, const char* window_name) {
+    return FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
+  }
+
+  HWND GetGameHwnd() {
+    static const auto hwnd = GetHwnd(globals::target_window_class, globals::target_window_name);
+    return hwnd;
+  }
+
+  bool IsForegroundWindow() {
+    auto foreground_window = GetForegroundWindow();
+    return foreground_window == GetConsoleWindow() || GetGameHwnd();
+  }
+
+  bool IsTargetProcess() {
+    auto exe_name = new CHAR[MAX_PATH];
+    std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name, MAX_PATH);
+
+    if (str_len == 0) {
+      LOG_ERROR("Failed to get module file name. win32 err code: {}", GetLastError());
+      return false;
+    }
+
+    bool is_target_process = std::filesystem::path(std::string(exe_name, str_len)).filename().string() == globals::target_process_name;
+    delete[] exe_name;
+    return is_target_process;
+  }
 }
