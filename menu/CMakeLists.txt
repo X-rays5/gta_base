@@ -12,8 +12,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/render/draw.hpp
             src/render/manager.cpp
             src/render/manager.hpp
-            src/render/render_hook.cpp
-            src/render/render_hook.hpp
             src/logging/logger.cpp
             src/logging/logger.hpp
             src/logging/logging_macro.hpp
@@ -32,6 +30,8 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/win32/memory.hpp
             src/logging/exception/util.hpp
             src/logging/exception/util.cpp
+            src/render/draw_util.cpp
+            src/render/draw_util.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
@@ -45,6 +45,7 @@ include(../vendor/kiero.cmake)
 include(../vendor/imgui.cmake)
 include(../vendor/leopard.cmake)
 include(../vendor/abseil.cmake)
+include(../vendor/magic_enum.cmake)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)

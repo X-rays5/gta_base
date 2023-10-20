@@ -5,6 +5,8 @@
 #include "main.hpp"
 #include <ThreadPool/ThreadPool.h>
 
+std::atomic<bool> base::globals::kRUNNING = false;
+
 int base::menu_main() {
   hmthrp::ThreadPool thread_pool(std::thread::hardware_concurrency());
 
