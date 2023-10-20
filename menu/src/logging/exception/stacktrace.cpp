@@ -9,7 +9,7 @@
 
 namespace base::logging::exception {
   namespace {
-     std::string RemoveDoubleSpaces(const std::string& str) {
+    std::string RemoveDoubleSpaces(const std::string& str) {
       std::string result;
       for (auto it = str.begin(); it != str.end(); ++it) {
         if (it != str.begin() && *it == ' ' && *(it - 1) == ' ')
@@ -44,7 +44,7 @@ namespace base::logging::exception {
     }
   }
 
-  std::string GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
+  absl::StatusOr<std::string> GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
     #ifndef NDEBUG
     //__debugbreak();
     #endif
@@ -55,14 +55,24 @@ namespace base::logging::exception {
     msg << "***** Exception name: " << ExceptionCodeToStr(except_rec->ExceptionCode) << " *****\n";
     msg << "***** Exception code: " << util::common::AddrToHex(except_rec->ExceptionCode) << " *****\n";
     msg << "***** Exception pid: " << GetCurrentProcessId() << " *****\n";
-    msg << "***** Exception module: " << win32::memory::GetModuleNameFromAddress(GetCurrentProcessId(), ctx->Rip) << " *****\n";
+
+    auto except_mod_res = win32::memory::GetModuleNameFromAddress(GetCurrentProcessId(), ctx->Rip);
+    if (!except_mod_res.ok())
+      return except_mod_res.status();
+
+    msg << "***** Exception module: " << except_mod_res.value() << " *****\n";
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
     //msg << "***** Exception instruction: " << common::GetInstructionStr((std::uintptr_t) except_rec->ExceptionAddress) << " *****\n"; TODO: impl zydis decomp
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
     msg << "\n***** STACKDUMP *****\n";
 
     msg << "\nLoaded Modules:\n";
-    std::vector<MODULEENTRY32> modules = win32::GetProcessModules(GetCurrentProcessId());
+
+    auto mod_res = win32::GetProcessModules(GetCurrentProcessId());
+    if (!mod_res.ok())
+      return mod_res.status();
+
+    std::vector<MODULEENTRY32> modules = mod_res.value();
     for (auto&& mod : modules) {
       msg << mod.szExePath << " addr: " << util::common::AddrToHex(reinterpret_cast<std::uintptr_t>(mod.modBaseAddr)) << " size: " << util::common::AddrToHex(mod.modBaseSize);
       msg << '\n';

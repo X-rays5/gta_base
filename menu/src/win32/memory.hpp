@@ -7,10 +7,10 @@
 #include <TlHelp32.h>
 
 namespace base::win32::memory {
-  std::uintptr_t GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name);
-  MODULEENTRY32 GetModuleFromAddress(std::uint32_t pid, std::uintptr_t addr);
-  std::string GetModuleNameFromAddress(std::uint32_t pid, std::uintptr_t addr);
-  uintptr_t GetModuleOffsetFromAddress(std::uint32_t pid, std::uintptr_t addr);
+  absl::StatusOr<std::uintptr_t> GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name);
+  absl::StatusOr<MODULEENTRY32> GetModuleFromAddress(std::uint32_t pid, std::uintptr_t addr);
+  absl::StatusOr<std::string> GetModuleNameFromAddress(std::uint32_t pid, std::uintptr_t addr);
+  absl::StatusOr<uintptr_t> GetModuleOffsetFromAddress(std::uint32_t pid, std::uintptr_t addr);
 }
 
 #endif //GTA_BASE_MEMORY_6E2CBAF0C25F49E69A8329E5694C9C0B_HPP

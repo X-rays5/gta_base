@@ -12,8 +12,16 @@ namespace base::logging::exception {
     void MSVCException(PEXCEPTION_POINTERS except) {
       std::uint32_t pid = GetCurrentProcessId();
 
-      auto mod_name = win32::memory::GetModuleNameFromAddress(pid, except->ContextRecord->Rip);
-      auto offset = win32::memory::GetModuleOffsetFromAddress(pid, except->ContextRecord->Rip);
+      auto mod_name_res = win32::memory::GetModuleNameFromAddress(pid, except->ContextRecord->Rip);
+      std::string mod_name;
+      if (mod_name_res.ok())
+        mod_name = mod_name_res.value();
+      
+      auto offset_res = win32::memory::GetModuleOffsetFromAddress(pid, except->ContextRecord->Rip);
+      std::uintptr_t offset;
+      if (offset_res.ok())
+        offset = offset_res.value();
+
       auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
 
       if (exception && exception->what()) {
@@ -43,7 +51,9 @@ namespace base::logging::exception {
 
       // TODO: implement some cursed fatal exception recovery
 
-      GetStackTrace(except, 7);
+      auto stacktrace_res = GetStackTrace(except, 7);
+      if (stacktrace_res.ok())
+        LOG_CRITICAL(stacktrace_res.value());
 
       spdlog::default_logger_raw()->flush();
       std::this_thread::sleep_for(std::chrono::seconds(10));

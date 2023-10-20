@@ -15,12 +15,18 @@
 
 namespace base::util::vfs {
   inline void SetWorkingDir() {
-    auto appdata_path = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData) / globals::kBASE_NAME;
+    auto app_path_res = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData);
+    if (!app_path_res.ok()) {
+      LOG_CRITICAL("Failed to get appdata path: {}", app_path_res.status().ToString());
+      abort();
+    }
+
+    auto appdata_path = app_path_res.value() / globals::kBASE_NAME;
 
     std::filesystem::create_directories(appdata_path);
     std::filesystem::current_path(appdata_path);
   }
-  
+
   GET_PATH(LoggingDir, "logs")
   GET_PATH(LoggingSaveDir, "logs/saved")
 }
