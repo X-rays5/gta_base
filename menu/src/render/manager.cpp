@@ -6,6 +6,7 @@
 #include <dxgi.h>
 #include <kiero.h>
 #include <imgui.h>
+#include <d3d10_1.h>
 #include <imgui_impl_dx10.h>
 #include <d3d10.h>
 #include <d3d11.h>
@@ -23,7 +24,7 @@ namespace base::render {
     void InitImGui(IDXGISwapChain* swap_chain) {
       IMGUI_CHECKVERSION();
       ImGui::CreateContext();
-      ImGui_ImplWin32_Init(win32::GetGameHwnd());
+      ImGui_ImplWin32_Init(win32::GetGameHwnd().value());
 
       void* device{};
       swap_chain->GetDevice(__uuidof(ID3D11Device), &device);
@@ -65,9 +66,7 @@ namespace base::render {
         IMGUI_CALL_RENDER_BACKEND(NewFrame);
         ImGui::NewFrame();
 
-        for (auto&& cb : kMANAGER->GetRenderCallbacks()) {
-          cb();
-        }
+        kMANAGER->GetDrawQueueBuffer()->RenderFrame();
 
         ImGui::Render();
         IMGUI_CALL_RENDER_BACKEND(RenderDrawData, ImGui::GetDrawData());

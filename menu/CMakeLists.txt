@@ -8,7 +8,6 @@ set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/main.cpp
             src/main.hpp
-            src/render/draw.cpp
             src/render/draw.hpp
             src/render/manager.cpp
             src/render/manager.hpp
@@ -32,6 +31,11 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/logging/exception/util.cpp
             src/render/draw_util.cpp
             src/render/draw_util.hpp
+            src/render/draw_commands.hpp
+            src/util/spinlock.cpp
+            src/util/spinlock.hpp
+            src/render/thread.cpp
+            src/render/thread.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)

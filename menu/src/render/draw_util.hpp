@@ -25,5 +25,7 @@ namespace base::render::util {
 
   // TODO: Make a non monospace version of this.
   std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::uint32_t max_lines);
+
+  ImDrawList* GetDrawList();
 }
 #endif //GTA_BASE_DRAW_UTIL_AE07DB6C33FB43E1B6FE62992EE1D737_HPP

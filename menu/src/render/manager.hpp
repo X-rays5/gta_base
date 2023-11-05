@@ -16,8 +16,9 @@ namespace base::render {
     Manager();
     ~Manager();
 
-    inline Draw GetDraw() {
-      return draw_;
+    /// @note This pointer can die at any time, so don't store it.
+    inline DrawQueueBuffer* GetDrawQueueBuffer() {
+      return &draw_queue_buffer_;
     }
 
     inline void* GetPresentOg() {
@@ -38,13 +39,14 @@ namespace base::render {
 
   private:
     std::vector<render_cb_t> render_callbacks_;
-    Draw draw_;
+    DrawQueueBuffer draw_queue_buffer_;
     void* present_og_;
     void* resize_buffers_og_;
 
   private:
 
   };
+
   inline Manager* kMANAGER{};
 }
 #endif //BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
