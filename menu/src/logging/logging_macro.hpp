@@ -66,7 +66,7 @@
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
-#define GTA_BASE_ASSERT(condition, ...) LOG_DEBUG_CONDITIONAL(!(condition), __VA_ARGS__)
+#define GTA_BASE_ASSERT(condition, ...) LOG_DEBUG_CONDITIONAL(!(condition), __VA_ARGS__); assert(condition)
 #else
 #define GTA_BASE_ASSERT(condition, ...) (void)0
 #endif
