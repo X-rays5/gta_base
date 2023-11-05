@@ -7,6 +7,7 @@
 #include "main.hpp"
 #include "util/vfs.hpp"
 #include "logging/logger.hpp"
+#include "win32/misc.hpp"
 
 namespace {
   HINSTANCE dll_inst;
@@ -21,8 +22,14 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason, LPVOID) {
 
       int exit_code = EXIT_FAILURE;
       try {
-       auto logger_inst = std::make_unique<base::logging::Manager>();
-        exit_code = base::menu_main();
+        auto logger_inst = std::make_unique<base::logging::Manager>();
+
+        if (base::win32::GetGameHwnd().ok() && base::win32::IsTargetProcess()) {
+          exit_code = base::menu_main();
+        } else {
+          LOG_CRITICAL("Process doesn't seem to be GTA V, aborting...");
+        }
+
         logger_inst.reset();
       } catch (std::exception& e) {
         MessageBoxA(nullptr, fmt::format("An exception occurred on the main thread: {}", e.what()).c_str(), "Critical exception main thread", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);

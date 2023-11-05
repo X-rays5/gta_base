@@ -50,31 +50,31 @@ namespace base::win32 {
     return modules;
   }
 
-  HWND GetHwnd(const char* class_name, const char* window_name) {
-    return FindWindowA(!strcmp(class_name, "") ? nullptr : class_name, !strcmp(window_name, "") ? nullptr : window_name);
+  absl::StatusOr<HWND> GetHwnd(std::string_view window_class, std::string_view window_name) {
+    return FindWindowA(window_class == "" ? nullptr : window_class.data(), window_name == "" ? nullptr : window_name.data());
   }
 
-  HWND GetGameHwnd() {
+  absl::StatusOr<HWND> GetGameHwnd() {
     static const auto hwnd = GetHwnd(globals::target_window_class, globals::target_window_name);
     return hwnd;
   }
 
   bool IsForegroundWindow() {
     auto foreground_window = GetForegroundWindow();
-    return foreground_window == GetConsoleWindow() || GetGameHwnd();
+    return foreground_window == GetConsoleWindow() || GetGameHwnd().value();
   }
 
   bool IsTargetProcess() {
-    auto exe_name = new CHAR[MAX_PATH];
-    std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name, MAX_PATH);
+    auto exe_name = std::make_unique<CHAR[]>(MAX_PATH);
+    std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name.get(), MAX_PATH);
 
     if (str_len == 0) {
       LOG_ERROR("Failed to get module file name. win32 err code: {}", GetLastError());
       return false;
     }
 
-    bool is_target_process = std::filesystem::path(std::string(exe_name, str_len)).filename().string() == globals::target_process_name;
-    delete[] exe_name;
-    return is_target_process;
+    std::string cur_proc_name = std::filesystem::path(std::string(exe_name.get(), str_len)).filename().string();
+
+    return cur_proc_name == globals::target_process_name;
   }
 }
