@@ -9,13 +9,15 @@ std::atomic<bool> base::globals::kRUNNING = false;
 
 int base::menu_main() {
   hmthrp::ThreadPool thread_pool(std::thread::hardware_concurrency());
+  LOG_INFO("[INIT] Created thread pool with {} threads", std::thread::hardware_concurrency());
 
-  auto fut = thread_pool.dispatch(false, [] {
-    std::string hello_world = "Hello World!";
-    return hello_world;
-  });
+  while (globals::kRUNNING) {
+    if (GetAsyncKeyState(VK_END))
+      break;
+  }
 
-  LOG_INFO(fut.get());
+  thread_pool.shutdown();
+  LOG_INFO("[SHUTDOWN] Thread pool has been shutdown");
 
   return 0;
 }
