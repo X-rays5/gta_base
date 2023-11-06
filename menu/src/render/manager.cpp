@@ -43,15 +43,7 @@ namespace base::render {
 
     void ShutdownImGui() {
       ImGui_ImplWin32_Shutdown();
-
-      if (render_api == kiero::RenderType::D3D10 || render_api == kiero::RenderType::D3D10_1) {
-        ImGui_ImplDX10_Shutdown();
-      } else if (render_api == kiero::RenderType::D3D11) {
-        ImGui_ImplDX11_Shutdown();
-      } else {
-        LOG_CRITICAL("Unsupported render api was encountered when shutting down renderer");
-      }
-
+      IMGUI_CALL_RENDER_BACKEND(Shutdown);
       ImGui::DestroyContext();
     }
 
