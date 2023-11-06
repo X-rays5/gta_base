@@ -8,6 +8,8 @@
 #include "draw_util.hpp"
 #include <d3d11.h>
 
+// TODO: move most of this file to a cpp file
+
 namespace base::render {
   class BaseDrawCommand {
   public:
@@ -34,27 +36,32 @@ namespace base::render {
 
   class RectOutline : public BaseDrawCommand {
   public:
-    RectOutline(ImVec2 pos, ImVec2 size, ImU32 color) :
-    pos_(pos), size_(size), color_(color) {}
+    RectOutline(ImVec2 pos, ImVec2 size, ImU32 color, float thickness = 1.0f) :
+    pos_(pos), size_(size), color_(color), thickness_(thickness) {}
 
     void Draw() final {
-      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_);
+      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.f,NULL, thickness_);
     }
 
   private:
     ImVec2 pos_;
     ImVec2 size_;
     ImU32 color_;
+    float thickness_;
   };
 
   class Text : public BaseDrawCommand {
   public:
-    Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, const ImFont* font = nullptr) :
-    pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), font_(font) {}
+    Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
+    pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
 
-    void Draw() final {
+    void Draw() override {
       if (!font_) {
         font_ = ImGui::GetFont();
+      }
+
+      if (max_width_ > 0.f) {
+        util::WordWrap(y_size_text_, text_, max_width_, max_lines_);
       }
 
       if (right_align_) {
@@ -69,14 +76,52 @@ namespace base::render {
       util::GetDrawList()->AddText(font_, util::ScaleFont(y_size_text_), util::ScaleToScreen(pos_), color_, text_.c_str());
     }
 
-  private:
+  protected:
     ImVec2 pos_;
     ImU32 color_;
     std::string text_;
     bool right_align_;
     bool center_;
     float y_size_text_;
+    float max_width_;
+    std::size_t max_lines_;
     const ImFont* font_;
+  };
+
+  class TextBackground : Text {
+  public:
+    TextBackground(ImVec2 pos, ImU32 text_color, ImU32 background_color, std::string text, bool right_align, bool center, float y_size_text, float padding_side = 0.01f, float padding_bottom_top = 0.01f, bool border = false, ImU32 border_color = NULL, float border_thickness = 1.f, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
+    Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font), rect_({}, {}, {}), rect_outline_({}, {}, {}),
+    border_(border)
+    {
+      ImVec2 rect_pos = pos_;
+      rect_pos.x -= padding_side;
+      rect_pos.y -= padding_bottom_top;
+
+      ImVec2 rect_size = util::CalcTextSize(font_, y_size_text_, text_);
+      rect_size.x += (padding_side * 2);
+      rect_size.y += (padding_bottom_top * 2);
+
+      rect_ = Rect(rect_pos, rect_size, background_color);
+
+      if (border_) {
+        rect_outline_ = RectOutline(rect_pos, rect_size, border_color, border_thickness);
+      }
+    }
+
+    void Draw() final {
+      rect_.Draw();
+      if (border_) {
+        rect_outline_.Draw();
+      }
+
+      Text::Draw();
+    }
+
+  private:
+    Rect rect_;
+    RectOutline rect_outline_;
+    bool border_;
   };
 
   class Image : public BaseDrawCommand {
@@ -99,7 +144,7 @@ namespace base::render {
 
   class RunRenderCode : public BaseDrawCommand {
   public:
-    RunRenderCode(std::function<void()> render_code) :
+    explicit RunRenderCode(std::function<void()> render_code) :
     render_code_(std::move(render_code)) {}
 
     void Draw() final {
