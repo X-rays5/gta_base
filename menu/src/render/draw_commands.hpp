@@ -24,11 +24,11 @@ namespace base::render {
     Rect(ImVec2 pos, ImVec2 size, ImU32 color) :
     pos_(pos), size_(size), color_(color) {}
 
-    void Draw() final {
+    void Draw() override {
       util::GetDrawList()->AddRectFilled(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_);
     }
 
-  private:
+  protected:
     ImVec2 pos_;
     ImVec2 size_;
     ImU32 color_;
@@ -47,6 +47,35 @@ namespace base::render {
     ImVec2 pos_;
     ImVec2 size_;
     ImU32 color_;
+    float thickness_;
+  };
+
+  class RectBorder : Rect {
+  public:
+    RectBorder(ImVec2 pos, ImVec2 size, ImU32 background_color, ImU32 border_color, bool top, bool bottom, bool left, bool right, float thickness = 0.005f) :
+    Rect(pos, size, background_color), border_color_(border_color), top_(top), bottom_(bottom), left_(left), right_(right), thickness_(thickness) {}
+
+    void Draw() final {
+      Rect::Draw();
+
+      auto draw_list = util::GetDrawList();
+
+      if (top_)
+        draw_list->AddLine(util::ScaleToScreen(pos_), util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y)), border_color_, thickness_);
+      if (bottom_)
+        draw_list->AddLine(util::ScaleToScreen(ImVec2(pos_.x, pos_.y + size_.y)), util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y + size_.y)), border_color_, thickness_);
+      if (left_)
+        draw_list->AddLine(util::ScaleToScreen(pos_), util::ScaleToScreen(ImVec2(pos_.x, pos_.y + size_.y)), border_color_, thickness_);
+      if (right_)
+        draw_list->AddLine(util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y)), util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y + size_.y)), border_color_, thickness_);
+    }
+
+  private:
+    ImU32 border_color_;
+    bool top_;
+    bool bottom_;
+    bool left_;
+    bool right_;
     float thickness_;
   };
 
@@ -90,9 +119,9 @@ namespace base::render {
 
   class TextBackground : Text {
   public:
-    TextBackground(ImVec2 pos, ImU32 text_color, ImU32 background_color, std::string text, bool right_align, bool center, float y_size_text, float padding_side = 0.01f, float padding_bottom_top = 0.01f, bool border = false, ImU32 border_color = NULL, float border_thickness = 1.f, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
-    Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font), rect_({}, {}, {}), rect_outline_({}, {}, {}),
-    border_(border)
+    TextBackground(ImVec2 pos, ImU32 text_color, ImU32 background_color, std::string text, bool right_align, bool center, float y_size_text, float padding_side = 0.01f, float padding_bottom_top = 0.01f, bool border_top = false, bool border_bottom = false, bool border_left = false, bool border_right = false, ImU32 border_color = NULL, float border_thickness = 1.f, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
+    Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font),
+    rect_({}, {}, {}, {}, {}, {}, {}, {})
     {
       ImVec2 rect_pos = pos_;
       rect_pos.x -= padding_side;
@@ -102,26 +131,16 @@ namespace base::render {
       rect_size.x += (padding_side * 2);
       rect_size.y += (padding_bottom_top * 2);
 
-      rect_ = Rect(rect_pos, rect_size, background_color);
-
-      if (border_) {
-        rect_outline_ = RectOutline(rect_pos, rect_size, border_color, border_thickness);
-      }
+      rect_ = RectBorder(rect_pos, rect_size, background_color, border_color, border_top, border_bottom, border_left, border_right, border_thickness);
     }
 
     void Draw() final {
       rect_.Draw();
-      if (border_) {
-        rect_outline_.Draw();
-      }
-
       Text::Draw();
     }
 
   private:
-    Rect rect_;
-    RectOutline rect_outline_;
-    bool border_;
+    RectBorder rect_;
   };
 
   class Image : public BaseDrawCommand {
