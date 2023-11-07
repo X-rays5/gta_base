@@ -29,16 +29,7 @@ namespace base::render {
       return resize_buffers_og_;
     }
 
-    inline void AddRenderCallback(const render_cb_t& cb) {
-      render_callbacks_.push_back(cb);
-    }
-
-    inline std::vector<render_cb_t>& GetRenderCallbacks() {
-      return render_callbacks_;
-    }
-
   private:
-    std::vector<render_cb_t> render_callbacks_;
     DrawQueueBuffer draw_queue_buffer_;
     void* present_og_;
     void* resize_buffers_og_;

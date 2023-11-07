@@ -7,7 +7,6 @@
 #include "main.hpp"
 #include "util/vfs.hpp"
 #include "logging/logger.hpp"
-#include "win32/misc.hpp"
 
 namespace {
   HINSTANCE dll_inst;
