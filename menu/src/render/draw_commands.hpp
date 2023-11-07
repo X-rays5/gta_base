@@ -14,7 +14,7 @@ namespace base::render {
   class BaseDrawCommand {
   public:
     BaseDrawCommand() = default;
-    virtual ~BaseDrawCommand() = 0;
+    virtual ~BaseDrawCommand() = default;
 
     virtual void Draw() = 0;
   };

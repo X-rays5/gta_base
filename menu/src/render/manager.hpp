@@ -7,12 +7,11 @@
 #define BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
 #include "draw.hpp"
 #include <functional>
+#include "thread.hpp"
 
 namespace base::render {
   class Manager {
   public:
-    using render_cb_t = std::function<void()>;
-
     Manager();
     ~Manager();
 
@@ -31,6 +30,7 @@ namespace base::render {
 
   private:
     DrawQueueBuffer draw_queue_buffer_;
+    std::unique_ptr<Thread> render_thread_;
     void* present_og_;
     void* resize_buffers_og_;
 

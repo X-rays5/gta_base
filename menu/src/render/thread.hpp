@@ -7,7 +7,6 @@
 #define GTA_BASE_THREAD_E1B5110495AF4A36A7A7D235FBB8EC7D_HPP
 #include <functional>
 #include <vector>
-#include "manager.hpp"
 #include "draw.hpp"
 
 namespace base::render {

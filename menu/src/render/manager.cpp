@@ -41,7 +41,7 @@ namespace base::render {
       }
     }
 
-    void ShutdownImGui() {
+    inline void ShutdownImGui() {
       ImGui_ImplWin32_Shutdown();
       IMGUI_CALL_RENDER_BACKEND(Shutdown);
       ImGui::DestroyContext();
@@ -83,6 +83,8 @@ namespace base::render {
   }
 
   Manager::Manager() {
+    kMANAGER = this;
+
     if (auto status = kiero::init(kiero::RenderType::Auto); status != kiero::Status::Success) {
       LOG_CRITICAL("Kiero failed to init: {}", magic_enum::enum_name(status));
       abort(); //TODO: should implement something to abort loading and do a clean exit
@@ -91,9 +93,13 @@ namespace base::render {
 
     kiero::bind(8, &present_og_, &Present);
     kiero::bind(13, &resize_buffers_og_, &ResizeBuffers);
+
+    render_thread_ = std::make_unique<Thread>();
   }
 
   Manager::~Manager() {
+    render_thread_.reset();
+
     kMANAGER = nullptr;
 
     ShutdownImGui();

@@ -3,6 +3,7 @@
 //
 
 #include "thread.hpp"
+#include "manager.hpp"
 
 namespace base::render {
   Thread::Thread() {
@@ -15,14 +16,25 @@ namespace base::render {
 
   void Thread::RenderMain() {
     while (globals::kRUNNING) {
-      if (kTHREAD) {
+      if (kTHREAD && kMANAGER) {
         auto buffer = kMANAGER->GetDrawQueueBuffer();
 
         for (auto& cb : kTHREAD->GetRenderCallbacks()) {
+          if (!buffer) {
+            if (globals::kRUNNING) {
+              LOG_ERROR("DrawQueueBuffer is null. Skipping render tick.");
+              break;
+            }
+
+            LOG_INFO("Render thread is assuming shutdown. Exiting render thread...");
+            break;
+          }
+
           cb(buffer);
         }
 
-        buffer->SwapBuffers();
+        if (buffer)
+          buffer->SwapBuffers();
       }
     }
   }

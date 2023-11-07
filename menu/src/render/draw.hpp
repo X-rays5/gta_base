@@ -28,7 +28,7 @@ namespace base::render {
       }
     }
 
-    void Clear() {
+    FORCE_INLINE void Clear() {
       draw_commands_.clear();
     }
 
@@ -50,7 +50,13 @@ namespace base::render {
       read_notification_ = std::make_unique<absl::Notification>();
     }
 
-    FORCE_INLINE void RenderFrame() {
+    ~DrawQueueBuffer() {
+      // Just in case to prevent a deadlock on shutdown.
+      ::base::util::ScopedSpinlock lock(spinlock_);
+      read_notification_->Notify();
+    }
+
+    inline void RenderFrame() {
       ::base::util::ScopedSpinlock lock(spinlock_);
       draw_queue_[read_idx_].Draw();
       read_notification_->Notify();
@@ -58,12 +64,12 @@ namespace base::render {
 
     /// @note This function should ONLY be called from the render thread.
     template<typename ...Args>
-    FORCE_INLINE void AddCommand(Args&& ... command) {
+    inline void AddCommand(Args&& ... command) {
       draw_queue_[write_idx_].AddCommand(std::forward<Args>(command)...);
     }
 
-    /// @note This function should ONLY be called from the render thread.
-    FORCE_INLINE void SwapBuffers() {
+    /// @warning This function may ONLY be called from Thread::RenderMain().
+    void SwapBuffers() {
       spinlock_.Lock();
 
       read_idx_ = write_idx_;
@@ -72,7 +78,7 @@ namespace base::render {
 
       spinlock_.Unlock();
 
-      WaitForRead();
+      read_notification_->WaitForNotification();
 
       spinlock_.Lock();
       read_notification_ = std::make_unique<absl::Notification>();
@@ -85,11 +91,6 @@ namespace base::render {
     std::size_t write_idx_;
     ::base::util::Spinlock spinlock_;
     std::unique_ptr<absl::Notification> read_notification_;
-
-  private:
-    inline void WaitForRead() {
-      read_notification_->WaitForNotification();
-    }
   };
 }
 #endif //BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP
