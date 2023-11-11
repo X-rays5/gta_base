@@ -64,4 +64,22 @@ namespace base::win32::memory {
 
     return addr - reinterpret_cast<std::uintptr_t>(mod_addr->modBaseAddr);
   }
+
+  absl::StatusOr<MODULEENTRY32> GetModuleFromHModule(HMODULE mod) {
+    MODULEENTRY32 mod_entry{};
+    mod_entry.dwSize = sizeof(MODULEENTRY32);
+    const HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+    if (hSnapshot == INVALID_HANDLE_VALUE) {
+      return absl::InvalidArgumentError("PID is an invalid handle");
+    }
+    if (Module32First(hSnapshot, &mod_entry)) {
+      do {
+        if (mod_entry.hModule == mod) {
+          break;
+        }
+      } while (Module32Next(hSnapshot, &mod_entry));
+    }
+    CloseHandle(hSnapshot);
+    return mod_entry;
+  }
 }

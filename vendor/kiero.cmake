@@ -6,4 +6,4 @@ set(KIERO_USE_POLYHOOK2 OFF CACHE BOOL "" FORCE)
 
 cpmaddpackage("gh:X-rays5/kiero#master")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE kiero)
+target_link_libraries(${PROJECT_NAME} PRIVATE kiero::kiero)

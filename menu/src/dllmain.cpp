@@ -29,6 +29,7 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason, LPVOID) {
           LOG_CRITICAL("Process doesn't seem to be GTA V, aborting...");
         }
 
+        LOG_INFO("This is it... Goodbye!");
         logger_inst.reset();
       } catch (std::exception& e) {
         MessageBoxA(nullptr, fmt::format("An exception occurred on the main thread: {}", e.what()).c_str(), "Critical exception main thread", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
@@ -37,4 +38,6 @@ BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason, LPVOID) {
       FreeLibraryAndExitThread(dll_inst, exit_code);
     }, nullptr, 0, nullptr);
   }
+  
+  return TRUE;
 }

@@ -36,6 +36,17 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/util/spinlock.hpp
             src/render/thread.cpp
             src/render/thread.hpp
+            src/memory/scanner/all.hpp
+            src/memory/scanner/fwdec.hpp
+            src/memory/scanner/handle.hpp
+            src/memory/scanner/module.cpp
+            src/memory/scanner/module.hpp
+            src/memory/scanner/pattern.cpp
+            src/memory/scanner/pattern.hpp
+            src/memory/scanner/range.cpp
+            src/memory/scanner/range.hpp
+            src/memory/scanner/sig_batch_scan.cpp
+            src/memory/scanner/sig_batch_scan.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
@@ -50,8 +61,12 @@ include(../vendor/imgui.cmake)
 include(../vendor/leopard.cmake)
 include(../vendor/abseil.cmake)
 include(../vendor/magic_enum.cmake)
+include(../vendor/inireader.cmake)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+target_include_directories(${PROJECT_NAME} PRIVATE "${imgui_SOURCE_DIR}")
+target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret)
 target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)

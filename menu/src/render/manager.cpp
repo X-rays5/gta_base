@@ -7,11 +7,11 @@
 #include <kiero.h>
 #include <imgui.h>
 #include <d3d10_1.h>
-#include <imgui_impl_dx10.h>
+#include <backends/imgui_impl_dx10.h>
 #include <d3d10.h>
 #include <d3d11.h>
-#include <imgui_impl_dx11.h>
-#include <imgui_impl_win32.h>
+#include <backends/imgui_impl_dx11.h>
+#include <backends/imgui_impl_win32.h>
 #include <magic_enum.hpp>
 
 #define IMGUI_CALL_RENDER_BACKEND(fn, ...) render_api == kiero::RenderType::D3D11 ? ImGui_ImplDX11_##fn(__VA_ARGS__) : ImGui_ImplDX10_##fn(__VA_ARGS__)
