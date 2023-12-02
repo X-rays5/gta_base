@@ -4,7 +4,7 @@
 
 #ifndef GTA_BASE_DRAW_UTIL_AE07DB6C33FB43E1B6FE62992EE1D737_HPP
 #define GTA_BASE_DRAW_UTIL_AE07DB6C33FB43E1B6FE62992EE1D737_HPP
-#include <imgui.h>
+#include <imgui/imgui.h>
 
 namespace base::render::util {
   ImVec2 GetSize(ImVec2 pos, ImVec2 size);

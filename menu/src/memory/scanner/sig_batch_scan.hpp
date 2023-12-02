@@ -9,26 +9,29 @@
 namespace base::memory::scanner {
   class Batch {
     public:
-    explicit Batch() = default;
-    ~Batch() noexcept = default;
+      explicit Batch() = default;
 
-    void add(std::string name, char* pattern, std::function<void(Handle)> callback);
-    void add(std::string name, Pattern pattern, std::function<void(Handle)> callback);
-    void run(Range region);
+      ~Batch() noexcept = default;
 
-    struct entry {
-      std::string name_;
-      Pattern pattern_;
-      std::function<void(Handle)> cb_;
+      void add(std::string name, char* pattern, std::function<void(Handle)> callback);
 
-      explicit entry(std::string name, Pattern pattern, std::function<void(Handle)> callback) :
-        name_(std::move(name)),
-        pattern_(std::move(pattern)),
-        cb_(std::move(callback)) {}
-    };
+      void add(std::string name, Pattern pattern, std::function<void(Handle)> callback);
+
+      void run(Range region);
+
+      struct entry {
+        std::string name_;
+        Pattern pattern_;
+        std::function<void(Handle)> cb_;
+
+        explicit entry(std::string name, Pattern pattern, std::function<void(Handle)> callback)
+          :
+          name_(std::move(name)),
+          pattern_(std::move(pattern)),
+          cb_(std::move(callback)) {}
+      };
 
     private:
-    std::vector<entry> entries_;
+      std::vector<entry> entries_;
   };
-
 }
