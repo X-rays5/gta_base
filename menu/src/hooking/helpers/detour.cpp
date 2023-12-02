@@ -53,5 +53,5 @@ namespace base::hooking {
     __except (ExpHandler(GetExceptionInformation(), name_)) { [this]() { LOG_CRITICAL("Failed to fix hook address for '{}'", name_); }(); }
   }
 
-  DWORD DetourHook::ExpHandler(PEXCEPTION_POINTERS exp, const std::string& name) { return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH; }
+  DWORD DetourHook::ExpHandler(PEXCEPTION_POINTERS exp, [[maybe_unused]] const std::string& name) { return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH; }
 }

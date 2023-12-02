@@ -4,7 +4,9 @@
 
 #include "main.hpp"
 #include <memory>
+#pragma warning(push, 0)
 #include <ThreadPool/ThreadPool.h>
+#pragma warning(pop)
 #include <MinHook.hpp>
 #include "render/renderer.hpp"
 #include "memory/pointers.hpp"

@@ -55,5 +55,5 @@ namespace base::hooking {
     __except (ExpHandler(GetExceptionInformation(), name)) { [&name]() { LOG_CRITICAL("Failed to fix hook address for '{}'", name); }(); }
   }
 
-  DWORD VmtHook::ExpHandler(PEXCEPTION_POINTERS exp, const std::string& name) { return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH; }
+  DWORD VmtHook::ExpHandler(PEXCEPTION_POINTERS exp, [[maybe_unused]] const std::string& name) { return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH; }
 }

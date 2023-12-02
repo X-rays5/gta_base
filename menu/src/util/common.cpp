@@ -7,9 +7,7 @@
 #include <wincrypt.h>
 
 namespace base::util::common {
-  std::uint64_t GetTimeStamp() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-  }
+  std::uint64_t GetTimeStamp() { return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count(); }
 
   std::string AddrToHex(uint64_t addr) {
     if (!addr)
@@ -23,7 +21,9 @@ namespace base::util::common {
   struct HexToIntTable {
     std::int64_t tab[128];
 
-    HexToIntTable() : tab{} {
+    HexToIntTable()
+      :
+      tab{} {
       tab['1'] = 1;
       tab['2'] = 2;
       tab['3'] = 3;
@@ -65,13 +65,11 @@ namespace base::util::common {
     HCRYPTPROV hProv = 0;
     HCRYPTHASH hHash = 0;
     BYTE rgbHash[16];
-    DWORD cbHash = std::size(rgbHash);
+    DWORD cbHash = static_cast<DWORD>(std::size(rgbHash));
     constexpr CHAR rgbDigits[] = "0123456789abcdef";
     std::string res;
 
-    if (!CryptAcquireContextA(&hProv, nullptr, nullptr, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
-      return absl::InternalError(fmt::format("CryptAcquireContextA failed: {}", GetLastError()));
-    }
+    if (!CryptAcquireContextA(&hProv, nullptr, nullptr, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) { return absl::InternalError(fmt::format("CryptAcquireContextA failed: {}", GetLastError())); }
 
     if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
       CryptReleaseContext(hProv, 0);
@@ -84,15 +82,15 @@ namespace base::util::common {
       return absl::InternalError(fmt::format("Failed to open file: {}", file_path.string()));
 
     std::vector<char> buffer(1024);
-    while (file.read(buffer.data(), buffer.size())) {
-      if (!CryptHashData(hHash, reinterpret_cast<BYTE*>(buffer.data()), buffer.size(), 0)) {
+    while (file.read(buffer.data(), static_cast<std::streamsize>(buffer.size()))) {
+      if (!CryptHashData(hHash, reinterpret_cast<BYTE*>(buffer.data()), static_cast<DWORD>(buffer.size()), 0)) {
         CryptReleaseContext(hProv, 0);
         CryptDestroyHash(hHash);
         return absl::InternalError(fmt::format("CryptHashData failed: {}", GetLastError()));
       }
     }
 
-    if (!CryptHashData(hHash, reinterpret_cast<BYTE*>(buffer.data()), file.gcount(), 0)) {
+    if (!CryptHashData(hHash, reinterpret_cast<BYTE*>(buffer.data()), static_cast<DWORD>(file.gcount()), 0)) {
       CryptReleaseContext(hProv, 0);
       CryptDestroyHash(hHash);
       return absl::InternalError(fmt::format("CryptHashData failed: {}", GetLastError()));

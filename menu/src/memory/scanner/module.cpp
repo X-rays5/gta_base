@@ -23,7 +23,7 @@ namespace base::memory::scanner {
 
   [[maybe_unused]] Handle Module::get_export(std::string_view symbol_name) { return GetProcAddress(base_.as<HMODULE>(), symbol_name.data()); }
 
-  absl::StatusOr<Handle> ScanForPattern(const std::string& pattern, const std::string& module, bool check_cache) {
+  absl::StatusOr<Handle> ScanForPattern(const std::string& pattern, const std::string& module, [[maybe_unused]] bool check_cache) {
     Module mod(nullptr);
     if (!module.empty())
       mod = Module(module);
