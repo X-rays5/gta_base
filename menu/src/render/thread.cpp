@@ -3,21 +3,17 @@
 //
 
 #include "thread.hpp"
-#include "manager.hpp"
+#include "renderer.hpp"
 
 namespace base::render {
-  Thread::Thread() {
-    kTHREAD = this;
-  }
+  Thread::Thread() { kTHREAD = this; }
 
-  Thread::~Thread() {
-    kTHREAD = nullptr;
-  }
+  Thread::~Thread() { kTHREAD = nullptr; }
 
   void Thread::RenderMain() {
     while (globals::kRUNNING) {
-      if (kTHREAD && kMANAGER) {
-        auto buffer = kMANAGER->GetDrawQueueBuffer();
+      if (kTHREAD && kRENDERER) {
+        auto buffer = kRENDERER->GetDrawQueueBuffer();
 
         for (auto& cb : kTHREAD->GetRenderCallbacks()) {
           if (!buffer) {
