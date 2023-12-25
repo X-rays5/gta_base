@@ -55,6 +55,7 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
             src/hooking/helpers/vmt.hpp
             src/memory/pointers.cpp
             src/memory/pointers.hpp
+            src/win32/signal.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)

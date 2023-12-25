@@ -39,20 +39,20 @@ class LifeTimeHelper {
 
     ~LifeTimeHelper() {
       LOG_INFO("[SHUTDOWN] LifeTimeHelper");
-      for (auto it = cbs_.rbegin(); it != cbs_.rend(); ++it)
+      for (auto it = cb_vec_.rbegin(); it != cb_vec_.rend(); ++it)
         (*it)(Shutdown);
     }
 
     void RunInit() const {
       LOG_INFO("[INIT] LifeTimeHelper");
-      for (auto& cb : cbs_)
+      for (auto& cb : cb_vec_)
         cb(Init);
     }
 
-    void AddCallback(const cb_t& cb) { cbs_.push_back(cb); }
+    void AddCallback(const cb_t& cb) { cb_vec_.push_back(cb); }
 
   private:
-    std::vector<cb_t> cbs_;
+    std::vector<cb_t> cb_vec_;
 };
 
 #define MANAGER_PTR_LIFETIME(lifetime_helper_inst, init_name, manager_var) lifetime_helper_inst->AddCallback([](LifeTimeHelper::Action action) { \

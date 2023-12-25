@@ -6,4 +6,5 @@
 #define GTA_BASE_ALL_0F38DCADAC624F7385156BEF131F73A5_HPP
 #include "memory.hpp"
 #include "misc.hpp"
+#include "signal.hpp"
 #endif //GTA_BASE_ALL_0F38DCADAC624F7385156BEF131F73A5_HPP

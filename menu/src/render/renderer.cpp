@@ -13,13 +13,12 @@
 
 namespace base::render {
   namespace {
-    void InitImGui() {
+    void InitImGui(ID3D11Device* device, ID3D11DeviceContext* device_context) {
       IMGUI_CHECKVERSION();
       ImGui::CreateContext();
       ImGui_ImplWin32_Init(win32::GetGameHwnd().value());
+      ImGui_ImplDX11_Init(device, device_context);
     }
-
-    void InitD3d() {}
 
     void ShutdownImGui() {
       ImGui_ImplWin32_Shutdown();
@@ -30,9 +29,15 @@ namespace base::render {
 
   Renderer::Renderer() {
     swap_chain_ = *memory::kPOINTERS->swap_chain_;
+    LOG_FATAL_CONDITIONAL(!swap_chain_.GetAddressOf(), "Failed to find valid swapchain ptr.");
 
-    LOG_FATAL_CONDITIONAL(swap_chain_->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<void**>(device_)) < 0, "Failed to acquire device from D3D swapchain.");
-    device_->GetImmediateContext(&device_ctx_);
+    void* device{};
+    if (FAILED(swap_chain_->GetDevice(__uuidof(ID3D11Device), &device))) { LOG_FATAL("Failed to get device from swap chain"); }
+
+    device_.Attach(static_cast<ID3D11Device*>(device));
+    device_->GetImmediateContext(device_ctx_.GetAddressOf());
+
+    InitImGui(device_.Get(), device_ctx_.Get());
 
     kRENDERER = this;
   }

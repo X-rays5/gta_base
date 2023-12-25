@@ -8,7 +8,6 @@
 #include <vector>
 #include <memory>
 #include <imgui/imgui.h>
-#include <absl/synchronization/notification.h>
 #include "draw_util.hpp"
 #include "draw_commands.hpp"
 #include "../util/spinlock.hpp"
@@ -31,25 +30,24 @@ namespace base::render {
 
   class DrawQueueBuffer {
     public:
-      DrawQueueBuffer(std::size_t draw_queue_buffers = 3) {
+      explicit DrawQueueBuffer(std::size_t draw_queue_buffers = 3) {
         GTA_BASE_ASSERT(draw_queue_buffers > 1, "Draw queue buffers must be greater than 1.");
 
         draw_queue_.resize(draw_queue_buffers);
         read_idx_ = 0;
         write_idx_ = 1;
-        read_notification_ = std::make_unique<absl::Notification>();
       }
 
       ~DrawQueueBuffer() {
         // Just in case to prevent a deadlock on shutdown.
         ::base::util::ScopedSpinlock lock(spinlock_);
-        read_notification_->Notify();
+        read_signal_.Notify();
       }
 
-      inline void RenderFrame() {
+      void RenderFrame() {
         ::base::util::ScopedSpinlock lock(spinlock_);
         draw_queue_[read_idx_].Draw();
-        read_notification_->Notify();
+        read_signal_.Notify();
       }
 
       /// @note This function should ONLY be called from the render thread.
@@ -66,11 +64,7 @@ namespace base::render {
 
         spinlock_.Unlock();
 
-        read_notification_->WaitForNotification();
-
-        spinlock_.Lock();
-        read_notification_ = std::make_unique<absl::Notification>();
-        spinlock_.Unlock();
+        read_signal_.Wait();
       }
 
     private:
@@ -78,7 +72,7 @@ namespace base::render {
       std::size_t read_idx_;
       std::size_t write_idx_;
       ::base::util::Spinlock spinlock_;
-      std::unique_ptr<absl::Notification> read_notification_;
+      win32::Signal read_signal_;
   };
 }
 #endif //BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP

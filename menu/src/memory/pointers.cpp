@@ -15,6 +15,10 @@ namespace base::memory {
                swap_chain_ = ptr.add(3).rip().as<IDXGISwapChain**>();
                });
 
+    BATCH_SCAN(main_batch, "resolution", "66 0F 6E 0D ? ? ? ? 0F B7 3D", [this](scanner::Handle ptr) {
+               LOG_DEBUG("x: {}, y: {}", *ptr.sub(4).rip().as<int*>(), *ptr.add(4).rip().as<int*>());
+               });
+
     main_batch.run(scanner::Module(nullptr));
 
     kPOINTERS = this;

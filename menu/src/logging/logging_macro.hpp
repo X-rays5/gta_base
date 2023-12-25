@@ -66,7 +66,9 @@
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL
 #define LOG_FATAL(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::critical, __VA_ARGS__); spdlog::default_logger_raw()->flush(); abort()
-#define LOG_FATAL_CONDITIONAL(condition, ...) if (condition) {LOG_FATAL(__VA_ARGS__);}
+#define LOG_FATAL_CONDITIONAL(condition, ...) if (condition) { \
+  LOG_FATAL(__VA_ARGS__); \
+  }
 #else
 #define LOG_FATAL(...)  (void)0
 #define LOG_FATAL_CONDITIONAL(...) (void)0
@@ -77,5 +79,4 @@
 #else
 #define GTA_BASE_ASSERT(condition, ...) (void)0
 #endif
-
 #endif //GTA_BASE_LOGGING_MACRO_019BE36990514312A78AF967214A9577_HPP
