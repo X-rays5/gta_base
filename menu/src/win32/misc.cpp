@@ -4,15 +4,15 @@
 
 #include "misc.hpp"
 #include <ShlObj.h>
-#include <robin_hood.h>
+#include <unordered_map>
 
 namespace base::win32 {
   namespace {
-    const robin_hood::unordered_map <KNOWN_FOLDER_ID, KNOWNFOLDERID> guid_map{
-    {KNOWN_FOLDER_ID::kDocuments,      FOLDERID_Documents},
-    {KNOWN_FOLDER_ID::kFonts,          FOLDERID_Fonts},
-    {KNOWN_FOLDER_ID::kLocalAppData,   FOLDERID_LocalAppData},
-    {KNOWN_FOLDER_ID::kRoamingAppData, FOLDERID_RoamingAppData},
+    const std::unordered_map<KNOWN_FOLDER_ID, KNOWNFOLDERID> guid_map{
+      {KNOWN_FOLDER_ID::kDocuments, FOLDERID_Documents},
+      {KNOWN_FOLDER_ID::kFonts, FOLDERID_Fonts},
+      {KNOWN_FOLDER_ID::kLocalAppData, FOLDERID_LocalAppData},
+      {KNOWN_FOLDER_ID::kRoamingAppData, FOLDERID_RoamingAppData},
     };
   }
 

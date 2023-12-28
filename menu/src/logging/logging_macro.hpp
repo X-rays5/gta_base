@@ -14,7 +14,7 @@
 #define SPDLOG_ACTIVE_LEVEL 2 // INFO
 #endif
 
-#define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, "null"}, level, __VA_ARGS__)
+#define LOGGER_LOG(logger, level, msg, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, ""}, level, msg, __VA_ARGS__)
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
 #define LOG_TRACE(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::trace, __VA_ARGS__)

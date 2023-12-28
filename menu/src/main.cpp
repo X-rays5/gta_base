@@ -26,38 +26,40 @@ namespace base {
 }
 
 class LifeTimeHelper {
-  public:
-    enum Action {
-      Init,
-      Shutdown
-    };
+public:
+  enum Action {
+    Init,
+    Shutdown
+  };
 
-    using cb_t = std::function<void(Action)>;
+  using cb_t = std::function<void(Action)>;
 
-  public:
-    LifeTimeHelper() = default;
+public:
+  LifeTimeHelper() = default;
 
-    ~LifeTimeHelper() {
-      LOG_INFO("[SHUTDOWN] LifeTimeHelper");
-      for (auto it = cb_vec_.rbegin(); it != cb_vec_.rend(); ++it)
-        (*it)(Shutdown);
-    }
+  ~LifeTimeHelper() {
+    LOG_INFO("[SHUTDOWN] LifeTimeHelper");
+    for (auto it = cb_vec_.rbegin(); it != cb_vec_.rend(); ++it)
+      (*it)(Shutdown);
+  }
 
-    void RunInit() const {
-      LOG_INFO("[INIT] LifeTimeHelper");
-      for (auto& cb : cb_vec_)
-        cb(Init);
-    }
+  void RunInit() const {
+    LOG_INFO("[INIT] LifeTimeHelper");
+    for (auto& cb : cb_vec_)
+      cb(Init);
+  }
 
-    void AddCallback(const cb_t& cb) { cb_vec_.push_back(cb); }
+  void AddCallback(const cb_t& cb) {
+    cb_vec_.push_back(cb);
+  }
 
-  private:
-    std::vector<cb_t> cb_vec_;
+private:
+  std::vector<cb_t> cb_vec_;
 };
 
-#define MANAGER_PTR_LIFETIME(lifetime_helper_inst, init_name, manager_var) lifetime_helper_inst->AddCallback([](LifeTimeHelper::Action action) { \
+#define MANAGER_PTR_LIFETIME(lifetime_helper_inst, init_name, manager_var, ...) lifetime_helper_inst->AddCallback([](LifeTimeHelper::Action action) { \
   if (action == LifeTimeHelper::Init) { \
-    manager_var = std::make_unique<std::remove_reference_t<decltype(*manager_var)>>(); \
+    manager_var = std::make_unique<std::remove_reference_t<decltype(*manager_var)>>(__VA_ARGS__); \
     LOG_INFO("[INIT] {}", init_name); \
   } \
   else { \
@@ -69,6 +71,7 @@ class LifeTimeHelper {
 int base::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
+  MANAGER_PTR_LIFETIME(lifetime_helper, "ThreadPool", thread_pool_inst, std::thread::hardware_concurrency());
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
 
   lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {

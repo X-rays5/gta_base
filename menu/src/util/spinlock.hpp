@@ -11,6 +11,14 @@
 namespace base::util {
   class Spinlock {
   public:
+    Spinlock() = default;
+    ~Spinlock() = default;
+
+    Spinlock(const Spinlock& c) = delete;
+    void operator=(const Spinlock& c) = delete;
+    Spinlock(Spinlock&& c) = delete;
+    void operator=(Spinlock&& c) = delete;
+
     void Lock() noexcept;
     bool TryLock() noexcept;
     void Unlock() noexcept;
@@ -21,6 +29,14 @@ namespace base::util {
 
   class RecursiveSpinlock {
   public:
+    RecursiveSpinlock() = default;
+    ~RecursiveSpinlock() = default;
+
+    RecursiveSpinlock(const RecursiveSpinlock& c) = delete;
+    void operator=(const RecursiveSpinlock& c) = delete;
+    RecursiveSpinlock(RecursiveSpinlock&& c) = delete;
+    void operator=(RecursiveSpinlock&& c) = delete;
+
     void Lock() noexcept;
     bool TryLock() noexcept;
     void Unlock() noexcept;
