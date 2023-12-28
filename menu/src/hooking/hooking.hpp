@@ -17,15 +17,14 @@ namespace base::hooking {
   };
 
   class Manager {
-    public:
+  public:
     VmtHook swap_chain_hook_;
 
-    public:
-      Manager();
-      ~Manager();
+  public:
+    Manager();
 
-      void Enable();
-      void Disable();
+    void Enable();
+    void Disable();
   };
 
   inline Manager* kMANAGER{};

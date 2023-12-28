@@ -87,15 +87,25 @@ int base::menu_main() {
 
   lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
     if (action == LifeTimeHelper::Init) {
+      LOG_INFO("[INIT] Renderer");
       render_inst = std::make_unique<render::Renderer>();
       render_thread_manager_inst = std::make_unique<render::Thread>();
 
-      render::kTHREAD->AddRenderCallback([](render::DrawQueueBuffer* buffer) { buffer->AddCommand(render::Text({0.5, 0.5}, ImColor(255, 0, 0), "Hello World!", false, true, 0.02f)); });
+      render::kTHREAD->AddRenderCallback([](render::DrawQueueBuffer* buffer) {
+        buffer->AddCommand(render::Text({0.5, 0.5}, ImColor(255, 0, 0), "Hello World!", false, true, 0.02f));
+      });
 
+      LOG_INFO("[INIT] Render thread");
       render_thread_inst = std::make_unique<std::thread>(render::Thread::RenderMain);
     } else {
+      // First make sure it's actually waiting then unblock it.
+      std::this_thread::sleep_for(std::chrono::milliseconds(200));
+      render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
+
+      LOG_DEBUG("[SHUTDOWN] Stopping render thread...");
       if (render_thread_inst->joinable())
         render_thread_inst->join();
+      LOG_INFO("[SHUTDOWN] Render thread stopped.");
 
       render_thread_manager_inst.reset();
       render_inst.reset();

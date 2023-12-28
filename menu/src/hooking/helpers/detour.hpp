@@ -6,42 +6,33 @@
 #ifndef GTA_BASE_DETOUR_HPP
 #define GTA_BASE_DETOUR_HPP
 #include <string>
+#include <subhook.h>
 
 namespace base::hooking {
   class DetourHook {
-    public:
-      explicit DetourHook()
-        :
-        target_(nullptr), detour_(nullptr) {}
+  public:
+    explicit DetourHook(std::string name, void* src, void* dst);
+    explicit DetourHook(std::string name, std::string module, std::string src, void* dst);
 
-      explicit DetourHook(std::string name, void* target, void* detour);
-      explicit DetourHook(std::string name, std::string module_name, std::string func_name, void* detour);
+    ~DetourHook() noexcept;
+    DetourHook(DetourHook&& that) = delete;
+    DetourHook& operator=(DetourHook&& that) = delete;
+    DetourHook(const DetourHook&) = delete;
+    DetourHook& operator=(const DetourHook&) = delete;
 
-      ~DetourHook() noexcept;
-      DetourHook(DetourHook&& that) = delete;
-      DetourHook& operator=(DetourHook&& that) = delete;
-      DetourHook(DetourHook const&) = delete;
-      DetourHook& operator=(DetourHook const&) = delete;
+    [[nodiscard]] std::string GetName() const;
 
-      [[nodiscard]] inline std::string GetName() const;
+    void Enable();
+    void Disable();
 
-      void Enable();
+    template <typename T>
+    T GetOriginal() {
+      return reinterpret_cast<T>(subhook_get_trampoline(detour_));
+    }
 
-      void Disable();
-
-      template<typename T>
-      T GetOriginal() { return static_cast<T>(original_); }
-
-    private:
-      std::string name_;
-      void* target_;
-      void* detour_;
-      void* original_{};
-
-    private:
-      void FixHookAddress();
-
-      static DWORD ExpHandler(PEXCEPTION_POINTERS exp, std::string const& name);
+  private:
+    std::string name_;
+    subhook_t detour_;
   };
 }
 #endif //GTA_BASE_DETOUR_HPP

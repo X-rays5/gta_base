@@ -22,7 +22,7 @@ namespace base::render {
   class Rect : public BaseDrawCommand {
   public:
     Rect(ImVec2 pos, ImVec2 size, ImU32 color) :
-    pos_(pos), size_(size), color_(color) {}
+      pos_(pos), size_(size), color_(color) {}
 
     void Draw() override {
       util::GetDrawList()->AddRectFilled(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_);
@@ -37,7 +37,7 @@ namespace base::render {
   class RectOutline : public BaseDrawCommand {
   public:
     RectOutline(ImVec2 pos, ImVec2 size, ImU32 color, float thickness = 1.0f) :
-    pos_(pos), size_(size), color_(color), thickness_(thickness) {}
+      pos_(pos), size_(size), color_(color), thickness_(thickness) {}
 
     void Draw() final {
       util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.f,NULL, thickness_);
@@ -53,7 +53,7 @@ namespace base::render {
   class RectBorder : Rect {
   public:
     RectBorder(ImVec2 pos, ImVec2 size, ImU32 background_color, ImU32 border_color, bool top, bool bottom, bool left, bool right, float thickness = 0.005f) :
-    Rect(pos, size, background_color), border_color_(border_color), top_(top), bottom_(bottom), left_(left), right_(right), thickness_(thickness) {}
+      Rect(pos, size, background_color), border_color_(border_color), top_(top), bottom_(bottom), left_(left), right_(right), thickness_(thickness) {}
 
     void Draw() final {
       Rect::Draw();
@@ -82,7 +82,7 @@ namespace base::render {
   class Text : public BaseDrawCommand {
   public:
     Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
-    pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
+      pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
 
     void Draw() override {
       if (!font_) {
@@ -96,10 +96,10 @@ namespace base::render {
       if (right_align_) {
         ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
         pos_.x -= text_size.x;
-        pos_.y += (text_size.y / 2);
+        pos_.y += text_size.y / 2;
       } else if (center_) {
         ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
-        pos_.y += ((text_size.y / 2));
+        pos_.y += text_size.y / 2;
       }
 
       util::GetDrawList()->AddText(font_, util::ScaleFont(y_size_text_), util::ScaleToScreen(pos_), color_, text_.c_str());
@@ -120,9 +120,8 @@ namespace base::render {
   class TextBackground : Text {
   public:
     TextBackground(ImVec2 pos, ImU32 text_color, ImU32 background_color, std::string text, bool right_align, bool center, float y_size_text, float padding_side = 0.01f, float padding_bottom_top = 0.01f, bool border_top = false, bool border_bottom = false, bool border_left = false, bool border_right = false, ImU32 border_color = NULL, float border_thickness = 1.f, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
-    Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font),
-    rect_({}, {}, {}, {}, {}, {}, {}, {})
-    {
+      Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font),
+      rect_({}, {}, {}, {}, {}, {}, {}, {}) {
       ImVec2 rect_pos = pos_;
       rect_pos.x -= padding_side;
       rect_pos.y -= padding_bottom_top;
@@ -146,10 +145,10 @@ namespace base::render {
   class Image : public BaseDrawCommand {
   public:
     Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) :
-    texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
+      texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
 
     void Draw() final {
-      util::GetDrawList()->AddImage((void*) texture_, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+      util::GetDrawList()->AddImage((void*)texture_, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
   private:
@@ -164,7 +163,7 @@ namespace base::render {
   class RunRenderCode : public BaseDrawCommand {
   public:
     explicit RunRenderCode(std::function<void()> render_code) :
-    render_code_(std::move(render_code)) {}
+      render_code_(std::move(render_code)) {}
 
     void Draw() final {
       render_code_();

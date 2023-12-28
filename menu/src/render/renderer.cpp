@@ -14,6 +14,7 @@
 namespace base::render {
   namespace {
     void InitImGui(ID3D11Device* device, ID3D11DeviceContext* device_context) {
+      LOG_DEBUG("ImGui init");
       IMGUI_CHECKVERSION();
       ImGui::CreateContext();
       ImGui_ImplWin32_Init(win32::GetGameHwnd().value());
@@ -21,6 +22,7 @@ namespace base::render {
     }
 
     void ShutdownImGui() {
+      LOG_DEBUG("ImGui shutdown");
       ImGui_ImplWin32_Shutdown();
       ImGui_ImplDX11_Shutdown();
       ImGui::DestroyContext();
@@ -32,7 +34,9 @@ namespace base::render {
     LOG_FATAL_CONDITIONAL(!swap_chain_.GetAddressOf(), "Failed to find valid swapchain ptr.");
 
     void* device{};
-    if (FAILED(swap_chain_->GetDevice(__uuidof(ID3D11Device), &device))) { LOG_FATAL("Failed to get device from swap chain"); }
+    if (FAILED(swap_chain_->GetDevice(__uuidof(ID3D11Device), &device))) {
+      LOG_FATAL("Failed to get device from swap chain");
+    }
 
     device_.Attach(static_cast<ID3D11Device*>(device));
     device_->GetImmediateContext(device_ctx_.GetAddressOf());

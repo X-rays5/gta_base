@@ -8,22 +8,30 @@
 
 namespace base::win32 {
   class Signal {
-    public:
-      Signal() { signal_h_ = CreateEvent(nullptr, false, false, (std::to_string(util::common::GetTimeStamp()) + "signal_helper").c_str()); }
+  public:
+    Signal() {
+      signal_h_ = CreateEvent(nullptr, false, false, (std::to_string(util::common::GetTimeStamp()) + "signal_helper").c_str());
+    }
 
-      ~Signal() {
-        SetEvent(signal_h_);
-        CloseHandle(signal_h_);
-      }
+    ~Signal() {
+      SetEvent(signal_h_);
+      CloseHandle(signal_h_);
+    }
 
-      void Notify() const { SetEvent(signal_h_); }
+    void Notify() const {
+      SetEvent(signal_h_);
+    }
 
-      void Wait() const { WaitForSingleObject(signal_h_, INFINITE); }
+    void Wait() const {
+      Wait(INFINITE);
+    }
 
-      void Wait(const std::int32_t timeout) const { WaitForSingleObject(signal_h_, timeout); }
+    void Wait(const std::int32_t timeout) const {
+      WaitForSingleObject(signal_h_, timeout);
+    }
 
-    private:
-      HANDLE signal_h_;
+  private:
+    HANDLE signal_h_;
   };
 }
 #endif //SIGNAL_HPP

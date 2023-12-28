@@ -4,54 +4,84 @@
 
 #include "detour.hpp"
 #include <utility>
-#include <MinHook.hpp>
-#include <magic_enum.hpp>
+#include <Zydis/Zydis.h>
 
-#include "../../memory/scanner/handle.hpp"
+#define PTR_TO_ADDR(ptr) reinterpret_cast<std::uintptr_t>(ptr)
 
 namespace base::hooking {
-  DetourHook::DetourHook(std::string name, void* target, void* detour)
-    :
-    name_(std::move(name)), target_(target), detour_(detour) {
-    FixHookAddress();
+  namespace {
+    int DisasmHandler(void* src, int* reloc_op_offset) {
+      ZydisDecoder decoder;
+#ifdef _M_AMD64
+      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64)))
+#else
+      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
+#endif
+        return NULL;
 
-    if (auto status = MH_CreateHook(target_, detour_, &original_); status != MH_OK) { LOG_ERROR("Failed to create hook '{}' at 0x{:X} (error: {})", name_, uintptr_t(target_), magic_enum::enum_name(status)); }
+      ZydisDecodedInstruction instruction;
+      ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT];
+      if (!ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, src, 15, &instruction, operands))) {
+        LOG_FATAL("Failed to disasm op.");
+      }
+
+      // Check for the operand type that indicates a relative address, e.g., CALL or JMP.
+      for (unsigned int i = 0; i < instruction.operand_count; ++i) {
+        if (operands[i].type == ZYDIS_OPERAND_TYPE_IMMEDIATE && operands[i].imm.is_relative) {
+          // Calculate the offset of the relative address within the instruction.
+          uintptr_t immediate_address = (uintptr_t)src + instruction.raw.imm[i].offset;
+          auto instruction_address = reinterpret_cast<std::uintptr_t>(src);
+          *reloc_op_offset = static_cast<std::int32_t>(immediate_address - instruction_address);
+          return instruction.length;
+        }
+      }
+
+      return instruction.length;
+    }
   }
 
-  DetourHook::DetourHook(std::string name, std::string module_name, std::string func_name, void* detour)
-    :
-    name_(std::move(name)), detour_(detour) {
-    auto target_dll = GetModuleHandleA(module_name.c_str());
+  DetourHook::DetourHook(std::string name, void* src, void* dst) : name_(std::move(name)) {
+    detour_ = subhook_new(src, dst, static_cast<subhook_flags_t>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
+    subhook_set_disasm_handler(DisasmHandler);
+  }
+
+  DetourHook::DetourHook(std::string name, std::string module, std::string src, void* dst) : name_(std::move(name)) {
+    const HMODULE target_dll = GetModuleHandleA(module.c_str());
     if (!target_dll) {
-      LOG_ERROR("Failed to get module handle for '{}'", module_name);
+      LOG_CRITICAL("Failed to find target module {} for {} hook", module, name_);
       return;
     }
 
-    target_ = GetProcAddress(target_dll, func_name.c_str());
-    if (!target_) {
-      LOG_ERROR("Failed to get address of '{}' in '{}'", func_name, module_name);
+    FARPROC src_addr = GetProcAddress(target_dll, src.c_str());
+    if (!src_addr) {
+      LOG_ERROR("Failed to get address of '{}' in '{}'", src, module);
       return;
     }
 
-    if (auto status = MH_CreateHook(target_, detour_, &original_); status != MH_OK) { LOG_ERROR("Failed to create hook '{}' at 0x{:X} (error: {})", name_, uintptr_t(target_), magic_enum::enum_name(status)); }
+    detour_ = subhook_new(src_addr, dst, static_cast<subhook_flags_t>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
   }
 
-  DetourHook::~DetourHook() noexcept { if (target_) { MH_RemoveHook(target_); } }
+  DetourHook::~DetourHook() {
+    subhook_free(detour_);
+  }
 
-  std::string DetourHook::GetName() const { return name_; }
+  std::string DetourHook::GetName() const {
+    return name_;
+  }
 
-  void DetourHook::Enable() { if (auto status = MH_EnableHook(target_); status == MH_OK) { LOG_DEBUG("[{}] hooked src -> {}, dst -> {}, og -> {}", name_, (void*) target_, (void*) detour_, (void*) original_); } else { LOG_ERROR("Failed to enable hook 0x{:X} ({})", uintptr_t(target_), magic_enum::enum_name(status)); } }
-
-  void DetourHook::Disable() { if (auto status = MH_DisableHook(target_); status != MH_OK) { LOG_ERROR("Failed to disable hook '{}'.", name_); } }
-
-  void DetourHook::FixHookAddress() {
-    __try {
-      auto ptr = memory::scanner::Handle(target_);
-      while (ptr.as<std::uint8_t&>() == 0xE9) { ptr = ptr.add(1).rip(); }
-      target_ = ptr.as<void*>();
+  void DetourHook::Enable() {
+    if (const auto status = absl::ErrnoToStatus(subhook_install(detour_), ""); status.ok()) {
+      LOG_INFO("Hook for {} has been enabled.", name_);
+    } else {
+      LOG_CRITICAL("Failed to enabled hook for {} error {}.", name_, absl::StatusCodeToString(status.code()));
     }
-    __except (ExpHandler(GetExceptionInformation(), name_)) { [this]() { LOG_CRITICAL("Failed to fix hook address for '{}'", name_); }(); }
   }
 
-  DWORD DetourHook::ExpHandler(PEXCEPTION_POINTERS exp, [[maybe_unused]] const std::string& name) { return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH; }
+  void DetourHook::Disable() {
+    if (const auto status = absl::ErrnoToStatus(subhook_remove(detour_), ""); status.ok()) {
+      LOG_INFO("Hook for {} has been enabled.", name_);
+    } else {
+      LOG_CRITICAL("Failed to disable hook for {} error {}.", name_, absl::StatusCodeToString(status.code()));
+    }
+  }
 }
