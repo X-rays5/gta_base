@@ -106,10 +106,14 @@ int base::menu_main() {
 
   hooking_inst->Enable();
 
+  LOG_INFO("Loaded");
   while (globals::kRUNNING) {
-    if (GetAsyncKeyState(VK_END))
+    if (GetAsyncKeyState(VK_END)) {
+      globals::kRUNNING = false;
       break;
+    }
   }
+  LOG_INFO("Unloading...");
 
   hooking_inst->Disable();
 
