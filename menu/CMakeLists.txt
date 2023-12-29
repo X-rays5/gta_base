@@ -73,6 +73,7 @@ include(../vendor/inireader.cmake)
 include(../vendor/minhook.cmake)
 include(../vendor/subhook.cmake)
 include(../vendor/zydis.cmake)
+include(../vendor/battery_embed.cmake)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
