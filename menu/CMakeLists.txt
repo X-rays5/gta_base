@@ -57,6 +57,8 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/memory/pointers.hpp
         src/win32/signal.hpp
         src/logging/formatter/thread_id.hpp
+        src/render/font/manager.cpp
+        src/render/font/manager.hpp
         src/render/font/IconsFontAwesome6.h
 )
 

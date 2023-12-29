@@ -43,11 +43,15 @@ namespace base::render {
 
     InitImGui(device_.Get(), device_ctx_.Get());
 
+    font_mgr_inst_ = std::make_unique<font::Manager>();
+
     kRENDERER = this;
   }
 
   Renderer::~Renderer() {
     kRENDERER = nullptr;
+
+    font_mgr_inst_.reset();
 
     ShutdownImGui();
   }
@@ -58,7 +62,9 @@ namespace base::render {
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
 
+      font::kMANAGER->PushFont("default");
       kRENDERER->GetDrawQueueBuffer()->RenderFrame();
+      font::kMANAGER->PopFont();
 
       ImGui::Render();
       ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
