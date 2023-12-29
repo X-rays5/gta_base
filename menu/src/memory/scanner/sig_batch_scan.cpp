@@ -1,9 +1,13 @@
 #include "sig_batch_scan.hpp"
 
 namespace base::memory::scanner {
-  void Batch::add(std::string name, char* pattern, std::function<void(Handle)> callback) { add(std::move(name), Pattern(pattern), std::move(callback)); }
+  void Batch::add(std::string name, char* pattern, std::function<void(Handle)> callback) {
+    add(std::move(name), Pattern(pattern), std::move(callback));
+  }
 
-  void Batch::add(std::string name, Pattern pattern, std::function<void(Handle)> callback) { entries_.emplace_back(std::move(name), std::move(pattern), std::move(callback)); }
+  void Batch::add(std::string name, Pattern pattern, std::function<void(Handle)> callback) {
+    entries_.emplace_back(std::move(name), std::move(pattern), std::move(callback));
+  }
 
   void Batch::run(Range region) {
     bool all_found = true;
@@ -11,15 +15,13 @@ namespace base::memory::scanner {
       if (auto result = region.scan(entry.pattern_); result.ok()) {
         if (entry.cb_) {
           std::invoke(entry.cb_, result.value());
-          LOG_DEBUG("Found '{}' GTA5.exe+{:x}", entry.name_,
+          LOG_DEBUG("Found '{}' GTA5.exe+0x{:x}", entry.name_,
                     (result.value().as<DWORD64>() - region.begin().as<DWORD64>()));
-        }
-        else {
+        } else {
           all_found = false;
           LOG_CRITICAL("Failed to find '{}'.", entry.name_);
         }
-      }
-      else {
+      } else {
         all_found = false;
         LOG_CRITICAL("Failed to find '{}'.", entry.name_);
       }
@@ -27,9 +29,9 @@ namespace base::memory::scanner {
 
     entries_.clear();
     if (!all_found) {
-      #ifndef NDEBUG
+#ifndef NDEBUG
       __debugbreak();
-      #endif
+#endif
       LOG_CRITICAL("Failed to find some patterns.");
     }
   }
