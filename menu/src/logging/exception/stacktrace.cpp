@@ -13,23 +13,37 @@ namespace base::logging::exception {
     absl::StatusOr<std::string> GetInstructionsStr(const std::uintptr_t addr) {
       const std::uint32_t pid = GetCurrentProcessId();
 
-      auto except_mod_res = win32::memory::GetModuleNameFromAddress(pid, addr);
+      auto except_mod_res = win32::memory::GetModuleFromAddress(pid, addr);
       if (!except_mod_res.ok())
         return except_mod_res.status();
 
       constexpr int num_instructions = 5;
       constexpr int middle_idx = 2;
-      constexpr int max_bytes_per = 15;
 
       ZydisDisassembledInstruction instruction;
       std::array<std::string, num_instructions> res_arr;
 
-      std::uintptr_t cur_addr = addr - max_bytes_per * 2; // Two instructions before
-      for (int i = 0; i < num_instructions; ++i) {
-        if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), max_bytes_per, &instruction))) {
-          res_arr[i].append(fmt::format("{}+0x{:X}\t", except_mod_res.value(), win32::memory::GetModuleOffsetFromAddress(pid, cur_addr).value_or(NULL)));
+      std::uintptr_t cur_addr = addr;
+      for (int i = 2; i < num_instructions; ++i) {
+        const std::uintptr_t offset = cur_addr - reinterpret_cast<std::uintptr_t>(except_mod_res.value().modBaseAddr);
+        const std::uintptr_t mod_size_left = except_mod_res.value().dwSize - offset;
+        if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), mod_size_left, &instruction))) {
+          res_arr[i].append(fmt::format("{}+0x{:X}\t", except_mod_res.value().szModule, offset));
           res_arr[i].append(instruction.text);
           cur_addr += instruction.info.length;
+        }
+      }
+
+      if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), 15, &instruction))) {
+        cur_addr -= instruction.info.length;
+        for (int i = 1; i >= 0; i--) {
+          const std::uintptr_t offset = (cur_addr - reinterpret_cast<std::uintptr_t>(except_mod_res.value().modBaseAddr));
+          const std::uintptr_t mod_size_left = offset - except_mod_res.value().dwSize;
+          if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), mod_size_left, &instruction))) {
+            res_arr[i].append(fmt::format("{}+0x{:X}\t", except_mod_res.value().szModule, offset));
+            res_arr[i].append(instruction.text);
+            cur_addr -= instruction.info.length;
+          }
         }
       }
 
@@ -97,9 +111,7 @@ namespace base::logging::exception {
     msg << "***** Exception module: " << except_mod_res.value() << " *****\n";
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
-
-    msg << "\n***** Exception instructions *****\n";
-    msg << GetInstructionsStr(reinterpret_cast<std::uintptr_t>(except_rec->ExceptionAddress)).value_or("Failed to decompile exception area.") << '\n';
+    msg << "\n***** Exception instruction: " << GetInstructionsStr(ctx->Rip).value_or("Failed to decompile exception area.") << "*****\n";
 
     msg << "\n***** STACKDUMP *****\n";
 
