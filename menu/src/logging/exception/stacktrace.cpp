@@ -10,60 +10,33 @@
 
 namespace base::logging::exception {
   namespace {
-    struct ZydisInstruction {
-      ZydisDecodedInstruction instruction;
-      ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT];
-    };
+    absl::StatusOr<std::string> GetInstructionsStr(const std::uintptr_t addr) {
+      const std::uint32_t pid = GetCurrentProcessId();
 
-    std::string GetInstructionStr(std::uintptr_t addr, const ZydisInstruction& instruction) {
-      ZydisFormatter formatter;
-      ZydisFormatterInit(&formatter, ZYDIS_FORMATTER_STYLE_INTEL);
+      auto except_mod_res = win32::memory::GetModuleNameFromAddress(pid, addr);
+      if (!except_mod_res.ok())
+        return except_mod_res.status();
 
-      char buffer[256];
-      ZydisFormatterFormatInstruction(&formatter, &instruction.instruction, instruction.operands, instruction.instruction.operand_count_visible, buffer, sizeof(buffer), addr, ZYAN_NULL);
+      constexpr int num_instructions = 5;
+      constexpr int middle_idx = 2;
+      constexpr int max_bytes_per = 15;
 
-      return buffer;
-    }
+      ZydisDisassembledInstruction instruction;
+      std::array<std::string, num_instructions> res_arr;
 
-
-    std::string GetInstructionsStr(std::uintptr_t addr) {
-      ZydisDecoder decoder;
-#ifdef _M_AMD64
-      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64)))
-#else
-      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
-#endif
-        return {};
-
-      ZydisInstruction instruction{};
-      std::array<std::string, 5> res_arr;
-      std::uintptr_t cur_addr = addr;
-      std::uintptr_t initial_length = 0;
-
-      if (ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, reinterpret_cast<void*>(cur_addr), 15, &instruction.instruction, instruction.operands))) {
-        res_arr[2] = GetInstructionStr(cur_addr, instruction);
-        res_arr[2].append(" <-- here");
-        initial_length = instruction.instruction.length;
-      }
-      cur_addr += initial_length;
-
-      for (int i = 0; i < 2; i++) {
-        if (ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, reinterpret_cast<void*>(cur_addr), 15, &instruction.instruction, instruction.operands))) {
-          res_arr[i] = GetInstructionStr(cur_addr, instruction);
-          cur_addr += instruction.instruction.length;
+      std::uintptr_t cur_addr = addr - max_bytes_per * 2; // Two instructions before
+      for (int i = 0; i < num_instructions; ++i) {
+        if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), max_bytes_per, &instruction))) {
+          res_arr[i].append(fmt::format("{}+0x{:X}\t", except_mod_res.value(), win32::memory::GetModuleOffsetFromAddress(pid, cur_addr).value_or(NULL)));
+          res_arr[i].append(instruction.text);
+          cur_addr += instruction.info.length;
         }
       }
-      cur_addr += initial_length;
 
-      for (int i = 3; i < 5; i++) {
-        if (ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, reinterpret_cast<void*>(cur_addr), 15, &instruction.instruction, instruction.operands))) {
-          res_arr[i] = GetInstructionStr(cur_addr, instruction);
-          cur_addr += instruction.instruction.length;
-        }
-      }
+      res_arr[middle_idx].append(" <-- here");
 
       std::stringstream ss;
-      for (auto&& line : res_arr) {
+      for (const auto& line : res_arr) {
         ss << line << '\n';
       }
 
@@ -123,11 +96,10 @@ namespace base::logging::exception {
 
     msg << "***** Exception module: " << except_mod_res.value() << " *****\n";
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
-    //msg << "***** Exception instruction: " << common::GetInstructionStr((std::uintptr_t) except_rec->ExceptionAddress) << " *****\n"; TODO: impl zydis decomp
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
 
     msg << "\n***** Exception instructions *****\n";
-    msg << GetInstructionsStr(reinterpret_cast<std::uintptr_t>(except_rec->ExceptionAddress)) << '\n';
+    msg << GetInstructionsStr(reinterpret_cast<std::uintptr_t>(except_rec->ExceptionAddress)).value_or("Failed to decompile exception area.") << '\n';
 
     msg << "\n***** STACKDUMP *****\n";
 
