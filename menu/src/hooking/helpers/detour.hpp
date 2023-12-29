@@ -25,9 +25,19 @@ namespace base::hooking {
     void Enable();
     void Disable();
 
-    template <typename T>
-    T GetOriginal() {
-      return reinterpret_cast<T>(subhook_get_trampoline(detour_));
+    template <typename T, typename... Args> requires std::is_function_v<std::remove_pointer_t<T>>
+    std::invoke_result_t<T, Args...> GetOriginal(Args&&... args) {
+      void* og = subhook_get_trampoline(detour_);
+      if (!og) {
+        LOG_WARN("nullptr og {}", name_);
+
+        if constexpr (std::is_void_v<std::invoke_result_t<T, Args...>>)
+          return;
+        else
+          return {};
+      }
+
+      return reinterpret_cast<T>(og)(std::forward<Args>(args)...);
     }
 
   private:

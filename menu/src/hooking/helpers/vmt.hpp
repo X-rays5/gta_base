@@ -21,15 +21,18 @@ namespace base::hooking {
     void Disable(std::size_t idx);
     void DisableAll();
 
-    template <typename T>
-    T GetOriginal(std::size_t index) {
+    template <typename T, typename... Args> requires std::is_function_v<std::remove_pointer_t<T>>
+    std::invoke_result_t<T, Args...> GetOriginal(std::size_t index, Args&&... args) {
       if (auto it = hooks_.find(index); it == hooks_.end()) {
         LOG_WARN("Tried to get original at idx: {} which doesn't exist", index);
       } else {
-        return static_cast<T>(it->second->GetOriginal<T>());
+        return it->second->GetOriginal<T>(std::forward<Args>(args)...);
       }
 
-      return {};
+      if constexpr (std::is_void_v<std::invoke_result_t<T, Args...>>)
+        return;
+      else
+        return {};
     }
 
   private:
