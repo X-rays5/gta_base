@@ -27,7 +27,7 @@ namespace base::hooking {
 
     template <typename T, typename... Args> requires std::is_function_v<std::remove_pointer_t<T>>
     std::invoke_result_t<T, Args...> GetOriginal(Args&&... args) {
-      void* og = subhook_get_trampoline(detour_);
+      void* og = detour_->GetTrampoline();
       if (!og) {
         LOG_WARN("nullptr og {}", name_);
 
@@ -42,7 +42,7 @@ namespace base::hooking {
 
   private:
     std::string name_;
-    subhook_t detour_;
+    std::unique_ptr<subhook::Hook> detour_;
   };
 }
 #endif //GTA_BASE_DETOUR_HPP

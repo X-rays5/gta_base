@@ -5,44 +5,31 @@
 #include "detour.hpp"
 #include <utility>
 #include <Zydis/Zydis.h>
+#include "../../memory/scanner/handle.hpp"
 
 #define PTR_TO_ADDR(ptr) reinterpret_cast<std::uintptr_t>(ptr)
 
 namespace base::hooking {
   namespace {
     int DisasmHandler(void* src, int* reloc_op_offset) {
-      ZydisDecoder decoder;
-#ifdef _M_AMD64
-      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64)))
-#else
-      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
-#endif
-        return NULL;
-
-      ZydisDecodedInstruction instruction;
-      ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT];
-      if (!ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, src, 15, &instruction, operands))) {
+      ZydisDisassembledInstruction instruction;
+      if (!ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, PTR_TO_ADDR(src), src, 15, &instruction))) {
         LOG_FATAL("Failed to disasm op.");
       }
 
-      // Check for the operand type that indicates a relative address, e.g., CALL or JMP.
-      for (unsigned int i = 0; i < instruction.operand_count; ++i) {
-        if (operands[i].type == ZYDIS_OPERAND_TYPE_IMMEDIATE && operands[i].imm.is_relative) {
-          // Calculate the offset of the relative address within the instruction.
-          uintptr_t immediate_address = (uintptr_t)src + instruction.raw.imm[i].offset;
-          auto instruction_address = reinterpret_cast<std::uintptr_t>(src);
-          *reloc_op_offset = static_cast<std::int32_t>(immediate_address - instruction_address);
-          return instruction.length;
-        }
+      auto ptr = memory::scanner::Handle(src);
+      while (ptr.as<std::uint8_t&>() == 0xE9) {
+        ptr = ptr.add(1).rip();
       }
+      *reloc_op_offset = static_cast<std::int32_t>(ptr.as<std::uintptr_t>() - PTR_TO_ADDR(src));
 
-      return instruction.length;
+      return instruction.info.length;
     }
   }
 
   DetourHook::DetourHook(std::string name, void* src, void* dst) : name_(std::move(name)) {
-    detour_ = subhook_new(src, dst, static_cast<subhook_flags_t>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
     subhook_set_disasm_handler(DisasmHandler);
+    detour_ = std::make_unique<subhook::Hook>(src, dst, static_cast<subhook::HookFlags>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
   }
 
   DetourHook::DetourHook(std::string name, std::string module, std::string src, void* dst) : name_(std::move(name)) {
@@ -58,11 +45,12 @@ namespace base::hooking {
       return;
     }
 
-    detour_ = subhook_new(src_addr, dst, static_cast<subhook_flags_t>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
+    detour_ = std::make_unique<subhook::Hook>(src_addr, dst, static_cast<subhook::HookFlags>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
   }
 
   DetourHook::~DetourHook() {
-    subhook_free(detour_);
+    if (detour_->IsInstalled())
+      detour_->Remove();
   }
 
   std::string DetourHook::GetName() const {
@@ -70,18 +58,28 @@ namespace base::hooking {
   }
 
   void DetourHook::Enable() {
-    if (const auto status = absl::ErrnoToStatus(subhook_install(detour_), ""); status.ok()) {
+    if (detour_->IsInstalled()) {
+      LOG_WARN("Tried to enable already enabled hook {}", name_);
+      return;
+    }
+
+    if (detour_->Install()) {
       LOG_INFO("Hook for {} has been enabled.", name_);
     } else {
-      LOG_CRITICAL("Failed to enabled hook for {} error {}.", name_, absl::StatusCodeToString(status.code()));
+      LOG_CRITICAL("Failed to enabled hook for {}", name_);
     }
   }
 
   void DetourHook::Disable() {
-    if (const auto status = absl::ErrnoToStatus(subhook_remove(detour_), ""); status.ok()) {
-      LOG_INFO("Hook for {} has been enabled.", name_);
+    if (!detour_->IsInstalled()) {
+      LOG_WARN("Tried to disable already disabled hook {}", name_);
+      return;
+    }
+
+    if (detour_->Remove()) {
+      LOG_INFO("Hook for {} has been disabled.", name_);
     } else {
-      LOG_CRITICAL("Failed to disable hook for {} error {}.", name_, absl::StatusCodeToString(status.code()));
+      LOG_CRITICAL("Failed to disable hook for {}.", name_);
     }
   }
 }
