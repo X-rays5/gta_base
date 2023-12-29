@@ -71,7 +71,7 @@ private:
 int base::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
-  MANAGER_PTR_LIFETIME(lifetime_helper, "ThreadPool", thread_pool_inst, std::thread::hardware_concurrency());
+  MANAGER_PTR_LIFETIME(lifetime_helper, "ThreadPool", thread_pool_inst, std::thread::hardware_concurrency() / 2);
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
 
   lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
