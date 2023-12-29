@@ -4,11 +4,72 @@
 
 #include "stacktrace.hpp"
 #include <stacktrace>
+#include <Zydis/Zydis.h>
 #include "../../util/common.hpp"
 #include "util.hpp"
 
 namespace base::logging::exception {
   namespace {
+    struct ZydisInstruction {
+      ZydisDecodedInstruction instruction;
+      ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT];
+    };
+
+    std::string GetInstructionStr(std::uintptr_t addr, const ZydisInstruction& instruction) {
+      ZydisFormatter formatter;
+      ZydisFormatterInit(&formatter, ZYDIS_FORMATTER_STYLE_INTEL);
+
+      char buffer[256];
+      ZydisFormatterFormatInstruction(&formatter, &instruction.instruction, instruction.operands, instruction.instruction.operand_count_visible, buffer, sizeof(buffer), addr, ZYAN_NULL);
+
+      return buffer;
+    }
+
+
+    std::string GetInstructionsStr(std::uintptr_t addr) {
+      ZydisDecoder decoder;
+#ifdef _M_AMD64
+      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64)))
+#else
+      if (!ZYAN_SUCCESS(ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_COMPAT_32, ZYDIS_STACK_WIDTH_32)))
+#endif
+        return {};
+
+      ZydisInstruction instruction{};
+      std::array<std::string, 5> res_arr;
+      std::uintptr_t cur_addr = addr;
+      std::uintptr_t initial_length = 0;
+
+      if (ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, reinterpret_cast<void*>(cur_addr), 15, &instruction.instruction, instruction.operands))) {
+        res_arr[2] = GetInstructionStr(cur_addr, instruction);
+        res_arr[2].append(" <-- here");
+        initial_length = instruction.instruction.length;
+      }
+      cur_addr += initial_length;
+
+      for (int i = 0; i < 2; i++) {
+        if (ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, reinterpret_cast<void*>(cur_addr), 15, &instruction.instruction, instruction.operands))) {
+          res_arr[i] = GetInstructionStr(cur_addr, instruction);
+          cur_addr += instruction.instruction.length;
+        }
+      }
+      cur_addr += initial_length;
+
+      for (int i = 3; i < 5; i++) {
+        if (ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, reinterpret_cast<void*>(cur_addr), 15, &instruction.instruction, instruction.operands))) {
+          res_arr[i] = GetInstructionStr(cur_addr, instruction);
+          cur_addr += instruction.instruction.length;
+        }
+      }
+
+      std::stringstream ss;
+      for (auto&& line : res_arr) {
+        ss << line << '\n';
+      }
+
+      return ss.str();
+    }
+
     std::string RemoveDoubleSpaces(const std::string& str) {
       std::string result;
       for (auto it = str.begin(); it != str.end(); ++it) {
@@ -45,9 +106,9 @@ namespace base::logging::exception {
   }
 
   absl::StatusOr<std::string> GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
-    #ifndef NDEBUG
+#ifndef NDEBUG
     //__debugbreak();
-    #endif
+#endif
 
     std::stringstream msg;
 
@@ -64,6 +125,10 @@ namespace base::logging::exception {
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
     //msg << "***** Exception instruction: " << common::GetInstructionStr((std::uintptr_t) except_rec->ExceptionAddress) << " *****\n"; TODO: impl zydis decomp
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
+
+    msg << "\n***** Exception instructions *****\n";
+    msg << GetInstructionsStr(reinterpret_cast<std::uintptr_t>(except_rec->ExceptionAddress)) << '\n';
+
     msg << "\n***** STACKDUMP *****\n";
 
     msg << "\nLoaded Modules:\n";
