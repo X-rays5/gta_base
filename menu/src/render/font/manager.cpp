@@ -1,0 +1,126 @@
+//
+// Created by X-ray on 29/12/2023.
+//
+
+#include "manager.hpp"
+#include <battery/embed.hpp>
+
+namespace base::render::font {
+  namespace {
+    void MergeFa() {
+      static const ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
+      ImFontConfig icons_config;
+      icons_config.MergeMode = true;
+      icons_config.PixelSnapH = true;
+      icons_config.FontDataOwnedByAtlas = false;
+      icons_config.GlyphOffset.y = 5;
+
+      static const auto font_awesome = b::embed<"assets/fonts/fa-solid-900.ttf">();
+
+      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_awesome.data(), (int)font_awesome.size(), 13, &icons_config, icons_ranges)) {
+        LOG_ERROR("Failed to merge fa");
+      }
+    }
+  }
+
+  Manager::Manager() {
+    ImGui::GetIO().Fonts->Clear();
+    ImFont* font = ImGui::GetIO().Fonts->AddFontDefault();
+    FinalizeLoading("default", font, true);
+
+    kMANAGER = this;
+  }
+
+  Manager::~Manager() {
+    kMANAGER = nullptr;
+  }
+
+  bool Manager::LoadFontFromDisk(const std::string& name, std::filesystem::path path, bool merge_fa) {
+    if (fonts_.contains(name)) {
+      LOG_WARN("Tried to load an already loaded font with the name {}", name);
+      return false;
+    }
+
+    if (!std::filesystem::is_regular_file(path)) {
+      LOG_ERROR("Tried to load {} font that doesn't exist from: {}", name, path.string());
+      return false;
+    }
+
+    const ImGuiIO& io = ImGui::GetIO();
+
+    ImFont* font = io.Fonts->AddFontFromFileTTF(path.string().c_str(), 13);
+    if (!font) {
+      LOG_ERROR("Failed to load {} font from disk.", name);
+      return false;
+    }
+
+    return FinalizeLoading(name, font, merge_fa);
+  }
+
+  bool Manager::LoadFontFromMemory(const std::string& name, void* font_data, std::int32_t font_data_size, bool merge_fa) {
+    if (fonts_.contains(name)) {
+      LOG_WARN("Tried to load an already loaded font {}.", name);
+      return false;
+    }
+
+    const ImGuiIO& io = ImGui::GetIO();
+
+    ImFontConfig cfg;
+    cfg.FontDataOwnedByAtlas = false;
+
+    ImFont* font = io.Fonts->AddFontFromMemoryTTF(font_data, font_data_size, 13, &cfg);
+    if (!font) {
+      LOG_ERROR("Failed to load {} font from memory.", name);
+      return false;
+    }
+
+    return FinalizeLoading(name, font, merge_fa);
+  }
+
+  bool Manager::LoadFontFromMemoryCompressed(const std::string& name, void* font_data, std::int32_t font_data_size, bool merge_fa) {
+    if (fonts_.contains(name)) {
+      LOG_WARN("Tried to load an already loaded font {}.", name);
+      return false;
+    }
+
+    const ImGuiIO& io = ImGui::GetIO();
+
+    ImFontConfig cfg;
+    cfg.FontDataOwnedByAtlas = false;
+
+    ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(font_data, font_data_size, 13, &cfg);
+    if (!font) {
+      LOG_ERROR("Failed to load {} font from memory.", name);
+      return false;
+    }
+
+    return FinalizeLoading(name, font, merge_fa);
+  }
+
+  void Manager::PushFont(const std::string& name) {
+    auto it = fonts_.find(name);
+
+    if (it != fonts_.end() && it->second) {
+      ImGui::PushFont(it->second);
+    } else {
+      LOG_WARN("Tried to push non existing font {}", name);
+    }
+  }
+
+  void Manager::PopFont() {
+    ImGui::PopFont();
+  }
+
+
+  bool Manager::FinalizeLoading(const std::string& name, ImFont* font, bool merge_fa) {
+    if (merge_fa)
+      MergeFa();
+
+    if (!ImGui::GetIO().Fonts->IsBuilt())
+      ImGui::GetIO().Fonts->Build();
+
+    fonts_[name] = font;
+
+    return true;
+  }
+}

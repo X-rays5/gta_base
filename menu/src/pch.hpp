@@ -13,6 +13,7 @@
 #include "globals.hpp"
 #include "logging/logging_macro.hpp"
 #include "win32/all.hpp"
+#include "render/font/IconsFontAwesome6.h"
 
 #ifdef MSVC
 #define FORCE_INLINE __forceinline
