@@ -1,5 +1,0 @@
-name = "Hello World!"
-description = "This is a Hello World! lua script"
-version = "v1.0.0"
-main_file = "src/main.lua"
-author = "X-ray"
