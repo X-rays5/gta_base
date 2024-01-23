@@ -12,7 +12,7 @@ namespace base::memory::scanner {
   void Batch::run(Range region) {
     bool all_found = true;
     for (auto& entry : entries_) {
-      if (auto result = region.scan(entry.pattern_); result.ok()) {
+      if (auto result = region.scan(entry.pattern_); result.error()) {
         if (entry.cb_) {
           std::invoke(entry.cb_, result.value());
           LOG_DEBUG("Found '{}' GTA5.exe+0x{:x}", entry.name_,

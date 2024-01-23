@@ -5,24 +5,24 @@
 
 namespace base::memory::scanner {
   class Range {
-    public:
-      Handle begin();
+  public:
+    Handle begin();
 
-      Handle end();
+    Handle end();
 
-      std::size_t size();
+    std::size_t size();
 
-      bool contains(Handle h);
+    bool contains(Handle h);
 
-      absl::StatusOr<Handle> scan(Pattern const& sig);
+    StatusOr<Handle> scan(Pattern const& sig);
 
-      std::vector<Handle> scan_all(Pattern const& sig);
+    std::vector<Handle> scan_all(Pattern const& sig);
 
-    protected:
-      Handle base_;
-      std::size_t size_;
+  protected:
+    Handle base_;
+    std::size_t size_;
 
-    protected:
-      Range(Handle base, std::size_t size);
+  protected:
+    Range(Handle base, std::size_t size);
   };
 }

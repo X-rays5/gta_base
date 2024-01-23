@@ -21,18 +21,20 @@ namespace base::memory::scanner {
     :
     Module(GetModuleHandleW(name.data())) {}
 
-  [[maybe_unused]] Handle Module::get_export(std::string_view symbol_name) { return GetProcAddress(base_.as<HMODULE>(), symbol_name.data()); }
+  [[maybe_unused]] Handle Module::get_export(std::string_view symbol_name) {
+    return GetProcAddress(base_.as<HMODULE>(), symbol_name.data());
+  }
 
-  absl::StatusOr<Handle> ScanForPattern(const std::string& pattern, const std::string& module, [[maybe_unused]] bool check_cache) {
+  StatusOr<Handle> ScanForPattern(const std::string& pattern, const std::string& module, [[maybe_unused]] bool check_cache) {
     Module mod(nullptr);
     if (!module.empty())
       mod = Module(module);
 
     auto res = mod.scan(Pattern(pattern));
-    if (res.ok())
+    if (res.has_value())
       LOG_DEBUG("Found pattern at {}", res.value().as<std::uintptr_t>());
     else
-      LOG_DEBUG("Failed to find pattern");
+      LOG_DEBUG("Failed to find pattern: {}", res);
 
     return res;
   }

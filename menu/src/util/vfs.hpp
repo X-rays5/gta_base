@@ -15,10 +15,7 @@
 namespace base::util::vfs {
   inline void SetWorkingDir() {
     auto app_path_res = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData);
-    if (!app_path_res.ok()) {
-      LOG_CRITICAL("Failed to get appdata path: {}", app_path_res.status().ToString());
-      abort();
-    }
+    LOG_FATAL_CONDITIONAL(app_path_res.error(), "Failed to get appdata path: {}", app_path_res);
 
     const auto appdata_path = app_path_res.value() / globals::kBASE_NAME;
 

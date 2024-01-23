@@ -7,7 +7,9 @@
 #include <wincrypt.h>
 
 namespace base::util::common {
-  std::uint64_t GetTimeStamp() { return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count(); }
+  std::uint64_t GetTimeStamp() {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+  }
 
   std::string AddrToHex(uint64_t addr) {
     if (!addr)
@@ -47,59 +49,63 @@ namespace base::util::common {
       tab['F'] = 15;
     }
 
-    std::int64_t operator[](char const idx) const { return tab[idx]; }
+    std::int64_t operator[](char const idx) const {
+      return tab[idx];
+    }
   } hex_to_int_table;
 
-  absl::StatusOr<std::uint64_t> HexCharToInt(const char number) {
+  StatusOr<std::uint64_t> HexCharToInt(const char number) {
     if (number == '0')
       return 0;
 
     auto res = hex_to_int_table[number];
     if (res == 0)
-      return absl::InvalidArgumentError("Invalid hex character.");
+      return MakeFailure<ResultCode::kINVALID_ARGUMENT>("Invalid hex character.");
 
     return res;
   }
 
-  absl::StatusOr<std::string> GetFileMd5Hash(const std::filesystem::path& file_path) {
+  StatusOr<std::string> GetFileMd5Hash(const std::filesystem::path& file_path) {
     HCRYPTPROV hProv = 0;
     HCRYPTHASH hHash = 0;
     BYTE rgbHash[16];
-    DWORD cbHash = static_cast<DWORD>(std::size(rgbHash));
+    auto cbHash = static_cast<DWORD>(std::size(rgbHash));
     constexpr CHAR rgbDigits[] = "0123456789abcdef";
     std::string res;
 
-    if (!CryptAcquireContextA(&hProv, nullptr, nullptr, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) { return absl::InternalError(fmt::format("CryptAcquireContextA failed: {}", GetLastError())); }
+    if (!CryptAcquireContextA(&hProv, nullptr, nullptr, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(fmt::format("CryptAcquireContextA failed: {}", GetLastError()));
+    }
 
     if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
       CryptReleaseContext(hProv, 0);
-      return absl::InternalError(fmt::format("CryptCreateHash failed: {}", GetLastError()));
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(fmt::format("CryptCreateHash failed: {}", GetLastError()));
     }
 
     std::ifstream file(file_path);
 
     if (!file.is_open())
-      return absl::InternalError(fmt::format("Failed to open file: {}", file_path.string()));
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(fmt::format("Failed to open file: {}", file_path.string()));
 
     std::vector<char> buffer(1024);
     while (file.read(buffer.data(), static_cast<std::streamsize>(buffer.size()))) {
       if (!CryptHashData(hHash, reinterpret_cast<BYTE*>(buffer.data()), static_cast<DWORD>(buffer.size()), 0)) {
         CryptReleaseContext(hProv, 0);
         CryptDestroyHash(hHash);
-        return absl::InternalError(fmt::format("CryptHashData failed: {}", GetLastError()));
+        return MakeFailure<ResultCode::kINTERNAL_ERROR>(fmt::format("CryptHashData failed: {}", GetLastError()));
       }
     }
 
     if (!CryptHashData(hHash, reinterpret_cast<BYTE*>(buffer.data()), static_cast<DWORD>(file.gcount()), 0)) {
       CryptReleaseContext(hProv, 0);
       CryptDestroyHash(hHash);
-      return absl::InternalError(fmt::format("CryptHashData failed: {}", GetLastError()));
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(fmt::format("CryptHashData failed: {}", GetLastError()));
     }
 
     if (!CryptGetHashParam(hHash, HP_HASHVAL, rgbHash, &cbHash, 0)) {
       CryptReleaseContext(hProv, 0);
       CryptDestroyHash(hHash);
-      return absl::InternalError(fmt::format("CryptGetHashParam failed: {}", GetLastError()));
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(fmt::format("CryptGetHashParam failed: {}", GetLastError()));
     }
 
     for (DWORD i = 0; i < cbHash; i++) {

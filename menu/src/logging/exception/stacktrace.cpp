@@ -10,12 +10,12 @@
 
 namespace base::logging::exception {
   namespace {
-    absl::StatusOr<std::string> GetInstructionsStr(const std::uintptr_t addr) {
+    StatusOr<std::string> GetInstructionsStr(const std::uintptr_t addr) {
       const std::uint32_t pid = GetCurrentProcessId();
 
       auto except_mod_res = win32::memory::GetModuleFromAddress(pid, addr);
-      if (!except_mod_res.ok())
-        return except_mod_res.status();
+      if (except_mod_res.error())
+        return except_mod_res.error().Forward();
 
       constexpr int num_instructions = 5;
       constexpr int middle_idx = 2;
@@ -92,7 +92,7 @@ namespace base::logging::exception {
     }
   }
 
-  absl::StatusOr<std::string> GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
+  StatusOr<std::string> GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
 #ifndef NDEBUG
     //__debugbreak();
 #endif
@@ -105,8 +105,8 @@ namespace base::logging::exception {
     msg << "***** Exception pid: " << GetCurrentProcessId() << " *****\n";
 
     auto except_mod_res = win32::memory::GetModuleNameFromAddress(GetCurrentProcessId(), ctx->Rip);
-    if (!except_mod_res.ok())
-      return except_mod_res.status();
+    if (except_mod_res.error())
+      return except_mod_res.error().Forward();
 
     msg << "***** Exception module: " << except_mod_res.value() << " *****\n";
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
@@ -118,8 +118,8 @@ namespace base::logging::exception {
     msg << "\nLoaded Modules:\n";
 
     auto mod_res = win32::GetProcessModules(GetCurrentProcessId());
-    if (!mod_res.ok())
-      return mod_res.status();
+    if (mod_res.error())
+      return mod_res.error().Forward();
 
     std::vector<MODULEENTRY32> modules = mod_res.value();
     for (auto&& mod : modules) {

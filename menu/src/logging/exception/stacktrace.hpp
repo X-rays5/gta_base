@@ -7,8 +7,8 @@
 #include <string>
 
 namespace base::logging::exception {
-  absl::StatusOr<std::string> GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count);
-  FORCE_INLINE absl::StatusOr<std::string> GetStackTrace(PEXCEPTION_POINTERS except, std::size_t stacktrace_skip_count) {
+  StatusOr<std::string> GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count);
+  FORCE_INLINE StatusOr<std::string> GetStackTrace(PEXCEPTION_POINTERS except, std::size_t stacktrace_skip_count) {
     return GetStackTrace(except->ExceptionRecord, except->ContextRecord, stacktrace_skip_count);
   }
 }

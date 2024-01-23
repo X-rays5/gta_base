@@ -16,7 +16,7 @@ namespace base::win32 {
     };
   }
 
-  absl::StatusOr<std::filesystem::path> GetKnownFolderPath(KNOWN_FOLDER_ID folder_id) {
+  StatusOr<std::filesystem::path> GetKnownFolderPath(KNOWN_FOLDER_ID folder_id) {
     PWSTR path = nullptr;
     const GUID guid = guid_map.at(folder_id);
 
@@ -26,18 +26,18 @@ namespace base::win32 {
       return res;
     } else {
       LOG_ERROR("Failed to get known folder path. win32 err code: {}", GetLastError());
-      return absl::NotFoundError("Unknown folder requested");
+      return MakeFailure<ResultCode::kNOT_FOUND>("Unknown folder requested");
     }
   }
 
-  absl::StatusOr<std::vector<MODULEENTRY32>> GetProcessModules(std::uint32_t pid) {
+  StatusOr<std::vector<MODULEENTRY32>> GetProcessModules(std::uint32_t pid) {
     std::vector<MODULEENTRY32> modules;
     MODULEENTRY32 mod_entry{};
     mod_entry.dwSize = sizeof(MODULEENTRY32);
 
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
     if (hSnapshot == INVALID_HANDLE_VALUE) {
-      return absl::InvalidArgumentError("PID is an invalid handle");
+      return MakeFailure<ResultCode::kINVALID_ARGUMENT>("PID is an invalid handle");
     }
 
     if (Module32First(hSnapshot, &mod_entry)) {
@@ -50,11 +50,16 @@ namespace base::win32 {
     return modules;
   }
 
-  absl::StatusOr<HWND> GetHwnd(std::string_view window_class, std::string_view window_name) {
-    return FindWindowA(window_class == "" ? nullptr : window_class.data(), window_name == "" ? nullptr : window_name.data());
+  StatusOr<HWND> GetHwnd(std::string_view window_class, std::string_view window_name) {
+    auto hwnd = FindWindowA(window_class.empty() ? nullptr : window_class.data(), window_name.empty() ? nullptr : window_name.data());
+    if (hwnd == INVALID_HANDLE_VALUE) {
+      return MakeFailure<ResultCode::kNOT_FOUND>("Failed to retrieve valid hwnd handle for target window");
+    }
+
+    return hwnd;
   }
 
-  absl::StatusOr<HWND> GetGameHwnd() {
+  StatusOr<HWND> GetGameHwnd() {
     static const auto hwnd = GetHwnd(globals::target_window_class, globals::target_window_name);
     return hwnd;
   }

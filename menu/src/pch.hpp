@@ -11,6 +11,7 @@
 #include <absl/status/status.h>
 #include <absl/status/statusor.h>
 #include "globals.hpp"
+#include "util/result.hpp"
 #include "logging/logging_macro.hpp"
 #include "win32/all.hpp"
 #include "render/font/IconsFontAwesome6.h"
@@ -22,5 +23,4 @@
 #elif
 #define FORCE_INLINE
 #endif
-
 #endif //BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP

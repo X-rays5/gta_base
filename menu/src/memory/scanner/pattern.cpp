@@ -3,7 +3,6 @@
 
 namespace base::memory::scanner {
   Pattern::Pattern(std::string_view ida_sig) {
-
     for (std::size_t i = 0; i < ida_sig.size(); ++i) {
       if (ida_sig[i] == ' ')
         continue;
@@ -12,7 +11,7 @@ namespace base::memory::scanner {
         if (!last) {
           auto c1 = util::common::HexCharToInt(ida_sig[i]);
           auto c2 = util::common::HexCharToInt(ida_sig[i + 1]);
-          if (c1.ok() && c2.ok()) {
+          if (c1.has_value() && c2.has_value()) {
             bytes_.emplace_back(static_cast<std::uint8_t>((c1.value() * 0x10) + c2.value()));
           }
         }
