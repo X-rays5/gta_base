@@ -60,7 +60,13 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/render/font/manager.cpp
         src/render/font/manager.hpp
         src/render/font/IconsFontAwesome6.h
+        src/ui/localization/manager.cpp
+        src/ui/localization/manager.hpp
+        src/ui/localization/default.cpp
+        src/util/glaze/glaze_meta.cpp
+        src/util/glaze/glaze_meta.hpp
         src/util/result.hpp
+        src/util/type_traits.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
@@ -73,10 +79,11 @@ include(../vendor/imgui.cmake)
 include(../vendor/leopard.cmake)
 include(../vendor/magic_enum.cmake)
 include(../vendor/inireader.cmake)
-include(../vendor/minhook.cmake)
 include(../vendor/subhook.cmake)
 include(../vendor/zydis.cmake)
 include(../vendor/battery_embed.cmake)
+include(../vendor/glaze.cmake)
+include(../vendor/unordered_dense.cmake)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
