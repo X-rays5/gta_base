@@ -6,21 +6,27 @@ namespace base::memory::scanner {
     :
     base_(base), size_(size) {}
 
-  Handle Range::begin() { return base_; }
+  Handle Range::begin() {
+    return base_;
+  }
 
-  Handle Range::end() { return base_.add(size_); }
+  Handle Range::end() {
+    return base_.add(size_);
+  }
 
-  std::size_t Range::size() { return size_; }
+  std::size_t Range::size() {
+    return size_;
+  }
 
   bool Range::contains(Handle h) {
     return h.as<std::uintptr_t>() >= begin().as<std::uintptr_t>() && h.as<std::uintptr_t>() <= end().as<
-             std::uintptr_t>();
+      std::uintptr_t>();
   }
 
   // https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore%E2%80%93Horspool_algorithm
   // https://www.youtube.com/watch?v=AuZUeshhy-s
-  absl::StatusOr<Handle> scan_pattern(const std::optional<std::uint8_t>* sig, std::size_t length, Handle begin,
-                                      std::size_t module_size) {
+  StatusOr<Handle> scan_pattern(const std::optional<std::uint8_t>* sig, std::size_t length, Handle begin,
+                                std::size_t module_size) {
     std::size_t maxShift = length;
     const std::size_t max_idx = length - 1;
 
@@ -36,10 +42,14 @@ namespace base::memory::scanner {
 
     //Store max shiftable bytes for non wildcards.
     std::size_t shift_table[UINT8_MAX + 1]{};
-    for (std::size_t i{}; i <= UINT8_MAX; ++i) { shift_table[i] = maxShift; }
+    for (std::size_t i{}; i <= UINT8_MAX; ++i) {
+      shift_table[i] = maxShift;
+    }
 
     //Fill shift table with sig bytes
-    for (std::size_t i{wild_card_idx + 1}; i != max_idx; ++i) { shift_table[*sig[i]] = max_idx - i; }
+    for (std::size_t i{wild_card_idx + 1}; i != max_idx; ++i) {
+      shift_table[*sig[i]] = max_idx - i;
+    }
 
     //Loop data
     for (std::size_t current_idx{}; current_idx <= module_size - length;) {
@@ -47,14 +57,16 @@ namespace base::memory::scanner {
         if (sig[sig_idx] && *begin.add(current_idx + sig_idx).as<uint8_t*>() != *sig[sig_idx]) {
           current_idx += shift_table[*begin.add(current_idx + max_idx).as<uint8_t*>()];
           break;
+        } else if (sig_idx == NULL) {
+          return begin.add(current_idx);
         }
-        else if (sig_idx == NULL) { return begin.add(current_idx); }
       }
     }
-    return absl::NotFoundError("Failed to find pattern");
+
+    return MakeFailure<ResultCode::kNOT_FOUND>("Failed to find pattern");
   }
 
-  absl::StatusOr<Handle> Range::scan(Pattern const& sig) {
+  StatusOr<Handle> Range::scan(Pattern const& sig) {
     const auto data = sig.bytes_.data();
     const auto length = sig.bytes_.size();
 
@@ -62,7 +74,11 @@ namespace base::memory::scanner {
   }
 
   bool pattern_matches(std::uint8_t* target, const std::optional<std::uint8_t>* sig, std::size_t length) {
-    for (std::size_t i{}; i != length; ++i) { if (sig[i] && *sig[i] != target[i]) { return false; } }
+    for (std::size_t i{}; i != length; ++i) {
+      if (sig[i] && *sig[i] != target[i]) {
+        return false;
+      }
+    }
 
     return true;
   }
@@ -74,7 +90,9 @@ namespace base::memory::scanner {
 
     const auto search_end = size_ - length;
     for (std::uintptr_t i = 0; i < search_end; ++i) {
-      if (pattern_matches(base_.add(i).as<std::uint8_t*>(), data, length)) { result.push_back(base_.add(i)); }
+      if (pattern_matches(base_.add(i).as<std::uint8_t*>(), data, length)) {
+        result.push_back(base_.add(i));
+      }
     }
 
     return std::move(result);

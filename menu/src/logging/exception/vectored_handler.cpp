@@ -10,24 +10,24 @@
 namespace base::logging::exception {
   namespace {
     void MSVCException(PEXCEPTION_POINTERS except) {
-      std::uint32_t pid = GetCurrentProcessId();
+      const std::uint32_t pid = GetCurrentProcessId();
 
       auto mod_name_res = win32::memory::GetModuleNameFromAddress(pid, except->ContextRecord->Rip);
       std::string mod_name;
-      if (mod_name_res.ok())
+      if (mod_name_res.has_value())
         mod_name = mod_name_res.value();
-      
+
       auto offset_res = win32::memory::GetModuleOffsetFromAddress(pid, except->ContextRecord->Rip);
       std::uintptr_t offset;
-      if (offset_res.ok())
+      if (offset_res.has_value())
         offset = offset_res.value();
 
-      auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
+      const auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
 
       if (exception && exception->what()) {
         LOG_ERROR("{}+{}: {}", mod_name, offset, exception->what());
       } else {
-        LOG_ERROR("{}+{}: cpp exception thrown");
+        LOG_ERROR("{}+{}: cpp exception thrown", mod_name, offset);
       }
     }
 
@@ -52,7 +52,7 @@ namespace base::logging::exception {
       // TODO: implement some cursed fatal exception recovery
 
       auto stacktrace_res = GetStackTrace(except, 7);
-      if (stacktrace_res.ok())
+      if (stacktrace_res.has_value())
         LOG_CRITICAL(stacktrace_res.value());
 
       spdlog::default_logger_raw()->flush();

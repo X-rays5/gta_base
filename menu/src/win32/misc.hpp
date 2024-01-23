@@ -18,14 +18,14 @@ namespace base::win32 {
     kRoamingAppData,
   };
 
-  absl::StatusOr<std::filesystem::path> GetKnownFolderPath(KNOWN_FOLDER_ID folder_id);
+  StatusOr<std::filesystem::path> GetKnownFolderPath(KNOWN_FOLDER_ID folder_id);
 
-  absl::StatusOr<std::vector<MODULEENTRY32>> GetProcessModules(std::uint32_t pid);
+  StatusOr<std::vector<MODULEENTRY32>> GetProcessModules(std::uint32_t pid);
 
   /// @note Leave window_class or window_name empty to ignore them
-  absl::StatusOr<HWND> GetHwnd(std::string_view window_class, std::string_view window_name);
-  absl::StatusOr<HWND> GetGameHwnd();
-  
+  StatusOr<HWND> GetHwnd(std::string_view window_class, std::string_view window_name);
+  StatusOr<HWND> GetGameHwnd();
+
   bool IsForegroundWindow();
   bool IsTargetProcess();
 }

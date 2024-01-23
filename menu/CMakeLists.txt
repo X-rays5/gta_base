@@ -60,6 +60,7 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/render/font/manager.cpp
         src/render/font/manager.hpp
         src/render/font/IconsFontAwesome6.h
+        src/util/result.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
@@ -70,7 +71,6 @@ include(../vendor/spdlog.cmake)
 include(../vendor/xorstr.cmake)
 include(../vendor/imgui.cmake)
 include(../vendor/leopard.cmake)
-include(../vendor/abseil.cmake)
 include(../vendor/magic_enum.cmake)
 include(../vendor/inireader.cmake)
 include(../vendor/minhook.cmake)

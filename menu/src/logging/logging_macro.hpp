@@ -14,7 +14,7 @@
 #define SPDLOG_ACTIVE_LEVEL 2 // INFO
 #endif
 
-#define LOGGER_LOG(logger, level, msg, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, ""}, level, msg, __VA_ARGS__)
+#define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, ""}, level, __VA_ARGS__)
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
 #define LOG_TRACE(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::trace, __VA_ARGS__)
@@ -66,9 +66,7 @@
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL
 #define LOG_FATAL(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::critical, __VA_ARGS__); spdlog::default_logger_raw()->flush(); abort()
-#define LOG_FATAL_CONDITIONAL(condition, ...) if (condition) { \
-  LOG_FATAL(__VA_ARGS__); \
-  }
+#define LOG_FATAL_CONDITIONAL(condition, ...) if (condition) {LOG_FATAL(__VA_ARGS__);}
 #else
 #define LOG_FATAL(...)  (void)0
 #define LOG_FATAL_CONDITIONAL(...) (void)0
