@@ -7,7 +7,6 @@
 #pragma warning(push, 0)
 #include <ThreadPool/ThreadPool.h>
 #pragma warning(pop)
-#include <MinHook.hpp>
 #include "render/renderer.hpp"
 #include "memory/pointers.hpp"
 #include "hooking/hooking.hpp"
@@ -76,14 +75,10 @@ int base::menu_main() {
 
   lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
     if (action == LifeTimeHelper::Init) {
-      MH_Initialize();
-      LOG_INFO("[INIT] MinHook");
       hooking_inst = std::make_unique<hooking::Manager>();
       LOG_INFO("[INIT] HookingManager");
     } else {
       hooking_inst.reset();
-      LOG_INFO("[SHUTDOWN] HookingManager");
-      MH_Uninitialize();
       LOG_INFO("[SHUTDOWN] MinHook");
     }
   });
