@@ -12,13 +12,13 @@ namespace base::ui::localization {
     extern const translation_map_t default_translation;
 
     struct Translation {
-        translation_map_t loaded_translation_;
+        translation_map_t loaded_translation_ = default_translation;
 
-        Status Load();
+        [[nodiscard]] Status Load();
 
-        Status Save();
+        [[nodiscard]] Status Save();
 
-        void Merge();
+        [[nodiscard]] Status Merge(translation_map_t tmp_translation);
     };
 
     class Manager {
@@ -27,7 +27,7 @@ namespace base::ui::localization {
 
         ~Manager();
 
-        std::string Localize(const char* key) {
+        [[nodiscard]] std::string Localize(const char* key) {
             const auto it = translation_.loaded_translation_.find(key);
 
             return (it != translation_.loaded_translation_.end()) ? it->second : key;
@@ -35,13 +35,11 @@ namespace base::ui::localization {
 
     private:
         Translation translation_;
-
-    private:
     };
 
     inline Manager* kMANAGER{};
 
-    inline std::string operator ""_l10n(const char* key) {
+    [[nodiscard]] inline std::string operator ""_l10n(const char* key) {
         return kMANAGER->Localize(key);
     }
 }
