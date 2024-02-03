@@ -22,22 +22,42 @@ namespace base::util::result {
     StatusErr() : result_code_(ResultCode::kSUCCESS) {}
     StatusErr(const ResultCode code, const std::string& msg = "") : result_code_(code), msg_(msg) {}
 
+    /**
+     * \brief Check if the status is ok
+     * \return True if the status is ok, false otherwise
+     */
     [[nodiscard]] bool Ok() const {
       return result_code_ == ResultCode::kSUCCESS;
     }
 
+    /**
+     * \brief Get the result code
+     * \return The result code
+     */
     [[nodiscard]] ResultCode GetResult() const {
       return result_code_;
     }
 
+    /**
+     * \brief Get the result code as a string
+     * \return The result code as a string
+     */
     [[nodiscard]] std::string GetResultString() const {
       return magic_enum::enum_name(result_code_).data();
     }
 
+    /**
+     * \brief Get the result message
+     * \return The result message
+     */
     [[nodiscard]] std::string GetResultMessage() const {
       return msg_;
     }
 
+    /**
+     * \brief Forward the status
+     * \return An unexpected status
+     */
     [[nodiscard]] std::unexpected<StatusErr> Forward() {
       return std::unexpected(*this);
     }
@@ -55,6 +75,11 @@ namespace base::util::result {
   template <typename T>
   using StatusOr = std::expected<T, StatusErr>;
 
+  /**
+   * \brief Make a failure status
+   * \param msg The result message
+   * \return An unexpected status
+   */
   template <ResultCode code>
   std::unexpected<StatusErr> MakeFailure(const std::string& msg = "") {
     return std::unexpected(StatusErr(code, msg));
