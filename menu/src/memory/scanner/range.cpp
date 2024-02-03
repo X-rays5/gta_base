@@ -73,7 +73,7 @@ namespace base::memory::scanner {
     return scan_pattern(data, length, base_, size_);
   }
 
-  bool pattern_matches(std::uint8_t* target, const std::optional<std::uint8_t>* sig, std::size_t length) {
+  bool pattern_matches(const std::uint8_t* target, const std::optional<std::uint8_t>* sig, std::size_t length) {
     for (std::size_t i{}; i != length; ++i) {
       if (sig[i] && *sig[i] != target[i]) {
         return false;
