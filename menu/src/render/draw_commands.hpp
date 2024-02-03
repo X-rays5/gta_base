@@ -21,7 +21,7 @@ namespace base::render {
 
   class Rect : public BaseDrawCommand {
   public:
-    Rect(ImVec2 pos, ImVec2 size, ImU32 color) :
+    Rect(const ImVec2 pos, const ImVec2 size, const ImU32 color) :
       pos_(pos), size_(size), color_(color) {}
 
     void Draw() override {
@@ -34,13 +34,13 @@ namespace base::render {
     ImU32 color_;
   };
 
-  class RectOutline : public BaseDrawCommand {
+  class RectOutline final : public BaseDrawCommand {
   public:
-    RectOutline(ImVec2 pos, ImVec2 size, ImU32 color, float thickness = 1.0f) :
+    RectOutline(const ImVec2 pos, const ImVec2 size, const ImU32 color, const float thickness = 1.0F) :
       pos_(pos), size_(size), color_(color), thickness_(thickness) {}
 
-    void Draw() final {
-      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.f,NULL, thickness_);
+    void Draw() override {
+      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.F,NULL, thickness_);
     }
 
   private:
@@ -50,16 +50,15 @@ namespace base::render {
     float thickness_;
   };
 
-  class RectBorder : Rect {
+  class RectBorder final : Rect {
   public:
-    RectBorder(ImVec2 pos, ImVec2 size, ImU32 background_color, ImU32 border_color, bool top, bool bottom, bool left, bool right, float thickness = 0.005f) :
+    RectBorder(const ImVec2 pos, const ImVec2 size, const ImU32 background_color, const ImU32 border_color, const bool top, const bool bottom, const bool left, const bool right, const float thickness = 0.005F) :
       Rect(pos, size, background_color), border_color_(border_color), top_(top), bottom_(bottom), left_(left), right_(right), thickness_(thickness) {}
 
-    void Draw() final {
+    void Draw() override {
       Rect::Draw();
 
-      auto draw_list = util::GetDrawList();
-
+      const auto draw_list = util::GetDrawList();
       if (top_)
         draw_list->AddLine(util::ScaleToScreen(pos_), util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y)), border_color_, thickness_);
       if (bottom_)
@@ -81,7 +80,7 @@ namespace base::render {
 
   class Text : public BaseDrawCommand {
   public:
-    Text(ImVec2 pos, ImU32 color, std::string text, bool right_align, bool center, float y_size_text, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
+    Text(const ImVec2 pos, const ImU32 color, std::string text, const bool right_align, const bool center, const float y_size_text, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
       pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
 
     void Draw() override {
@@ -89,7 +88,7 @@ namespace base::render {
         font_ = ImGui::GetFont();
       }
 
-      if (max_width_ > 0.f) {
+      if (max_width_ > 0.F) {
         util::WordWrap(y_size_text_, text_, max_width_, max_lines_);
       }
 
@@ -117,9 +116,9 @@ namespace base::render {
     const ImFont* font_;
   };
 
-  class TextBackground : Text {
+  class TextBackground final : Text {
   public:
-    TextBackground(ImVec2 pos, ImU32 text_color, ImU32 background_color, std::string text, bool right_align, bool center, float y_size_text, float padding_side = 0.01f, float padding_bottom_top = 0.01f, bool border_top = false, bool border_bottom = false, bool border_left = false, bool border_right = false, ImU32 border_color = NULL, float border_thickness = 1.f, float max_width = 0.f, std::size_t max_lines = 2, const ImFont* font = nullptr) :
+    TextBackground(const ImVec2 pos, const ImU32 text_color, const ImU32 background_color, std::string text, const bool right_align, const bool center, const float y_size_text, const float padding_side = 0.01F, const float padding_bottom_top = 0.01F, const bool border_top = false, const bool border_bottom = false, const bool border_left = false, const bool border_right = false, const ImU32 border_color = NULL, const float border_thickness = 1.F, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
       Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font),
       rect_({}, {}, {}, {}, {}, {}, {}, {}) {
       ImVec2 rect_pos = pos_;
@@ -133,7 +132,7 @@ namespace base::render {
       rect_ = RectBorder(rect_pos, rect_size, background_color, border_color, border_top, border_bottom, border_left, border_right, border_thickness);
     }
 
-    void Draw() final {
+    void Draw() override {
       rect_.Draw();
       Text::Draw();
     }
@@ -142,13 +141,13 @@ namespace base::render {
     RectBorder rect_;
   };
 
-  class Image : public BaseDrawCommand {
+  class Image final : public BaseDrawCommand {
   public:
     Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) :
       texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
 
-    void Draw() final {
-      util::GetDrawList()->AddImage((void*)texture_, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+    void Draw() override {
+      util::GetDrawList()->AddImage(texture_, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
   private:
@@ -160,12 +159,12 @@ namespace base::render {
     ImU32 col_;
   };
 
-  class RunRenderCode : public BaseDrawCommand {
+  class RunRenderCode final : public BaseDrawCommand {
   public:
     explicit RunRenderCode(std::function<void()> render_code) :
       render_code_(std::move(render_code)) {}
 
-    void Draw() final {
+    void Draw() override {
       render_code_();
     }
 

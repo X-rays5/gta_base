@@ -8,7 +8,7 @@
 namespace base::render::font {
   namespace {
     void MergeFa() {
-      static const ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
+      constexpr ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
       ImFontConfig icons_config;
       icons_config.MergeMode = true;
       icons_config.PixelSnapH = true;
@@ -17,7 +17,7 @@ namespace base::render::font {
 
       static const auto font_awesome = b::embed<"assets/fonts/fa-solid-900.ttf">();
 
-      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_awesome.data(), (int)font_awesome.size(), 13, &icons_config, icons_ranges)) {
+      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), static_cast<int>(font_awesome.size()), 13, &icons_config, icons_ranges)) {
         LOG_ERROR("Failed to merge fa");
       }
     }
@@ -35,7 +35,7 @@ namespace base::render::font {
     kMANAGER = nullptr;
   }
 
-  bool Manager::LoadFontFromDisk(const std::string& name, std::filesystem::path path, bool merge_fa) {
+  bool Manager::LoadFontFromDisk(const std::string& name, const std::filesystem::path& path, const bool merge_fa) {
     if (fonts_.contains(name)) {
       LOG_WARN("Tried to load an already loaded font with the name {}", name);
       return false;

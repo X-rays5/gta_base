@@ -90,7 +90,7 @@ int base::menu_main() {
       render_thread_manager_inst = std::make_unique<render::Thread>();
 
       render::kTHREAD->AddRenderCallback([](render::DrawQueueBuffer* buffer) {
-        buffer->AddCommand(render::Text({0.5, 0.5}, ImColor(255, 0, 0), "Hello World!", false, true, 0.02f));
+        buffer->AddCommand(render::Text({0.5, 0.5}, ImColor(255, 0, 0), "Hello World!", false, true, 0.02F));
       });
 
       LOG_INFO("[INIT] Render thread");

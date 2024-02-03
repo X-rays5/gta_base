@@ -32,7 +32,7 @@ namespace base::hooking {
     detour_ = std::make_unique<subhook::Hook>(src, dst, static_cast<subhook::HookFlags>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
   }
 
-  DetourHook::DetourHook(std::string name, std::string module, std::string src, void* dst) : name_(std::move(name)) {
+  DetourHook::DetourHook(std::string name, const std::string& module, const std::string& src, void* dst) : name_(std::move(name)) {
     const HMODULE target_dll = GetModuleHandleA(module.c_str());
     if (!target_dll) {
       LOG_CRITICAL("Failed to find target module {} for {} hook", module, name_);

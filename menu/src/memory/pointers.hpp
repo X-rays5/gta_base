@@ -8,13 +8,14 @@
 
 namespace base::memory {
   class Pointers {
-    public:
-      Pointers();
-      ~Pointers();
+  public:
+    Pointers();
+    ~Pointers();
 
-      IDXGISwapChain** swap_chain_{};
+    IDXGISwapChain** swap_chain_{};
   };
 
+  // skipcq: CXX-W2009
   inline Pointers* kPOINTERS{};
 }
 #endif //POINTERS_HPP
