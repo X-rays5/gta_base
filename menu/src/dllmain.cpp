@@ -9,6 +9,7 @@
 #include "logging/logger.hpp"
 
 namespace {
+  // skipqc: CXX-W2009
   HINSTANCE dll_inst;
 }
 
