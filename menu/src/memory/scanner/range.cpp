@@ -41,7 +41,7 @@ namespace base::memory::scanner {
     }
 
     //Store max shiftable bytes for non wildcards.
-    std::size_t shift_table[UINT8_MAX + 1]{};
+    std::array<std::size_t, UINT8_MAX + 1> shift_table{};
     for (std::size_t i{}; i <= UINT8_MAX; ++i) {
       shift_table[i] = maxShift;
     }
