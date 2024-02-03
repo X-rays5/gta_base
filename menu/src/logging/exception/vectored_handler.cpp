@@ -9,6 +9,9 @@
 
 namespace base::logging::exception {
   namespace {
+    // skipqc: CXX-W2009
+    PVOID cur_handler = nullptr;
+
     void MSVCException(PEXCEPTION_POINTERS except) {
       const std::uint32_t pid = GetCurrentProcessId();
 
@@ -31,7 +34,7 @@ namespace base::logging::exception {
       }
     }
 
-    LONG VectoredExceptionHandler(PEXCEPTION_POINTERS except) {
+    LONG VectoredExceptionHandler(const PEXCEPTION_POINTERS except) {
       auto err_code = except->ExceptionRecord->ExceptionCode;
 
       if (ExceptionCodeToStr(err_code) == "UNKNOWN") {
@@ -58,12 +61,10 @@ namespace base::logging::exception {
       spdlog::default_logger_raw()->flush();
       std::this_thread::sleep_for(std::chrono::seconds(10));
 
-      logging::Manager::Shutdown();
+      Manager::Shutdown();
 
       return EXCEPTION_CONTINUE_SEARCH;
     }
-
-    PVOID cur_handler = nullptr;
   }
 
   void EnableHandler() {

@@ -11,7 +11,9 @@ namespace base::render::util {
       std::string res;
       for (std::uint32_t i = 0; i < line_count; i++) {
         auto line = lines[i];
-        while (line.back() == ' ') { line.pop_back(); }
+        while (line.back() == ' ') {
+          line.pop_back();
+        }
         res = fmt::format("{}{}\n", res, line);
       }
 
@@ -19,9 +21,13 @@ namespace base::render::util {
     }
   }
 
-  ImDrawList* GetDrawList() { return ImGui::GetForegroundDrawList(); }
+  ImDrawList* GetDrawList() {
+    return ImGui::GetForegroundDrawList();
+  }
 
-  ImVec2 GetSize(ImVec2 pos, ImVec2 size) { return {pos.x + size.x, pos.y + size.y}; }
+  ImVec2 GetSize(ImVec2 pos, ImVec2 size) {
+    return {pos.x + size.x, pos.y + size.y};
+  }
 
   // scale float in range [0, 1] to [0, screen_size]
   ImVec2 ScaleToScreen(ImVec2 xy) {
@@ -55,42 +61,54 @@ namespace base::render::util {
     return xy;
   }
 
-  float ScaleXToScreen(float x) { return ScaleToScreen({x, 0}).x; }
+  float ScaleXToScreen(float x) {
+    return ScaleToScreen({x, 0}).x;
+  }
 
-  float ScaleXFromScreen(float x) { return ScaleFromScreen({x, 0}).x; }
+  float ScaleXFromScreen(float x) {
+    return ScaleFromScreen({x, 0}).x;
+  }
 
-  float ScaleYToScreen(float y) { return ScaleToScreen({0, y}).y; }
+  float ScaleYToScreen(float y) {
+    return ScaleToScreen({0, y}).y;
+  }
 
-  float ScaleYFromScreen(float y) { return ScaleFromScreen({0, y}).y; }
+  float ScaleYFromScreen(float y) {
+    return ScaleFromScreen({0, y}).y;
+  }
 
   ImVec2 ScaleSquare(float y) {
     auto tmp = ScaleYToScreen(y);
     return ScaleFromScreen({tmp, tmp});
   }
 
-  float ScaleFont(float size) { return ScaleYToScreen(size); }
+  float ScaleFont(float size) {
+    return ScaleYToScreen(size);
+  }
 
   ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width) {
     if (!font)
       font = ImGui::GetFont();
 
     ImVec2 text_size = font->CalcTextSizeA(ScaleFont(font_size), ImGui::GetIO().DisplaySize.x, wrap_width, text.c_str());
-    text_size.x = ((float)(int)(text_size.x + 0.99999f));
+    text_size.x = text_size.x + 0.99999F;
 
     return text_size;
   }
 
-  ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width) { return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width)); }
+  ImVec2 CalcTextSize(const ImFont* font, const float font_size, const std::string& text, const float wrap_width) {
+    return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
+  }
 
-  std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::size_t max_lines) {
-    auto real_max_x = ScaleXToScreen(max_x);
+  std::uint32_t WordWrap(const float font_size, std::string& str, const float max_x, const std::size_t max_lines) {
+    const auto real_max_x = ScaleXToScreen(max_x);
 
     if (str.empty() || CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
       return 1; // Wrapping is not needed so just return that there is 1 line
     }
 
-    auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
-    auto chars_per_line = (std::uint32_t)(real_max_x / char_x_size);
+    const auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
+    const auto chars_per_line = static_cast<std::uint32_t>(real_max_x / char_x_size);
 
     auto* lines = new std::string[max_lines];
     std::uint32_t line_count = 0;
@@ -112,7 +130,9 @@ namespace base::render::util {
       }
       line_count += 1;
 
-      if (str.empty() && CalcTextSizeRaw(ImGui::GetFont(), font_size, lines[line_count - 1]).x <= real_max_x) { break; }
+      if (str.empty() && CalcTextSizeRaw(ImGui::GetFont(), font_size, lines[line_count - 1]).x <= real_max_x) {
+        break;
+      }
     }
 
     str = WordWrapGetString(lines, line_count);

@@ -10,7 +10,7 @@ namespace base::memory::scanner {
 
     Handle end();
 
-    std::size_t size();
+    std::size_t size() const;
 
     bool contains(Handle h);
 
