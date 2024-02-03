@@ -6,13 +6,17 @@
 #define GTA_BASE_VFS_16AC40FC6BC24763B42CAF7CBB740E5B_HPP
 #include <filesystem>
 
-#define GET_PATH(path_name, path_to_dir) FORCE_INLINE std::filesystem::path Get##path_name() { \
+#define GET_PATH(path_name, path_to_dir) \
+FORCE_INLINE std::filesystem::path Get##path_name() { \
   std::filesystem::path dir = xorstr_(path_to_dir); \
   std::filesystem::create_directories(std::filesystem::absolute(dir));                     \
   return dir;                                                                               \
  }
 
 namespace base::util::vfs {
+  /**
+   * \brief Set the working directory to the appdata directory
+   */
   inline void SetWorkingDir() {
     auto app_path_res = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData);
     LOG_FATAL_CONDITIONAL(app_path_res.error(), "Failed to get appdata path: {}", app_path_res);
@@ -26,6 +30,7 @@ namespace base::util::vfs {
   GET_PATH(LoggingDir, "logs")
   GET_PATH(LoggingSaveDir, "logs/saved")
   GET_PATH(PatternCacheDir, "cache/patterns")
+  GET_PATH(TranslationDir, "translations")
 }
 
 #undef GET_PATH

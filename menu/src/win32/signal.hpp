@@ -7,6 +7,9 @@
 #include "../util/common.hpp"
 
 namespace base::win32 {
+  /**
+   * \brief A class for thread synchronization using Windows events
+   */
   class Signal {
   public:
     Signal() {
@@ -18,14 +21,24 @@ namespace base::win32 {
       CloseHandle(signal_h_);
     }
 
+    /**
+     * \brief Notify all threads currently waiting on the signal
+     */
     void Notify() const {
       SetEvent(signal_h_);
     }
 
+    /**
+     * \brief Infinitly wait for the signal to be notified
+     */
     void Wait() const {
       Wait(INFINITE);
     }
 
+    /**
+     * \brief Wait for a signal notify to occur within a set timeout
+     * \param timeout Timeout in milliseconds
+     */
     void Wait(const std::int32_t timeout) const {
       WaitForSingleObject(signal_h_, timeout);
     }

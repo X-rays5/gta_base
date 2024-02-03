@@ -79,7 +79,7 @@ int base::menu_main() {
       LOG_INFO("[INIT] HookingManager");
     } else {
       hooking_inst.reset();
-      LOG_INFO("[SHUTDOWN] MinHook");
+      LOG_INFO("[SHUTDOWN] HookingManager");
     }
   });
 
