@@ -21,7 +21,7 @@ namespace base::util::common {
   }
 
   struct HexToIntTable {
-    std::int64_t tab[128];
+    std::array<std::int64_t, 128> tab;
 
     HexToIntTable()
       :

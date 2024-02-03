@@ -8,8 +8,6 @@
 #include <Windows.h>
 #include <fmt/format.h>
 #include <xorstr.hpp>
-#include <absl/status/status.h>
-#include <absl/status/statusor.h>
 #include "globals.hpp"
 #include "util/result.hpp"
 #include "logging/logging_macro.hpp"

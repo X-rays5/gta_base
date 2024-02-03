@@ -27,6 +27,7 @@ namespace base::hooking {
     void Disable();
   };
 
+  // skipqc: CXX-W2009
   inline Manager* kMANAGER{};
 }
 #endif //HOOKING_HPP
