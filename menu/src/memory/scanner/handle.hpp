@@ -4,23 +4,23 @@
 
 namespace base::memory::scanner {
   class Handle {
-    public:
+  public:
     Handle(void* ptr = nullptr);
     explicit Handle(std::uintptr_t ptr);
 
-    template<typename T>
+    template <typename T>
     std::enable_if_t<std::is_pointer_v<T>, T> as();
 
-    template<typename T>
+    template <typename T>
     std::enable_if_t<std::is_lvalue_reference_v<T>, T> as();
 
-    template<typename T>
+    template <typename T>
     std::enable_if_t<std::is_same_v<T, std::uintptr_t>, T> as();
 
-    template<typename T>
+    template <typename T>
     Handle add(T offset);
 
-    template<typename T>
+    template <typename T>
     Handle sub(T offset);
 
     Handle rip();
@@ -29,7 +29,8 @@ namespace base::memory::scanner {
 
     friend bool operator==(Handle a, Handle b);
     friend bool operator!=(Handle a, Handle b);
-    private:
+
+  private:
     void* ptr_;
   };
 
@@ -37,27 +38,27 @@ namespace base::memory::scanner {
 
   inline Handle::Handle(std::uintptr_t ptr) : ptr_(reinterpret_cast<void*>(ptr)) {}
 
-  template<typename T>
+  template <typename T>
   inline std::enable_if_t<std::is_pointer_v<T>, T> Handle::as() {
     return static_cast<T>(ptr_);
   }
 
-  template<typename T>
+  template <typename T>
   inline std::enable_if_t<std::is_lvalue_reference_v<T>, T> Handle::as() {
     return *static_cast<std::add_pointer_t<std::remove_reference_t<T>>>(ptr_);
   }
 
-  template<typename T>
+  template <typename T>
   inline std::enable_if_t<std::is_same_v<T, std::uintptr_t>, T> Handle::as() {
     return reinterpret_cast<std::uintptr_t>(ptr_);
   }
 
-  template<typename T>
+  template <typename T>
   inline Handle Handle::add(T offset) {
     return Handle(as<std::uintptr_t>() + offset);
   }
 
-  template<typename T>
+  template <typename T>
   inline Handle Handle::sub(T offset) {
     return Handle(as<std::uintptr_t>() - offset);
   }

@@ -6,6 +6,7 @@
 #define RESULT_HPP_01224051
 #include <expected>
 #include <magic_enum.hpp>
+#include <utility>
 
 namespace base::util::result {
   enum class ResultCode {
@@ -20,7 +21,7 @@ namespace base::util::result {
   class StatusErr {
   public:
     StatusErr() : result_code_(ResultCode::kSUCCESS) {}
-    StatusErr(const ResultCode code, const std::string& msg = "") : result_code_(code), msg_(msg) {}
+    StatusErr(const ResultCode code, std::string msg = "") : result_code_(code), msg_(std::move(msg)) {}
 
     [[nodiscard]] bool Ok() const {
       return result_code_ == ResultCode::kSUCCESS;

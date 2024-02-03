@@ -76,14 +76,21 @@ namespace base::logging {
       formatter->add_flag<ThreadIdFormatter>('t').set_pattern("[%T] [%^%l%$] [thread: %t] [%s:%#] %v");
       spdlog::set_formatter(std::move(formatter));
 
-      logger->set_error_handler([&](const std::string& err) { logger->critical("spdlog: {}", err); });
+      logger->set_error_handler([&](const std::string& err) {
+        logger->critical("spdlog: {}", err);
+      });
 
       return logger;
     }
   }
 
-  Manager::Manager() { Init(); }
-  Manager::~Manager() { Shutdown(); }
+  Manager::Manager() {
+    Init();
+  }
+
+  Manager::~Manager() {
+    Shutdown();
+  }
 
   void Manager::Init() {
     const bool result = EnsureConsole();
@@ -119,7 +126,8 @@ namespace base::logging {
 
         SaveLogFile(log_file_tmp);
       }
+    } catch (std::filesystem::filesystem_error& e) {
+      MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
     }
-    catch (std::filesystem::filesystem_error& e) { MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL); }
   }
 }

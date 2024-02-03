@@ -14,7 +14,7 @@ namespace base::memory::scanner {
     return base_.add(size_);
   }
 
-  std::size_t Range::size() {
+  std::size_t Range::size() const {
     return size_;
   }
 
@@ -41,7 +41,7 @@ namespace base::memory::scanner {
     }
 
     //Store max shiftable bytes for non wildcards.
-    std::size_t shift_table[UINT8_MAX + 1]{};
+    std::array<std::size_t, UINT8_MAX + 1> shift_table{};
     for (std::size_t i{}; i <= UINT8_MAX; ++i) {
       shift_table[i] = maxShift;
     }
@@ -73,7 +73,7 @@ namespace base::memory::scanner {
     return scan_pattern(data, length, base_, size_);
   }
 
-  bool pattern_matches(std::uint8_t* target, const std::optional<std::uint8_t>* sig, std::size_t length) {
+  bool pattern_matches(const std::uint8_t* target, const std::optional<std::uint8_t>* sig, std::size_t length) {
     for (std::size_t i{}; i != length; ++i) {
       if (sig[i] && *sig[i] != target[i]) {
         return false;

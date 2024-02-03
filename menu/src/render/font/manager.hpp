@@ -14,7 +14,7 @@ namespace base::render::font {
     Manager();
     ~Manager();
 
-    [[nodiscard]] bool LoadFontFromDisk(const std::string& name, std::filesystem::path path, bool merge_fa = true);
+    [[nodiscard]] bool LoadFontFromDisk(const std::string& name, const std::filesystem::path& path, bool merge_fa = true);
     [[nodiscard]] bool LoadFontFromMemory(const std::string& name, void* font_data, std::int32_t font_data_size, bool merge_fa = true);
     [[nodiscard]] bool LoadFontFromMemoryCompressed(const std::string& name, void* font_data, std::int32_t font_data_size, bool merge_fa = true);
 
@@ -28,6 +28,7 @@ namespace base::render::font {
     bool FinalizeLoading(const std::string& name, ImFont* font, bool merge_fa);
   };
 
+  // skipcq: CXX-W2009
   inline Manager* kMANAGER{};
 }
 #endif //MANAGER_HPP_12174322

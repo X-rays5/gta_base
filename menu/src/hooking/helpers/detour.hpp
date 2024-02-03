@@ -12,7 +12,7 @@ namespace base::hooking {
   class DetourHook {
   public:
     explicit DetourHook(std::string name, void* src, void* dst);
-    explicit DetourHook(std::string name, std::string module, std::string src, void* dst);
+    explicit DetourHook(std::string name, const std::string& module, const std::string& src, void* dst);
 
     ~DetourHook() noexcept;
     DetourHook(DetourHook&& that) = delete;
