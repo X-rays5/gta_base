@@ -71,23 +71,13 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/fmt/formatter.cpp
         src/util/fmt/formatter.hpp
         src/logging/plh_logger.hpp
+        src/memory/address.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
 
-include(../vendor/fmt.cmake)
-include(../vendor/spdlog.cmake)
-include(../vendor/xorstr.cmake)
-include(../vendor/imgui.cmake)
-include(../vendor/leopard.cmake)
-include(../vendor/magic_enum.cmake)
-include(../vendor/inireader.cmake)
-include(../vendor/subhook.cmake)
-include(../vendor/zydis.cmake)
-include(../vendor/battery_embed.cmake)
-include(../vendor/glaze.cmake)
-include(../vendor/unordered_dense.cmake)
+include(vendor.cmake)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
