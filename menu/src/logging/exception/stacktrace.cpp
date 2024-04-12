@@ -7,54 +7,37 @@
 #include <Zydis/Zydis.h>
 #include "../../util/common.hpp"
 #include "util.hpp"
+#include "../../memory/address.hpp"
 
 namespace base::logging::exception {
   namespace {
     StatusOr<std::string> GetInstructionsStr(const std::uintptr_t addr) {
       const std::uint32_t pid = GetCurrentProcessId();
-
       auto except_mod_res = win32::memory::GetModuleFromAddress(pid, addr);
       if (except_mod_res.error())
         return except_mod_res.error().Forward();
 
-      constexpr int num_instructions = 5;
-      constexpr int middle_idx = 2;
+      const std::uintptr_t offset = addr - reinterpret_cast<std::uintptr_t>(except_mod_res.value().modBaseAddr);
+
+      auto mem_info_res = memory::Address(addr).GetMemoryInformation();
+      if (!mem_info_res) {
+        LOG_CRITICAL("Failed to get memory information for exception at: 0x{:X}", addr);
+      }
+      MEMORY_BASIC_INFORMATION mem_info = mem_info_res.value();
+
+      if (mem_info.AllocationProtect != PAGE_EXECUTE_READ && mem_info.AllocationProtect != PAGE_EXECUTE_READWRITE && mem_info.AllocationProtect != PAGE_EXECUTE_WRITECOPY) {
+        LOG_ERROR("Address is not in executable memory.");
+        LOG_DEBUG("{}+0x{:X} NO EXECUTE", except_mod_res.value().szModule, offset);
+        return MakeFailure<ResultCode::kINTERNAL_ERROR>("Address is not in executable memory.");
+      }
 
       ZydisDisassembledInstruction instruction;
-      std::array<std::string, num_instructions> res_arr;
-
-      std::uintptr_t cur_addr = addr;
-      for (int i = 2; i < num_instructions; ++i) {
-        const std::uintptr_t offset = cur_addr - reinterpret_cast<std::uintptr_t>(except_mod_res.value().modBaseAddr);
-        const std::uintptr_t mod_size_left = except_mod_res.value().dwSize - offset;
-        if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), mod_size_left, &instruction))) {
-          res_arr[i].append(fmt::format("{}+0x{:X}\t", except_mod_res.value().szModule, offset));
-          res_arr[i].append(instruction.text);
-          cur_addr += instruction.info.length;
-        }
+      if (!ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, addr, reinterpret_cast<void*>(addr), 15, &instruction))) {
+        LOG_ERROR("Failed to disassemble exception area.");
+        return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to disassemble exception area.");
       }
 
-      if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), 15, &instruction))) {
-        cur_addr -= instruction.info.length;
-        for (int i = 1; i >= 0; i--) {
-          const std::uintptr_t offset = (cur_addr - reinterpret_cast<std::uintptr_t>(except_mod_res.value().modBaseAddr));
-          const std::uintptr_t mod_size_left = offset - except_mod_res.value().dwSize;
-          if (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, cur_addr, reinterpret_cast<void*>(cur_addr), mod_size_left, &instruction))) {
-            res_arr[i].append(fmt::format("{}+0x{:X}\t", except_mod_res.value().szModule, offset));
-            res_arr[i].append(instruction.text);
-            cur_addr -= instruction.info.length;
-          }
-        }
-      }
-
-      res_arr[middle_idx].append(" <-- here");
-
-      std::stringstream ss;
-      for (const auto& line : res_arr) {
-        ss << line << '\n';
-      }
-
-      return ss.str();
+      return fmt::format("{}+0x{:X}\t{}", except_mod_res.value().szModule, offset, instruction.text);
     }
 
     std::string RemoveDoubleSpaces(const std::string& str) {
@@ -111,7 +94,7 @@ namespace base::logging::exception {
     msg << "***** Exception module: " << except_mod_res.value() << " *****\n";
     msg << "***** Exception address: 0x" << except_rec->ExceptionAddress << " *****\n";
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
-    msg << "\n***** Exception instruction: " << GetInstructionsStr(ctx->Rip).value_or("Failed to decompile exception area.") << "*****\n";
+    msg << "***** Exception instruction: " << GetInstructionsStr(ctx->Rip).value_or("Failed to decompile exception area.") << " *****\n";
 
     msg << "\n***** STACKDUMP *****\n";
 
