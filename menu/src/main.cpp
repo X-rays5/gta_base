@@ -4,20 +4,20 @@
 
 #include "main.hpp"
 #include <memory>
-#pragma warning(push, 0)
-#include <ThreadPool/ThreadPool.h>
-#pragma warning(pop)
+#include <glaze/thread/threadpool.hpp>
 #include "render/renderer.hpp"
 #include "memory/pointers.hpp"
 #include "hooking/hooking.hpp"
+#include "ui/localization/manager.hpp"
 
 std::atomic<bool> base::globals::kRUNNING = true;
 
 namespace base {
   namespace {
     std::unique_ptr<memory::Pointers> pointers_inst;
-    std::unique_ptr<hmthrp::ThreadPool> thread_pool_inst;
+    std::unique_ptr<glz::pool> thread_pool_inst;
     std::unique_ptr<hooking::Manager> hooking_inst;
+    std::unique_ptr<ui::localization::Manager> localization_manager_inst;
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<render::Thread> render_thread_manager_inst;
     std::unique_ptr<std::thread> render_thread_inst;
@@ -67,48 +67,44 @@ private:
   } \
 })
 
+void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
+  lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
+    if (action == LifeTimeHelper::Init) {
+      LOG_INFO("[INIT] Renderer");
+      base::render_inst = std::make_unique<base::render::Renderer>();
+      base::render_thread_manager_inst = std::make_unique<base::render::Thread>();
+
+      base::render::kTHREAD->AddRenderCallback([](base::render::DrawQueueBuffer* buffer) {
+        buffer->AddCommand(base::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::ui::localization::kMANAGER->Localize("text/hello_world"), false, true, 0.02F));
+      });
+
+      LOG_INFO("[INIT] Render thread");
+      base::render_thread_inst = std::make_unique<std::thread>(base::render::Thread::RenderMain);
+    } else {
+      // First make sure it's actually waiting then unblock it.
+      std::this_thread::sleep_for(std::chrono::milliseconds(200));
+      base::render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
+
+      LOG_DEBUG("[SHUTDOWN] Stopping render thread...");
+      if (base::render_thread_inst->joinable())
+        base::render_thread_inst->join();
+      LOG_INFO("[SHUTDOWN] Render thread stopped.");
+
+      base::render_thread_manager_inst.reset();
+      base::render_inst.reset();
+    }
+  });
+}
+
 int base::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
   MANAGER_PTR_LIFETIME(lifetime_helper, "ThreadPool", thread_pool_inst, std::thread::hardware_concurrency() / 2);
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
+  MANAGER_PTR_LIFETIME(lifetime_helper, "HookingManager", hooking_inst);
+  MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);
 
-  lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
-    if (action == LifeTimeHelper::Init) {
-      hooking_inst = std::make_unique<hooking::Manager>();
-      LOG_INFO("[INIT] HookingManager");
-    } else {
-      hooking_inst.reset();
-      LOG_INFO("[SHUTDOWN] HookingManager");
-    }
-  });
-
-  lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
-    if (action == LifeTimeHelper::Init) {
-      LOG_INFO("[INIT] Renderer");
-      render_inst = std::make_unique<render::Renderer>();
-      render_thread_manager_inst = std::make_unique<render::Thread>();
-
-      render::kTHREAD->AddRenderCallback([](render::DrawQueueBuffer* buffer) {
-        buffer->AddCommand(render::Text({0.5, 0.5}, ImColor(255, 0, 0), "Hello World!", false, true, 0.02F));
-      });
-
-      LOG_INFO("[INIT] Render thread");
-      render_thread_inst = std::make_unique<std::thread>(render::Thread::RenderMain);
-    } else {
-      // First make sure it's actually waiting then unblock it.
-      std::this_thread::sleep_for(std::chrono::milliseconds(200));
-      render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
-
-      LOG_DEBUG("[SHUTDOWN] Stopping render thread...");
-      if (render_thread_inst->joinable())
-        render_thread_inst->join();
-      LOG_INFO("[SHUTDOWN] Render thread stopped.");
-
-      render_thread_manager_inst.reset();
-      render_inst.reset();
-    }
-  });
+  RenderThreadLifeTime(lifetime_helper.get());
 
   lifetime_helper->RunInit();
 
