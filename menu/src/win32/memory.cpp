@@ -51,7 +51,7 @@ namespace base::win32::memory {
 
   StatusOr<std::string> GetModuleNameFromAddress(std::uint32_t pid, std::uintptr_t addr) {
     auto mod_addr = GetModuleFromAddress(pid, addr);
-    if (mod_addr.error())
+    if (!mod_addr)
       return mod_addr.error().Forward();
 
     return mod_addr->szModule;
@@ -59,8 +59,8 @@ namespace base::win32::memory {
 
   StatusOr<uintptr_t> GetModuleOffsetFromAddress(std::uint32_t pid, std::uintptr_t addr) {
     auto mod_addr = GetModuleFromAddress(pid, addr);
-    if (mod_addr.error())
-      return mod_addr.error().Forward();
+    if (!mod_addr)
+      return mod_addr.error();
 
     return addr - reinterpret_cast<std::uintptr_t>(mod_addr->modBaseAddr);
   }

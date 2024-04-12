@@ -7,6 +7,6 @@
 
 namespace base::ui::localization {
   const translation_map_t default_translation = {
-    ADD_TRANSLATION("", "")
+    ADD_TRANSLATION("text/hello_world", "Hello World!")
   };
 }

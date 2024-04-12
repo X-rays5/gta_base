@@ -24,10 +24,10 @@ namespace base::win32 {
       std::filesystem::path res = path;
       CoTaskMemFree(path);
       return res;
-    } else {
-      LOG_ERROR("Failed to get known folder path. win32 err code: {}", GetLastError());
-      return MakeFailure<ResultCode::kNOT_FOUND>("Unknown folder requested");
     }
+
+    LOG_ERROR("Failed to get known folder path. win32 err code: {}", GetLastError());
+    return MakeFailure<ResultCode::kNOT_FOUND>("Unknown folder requested");
   }
 
   StatusOr<std::vector<MODULEENTRY32>> GetProcessModules(std::uint32_t pid) {

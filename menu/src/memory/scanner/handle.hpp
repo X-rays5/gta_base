@@ -27,6 +27,10 @@ namespace base::memory::scanner {
 
     explicit operator bool();
 
+    operator std::uintptr_t() {
+      return as<std::uintptr_t>();
+    }
+
     friend bool operator==(Handle a, Handle b);
     friend bool operator!=(Handle a, Handle b);
 

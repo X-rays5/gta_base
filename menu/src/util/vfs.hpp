@@ -7,7 +7,7 @@
 #include <filesystem>
 
 #define GET_PATH(path_name, path_to_dir) \
-FORCE_INLINE std::filesystem::path Get##path_name() { \
+inline std::filesystem::path Get##path_name() { \
   std::filesystem::path dir = xorstr_(path_to_dir); \
   std::filesystem::create_directories(std::filesystem::absolute(dir));                     \
   return dir;                                                                               \

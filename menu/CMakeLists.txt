@@ -4,6 +4,7 @@ project(menu CXX ASM_MASM)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/main.cpp
@@ -59,7 +60,7 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/logging/formatter/thread_id.hpp
         src/render/font/manager.cpp
         src/render/font/manager.hpp
-        src/render/font/IconsFontAwesome6.h
+        src/render/font/IconsFontAwesome6.hpp
         src/ui/localization/manager.cpp
         src/ui/localization/manager.hpp
         src/ui/localization/default.cpp
@@ -67,6 +68,8 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/glaze/glaze_meta.hpp
         src/util/result.hpp
         src/util/type_traits.hpp
+        src/util/fmt/formatter.cpp
+        src/util/fmt/formatter.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)

@@ -4,9 +4,11 @@
 
 #ifndef RESULT_HPP_01224051
 #define RESULT_HPP_01224051
-#include <expected>
-#include <magic_enum.hpp>
-#include <utility>
+#include <magic_enum/magic_enum.hpp>
+#include <result.hpp>
+#include <fmt/format.h>
+
+#include "fmt/formatter.hpp"
 
 namespace base::util::result {
   enum class ResultCode {
@@ -20,8 +22,11 @@ namespace base::util::result {
 
   class StatusErr {
   public:
-    StatusErr() : result_code_(ResultCode::kSUCCESS) {}
-    StatusErr(const ResultCode code, std::string msg = "") : result_code_(code), msg_(std::move(msg)) {}
+    StatusErr() :
+      result_code_(ResultCode::kSUCCESS) {}
+
+    StatusErr(const ResultCode code, std::string msg = "") :
+      result_code_(code), msg_(std::move(msg)) {}
 
     /**
      * \brief Check if the status is ok
@@ -56,11 +61,11 @@ namespace base::util::result {
     }
 
     /**
-     * \brief Forward the status
-     * \return An unexpected status
+     * \brief Forward the error
+     * @return The error
      */
-    [[nodiscard]] std::unexpected<StatusErr> Forward() {
-      return std::unexpected(*this);
+    [[nodiscard]] cpp::failure<StatusErr> Forward() const {
+      return cpp::fail(*this);
     }
 
     operator bool() const {
@@ -72,18 +77,23 @@ namespace base::util::result {
     const std::string msg_;
   };
 
-  using Status = std::expected<void, StatusErr>;
+  using Status = cpp::result<void, StatusErr>;
   template <typename T>
-  using StatusOr = std::expected<T, StatusErr>;
+  using StatusOr = cpp::result<T, StatusErr>;
 
   /**
    * \brief Make a failure status
-   * \param msg The result message
+   * \param format The result message
+   * \param format_args arguments to format message
    * \return An unexpected status
    */
-  template <ResultCode code>
-  std::unexpected<StatusErr> MakeFailure(const std::string& msg = "") {
-    return std::unexpected(StatusErr(code, msg));
+  template <ResultCode code, typename... Args>
+  cpp::failure<StatusErr> MakeFailure(const std::string& format = "", Args&&... format_args) {
+    if constexpr (sizeof...(format_args)) {
+      return cpp::fail(StatusErr(code, fmt::vformat(format, fmt::make_format_args(std::forward<Args>(format_args)...))));
+    } else {
+      return cpp::fail(StatusErr(code, format));
+    }
   }
 }
 
@@ -94,15 +104,24 @@ namespace base {
   using util::result::MakeFailure;
 }
 
-template <typename T>
-struct fmt::formatter<base::StatusOr<T>> {
-  constexpr auto parse(format_parse_context& ctx) {
-    return ctx.begin();
-  }
-
-  template <typename Context>
-  auto format(const base::StatusOr<T>& status, Context& ctx) {
-    return fmt::format_to(ctx.out(), "{} \"{}\")", status.error().GetResultString(), status.error().GetResultMessage());
+template <>
+struct fmt::formatter<base::util::result::StatusErr> : formatter<std::string> {
+  template <typename FormatContext>
+  auto format(const base::util::result::StatusErr& status, FormatContext& ctx) const {
+    return fmt::format_to(ctx.out(), "{}: {}", status.GetResultString(), status.GetResultMessage());
   }
 };
+
+template <typename SuccessType, typename ErrorType>
+struct fmt::formatter<cpp::result<SuccessType, ErrorType>> : formatter<std::string> {
+  template <typename FormatContext>
+  auto format(const cpp::result<SuccessType, ErrorType>& result, FormatContext& ctx) const {
+    if (result.has_value()) {
+      return fmt::format_to(ctx.out(), "[SUCCESS]");
+    }
+
+    return fmt::format_to(ctx.out(), "[FAILURE]: {}", result.error());
+  }
+};
+
 #endif //RESULT_HPP_01224051

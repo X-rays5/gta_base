@@ -28,7 +28,6 @@ namespace base::render::font {
     bool FinalizeLoading(const std::string& name, ImFont* font, bool merge_fa);
   };
 
-  // skipcq: CXX-W2009
   inline Manager* kMANAGER{};
 }
 #endif //MANAGER_HPP_12174322

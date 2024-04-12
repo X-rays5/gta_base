@@ -37,6 +37,9 @@ namespace base::logging::exception {
     LONG VectoredExceptionHandler(const PEXCEPTION_POINTERS except) {
       auto err_code = except->ExceptionRecord->ExceptionCode;
 
+      if (err_code == EXCEPTION_BREAKPOINT || err_code == EXCEPTION_SINGLE_STEP)
+        return EXCEPTION_CONTINUE_SEARCH;
+
       if (ExceptionCodeToStr(err_code) == "UNKNOWN") {
         // check for output debug string
         if (err_code != 1073807366) {

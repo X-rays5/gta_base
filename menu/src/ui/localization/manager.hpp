@@ -14,11 +14,13 @@ namespace base::ui::localization {
     struct Translation {
         translation_map_t loaded_translation_ = default_translation;
 
-        [[nodiscard]] Status Load();
+        [[nodiscard]] Status Load(const std::string& name);
 
-        [[nodiscard]] Status Save();
+        [[nodiscard]] Status Save(const std::string& name);
 
         [[nodiscard]] Status Merge(translation_map_t tmp_translation);
+
+        static void WriteDefaultTranslation();
     };
 
     class Manager {
@@ -27,20 +29,20 @@ namespace base::ui::localization {
 
         ~Manager();
 
-        [[nodiscard]] std::string Localize(const char* key) {
-            const auto it = translation_.loaded_translation_.find(key);
-
-            return (it != translation_.loaded_translation_.end()) ? it->second : key;
-        }
+        [[nodiscard]] std::string Localize(const char* key);
+        [[nodiscard]] Status SetActiveTranslation(const std::string& name, bool save_current = true);
 
     private:
         Translation translation_;
+        std::string active_translation_;
     };
 
     inline Manager* kMANAGER{};
+}
 
+namespace base {
     [[nodiscard]] inline std::string operator ""_l10n(const char* key) {
-        return kMANAGER->Localize(key);
+        return ui::localization::kMANAGER->Localize(key);
     }
 }
 #endif //MANAGER_HPP_12190029
