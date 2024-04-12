@@ -70,6 +70,7 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/type_traits.hpp
         src/util/fmt/formatter.cpp
         src/util/fmt/formatter.hpp
+        src/logging/plh_logger.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)

@@ -4,32 +4,14 @@
 
 #include "detour.hpp"
 #include <utility>
-#include <Zydis/Zydis.h>
 #include "../../memory/scanner/handle.hpp"
 
 #define PTR_TO_ADDR(ptr) reinterpret_cast<std::uintptr_t>(ptr)
 
 namespace base::hooking {
-  namespace {
-    int DisasmHandler(void* src, int* reloc_op_offset) {
-      ZydisDisassembledInstruction instruction;
-      if (!ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, PTR_TO_ADDR(src), src, 15, &instruction))) {
-        LOG_FATAL("Failed to disasm op.");
-      }
-
-      auto ptr = memory::scanner::Handle(src);
-      while (ptr.as<std::uint8_t&>() == 0xE9) {
-        ptr = ptr.add(1).rip();
-      }
-      *reloc_op_offset = static_cast<std::int32_t>(ptr.as<std::uintptr_t>() - PTR_TO_ADDR(src));
-
-      return instruction.info.length;
-    }
-  }
-
   DetourHook::DetourHook(std::string name, void* src, void* dst) : name_(std::move(name)) {
-    subhook_set_disasm_handler(DisasmHandler);
-    detour_ = std::make_unique<subhook::Hook>(src, dst, static_cast<subhook::HookFlags>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
+    LOG_DEBUG("Creating detour for {} at 0x{:x} to 0x{:x}", name_, PTR_TO_ADDR(src), PTR_TO_ADDR(dst));
+    detour_ = std::make_unique<PLH::NatDetour>(reinterpret_cast<std::uintptr_t>(src), reinterpret_cast<std::uintptr_t>(dst), &og_);
   }
 
   DetourHook::DetourHook(std::string name, const std::string& module, const std::string& src, void* dst) : name_(std::move(name)) {
@@ -45,12 +27,13 @@ namespace base::hooking {
       return;
     }
 
-    detour_ = std::make_unique<subhook::Hook>(src_addr, dst, static_cast<subhook::HookFlags>(SUBHOOK_64BIT_OFFSET | SUBHOOK_TRAMPOLINE));
+    LOG_DEBUG("Creating detour for {} at 0x{:x} to 0x{:x}", name_, PTR_TO_ADDR(src_addr), PTR_TO_ADDR(dst));
+    detour_ = std::make_unique<PLH::NatDetour>(reinterpret_cast<std::uintptr_t>(src_addr), reinterpret_cast<std::uintptr_t>(dst), &og_);
   }
 
   DetourHook::~DetourHook() {
-    if (detour_->IsInstalled())
-      detour_->Remove();
+    if (detour_->isHooked())
+      detour_->unHook();
   }
 
   std::string DetourHook::GetName() const {
@@ -58,28 +41,29 @@ namespace base::hooking {
   }
 
   void DetourHook::Enable() {
-    if (detour_->IsInstalled()) {
+    if (detour_->isHooked()) {
       LOG_WARN("Tried to enable already enabled hook {}", name_);
       return;
     }
 
-    if (detour_->Install()) {
+    if (detour_->hook()) {
       LOG_INFO("Hook for {} has been enabled.", name_);
     } else {
-      LOG_CRITICAL("Failed to enabled hook for {}", name_);
+      LOG_CRITICAL("Failed to enabled hook for '{}': {}", name_, PLH::ErrorLog::singleton().pop().msg);
+      globals::kRUNNING = false;
     }
   }
 
   void DetourHook::Disable() {
-    if (!detour_->IsInstalled()) {
+    if (!detour_->isHooked()) {
       LOG_WARN("Tried to disable already disabled hook {}", name_);
       return;
     }
 
-    if (detour_->Remove()) {
+    if (detour_->unHook()) {
       LOG_INFO("Hook for {} has been disabled.", name_);
     } else {
-      LOG_CRITICAL("Failed to disable hook for {}.", name_);
+      LOG_CRITICAL("Failed to disable hook for '{}': {}", name_, PLH::ErrorLog::singleton().pop().msg);
     }
   }
 }

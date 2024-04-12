@@ -5,13 +5,16 @@
 #include "hooking.hpp"
 #include "../memory/pointers.hpp"
 #include "../render/renderer.hpp"
+#include "../logging/plh_logger.hpp"
 
 namespace base::hooking {
   Manager::Manager() :
-    swap_chain_hook_(*memory::kPOINTERS->swap_chain_) {
-    swap_chain_hook_.Hook("Present", Hooks::swapchain_present_index, &Hooks::Present);
-    swap_chain_hook_.Hook("ResizeBuffers", Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers);
-
+    swap_chain_hook_("swap_chain", *memory::kPOINTERS->swap_chain_, {
+                       {Hooks::swapchain_present_index, &Hooks::Present},
+                       {Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers}
+                     }) {
+    auto logger = std::make_shared<logging::PLH::Logger>();
+    PLH::Log::registerLogger(logger);
 
     kMANAGER = this;
   }

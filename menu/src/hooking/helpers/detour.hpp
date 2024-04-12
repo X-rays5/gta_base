@@ -6,7 +6,7 @@
 #ifndef GTA_BASE_DETOUR_HPP
 #define GTA_BASE_DETOUR_HPP
 #include <string>
-#include <subhook.h>
+#include <polyhook2/Detour/NatDetour.hpp>
 
 namespace base::hooking {
   class DetourHook {
@@ -26,8 +26,8 @@ namespace base::hooking {
     void Disable();
 
     template <typename T, typename... Args> requires std::is_function_v<std::remove_pointer_t<T>>
-    std::invoke_result_t<T, Args...> GetOriginal(Args&&... args) {
-      void* og = detour_->GetTrampoline();
+    std::invoke_result_t<T, Args...> CallOriginal(Args&&... args) {
+      void* og = reinterpret_cast<void*>(og_);
       if (!og) {
         LOG_WARN("nullptr og {}", name_);
 
@@ -42,7 +42,8 @@ namespace base::hooking {
 
   private:
     std::string name_;
-    std::unique_ptr<subhook::Hook> detour_;
+    std::uintptr_t og_;
+    std::unique_ptr<PLH::NatDetour> detour_;
   };
 }
 #endif //GTA_BASE_DETOUR_HPP
