@@ -6,13 +6,14 @@
 #ifndef GTA_BASE_LOGGING_MACRO_019BE36990514312A78AF967214A9577_HPP
 #define GTA_BASE_LOGGING_MACRO_019BE36990514312A78AF967214A9577_HPP
 
-#include <spdlog/spdlog.h>
-
 #ifndef NDEBUG
 #define SPDLOG_ACTIVE_LEVEL 1 // DEBUG
 #else
 #define SPDLOG_ACTIVE_LEVEL 2 // INFO
 #endif
+
+#include <spdlog/spdlog.h>
+#include "../util/fmt/formatter.hpp"
 
 #define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, ""}, level, __VA_ARGS__)
 

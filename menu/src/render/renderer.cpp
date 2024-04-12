@@ -43,6 +43,7 @@ namespace base::render {
 
     InitImGui(device_.Get(), device_ctx_.Get());
 
+    LOG_DEBUG("Initializing font manager.");
     font_mgr_inst_ = std::make_unique<font::Manager>();
 
     kRENDERER = this;

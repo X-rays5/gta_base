@@ -15,7 +15,7 @@ namespace glz {
   struct meta<T> {
     using Key = typename T::key_type;
     using V = typename T::mapped_type;
-    static constexpr std::string_view name = detail::join_v<chars<"ankerl::unordered_dense::map<">, name_v<Key>, chars<",">, name_v<V>, chars<">">>;
+    static constexpr std::string_view name = join_v<chars<"ankerl::unordered_dense::map<">, name_v<Key>, chars<",">, name_v<V>, chars<">">>;
   };
 }
 #endif //GLAZE_META_HPP_01223842
