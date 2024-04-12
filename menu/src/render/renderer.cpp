@@ -71,20 +71,20 @@ namespace base::render {
       ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
 
-    return hooking::kMANAGER->swap_chain_hook_.GetOriginal<decltype(&Present)>(hooking::Hooks::swapchain_present_index, swap_chain, sync_interval, flags);
+    return hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&Present)>(hooking::Hooks::swapchain_present_index, swap_chain, sync_interval, flags);
   }
 
   HRESULT Renderer::ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags) {
     if (globals::kRUNNING) {
       ImGui_ImplDX11_InvalidateDeviceObjects();
 
-      auto res = hooking::kMANAGER->swap_chain_hook_.GetOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
+      auto res = hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
       if (SUCCEEDED(res))
         ImGui_ImplDX11_CreateDeviceObjects();
 
       return res;
     }
 
-    return hooking::kMANAGER->swap_chain_hook_.GetOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
+    return hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
   }
 }

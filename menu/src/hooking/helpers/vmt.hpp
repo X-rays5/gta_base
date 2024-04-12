@@ -5,28 +5,33 @@
 #pragma once
 #ifndef GTA_BASE_VMT_HPP
 #define GTA_BASE_VMT_HPP
-#include <unordered_map>
 #include <memory>
-#include "detour.hpp"
+#include <polyhook2/Virtuals/VFuncSwapHook.hpp>
 
 namespace base::hooking {
+  struct IDXHook {
+    std::uint16_t idx;
+    void* dst;
+  };
+
   class VmtHook {
   public:
-    explicit VmtHook(LPVOID vtable);
+    explicit VmtHook(const std::string& vtable_name, LPVOID vtable, std::initializer_list<IDXHook> hooks);
+    ~VmtHook();
 
-    void Hook(const std::string& name, std::size_t idx, LPVOID dst);
-
-    void Enable(std::size_t idx);
     void EnableAll();
-    void Disable(std::size_t idx);
     void DisableAll();
 
     template <typename T, typename... Args> requires std::is_function_v<std::remove_pointer_t<T>>
-    std::invoke_result_t<T, Args...> GetOriginal(std::size_t index, Args&&... args) {
-      if (auto it = hooks_.find(index); it == hooks_.end()) {
+    std::invoke_result_t<T, Args...> CallOriginal(std::uint16_t index, Args&&... args) {
+      if (auto it = vtable_og_.find(index); it == vtable_og_.end()) {
         LOG_WARN("Tried to get original at idx: {} which doesn't exist", index);
       } else {
-        return it->second->GetOriginal<T>(std::forward<Args>(args)...);
+        if (it->second == NULL) {
+          LOG_WARN("nullptr og {}", vtable_name_);
+        } else {
+          return reinterpret_cast<T>(it->second)(std::forward<Args>(args)...);
+        }
       }
 
       if constexpr (std::is_void_v<std::invoke_result_t<T, Args...>>)
@@ -36,8 +41,11 @@ namespace base::hooking {
     }
 
   private:
-    LPVOID* vtable_;
-    std::unordered_map<std::size_t, std::unique_ptr<DetourHook>> hooks_;
+    std::string vtable_name_;
+    LPVOID vtable_;
+    PLH::VFuncMap vtable_redirect_;
+    PLH::VFuncMap vtable_og_;
+    std::unique_ptr<PLH::VFuncSwapHook> vtable_hook_;
   };
 }
 #endif //GTA_BASE_VMT_HPP
