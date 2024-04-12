@@ -9,6 +9,6 @@ file(COPY "${zydis_SOURCE_DIR}/dependencies/zycore/include" DESTINATION $ENV{TMP
 
 SET(POLYHOOK_BUILD_STATIC_RUNTIME OFF CACHE BOOL "" FORCE)
 
-CPMAddPackage("gh:stevemk14ebr/PolyHook_2_0#fd2a88f")
+CPMAddPackage("gh:X-rays5-forks/PolyHook_2_0#5717242")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE PolyHook_2)
