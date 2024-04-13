@@ -17,7 +17,7 @@ namespace base::render::font {
 
       static const auto font_awesome = b::embed<"assets/fonts/fa-solid-900.ttf">();
 
-      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), static_cast<int>(font_awesome.size()), 13, &icons_config, icons_ranges)) {
+      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), static_cast<int>(font_awesome.size()), 40, &icons_config, icons_ranges)) {
         LOG_ERROR("Failed to merge fa");
       }
     }
@@ -25,8 +25,11 @@ namespace base::render::font {
 
   Manager::Manager() {
     ImGui::GetIO().Fonts->Clear();
-    ImFont* font = ImGui::GetIO().Fonts->AddFontDefault();
-    FinalizeLoading("default", font, true);
+    static const auto roboto_mono_regular = b::embed<"assets/fonts/RobotoMono-Regular.ttf">();
+    if (!LoadFontFromMemory("roboto", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), static_cast<int>(roboto_mono_regular.size()))) {
+      ImFont* font = ImGui::GetIO().Fonts->AddFontDefault();
+      FinalizeLoading("default", font, true);
+    }
 
     kMANAGER = this;
   }
@@ -48,7 +51,7 @@ namespace base::render::font {
 
     const ImGuiIO& io = ImGui::GetIO();
 
-    ImFont* font = io.Fonts->AddFontFromFileTTF(path.string().c_str(), 13);
+    ImFont* font = io.Fonts->AddFontFromFileTTF(path.string().c_str(), 40);
     if (!font) {
       LOG_ERROR("Failed to load {} font from disk.", name);
       return false;
@@ -68,7 +71,7 @@ namespace base::render::font {
     ImFontConfig cfg;
     cfg.FontDataOwnedByAtlas = false;
 
-    ImFont* font = io.Fonts->AddFontFromMemoryTTF(font_data, font_data_size, 13, &cfg);
+    ImFont* font = io.Fonts->AddFontFromMemoryTTF(font_data, font_data_size, 40, &cfg);
     if (!font) {
       LOG_ERROR("Failed to load {} font from memory.", name);
       return false;
@@ -88,7 +91,7 @@ namespace base::render::font {
     ImFontConfig cfg;
     cfg.FontDataOwnedByAtlas = false;
 
-    ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(font_data, font_data_size, 13, &cfg);
+    ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(font_data, font_data_size, 40, &cfg);
     if (!font) {
       LOG_ERROR("Failed to load {} font from memory.", name);
       return false;

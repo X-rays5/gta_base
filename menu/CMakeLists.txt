@@ -80,3 +80,4 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX 
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.hpp)
 
 b_embed(${PROJECT_NAME} assets/fonts/fa-solid-900.ttf)
+b_embed(${PROJECT_NAME} assets/fonts/RobotoMono-Regular.ttf)

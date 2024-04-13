@@ -4,7 +4,6 @@
 
 #include "detour.hpp"
 #include <utility>
-#include "../../memory/scanner/handle.hpp"
 
 #define PTR_TO_ADDR(ptr) reinterpret_cast<std::uintptr_t>(ptr)
 
