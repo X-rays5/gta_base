@@ -19,7 +19,7 @@ namespace base::util::vfs {
    */
   inline void SetWorkingDir() {
     auto app_path_res = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData);
-    LOG_FATAL_CONDITIONAL(app_path_res.error(), "Failed to get appdata path: {}", app_path_res);
+    LOG_CRITICAL_CONDITIONAL(app_path_res.error(), "Failed to get appdata path: {}", app_path_res);
 
     const auto appdata_path = app_path_res.value() / globals::kBASE_NAME;
 

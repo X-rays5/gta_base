@@ -31,11 +31,11 @@ namespace base::render {
 
   Renderer::Renderer() {
     swap_chain_ = *memory::kPOINTERS->swap_chain_;
-    LOG_FATAL_CONDITIONAL(!swap_chain_.GetAddressOf(), "Failed to find valid swapchain ptr.");
+    LOG_CRITICAL_CONDITIONAL(!swap_chain_.GetAddressOf(), "Failed to find valid swapchain ptr.");
 
     void* device{};
     if (FAILED(swap_chain_->GetDevice(__uuidof(ID3D11Device), &device))) {
-      LOG_FATAL("Failed to get device from swap chain");
+      LOG_CRITICAL("Failed to get device from swap chain");
     }
 
     device_.Attach(static_cast<ID3D11Device*>(device));
@@ -63,7 +63,7 @@ namespace base::render {
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
 
-      font::kMANAGER->PushFont("default");
+      font::kMANAGER->PushFont("roboto");
       kRENDERER->GetDrawQueueBuffer()->RenderFrame();
       font::kMANAGER->PopFont();
 

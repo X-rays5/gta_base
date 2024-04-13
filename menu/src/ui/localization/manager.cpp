@@ -69,7 +69,7 @@ namespace base::ui::localization {
     Manager::Manager() {
         auto status = translation_.Load("default");
         if (status.error()) {
-            LOG_FATAL("Failed to load translation from disk: {}", status.error());
+            LOG_CRITICAL("Failed to load translation from disk: {}", status.error());
         }
 
         kMANAGER = this;

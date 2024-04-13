@@ -6,19 +6,6 @@
 #include "signature/batch.hpp"
 #include <chrono>
 
-template <typename T = std::chrono::milliseconds>
-class stopwatch {
-public:
-  explicit stopwatch() : start_time_(std::chrono::high_resolution_clock::now()) {}
-
-  ~stopwatch() {
-    LOG_DEBUG("Execution time: {}", std::chrono::duration_cast<T>(std::chrono::high_resolution_clock::now() - start_time_).count());
-  }
-
-private:
-  std::chrono::time_point<std::chrono::steady_clock> start_time_;
-};
-
 #define BATCH_SCAN(name, pattern, mod, cb) batch.Add(xorstr_(name), signature::Pattern(xorstr_(pattern), mod), cb)
 
 namespace base::memory {
@@ -34,12 +21,7 @@ namespace base::memory {
                LOG_DEBUG("Resolution x: {}, y: {}", *ptr->Sub(4).Rip().As<int*>(), *ptr->Add(4).Rip().As<int*>());
                });
 
-
-    {
-      stopwatch sw;
-      batch.Scan();
-    }
-
+    batch.Scan();
     kPOINTERS = this;
   }
 
