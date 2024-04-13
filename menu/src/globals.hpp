@@ -8,7 +8,6 @@
 
 namespace base::globals {
   constexpr static auto kBASE_NAME = "base";
-  // skipqc: CXX-W2009
   extern std::atomic<bool> kRUNNING;
   constexpr static auto target_window_name = "";
   constexpr static auto target_window_class = "grcWindow";

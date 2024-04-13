@@ -71,6 +71,8 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/fmt/formatter.cpp
         src/util/fmt/formatter.hpp
         src/logging/plh_logger.hpp
+        src/memory/signature/pattern.cpp
+        src/memory/signature/pattern.hpp
         src/memory/address.hpp
 )
 
