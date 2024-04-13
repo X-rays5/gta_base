@@ -15,7 +15,6 @@ namespace base::memory {
     IDXGISwapChain** swap_chain_{};
   };
 
-  // skipcq: CXX-W2009
   inline Pointers* kPOINTERS{};
 }
 #endif //POINTERS_HPP

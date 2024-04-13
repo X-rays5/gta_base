@@ -37,17 +37,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/spinlock.hpp
         src/render/thread.cpp
         src/render/thread.hpp
-        src/memory/scanner/all.hpp
-        src/memory/scanner/fwdec.hpp
-        src/memory/scanner/handle.hpp
-        src/memory/scanner/module.cpp
-        src/memory/scanner/module.hpp
-        src/memory/scanner/pattern.cpp
-        src/memory/scanner/pattern.hpp
-        src/memory/scanner/range.cpp
-        src/memory/scanner/range.hpp
-        src/memory/scanner/sig_batch_scan.cpp
-        src/memory/scanner/sig_batch_scan.hpp
         src/hooking/hooking.cpp
         src/hooking/hooking.hpp
         src/hooking/helpers/detour.cpp
@@ -71,7 +60,12 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/fmt/formatter.cpp
         src/util/fmt/formatter.hpp
         src/logging/plh_logger.hpp
+        src/memory/signature/pattern.cpp
+        src/memory/signature/pattern.hpp
         src/memory/address.hpp
+        src/memory/signature/batch.cpp
+        src/memory/signature/batch.hpp
+        src/util/thread_pool.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
