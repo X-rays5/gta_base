@@ -74,6 +74,9 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/memory/signature/pattern.cpp
         src/memory/signature/pattern.hpp
         src/memory/address.hpp
+        src/memory/signature/batch.cpp
+        src/memory/signature/batch.hpp
+        src/util/thread_pool.hpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)

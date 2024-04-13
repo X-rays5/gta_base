@@ -3,27 +3,41 @@
 //
 
 #include "pointers.hpp"
-#include "scanner/all.hpp"
+#include "signature/batch.hpp"
+#include <chrono>
 
-#define BATCH_SCAN(batch, name, pattern, cb) batch.add(xorstr_(name), xorstr_(pattern), cb)
+template <typename T = std::chrono::milliseconds>
+class stopwatch {
+public:
+  explicit stopwatch() : start_time_(std::chrono::high_resolution_clock::now()) {}
+
+  ~stopwatch() {
+    LOG_DEBUG("Execution time: {}", std::chrono::duration_cast<T>(std::chrono::high_resolution_clock::now() - start_time_).count());
+  }
+
+private:
+  std::chrono::time_point<std::chrono::steady_clock> start_time_;
+};
+
+#define BATCH_SCAN(name, pattern, mod, cb) batch.Add(xorstr_(name), signature::Pattern(xorstr_(pattern), mod), cb)
 
 namespace base::memory {
   Pointers::Pointers() {
-    scanner::Batch main_batch;
+    signature::BatchScan batch;
 
-    BATCH_SCAN(main_batch, "swap_chain", "48 8B 0D ? ? ? ? 48 8B 01 44 8D 43 01 33 D2 FF 50 40 8B C8", [this](scanner::Handle ptr) {
-               swap_chain_ = ptr.add(3).rip().as<IDXGISwapChain**>();
+    BATCH_SCAN("swap_chain", "48 8B 0D ? ? ? ? 48 8B 01 44 8D 43 01 33 D2 FF 50 40 8B C8", "", [this](const Address* ptr) {
+               swap_chain_ = ptr->Add(3).Rip().As<IDXGISwapChain**>();
                GTA_BASE_ASSERT(swap_chain_, "Invalid swap_chain pointer");
                });
 
-    BATCH_SCAN(main_batch, "resolution", "66 0F 6E 0D ? ? ? ? 0F B7 3D", [this](scanner::Handle ptr) {
-               LOG_DEBUG("Resolution x: {}, y: {}", *ptr.sub(4).rip().as<int*>(), *ptr.add(4).rip().as<int*>());
+    BATCH_SCAN("resolution", "66 0F 6E 0D ? ? ? ? 0F B7 3D", "", [this](const Address* ptr) {
+               LOG_DEBUG("Resolution x: {}, y: {}", *ptr->Sub(4).Rip().As<int*>(), *ptr->Add(4).Rip().As<int*>());
                });
 
-    auto scan_result = main_batch.run(scanner::Module(nullptr));
-    if (scan_result.error()) {
-      LOG_CRITICAL("Can't continue without the required pointers. Exiting...");
-      abort();
+
+    {
+      stopwatch sw;
+      batch.Scan();
     }
 
     kPOINTERS = this;

@@ -4,18 +4,20 @@
 
 #include "main.hpp"
 #include <memory>
-#include <glaze/thread/threadpool.hpp>
+#include "util/thread_pool.hpp"
 #include "render/renderer.hpp"
 #include "memory/pointers.hpp"
 #include "hooking/hooking.hpp"
 #include "ui/localization/manager.hpp"
+#include "memory/signature/pattern.hpp"
+#include <chrono>
 
 std::atomic<bool> base::globals::kRUNNING = true;
 
 namespace base {
   namespace {
     std::unique_ptr<memory::Pointers> pointers_inst;
-    std::unique_ptr<glz::pool> thread_pool_inst;
+    std::unique_ptr<util::ThreadPool> thread_pool_inst;
     std::unique_ptr<hooking::Manager> hooking_inst;
     std::unique_ptr<ui::localization::Manager> localization_manager_inst;
     std::unique_ptr<render::Renderer> render_inst;
@@ -67,6 +69,20 @@ private:
   } \
 })
 
+void ThreadPoolLifetime(LifeTimeHelper* life_time_helper) {
+  life_time_helper->AddCallback([&](LifeTimeHelper::Action action) {
+    if (action == LifeTimeHelper::Init) {
+      base::thread_pool_inst = std::make_unique<std::remove_reference_t<decltype(*base::thread_pool_inst)>>(std::thread::hardware_concurrency() / 2);
+      base::util::kTHREAD_POOL = base::thread_pool_inst.get();
+      LOG_INFO("[INIT] {}", "ThreadPool");
+    } else {
+      base::util::kTHREAD_POOL = nullptr;
+      base::thread_pool_inst.reset();
+      LOG_INFO("[SHUTDOWN] {}", "ThreadPool");
+    }
+  });
+}
+
 void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
   lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
     if (action == LifeTimeHelper::Init) {
@@ -99,11 +115,10 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
 int base::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
-  MANAGER_PTR_LIFETIME(lifetime_helper, "ThreadPool", thread_pool_inst, std::thread::hardware_concurrency() / 2);
+  ThreadPoolLifetime(lifetime_helper.get());
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "HookingManager", hooking_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);
-
   RenderThreadLifeTime(lifetime_helper.get());
 
   lifetime_helper->RunInit();
