@@ -5,7 +5,7 @@
 #include "vectored_handler.hpp"
 #include "util.hpp"
 #include "../logger.hpp"
-#include "stacktrace.hpp"
+#include "exception_report.hpp"
 
 namespace base::logging::exception {
   namespace {
@@ -57,12 +57,11 @@ namespace base::logging::exception {
 
       // TODO: implement some cursed fatal exception recovery
 
-      auto stacktrace_res = GetStackTrace(except, 7);
+      auto stacktrace_res = WriteExceptionReport(except, 7);
       if (stacktrace_res.has_value())
         LOG_CRITICAL(stacktrace_res.value());
 
       spdlog::default_logger_raw()->flush();
-      std::this_thread::sleep_for(std::chrono::seconds(10));
 
       Manager::Shutdown();
 

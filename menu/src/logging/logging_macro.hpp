@@ -15,7 +15,11 @@
 #include <spdlog/spdlog.h>
 #include "../util/fmt/formatter.hpp"
 
+#ifndef NDEBUG
 #define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, ""}, level, __VA_ARGS__)
+#else
+#define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{xorstr_(__FILE__), __LINE__, ""}, level, __VA_ARGS__)
+#endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
 #define LOG_TRACE(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::trace, __VA_ARGS__)
