@@ -42,6 +42,7 @@ namespace base::render {
     device_->GetImmediateContext(device_ctx_.GetAddressOf());
 
     InitImGui(device_.Get(), device_ctx_.Get());
+    init_imgui_ = true;
 
     LOG_DEBUG("Initializing font manager.");
     font_mgr_inst_ = std::make_unique<font::Manager>();
@@ -54,11 +55,16 @@ namespace base::render {
 
     font_mgr_inst_.reset();
 
+    init_imgui_ = false;
     ShutdownImGui();
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
-    if (globals::kRUNNING) {
+    if (globals::kRUNNING && kRENDERER && kRENDERER->init_imgui_) {
+      std::uint64_t now = base::util::common::GetTimeStamp();
+      kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
+      kRENDERER->SetLastTime(now);
+
       ImGui_ImplWin32_NewFrame();
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
@@ -75,7 +81,7 @@ namespace base::render {
   }
 
   HRESULT Renderer::ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags) {
-    if (globals::kRUNNING) {
+    if (globals::kRUNNING && kRENDERER->init_imgui_) {
       ImGui_ImplDX11_InvalidateDeviceObjects();
 
       auto res = hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);

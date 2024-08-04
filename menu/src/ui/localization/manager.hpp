@@ -6,6 +6,8 @@
 #define MANAGER_HPP_12190029
 #include <ankerl/unordered_dense.h>
 
+#define TRANSLATE_LITERAL(str) base::ui::localization::kMANAGER->Localize(xorstr_(str));
+
 namespace base::ui::localization {
     using translation_map_t = ankerl::unordered_dense::map<std::string, std::string>;
 
@@ -45,4 +47,6 @@ namespace base {
         return ui::localization::kMANAGER->Localize(key);
     }
 }
+
+
 #endif //MANAGER_HPP_12190029

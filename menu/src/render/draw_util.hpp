@@ -13,6 +13,7 @@ namespace base::render::util {
   ImVec2 ScaleToScreen(ImVec2 xy);
   /// scale float in range [0, screen_size] to [0, 1]
   ImVec2 ScaleFromScreen(ImVec2 xy);
+
   float ScaleXToScreen(float x);
   float ScaleXFromScreen(float x);
   float ScaleYToScreen(float y);

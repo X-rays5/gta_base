@@ -6,18 +6,22 @@
 #include "renderer.hpp"
 
 namespace base::render {
-  Thread::Thread() { kTHREAD = this; }
+  Thread::Thread() {
+    kTHREAD = this;
+  }
 
-  Thread::~Thread() { kTHREAD = nullptr; }
+  Thread::~Thread() {
+    kTHREAD = nullptr;
+  }
 
   void Thread::RenderMain() {
+    SetThreadDescription(GetCurrentThread(), L"RenderLoop");
     LOG_INFO("Render thread started.");
     while (globals::kRUNNING) {
       if (kTHREAD && kRENDERER) {
         const auto buffer = kRENDERER->GetDrawQueueBuffer();
 
-        for (auto& cb : kTHREAD->GetRenderCallbacks()) {
-
+        for (auto& render_cb : kTHREAD->GetRenderCallbacks()) {
           if (!buffer) {
             if (globals::kRUNNING) {
               LOG_ERROR("DrawQueueBuffer is null. Skipping render tick.");
@@ -28,14 +32,14 @@ namespace base::render {
             break;
           }
 
-          cb(buffer);
+          render_cb.cb_(buffer);
         }
 
         if (buffer)
           buffer->SwapBuffers();
       } else {
         [[unlikely]]
-            LOG_DEBUG("nullptr");
+          LOG_DEBUG("nullptr");
       }
     }
     LOG_INFO("Exiting render thread.");

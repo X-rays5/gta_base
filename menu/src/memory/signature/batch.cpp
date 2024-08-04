@@ -7,6 +7,7 @@
 #include <ranges>
 
 #include "../../util/thread_pool.hpp"
+#include "../../util/profile.hpp"
 
 namespace base::memory::signature {
   namespace {
@@ -30,18 +31,28 @@ namespace base::memory::signature {
       return;
     scanned_ = true;
 
+    util::Profile profile;
+#ifdef NDEBUG
+    profile.Disabled(true);
+#endif
+
     std::vector<std::future<bool>> futures;
     for (auto&& job : std::views::values(patterns_)) {
       futures.emplace_back(util::kTHREAD_POOL->emplace_back([&] {
-        return ScanPattern(job);
+        profile.Begin(job.name);
+        const auto res = ScanPattern(job);
+        profile.End(job.name);
+        return res;
       }));
     }
 
     for (auto&& fut : futures) {
       if (!fut.get()) {
         LOG_CRITICAL("Failed to find a pattern. Aborting...");
-        abort();
+        exit(1);
       }
     }
+
+    PROFILER_SAVE(profile);
   }
 }

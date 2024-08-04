@@ -3,7 +3,7 @@
 //
 
 #include "draw_util.hpp"
-#include <stacktrace>
+#include "../memory/pointers.hpp"
 
 namespace base::render::util {
   namespace {
@@ -32,11 +32,10 @@ namespace base::render::util {
   // scale float in range [0, 1] to [0, screen_size]
   ImVec2 ScaleToScreen(ImVec2 xy) {
     if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) {
-      // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-      LOG_WARN("ScaleToScreen: xy out of range: {} {}\n{}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
+      return {};
     }
 
-    ImVec2 cur_res = ImGui::GetIO().DisplaySize;
+    auto cur_res = memory::kPOINTERS->screen_res_;
 
     xy.x = (xy.x * cur_res.x);
     xy.y = (xy.y * cur_res.y);
@@ -44,15 +43,15 @@ namespace base::render::util {
     return xy;
   }
 
+  /// scale float in range [0, screen_size] to [0, 1]
   ImVec2 ScaleFromScreen(ImVec2 xy) {
-    ImVec2 cur_res = ImGui::GetIO().DisplaySize;
+    auto cur_res = memory::kPOINTERS->screen_res_;
     if (cur_res.x == 0 || cur_res.y == 0) {
       return {}; // Happens when the window is minimized.
     }
 
     if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) {
-      // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-      LOG_WARN("ScaleFromScreen: xy out of range: {} {}\n {}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
+      return {};
     }
 
     xy.x = (xy.x / cur_res.x);

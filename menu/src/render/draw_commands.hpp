@@ -80,8 +80,8 @@ namespace base::render {
 
   class Text : public BaseDrawCommand {
   public:
-    Text(const ImVec2 pos, const ImU32 color, std::string text, const bool right_align, const bool center, const float y_size_text, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
-      pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
+    Text(const ImVec2 pos, const ImU32 color, std::string text, const float y_size_text, const bool right_align = false, const bool center_x = false, const bool center_y = false, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
+      pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_x_(center_x), center_y_(center_y), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
 
     void Draw() override {
       if (!font_) {
@@ -96,9 +96,16 @@ namespace base::render {
         ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
         pos_.x -= text_size.x;
         pos_.y += text_size.y / 2;
-      } else if (center_) {
+      }
+
+      if (!right_align_ && center_y_) {
         ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
         pos_.y += text_size.y / 2;
+      }
+
+      if (!right_align_ && center_x_) {
+        ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        pos_.x -= text_size.x / 2;
       }
 
       util::GetDrawList()->AddText(font_, util::ScaleFont(y_size_text_), util::ScaleToScreen(pos_), color_, text_.c_str());
@@ -109,7 +116,8 @@ namespace base::render {
     ImU32 color_;
     std::string text_;
     bool right_align_;
-    bool center_;
+    bool center_x_;
+    bool center_y_;
     float y_size_text_;
     float max_width_;
     std::size_t max_lines_;
@@ -118,8 +126,8 @@ namespace base::render {
 
   class TextBackground final : Text {
   public:
-    TextBackground(const ImVec2 pos, const ImU32 text_color, const ImU32 background_color, std::string text, const bool right_align, const bool center, const float y_size_text, const float padding_side = 0.01F, const float padding_bottom_top = 0.01F, const bool border_top = false, const bool border_bottom = false, const bool border_left = false, const bool border_right = false, const ImU32 border_color = NULL, const float border_thickness = 1.F, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
-      Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font),
+    TextBackground(const ImVec2 pos, const ImU32 text_color, const ImU32 background_color, std::string text, const bool right_align, const bool center_x, const bool center_y, const float y_size_text, const float padding_side = 0.01F, const float padding_bottom_top = 0.01F, const bool border_top = false, const bool border_bottom = false, const bool border_left = false, const bool border_right = false, const ImU32 border_color = NULL, const float border_thickness = 1.F, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
+      Text(pos, text_color, std::move(text), right_align, center_x, center_y, y_size_text, max_width, max_lines, font),
       rect_({}, {}, {}, {}, {}, {}, {}, {}) {
       ImVec2 rect_pos = pos_;
       rect_pos.x -= padding_side;

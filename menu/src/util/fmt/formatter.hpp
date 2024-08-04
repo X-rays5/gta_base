@@ -10,8 +10,8 @@
 template <>
 struct fmt::formatter<std::filesystem::path> : formatter<std::string_view> {
   template <typename FormatContext>
-  auto format(const std::filesystem::path &path, FormatContext &ctx) const {
-    return formatter<std::string_view>::format(path.string(), ctx);
+  auto format(const std::filesystem::path& path, FormatContext& ctx) const {
+    return formatter<std::string_view>::format(path.generic_string(), ctx);
   }
 };
 #endif //FORMATTER_HPP_02215435

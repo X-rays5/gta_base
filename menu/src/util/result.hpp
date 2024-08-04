@@ -88,12 +88,20 @@ namespace base::util::result {
    * \return An unexpected status
    */
   template <ResultCode code, typename... Args>
-  cpp::failure<StatusErr> MakeFailure(const std::string& format = "", Args&&... format_args) {
+  [[nodiscard]] cpp::failure<StatusErr> MakeFailure(const std::string& format = "", Args&&... format_args) {
     if constexpr (sizeof...(format_args)) {
       return cpp::fail(StatusErr(code, fmt::vformat(format, fmt::make_format_args(std::forward<Args>(format_args)...))));
     } else {
       return cpp::fail(StatusErr(code, format));
     }
+  }
+
+  /**
+   * Make a success status
+   * @return a cpp::failure instance containing kSUCCESS
+   */
+  [[nodiscard]] inline cpp::failure<StatusErr> MakeSuccess() {
+    return MakeFailure<ResultCode::kSUCCESS>();
   }
 }
 
@@ -102,6 +110,7 @@ namespace base {
   using util::result::Status;
   using util::result::StatusOr;
   using util::result::MakeFailure;
+  using util::result::MakeSuccess;
 }
 
 template <>
