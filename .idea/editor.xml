@@ -39,17 +39,7 @@
     <option name="/Default/CodeStyle/CodeFormatting/CppFormatting/PLACE_ELSE_ON_NEW_LINE/@EntryValue" value="false" type="bool" />
     <option name="/Default/CodeStyle/CodeFormatting/CppFormatting/PLACE_WHILE_ON_NEW_LINE/@EntryValue" value="false" type="bool" />
     <option name="/Default/CodeStyle/CodeFormatting/CppFormatting/PLACE_CATCH_ON_NEW_LINE/@EntryValue" value="false" type="bool" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppWrongSlashesInIncludeDirective/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppUseAuto/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceCVQualifiersPlacement/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceCVQualifiersOrder/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceFunctionDeclarationStyle/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceTypeAliasCodeStyle/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceNestedNamespacesStyle/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceIfStatementBraces/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceForStatementBraces/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceWhileStatementBraces/@EntryIndexedValue" />
-    <option name="/Default/CodeInspection/Highlighting/InspectionSeverities/=CppEnforceDoStatementBraces/@EntryIndexedValue" />
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="245" type="long" />
   </component>
 </project>

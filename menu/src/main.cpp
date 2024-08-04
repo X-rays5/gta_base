@@ -10,6 +10,7 @@
 #include "hooking/hooking.hpp"
 #include "ui/localization/manager.hpp"
 #include "memory/signature/pattern.hpp"
+#include "discord/rich_presence.hpp"
 #include <chrono>
 
 std::atomic<bool> base::globals::kRUNNING = true;
@@ -20,6 +21,7 @@ namespace base {
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
     std::unique_ptr<hooking::Manager> hooking_inst;
     std::unique_ptr<ui::localization::Manager> localization_manager_inst;
+    std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<render::Thread> render_thread_manager_inst;
     std::unique_ptr<std::thread> render_thread_inst;
@@ -119,6 +121,7 @@ int base::menu_main() {
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "HookingManager", hooking_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);
+  MANAGER_PTR_LIFETIME(lifetime_helper, "DiscordRichPresence", discord_rich_presence_inst);
   RenderThreadLifeTime(lifetime_helper.get());
 
   lifetime_helper->RunInit();
@@ -131,6 +134,9 @@ int base::menu_main() {
       globals::kRUNNING = false;
       break;
     }
+
+    discord::kRICH_PRESENCE->Tick();
+    std::this_thread::yield();
   }
   LOG_INFO("Unloading...");
 
