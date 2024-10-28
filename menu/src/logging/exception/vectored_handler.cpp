@@ -3,16 +3,15 @@
 //
 
 #include "vectored_handler.hpp"
+#include "exception_report.hpp"
 #include "util.hpp"
 #include "../logger.hpp"
-#include "exception_report.hpp"
 
 namespace base::logging::exception {
   namespace {
-    // skipqc: CXX-W2009
     PVOID cur_handler = nullptr;
 
-    void MSVCException(PEXCEPTION_POINTERS except) {
+    void MSVCException(const PEXCEPTION_POINTERS except) {
       const std::uint32_t pid = GetCurrentProcessId();
 
       auto mod_name_res = win32::memory::GetModuleNameFromAddress(pid, except->ContextRecord->Rip);
@@ -25,9 +24,7 @@ namespace base::logging::exception {
       if (offset_res.has_value())
         offset = offset_res.value();
 
-      const auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
-
-      if (exception && exception->what()) {
+      if (const auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]); exception && exception->what()) {
         LOG_ERROR("{}+{}: {}", mod_name, offset, exception->what());
       } else {
         LOG_ERROR("{}+{}: cpp exception thrown", mod_name, offset);
@@ -57,8 +54,7 @@ namespace base::logging::exception {
 
       // TODO: implement some cursed fatal exception recovery
 
-      auto stacktrace_res = WriteExceptionReport(except, 7);
-      if (stacktrace_res.has_value())
+      if (auto stacktrace_res = WriteExceptionReport(except, 7); stacktrace_res.has_value())
         LOG_CRITICAL(stacktrace_res.value());
 
       spdlog::default_logger_raw()->flush();
