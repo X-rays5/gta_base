@@ -10,6 +10,7 @@
 namespace base::memory {
 
   // Warning irrelevant here
+  #pragma warning(push)
   #pragma warning(disable : 4100)
 
   Pointers::Pointers() {
@@ -28,7 +29,7 @@ namespace base::memory {
     kPOINTERS = this;
   }
 
-  #pragma warning(default : 4100)
+  #pragma warning(pop)
 
   Pointers::~Pointers() {
     kPOINTERS = nullptr;
