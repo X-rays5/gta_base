@@ -50,8 +50,12 @@ namespace base::ui::localization {
         auto merged = glz::merge{loaded_translation_, tmp_translation};
 
         std::string tmp_buff;
-        glz::write_json(merged, tmp_buff);
-        const auto ec = glz::read_json(loaded_translation_, tmp_buff);
+        auto ec = glz::write_json(merged, tmp_buff);
+        if (ec) {
+            return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to merge default and loaded translation files");
+        }
+
+        ec = glz::read_json(loaded_translation_, tmp_buff);
         if (ec) {
             return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to merge default and loaded translation files");
         }
