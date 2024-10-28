@@ -24,7 +24,7 @@ namespace base::logging::exception {
       if (offset_res.has_value())
         offset = offset_res.value();
 
-      if (const auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]); exception && exception->what()) {
+      if (const auto exception = std::bit_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]); exception && exception->what()) {
         LOG_ERROR("{}+{}: {}", mod_name, offset, exception->what());
       } else {
         LOG_ERROR("{}+{}: cpp exception thrown", mod_name, offset);
