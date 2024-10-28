@@ -3,30 +3,30 @@
 //
 
 #include "vectored_handler.hpp"
+#include "exception_report.hpp"
 #include "util.hpp"
 #include "../logger.hpp"
-#include "stacktrace.hpp"
 
 namespace base::logging::exception {
   namespace {
-    // skipqc: CXX-W2009
     PVOID cur_handler = nullptr;
 
-    void MSVCException(PEXCEPTION_POINTERS except) {
+    void MSVCException(const PEXCEPTION_POINTERS except) {
       const std::uint32_t pid = GetCurrentProcessId();
 
       auto mod_name_res = win32::memory::GetModuleNameFromAddress(pid, except->ContextRecord->Rip);
       std::string mod_name;
-      if (mod_name_res.has_value())
+      if (mod_name_res.has_value()) {
         mod_name = mod_name_res.value();
+      }
 
       auto offset_res = win32::memory::GetModuleOffsetFromAddress(pid, except->ContextRecord->Rip);
-      std::uintptr_t offset;
-      if (offset_res.has_value())
+      std::uintptr_t offset = 0;
+      if (offset_res.has_value()) {
         offset = offset_res.value();
+      }
 
-      const auto exception = reinterpret_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
-
+      const auto* exception = std::bit_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
       if (exception && exception->what()) {
         LOG_ERROR("{}+{}: {}", mod_name, offset, exception->what());
       } else {
@@ -37,8 +37,9 @@ namespace base::logging::exception {
     LONG VectoredExceptionHandler(const PEXCEPTION_POINTERS except) {
       auto err_code = except->ExceptionRecord->ExceptionCode;
 
-      if (err_code == EXCEPTION_BREAKPOINT || err_code == EXCEPTION_SINGLE_STEP)
+      if (err_code == EXCEPTION_BREAKPOINT || err_code == EXCEPTION_SINGLE_STEP) {
         return EXCEPTION_CONTINUE_SEARCH;
+      }
 
       if (ExceptionCodeToStr(err_code) == "UNKNOWN") {
         // check for output debug string
@@ -57,12 +58,12 @@ namespace base::logging::exception {
 
       // TODO: implement some cursed fatal exception recovery
 
-      auto stacktrace_res = GetStackTrace(except, 7);
-      if (stacktrace_res.has_value())
+      auto stacktrace_res = WriteExceptionReport(except, 7);
+      if (stacktrace_res.has_value()) {
         LOG_CRITICAL(stacktrace_res.value());
+      }
 
       spdlog::default_logger_raw()->flush();
-      std::this_thread::sleep_for(std::chrono::seconds(10));
 
       Manager::Shutdown();
 

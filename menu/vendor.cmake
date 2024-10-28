@@ -1,4 +1,5 @@
 include(../vendor/battery_embed.cmake)
+include(../vendor/discord-rpc.cmake)
 include(../vendor/fmt.cmake)
 include(../vendor/glaze.cmake)
 include(../vendor/imgui.cmake)

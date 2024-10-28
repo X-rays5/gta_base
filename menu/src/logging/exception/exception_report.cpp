@@ -2,15 +2,39 @@
 // Created by xray on 06/09/2023.
 //
 
-#include "stacktrace.hpp"
+#include "exception_report.hpp"
 #include <stacktrace>
+#include <fstream>
 #include <Zydis/Zydis.h>
+#include <DbgHelp.h>
 #include "../../util/common.hpp"
 #include "util.hpp"
 #include "../../memory/address.hpp"
+#include "../../util/vfs.hpp"
 
 namespace base::logging::exception {
   namespace {
+    Status WriteMiniDump(std::filesystem::path path, PEXCEPTION_POINTERS except_ptr) {
+      HANDLE dump_file = CreateFile(path.string().c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+      if (dump_file == INVALID_HANDLE_VALUE) {
+        LOG_ERROR("Failed to create dump file '{}'", path);
+        return MakeFailure<ResultCode::kIO_ERROR>("Failed to create dump file '{}'", path);
+      }
+
+      MINIDUMP_EXCEPTION_INFORMATION except_info;
+      except_info.ThreadId = GetCurrentThreadId();
+      except_info.ExceptionPointers = except_ptr;
+      except_info.ClientPointers = FALSE;
+
+      if (!MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), dump_file, MiniDumpIgnoreInaccessibleMemory, &except_info, nullptr, nullptr)) {
+        LOG_ERROR("Failed to write minidump to '{}'", path);
+        return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to write minidump to '{}'", path);
+      }
+
+      CloseHandle(dump_file);
+      return {};
+    }
+
     StatusOr<std::string> GetInstructionsStr(const std::uintptr_t addr) {
       const std::uint32_t pid = GetCurrentProcessId();
       auto except_mod_res = win32::memory::GetModuleFromAddress(pid, addr);
@@ -32,7 +56,7 @@ namespace base::logging::exception {
       }
 
       ZydisDisassembledInstruction instruction;
-      if (!ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, addr, reinterpret_cast<void*>(addr), 15, &instruction))) {
+      if (!ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, addr, reinterpret_cast<void*>(addr), ZYDIS_MAX_INSTRUCTION_LENGTH, &instruction))) {
         LOG_ERROR("Failed to disassemble exception area.");
         return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to disassemble exception area.");
       }
@@ -75,15 +99,12 @@ namespace base::logging::exception {
     }
   }
 
-  StatusOr<std::string> GetStackTrace(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
-#ifndef NDEBUG
-    //__debugbreak();
-#endif
-
+  StatusOr<std::string> WriteExceptionReport(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count) {
     std::stringstream msg;
+    std::string exception_name = ExceptionCodeToStr(except_rec->ExceptionCode);
 
-    msg << "\n***** EXCEPTION RECEIVED *****\n\n";
-    msg << "***** Exception name: " << ExceptionCodeToStr(except_rec->ExceptionCode) << " *****\n";
+    msg << "***** EXCEPTION RECEIVED *****\n";
+    msg << "***** Exception name: " << exception_name << " *****\n";
     msg << "***** Exception code: " << util::common::AddrToHex(except_rec->ExceptionCode) << " *****\n";
     msg << "***** Exception pid: " << GetCurrentProcessId() << " *****\n";
 
@@ -96,7 +117,6 @@ namespace base::logging::exception {
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
     msg << "***** Exception instruction: " << GetInstructionsStr(ctx->Rip).value_or("Failed to decompile exception area.") << " *****\n";
 
-    msg << "\n***** STACKDUMP *****\n";
 
     msg << "\nLoaded Modules:\n";
 
@@ -110,10 +130,35 @@ namespace base::logging::exception {
       msg << '\n';
     }
 
+    msg << "\n***** STACKDUMP *****\n";
     msg << GetRegisters(ctx);
-
     msg << '\n' << std::stacktrace::current(stacktrace_skip_count) << '\n';
 
-    return RemoveDoubleSpaces(msg.str());
+    std::filesystem::path report_dir = util::vfs::GetExceptionReports() / fmt::format("report_{}", util::common::GetTimeStamp());
+    if (!std::filesystem::create_directories(report_dir)) {
+      LOG_ERROR("Failed to create exception report directory '{}'", report_dir);
+      return MakeFailure<ResultCode::kIO_ERROR>("Failed to create exception report directory '{}'", report_dir);
+    }
+
+    std::filesystem::path minidump_path = report_dir / "minidump.dmp";
+    EXCEPTION_POINTERS except_ptr;
+    except_ptr.ExceptionRecord = except_rec;
+    except_ptr.ContextRecord = ctx;
+    auto dump_res = WriteMiniDump(minidump_path, &except_ptr);
+    if (dump_res.error()) {
+      LOG_ERROR(dump_res);
+      return dump_res.error().GetResultMessage();
+    }
+
+    std::filesystem::path report_file_path = report_dir / "report.log";
+    std::ofstream report_file(report_file_path);
+    if (!report_file.is_open()) {
+      LOG_ERROR("Failed to open report file for writing '{}'", report_file_path);
+      return MakeFailure<ResultCode::kIO_ERROR>("Failed to open report file '{}'", report_file_path);
+    }
+
+    report_file << RemoveDoubleSpaces(msg.str());
+
+    return fmt::format("{}: Wrote exception report to '{}'", exception_name, report_file_path);
   }
 }

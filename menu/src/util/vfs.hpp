@@ -29,6 +29,7 @@ namespace base::util::vfs {
 
   GET_PATH(LoggingDir, "logs")
   GET_PATH(LoggingSaveDir, "logs/saved")
+  GET_PATH(ExceptionReports, "logs/exception_reports")
   GET_PATH(PatternCacheDir, "cache/patterns")
   GET_PATH(TranslationDir, "translations")
 }

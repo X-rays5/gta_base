@@ -73,7 +73,7 @@ namespace base::logging {
       spdlog::register_logger(logger);
 
       auto formatter = std::make_unique<spdlog::pattern_formatter>();
-      formatter->add_flag<ThreadIdFormatter>('t').set_pattern("[%T] [%^%l%$] [thread: %t] [%s:%#] %v");
+      formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%T] [%^%l%$] [thread: %N] [%s:%#] %v");
       spdlog::set_formatter(std::move(formatter));
 
       logger->set_error_handler([&](const std::string& err) {
