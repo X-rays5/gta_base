@@ -11,7 +11,7 @@ namespace base::logging::exception {
   namespace {
     PVOID cur_handler = nullptr;
 
-    void MSVCException(PEXCEPTION_POINTERS const except) {
+    void MSVCException(const PEXCEPTION_POINTERS except) {
       const std::uint32_t pid = GetCurrentProcessId();
 
       auto mod_name_res = win32::memory::GetModuleNameFromAddress(pid, except->ContextRecord->Rip);
@@ -34,7 +34,7 @@ namespace base::logging::exception {
       }
     }
 
-    LONG VectoredExceptionHandler(PEXCEPTION_POINTERS const except) {
+    LONG VectoredExceptionHandler(const PEXCEPTION_POINTERS except) {
       auto err_code = except->ExceptionRecord->ExceptionCode;
 
       if (err_code == EXCEPTION_BREAKPOINT || err_code == EXCEPTION_SINGLE_STEP) {
