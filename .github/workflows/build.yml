@@ -20,7 +20,7 @@ jobs:
       - name: Build with build-wrapper
         run: |
           New-Item -ItemType directory -Path build
-          cmake -S . -B build
+          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
       - name: Run sonar-scanner
         env:
