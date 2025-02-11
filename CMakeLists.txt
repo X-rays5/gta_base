@@ -5,6 +5,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(cmake_scripts/get_cpm.cmake)
 
+add_subdirectory(common)
+
 if (WIN32)
   if (MSVC)
     add_subdirectory(menu)

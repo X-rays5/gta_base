@@ -8,8 +8,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 #include <spdlog/async.h>
+#include <base-common/time.hpp>
 #include "../util/vfs.hpp"
-#include "../util/common.hpp"
 #include "formatter/thread_id.hpp"
 #include "exception/vectored_handler.hpp"
 
@@ -55,7 +55,7 @@ namespace base::logging {
     void MovePossibleCrashLog() {
       const auto log_file_path = GetLogFile();
       if (std::filesystem::exists(log_file_path)) {
-        const auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", util::common::GetTimeStamp(), log_file_path.stem().string(), log_file_path.extension().string());
+        const auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", common::util::time::GetTimeStamp(), log_file_path.stem().string(), log_file_path.extension().string());
         std::filesystem::rename(log_file_path, log_file_path_tmp);
         SaveLogFile(log_file_path_tmp);
       }
@@ -121,7 +121,7 @@ namespace base::logging {
     try {
       const auto log_file = GetLogFile();
       if (std::filesystem::exists(log_file)) {
-        const auto log_file_tmp = log_file.parent_path() / fmt::format("{}_{}{}", util::common::GetTimeStamp(), log_file.stem().string(), log_file.extension().string());
+        const auto log_file_tmp = log_file.parent_path() / fmt::format("{}_{}{}", common::util::time::GetTimeStamp(), log_file.stem().string(), log_file.extension().string());
         std::filesystem::rename(log_file, log_file_tmp);
 
         SaveLogFile(log_file_tmp);

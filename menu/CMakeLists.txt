@@ -20,8 +20,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/win32/misc.cpp
         src/win32/misc.hpp
         src/globals.hpp
-        src/util/common.cpp
-        src/util/common.hpp
         src/logging/exception/exception_report.cpp
         src/logging/exception/exception_report.hpp
         src/logging/exception/vectored_handler.cpp
@@ -33,8 +31,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/render/draw_util.cpp
         src/render/draw_util.hpp
         src/render/draw_commands.hpp
-        src/util/spinlock.cpp
-        src/util/spinlock.hpp
         src/render/thread.cpp
         src/render/thread.hpp
         src/hooking/hooking.cpp
@@ -55,10 +51,7 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/ui/localization/default.cpp
         src/util/glaze/glaze_meta.cpp
         src/util/glaze/glaze_meta.hpp
-        src/util/result.hpp
         src/util/type_traits.hpp
-        src/util/fmt/formatter.cpp
-        src/util/fmt/formatter.hpp
         src/logging/plh_logger.hpp
         src/memory/signature/pattern.cpp
         src/memory/signature/pattern.hpp
@@ -68,7 +61,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/thread_pool.hpp
         src/discord/rich_presence.cpp
         src/discord/rich_presence.hpp
-        src/util/result.cpp
 )
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
@@ -85,6 +77,8 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.hpp)
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE Dbghelp)
 endif ()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
 
 b_embed(${PROJECT_NAME} assets/fonts/fa-solid-900.ttf)
 b_embed(${PROJECT_NAME} assets/fonts/RobotoMono-Regular.ttf)

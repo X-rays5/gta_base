@@ -11,3 +11,5 @@ add_executable(${PROJECT_NAME}
 include(vendor.cmake)
 
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY WIN32_EXECUTABLE TRUE)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE base::common)

@@ -4,8 +4,8 @@
 
 #ifndef FORMATTER_HPP_02215435
 #define FORMATTER_HPP_02215435
-#include <fmt/format.h>
 #include <filesystem>
+#include <fmt/format.h>
 
 template <>
 struct fmt::formatter<std::filesystem::path> : formatter<std::string_view> {

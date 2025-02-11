@@ -6,7 +6,7 @@
 #define STRING_HPP_08145245
 #include <string>
 
-namespace base::util::string {
+namespace base::common::util::string {
   /**
    * Replace all occurrences of targetReplace with replaceWith in str
    * @param str String to replace in

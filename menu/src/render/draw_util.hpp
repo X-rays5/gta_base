@@ -20,8 +20,8 @@ namespace base::render::util {
   ImVec2 ScaleSquare(float y);
   float ScaleFont(float size);
 
-  ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
-  ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
+  ImVec2 CalcTextSizeRaw(ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
+  ImVec2 CalcTextSize(ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
 
   // TODO: Make a non monospace version of this.
   std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::size_t max_lines);

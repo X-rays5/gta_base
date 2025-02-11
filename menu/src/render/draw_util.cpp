@@ -86,9 +86,10 @@ namespace base::render::util {
     return ScaleYToScreen(size);
   }
 
-  ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width) {
-    if (!font)
+  ImVec2 CalcTextSizeRaw(ImFont* font, const float font_size, const std::string& text, float wrap_width) {
+    if (!font) {
       font = ImGui::GetFont();
+    }
 
     ImVec2 text_size = font->CalcTextSizeA(ScaleFont(font_size), ImGui::GetIO().DisplaySize.x, wrap_width, text.c_str());
     text_size.x = text_size.x + 0.99999F;
@@ -96,7 +97,7 @@ namespace base::render::util {
     return text_size;
   }
 
-  ImVec2 CalcTextSize(const ImFont* font, const float font_size, const std::string& text, const float wrap_width) {
+  ImVec2 CalcTextSize(ImFont* font, const float font_size, const std::string& text, const float wrap_width) {
     return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
   }
 

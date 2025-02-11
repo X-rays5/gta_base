@@ -80,7 +80,7 @@ namespace base::render {
 
   class Text : public BaseDrawCommand {
   public:
-    Text(const ImVec2 pos, const ImU32 color, std::string text, const bool right_align, const bool center, const float y_size_text, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
+    Text(const ImVec2 pos, const ImU32 color, std::string text, const bool right_align, const bool center, const float y_size_text, const float max_width = 0.F, const std::size_t max_lines = 2, ImFont* font = nullptr) :
       pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
 
     void Draw() override {
@@ -113,12 +113,12 @@ namespace base::render {
     float y_size_text_;
     float max_width_;
     std::size_t max_lines_;
-    const ImFont* font_;
+    ImFont* font_;
   };
 
   class TextBackground final : Text {
   public:
-    TextBackground(const ImVec2 pos, const ImU32 text_color, const ImU32 background_color, std::string text, const bool right_align, const bool center, const float y_size_text, const float padding_side = 0.01F, const float padding_bottom_top = 0.01F, const bool border_top = false, const bool border_bottom = false, const bool border_left = false, const bool border_right = false, const ImU32 border_color = NULL, const float border_thickness = 1.F, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
+    TextBackground(const ImVec2 pos, const ImU32 text_color, const ImU32 background_color, std::string text, const bool right_align, const bool center, const float y_size_text, const float padding_side = 0.01F, const float padding_bottom_top = 0.01F, const bool border_top = false, const bool border_bottom = false, const bool border_left = false, const bool border_right = false, const ImU32 border_color = NULL, const float border_thickness = 1.F, const float max_width = 0.F, const std::size_t max_lines = 2, ImFont* font = nullptr) :
       Text(pos, text_color, std::move(text), right_align, center, y_size_text, max_width, max_lines, font),
       rect_({}, {}, {}, {}, {}, {}, {}, {}) {
       ImVec2 rect_pos = pos_;
@@ -147,7 +147,7 @@ namespace base::render {
       texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
 
     void Draw() override {
-      util::GetDrawList()->AddImage(texture_, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+      util::GetDrawList()->AddImage(reinterpret_cast<ImTextureID>(texture_), util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
   private:

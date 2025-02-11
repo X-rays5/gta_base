@@ -4,13 +4,13 @@
 
 #ifndef RESULT_HPP_01224051
 #define RESULT_HPP_01224051
-#include <magic_enum/magic_enum.hpp>
 #include <result.hpp>
 #include <fmt/format.h>
+#include <magic_enum/magic_enum.hpp>
 
-#include "fmt/formatter.hpp"
+#include "fmt.hpp"
 
-namespace base::util::result {
+namespace base::common::result {
   enum class ResultCode {
     kSUCCESS,
     kINVALID_ARGUMENT,
@@ -98,16 +98,16 @@ namespace base::util::result {
 }
 
 namespace base {
-  using util::result::ResultCode;
-  using util::result::Status;
-  using util::result::StatusOr;
-  using util::result::MakeFailure;
+  using common::result::ResultCode;
+  using common::result::Status;
+  using common::result::StatusOr;
+  using common::result::MakeFailure;
 }
 
 template <>
-struct fmt::formatter<base::util::result::StatusErr> : formatter<std::string> {
+struct fmt::formatter<base::common::result::StatusErr> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const base::util::result::StatusErr& status, FormatContext& ctx) const {
+  auto format(const base::common::result::StatusErr& status, FormatContext& ctx) const {
     return fmt::format_to(ctx.out(), "{}: {}", status.GetResultString(), status.GetResultMessage());
   }
 };

@@ -13,7 +13,7 @@
 #endif
 
 #include <spdlog/spdlog.h>
-#include "../util/fmt/formatter.hpp"
+#include <base-common/fmt.hpp>
 
 #ifndef NDEBUG
 #define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, ""}, level, __VA_ARGS__)

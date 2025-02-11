@@ -4,7 +4,7 @@
 
 #ifndef SIGNAL_HPP
 #define SIGNAL_HPP
-#include "../util/common.hpp"
+#include <base-common/time.hpp>
 
 namespace base::win32 {
   /**
@@ -13,7 +13,7 @@ namespace base::win32 {
   class Signal {
   public:
     Signal() {
-      signal_h_ = CreateEvent(nullptr, false, false, (std::to_string(util::common::GetTimeStamp()) + "signal_helper").c_str());
+      signal_h_ = CreateEvent(nullptr, false, false, (std::to_string(common::util::time::GetTimeStamp()) + "signal_helper").c_str());
     }
 
     ~Signal() {

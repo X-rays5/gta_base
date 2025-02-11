@@ -7,15 +7,16 @@
 #include <fstream>
 #include <Zydis/Zydis.h>
 #include <DbgHelp.h>
-#include "../../util/common.hpp"
+#include <base-common/conversion.hpp>
+#include <base-common/time.hpp>
 #include "util.hpp"
 #include "../../memory/address.hpp"
 #include "../../util/vfs.hpp"
 
 namespace base::logging::exception {
   namespace {
-    Status WriteMiniDump(std::filesystem::path path, PEXCEPTION_POINTERS except_ptr) {
-      HANDLE dump_file = CreateFile(path.string().c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    Status WriteMiniDump(std::filesystem::path path, const PEXCEPTION_POINTERS except_ptr) {
+      const HANDLE dump_file = CreateFile(path.string().c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
       if (dump_file == INVALID_HANDLE_VALUE) {
         LOG_ERROR("Failed to create dump file '{}'", path);
         return MakeFailure<ResultCode::kIO_ERROR>("Failed to create dump file '{}'", path);
@@ -74,26 +75,26 @@ namespace base::logging::exception {
       return result;
     }
 
-    std::string GetRegisters(PCONTEXT ctx) {
+    std::string GetRegisters(const PCONTEXT ctx) {
       std::stringstream res;
       res << "\nDumping registers:\n";
-      res << "Rip: " << util::common::AddrToHex(ctx->Rip) << "\n";
-      res << "Rax: " << util::common::AddrToHex(ctx->Rax) << "\n";
-      res << "Rbx: " << util::common::AddrToHex(ctx->Rbx) << "\n";
-      res << "Rcx: " << util::common::AddrToHex(ctx->Rcx) << "\n";
-      res << "Rdx: " << util::common::AddrToHex(ctx->Rdx) << "\n";
-      res << "Rsi: " << util::common::AddrToHex(ctx->Rsi) << "\n";
-      res << "Rdi: " << util::common::AddrToHex(ctx->Rdi) << "\n";
-      res << "RSp: " << util::common::AddrToHex(ctx->Rsp) << "\n";
-      res << "Rbp: " << util::common::AddrToHex(ctx->Rbp) << "\n";
-      res << "R8: " << util::common::AddrToHex(ctx->R8) << "\n";
-      res << "R9: " << util::common::AddrToHex(ctx->R9) << "\n";
-      res << "R10: " << util::common::AddrToHex(ctx->R10) << "\n";
-      res << "R11: " << util::common::AddrToHex(ctx->R11) << "\n";
-      res << "R12: " << util::common::AddrToHex(ctx->R12) << "\n";
-      res << "R13: " << util::common::AddrToHex(ctx->R13) << "\n";
-      res << "R14: " << util::common::AddrToHex(ctx->R14) << "\n";
-      res << "R15: " << util::common::AddrToHex(ctx->R15) << "\n";
+      res << "Rip: " << common::conversion::AddrToHex(ctx->Rip) << "\n";
+      res << "Rax: " << common::conversion::AddrToHex(ctx->Rax) << "\n";
+      res << "Rbx: " << common::conversion::AddrToHex(ctx->Rbx) << "\n";
+      res << "Rcx: " << common::conversion::AddrToHex(ctx->Rcx) << "\n";
+      res << "Rdx: " << common::conversion::AddrToHex(ctx->Rdx) << "\n";
+      res << "Rsi: " << common::conversion::AddrToHex(ctx->Rsi) << "\n";
+      res << "Rdi: " << common::conversion::AddrToHex(ctx->Rdi) << "\n";
+      res << "RSp: " << common::conversion::AddrToHex(ctx->Rsp) << "\n";
+      res << "Rbp: " << common::conversion::AddrToHex(ctx->Rbp) << "\n";
+      res << "R8: " << common::conversion::AddrToHex(ctx->R8) << "\n";
+      res << "R9: " << common::conversion::AddrToHex(ctx->R9) << "\n";
+      res << "R10: " << common::conversion::AddrToHex(ctx->R10) << "\n";
+      res << "R11: " << common::conversion::AddrToHex(ctx->R11) << "\n";
+      res << "R12: " << common::conversion::AddrToHex(ctx->R12) << "\n";
+      res << "R13: " << common::conversion::AddrToHex(ctx->R13) << "\n";
+      res << "R14: " << common::conversion::AddrToHex(ctx->R14) << "\n";
+      res << "R15: " << common::conversion::AddrToHex(ctx->R15) << "\n";
 
       return res.str();
     }
@@ -105,7 +106,7 @@ namespace base::logging::exception {
 
     msg << "***** EXCEPTION RECEIVED *****\n";
     msg << "***** Exception name: " << exception_name << " *****\n";
-    msg << "***** Exception code: " << util::common::AddrToHex(except_rec->ExceptionCode) << " *****\n";
+    msg << "***** Exception code: " << common::conversion::AddrToHex(except_rec->ExceptionCode) << " *****\n";
     msg << "***** Exception pid: " << GetCurrentProcessId() << " *****\n";
 
     auto except_mod_res = win32::memory::GetModuleNameFromAddress(GetCurrentProcessId(), ctx->Rip);
@@ -126,7 +127,7 @@ namespace base::logging::exception {
 
     std::vector<MODULEENTRY32> modules = mod_res.value();
     for (auto&& mod : modules) {
-      msg << mod.szExePath << " addr: " << util::common::AddrToHex(reinterpret_cast<std::uintptr_t>(mod.modBaseAddr)) << " size: " << util::common::AddrToHex(mod.modBaseSize);
+      msg << mod.szExePath << " addr: " << common::conversion::AddrToHex(reinterpret_cast<std::uintptr_t>(mod.modBaseAddr)) << " size: " << common::conversion::AddrToHex(mod.modBaseSize);
       msg << '\n';
     }
 
@@ -134,7 +135,7 @@ namespace base::logging::exception {
     msg << GetRegisters(ctx);
     msg << '\n' << std::stacktrace::current(stacktrace_skip_count) << '\n';
 
-    std::filesystem::path report_dir = util::vfs::GetExceptionReports() / fmt::format("report_{}", util::common::GetTimeStamp());
+    std::filesystem::path report_dir = util::vfs::GetExceptionReports() / fmt::format("report_{}", common::util::time::GetTimeStamp());
     if (!std::filesystem::create_directories(report_dir)) {
       LOG_ERROR("Failed to create exception report directory '{}'", report_dir);
       return MakeFailure<ResultCode::kIO_ERROR>("Failed to create exception report directory '{}'", report_dir);
