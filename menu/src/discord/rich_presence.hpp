@@ -5,11 +5,12 @@
 #ifndef RICH_PRESENCE_HPP_08155936
 #define RICH_PRESENCE_HPP_08155936
 #include <base-common/spinlock.hpp>
+#include <base-common/globals.hpp>
 
 namespace base::discord {
    struct Activity {
       std::string state;
-      std::string details = fmt::format("Playing GTA V with {}", globals::kBASE_NAME);
+      std::string details = fmt::format("Playing GTA V with {}", common::globals::kBASE_NAME);
       std::string large_image_key = "gta-logo";
       std::string large_image_text;
       std::string small_image_key;

@@ -5,6 +5,7 @@
 #include "misc.hpp"
 #include <ShlObj.h>
 #include <unordered_map>
+#include <base-common/globals.hpp>
 
 namespace base::win32 {
   namespace {
@@ -60,7 +61,7 @@ namespace base::win32 {
   }
 
   StatusOr<HWND> GetGameHwnd() {
-    static const auto hwnd = GetHwnd(globals::target_window_class, globals::target_window_name);
+    static const auto hwnd = GetHwnd(common::globals::target_window_class, common::globals::target_window_name);
     return hwnd;
   }
 
@@ -80,6 +81,6 @@ namespace base::win32 {
 
     std::string cur_proc_name = std::filesystem::path(std::string(exe_name.get(), str_len)).filename().string();
 
-    return cur_proc_name == globals::target_process_name;
+    return cur_proc_name == common::globals::target_process_name;
   }
 }

@@ -4,14 +4,15 @@
 
 #include "logger.hpp"
 #include <vector>
+#include <base-common/globals.hpp>
+#include <base-common/time.hpp>
+#include <spdlog/async.h>
+#include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
-#include <spdlog/async.h>
-#include <base-common/time.hpp>
 #include "../util/vfs.hpp"
-#include "formatter/thread_id.hpp"
 #include "exception/vectored_handler.hpp"
+#include "formatter/thread_id.hpp"
 
 namespace base::logging {
   namespace {
@@ -32,7 +33,7 @@ namespace base::logging {
         if (!console_handle)
           return false;
 
-        SetConsoleTitleA(globals::kBASE_NAME);
+        SetConsoleTitleA(common::globals::kBASE_NAME);
         SetConsoleOutputCP(CP_UTF8);
 
         return SetConsoleMode(console_handle);
@@ -47,7 +48,7 @@ namespace base::logging {
     }
 
     std::filesystem::path GetLogFile() {
-      static const auto log_file = std::string(globals::kBASE_NAME) + ".log";
+      static const auto log_file = std::string(common::globals::kBASE_NAME) + ".log";
 
       return util::vfs::GetLoggingDir() / log_file;
     }
@@ -103,7 +104,7 @@ namespace base::logging {
 
     spdlog::init_thread_pool(spdlog::details::default_async_q_size, 2);
 
-    auto logger = SetupLoggerInst(fmt::format("{}_main_logger", globals::kBASE_NAME));
+    auto logger = SetupLoggerInst(fmt::format("{}_main_logger", common::globals::kBASE_NAME));
     spdlog::set_default_logger(logger);
 
     exception::EnableHandler();
