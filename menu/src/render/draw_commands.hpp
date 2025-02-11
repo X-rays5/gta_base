@@ -10,7 +10,7 @@
 
 // TODO: move most of this file to a cpp file
 
-namespace base::render {
+namespace base::menu::render {
   class BaseDrawCommand {
   public:
     BaseDrawCommand() = default;

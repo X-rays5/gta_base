@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <base-common/globals.hpp>
 
-namespace base::win32 {
+namespace base::menu::win32 {
   namespace {
     const std::unordered_map<KNOWN_FOLDER_ID, KNOWNFOLDERID> guid_map{
       {KNOWN_FOLDER_ID::kDocuments, FOLDERID_Documents},

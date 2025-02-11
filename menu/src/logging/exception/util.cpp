@@ -10,7 +10,7 @@
 
 #define EXCEPTION_CASE(code) EXCEPTION_CASE_NAME(code, #code)
 
-namespace base::logging::exception {
+namespace base::menu::logging::exception {
   std::string ExceptionCodeToStr(std::uint32_t code) {
     switch (code) {
       EXCEPTION_CASE(EXCEPTION_ACCESS_VIOLATION)

@@ -7,10 +7,10 @@
 
 #define PTR_TO_ADDR(ptr) reinterpret_cast<std::uintptr_t>(ptr)
 
-namespace base::hooking {
+namespace base::menu::hooking {
   DetourHook::DetourHook(std::string name, void* src, void* dst) : name_(std::move(name)) {
     LOG_DEBUG("Creating detour for {} at 0x{:x} to 0x{:x}", name_, PTR_TO_ADDR(src), PTR_TO_ADDR(dst));
-    detour_ = std::make_unique<PLH::NatDetour>(reinterpret_cast<std::uintptr_t>(src), reinterpret_cast<std::uintptr_t>(dst), &og_);
+    detour_ = std::make_unique<PLH::NatDetour>(PTR_TO_ADDR(src), PTR_TO_ADDR(dst), &og_);
   }
 
   DetourHook::DetourHook(std::string name, const std::string& module, const std::string& src, void* dst) : name_(std::move(name)) {
@@ -27,7 +27,7 @@ namespace base::hooking {
     }
 
     LOG_DEBUG("Creating detour for {} at 0x{:x} to 0x{:x}", name_, PTR_TO_ADDR(src_addr), PTR_TO_ADDR(dst));
-    detour_ = std::make_unique<PLH::NatDetour>(reinterpret_cast<std::uintptr_t>(src_addr), reinterpret_cast<std::uintptr_t>(dst), &og_);
+    detour_ = std::make_unique<PLH::NatDetour>(PTR_TO_ADDR(src_addr), PTR_TO_ADDR(dst), &og_);
   }
 
   DetourHook::~DetourHook() {

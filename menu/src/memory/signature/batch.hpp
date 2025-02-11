@@ -7,7 +7,7 @@
 #include <ankerl/unordered_dense.h>
 #include "pattern.hpp"
 
-namespace base::memory::signature {
+namespace base::menu::memory::signature {
   struct BatchJob {
     using cb_t = std::function<void(const Address*)>;
 

@@ -7,7 +7,7 @@
 #include "../render/renderer.hpp"
 #include "../logging/plh_logger.hpp"
 
-namespace base::hooking {
+namespace base::menu::hooking {
   Manager::Manager() :
     swap_chain_hook_("swap_chain", *memory::kPOINTERS->swap_chain_, {
                        {Hooks::swapchain_present_index, &Hooks::Present},

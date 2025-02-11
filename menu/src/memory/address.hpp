@@ -5,7 +5,7 @@
 #ifndef ADDRESS_HPP
 #define ADDRESS_HPP
 
-namespace base::memory {
+namespace base::menu::memory {
   class Address {
   public:
     explicit Address(void* addr) : addr_(reinterpret_cast<std::uintptr_t>(addr)) {}

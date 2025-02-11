@@ -13,7 +13,7 @@
 #include "../../memory/address.hpp"
 #include "../../util/vfs.hpp"
 
-namespace base::logging::exception {
+namespace base::menu::logging::exception {
   namespace {
     Status WriteMiniDump(std::filesystem::path path, const PEXCEPTION_POINTERS except_ptr) {
       const HANDLE dump_file = CreateFile(path.string().c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);

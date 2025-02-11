@@ -14,7 +14,7 @@ inline std::filesystem::path Get##path_name() { \
   return dir;                                                                               \
  }
 
-namespace base::util::vfs {
+namespace base::menu::util::vfs {
   /**
    * \brief Set the working directory to the appdata directory
    */

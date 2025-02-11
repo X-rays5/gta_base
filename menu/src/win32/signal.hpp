@@ -6,7 +6,7 @@
 #define SIGNAL_HPP
 #include <base-common/time.hpp>
 
-namespace base::win32 {
+namespace base::menu::win32 {
   /**
    * \brief A class for thread synchronization using Windows events
    */

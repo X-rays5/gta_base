@@ -7,7 +7,7 @@
 
 #define BATCH_SCAN(name, pattern, mod, cb) batch.Add(xorstr_(name), signature::Pattern(xorstr_(pattern), xorstr_(mod)), cb)
 
-namespace base::memory {
+namespace base::menu::memory {
 
   // Warning irrelevant here
   #pragma warning(push)

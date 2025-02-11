@@ -12,7 +12,7 @@
 #pragma warning(pop)
 #include <psapi.h>
 
-namespace base::memory::signature {
+namespace base::menu::memory::signature {
   namespace {
     std::string FixIdaSignature(std::string signature) {
       size_t start_pos = 0;

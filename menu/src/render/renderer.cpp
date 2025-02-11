@@ -11,7 +11,7 @@
 #include "../memory/pointers.hpp"
 #include "../hooking/hooking.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   namespace {
     void InitImGui(ID3D11Device* device, ID3D11DeviceContext* device_context) {
       LOG_DEBUG("ImGui init");

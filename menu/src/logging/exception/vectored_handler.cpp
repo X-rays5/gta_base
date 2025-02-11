@@ -7,7 +7,7 @@
 #include "util.hpp"
 #include "../logger.hpp"
 
-namespace base::logging::exception {
+namespace base::menu::logging::exception {
   namespace {
     PVOID cur_handler = nullptr;
 

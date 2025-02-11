@@ -5,7 +5,7 @@
 #include "thread.hpp"
 #include "renderer.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   Thread::Thread() { kTHREAD = this; }
 
   Thread::~Thread() { kTHREAD = nullptr; }

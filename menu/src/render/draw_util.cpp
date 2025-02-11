@@ -5,7 +5,7 @@
 #include "draw_util.hpp"
 #include <stacktrace>
 
-namespace base::render::util {
+namespace base::menu::render::util {
   namespace {
     FORCE_INLINE std::string WordWrapGetString(std::string* lines, std::uint32_t line_count) {
       std::string res;

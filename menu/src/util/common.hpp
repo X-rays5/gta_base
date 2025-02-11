@@ -7,7 +7,7 @@
 
 #define GTA_BASE_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
-namespace base::util::common {
+namespace base::menu::util::common {
  /**
   * \brief Convert a hex string to a address
   * \param file_path The hex string

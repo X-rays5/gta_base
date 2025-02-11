@@ -6,7 +6,7 @@
 #define GTA_BASE_MEMORY_6E2CBAF0C25F49E69A8329E5694C9C0B_HPP
 #include <TlHelp32.h>
 
-namespace base::win32::memory {
+namespace base::menu::win32::memory {
  /**
   * \brief Get the base address of a module in a process
   * \param pid pid of the process

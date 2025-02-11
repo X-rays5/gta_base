@@ -5,7 +5,7 @@
 #include "rich_presence.hpp"
 #include <discord_rpc.h>
 
-namespace base::discord {
+namespace base::menu::discord {
   namespace {
     void HandleDisconnect(int err_code, const char* message) {
       LOG_ERROR("Discord disconnected: {} - {}", err_code, message);

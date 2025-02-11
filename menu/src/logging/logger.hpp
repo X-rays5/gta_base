@@ -6,7 +6,7 @@
 #ifndef GTA_BASE_LOGGER_B10F4F65142242508AED522F616DA0DA_HPP
 #define GTA_BASE_LOGGER_B10F4F65142242508AED522F616DA0DA_HPP
 
-namespace base::logging {
+namespace base::menu::logging {
   class Manager {
   public:
     Manager();

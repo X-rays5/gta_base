@@ -6,22 +6,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS src/*.hpp)
-file(COPY ${HEADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/base-common)
+
+# Copy headers to the include directory
+foreach(header ${HEADERS})
+  get_filename_component(header_name ${header} NAME)
+  configure_file(${header} ${CMAKE_CURRENT_BINARY_DIR}/include/base-common/${header_name} COPYONLY)
+endforeach()
 
 add_library(${PROJECT_NAME} STATIC
     src/globals.hpp
-        src/util/spinlock.cpp
-        src/util/spinlock.hpp
-        src/result.cpp
-        src/result.hpp
-        src/fmt.cpp
-        src/fmt.hpp
-        src/util/string.cpp
-        src/util/string.hpp
-        src/util/time.cpp
-        src/util/time.hpp
-        src/conversion.cpp
-        src/conversion.hpp
+    src/util/spinlock.cpp
+    src/util/spinlock.hpp
+    src/result.cpp
+    src/result.hpp
+    src/fmt.cpp
+    src/fmt.hpp
+    src/util/string.cpp
+    src/util/string.hpp
+    src/util/time.cpp
+    src/util/time.hpp
+    src/conversion.cpp
+    src/conversion.hpp
 )
 add_library(base::common ALIAS ${PROJECT_NAME})
 

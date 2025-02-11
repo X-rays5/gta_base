@@ -6,7 +6,7 @@
 #include <fstream>
 #include <wincrypt.h>
 
-namespace base::util::common {
+namespace base::menu::util::common {
   StatusOr<std::string> GetFileMd5Hash(const std::filesystem::path& file_path) {
     HCRYPTPROV hProv = 0;
     HCRYPTHASH hHash = 0;

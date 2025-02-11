@@ -7,7 +7,7 @@
 #include <base-common/spinlock.hpp>
 #include <base-common/globals.hpp>
 
-namespace base::discord {
+namespace base::menu::discord {
    struct Activity {
       std::string state;
       std::string details = fmt::format("Playing GTA V with {}", common::globals::kBASE_NAME);

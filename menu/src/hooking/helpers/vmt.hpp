@@ -8,7 +8,7 @@
 #include <memory>
 #include <polyhook2/Virtuals/VFuncSwapHook.hpp>
 
-namespace base::hooking {
+namespace base::menu::hooking {
   struct IDXHook {
     std::uint16_t idx;
     void* dst;

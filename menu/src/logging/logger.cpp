@@ -14,7 +14,7 @@
 #include "exception/vectored_handler.hpp"
 #include "formatter/thread_id.hpp"
 
-namespace base::logging {
+namespace base::menu::logging {
   namespace {
     bool SetConsoleMode(HANDLE console_handle) {
       DWORD console_mode;

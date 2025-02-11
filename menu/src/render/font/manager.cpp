@@ -5,7 +5,7 @@
 #include "manager.hpp"
 #include <battery/embed.hpp>
 
-namespace base::render::font {
+namespace base::menu::render::font {
   namespace {
     void MergeFa() {
       constexpr ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};

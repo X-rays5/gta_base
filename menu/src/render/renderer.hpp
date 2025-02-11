@@ -10,7 +10,7 @@
 #include "font/manager.hpp"
 #include <wrl/client.h>
 
-namespace base::render {
+namespace base::menu::render {
   class Renderer {
   public:
     using device_ptr_t = Microsoft::WRL::ComPtr<ID3D11Device>;

@@ -6,7 +6,7 @@
 #define GTA_BASE_DRAW_UTIL_AE07DB6C33FB43E1B6FE62992EE1D737_HPP
 #include <imgui/imgui.h>
 
-namespace base::render::util {
+namespace base::menu::render::util {
   ImVec2 GetSize(ImVec2 pos, ImVec2 size);
 
   /// scale float in range [0, 1] to [0, screen_size]

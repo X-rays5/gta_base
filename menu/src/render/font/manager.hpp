@@ -8,7 +8,7 @@
 #include <filesystem>
 #include <imgui/imgui.h>
 
-namespace base::render::font {
+namespace base::menu::render::font {
   class Manager {
   public:
     Manager();

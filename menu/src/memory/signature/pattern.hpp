@@ -6,7 +6,7 @@
 #define PATTERN_HPP
 #include "../address.hpp"
 
-namespace base::memory::signature {
+namespace base::menu::memory::signature {
   class Pattern {
   public:
     explicit Pattern(const std::string& signature, const std::string& module_name = "") : signature_(signature), module_name_(module_name) {}

@@ -13,12 +13,12 @@
 #include "string.hpp"
 
 #ifndef NDEBUG
-#define PROFILER_SAVE(profiler) if (const Status _prof_res = profiler.WriteToDisk(::base::util::string::ReplaceAll(__FUNCTION__, "::", "_")); _prof_res.error()) { LOG_ERROR("{}", _prof_res.error()); }
+#define PROFILER_SAVE(profiler) if (const Status _prof_res = profiler.WriteToDisk(::base::menu::util::string::ReplaceAll(__FUNCTION__, "::", "_")); _prof_res.error()) { LOG_ERROR("{}", _prof_res.error()); }
 #else
 #define PROFILER_SAVE(profiler) (void)0
 #endif
 
-namespace base::util {
+namespace base::menu::util {
   class Profile {
   public:
     void Disabled(const bool is_disabled) {

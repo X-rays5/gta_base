@@ -8,7 +8,7 @@
 #include "helpers/detour.hpp"
 #include "helpers/vmt.hpp"
 
-namespace base::hooking {
+namespace base::menu::hooking {
   struct Hooks {
     static constexpr auto swapchain_present_index = 8;
     static constexpr auto swapchain_resizebuffers_index = 13;

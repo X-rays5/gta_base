@@ -6,7 +6,7 @@
 #define GTA_BASE_GLOBALS_852FF53BDBCA440E9F3C9A229E4D34B1_HPP
 #include <atomic>
 
-namespace base::globals {
+namespace base::menu::globals {
   extern std::atomic<bool> kRUNNING;
 }
 #endif //GTA_BASE_GLOBALS_852FF53BDBCA440E9F3C9A229E4D34B1_HPP

@@ -12,7 +12,7 @@
 #include "draw_commands.hpp"
 #include <base-common/spinlock.hpp>
 
-namespace base::render {
+namespace base::menu::render {
   class DrawQueue {
   public:
     template <typename T> requires std::is_base_of_v<BaseDrawCommand, T>
