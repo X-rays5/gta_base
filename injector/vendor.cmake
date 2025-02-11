@@ -1,0 +1,4 @@
+include(../vendor/spel64.cmake)
+include(../vendor/sdl.cmake)
+include(../vendor/imgui.cmake)
+target_link_libraries(imgui PRIVATE SDL3::SDL3)

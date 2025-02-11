@@ -10,3 +10,5 @@ if (WIN32)
     add_subdirectory(menu)
   endif ()
 endif ()
+
+add_subdirectory(injector)
