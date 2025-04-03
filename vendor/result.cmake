@@ -1,4 +1,4 @@
-CPMAddPackage("gh:X-rays5-forks/result#a97e66b")
+CPMAddPackage("gh:X-rays5-forks/result#master")
 
 # Need to move the file into result/result.hpp to prevent collisions
 file(GLOB_RECURSE result_files "${result_SOURCE_DIR}/include/*.hpp")
