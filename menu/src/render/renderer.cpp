@@ -44,7 +44,7 @@ namespace base::menu::render {
     InitImGui(device_.Get(), device_ctx_.Get());
 
     LOG_DEBUG("Initializing font manager.");
-    font_mgr_inst_ = std::make_unique<font::Manager>();
+    font_mgr_inst_ = std::make_unique<imfont::Manager>();
 
     kRENDERER = this;
   }
@@ -63,9 +63,9 @@ namespace base::menu::render {
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
 
-      font::kMANAGER->PushFont("roboto");
+      imfont::kMANAGER->PushFont("roboto");
       kRENDERER->GetDrawQueueBuffer()->RenderFrame();
-      font::kMANAGER->PopFont();
+      imfont::kMANAGER->PopFont();
 
       ImGui::Render();
       ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

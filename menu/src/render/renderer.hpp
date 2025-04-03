@@ -46,7 +46,7 @@ namespace base::menu::render {
     device_context_ptr_t device_ctx_{};
     swapchain_ptr_t swap_chain_{};
     DrawQueueBuffer draw_queue_buffer_;
-    std::unique_ptr<font::Manager> font_mgr_inst_;
+    std::unique_ptr<imfont::Manager> font_mgr_inst_;
   };
 
   // skipcq: CXX-W2009

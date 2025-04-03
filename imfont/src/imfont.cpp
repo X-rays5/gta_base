@@ -8,7 +8,7 @@
 #include <imgui/imgui.h>
 #include <base-common/logging/logging_macro.hpp>
 
-namespace base::menu::render::font {
+namespace imfont {
   namespace {
     void MergeFa() {
       constexpr ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};

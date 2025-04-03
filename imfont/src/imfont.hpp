@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <filesystem>
 
-namespace base::menu::render::font {
+namespace imfont {
   class Manager {
   public:
     Manager();
