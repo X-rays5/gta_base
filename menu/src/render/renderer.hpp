@@ -7,7 +7,7 @@
 #define BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
 #include "draw.hpp"
 #include "thread.hpp"
-#include "font/manager.hpp"
+#include <imfont/imfont.hpp>
 #include <wrl/client.h>
 
 namespace base::menu::render {

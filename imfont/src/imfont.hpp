@@ -6,7 +6,6 @@
 #define MANAGER_HPP_12174322
 #include <unordered_map>
 #include <filesystem>
-#include <imgui/imgui.h>
 
 namespace base::menu::render::font {
   class Manager {
@@ -22,10 +21,11 @@ namespace base::menu::render::font {
     static void PopFont();
 
   private:
-    std::unordered_map<std::string, ImFont*> fonts_;
+    // std::string, ImFont*
+    std::unordered_map<std::string, void*> fonts_;
 
   private:
-    bool FinalizeLoading(const std::string& name, ImFont* font, bool merge_fa);
+    bool FinalizeLoading(const std::string& name, void* font, bool merge_fa);
   };
 
   inline Manager* kMANAGER{};

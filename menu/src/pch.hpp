@@ -11,7 +11,7 @@
 #include <base-common/result.hpp>
 #include <base-common/win32/all.hpp>
 #include "globals.hpp"
-#include "render/font/IconsFontAwesome6.hpp"
+#include <imfont/IconsFontAwesome6.hpp>
 
 #ifdef MSVC
 #define FORCE_INLINE __forceinline

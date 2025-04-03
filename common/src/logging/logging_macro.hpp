@@ -16,16 +16,16 @@
 #include <spdlog/spdlog.h>
 
 #ifndef NDEBUG
-#define LOGGER_LOG(level, ...) (spdlog::default_logger_raw())->log(spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__)
+#define LOGGER_LOG(level, ...) if (auto __logger__ = spdlog::default_logger_raw(); __logger__) { __logger__->log(spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__); } (void)0
 #else
-#define LOGGER_LOG(level, ...) (spdlog::default_logger_raw())->log(spdlog::source_loc{xorstr_(__FILE__), __LINE__, ""}, level, __VA_ARGS__)
+#define LOGGER_LOG(level, ...) (if (auto __logger__ = spdlog::default_logger_raw(); __logger__) { __logger__->log(spdlog::source_loc{xorstr_(__FILE__), __LINE__, ""}, level, __VA_ARGS__); } (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
 #define LOG_TRACE(...) LOGGER_LOG(spdlog::level::trace, __VA_ARGS__)
 #define LOG_TRACE_CONDITIONAL(condition, ...) if (condition) {LOG_TRACE(__VA_ARGS__);}
 #else
-#define LOG_TRACE(...)  (void)0
+#define LOG_TRACE(...) (void)0
 #define LOG_TRACE_CONDITIONAL(...) (void)0
 #endif
 

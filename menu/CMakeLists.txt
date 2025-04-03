@@ -26,9 +26,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/hooking/helpers/vmt.hpp
         src/memory/pointers.cpp
         src/memory/pointers.hpp
-        src/render/font/manager.cpp
-        src/render/font/manager.hpp
-        src/render/font/IconsFontAwesome6.hpp
         src/ui/localization/manager.cpp
         src/ui/localization/manager.hpp
         src/ui/localization/default.cpp
@@ -61,6 +58,4 @@ if(WIN32)
 endif ()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
-
-b_embed(${PROJECT_NAME} assets/fonts/fa-solid-900.ttf)
-b_embed(${PROJECT_NAME} assets/fonts/RobotoMono-Regular.ttf)
+target_link_libraries(${PROJECT_NAME} PRIVATE base::imfont)

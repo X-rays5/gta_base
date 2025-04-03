@@ -2,8 +2,11 @@
 // Created by X-ray on 29/12/2023.
 //
 
-#include "manager.hpp"
+#include "imfont.hpp"
+#include "IconsFontAwesome6.hpp"
 #include <battery/embed.hpp>
+#include <imgui/imgui.h>
+#include <base-common/logging/logging_macro.hpp>
 
 namespace base::menu::render::font {
   namespace {
@@ -104,7 +107,7 @@ namespace base::menu::render::font {
     auto it = fonts_.find(name);
 
     if (it != fonts_.end() && it->second) {
-      ImGui::PushFont(it->second);
+      ImGui::PushFont(static_cast<ImFont*>(it->second));
     } else {
       LOG_WARN("Tried to push non existing font {}", name);
     }
@@ -115,7 +118,7 @@ namespace base::menu::render::font {
   }
 
 
-  bool Manager::FinalizeLoading(const std::string& name, ImFont* font, bool merge_fa) {
+  bool Manager::FinalizeLoading(const std::string& name, void* font, bool merge_fa) {
     if (merge_fa)
       MergeFa();
 

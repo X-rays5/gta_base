@@ -45,7 +45,7 @@ add_library(${PROJECT_NAME} STATIC
       src/win32/misc.cpp
       src/win32/signal.hpp
 )
-add_library(base::common ALIAS ${PROJECT_NAME})
+add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
