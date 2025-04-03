@@ -15,8 +15,8 @@
 #include <base-common/win32/all.hpp>
 #include <imfont/imfont.hpp>
 
-constexpr auto kWINDOW_WIDTH = 1280;
-constexpr auto kWINDOW_HEIGHT = 720;
+constexpr auto kWINDOW_WIDTH = 850;
+constexpr auto kWINDOW_HEIGHT = 510;
 
 SDL_Window* kWINDOW;
 SDL_Renderer* kRENDERER;
