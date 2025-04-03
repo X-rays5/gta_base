@@ -6,6 +6,7 @@
 #define GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP
 #include <filesystem>
 #include <TlHelp32.h>
+#include "../result.hpp"
 
 namespace base::menu::win32 {
  enum class KNOWN_FOLDER_ID : uint32_t {
@@ -45,6 +46,20 @@ namespace base::menu::win32 {
   * \return HWND
   */
  StatusOr<HWND> GetGameHwnd();
+
+ /**
+  * \brief Get the PID of a HWND
+  * \param hwnd The HWND of the window
+  * \return DWORD
+  */
+ StatusOr<DWORD> GetPIDFromHWND(HWND hwnd);
+
+ /**
+  * \brief Get the process handle from a HWND
+  * \param hwnd The HWND of the window
+  * \return HANDLE
+  */
+ StatusOr<HANDLE> GetHProcFromHWND(HWND hwnd);
 
  /**
   * \brief Check if the game window is the foreground window

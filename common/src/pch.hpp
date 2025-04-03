@@ -7,8 +7,6 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include "logging/logging_macro.hpp"
-#include "result.hpp"
-#include "win32/all.hpp"
 
 #ifdef MSVC
 #define FORCE_INLINE __forceinline

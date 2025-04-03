@@ -17,11 +17,10 @@ namespace base::menu::win32 {
     };
   }
 
-  StatusOr<std::filesystem::path> GetKnownFolderPath(KNOWN_FOLDER_ID folder_id) {
+  StatusOr<std::filesystem::path> GetKnownFolderPath(const KNOWN_FOLDER_ID folder_id) {
     PWSTR path = nullptr;
-    const GUID guid = guid_map.at(folder_id);
 
-    if (SUCCEEDED(SHGetKnownFolderPath(guid, 0, nullptr, &path))) {
+    if (const GUID guid = guid_map.at(folder_id); SUCCEEDED(SHGetKnownFolderPath(guid, 0, nullptr, &path))) {
       std::filesystem::path res = path;
       CoTaskMemFree(path);
       return res;
@@ -63,6 +62,27 @@ namespace base::menu::win32 {
   StatusOr<HWND> GetGameHwnd() {
     static const auto hwnd = GetHwnd(common::globals::target_window_class, common::globals::target_window_name);
     return hwnd;
+  }
+
+  StatusOr<DWORD> GetPIDFromHWND(const HWND hwnd) {
+    DWORD process_id = 0;
+    GetWindowThreadProcessId(hwnd, &process_id);
+    if (process_id == 0) {
+      return MakeFailure<ResultCode::kINVALID_HANDLE>("Failed to retrieve valid pid from hwnd");
+    }
+
+    return process_id;
+  }
+
+  StatusOr<HANDLE> GetHProcFromHWND(const HWND hwnd) {
+    DWORD process_id = 0;
+    GetWindowThreadProcessId(hwnd, &process_id);
+    HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
+    if (hProc == INVALID_HANDLE_VALUE) {
+      return MakeFailure<ResultCode::kINVALID_HANDLE>("Failed to open process handle");
+    }
+
+    return hProc;
   }
 
   bool IsForegroundWindow() {

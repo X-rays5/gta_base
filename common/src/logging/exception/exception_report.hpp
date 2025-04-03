@@ -5,6 +5,7 @@
 #ifndef GTA_BASE_STACKTRACE_A38C3A72B50442F086F82164348159CC_HPP
 #define GTA_BASE_STACKTRACE_A38C3A72B50442F086F82164348159CC_HPP
 #include <string>
+#include "../../result.hpp"
 
 namespace base::menu::logging::exception {
   StatusOr<std::string> WriteExceptionReport(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count);

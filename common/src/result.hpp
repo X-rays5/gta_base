@@ -4,9 +4,9 @@
 
 #ifndef RESULT_HPP_01224051
 #define RESULT_HPP_01224051
-#include <result.hpp>
 #include <fmt/format.h>
 #include <magic_enum/magic_enum.hpp>
+#include <result/result.hpp>
 
 #include "fmt.hpp"
 

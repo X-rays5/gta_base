@@ -24,7 +24,7 @@ if (spel64_ADDED)
     file(COPY ${spel64_LIB_DIR}/spel64.h DESTINATION ${spel64_SOURCE_DIR}/headers/spel64)
     target_include_directories(spel64 INTERFACE ${spel64_SOURCE_DIR}/headers)
 
-    target_link_libraries(${PROJECT_NAME} PRIVATE spel64)
+    target_link_libraries(${PROJECT_NAME} PUBLIC spel64)
 else()
     message(FATAL_ERROR "Could not find spel64")
 endif()

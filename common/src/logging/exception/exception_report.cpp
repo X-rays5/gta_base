@@ -8,9 +8,11 @@
 #include <stacktrace>
 #include <Zydis/Zydis.h>
 #include "util.hpp"
+#include "../../address.hpp"
 #include "../../conversion.hpp"
 #include "../../vfs.hpp"
-#include "../../address.hpp"
+#include "../../win32/memory.hpp"
+#include "../../util/time.hpp"
 
 namespace base::menu::logging::exception {
   namespace {
