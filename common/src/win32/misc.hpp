@@ -5,6 +5,7 @@
 #ifndef GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP
 #define GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP
 #include <filesystem>
+#include <TlHelp32.h>
 
 namespace base::menu::win32 {
  enum class KNOWN_FOLDER_ID : uint32_t {

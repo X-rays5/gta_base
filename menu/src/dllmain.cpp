@@ -4,16 +4,15 @@
 
 #include <memory>
 #include <Windows.h>
+#include <base-common/vfs.hpp>
+#include <base-common/logging/logger.hpp>
 #include "main.hpp"
-#include "util/vfs.hpp"
-#include "logging/logger.hpp"
 
 namespace {
-  // skipqc: CXX-W2009
   HINSTANCE dll_inst;
 }
 
-BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason, LPVOID) {
+BOOL WINAPI DllMain(const HINSTANCE dll_handle, const DWORD call_reason, LPVOID) {
   if (call_reason == DLL_PROCESS_ATTACH) {
     dll_inst = dll_handle;
     CreateThread(nullptr, 0, [](LPVOID) -> DWORD {

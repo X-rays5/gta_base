@@ -3,6 +3,7 @@
 //
 
 #include "util.hpp"
+#include <xorstr.hpp>
 
 #define EXCEPTION_CASE_NAME(code, name) \
     case code:              \

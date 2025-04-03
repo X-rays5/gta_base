@@ -5,7 +5,10 @@
 #ifndef GTA_BASE_VFS_16AC40FC6BC24763B42CAF7CBB740E5B_HPP
 #define GTA_BASE_VFS_16AC40FC6BC24763B42CAF7CBB740E5B_HPP
 #include <filesystem>
-#include <base-common/globals.hpp>
+#include <xorstr.hpp>
+#include "globals.hpp"
+#include "logging/logging_macro.hpp"
+#include "win32/misc.hpp"
 
 #define GET_PATH(path_name, path_to_dir) \
 inline std::filesystem::path Get##path_name() { \

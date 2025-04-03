@@ -5,6 +5,8 @@
 #ifndef GTA_BASE_MEMORY_6E2CBAF0C25F49E69A8329E5694C9C0B_HPP
 #define GTA_BASE_MEMORY_6E2CBAF0C25F49E69A8329E5694C9C0B_HPP
 #include <TlHelp32.h>
+#include <cstdint>
+#include <string>
 
 namespace base::menu::win32::memory {
  /**

@@ -5,7 +5,7 @@
 #include "misc.hpp"
 #include <ShlObj.h>
 #include <unordered_map>
-#include <base-common/globals.hpp>
+#include "../globals.hpp"
 
 namespace base::menu::win32 {
   namespace {

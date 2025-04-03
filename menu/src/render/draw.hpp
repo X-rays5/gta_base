@@ -5,12 +5,12 @@
 #pragma once
 #ifndef BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP
 #define BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP
-#include <vector>
 #include <memory>
+#include <vector>
+#include <base-common/util/spinlock.hpp>
 #include <imgui/imgui.h>
-#include "draw_util.hpp"
 #include "draw_commands.hpp"
-#include <base-common/spinlock.hpp>
+#include "draw_util.hpp"
 
 namespace base::menu::render {
   class DrawQueue {

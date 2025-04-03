@@ -4,7 +4,7 @@
 
 #ifndef SIGNAL_HPP
 #define SIGNAL_HPP
-#include <base-common/time.hpp>
+#include "../util/time.hpp"
 
 namespace base::menu::win32 {
   /**
@@ -29,7 +29,7 @@ namespace base::menu::win32 {
     }
 
     /**
-     * \brief Infinitly wait for the signal to be notified
+     * \brief Infinitely wait for the signal to be notified
      */
     void Wait() const {
       Wait(INFINITE);

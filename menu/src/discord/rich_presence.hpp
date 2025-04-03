@@ -4,8 +4,9 @@
 
 #ifndef RICH_PRESENCE_HPP_08155936
 #define RICH_PRESENCE_HPP_08155936
-#include <base-common/spinlock.hpp>
+#include <string>
 #include <base-common/globals.hpp>
+#include <base-common/util/spinlock.hpp>
 
 namespace base::menu::discord {
    struct Activity {

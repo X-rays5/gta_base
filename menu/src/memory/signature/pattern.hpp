@@ -4,7 +4,7 @@
 
 #ifndef PATTERN_HPP
 #define PATTERN_HPP
-#include "../address.hpp"
+#include "../../../../common/src/address.hpp"
 
 namespace base::menu::memory::signature {
   class Pattern {

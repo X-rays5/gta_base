@@ -12,22 +12,7 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/render/draw.hpp
         src/render/renderer.cpp
         src/render/renderer.hpp
-        src/logging/logger.cpp
-        src/logging/logger.hpp
-        src/logging/logging_macro.hpp
-        src/util/vfs.hpp
-        src/win32/all.hpp
-        src/win32/misc.cpp
-        src/win32/misc.hpp
         src/globals.hpp
-        src/logging/exception/exception_report.cpp
-        src/logging/exception/exception_report.hpp
-        src/logging/exception/vectored_handler.cpp
-        src/logging/exception/vectored_handler.hpp
-        src/win32/memory.cpp
-        src/win32/memory.hpp
-        src/logging/exception/util.hpp
-        src/logging/exception/util.cpp
         src/render/draw_util.cpp
         src/render/draw_util.hpp
         src/render/draw_commands.hpp
@@ -41,8 +26,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/hooking/helpers/vmt.hpp
         src/memory/pointers.cpp
         src/memory/pointers.hpp
-        src/win32/signal.hpp
-        src/logging/formatter/thread_id.hpp
         src/render/font/manager.cpp
         src/render/font/manager.hpp
         src/render/font/IconsFontAwesome6.hpp
@@ -55,7 +38,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/logging/plh_logger.hpp
         src/memory/signature/pattern.cpp
         src/memory/signature/pattern.hpp
-        src/memory/address.hpp
         src/memory/signature/batch.cpp
         src/memory/signature/batch.hpp
         src/util/thread_pool.hpp

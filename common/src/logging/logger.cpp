@@ -3,33 +3,35 @@
 //
 
 #include "logger.hpp"
+#include <filesystem>
 #include <vector>
-#include <base-common/globals.hpp>
-#include <base-common/time.hpp>
+#include <xorstr.hpp>
 #include <spdlog/async.h>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include "../util/vfs.hpp"
+#include "../globals.hpp"
+#include "../vfs.hpp"
+#include "../util/time.hpp"
 #include "exception/vectored_handler.hpp"
 #include "formatter/thread_id.hpp"
 
 namespace base::menu::logging {
   namespace {
-    bool SetConsoleMode(HANDLE console_handle) {
-      DWORD console_mode;
+    bool SetConsoleMode(const HANDLE console_handle) {
+      DWORD console_mode{};
       if (!GetConsoleMode(console_handle, &console_mode))
         return false;
 
       console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-      console_mode &= ~(ENABLE_QUICK_EDIT_MODE);
+      console_mode &= ~ENABLE_QUICK_EDIT_MODE;
 
       return ::SetConsoleMode(console_handle, console_mode);
     }
 
     bool EnsureConsole() {
       if (AttachConsole(GetCurrentProcessId()) || AllocConsole()) {
-        const auto console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+        const HANDLE console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
         if (!console_handle)
           return false;
 
@@ -94,8 +96,7 @@ namespace base::menu::logging {
   }
 
   void Manager::Init() {
-    const bool result = EnsureConsole();
-    if (!result) {
+    if (!EnsureConsole()) {
       MessageBoxA(nullptr, xorstr_("There was an error creating/obtaining a console window."), xorstr_("Critical logging error"), MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
       abort();
     }
@@ -104,13 +105,13 @@ namespace base::menu::logging {
 
     spdlog::init_thread_pool(spdlog::details::default_async_q_size, 2);
 
-    auto logger = SetupLoggerInst(fmt::format("{}_main_logger", common::globals::kBASE_NAME));
+    const auto logger = SetupLoggerInst(fmt::format("{}_main_logger", common::globals::kBASE_NAME));
     spdlog::set_default_logger(logger);
 
     exception::EnableHandler();
   }
 
-  void Manager::Shutdown() {
+  void Manager::Shutdown() noexcept {
     exception::DisableHandler();
 
     spdlog::default_logger_raw()->flush();
@@ -120,8 +121,7 @@ namespace base::menu::logging {
     FreeConsole();
 
     try {
-      const auto log_file = GetLogFile();
-      if (std::filesystem::exists(log_file)) {
+      if (const auto log_file = GetLogFile(); std::filesystem::exists(log_file)) {
         const auto log_file_tmp = log_file.parent_path() / fmt::format("{}_{}{}", common::util::time::GetTimeStamp(), log_file.stem().string(), log_file.extension().string());
         std::filesystem::rename(log_file, log_file_tmp);
 
@@ -131,4 +131,5 @@ namespace base::menu::logging {
       MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
     }
   }
+
 }

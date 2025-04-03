@@ -12,17 +12,17 @@
 #define SPDLOG_ACTIVE_LEVEL 2 // INFO
 #endif
 
+#include "../fmt.hpp"
 #include <spdlog/spdlog.h>
-#include <base-common/fmt.hpp>
 
 #ifndef NDEBUG
-#define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{__FILE__, __LINE__, ""}, level, __VA_ARGS__)
+#define LOGGER_LOG(level, ...) (spdlog::default_logger_raw())->log(spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__)
 #else
-#define LOGGER_LOG(logger, level, ...) (logger)->log(spdlog::source_loc{xorstr_(__FILE__), __LINE__, ""}, level, __VA_ARGS__)
+#define LOGGER_LOG(level, ...) (spdlog::default_logger_raw())->log(spdlog::source_loc{xorstr_(__FILE__), __LINE__, ""}, level, __VA_ARGS__)
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
-#define LOG_TRACE(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::trace, __VA_ARGS__)
+#define LOG_TRACE(...) LOGGER_LOG(spdlog::level::trace, __VA_ARGS__)
 #define LOG_TRACE_CONDITIONAL(condition, ...) if (condition) {LOG_TRACE(__VA_ARGS__);}
 #else
 #define LOG_TRACE(...)  (void)0
@@ -30,7 +30,7 @@
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
-#define LOG_DEBUG(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::debug, __VA_ARGS__)
+#define LOG_DEBUG(...) LOGGER_LOG(spdlog::level::debug, __VA_ARGS__)
 #define LOG_DEBUG_CONDITIONAL(condition, ...) if (condition) {LOG_DEBUG(__VA_ARGS__);}
 #else
 #define LOG_DEBUG(...)  (void)0
@@ -38,7 +38,7 @@
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO
-#define LOG_INFO(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::info, __VA_ARGS__)
+#define LOG_INFO(...) LOGGER_LOG(spdlog::level::info, __VA_ARGS__)
 #define LOG_INFO_CONDITIONAL(condition, ...) if (condition) {LOG_INFO(__VA_ARGS__);}
 #else
 #define LOG_INFO(...)  (void)0
@@ -46,7 +46,7 @@
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_WARN
-#define LOG_WARN(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::warn, __VA_ARGS__)
+#define LOG_WARN(...) LOGGER_LOG(spdlog::level::warn, __VA_ARGS__)
 #define LOG_WARN_CONDITIONAL(condition, ...) if (condition) {LOG_WARN(__VA_ARGS__);}
 #else
 #define LOG_WARN(...)  (void)0
@@ -54,7 +54,7 @@
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_ERROR
-#define LOG_ERROR(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::err, __VA_ARGS__)
+#define LOG_ERROR(...) LOGGER_LOG(spdlog::level::err, __VA_ARGS__)
 #define LOG_ERROR_CONDITIONAL(condition, ...) if (condition) {LOG_ERROR(__VA_ARGS__);}
 #else
 #define LOG_ERROR(...)  (void)0
@@ -62,7 +62,7 @@
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL
-#define LOG_CRITICAL(...) LOGGER_LOG(spdlog::default_logger_raw(), spdlog::level::critical, __VA_ARGS__)
+#define LOG_CRITICAL(...) LOGGER_LOG(spdlog::level::critical, __VA_ARGS__)
 #define LOG_CRITICAL_CONDITIONAL(condition, ...) if (condition) {LOG_CRITICAL(__VA_ARGS__);}
 #else
 #define LOG_CRITICAL(...)  (void)0

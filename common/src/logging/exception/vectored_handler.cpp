@@ -5,7 +5,7 @@
 #include "vectored_handler.hpp"
 #include "exception_report.hpp"
 #include "util.hpp"
-#include "../logger.hpp"
+#include "../../../../common/src/logging/logger.hpp"
 
 namespace base::menu::logging::exception {
   namespace {
