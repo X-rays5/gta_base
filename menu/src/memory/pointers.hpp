@@ -6,7 +6,7 @@
 #define POINTERS_HPP
 #include <dxgi.h>
 
-namespace base::memory {
+namespace base::menu::memory {
   class Pointers {
   public:
     Pointers();

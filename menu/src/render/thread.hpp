@@ -9,7 +9,7 @@
 #include <vector>
 #include "draw.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   class Thread {
   public:
     using render_cb_t = std::function<void(DrawQueueBuffer*)>;

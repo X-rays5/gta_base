@@ -4,27 +4,26 @@
 
 #include <memory>
 #include <Windows.h>
+#include <base-common/vfs.hpp>
+#include <base-common/logging/logger.hpp>
 #include "main.hpp"
-#include "util/vfs.hpp"
-#include "logging/logger.hpp"
 
 namespace {
-  // skipqc: CXX-W2009
   HINSTANCE dll_inst;
 }
 
-BOOL WINAPI DllMain(HINSTANCE dll_handle, DWORD call_reason, LPVOID) {
+BOOL WINAPI DllMain(const HINSTANCE dll_handle, const DWORD call_reason, LPVOID) {
   if (call_reason == DLL_PROCESS_ATTACH) {
     dll_inst = dll_handle;
     CreateThread(nullptr, 0, [](LPVOID) -> DWORD {
-      base::util::vfs::SetWorkingDir();
+      base::common::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
 
       int exit_code = EXIT_FAILURE;
       try {
-        auto logger_inst = std::make_unique<base::logging::Manager>();
+        auto logger_inst = std::make_unique<base::common::logging::Manager>();
 
         if (!base::win32::GetGameHwnd().error() && base::win32::IsTargetProcess()) {
-          exit_code = base::menu_main();
+          exit_code = base::menu::menu_main();
         } else {
           LOG_CRITICAL("Process doesn't seem to be GTA V, aborting...");
         }

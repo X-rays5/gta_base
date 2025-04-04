@@ -6,7 +6,7 @@
 #define MANAGER_HPP_12190029
 #include <ankerl/unordered_dense.h>
 
-namespace base::ui::localization {
+namespace base::menu::ui::localization {
     using translation_map_t = ankerl::unordered_dense::map<std::string, std::string>;
 
     extern const translation_map_t default_translation;
@@ -42,7 +42,7 @@ namespace base::ui::localization {
 
 namespace base {
     [[nodiscard]] inline std::string operator ""_l10n(const char* key) {
-        return ui::localization::kMANAGER->Localize(key);
+        return menu::ui::localization::kMANAGER->Localize(key);
     }
 }
 #endif //MANAGER_HPP_12190029

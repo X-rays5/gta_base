@@ -7,17 +7,17 @@
 #define BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP
 #include <Windows.h>
 #include <xorstr.hpp>
-#include "util/result.hpp"
+#include <base-common/logging/logging_macro.hpp>
+#include <base-common/result.hpp>
+#include <base-common/win32/all.hpp>
 #include "globals.hpp"
-#include "logging/logging_macro.hpp"
-#include "render/font/IconsFontAwesome6.hpp"
-#include "win32/all.hpp"
+#include <imfont/IconsFontAwesome6.hpp>
 
 #ifdef MSVC
 #define FORCE_INLINE __forceinline
 #elif defined(GNU)
 #define FORCE_INLINE __attribute__((always_inline)) inline
-#elif
+#else
 #define FORCE_INLINE
 #endif
 #endif //BASE_PCH_02FC1A25A084431E8F0AB7249ED42555_HPP

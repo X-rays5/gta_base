@@ -6,7 +6,7 @@
 #define PLH_LOGGER_HPP
 #include <polyhook2/ErrorLog.hpp>
 
-namespace base::logging::PLH {
+namespace base::menu::logging::PLH {
   class Logger final : public ::PLH::Logger {
   public:
     virtual ~Logger() override = default;

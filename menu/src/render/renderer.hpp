@@ -7,10 +7,10 @@
 #define BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
 #include "draw.hpp"
 #include "thread.hpp"
-#include "font/manager.hpp"
+#include <imfont/imfont.hpp>
 #include <wrl/client.h>
 
-namespace base::render {
+namespace base::menu::render {
   class Renderer {
   public:
     using device_ptr_t = Microsoft::WRL::ComPtr<ID3D11Device>;
@@ -46,7 +46,7 @@ namespace base::render {
     device_context_ptr_t device_ctx_{};
     swapchain_ptr_t swap_chain_{};
     DrawQueueBuffer draw_queue_buffer_;
-    std::unique_ptr<font::Manager> font_mgr_inst_;
+    std::unique_ptr<imfont::Manager> font_mgr_inst_;
   };
 
   // skipcq: CXX-W2009

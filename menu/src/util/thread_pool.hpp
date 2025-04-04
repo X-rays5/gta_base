@@ -7,7 +7,7 @@
 #define GTA_BASE_THREAD_POOL_HPP
 #include <glaze/thread/threadpool.hpp>
 
-namespace base::util {
+namespace base::menu::util {
   using ThreadPool = glz::pool;
 
   inline ThreadPool* kTHREAD_POOL{};

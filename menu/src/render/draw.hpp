@@ -5,14 +5,14 @@
 #pragma once
 #ifndef BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP
 #define BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP
-#include <vector>
 #include <memory>
+#include <vector>
+#include <base-common/util/spinlock.hpp>
 #include <imgui/imgui.h>
-#include "draw_util.hpp"
 #include "draw_commands.hpp"
-#include "../util/spinlock.hpp"
+#include "draw_util.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   class DrawQueue {
   public:
     template <typename T> requires std::is_base_of_v<BaseDrawCommand, T>
@@ -46,7 +46,7 @@ namespace base::render {
 
     ~DrawQueueBuffer() {
       // Just in case to prevent a deadlock on shutdown.
-      ::base::util::ScopedSpinlock lock(spinlock_);
+      common::util::ScopedSpinlock lock(spinlock_);
       read_signal_.Notify();
     }
 
@@ -56,7 +56,7 @@ namespace base::render {
     }
 
     void RenderFrame() {
-      ::base::util::ScopedSpinlock lock(spinlock_);
+      common::util::ScopedSpinlock lock(spinlock_);
       draw_queue_[read_idx_].Draw();
       read_signal_.Notify();
     }
@@ -64,7 +64,7 @@ namespace base::render {
     /// @note This function should ONLY be called from the render thread.
     template <typename... Args>
     void AddCommand(Args&&... command) {
-      ::base::util::ScopedSpinlock lock(spinlock_);
+      common::util::ScopedSpinlock lock(spinlock_);
       draw_queue_[write_idx_].AddCommand(std::forward<Args>(command)...);
     }
 
@@ -85,7 +85,7 @@ namespace base::render {
     std::vector<DrawQueue> draw_queue_;
     std::size_t read_idx_;
     std::size_t write_idx_;
-    ::base::util::Spinlock spinlock_;
+    common::util::Spinlock spinlock_;
     win32::Signal read_signal_;
   };
 }

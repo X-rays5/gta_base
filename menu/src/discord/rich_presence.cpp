@@ -5,7 +5,7 @@
 #include "rich_presence.hpp"
 #include <discord_rpc.h>
 
-namespace base::discord {
+namespace base::menu::discord {
   namespace {
     void HandleDisconnect(int err_code, const char* message) {
       LOG_ERROR("Discord disconnected: {} - {}", err_code, message);
@@ -35,7 +35,7 @@ namespace base::discord {
   }
 
   void RichPresence::Tick() {
-    util::ScopedSpinlock lock(lock_);
+    common::util::ScopedSpinlock lock(lock_);
     DiscordRichPresence discord_presence = {};
     discord_presence.state = activity_.state.c_str();
     discord_presence.details = activity_.details.c_str();

@@ -6,7 +6,7 @@
 #include <ranges>
 #include <polyhook2/ErrorLog.hpp>
 
-namespace base::hooking {
+namespace base::menu::hooking {
   VmtHook::VmtHook(const std::string& vtable_name, LPVOID vtable, std::initializer_list<IDXHook> hooks) : vtable_name_(vtable_name), vtable_(vtable) {
     for (auto&& [idx, dst] : hooks) {
       vtable_redirect_.insert({idx, reinterpret_cast<std::uintptr_t>(dst)});

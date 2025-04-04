@@ -8,7 +8,7 @@
 #include <string>
 #include <polyhook2/Detour/NatDetour.hpp>
 
-namespace base::hooking {
+namespace base::menu::hooking {
   class DetourHook {
   public:
     explicit DetourHook(std::string name, void* src, void* dst);
