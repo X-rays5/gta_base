@@ -79,6 +79,34 @@ jobs:
         if: matrix.language == 'c-cpp'
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.1.0
 
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+          output: ${{ github.workspace }}/results/codeql
+          upload: failure-only
+
+      - name: Filter CPP SARIF to exclude build directory
+        if: matrix.language == 'c-cpp'
+        uses: advanced-security/filter-sarif@v1
+        with:
+          input: ${{ github.workspace }}/results/codeql/cpp.sarif
+          output: ${{ github.workspace }}/results/codeql/cpp.sarif
+          patterns: |
+            -build/**
+
+      - name: Upload CPP SARIF
+        if: matrix.language == 'c-cpp'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ github.workspace }}/results/codeql/cpp.sarif
+
+      - name: Upload Actions SARIF
+        if: matrix.language == 'actions'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ github.workspace }}/results/codeql/actions.sarif
+
       - name: Build with build-wrapper
         if: matrix.language == 'c-cpp'
         run: |
@@ -123,3 +151,4 @@ jobs:
           path: |
             build/Release/**/*.exe
             build/Release/**/*.dll
+          retention-days: 7
