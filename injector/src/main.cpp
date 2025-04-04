@@ -7,28 +7,43 @@
 #include <base-common/logging/logger.hpp>
 #include <imgui/imgui.h>
 #include "window.hpp"
+#include "settings.hpp"
 
 std::unique_ptr<base::common::logging::Manager> kLOGGER;
 
 constexpr auto kWINDOW_WIDTH = 850;
 constexpr auto kWINDOW_HEIGHT = 510;
+base::injector::Settings kSETTINGS;
 
-[[noreturn]] std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-  base::common::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
-  kLOGGER = std::make_unique<base::common::logging::Manager>();
+void AtExit() {
+  if (const auto res = SaveSettings(kSETTINGS); !res) {
+    LOG_ERROR("Failed to save settings: {}", res.error());
+  }
+  kLOGGER->Shutdown();
+}
+
+std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+  using namespace base;
+  using namespace base::injector;
+
+  common::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
+  kLOGGER = std::make_unique<common::logging::Manager>();
 
 #ifdef NDEBUG
   ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
 
-  at_quick_exit([]() {
-    kLOGGER->Shutdown();
-  });
-  atexit([]() {
-    kLOGGER->Shutdown();
-  });
+  at_quick_exit(AtExit);
+  atexit(AtExit);
 
-  const base::injector::Window window(kWINDOW_WIDTH, kWINDOW_HEIGHT);
+  if (auto res = LoadSettings(); res) {
+    kSETTINGS = res.value();
+  } else {
+    LOG_ERROR("Failed to load settings: {}", res.error());
+    return 1;
+  }
+
+  const Window window(kWINDOW_WIDTH, kWINDOW_HEIGHT);
 
   while (true) {
     window.HandleEvents();

@@ -36,6 +36,7 @@ namespace base::common::vfs {
   GET_PATH(ExceptionReports, "logs/exception_reports")
   GET_PATH(PatternCacheDir, "cache/patterns")
   GET_PATH(TranslationDir, "translations")
+  GET_PATH(SettingsDir, "settings")
 }
 
 #undef GET_PATH
