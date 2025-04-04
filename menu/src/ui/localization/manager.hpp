@@ -44,7 +44,7 @@ namespace base::ui::localization {
 
 namespace base {
     [[nodiscard]] inline std::string operator ""_l10n(const char* key) {
-        return ui::localization::kMANAGER->Localize(key);
+        return menu::ui::localization::kMANAGER->Localize(key);
     }
 }
 

@@ -11,4 +11,4 @@ SET(POLYHOOK_BUILD_STATIC_RUNTIME OFF CACHE BOOL "" FORCE)
 
 CPMAddPackage("gh:X-rays5-forks/PolyHook_2_0#5717242")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE PolyHook_2)
+target_link_libraries(${PROJECT_NAME} PUBLIC PolyHook_2)

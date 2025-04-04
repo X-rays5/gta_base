@@ -6,7 +6,7 @@
 #define TYPE_TRAITS_HPP_01233709
 #include <type_traits>
 
-namespace base::util {
+namespace base::menu::util {
   template <typename T>
   struct is_char_array : std::false_type {};
 

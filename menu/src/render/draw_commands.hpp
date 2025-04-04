@@ -10,7 +10,7 @@
 
 // TODO: move most of this file to a cpp file
 
-namespace base::render {
+namespace base::menu::render {
   class BaseDrawCommand {
   public:
     BaseDrawCommand() = default;
@@ -121,7 +121,7 @@ namespace base::render {
     float y_size_text_;
     float max_width_;
     std::size_t max_lines_;
-    const ImFont* font_;
+    ImFont* font_;
   };
 
   class TextBackground final : Text {
@@ -155,7 +155,7 @@ namespace base::render {
       texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
 
     void Draw() override {
-      util::GetDrawList()->AddImage(texture_, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+      util::GetDrawList()->AddImage(reinterpret_cast<ImTextureID>(texture_), util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
   private:

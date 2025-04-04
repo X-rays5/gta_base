@@ -7,25 +7,7 @@
 
 #define GTA_BASE_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
-namespace base::util::common {
- /**
-  * \brief Get the current timestamp
-  * \return The current timestamp
-  */
- std::uint64_t GetTimeStamp();
-
- /**
-  * \brief Convert a address to a hex string
-  * \param addr The address
-  * \return The hex string
-  */
- std::string AddrToHex(uint64_t addr);
- /**
-  * \brief Convert a hex string to a address
-  * \param hex The hex string
-  * \return The address
-  */
- StatusOr<std::uint64_t> HexCharToInt(char number);
+namespace base::menu::util::common {
  /**
   * \brief Convert a hex string to a address
   * \param file_path The hex string

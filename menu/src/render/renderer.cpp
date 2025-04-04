@@ -11,7 +11,7 @@
 #include "../memory/pointers.hpp"
 #include "../hooking/hooking.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   namespace {
     void InitImGui(ID3D11Device* device, ID3D11DeviceContext* device_context) {
       LOG_DEBUG("ImGui init");
@@ -45,7 +45,7 @@ namespace base::render {
     init_imgui_ = true;
 
     LOG_DEBUG("Initializing font manager.");
-    font_mgr_inst_ = std::make_unique<font::Manager>();
+    font_mgr_inst_ = std::make_unique<imfont::Manager>();
 
     kRENDERER = this;
   }
@@ -69,9 +69,9 @@ namespace base::render {
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
 
-      font::kMANAGER->PushFont("roboto");
+      imfont::kMANAGER->PushFont("roboto");
       kRENDERER->GetDrawQueueBuffer()->RenderFrame();
-      font::kMANAGER->PopFont();
+      imfont::kMANAGER->PopFont();
 
       ImGui::Render();
       ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

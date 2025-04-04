@@ -11,7 +11,7 @@
 #include "../util/spinlock.hpp"
 #include "draw.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   class Thread {
   public:
     struct RenderCB {

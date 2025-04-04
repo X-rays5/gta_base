@@ -17,9 +17,9 @@
 #include <chrono>
 #include <fmt/args.h>
 
-std::atomic<bool> base::globals::kRUNNING = true;
+std::atomic<bool> base::menu::globals::kRUNNING = true;
 
-namespace base {
+namespace base::menu {
   namespace {
     std::unique_ptr<memory::Pointers> pointers_inst;
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
@@ -79,12 +79,12 @@ private:
 void ThreadPoolLifetime(LifeTimeHelper* life_time_helper) {
   life_time_helper->AddCallback([&](LifeTimeHelper::Action action) {
     if (action == LifeTimeHelper::Init) {
-      base::thread_pool_inst = std::make_unique<std::remove_reference_t<decltype(*base::thread_pool_inst)>>(std::thread::hardware_concurrency() / 2);
-      base::util::kTHREAD_POOL = base::thread_pool_inst.get();
+      base::menu::thread_pool_inst = std::make_unique<std::remove_reference_t<decltype(*base::menu::thread_pool_inst)>>(std::thread::hardware_concurrency() / 2);
+      base::menu::util::kTHREAD_POOL = base::menu::thread_pool_inst.get();
       LOG_INFO("[INIT] {}", "ThreadPool");
     } else {
-      base::util::kTHREAD_POOL = nullptr;
-      base::thread_pool_inst.reset();
+      base::menu::util::kTHREAD_POOL = nullptr;
+      base::menu::thread_pool_inst.reset();
       LOG_INFO("[SHUTDOWN] {}", "ThreadPool");
     }
   });
@@ -94,8 +94,8 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
   lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
     if (action == LifeTimeHelper::Init) {
       LOG_INFO("[INIT] Renderer");
-      base::render_inst = std::make_unique<base::render::Renderer>();
-      base::render_thread_manager_inst = std::make_unique<base::render::Thread>();
+      base::menu::render_inst = std::make_unique<base::menu::render::Renderer>();
+      base::menu::render_thread_manager_inst = std::make_unique<base::menu::render::Thread>();
 
       base::render::kTHREAD->AddRenderCallback(0, [](base::render::DrawQueueBuffer* buffer) {
         buffer->AddCommand(base::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::ui::localization::kMANAGER->Localize("text/hello_world"), 0.02F, false, true, true));
@@ -108,24 +108,24 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
       });
 
       LOG_INFO("[INIT] Render thread");
-      base::render_thread_inst = std::make_unique<std::thread>(base::render::Thread::RenderMain);
+      base::menu::render_thread_inst = std::make_unique<std::thread>(base::menu::render::Thread::RenderMain);
     } else {
       // First make sure it's actually waiting then unblock it.
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
-      base::render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
+      base::menu::render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
 
       LOG_DEBUG("[SHUTDOWN] Stopping render thread...");
-      if (base::render_thread_inst->joinable())
-        base::render_thread_inst->join();
+      if (base::menu::render_thread_inst->joinable())
+        base::menu::render_thread_inst->join();
       LOG_INFO("[SHUTDOWN] Render thread stopped.");
 
-      base::render_thread_manager_inst.reset();
-      base::render_inst.reset();
+      base::menu::render_thread_manager_inst.reset();
+      base::menu::render_inst.reset();
     }
   });
 }
 
-int base::menu_main() {
+int base::menu::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
   ThreadPoolLifetime(lifetime_helper.get());
