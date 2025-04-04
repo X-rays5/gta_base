@@ -28,9 +28,6 @@ namespace base::common::result {
     StatusErr(const ResultCode code, std::string msg = "") :
       result_code_(code), msg_(std::move(msg)) {}
 
-    StatusErr(StatusErr&& other) noexcept = default;
-    StatusErr& operator=(StatusErr&& other) noexcept = delete;
-
     /**
      * \brief Check if the status is ok
      * \return True if the status is ok, false otherwise
@@ -52,7 +49,7 @@ namespace base::common::result {
      * \return The result code as a string
      */
     [[nodiscard]] std::string GetResultString() const {
-      return magic_enum::enum_name(result_code_).data();
+      return std::string(magic_enum::enum_name(result_code_));
     }
 
     /**
