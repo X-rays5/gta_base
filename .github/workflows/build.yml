@@ -6,6 +6,11 @@ on:
     branches: [ "master" ]
   schedule:
     - cron: '17 7 * * 0'
+  workflow_dispatch: # Allow manual triggering
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -14,6 +19,7 @@ jobs:
     permissions:
       security-events: write
       packages: read
+      contents: write
 
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
@@ -33,10 +39,28 @@ jobs:
         with:
           fetch-depth: 0  # Fetch full history of current branch
 
-      - name: Fetch SonarCloud comparison branch (${{ github.base_ref }})
+      - name: Cache CMake build files
+        if: matrix.language == 'c-cpp'
+        uses: actions/cache@v4.2.3
+        with:
+          path: build
+          key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+
+      - name: Cache SonarCloud scanner
+        if: matrix.language == 'c-cpp'
+        uses: actions/cache@v4.2.3
+        with:
+          path: .sonar/cache
+          key: ${{ runner.os }}-sonar-${{ github.ref_name }}
+          restore-keys: |
+            ${{ runner.os }}-sonar-
+
+      - name: Fetch SonarCloud comparison branch
         if: matrix.language == 'c-cpp'
         run: |
-          if ("${{ github.event_name }}" -eq "pull_request") {
+          if ($Env:GITHUB_EVENT_NAME -eq "pull_request") {
             $TARGET_BRANCH="${{ github.base_ref }}"
             Write-Host "PR detected. Fetching target branch: $TARGET_BRANCH"
             git fetch origin ${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}
@@ -58,8 +82,8 @@ jobs:
       - name: Build with build-wrapper
         if: matrix.language == 'c-cpp'
         run: |
-          New-Item -ItemType directory -Path build
-          cmake -S . -B build
+          New-Item -ItemType directory -Path build -Force
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
 
       - name: Perform CodeQL Analysis
@@ -77,3 +101,25 @@ jobs:
           args: >
             -Dsonar.cfamily.build-wrapper-output=${{ env.BUILD_WRAPPER_OUT_DIR }}
             -Dsonar.scm.provider=git
+
+      # Create release for tagged commits
+      - name: Create Release
+        if: matrix.language == 'c-cpp' && startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          files: |
+            build/Release/**/*.exe
+            build/Release/**/*.dll
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Updated artifact upload to include both .exe and .dll files
+      - name: Upload Build Artifact
+        if: matrix.language == 'c-cpp'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: build-artifacts
+          path: |
+            build/Release/**/*.exe
+            build/Release/**/*.dll
