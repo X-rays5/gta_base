@@ -2,12 +2,14 @@
 // Created by X-ray on 10/02/2025.
 //
 
-
+#include <future>
 #include <base-common/vfs.hpp>
 #include <base-common/logging/logger.hpp>
 #include <imgui/imgui.h>
-#include "window.hpp"
+#include <magic_enum/magic_enum.hpp>
+#include "inject.hpp"
 #include "settings.hpp"
+#include "window.hpp"
 
 std::atomic<bool> kRUNNING = true;
 
@@ -60,6 +62,8 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
   strncpy_s(target_window_class.get(), 255, kSETTINGS.target_window_class.c_str(), _TRUNCATE);
   strncpy_s(target_process_name.get(), 255, kSETTINGS.target_process_name.c_str(), _TRUNCATE);
 
+  HWND game_wnd = nullptr;
+
   while (kRUNNING) {
     window.HandleEvents();
     if (SDL_GetWindowFlags(window.GetWindow()) & SDL_WINDOW_MINIMIZED) {
@@ -67,12 +71,28 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
       continue;
     }
 
+    game_wnd = win32::GetHwnd(kSETTINGS.target_window_class, kSETTINGS.target_window_name).value_or(nullptr);
+
     window.PreFrame();
 
     {
       if (ImGui::Begin("Hello, world!", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
         if (ImGui::BeginTabBar("tabs")) {
           if (ImGui::BeginTabItem("Injector")) {
+            ImGui::Text(!game_wnd ? "Game not running" : fmt::format("Game running: {}", win32::GetPIDFromHWND(game_wnd).value_or(0)).c_str());
+            if (game_wnd) {
+              if (ImGui::Button("Inject")) {
+                auto _ = std::async(std::launch::async, [=]() {
+                  if (const auto res = Inject(win32::GetPIDFromHWND(game_wnd).value_or(0), kSETTINGS.dll_path); res.error()) {
+                    LOG_ERROR("Failed to inject: {}", res.error());
+                    MessageBoxA(nullptr, res.error().GetResultMessage().c_str(), "Error", MB_OK | MB_ICONERROR);
+                  } else {
+                    LOG_INFO("Injected successfully");
+                  }
+                });
+              }
+            }
+
             ImGui::EndTabItem();
           }
           if (ImGui::BeginTabItem("Settings")) {

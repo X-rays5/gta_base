@@ -46,7 +46,7 @@ namespace base::common::memory {
       const SIZE_T res = VirtualQuery((void*)*this, &memory_info, sizeof(memory_info));
 
       if (res != sizeof(memory_info)) {
-        return MakeFailure<ResultCode::kINTERNAL_ERROR>(fmt::format("Failed to get memory info for addr: 0x{:X}", addr_));
+        return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to get memory info for addr: 0x{:X}", addr_);
       }
       return memory_info;
     }

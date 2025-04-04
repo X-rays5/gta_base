@@ -52,7 +52,7 @@ namespace base::win32 {
 
   StatusOr<HWND> GetHwnd(std::string_view window_class, std::string_view window_name) {
     auto hwnd = FindWindowA(window_class.empty() ? nullptr : window_class.data(), window_name.empty() ? nullptr : window_name.data());
-    if (hwnd == INVALID_HANDLE_VALUE) {
+    if (hwnd == nullptr) {
       return MakeFailure<ResultCode::kNOT_FOUND>("Failed to retrieve valid hwnd handle for target window");
     }
 

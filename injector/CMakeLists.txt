@@ -11,6 +11,8 @@ add_executable(${PROJECT_NAME}
         src/window.hpp
         src/settings.cpp
         src/settings.hpp
+        src/inject.cpp
+        src/inject.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

@@ -17,7 +17,8 @@ namespace base::common::result {
     kINVALID_HANDLE,
     kNOT_FOUND,
     kIO_ERROR,
-    kINTERNAL_ERROR
+    kINTERNAL_ERROR,
+    kALLOCATION_ERROR
   };
 
   class StatusErr {
