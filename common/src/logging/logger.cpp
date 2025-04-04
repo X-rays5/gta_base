@@ -130,6 +130,10 @@ namespace base::common::logging {
   }
 
   void Manager::Shutdown() noexcept {
+    // We're already dead
+    if (!spdlog::default_logger_raw())
+      return;
+
     exception::DisableHandler();
 
     spdlog::default_logger_raw()->flush();

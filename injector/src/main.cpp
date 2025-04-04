@@ -9,6 +9,8 @@
 #include "window.hpp"
 #include "settings.hpp"
 
+std::atomic<bool> kRUNNING = true;
+
 std::unique_ptr<base::common::logging::Manager> kLOGGER;
 
 constexpr auto kWINDOW_WIDTH = 850;
@@ -16,6 +18,8 @@ constexpr auto kWINDOW_HEIGHT = 510;
 base::injector::Settings kSETTINGS;
 
 void AtExit() {
+  kRUNNING = false;
+
   if (const auto res = SaveSettings(kSETTINGS); !res) {
     LOG_ERROR("Failed to save settings: {}", res.error());
   }
@@ -45,7 +49,7 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
   const Window window(kWINDOW_WIDTH, kWINDOW_HEIGHT);
 
-  while (true) {
+  while (kRUNNING) {
     window.HandleEvents();
     if (SDL_GetWindowFlags(window.GetWindow()) & SDL_WINDOW_MINIMIZED) {
       std::this_thread::yield();
@@ -63,4 +67,6 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     window.PostFrame();
   }
+
+  return 0;
 }
