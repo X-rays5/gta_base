@@ -1,28 +1,62 @@
-name: build
+name: "Build & Analyze"
 on:
   push:
-    branches:
-      - master
+    branches: [ "master" ]
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    branches: [ "master" ]
+  schedule:
+    - cron: '17 7 * * 0'
+
 jobs:
   build:
-    name: Build and analyze
+    name: Build & Analyze
     runs-on: windows-2025
+    permissions:
+      security-events: write
+      packages: read
+
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: actions
+            build-mode: none
+          - language: c-cpp
+            build-mode: manual
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 500  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 500
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
       - name: Install sonar-scanner and build-wrapper
+        if: matrix.language == 'c-cpp'
         uses: SonarSource/sonarcloud-github-c-cpp@v3
+
       - name: Build with build-wrapper
+        if: matrix.language == 'c-cpp'
         run: |
           New-Item -ItemType directory -Path build
           cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
       - name: Run sonar-scanner
+        if: matrix.language == 'c-cpp'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
