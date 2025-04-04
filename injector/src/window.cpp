@@ -121,7 +121,7 @@ namespace base::injector {
     }
   }
 
-  void Window::HandleEvents() const {
+  void Window::HandleEvents() {
     SDL_Event event{};
     while (SDL_PollEvent(&event)) {
       if (ImGui_ImplSDL3_ProcessEvent(&event)) {
@@ -130,12 +130,8 @@ namespace base::injector {
 
       switch (event.type) {
       case SDL_EVENT_QUIT:
-        exit(0);
-        break;
       case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
-        if (event.window.windowID == SDL_GetWindowID(window_)) {
-          exit(0);
-        }
+        exit(0);
         break;
       default:
         LOG_WARN("Unhandled SDL event: {}", event.type);

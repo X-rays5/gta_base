@@ -15,7 +15,7 @@ namespace base::injector {
     Window(int width, int height);
     ~Window();
 
-    void HandleEvents() const;
+    static void HandleEvents();
     void PreFrame() const;
     void PostFrame() const;
 
