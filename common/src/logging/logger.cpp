@@ -18,7 +18,7 @@
 
 namespace base::common::logging {
   namespace {
-    bool LOGGER_EXISTS = false;
+    std::atomic<bool> LOGGER_EXISTS = false;
 
     bool SetConsoleMode(const HANDLE console_handle) {
       DWORD console_mode{};
