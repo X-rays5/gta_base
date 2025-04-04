@@ -8,7 +8,7 @@
 #include <functional>
 #include <vector>
 #include <algorithm>
-#include "../util/spinlock.hpp"
+#include <base-common/util/spinlock.hpp>
 #include "draw.hpp"
 
 namespace base::menu::render {
@@ -28,7 +28,7 @@ namespace base::menu::render {
     static void RenderMain();
 
     void AddRenderCallback(const std::size_t z_idx, const RenderCB::render_cb_t& cb) {
-      const auto lock = base::util::ScopedSpinlock(callback_lock_);
+      const auto lock = common::util::ScopedSpinlock(callback_lock_);
       render_callbacks_.push_back({z_idx, cb});
 
       // While this really isn't optimal, render callbacks aren't constantly added.
@@ -38,12 +38,12 @@ namespace base::menu::render {
     }
 
     std::vector<RenderCB>& GetRenderCallbacks() {
-      const auto lock = base::util::ScopedSpinlock(callback_lock_);
+      const auto lock = common::util::ScopedSpinlock(callback_lock_);
       return render_callbacks_;
     }
 
   private:
-    base::util::Spinlock callback_lock_;
+    common::util::Spinlock callback_lock_;
     std::vector<RenderCB> render_callbacks_;
   };
 

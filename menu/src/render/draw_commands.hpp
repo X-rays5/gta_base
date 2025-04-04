@@ -93,22 +93,22 @@ namespace base::menu::render {
       }
 
       if (right_align_) {
-        ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
         pos_.x -= text_size.x;
         pos_.y += text_size.y / 2;
       }
 
       if (!right_align_ && center_y_) {
-        ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
         pos_.y += text_size.y / 2;
       }
 
       if (!right_align_ && center_x_) {
-        ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
         pos_.x -= text_size.x / 2;
       }
 
-      util::GetDrawList()->AddText(font_, util::ScaleFont(y_size_text_), util::ScaleToScreen(pos_), color_, text_.c_str());
+      util::GetDrawList()->AddText(const_cast<ImFont*>(font_), util::ScaleFont(y_size_text_), util::ScaleToScreen(pos_), color_, text_.c_str());
     }
 
   protected:
@@ -121,7 +121,7 @@ namespace base::menu::render {
     float y_size_text_;
     float max_width_;
     std::size_t max_lines_;
-    ImFont* font_;
+    const ImFont* font_;
   };
 
   class TextBackground final : Text {

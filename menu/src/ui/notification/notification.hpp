@@ -6,7 +6,7 @@
 #define NOTIFICATION_HPP_05174124
 #include "../../render/animate.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   class DrawQueueBuffer;
 }
 
@@ -24,7 +24,7 @@ namespace base::ui::notification {
   private:
     Notification(const Type type, const std::string& title, const std::string& message) : type_(type), title_(title), message_(message) {}
 
-    void Draw(render::DrawQueueBuffer* draw_queue_buffer, std::size_t delta_time, bool right_align, std::float_t y_offset, std::size_t duration_ms);
+    void Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, std::size_t delta_time, bool right_align, std::float_t y_offset, std::size_t duration_ms);
 
     friend class Manager;
 

@@ -5,7 +5,7 @@
 #include "thread.hpp"
 #include "renderer.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   Thread::Thread() {
     kTHREAD = this;
   }
@@ -39,7 +39,7 @@ namespace base::render {
           buffer->SwapBuffers();
       } else {
         [[unlikely]]
-          LOG_DEBUG("nullptr");
+        LOG_DEBUG("nullptr");
       }
     }
     LOG_INFO("Exiting render thread.");

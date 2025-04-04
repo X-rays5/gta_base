@@ -47,8 +47,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/ui/notification/manager.hpp
         src/render/animate.hpp
         src/util/profile.hpp
-        src/util/string.cpp
-        src/util/string.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

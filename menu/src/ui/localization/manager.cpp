@@ -4,9 +4,9 @@
 
 #include "manager.hpp"
 #include <glaze/glaze.hpp>
-#include "../../../../common/src/vfs.hpp"
+#include <base-common/vfs.hpp>
 
-namespace base::menu::ui::localization {
+namespace base::ui::localization {
     namespace {
         std::string GetProfilePath(const std::string& name) {
             return fmt::format("{}/{}.json", common::vfs::GetTranslationDir(), name);

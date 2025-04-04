@@ -9,7 +9,7 @@
 namespace base::ui::notification {
   Manager::Manager() {
     kMANAGER = this;
-    render::kTHREAD->AddRenderCallback(999, [](render::DrawQueueBuffer* draw_queue_buffer) {
+    menu::render::kTHREAD->AddRenderCallback(999, [](menu::render::DrawQueueBuffer* draw_queue_buffer) {
       if (kMANAGER) {
         kMANAGER->Render(draw_queue_buffer);
       }
@@ -39,10 +39,10 @@ namespace base::ui::notification {
     notifications_.emplace_back(Notify{duration_ms, Notification(type, title, message)});
   }
 
-  void Manager::Render(render::DrawQueueBuffer* draw_queue_buffer) {
+  void Manager::Render(menu::render::DrawQueueBuffer* draw_queue_buffer) {
     // Iterate through all notifications and render them also remove them if they are expired
     for (auto it = notifications_.begin(); it != notifications_.end();) {
-      it->notification.Draw(draw_queue_buffer, render::kRENDERER->GetDeltaTime(), true, 0.0f, it->duration_ms);
+      it->notification.Draw(draw_queue_buffer, menu::render::kRENDERER->GetDeltaTime(), true, 0.0f, it->duration_ms);
       if (it->duration_ms == 0) {
         LOG_DEBUG("Notification expired: {}", it->notification.title_);
         it = notifications_.erase(it);

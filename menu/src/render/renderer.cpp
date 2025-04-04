@@ -10,6 +10,7 @@
 #include <imgui/imgui_impl_win32.h>
 #include "../memory/pointers.hpp"
 #include "../hooking/hooking.hpp"
+#include <base-common/util/time.hpp>
 
 namespace base::menu::render {
   namespace {
@@ -61,7 +62,7 @@ namespace base::menu::render {
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
     if (globals::kRUNNING && kRENDERER && kRENDERER->init_imgui_) {
-      std::uint64_t now = base::util::common::GetTimeStamp();
+      const std::uint64_t now = common::util::time::GetTimeStamp();
       kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
       kRENDERER->SetLastTime(now);
 

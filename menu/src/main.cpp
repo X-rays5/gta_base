@@ -97,9 +97,9 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
       base::menu::render_inst = std::make_unique<base::menu::render::Renderer>();
       base::menu::render_thread_manager_inst = std::make_unique<base::menu::render::Thread>();
 
-      base::render::kTHREAD->AddRenderCallback(0, [](base::render::DrawQueueBuffer* buffer) {
-        buffer->AddCommand(base::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::ui::localization::kMANAGER->Localize("text/hello_world"), 0.02F, false, true, true));
-        buffer->AddCommand(base::render::RunRenderCode([] {
+      base::menu::render::kTHREAD->AddRenderCallback(0, [](base::menu::render::DrawQueueBuffer* buffer) {
+        buffer->AddCommand(base::menu::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::ui::localization::kMANAGER->Localize("text/hello_world"), 0.02F, false, true, true));
+        buffer->AddCommand(base::menu::render::RunRenderCode([] {
           if (ImGui::Begin("Hello World")) {
             ImGui::Text(base::ui::localization::kMANAGER->Localize("text/hello_world").c_str());
             ImGui::End();

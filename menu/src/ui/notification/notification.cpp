@@ -6,10 +6,10 @@
 
 #include <imgui/imgui.h>
 
-#include "../../render/draw.hpp"
-#include "../../render/font/IconsFontAwesome6.hpp"
-#include "../../render/draw_util.hpp"
+#include <imfont/IconsFontAwesome6.hpp>
 #include "../../memory/pointers.hpp"
+#include "../../render/draw.hpp"
+#include "../../render/draw_util.hpp"
 
 namespace base::ui::notification {
   namespace {
@@ -34,7 +34,7 @@ namespace base::ui::notification {
     }
   }
 
-  void Notification::Draw(render::DrawQueueBuffer* draw_queue_buffer, std::size_t delta_time, const bool right_align, const std::float_t y_offset, const std::size_t duration_ms) {
+  void Notification::Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, const std::size_t delta_time, const bool right_align, const std::float_t y_offset, const std::size_t duration_ms) {
     const std::string type_text = GetTypeText(type_);
 
     const auto notification_x_pos = right_align ? 1.f - notification_width_ : 0;
@@ -44,6 +44,6 @@ namespace base::ui::notification {
     }
 
     auto x = notification_animation_->Animate(delta_time);
-    draw_queue_buffer->AddCommand(render::Text({x, y_offset}, ImColor(255, 0, 0), "Hello World2!", 0.02f));
+    draw_queue_buffer->AddCommand(menu::render::Text({x, y_offset}, ImColor(255, 0, 0), "Hello World2!", 0.02f));
   }
 }

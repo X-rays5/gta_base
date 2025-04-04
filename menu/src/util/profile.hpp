@@ -6,14 +6,13 @@
 #define PROFILE_HPP_08034048
 
 #include <filesystem>
+#include <base-common/vfs.hpp>
+#include <base-common/util/string.hpp>
+#include <base-common/util/time.hpp>
 #include <glaze/trace/trace.hpp>
-#include "result.hpp"
-#include "vfs.hpp"
-#include "common.hpp"
-#include "string.hpp"
 
 #ifndef NDEBUG
-#define PROFILER_SAVE(profiler) if (const Status _prof_res = profiler.WriteToDisk(::base::menu::util::string::ReplaceAll(__FUNCTION__, "::", "_")); _prof_res.error()) { LOG_ERROR("{}", _prof_res.error()); }
+#define PROFILER_SAVE(profiler) if (const Status _prof_res = profiler.WriteToDisk(::base::common::util::string::ReplaceAll(__FUNCTION__, "::", "_")); _prof_res.error()) { LOG_ERROR("{}", _prof_res.error()); }
 #else
 #define PROFILER_SAVE(profiler) (void)0
 #endif
@@ -35,24 +34,21 @@ namespace base::menu::util {
 
     [[nodiscard]] Status WriteToDisk(const std::string& folder) {
       if (!trace_.disabled) {
-        const auto target_folder = util::vfs::GetTimeTraceDir() / folder;
-        const auto target_file = target_folder / fmt::format("{}.trace", util::common::GetTimeStamp());
+        const auto target_folder = common::vfs::GetTimeTraceDir() / folder;
+        const auto target_file = target_folder / fmt::format("{}.trace", common::util::time::GetTimeStamp());
         try {
           std::filesystem::create_directories(target_folder);
         } catch (std::filesystem::filesystem_error ex) {
           LOG_ERROR("{}", ex.what());
         }
-        const auto ec = glz::write_file_json(trace_, target_file.string(), std::string{});
 
-        if (ec.ec != glz::error_code::none) {
+        if (const auto ec = glz::write_file_json(trace_, target_file.string(), std::string{}); ec.ec != glz::error_code::none) {
           auto error_name = magic_enum::enum_name(ec.ec);
           return MakeFailure<ResultCode::kIO_ERROR>("Error writing trace file: {}", error_name);
-        } else {
-          return MakeSuccess();
         }
       }
 
-      return MakeSuccess();
+      return {};
     }
 
   private:

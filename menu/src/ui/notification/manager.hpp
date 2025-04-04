@@ -7,7 +7,7 @@
 #include <vector>
 #include "notification.hpp"
 
-namespace base::render {
+namespace base::menu::render {
   class DrawQueueBuffer;
 }
 
@@ -32,7 +32,7 @@ namespace base::ui::notification {
    */
     void AddNotification(const Type type, const std::size_t duration_ms, const std::string& title, const std::string& message);
 
-    void Render(render::DrawQueueBuffer* draw_queue_buffer);
+    void Render(menu::render::DrawQueueBuffer* draw_queue_buffer);
 
   private:
     std::vector<Notify> notifications_;
