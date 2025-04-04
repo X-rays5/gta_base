@@ -3,6 +3,7 @@
 //
 
 #include "window.hpp"
+#include <base-common/globals.hpp>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl3.h>
 #include <imgui/imgui_impl_sdlrenderer3.h>
@@ -165,7 +166,7 @@ namespace base::injector {
     }
 
     constexpr Uint32 window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
-    window_ = SDL_CreateWindow("GTA base injector", width_, height_, window_flags);
+    window_ = SDL_CreateWindow(fmt::format("{}: injector", common::globals::kBASE_NAME).c_str(), width_, height_, window_flags);
     if (window_ == nullptr) {
       LOG_CRITICAL("Failed to create window: {}", SDL_GetError());
       return common::result::MakeFailure<ResultCode::kINTERNAL_ERROR>(SDL_GetError());
@@ -191,7 +192,7 @@ namespace base::injector {
     ImGui_ImplSDL3_InitForSDLRenderer(window_, renderer_);
     ImGui_ImplSDLRenderer3_Init(renderer_);
 
-    font_manager_ = std::make_unique<imfont::Manager>();
+    font_manager_ = std::make_unique<imfont::Manager>(20.f);
     return {};
   }
 

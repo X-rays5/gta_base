@@ -49,6 +49,17 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
   const Window window(kWINDOW_WIDTH, kWINDOW_HEIGHT);
 
+  auto dll_path = std::make_unique<char[]>(MAX_PATH);
+  auto target_window_name = std::make_unique<char[]>(255);
+  auto target_window_class = std::make_unique<char[]>(255);
+  auto target_process_name = std::make_unique<char[]>(255);
+
+  // init to initial values
+  strncpy_s(dll_path.get(), MAX_PATH, kSETTINGS.dll_path.c_str(), _TRUNCATE);
+  strncpy_s(target_window_name.get(), 255, kSETTINGS.target_window_name.c_str(), _TRUNCATE);
+  strncpy_s(target_window_class.get(), 255, kSETTINGS.target_window_class.c_str(), _TRUNCATE);
+  strncpy_s(target_process_name.get(), 255, kSETTINGS.target_process_name.c_str(), _TRUNCATE);
+
   while (kRUNNING) {
     window.HandleEvents();
     if (SDL_GetWindowFlags(window.GetWindow()) & SDL_WINDOW_MINIMIZED) {
@@ -60,7 +71,35 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     {
       if (ImGui::Begin("Hello, world!", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
-        ImGui::Text("Hello, world!");
+        if (ImGui::BeginTabBar("tabs")) {
+          if (ImGui::BeginTabItem("Injector")) {
+            ImGui::EndTabItem();
+          }
+          if (ImGui::BeginTabItem("Settings")) {
+            ImGui::Text("Settings");
+
+            ImGui::InputText("DLL Path", dll_path.get(), MAX_PATH);
+            ImGui::InputText("Target Window Name", target_window_name.get(), 255);
+            ImGui::InputText("Target Window Class", target_window_class.get(), 255);
+            ImGui::InputText("Target Process Name", target_process_name.get(), 255);
+
+            kSETTINGS.dll_path = dll_path.get();
+            kSETTINGS.target_window_name = target_window_name.get();
+            kSETTINGS.target_window_class = target_window_class.get();
+            kSETTINGS.target_process_name = target_process_name.get();
+
+            if (ImGui::Button("Save")) {
+              if (const auto res = SaveSettings(kSETTINGS); !res) {
+                LOG_ERROR("Failed to save settings: {}", res.error());
+              }
+            }
+
+            ImGui::EndTabItem();
+          }
+
+          ImGui::EndTabBar();
+        }
+
         ImGui::End();
       }
     }
