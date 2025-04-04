@@ -30,6 +30,8 @@ namespace base::menu::logging::exception {
 
       if (!MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), dump_file, MiniDumpIgnoreInaccessibleMemory, &except_info, nullptr, nullptr)) {
         LOG_ERROR("Failed to write minidump to '{}'", path);
+
+        CloseHandle(dump_file);
         return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to write minidump to '{}'", path);
       }
 
