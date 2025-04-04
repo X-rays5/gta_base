@@ -39,9 +39,9 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
 
-      - name: Install sonar-scanner and build-wrapper
+      - name: Install build-wrapper
         if: matrix.language == 'c-cpp'
-        uses: SonarSource/sonarcloud-github-c-cpp@v3
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.1.0
 
       - name: Build with build-wrapper
         if: matrix.language == 'c-cpp'
@@ -55,10 +55,13 @@ jobs:
         with:
           category: "/language:${{matrix.language}}"
 
-      - name: Run sonar-scanner
+      - name: Run SonarCloud scan
         if: matrix.language == 'c-cpp'
+        uses: SonarSource/sonarqube-scan-action@v5.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          sonar-scanner --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
+        with:
+          args: >
+            -Dsonar.cfamily.build-wrapper-output=${{ env.BUILD_WRAPPER_OUT_DIR }}
+            -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json
