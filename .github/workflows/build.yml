@@ -16,7 +16,7 @@ jobs:
       packages: read
 
     env:
-      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
 
     strategy:
       fail-fast: false
@@ -31,7 +31,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 500
+          fetch-depth: 0  # Fetch full history of current branch
+
+      - name: Fetch SonarCloud comparison branch (${{ github.base_ref }})
+        if: matrix.language == 'c-cpp'
+        run: |
+          if ("${{ github.event_name }}" -eq "pull_request") {
+            $TARGET_BRANCH="${{ github.base_ref }}"
+            Write-Host "PR detected. Fetching target branch: $TARGET_BRANCH"
+            git fetch origin ${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}
+          } else {
+            Write-Host "Fetching master branch"
+            git fetch origin master:refs/remotes/origin/master
+          }
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
@@ -47,7 +59,7 @@ jobs:
         if: matrix.language == 'c-cpp'
         run: |
           New-Item -ItemType directory -Path build
-          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          cmake -S . -B build
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
 
       - name: Perform CodeQL Analysis
@@ -64,4 +76,4 @@ jobs:
         with:
           args: >
             -Dsonar.cfamily.build-wrapper-output=${{ env.BUILD_WRAPPER_OUT_DIR }}
-            -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json
+            -Dsonar.scm.provider=git
