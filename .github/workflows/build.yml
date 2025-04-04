@@ -1,17 +1,17 @@
-name: "Build & Analyze"
+name: Build & Analyze
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - master
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
   schedule:
-    - cron: '17 7 * * 0'
-  workflow_dispatch: # Allow manual triggering
-
+    - cron: 17 7 * * 0
+  workflow_dispatch: null
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   build:
     name: Build & Analyze
@@ -20,10 +20,8 @@ jobs:
       security-events: write
       packages: read
       contents: write
-
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
-
     strategy:
       fail-fast: false
       matrix:
@@ -32,22 +30,20 @@ jobs:
             build-mode: none
           - language: c-cpp
             build-mode: manual
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch full history of current branch
-
+          fetch-depth: 0
       - name: Cache CMake build files
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
         with:
           path: build
-          key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
+          key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt',
+            '**/*.hpp', '**/*.cpp') }}
           restore-keys: |
             ${{ runner.os }}-cmake-
-
       - name: Cache SonarCloud scanner
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
@@ -56,10 +52,9 @@ jobs:
           key: ${{ runner.os }}-sonar-${{ github.ref_name }}
           restore-keys: |
             ${{ runner.os }}-sonar-
-
       - name: Fetch SonarCloud comparison branch
         if: matrix.language == 'c-cpp'
-        run: |
+        run: >
           if ($Env:GITHUB_EVENT_NAME -eq "pull_request") {
             $TARGET_BRANCH="${{ github.base_ref }}"
             Write-Host "PR detected. Fetching target branch: $TARGET_BRANCH"
@@ -68,24 +63,28 @@ jobs:
             Write-Host "Fetching master branch"
             git fetch origin master:refs/remotes/origin/master
           }
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
-
       - name: Install build-wrapper
         if: matrix.language == 'c-cpp'
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.1.0
+      - name: Build with build-wrapper
+        if: matrix.language == 'c-cpp'
+        run: >
+          New-Item -ItemType directory -Path build -Force
 
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
+          category: /language:${{matrix.language}}
           output: ${{ github.workspace }}/results/codeql
           upload: failure-only
-
       - name: Filter CPP SARIF to exclude build directory
         if: matrix.language == 'c-cpp'
         uses: advanced-security/filter-sarif@v1
@@ -94,26 +93,16 @@ jobs:
           output: ${{ github.workspace }}/results/codeql/cpp.sarif
           patterns: |
             -build/**
-
       - name: Upload CPP SARIF
         if: matrix.language == 'c-cpp'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ github.workspace }}/results/codeql/cpp.sarif
-
       - name: Upload Actions SARIF
         if: matrix.language == 'actions'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ github.workspace }}/results/codeql/actions.sarif
-
-      - name: Build with build-wrapper
-        if: matrix.language == 'c-cpp'
-        run: |
-          New-Item -ItemType directory -Path build -Force
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
-
       - name: Run SonarCloud scan
         if: matrix.language == 'c-cpp'
         uses: SonarSource/sonarqube-scan-action@v5.1.0
@@ -124,8 +113,6 @@ jobs:
           args: >
             -Dsonar.cfamily.build-wrapper-output=${{ env.BUILD_WRAPPER_OUT_DIR }}
             -Dsonar.scm.provider=git
-
-      # Create release for tagged commits
       - name: Create Release
         if: matrix.language == 'c-cpp' && startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2.2.1
@@ -136,8 +123,6 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Updated artifact upload to include both .exe and .dll files
       - name: Upload Build Artifact
         if: matrix.language == 'c-cpp'
         uses: actions/upload-artifact@v4.6.2
