@@ -15,7 +15,7 @@ namespace imfont {
 
     [[nodiscard]] bool LoadFontFromDisk(const std::string& name, const std::filesystem::path& path, bool merge_fa = true);
     [[nodiscard]] bool LoadFontFromMemory(const std::string& name, void* font_data, std::int32_t font_data_size, bool merge_fa = true);
-    [[nodiscard]] bool LoadFontFromMemoryCompressed(const std::string& name, void* font_data, std::int32_t font_data_size, bool merge_fa = true);
+    [[nodiscard]] bool LoadFontFromMemoryCompressed(const std::string& name, const void* font_data, std::int32_t font_data_size, bool merge_fa = true);
 
     void PushFont(const std::string& name);
     static void PopFont();
@@ -25,7 +25,7 @@ namespace imfont {
     std::unordered_map<std::string, void*> fonts_;
 
   private:
-    bool FinalizeLoading(const std::string& name, void* font, bool merge_fa);
+    bool FinalizeLoading(const std::string& name, const void* font, bool merge_fa);
   };
 
   inline Manager* kMANAGER{};
