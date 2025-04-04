@@ -89,11 +89,18 @@ namespace base::common::result {
    */
   template <ResultCode code, typename... Args>
   cpp::failure<StatusErr> MakeFailure(const std::string& format = "", Args&&... format_args) {
-    if constexpr (sizeof...(format_args)) {
-      return cpp::fail(StatusErr(code, fmt::vformat(format, fmt::make_format_args(std::forward<Args>(format_args)...))));
+    std::string message;
+    if constexpr (sizeof...(format_args) > 0) {
+      // Create lvalue copies to satisfy fmt::make_format_args
+      auto args_tuple = std::make_tuple(std::decay_t<Args>(std::forward<Args>(format_args))...);
+
+      message = std::apply([format](const auto&... args) {
+        return fmt::vformat(format, fmt::make_format_args(args...));
+      }, args_tuple);
     } else {
-      return cpp::fail(StatusErr(code, format));
+      message = format;
     }
+    return cpp::fail(StatusErr(code, std::move(message)));
   }
 }
 
