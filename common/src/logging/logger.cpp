@@ -16,12 +16,21 @@
 #include "exception/vectored_handler.hpp"
 #include "formatter/thread_id.hpp"
 
-namespace base::menu::logging {
+namespace base::common::logging {
   namespace {
+    bool LOGGER_EXISTS = false;
+
     bool SetConsoleMode(const HANDLE console_handle) {
       DWORD console_mode{};
-      if (!GetConsoleMode(console_handle, &console_mode))
+      if (!GetConsoleMode(console_handle, &console_mode)) {
+        if (GetLastError() == 6) {
+          // We are most likely running in an ide so ignore this.
+          return true;
+        }
+
+        MessageBox(nullptr, win32::GetLastErrorStr().c_str(), "Error", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
         return false;
+      }
 
       console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
       console_mode &= ~ENABLE_QUICK_EDIT_MODE;
@@ -32,10 +41,12 @@ namespace base::menu::logging {
     bool EnsureConsole() {
       if (AttachConsole(GetCurrentProcessId()) || AllocConsole()) {
         const HANDLE console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
-        if (!console_handle)
+        if (console_handle == INVALID_HANDLE_VALUE) {
+          MessageBoxA(nullptr, xorstr_("Failed to get console handle."), xorstr_("Critical logging error"), MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
           return false;
+        }
 
-        SetConsoleTitleA(common::globals::kBASE_NAME);
+        SetConsoleTitleA(globals::kBASE_NAME);
         SetConsoleOutputCP(CP_UTF8);
 
         return SetConsoleMode(console_handle);
@@ -45,20 +56,20 @@ namespace base::menu::logging {
     }
 
     void SaveLogFile(const std::filesystem::path& path) {
-      const auto save_path = util::vfs::GetLoggingSaveDir() / path.filename();
+      const auto save_path = vfs::GetLoggingSaveDir() / path.filename();
       std::filesystem::rename(path, save_path);
     }
 
     std::filesystem::path GetLogFile() {
-      static const auto log_file = std::string(common::globals::kBASE_NAME) + ".log";
+      static const auto log_file = std::string(globals::kBASE_NAME) + ".log";
 
-      return util::vfs::GetLoggingDir() / log_file;
+      return vfs::GetLoggingDir() / log_file;
     }
 
     void MovePossibleCrashLog() {
       const auto log_file_path = GetLogFile();
       if (std::filesystem::exists(log_file_path)) {
-        const auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", common::util::time::GetTimeStamp(), log_file_path.stem().string(), log_file_path.extension().string());
+        const auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", util::time::GetTimeStamp(), log_file_path.stem().string(), log_file_path.extension().string());
         std::filesystem::rename(log_file_path, log_file_path_tmp);
         SaveLogFile(log_file_path_tmp);
       }
@@ -88,11 +99,18 @@ namespace base::menu::logging {
   }
 
   Manager::Manager() {
+    if (LOGGER_EXISTS) {
+      MessageBox(nullptr, xorstr_("Logger already exists."), xorstr_("Critical logging error"), MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+      abort();
+    }
+
+    LOGGER_EXISTS = true;
     Init();
   }
 
   Manager::~Manager() {
     Shutdown();
+    LOGGER_EXISTS = false;
   }
 
   void Manager::Init() {
@@ -131,5 +149,4 @@ namespace base::menu::logging {
       MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while saving log file", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
     }
   }
-
 }

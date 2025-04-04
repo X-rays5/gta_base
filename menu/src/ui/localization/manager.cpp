@@ -9,7 +9,7 @@
 namespace base::menu::ui::localization {
     namespace {
         std::string GetProfilePath(const std::string& name) {
-            return fmt::format("{}/{}.json", util::vfs::GetTranslationDir(), name);
+            return fmt::format("{}/{}.json", common::vfs::GetTranslationDir(), name);
         }
     }
 

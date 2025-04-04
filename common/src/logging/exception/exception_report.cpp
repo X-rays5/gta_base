@@ -14,7 +14,7 @@
 #include "../../win32/memory.hpp"
 #include "../../util/time.hpp"
 
-namespace base::menu::logging::exception {
+namespace base::common::logging::exception {
   namespace {
     Status WriteMiniDump(std::filesystem::path path, const PEXCEPTION_POINTERS except_ptr) {
       const HANDLE dump_file = CreateFile(path.string().c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -138,7 +138,7 @@ namespace base::menu::logging::exception {
     msg << GetRegisters(ctx);
     msg << '\n' << std::stacktrace::current(stacktrace_skip_count) << '\n';
 
-    std::filesystem::path report_dir = util::vfs::GetExceptionReports() / fmt::format("report_{}", common::util::time::GetTimeStamp());
+    std::filesystem::path report_dir = common::vfs::GetExceptionReports() / fmt::format("report_{}", common::util::time::GetTimeStamp());
     if (!std::filesystem::create_directories(report_dir)) {
       LOG_ERROR("Failed to create exception report directory '{}'", report_dir);
       return MakeFailure<ResultCode::kIO_ERROR>("Failed to create exception report directory '{}'", report_dir);

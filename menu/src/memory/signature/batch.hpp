@@ -9,7 +9,7 @@
 
 namespace base::menu::memory::signature {
   struct BatchJob {
-    using cb_t = std::function<void(const Address*)>;
+    using cb_t = std::function<void(const common::memory::Address*)>;
 
     BatchJob() = default;
     BatchJob(const std::string& name, Pattern pattern, const cb_t& cb) : name(name), pattern(std::make_shared<Pattern>(pattern)), cb(cb) {}

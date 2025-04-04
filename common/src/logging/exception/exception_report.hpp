@@ -7,7 +7,7 @@
 #include <string>
 #include "../../result.hpp"
 
-namespace base::menu::logging::exception {
+namespace base::common::logging::exception {
   StatusOr<std::string> WriteExceptionReport(PEXCEPTION_RECORD except_rec, PCONTEXT ctx, std::size_t stacktrace_skip_count);
   FORCE_INLINE StatusOr<std::string> WriteExceptionReport(PEXCEPTION_POINTERS except, std::size_t stacktrace_skip_count) {
     return WriteExceptionReport(except->ExceptionRecord, except->ContextRecord, stacktrace_skip_count);

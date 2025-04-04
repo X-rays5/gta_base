@@ -17,15 +17,15 @@ inline std::filesystem::path Get##path_name() { \
   return dir;                                                                               \
  }
 
-namespace base::menu::util::vfs {
+namespace base::common::vfs {
   /**
    * \brief Set the working directory to the appdata directory
    */
-  inline void SetWorkingDir() {
+  inline void SetWorkingDir(const std::string& subcomponent) {
     auto app_path_res = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData);
     LOG_CRITICAL_CONDITIONAL(app_path_res.error(), "Failed to get appdata path: {}", app_path_res);
 
-    const auto appdata_path = app_path_res.value() / common::globals::kBASE_NAME;
+    const auto appdata_path = app_path_res.value() / common::globals::kBASE_NAME / subcomponent;
 
     std::filesystem::create_directories(appdata_path);
     std::filesystem::current_path(appdata_path);

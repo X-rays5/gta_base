@@ -8,7 +8,7 @@
 #include "../logger.hpp"
 #include "../../win32/memory.hpp"
 
-namespace base::menu::logging::exception {
+namespace base::common::logging::exception {
   namespace {
     PVOID cur_handler = nullptr;
 

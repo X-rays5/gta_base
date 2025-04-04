@@ -41,6 +41,7 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/discord/rich_presence.cpp
         src/discord/rich_presence.hpp
 )
+target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
@@ -52,10 +53,6 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
 target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.hpp)
-
-if(WIN32)
-    target_link_libraries(${PROJECT_NAME} PRIVATE Dbghelp)
-endif ()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
 target_link_libraries(${PROJECT_NAME} PRIVATE base::imfont)

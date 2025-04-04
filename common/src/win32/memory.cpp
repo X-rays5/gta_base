@@ -4,7 +4,7 @@
 
 #include "memory.hpp"
 
-namespace base::menu::win32::memory {
+namespace base::win32::memory {
   StatusOr<std::uintptr_t> GetModuleBaseAddress(std::uint32_t pid, const std::string& mod_name) {
     std::uint64_t mod_base_addr = 0;
     HANDLE h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);

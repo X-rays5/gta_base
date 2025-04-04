@@ -8,7 +8,7 @@
 
 #include <filesystem>
 
-namespace base::menu::logging {
+namespace base::common::logging {
   class Manager {
   public:
     Manager();

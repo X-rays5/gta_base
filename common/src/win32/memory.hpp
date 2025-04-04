@@ -9,7 +9,7 @@
 #include <TlHelp32.h>
 #include "../result.hpp"
 
-namespace base::menu::win32::memory {
+namespace base::win32::memory {
  /**
   * \brief Get the base address of a module in a process
   * \param pid pid of the process

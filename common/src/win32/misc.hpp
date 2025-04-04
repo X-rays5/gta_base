@@ -8,7 +8,7 @@
 #include <TlHelp32.h>
 #include "../result.hpp"
 
-namespace base::menu::win32 {
+namespace base::win32 {
  enum class KNOWN_FOLDER_ID : uint32_t {
   /// @note %USERPROFILE%/Documents
   kDocuments,
@@ -71,5 +71,11 @@ namespace base::menu::win32 {
   * \return bool
   */
  bool IsTargetProcess();
+
+ /**
+  * \brief Convert the return value of GetLastError() to a string message
+  * \return std::string
+  */
+ std::string GetLastErrorStr();
 }
 #endif //GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP

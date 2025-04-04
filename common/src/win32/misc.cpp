@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include "../globals.hpp"
 
-namespace base::menu::win32 {
+namespace base::win32 {
   namespace {
     const std::unordered_map<KNOWN_FOLDER_ID, KNOWNFOLDERID> guid_map{
       {KNOWN_FOLDER_ID::kDocuments, FOLDERID_Documents},
@@ -102,5 +102,25 @@ namespace base::menu::win32 {
     std::string cur_proc_name = std::filesystem::path(std::string(exe_name.get(), str_len)).filename().string();
 
     return cur_proc_name == common::globals::target_process_name;
+  }
+
+  std::string GetLastErrorStr() {
+    DWORD err = GetLastError();
+    if (err == 0) {
+      return "No error";
+    }
+
+    LPVOID lpMsgBuf;
+    FormatMessageA(
+      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+      nullptr,
+      err,
+      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+      reinterpret_cast<LPSTR>(reinterpret_cast<LPWSTR>(&lpMsgBuf)),
+      0, nullptr);
+
+    std::string msg = fmt::format("Error {}: {}", err, static_cast<char*>(lpMsgBuf));
+    LocalFree(lpMsgBuf);
+    return msg;
   }
 }
