@@ -25,9 +25,9 @@ jobs:
 
     env:
       BUILD_DIR: ${{ github.workspace }}/build
-      BUILD_WRAPPER_OUT_DIR: ${{ env.BUILD_DIR }}/build_wrapper_output_directory
-      ALL_EXE_ARTIFACTS: ${{ env.BUILD_DIR }}/**/*.exe
-      ALL_DLL_ARTIFACTS: ${{ env.BUILD_DIR }}/**/*.dll
+      BUILD_WRAPPER_OUT_DIR: ${{ BUILD_DIR }}/build_wrapper_output_directory
+      ALL_EXE_ARTIFACTS: ${{ BUILD_DIR }}/**/*.exe
+      ALL_DLL_ARTIFACTS: ${{ BUILD_DIR }}/**/*.dll
       CMAKE_BUILD_CONFIG: Release
       GIT_MAIN_BRANCH: master
 
