@@ -75,7 +75,7 @@ namespace base::common::util {
   };
 
   /**
-   * \brief A scoped lock for spinlocks
+   * \brief A scoped lock for a spinlock
    * \tparam T The type of lock to use
    */
   template <class T> requires std::is_same_v<T, Spinlock> or std::is_same_v<T, RecursiveSpinlock>

@@ -6,6 +6,7 @@
 #define GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP
 #include <filesystem>
 #include <TlHelp32.h>
+#include "../globals.hpp"
 #include "../result.hpp"
 
 namespace base::win32 {
@@ -63,14 +64,16 @@ namespace base::win32 {
 
  /**
   * \brief Check if the game window is the foreground window
+  * \param window The HWND of the window to check
   * \return bool
   */
- bool IsForegroundWindow();
+ bool IsForegroundWindow(HWND window = GetGameHwnd().value());
  /**
   * \brief Check if the current process is the target process
+  * \param target_process The name of the target process
   * \return bool
   */
- bool IsTargetProcess();
+ bool IsTargetProcess(const std::string& target_process = common::globals::target_process_name);
 
  /**
   * \brief Convert the return value of GetLastError() to a string message

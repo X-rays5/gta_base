@@ -26,7 +26,7 @@ namespace base::common::util {
   }
 
   void RecursiveSpinlock::Lock() noexcept {
-    auto thread_id = std::this_thread::get_id();
+    const auto thread_id = std::this_thread::get_id();
     if (cur_locking_thread_.load(std::memory_order_consume) == thread_id) {
       lock_count_ += 1;
       return;
@@ -38,7 +38,7 @@ namespace base::common::util {
   }
 
   bool RecursiveSpinlock::TryLock() noexcept {
-    auto thread_id = std::this_thread::get_id();
+    const auto thread_id = std::this_thread::get_id();
 
     if (cur_locking_thread_.load(std::memory_order_consume) == thread_id) {
       lock_count_ += 1;

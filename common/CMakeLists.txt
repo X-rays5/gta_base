@@ -83,3 +83,5 @@ foreach (header ${HEADERS})
 endforeach ()
 
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
+
+add_subdirectory(test)

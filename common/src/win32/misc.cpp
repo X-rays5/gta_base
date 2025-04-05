@@ -35,7 +35,7 @@ namespace base::win32 {
     MODULEENTRY32 mod_entry{};
     mod_entry.dwSize = sizeof(MODULEENTRY32);
 
-    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
+    const HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
     if (hSnapshot == INVALID_HANDLE_VALUE) {
       return MakeFailure<ResultCode::kINVALID_ARGUMENT>("PID is an invalid handle");
     }
@@ -85,23 +85,23 @@ namespace base::win32 {
     return hProc;
   }
 
-  bool IsForegroundWindow() {
-    auto foreground_window = GetForegroundWindow();
-    return foreground_window == GetConsoleWindow() || GetGameHwnd().value();
+  bool IsForegroundWindow(const HWND window) {
+    const auto foreground_window = GetForegroundWindow();
+    return foreground_window == GetConsoleWindow() || window;
   }
 
-  bool IsTargetProcess() {
-    auto exe_name = std::make_unique<CHAR[]>(MAX_PATH);
-    std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name.get(), MAX_PATH);
+  bool IsTargetProcess(const std::string& target_process) {
+    const auto exe_name = std::make_unique<CHAR[]>(MAX_PATH);
+    const std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name.get(), MAX_PATH);
 
     if (str_len == 0) {
       LOG_ERROR("Failed to get module file name. win32 err code: {}", GetLastError());
       return false;
     }
 
-    std::string cur_proc_name = std::filesystem::path(std::string(exe_name.get(), str_len)).filename().string();
+    const std::string cur_proc_name = std::filesystem::path(std::string(exe_name.get(), str_len)).filename().string();
 
-    return cur_proc_name == common::globals::target_process_name;
+    return cur_proc_name == target_process;
   }
 
   std::string GetLastErrorStr() {
