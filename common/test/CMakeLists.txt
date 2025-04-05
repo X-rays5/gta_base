@@ -31,4 +31,5 @@ enable_testing()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
 
-add_test(NAME common COMMAND ${PROJECT_NAME})
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})

@@ -31,7 +31,8 @@ jobs:
       CMAKE_BUILD_CONFIG: Release
       GIT_MAIN_BRANCH: master
       SONAR_USER_HOME: ${{ github.workspace }}/.sonar
-    
+      TEST_RESULTS_DIR: ${{ github.workspace }}/build/test-results
+
     strategy:
       fail-fast: false
       matrix:
@@ -98,6 +99,18 @@ jobs:
           New-Item -ItemType directory -Path ${{ env.BUILD_DIR }} -Force
           cmake -S . -B ${{ env.BUILD_DIR }} -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_CONFIG }}
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }} --config ${{ env.CMAKE_BUILD_CONFIG }}
+
+      - name: Run Unit Tests
+        if: matrix.language == 'c-cpp'
+        run: |
+          New-Item -ItemType directory -Path ${{ env.TEST_RESULTS_DIR }} -Force
+          cd ${{ env.BUILD_DIR }}
+          ctest -C ${{ env.CMAKE_BUILD_CONFIG }} --output-on-failure --output-junit ${{ env.TEST_RESULTS_DIR }}/test-results.xml
+      - name: Publish Test Results
+        if: matrix.language == 'c-cpp' && always()
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
+        with:
+          files: ${{ env.TEST_RESULTS_DIR }}/*.xml
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
