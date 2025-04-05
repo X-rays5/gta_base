@@ -62,10 +62,18 @@ jobs:
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
         with:
-          path: build
+          path: ${{ env.BUILD_DIR }}
           key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
           restore-keys: |
             ${{ runner.os }}-cmake-
+      - name: Cache vendor
+        if: matrix.language == 'c-cpp'
+        uses: actions/cache@v4.2.3
+        with:
+          path: ${{ env.BUILD_DIR }}/_deps
+          key: ${{ runner.os }}-vendor-${{ hashFiles('vendor/**/*.*') }}
+          restore-keys: |
+            ${{ runner.os }}-vendor-
       - name: Cache SonarCloud scanner
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
