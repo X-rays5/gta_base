@@ -10,6 +10,7 @@
 #include <imgui/imgui_impl_win32.h>
 #include "../memory/pointers.hpp"
 #include "../hooking/hooking.hpp"
+#include <base-common/util/time.hpp>
 
 namespace base::menu::render {
   namespace {
@@ -42,6 +43,7 @@ namespace base::menu::render {
     device_->GetImmediateContext(device_ctx_.GetAddressOf());
 
     InitImGui(device_.Get(), device_ctx_.Get());
+    init_imgui_ = true;
 
     LOG_DEBUG("Initializing font manager.");
     font_mgr_inst_ = std::make_unique<imfont::Manager>();
@@ -54,11 +56,16 @@ namespace base::menu::render {
 
     font_mgr_inst_.reset();
 
+    init_imgui_ = false;
     ShutdownImGui();
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
-    if (globals::kRUNNING) {
+    if (globals::kRUNNING && kRENDERER && kRENDERER->init_imgui_) {
+      const std::uint64_t now = common::util::time::GetTimeStamp();
+      kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
+      kRENDERER->SetLastTime(now);
+
       ImGui_ImplWin32_NewFrame();
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
@@ -75,7 +82,7 @@ namespace base::menu::render {
   }
 
   HRESULT Renderer::ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags) {
-    if (globals::kRUNNING) {
+    if (globals::kRUNNING && kRENDERER->init_imgui_) {
       ImGui_ImplDX11_InvalidateDeviceObjects();
 
       auto res = hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);

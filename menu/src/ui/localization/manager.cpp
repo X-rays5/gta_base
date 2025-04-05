@@ -4,9 +4,9 @@
 
 #include "manager.hpp"
 #include <glaze/glaze.hpp>
-#include "../../../../common/src/vfs.hpp"
+#include <base-common/vfs.hpp>
 
-namespace base::menu::ui::localization {
+namespace base::ui::localization {
     namespace {
         std::string GetProfilePath(const std::string& name) {
             return fmt::format("{}/{}.json", common::vfs::GetTranslationDir(), name);
@@ -91,7 +91,7 @@ namespace base::menu::ui::localization {
     std::string Manager::Localize(const char* key) {
         const auto it = translation_.loaded_translation_.find(key);
 
-        return (it != translation_.loaded_translation_.end()) ? it->second : fmt::format("NOT_FOUND: {}", key);
+        return (it != translation_.loaded_translation_.end()) ? it->second : key;
     }
 
     Status Manager::SetActiveTranslation(const std::string& name, bool save_current) {

@@ -10,11 +10,13 @@
 #include "logging/logging_macro.hpp"
 #include "win32/misc.hpp"
 
-#define GET_PATH(path_name, path_to_dir) \
-inline std::filesystem::path Get##path_name() { \
-  std::filesystem::path dir = xorstr_(path_to_dir); \
-  std::filesystem::create_directories(std::filesystem::absolute(dir));                     \
-  return dir;                                                                               \
+#define GET_PATH(path_name, path_to_dir)                                        \
+inline std::filesystem::path Get##path_name() {                                 \
+  std::filesystem::path dir = std::filesystem::absolute(xorstr_(path_to_dir));  \
+  if (!std::filesystem::is_directory(dir))                                       \
+    std::filesystem::create_directories(dir);                                   \
+                                                                                \
+  return dir;                                                                   \
  }
 
 namespace base::common::vfs {
@@ -23,7 +25,10 @@ namespace base::common::vfs {
    */
   inline void SetWorkingDir(const std::string& subcomponent) {
     auto app_path_res = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData);
-    LOG_CRITICAL_CONDITIONAL(app_path_res.error(), "Failed to get appdata path: {}", app_path_res);
+    if (app_path_res.error()) {
+      MessageBoxA(nullptr, app_path_res.error().GetResultMessage().c_str(), fmt::format("Failed to get appdata path: {}", app_path_res).c_str(), MB_OK | MB_ICONERROR);
+      std::exit(EXIT_FAILURE);
+    }
 
     const auto appdata_path = app_path_res.value() / common::globals::kBASE_NAME / subcomponent;
 
@@ -33,6 +38,7 @@ namespace base::common::vfs {
 
   GET_PATH(LoggingDir, "logs")
   GET_PATH(LoggingSaveDir, "logs/saved")
+  GET_PATH(TimeTraceDir, "logs/time_trace")
   GET_PATH(ExceptionReports, "logs/exception_reports")
   GET_PATH(PatternCacheDir, "cache/patterns")
   GET_PATH(TranslationDir, "translations")

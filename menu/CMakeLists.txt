@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/main.cpp
@@ -40,6 +41,12 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/thread_pool.hpp
         src/discord/rich_presence.cpp
         src/discord/rich_presence.hpp
+        src/ui/notification/notification.cpp
+        src/ui/notification/notification.hpp
+        src/ui/notification/manager.cpp
+        src/ui/notification/manager.hpp
+        src/render/animate.hpp
+        src/util/profile.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

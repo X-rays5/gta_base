@@ -13,6 +13,7 @@ namespace base::menu::render::util {
   ImVec2 ScaleToScreen(ImVec2 xy);
   /// scale float in range [0, screen_size] to [0, 1]
   ImVec2 ScaleFromScreen(ImVec2 xy);
+
   float ScaleXToScreen(float x);
   float ScaleXFromScreen(float x);
   float ScaleYToScreen(float y);
@@ -20,8 +21,8 @@ namespace base::menu::render::util {
   ImVec2 ScaleSquare(float y);
   float ScaleFont(float size);
 
-  ImVec2 CalcTextSizeRaw(ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
-  ImVec2 CalcTextSize(ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
+  ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
+  ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
 
   // TODO: Make a non monospace version of this.
   std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::size_t max_lines);
