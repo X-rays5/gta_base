@@ -3,7 +3,7 @@
 //
 
 #include <future>
-#include <base-common/vfs.hpp>
+#include <base-common/fs/vfs.hpp>
 #include <base-common/logging/logger.hpp>
 #include <imgui/imgui.h>
 #include <magic_enum/magic_enum.hpp>
@@ -32,7 +32,7 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
   using namespace base;
   using namespace base::injector;
 
-  common::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
+  common::fs::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
   kLOGGER = std::make_unique<common::logging::Manager>();
 
 #ifdef NDEBUG

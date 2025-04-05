@@ -5,7 +5,7 @@
 #ifndef SETTIUNGS_HPP_04144242
 #define SETTIUNGS_HPP_04144242
 #include <base-common/globals.hpp>
-#include <base-common/result.hpp>
+#include <base-common/util/result.hpp>
 
 namespace base::injector {
   struct Settings {

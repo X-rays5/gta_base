@@ -3,15 +3,15 @@
 //
 
 #include "settings.hpp"
+#include <base-common/fs/vfs.hpp>
 #include <glaze/glaze.hpp>
-#include <base-common/vfs.hpp>
 
 namespace base::injector {
   StatusOr<Settings> LoadSettings() {
     std::string json_buff;
     Settings settings;
 
-    const std::filesystem::path settings_file = common::vfs::GetSettingsDir() / "settings.json";
+    const std::filesystem::path settings_file = common::fs::vfs::GetSettingsDir() / "settings.json";
     if (!std::filesystem::is_regular_file(settings_file)) {
       LOG_INFO("No settings exist yet");
       return settings;
@@ -25,7 +25,7 @@ namespace base::injector {
   }
 
   Status SaveSettings(Settings settings) {
-    const std::filesystem::path settings_file = common::vfs::GetSettingsDir() / "settings.json";
+    const std::filesystem::path settings_file = common::fs::vfs::GetSettingsDir() / "settings.json";
 
     if (const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(settings, settings_file.string(), std::string{})) {
       return MakeFailure<ResultCode::kIO_ERROR>(glz::format_error(ec, std::string{}));

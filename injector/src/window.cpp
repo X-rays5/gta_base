@@ -158,19 +158,19 @@ namespace base::injector {
   Status Window::InitSdl() {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
       LOG_CRITICAL("Failed to initialize SDL: {}", SDL_GetError());
-      return common::result::MakeFailure<ResultCode::kINTERNAL_ERROR>(SDL_GetError());
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(SDL_GetError());
     }
 
     constexpr Uint32 window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
     window_ = SDL_CreateWindow(fmt::format("{}: injector", common::globals::kBASE_NAME).c_str(), width_, height_, window_flags);
     if (window_ == nullptr) {
       LOG_CRITICAL("Failed to create window: {}", SDL_GetError());
-      return common::result::MakeFailure<ResultCode::kINTERNAL_ERROR>(SDL_GetError());
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(SDL_GetError());
     }
     renderer_ = SDL_CreateRenderer(window_, nullptr);
     if (renderer_ == nullptr) {
       LOG_CRITICAL("Failed to create renderer: {}", SDL_GetError());
-      return common::result::MakeFailure<ResultCode::kINTERNAL_ERROR>(SDL_GetError());
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>(SDL_GetError());
     }
     SDL_SetRenderVSync(renderer_, 1);
     SDL_SetWindowPosition(window_, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
