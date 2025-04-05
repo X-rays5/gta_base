@@ -1,4 +1,4 @@
-name: Build & Analyze
+name: CI/CD
 on:
   push:
     branches:
@@ -9,9 +9,11 @@ on:
   schedule:
     - cron: 17 7 * * 0
   workflow_dispatch: null
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
   build:
     name: Build & Analyze
@@ -20,8 +22,15 @@ jobs:
       security-events: write
       packages: read
       contents: write
+
     env:
-      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
+      BUILD_DIR: ${{ github.workspace }}/build
+      BUILD_WRAPPER_OUT_DIR: ${{ env.BUILD_DIR }}/build_wrapper_output_directory
+      ALL_EXE_ARTIFACTS: ${{ env.BUILD_DIR }}/**/*.exe
+      ALL_DLL_ARTIFACTS: ${{ env.BUILD_DIR }}/**/*.dll
+      CMAKE_BUILD_CONFIG: Release
+      GIT_MAIN_BRANCH: master
+
     strategy:
       fail-fast: false
       matrix:
@@ -30,18 +39,31 @@ jobs:
             build-mode: none
           - language: c-cpp
             build-mode: manual
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Fetch SonarCloud comparison branch
+        if: matrix.language == 'c-cpp'
+        run: >
+          if ($Env:GITHUB_EVENT_NAME -eq "pull_request") {
+            $TARGET_BRANCH="${{ github.base_ref }}"
+            Write-Host "PR detected. Fetching target branch: $TARGET_BRANCH"
+            git fetch origin ${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}
+          } else {
+            Write-Host "Fetching ${{ env.GIT_MAIN_BRANCH }} branch"
+            git fetch origin ${{ env.GIT_MAIN_BRANCH }}:refs/remotes/origin/${{ env.GIT_MAIN_BRANCH }}
+          }
+
       - name: Cache CMake build files
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
         with:
           path: build
-          key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt',
-            '**/*.hpp', '**/*.cpp') }}
+          key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
           restore-keys: |
             ${{ runner.os }}-cmake-
       - name: Cache SonarCloud scanner
@@ -52,33 +74,24 @@ jobs:
           key: ${{ runner.os }}-sonar-${{ github.ref_name }}
           restore-keys: |
             ${{ runner.os }}-sonar-
-      - name: Fetch SonarCloud comparison branch
-        if: matrix.language == 'c-cpp'
-        run: >
-          if ($Env:GITHUB_EVENT_NAME -eq "pull_request") {
-            $TARGET_BRANCH="${{ github.base_ref }}"
-            Write-Host "PR detected. Fetching target branch: $TARGET_BRANCH"
-            git fetch origin ${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}
-          } else {
-            Write-Host "Fetching master branch"
-            git fetch origin master:refs/remotes/origin/master
-          }
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
+
       - name: Install build-wrapper
         if: matrix.language == 'c-cpp'
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.1.0
+
       - name: Build with build-wrapper
         if: matrix.language == 'c-cpp'
-        run: >
-          New-Item -ItemType directory -Path build -Force
+        run: |
+          New-Item -ItemType directory -Path ${{ env.BUILD_DIR }} -Force
+          cmake -S . -B ${{ env.BUILD_DIR }} -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_CONFIG }}
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }} --config ${{ env.CMAKE_BUILD_CONFIG }}
 
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
@@ -93,16 +106,11 @@ jobs:
           output: ${{ github.workspace }}/results/codeql/cpp.sarif
           patterns: |
             -build/**
-      - name: Upload CPP SARIF
-        if: matrix.language == 'c-cpp'
+      - name: Upload CodeQL SARIF
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: ${{ github.workspace }}/results/codeql/cpp.sarif
-      - name: Upload Actions SARIF
-        if: matrix.language == 'actions'
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: ${{ github.workspace }}/results/codeql/actions.sarif
+          sarif_file: ${{ github.workspace }}/results/codeql
+
       - name: Run SonarCloud scan
         if: matrix.language == 'c-cpp'
         uses: SonarSource/sonarqube-scan-action@v5.1.0
@@ -110,25 +118,25 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          args: >
-            -Dsonar.cfamily.build-wrapper-output=${{ env.BUILD_WRAPPER_OUT_DIR }}
+          args: |
+            -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json
             -Dsonar.scm.provider=git
-      - name: Create Release
-        if: matrix.language == 'c-cpp' && startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2.2.1
-        with:
-          files: |
-            build/Release/**/*.exe
-            build/Release/**/*.dll
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload Build Artifact
+
+      - name: Upload Build Artifacts
         if: matrix.language == 'c-cpp'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: build-artifacts
           path: |
-            build/Release/**/*.exe
-            build/Release/**/*.dll
+            ${{ env.ALL_EXE_ARTIFACTS }}
+            ${{ env.ALL_DLL_ARTIFACTS }}
           retention-days: 7
+
+      - name: Create Release
+        if: matrix.language == 'c-cpp' && startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          files: |
+            ${{ env.ALL_EXE_ARTIFACTS }}
+            ${{ env.ALL_DLL_ARTIFACTS }}
+          generate_release_notes: true
