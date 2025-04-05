@@ -4,7 +4,7 @@
 
 #include "spinlock.hpp"
 
-namespace base::common::util {
+namespace base::common::concurrency {
   void Spinlock::Lock() noexcept {
     for (;;) {
       if (!lock_.exchange(true, std::memory_order_acquire)) {

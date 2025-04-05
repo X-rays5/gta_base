@@ -5,14 +5,14 @@
 #ifndef SPINLOCK_TEST_HPP_04173353
 #define SPINLOCK_TEST_HPP_04173353
 #include <future>
-#include <base-common/util/spinlock.hpp>
+#include <base-common/concurrency/spinlock.hpp>
 #include <gtest/gtest.h>
 
 inline std::atomic<bool> keep_lock = true;
 
-template <class T> requires std::is_same_v<T, base::common::util::Spinlock> or std::is_same_v<T, base::common::util::RecursiveSpinlock>
+template <class T> requires std::is_same_v<T, base::common::concurrency::Spinlock> or std::is_same_v<T, base::common::concurrency::RecursiveSpinlock>
 void WaitForUnlock(T& spinlock) {
-    base::common::util::ScopedSpinlock<T> lock(spinlock);
+    base::common::concurrency::ScopedSpinlock<T> lock(spinlock);
 
     const auto start_time = std::chrono::steady_clock::now();
     constexpr auto timeout = std::chrono::seconds(5); // After 5 seconds we can safely say this isn't going to work
@@ -28,10 +28,10 @@ void WaitForUnlock(T& spinlock) {
 }
 
 TEST(SpinLock, TryLock) {
-    base::common::util::Spinlock spinlock;
+    base::common::concurrency::Spinlock spinlock;
     keep_lock = true;
 
-    const auto fut = std::async(std::launch::async, WaitForUnlock<base::common::util::Spinlock>, std::ref(spinlock));
+    const auto fut = std::async(std::launch::async, WaitForUnlock<base::common::concurrency::Spinlock>, std::ref(spinlock));
     std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // Need to make sure the new thread actually had time to take the lock
 
     ASSERT_FALSE(spinlock.TryLock());
@@ -41,12 +41,12 @@ TEST(SpinLock, TryLock) {
 }
 
 TEST(SpinLock, LockUnlock) {
-    base::common::util::Spinlock spinlock;
+    base::common::concurrency::Spinlock spinlock;
     keep_lock = false;
 
     spinlock.Lock();
 
-    const auto fut = std::async(std::launch::async, WaitForUnlock<base::common::util::Spinlock>, std::ref(spinlock));
+    const auto fut = std::async(std::launch::async, WaitForUnlock<base::common::concurrency::Spinlock>, std::ref(spinlock));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     ASSERT_NE(fut.wait_for(std::chrono::seconds(0)), std::future_status::ready);
@@ -58,10 +58,10 @@ TEST(SpinLock, LockUnlock) {
 
 // Now for recursive spinlock
 TEST(RecursiveSpinLock, TryLock) {
-    base::common::util::RecursiveSpinlock spinlock;
+    base::common::concurrency::RecursiveSpinlock spinlock;
     keep_lock = true;
 
-    auto fut = std::async(std::launch::async, WaitForUnlock<base::common::util::RecursiveSpinlock>, std::ref(spinlock));
+    auto fut = std::async(std::launch::async, WaitForUnlock<base::common::concurrency::RecursiveSpinlock>, std::ref(spinlock));
     std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // Need to make sure the new thread actually had time to take the lock
 
     ASSERT_FALSE(spinlock.TryLock());
@@ -72,7 +72,7 @@ TEST(RecursiveSpinLock, TryLock) {
     ASSERT_TRUE(spinlock.TryLock());
     ASSERT_TRUE(spinlock.TryLock());
 
-    fut = std::async(std::launch::async, WaitForUnlock<base::common::util::RecursiveSpinlock>, std::ref(spinlock));
+    fut = std::async(std::launch::async, WaitForUnlock<base::common::concurrency::RecursiveSpinlock>, std::ref(spinlock));
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     ASSERT_NE(fut.wait_for(std::chrono::seconds(0)), std::future_status::ready);
 
@@ -85,12 +85,12 @@ TEST(RecursiveSpinLock, TryLock) {
 }
 
 TEST(RecursiveSpinLock, LockUnlock) {
-    base::common::util::RecursiveSpinlock spinlock;
+    base::common::concurrency::RecursiveSpinlock spinlock;
     keep_lock = false;
 
     spinlock.Lock();
 
-    const auto fut = std::async(std::launch::async, WaitForUnlock<base::common::util::RecursiveSpinlock>, std::ref(spinlock));
+    const auto fut = std::async(std::launch::async, WaitForUnlock<base::common::concurrency::RecursiveSpinlock>, std::ref(spinlock));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     ASSERT_NE(fut.wait_for(std::chrono::seconds(0)), std::future_status::ready);

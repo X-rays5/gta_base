@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <TlHelp32.h>
 #include "../globals.hpp"
-#include "../result.hpp"
+#include "../util/result.hpp"
 
 namespace base::win32 {
  enum class KNOWN_FOLDER_ID : uint32_t {

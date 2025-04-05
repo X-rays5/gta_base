@@ -11,7 +11,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include "../globals.hpp"
-#include "../vfs.hpp"
+#include "../fs/vfs.hpp"
 #include "../util/time.hpp"
 #include "exception/vectored_handler.hpp"
 #include "formatter/thread_id.hpp"
@@ -56,14 +56,14 @@ namespace base::common::logging {
     }
 
     void SaveLogFile(const std::filesystem::path& path) {
-      const auto save_path = vfs::GetLoggingSaveDir() / path.filename();
+      const auto save_path = fs::vfs::GetLoggingSaveDir() / path.filename();
       std::filesystem::rename(path, save_path);
     }
 
     std::filesystem::path GetLogFile() {
       static const auto log_file = std::string(globals::kBASE_NAME) + ".log";
 
-      return vfs::GetLoggingDir() / log_file;
+      return fs::vfs::GetLoggingDir() / log_file;
     }
 
     void MovePossibleCrashLog() {

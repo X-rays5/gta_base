@@ -8,7 +8,7 @@
 #include <atomic>
 #include <thread>
 
-namespace base::common::util {
+namespace base::common::concurrency {
   /**
    * \brief A simple spinlock
    */

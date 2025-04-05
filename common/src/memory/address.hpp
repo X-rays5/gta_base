@@ -4,6 +4,8 @@
 
 #ifndef ADDRESS_HPP
 #define ADDRESS_HPP
+#include <Windows.h>
+#include "../util/result.hpp"
 
 namespace base::common::memory {
   class Address {
@@ -11,20 +13,17 @@ namespace base::common::memory {
     explicit Address(void* addr) : addr_(reinterpret_cast<std::uintptr_t>(addr)) {}
     explicit Address(const std::uintptr_t addr) : addr_(addr) {}
 
-    template <typename T>
-      requires std::is_pointer_v<T>
+    template <typename T> requires std::is_pointer_v<T>
     T As() {
-      return static_cast<T>((void*)*this);
+      return static_cast<T>(static_cast<void*>(*this));
     }
 
-    template <typename T>
-      requires std::is_lvalue_reference_v<T>
+    template <typename T> requires std::is_lvalue_reference_v<T>
     T As() {
-      return *static_cast<std::add_pointer_t<std::remove_reference_t<T>>>((void*)*this);
+      return *static_cast<std::add_pointer_t<std::remove_reference_t<T>>>(static_cast<void*>(*this));
     }
 
-    template <typename T>
-      requires std::is_same_v<T, std::uintptr_t>
+    template <typename T> requires std::is_same_v<T, std::uintptr_t>
     T As() {
       return addr_;
     }
@@ -43,8 +42,8 @@ namespace base::common::memory {
 
     StatusOr<MEMORY_BASIC_INFORMATION> GetMemoryInformation() {
       MEMORY_BASIC_INFORMATION memory_info;
-      const SIZE_T res = VirtualQuery((void*)*this, &memory_info, sizeof(memory_info));
 
+      const SIZE_T res = VirtualQuery(static_cast<void*>(*this), &memory_info, sizeof(memory_info));
       if (res != sizeof(memory_info)) {
         return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to get memory info for addr: 0x{:X}", addr_);
       }

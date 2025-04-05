@@ -8,11 +8,11 @@
 #include <stacktrace>
 #include <Zydis/Zydis.h>
 #include "util.hpp"
-#include "../../address.hpp"
-#include "../../conversion.hpp"
-#include "../../vfs.hpp"
-#include "../../win32/memory.hpp"
+#include "../../conversion/hex.hpp"
+#include "../../fs/vfs.hpp"
+#include "../../memory/address.hpp"
 #include "../../util/time.hpp"
+#include "../../win32/memory.hpp"
 
 namespace base::common::logging::exception {
   namespace {
@@ -138,7 +138,7 @@ namespace base::common::logging::exception {
     msg << GetRegisters(ctx);
     msg << '\n' << std::stacktrace::current(stacktrace_skip_count) << '\n';
 
-    std::filesystem::path report_dir = common::vfs::GetExceptionReports() / fmt::format("report_{}", common::util::time::GetTimeStamp());
+    std::filesystem::path report_dir = common::fs::vfs::GetExceptionReportsDir() / fmt::format("report_{}", common::util::time::GetTimeStamp());
     if (!std::filesystem::create_directories(report_dir)) {
       LOG_ERROR("Failed to create exception report directory '{}'", report_dir);
       return MakeFailure<ResultCode::kIO_ERROR>("Failed to create exception report directory '{}'", report_dir);

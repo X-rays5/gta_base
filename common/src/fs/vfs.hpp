@@ -6,9 +6,9 @@
 #define GTA_BASE_VFS_16AC40FC6BC24763B42CAF7CBB740E5B_HPP
 #include <filesystem>
 #include <xorstr.hpp>
-#include "globals.hpp"
-#include "logging/logging_macro.hpp"
-#include "win32/misc.hpp"
+#include "../globals.hpp"
+#include "../logging/logging_macro.hpp"
+#include "../win32/misc.hpp"
 
 #define GET_PATH(path_name, path_to_dir) \
 inline std::filesystem::path Get##path_name() { \
@@ -17,7 +17,7 @@ inline std::filesystem::path Get##path_name() { \
   return dir;                                                                               \
  }
 
-namespace base::common::vfs {
+namespace base::common::fs::vfs {
   /**
    * \brief Set the working directory to the appdata directory
    */
@@ -25,7 +25,7 @@ namespace base::common::vfs {
     auto app_path_res = win32::GetKnownFolderPath(win32::KNOWN_FOLDER_ID::kRoamingAppData);
     LOG_CRITICAL_CONDITIONAL(app_path_res.error(), "Failed to get appdata path: {}", app_path_res);
 
-    const auto appdata_path = app_path_res.value() / common::globals::kBASE_NAME / subcomponent;
+    const auto appdata_path = app_path_res.value() / globals::kBASE_NAME / subcomponent;
 
     std::filesystem::create_directories(appdata_path);
     std::filesystem::current_path(appdata_path);
@@ -33,7 +33,7 @@ namespace base::common::vfs {
 
   GET_PATH(LoggingDir, "logs")
   GET_PATH(LoggingSaveDir, "logs/saved")
-  GET_PATH(ExceptionReports, "logs/exception_reports")
+  GET_PATH(ExceptionReportsDir, "logs/exception_reports")
   GET_PATH(PatternCacheDir, "cache/patterns")
   GET_PATH(TranslationDir, "translations")
   GET_PATH(SettingsDir, "settings")
