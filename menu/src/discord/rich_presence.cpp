@@ -35,7 +35,7 @@ namespace base::menu::discord {
   }
 
   void RichPresence::Tick() {
-    common::util::ScopedSpinlock lock(lock_);
+    common::concurrency::ScopedSpinlock lock(lock_);
     DiscordRichPresence discord_presence = {};
     discord_presence.state = activity_.state.c_str();
     discord_presence.details = activity_.details.c_str();

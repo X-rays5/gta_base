@@ -7,7 +7,7 @@
 #define BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP
 #include <memory>
 #include <vector>
-#include <base-common/util/spinlock.hpp>
+#include <base-common/concurrency/spinlock.hpp>
 #include <imgui/imgui.h>
 #include "draw_commands.hpp"
 #include "draw_util.hpp"
@@ -46,7 +46,7 @@ namespace base::menu::render {
 
     ~DrawQueueBuffer() {
       // Just in case to prevent a deadlock on shutdown.
-      common::util::ScopedSpinlock lock(spinlock_);
+      common::concurrency::ScopedSpinlock lock(spinlock_);
       read_signal_.Notify();
     }
 
@@ -56,7 +56,7 @@ namespace base::menu::render {
     }
 
     void RenderFrame() {
-      common::util::ScopedSpinlock lock(spinlock_);
+      common::concurrency::ScopedSpinlock lock(spinlock_);
       draw_queue_[read_idx_].Draw();
       read_signal_.Notify();
     }
@@ -64,7 +64,7 @@ namespace base::menu::render {
     /// @note This function should ONLY be called from the render thread.
     template <typename... Args>
     void AddCommand(Args&&... command) {
-      common::util::ScopedSpinlock lock(spinlock_);
+      common::concurrency::ScopedSpinlock lock(spinlock_);
       draw_queue_[write_idx_].AddCommand(std::forward<Args>(command)...);
     }
 
@@ -85,7 +85,7 @@ namespace base::menu::render {
     std::vector<DrawQueue> draw_queue_;
     std::size_t read_idx_;
     std::size_t write_idx_;
-    common::util::Spinlock spinlock_;
+    common::concurrency::Spinlock spinlock_;
     win32::Signal read_signal_;
   };
 }
