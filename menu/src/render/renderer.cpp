@@ -54,7 +54,11 @@ namespace base::menu::render {
 
     font_mgr_inst_.reset();
 
-    ShutdownImGui();
+    try {
+      ShutdownImGui();
+    } catch (...) {
+      LOG_CRITICAL("Failed to shutdown ImGui");
+    }
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
