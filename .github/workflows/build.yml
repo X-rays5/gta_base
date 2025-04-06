@@ -112,9 +112,16 @@ jobs:
         run: |
           New-Item -ItemType directory -Path ${{ env.BUILD_DIR }} -Force
           choco install ninja -y
-          # Use Ninja generator instead of the default Visual Studio generator
+          
+          # Configure Visual Studio environment for MSVC compiler
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          Import-Module (Join-Path $vsPath "Common7\Tools\Microsoft.VisualStudio.DevShell.dll")
+          Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-arch=amd64"
+          
+          # Use Ninja generator with MSVC compiler
           cmake -S . -B ${{ env.BUILD_DIR }} -G "Ninja" -DCMAKE_BUILD_TYPE=${{ matrix.build-config }}
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }} --config ${{ matrix.build-config }}
+          
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }}
 
       - name: Run Unit Tests
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Release'
