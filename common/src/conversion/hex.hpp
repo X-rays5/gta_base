@@ -6,7 +6,7 @@
 #define CONVERSION_HPP_02232556
 #include <cstdint>
 #include <string>
-#include "result.hpp"
+#include "../util/result.hpp"
 
 namespace base::common::conversion {
   /**

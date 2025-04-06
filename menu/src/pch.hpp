@@ -8,7 +8,7 @@
 #include <Windows.h>
 #include <xorstr.hpp>
 #include <base-common/logging/logging_macro.hpp>
-#include <base-common/result.hpp>
+#include <base-common/util/result.hpp>
 #include <base-common/win32/all.hpp>
 #include "globals.hpp"
 #include <imfont/IconsFontAwesome6.hpp>

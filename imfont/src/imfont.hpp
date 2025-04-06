@@ -4,8 +4,8 @@
 
 #ifndef MANAGER_HPP_12174322
 #define MANAGER_HPP_12174322
-#include <unordered_map>
 #include <filesystem>
+#include <unordered_map>
 
 namespace imfont {
   class Manager {

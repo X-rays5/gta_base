@@ -11,7 +11,7 @@
 namespace imfont {
   namespace {
     void MergeFa(const std::float_t font_size) {
-      constexpr std::array<ImWchar, 2> icons_ranges = {ICON_MIN_FA, ICON_MAX_FA};
+      static constexpr ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, '\0'};
       ImFontConfig icons_config;
       icons_config.MergeMode = true;
       icons_config.PixelSnapH = true;
@@ -20,16 +20,16 @@ namespace imfont {
 
       static const auto font_awesome = b::embed<"assets/fonts/fa-solid-900.ttf">();
 
-      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), font_awesome.size(), font_size, &icons_config, icons_ranges.data())) {
+      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), static_cast<std::size_t>(font_awesome.size()), font_size, &icons_config, icons_ranges)) {
         LOG_ERROR("Failed to merge fa");
       }
     }
   }
 
-  Manager::Manager(std::float_t default_font_size) {
+  Manager::Manager(const std::float_t default_font_size) {
     ImGui::GetIO().Fonts->Clear();
     static const auto roboto_mono_regular = b::embed<"assets/fonts/RobotoMono-Regular.ttf">();
-    if (!LoadFontFromMemory("roboto", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size(), default_font_size)) {
+    if (!LoadFontFromMemory("roboto", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), static_cast<std::size_t>(roboto_mono_regular.size()), default_font_size)) {
       const ImFont* font = ImGui::GetIO().Fonts->AddFontDefault();
       FinalizeLoading("default", font, default_font_size, true);
     }
@@ -39,6 +39,11 @@ namespace imfont {
 
   Manager::~Manager() {
     kMANAGER = nullptr;
+
+    ImGui::GetIO().Fonts->Clear();
+    ImGui::GetIO().Fonts->AddFontDefault();
+    if (!ImGui::GetIO().Fonts->IsBuilt())
+      ImGui::GetIO().Fonts->Build();
   }
 
   bool Manager::LoadFontFromDisk(const std::string& name, const std::filesystem::path& path, const std::float_t font_size, const bool merge_fa) {

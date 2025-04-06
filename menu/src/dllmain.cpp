@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <Windows.h>
-#include <base-common/vfs.hpp>
+#include <base-common/fs/vfs.hpp>
 #include <base-common/logging/logger.hpp>
 #include "main.hpp"
 
@@ -16,7 +16,7 @@ BOOL WINAPI DllMain(const HINSTANCE dll_handle, const DWORD call_reason, LPVOID)
   if (call_reason == DLL_PROCESS_ATTACH) {
     dll_inst = dll_handle;
     CreateThread(nullptr, 0, [](LPVOID) -> DWORD {
-      base::common::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
+      base::common::fs::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
 
       int exit_code = EXIT_FAILURE;
       try {

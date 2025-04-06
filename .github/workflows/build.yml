@@ -22,24 +22,30 @@ jobs:
       security-events: write
       packages: read
       contents: write
+      checks: write
+      pull-requests: write
 
     env:
       BUILD_DIR: ${{ github.workspace }}/build
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
-      ALL_EXE_ARTIFACTS: ${{ github.workspace }}/build/**/*.exe
-      ALL_DLL_ARTIFACTS: ${{ github.workspace }}/build/**/*.dll
-      CMAKE_BUILD_CONFIG: Release
       GIT_MAIN_BRANCH: master
       SONAR_USER_HOME: ${{ github.workspace }}/.sonar
-    
+      TEST_RESULTS_DIR: ${{ github.workspace }}/build/test-results
+      COVERAGE_RESULTS_DIR: ${{ github.workspace }}/build/coverage
+
     strategy:
       fail-fast: false
       matrix:
         include:
           - language: actions
             build-mode: none
+            build-config: Debug
           - language: c-cpp
             build-mode: manual
+            build-config: Release
+          - language: c-cpp
+            build-mode: manual
+            build-config: Debug
 
     steps:
       - name: Checkout repository
@@ -64,15 +70,15 @@ jobs:
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}
-          key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
+          key: ${{ runner.os }}-cmake-${{ matrix.build-config }}-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
       - name: Cache vendor
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}/_deps
-          key: ${{ runner.os }}-vendor-${{ hashFiles('vendor/**/*.*') }}
+          key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('vendor/**/*.*') }}
           restore-keys: |
-            ${{ runner.os }}-vendor-
+            ${{ runner.os }}-vendor-${{ matrix.build-config }}-
       - name: Cache SonarCloud scanner
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
@@ -83,10 +89,18 @@ jobs:
             ${{ runner.os }}-sonar-
 
       - name: Initialize CodeQL
+        if: matrix.build-config == 'Debug'
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
+
+      - name: Install OpenCppCoverage # Needed to generate coverage
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe" -OutFile "OpenCppCoverageSetup.exe"
+          Start-Process -FilePath .\OpenCppCoverageSetup.exe -ArgumentList "/SUPRESSMSGBOXES /NORESTART /VERYSILENT" -NoNewWindow -Wait
+          echo "C:\Program Files\OpenCppCoverage" | Out-File -FilePath $env:GITHUB_PATH -Append
 
       - name: Install build-wrapper
         if: matrix.language == 'c-cpp'
@@ -96,17 +110,51 @@ jobs:
         if: matrix.language == 'c-cpp'
         run: |
           New-Item -ItemType directory -Path ${{ env.BUILD_DIR }} -Force
-          cmake -S . -B ${{ env.BUILD_DIR }} -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_CONFIG }}
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }} --config ${{ env.CMAKE_BUILD_CONFIG }}
+          choco install ninja -y
+          
+          # Configure Visual Studio environment for MSVC compiler
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          Import-Module (Join-Path $vsPath "Common7\Tools\Microsoft.VisualStudio.DevShell.dll")
+          Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-arch=amd64"
+          
+          # Use Ninja generator with MSVC compiler
+          cmake -S . -B ${{ env.BUILD_DIR }} -G "Ninja" -DCMAKE_BUILD_TYPE=${{ matrix.build-config }}
+          
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }}
+
+      - name: Run Unit Tests
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Release'
+        run: |
+          New-Item -ItemType directory -Path ${{ env.TEST_RESULTS_DIR }} -Force
+          cd ${{ env.BUILD_DIR }}
+          ctest -C ${{ matrix.build-config }} --output-on-failure --output-junit ${{ env.TEST_RESULTS_DIR }}/test-results.xml
+      - name: Publish Test Results
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Release' && always()
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2.19.0
+        with:
+          files: ${{ env.TEST_RESULTS_DIR }}/*.xml
+
+      - name: Run Coverage Tests
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+        run: |
+          cmake --build ${{ env.BUILD_DIR }} --target coverage --config ${{ matrix.build-config }}
+      - name: Upload Coverage Results
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: coverage-report
+          path: ${{ env.COVERAGE_RESULTS_DIR }}
+          retention-days: 7
 
       - name: Perform CodeQL Analysis
+        if: matrix.build-config == 'Debug'
         uses: github/codeql-action/analyze@v3
         with:
           category: /language:${{matrix.language}}
           output: ${{ github.workspace }}/results/codeql
           upload: failure-only
       - name: Filter CPP SARIF to exclude build directory
-        if: matrix.language == 'c-cpp'
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
         uses: advanced-security/filter-sarif@v1
         with:
           input: ${{ github.workspace }}/results/codeql/cpp.sarif
@@ -114,35 +162,36 @@ jobs:
           patterns: |
             -build/**
       - name: Upload CodeQL SARIF
+        if: matrix.build-config == 'Debug'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ github.workspace }}/results/codeql
 
       - name: Run SonarCloud scan
-        if: matrix.language == 'c-cpp'
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
         uses: SonarSource/sonarqube-scan-action@v5.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: |
-            -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json -Dsonar.scm.provider=git
+            -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json -Dsonar.scm.provider=git -Dsonar.cfamily.cobertura.reportPaths=build/coverage/coverage.xml
 
       - name: Upload Build Artifacts
         if: matrix.language == 'c-cpp'
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: build-artifacts
+          name: build-artifacts-${{ matrix.build-config }}
           path: |
-            ${{ env.ALL_EXE_ARTIFACTS }}
-            ${{ env.ALL_DLL_ARTIFACTS }}
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.exe
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.dll
           retention-days: 7
 
       - name: Create Release
-        if: matrix.language == 'c-cpp' && startsWith(github.ref, 'refs/tags/')
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Release' && startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2.2.1
         with:
           files: |
-            ${{ env.ALL_EXE_ARTIFACTS }}
-            ${{ env.ALL_DLL_ARTIFACTS }}
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.exe
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.dll
           generate_release_notes: true

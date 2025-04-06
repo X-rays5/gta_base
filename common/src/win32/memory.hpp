@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <string>
 #include <TlHelp32.h>
-#include "../result.hpp"
+#include "../util/result.hpp"
 
 namespace base::win32::memory {
  /**

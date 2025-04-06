@@ -6,7 +6,7 @@
 #define RICH_PRESENCE_HPP_08155936
 #include <string>
 #include <base-common/globals.hpp>
-#include <base-common/util/spinlock.hpp>
+#include <base-common/concurrency/spinlock.hpp>
 
 namespace base::menu::discord {
    struct Activity {
@@ -28,92 +28,92 @@ namespace base::menu::discord {
       void Tick();
 
       void SetState(const char* state) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.state = state;
       }
 
       std::string_view GetState() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.state;
       }
 
       void SetDetails(const char* details) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.details = details;
       }
 
       std::string_view GetDetails() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.details;
       }
 
       void SetLargeImageKey(const char* large_image_key) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.large_image_key = large_image_key;
       }
 
       std::string_view GetLargeImageKey() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.large_image_key;
       }
 
       void SetLargeImageText(const char* large_image_text) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.large_image_text = large_image_text;
       }
 
       std::string_view GetLargeImageText() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.large_image_text;
       }
 
       void SetSmallImageKey(const char* small_image_key) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.small_image_key = small_image_key;
       }
 
       std::string_view GetSmallImageKey() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.small_image_key;
       }
 
       void SetSmallImageText(const char* small_image_text) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.small_image_text = small_image_text;
       }
 
       std::string_view GetSmallImageText() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.small_image_text;
       }
 
       void SetPartySize(std::int32_t party_size) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.party_size = party_size;
       }
 
       std::int32_t GetPartySize() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.party_size;
       }
 
       void SetPartyMax(std::int32_t party_max) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_.party_max = party_max;
       }
 
       std::int32_t GetPartyMax() {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          return activity_.party_max;
       }
 
       void SetActivity(const Activity& activity) {
-         common::util::ScopedSpinlock lock(lock_);
+         common::concurrency::ScopedSpinlock lock(lock_);
          activity_ = activity;
       }
 
    private:
-      common::util::Spinlock lock_;
+      common::concurrency::Spinlock lock_;
       Activity activity_{};
       std::uint64_t start_time_;
    };
