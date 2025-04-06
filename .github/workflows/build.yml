@@ -140,8 +140,6 @@ jobs:
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
         run: |
           cmake --build ${{ env.BUILD_DIR }} --target coverage --config ${{ matrix.build-config }}
-          New-Item -ItemType directory -Path "${{ env.COVERAGE_RESULTS_DIR }}" -Force
-          Copy-Item -Path "${{ env.BUILD_DIR }}/coverage/*" -Destination "${{ env.COVERAGE_RESULTS_DIR }}" -Recurse
       - name: Upload Coverage Results
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
         uses: actions/upload-artifact@v4.6.2
