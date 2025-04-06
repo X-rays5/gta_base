@@ -79,14 +79,6 @@ jobs:
           key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('vendor/**/*.*') }}
           restore-keys: |
             ${{ runner.os }}-vendor-${{ matrix.build-config }}-
-      - name: Cache SonarCloud scanner
-        if: matrix.language == 'c-cpp'
-        uses: actions/cache@v4.2.3
-        with:
-          path: ${{ env.SONAR_USER_HOME }}
-          key: ${{ runner.os }}-sonar-${{ github.ref_name }}
-          restore-keys: |
-            ${{ runner.os }}-sonar-
 
       - name: Initialize CodeQL
         if: matrix.build-config == 'Debug'
