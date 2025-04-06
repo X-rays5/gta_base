@@ -70,13 +70,15 @@ jobs:
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}
-          key: ${{ runner.os }}-cmake-${{ matrix.build-config }}-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
+          key: ${{ runner.os }}-cmake-${{ matrix.build-config }}-${{ hashFiles('CMakeLists.txt', 'src/**/CMakeLists.txt', 'injector/src/**/CMakeLists.txt', 'menu/src/**/CMakeLists.txt', 'vendor/**/*.cmake', 'src/**/*.cpp', 'src/**/*.hpp', 'injector/src/**/*.cpp', 'injector/src/**/*.hpp', 'menu/src/**/*.cpp', 'menu/src/**/*.hpp', '**/*.h', '**/*.asm') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-${{ matrix.build-config }}-
       - name: Cache vendor
         if: matrix.language == 'c-cpp'
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}/_deps
-          key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('vendor/**/*.*') }}
+          key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('**/vendor/**/*.cmake') }}
           restore-keys: |
             ${{ runner.os }}-vendor-${{ matrix.build-config }}-
       - name: Cache SonarCloud scanner
