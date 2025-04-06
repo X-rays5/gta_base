@@ -111,7 +111,9 @@ jobs:
         if: matrix.language == 'c-cpp'
         run: |
           New-Item -ItemType directory -Path ${{ env.BUILD_DIR }} -Force
-          cmake -S . -B ${{ env.BUILD_DIR }} -DCMAKE_BUILD_TYPE=${{ matrix.build-config }}
+          choco install ninja -y
+          # Use Ninja generator instead of the default Visual Studio generator
+          cmake -S . -B ${{ env.BUILD_DIR }} -G "Ninja" -DCMAKE_BUILD_TYPE=${{ matrix.build-config }}
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }} --config ${{ matrix.build-config }}
 
       - name: Run Unit Tests
