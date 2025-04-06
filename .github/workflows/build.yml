@@ -98,7 +98,7 @@ jobs:
       - name: Install OpenCppCoverage # Needed to generate coverage
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
         run: |
-          wget https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe -o OpenCppCoverageSetup.exe
+          Invoke-WebRequest -Uri "https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe" -OutFile "OpenCppCoverageSetup.exe"
           Start-Process -FilePath .\OpenCppCoverageSetup.exe -ArgumentList "/SUPRESSMSGBOXES /NORESTART /VERYSILENT" -NoNewWindow -Wait
 
       - name: Install build-wrapper
