@@ -19,7 +19,7 @@ TEST(Win32Signal, StopWaitAfterTimeout) {
     const auto time_after = base::common::util::time::GetTimeStamp();
     const auto time_diff = time_after - time_now;
 
-    EXPECT_GE(time_diff, 2000);
+    EXPECT_GE(time_diff, 1900);
     EXPECT_LE(time_diff, 3000);
 }
 

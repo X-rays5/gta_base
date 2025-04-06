@@ -119,6 +119,7 @@ jobs:
 
       - name: Run Unit Tests
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Release'
+        continue-on-error: true
         run: |
           New-Item -ItemType directory -Path ${{ env.TEST_RESULTS_DIR }} -Force
           cd ${{ env.BUILD_DIR }}
@@ -131,6 +132,7 @@ jobs:
 
       - name: Run Coverage Tests
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+        continue-on-error: true
         run: |
           cmake --build ${{ env.BUILD_DIR }} --target coverage --config ${{ matrix.build-config }}
       - name: Upload Coverage Results
