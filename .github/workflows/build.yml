@@ -67,16 +67,19 @@ jobs:
 
       - name: Cache CMake build files
         if: matrix.language == 'c-cpp'
+        id: cache-cmake
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}
-          key: ${{ runner.os }}-cmake-${{ matrix.build-config }}-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.hpp', '**/*.cpp') }}
+          key: ${{ runner.os }}-cmake-${{ matrix.build-config }}-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt', '**/*.cmake', '**/*.cpp', '**/*.c', '**/*.hpp', '**/*.h', '**/*.asm') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-${{ matrix.build-config }}-
       - name: Cache vendor
-        if: matrix.language == 'c-cpp'
+        if: matrix.language == 'c-cpp' && steps.cache-cmake.outputs.cache-hit != 'true'
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}/_deps
-          key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('vendor/**/*.*') }}
+          key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('**/vendor/**/*.cmake') }}
           restore-keys: |
             ${{ runner.os }}-vendor-${{ matrix.build-config }}-
 
