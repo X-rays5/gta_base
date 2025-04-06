@@ -67,6 +67,7 @@ jobs:
 
       - name: Cache CMake build files
         if: matrix.language == 'c-cpp'
+        id: cache-cmake
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}
@@ -74,7 +75,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cmake-${{ matrix.build-config }}-
       - name: Cache vendor
-        if: matrix.language == 'c-cpp'
+        if: matrix.language == 'c-cpp' && steps.cache-cmake.outputs.cache-hit != 'true'
         uses: actions/cache@v4.2.3
         with:
           path: ${{ env.BUILD_DIR }}/_deps
