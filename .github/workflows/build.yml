@@ -30,10 +30,10 @@ jobs:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
       ALL_EXE_ARTIFACTS: ${{ github.workspace }}/build/**/*.exe
       ALL_DLL_ARTIFACTS: ${{ github.workspace }}/build/**/*.dll
-      CMAKE_BUILD_CONFIG: Release
       GIT_MAIN_BRANCH: master
       SONAR_USER_HOME: ${{ github.workspace }}/.sonar
       TEST_RESULTS_DIR: ${{ github.workspace }}/build/test-results
+      COVERAGE_RESULTS_DIR: ${{ github.workspace }}/build/coverage
 
     strategy:
       fail-fast: false
@@ -43,6 +43,10 @@ jobs:
             build-mode: none
           - language: c-cpp
             build-mode: manual
+            build-config: Release
+          - language: c-cpp
+            build-mode: manual
+            build-config: Debug
 
     steps:
       - name: Checkout repository
@@ -91,6 +95,12 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
 
+      - name: Install OpenCppCoverage # Needed to generate coverage
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+        run: |
+          wget https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe -o OpenCppCoverageSetup.exe
+          Start-Process -FilePath .\OpenCppCoverageSetup.exe -ArgumentList "/SUPRESSMSGBOXES /NORESTART /VERYSILENT" -NoNewWindow -Wait
+
       - name: Install build-wrapper
         if: matrix.language == 'c-cpp'
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.1.0
@@ -99,20 +109,34 @@ jobs:
         if: matrix.language == 'c-cpp'
         run: |
           New-Item -ItemType directory -Path ${{ env.BUILD_DIR }} -Force
-          cmake -S . -B ${{ env.BUILD_DIR }} -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_CONFIG }}
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }} --config ${{ env.CMAKE_BUILD_CONFIG }}
+          cmake -S . -B ${{ env.BUILD_DIR }} -DCMAKE_BUILD_TYPE=${{ matrix.build-config }}
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIR }} --config ${{ matrix.build-config }}
 
       - name: Run Unit Tests
-        if: matrix.language == 'c-cpp'
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Release'
         run: |
           New-Item -ItemType directory -Path ${{ env.TEST_RESULTS_DIR }} -Force
           cd ${{ env.BUILD_DIR }}
-          ctest -C ${{ env.CMAKE_BUILD_CONFIG }} --output-on-failure --output-junit ${{ env.TEST_RESULTS_DIR }}/test-results.xml
+          ctest -C ${{ matrix.build-config }} --output-on-failure --output-junit ${{ env.TEST_RESULTS_DIR }}/test-results.xml
       - name: Publish Test Results
-        if: matrix.language == 'c-cpp' && always()
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Release' && always()
         uses: EnricoMi/publish-unit-test-result-action/windows@v2.19.0
         with:
           files: ${{ env.TEST_RESULTS_DIR }}/*.xml
+
+      - name: Run Coverage Tests
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+        run: |
+          cmake --build ${{ env.BUILD_DIR }} --target coverage --config ${{ matrix.build-config }}
+          New-Item -ItemType directory -Path "${{ env.COVERAGE_RESULTS_DIR }}" -Force
+          Copy-Item -Path "${{ env.BUILD_DIR }}/coverage/*" -Destination "${{ env.COVERAGE_RESULTS_DIR }}" -Recurse
+      - name: Upload Coverage Results
+        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: coverage-report
+          path: ${{ env.COVERAGE_RESULTS_DIR }}
+          retention-days: 7
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
@@ -141,7 +165,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: |
-            -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json -Dsonar.scm.provider=git
+            -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json -Dsonar.scm.provider=git -Dsonar.cfamily.cobertura.reportPaths=${{ env.COVERAGE_RESULTS_DIR }}/coverage.xml
 
       - name: Upload Build Artifacts
         if: matrix.language == 'c-cpp'
