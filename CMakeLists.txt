@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(gta_base)
 
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+
 enable_testing()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -18,14 +20,22 @@ endif ()
 
 add_subdirectory(injector)
 
-# Add to the end of your root CMakeLists.txt
 if (WIN32)
     include(cmake_scripts/code_coverage.cmake)
     if (OPENCPPCOVERAGE_EXECUTABLE)
-        add_custom_target(coverage
-                COMMENT "Generate coverage for all tests"
-                DEPENDS coverage_common_test
+        set(COVERAGE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/coverage")
+
+        # Define the test targets
+        set(ALL_TEST_TARGETS
+                common_test
+                imfont_test
                 # Add other test targets as they're created
+        )
+        
+        add_combined_coverage_target(
+                coverage
+                ${COVERAGE_OUTPUT_DIR}
+                ${ALL_TEST_TARGETS}
         )
     endif ()
 endif ()

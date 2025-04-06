@@ -33,9 +33,3 @@ target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})
-
-include(${CMAKE_SOURCE_DIR}/cmake_scripts/code_coverage.cmake)
-if (OPENCPPCOVERAGE_EXECUTABLE)
-    set(COVERAGE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/coverage")
-    add_coverage_target(coverage_${PROJECT_NAME} ${PROJECT_NAME} ${COVERAGE_OUTPUT_DIR})
-endif ()
