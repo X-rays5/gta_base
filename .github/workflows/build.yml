@@ -28,8 +28,6 @@ jobs:
     env:
       BUILD_DIR: ${{ github.workspace }}/build
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
-      ALL_EXE_ARTIFACTS: ${{ github.workspace }}/build/**/*.exe
-      ALL_DLL_ARTIFACTS: ${{ github.workspace }}/build/**/*.dll
       GIT_MAIN_BRANCH: master
       SONAR_USER_HOME: ${{ github.workspace }}/.sonar
       TEST_RESULTS_DIR: ${{ github.workspace }}/build/test-results
@@ -185,8 +183,8 @@ jobs:
         with:
           name: build-artifacts-${{ matrix.build-config }}
           path: |
-            ${{ env.ALL_EXE_ARTIFACTS }}
-            ${{ env.ALL_DLL_ARTIFACTS }}
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.exe
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.dll
           retention-days: 7
 
       - name: Create Release
@@ -194,6 +192,6 @@ jobs:
         uses: softprops/action-gh-release@v2.2.1
         with:
           files: |
-            ${{ env.ALL_EXE_ARTIFACTS }}
-            ${{ env.ALL_DLL_ARTIFACTS }}
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.exe
+            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.dll
           generate_release_notes: true
