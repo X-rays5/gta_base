@@ -3,17 +3,14 @@
 //
 #include "manager.hpp"
 
-#define ADD_TRANSLATION(key, trans) {xorstr_(key), xorstr_(trans)}
-
-#define COMMON_TRANSLATION(category, ...) "common/" category "/" __VA_ARGS__
-#define LABEL_TRANSLATION(...) COMMON_TRANSLATION("label", __VA_ARGS__)
+#define ADD_TRANSLATION(key, trans) {xorstr_(key), xorstr_(trans)},
 
 namespace base::ui::localization {
   const translation_map_t default_translation = {
-    ADD_TRANSLATION("text/hello_world", "Hello World!"),
-    ADD_TRANSLATION(LABEL_TRANSLATION("ok"), "Ok"),
-    ADD_TRANSLATION(LABEL_TRANSLATION("cancel"), "Cancel"),
-    ADD_TRANSLATION(LABEL_TRANSLATION("yes"), "Yes"),
-    ADD_TRANSLATION(LABEL_TRANSLATION("No"), "No")
+    ADD_TRANSLATION("text/hello_world", "Hello World!")
+    ADD_TRANSLATION("label/ok", "Ok")
+    ADD_TRANSLATION("label/cancel", "Cancel")
+    ADD_TRANSLATION("label/yes", "Yes")
+    ADD_TRANSLATION("label/no", "No")
   };
 }

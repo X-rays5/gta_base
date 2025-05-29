@@ -3,8 +3,8 @@
 //
 
 #include "manager.hpp"
-#include <glaze/glaze.hpp>
 #include <base-common/fs/vfs.hpp>
+#include <glaze/glaze.hpp>
 
 namespace base::ui::localization {
     namespace {

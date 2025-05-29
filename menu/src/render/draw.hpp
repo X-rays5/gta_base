@@ -40,8 +40,6 @@ namespace base::menu::render {
       GTA_BASE_ASSERT(draw_queue_buffers > 1, "Draw queue buffers must be greater than 1.");
 
       draw_queue_.resize(draw_queue_buffers);
-      read_idx_ = 0;
-      write_idx_ = 1;
     }
 
     ~DrawQueueBuffer() {
@@ -50,7 +48,7 @@ namespace base::menu::render {
       read_signal_.Notify();
     }
 
-    /// @note This function is only supposed to be called when shutting down to prevent a deadlock. In the case the render thread was waiting for aa signal but the render detour is already disabled.
+    /// @note This function is only supposed to be called when shutting down to prevent a deadlock. In the case the render thread was waiting for a signal, but the render detour is already disabled.
     void UnblockRenderThread() const {
       read_signal_.Notify();
     }
@@ -83,8 +81,8 @@ namespace base::menu::render {
 
   private:
     std::vector<DrawQueue> draw_queue_;
-    std::size_t read_idx_;
-    std::size_t write_idx_;
+    std::size_t read_idx_ = 0;
+    std::size_t write_idx_ = 1;
     common::concurrency::Spinlock spinlock_;
     win32::Signal read_signal_;
   };
