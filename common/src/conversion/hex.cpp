@@ -2,10 +2,10 @@
 // Created by X-ray on 11/02/2025.
 //
 
-#include "conversion.hpp"
+#include "hex.hpp"
 
 namespace base::common::conversion {
-  std::string AddrToHex(uint64_t addr) {
+  std::string AddrToHex(const uint64_t addr) {
     if (!addr)
       return "0x0";
 

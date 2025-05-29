@@ -6,3 +6,5 @@
 .idea/*
 !.idea/
 !.idea/sonarlint.xml
+
+**/.vendor

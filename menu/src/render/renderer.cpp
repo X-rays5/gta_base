@@ -56,8 +56,13 @@ namespace base::menu::render {
 
     font_mgr_inst_.reset();
 
-    init_imgui_ = false;
-    ShutdownImGui();
+    try {
+      ShutdownImGui();
+    } catch (const std::exception& e) {
+      LOG_CRITICAL("Failed to shutdown ImGui: {}", e.what());
+    } catch (...) {
+      LOG_CRITICAL("Failed to shutdown ImGui due to an unknown error");
+    }
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {

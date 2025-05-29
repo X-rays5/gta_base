@@ -4,10 +4,10 @@
 
 #ifndef WINDOW_HPP_04125118
 #define WINDOW_HPP_04125118
-#include <base-common/result.hpp>
+#include <base-common/util/result.hpp>
+#include <imfont/imfont.hpp>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
-#include <imfont/imfont.hpp>
 
 namespace base::injector {
   class Window {

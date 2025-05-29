@@ -3,7 +3,7 @@
 //
 
 #include <future>
-#include <base-common/vfs.hpp>
+#include <base-common/fs/vfs.hpp>
 #include <base-common/logging/logger.hpp>
 #include <imgui/imgui.h>
 #include <magic_enum/magic_enum.hpp>
@@ -32,7 +32,7 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
   using namespace base;
   using namespace base::injector;
 
-  common::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
+  common::fs::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
   kLOGGER = std::make_unique<common::logging::Manager>();
 
 #ifdef NDEBUG
@@ -76,7 +76,7 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     window.PreFrame();
 
     {
-      if (ImGui::Begin("Hello, world!", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
+      if (ImGui::Begin("Injector window", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
         if (ImGui::BeginTabBar("tabs")) {
           if (ImGui::BeginTabItem("Injector")) {
             ImGui::Text(!game_wnd ? "Game not running" : fmt::format("Game running: {}", win32::GetPIDFromHWND(game_wnd).value_or(0)).c_str());
@@ -112,6 +112,10 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
               if (const auto res = SaveSettings(kSETTINGS); !res) {
                 LOG_ERROR("Failed to save settings: {}", res.error());
               }
+            }
+
+            if (ImGui::Button("Open injector files dir")) {
+              system(fmt::format("explorer.exe {}", std::filesystem::current_path()).c_str());
             }
 
             ImGui::EndTabItem();

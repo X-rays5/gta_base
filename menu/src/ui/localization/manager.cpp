@@ -4,12 +4,12 @@
 
 #include "manager.hpp"
 #include <glaze/glaze.hpp>
-#include <base-common/vfs.hpp>
+#include <base-common/fs/vfs.hpp>
 
 namespace base::ui::localization {
     namespace {
         std::string GetProfilePath(const std::string& name) {
-            return fmt::format("{}/{}.json", common::vfs::GetTranslationDir(), name);
+            return fmt::format("{}/{}.json", common::fs::vfs::GetTranslationDir(), name);
         }
     }
 
@@ -40,7 +40,7 @@ namespace base::ui::localization {
     Status Translation::Save(const std::string& name) {
         const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(loaded_translation_, GetProfilePath(name), std::string{});
         if (ec) {
-            return MakeFailure<ResultCode::kIO_ERROR>(magic_enum::enum_name(ec.ec).data());
+            return MakeFailure<ResultCode::kIO_ERROR>(std::string(magic_enum::enum_name(ec.ec)));
         }
 
         return {};

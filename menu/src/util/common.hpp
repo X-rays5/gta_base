@@ -4,12 +4,14 @@
 
 #ifndef GTA_BASE_COMMON_475366A25D554F19A9F0C4ADBC01FCAA_HPP
 #define GTA_BASE_COMMON_475366A25D554F19A9F0C4ADBC01FCAA_HPP
+#include <filesystem>
+#include <string>
 
 #define GTA_BASE_ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
 namespace base::menu::util::common {
  /**
-  * \brief Convert a hex string to a address
+  * \brief Convert a hex string to an address
   * \param file_path The hex string
   * \return The address
   */

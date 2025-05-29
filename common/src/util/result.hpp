@@ -8,9 +8,7 @@
 #include <magic_enum/magic_enum.hpp>
 #include <result/result.hpp>
 
-#include "fmt.hpp"
-
-namespace base::common::result {
+namespace base::common::util::result {
   enum class ResultCode {
     kSUCCESS,
     kINVALID_ARGUMENT,
@@ -114,16 +112,16 @@ namespace base::common::result {
 }
 
 namespace base {
-  using common::result::ResultCode;
-  using common::result::Status;
-  using common::result::StatusOr;
-  using common::result::MakeFailure;
+  using common::util::result::ResultCode;
+  using common::util::result::Status;
+  using common::util::result::StatusOr;
+  using common::util::result::MakeFailure;
 }
 
 template <>
-struct fmt::formatter<base::common::result::StatusErr> : formatter<std::string> {
+struct fmt::formatter<base::common::util::result::StatusErr> : formatter<std::string> {
   template <typename FormatContext>
-  auto format(const base::common::result::StatusErr& status, FormatContext& ctx) const {
+  auto format(const base::common::util::result::StatusErr& status, FormatContext& ctx) const {
     return fmt::format_to(ctx.out(), "{}: {}", status.GetResultString(), status.GetResultMessage());
   }
 };

@@ -16,18 +16,18 @@ endforeach ()
 
 add_library(${PROJECT_NAME} STATIC
         src/globals.hpp
-        src/util/spinlock.cpp
-        src/util/spinlock.hpp
-        src/result.cpp
-        src/result.hpp
-        src/fmt.cpp
-        src/fmt.hpp
+        src/concurrency/spinlock.cpp
+        src/concurrency/spinlock.hpp
+        src/util/result.cpp
+        src/util/result.hpp
+        src/fmt/fs_formatter.cpp
+        src/fmt/fs_formatter.hpp
         src/util/string.cpp
         src/util/string.hpp
         src/util/time.cpp
         src/util/time.hpp
-        src/conversion.cpp
-        src/conversion.hpp
+        src/conversion/hex.cpp
+        src/conversion/hex.hpp
         src/logging/logger.hpp
         src/logging/logger.cpp
         src/logging/logging_macro.hpp
@@ -44,6 +44,12 @@ add_library(${PROJECT_NAME} STATIC
         src/win32/misc.hpp
         src/win32/misc.cpp
         src/win32/signal.hpp
+        src/fs/vfs.cpp
+        src/fs/vfs.hpp
+        src/memory/address.cpp
+        src/memory/address.hpp
+        src/fmt/glaze_formatter.cpp
+        src/fmt/glaze_formatter.hpp
 )
 add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
@@ -83,3 +89,5 @@ foreach (header ${HEADERS})
 endforeach ()
 
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
+
+add_subdirectory(test)

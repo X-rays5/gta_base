@@ -2,8 +2,10 @@
 // Created by X-ray on 25/12/2023.
 //
 
-#ifndef SIGNAL_HPP
-#define SIGNAL_HPP
+#ifndef SIGNAL_HPP_02232550
+#define SIGNAL_HPP_02232550
+#include <string>
+#include <Windows.h>
 #include "../util/time.hpp"
 
 namespace base::win32 {
@@ -47,4 +49,4 @@ namespace base::win32 {
     HANDLE signal_h_;
   };
 }
-#endif //SIGNAL_HPP
+#endif //SIGNAL_HPP_02232550

@@ -4,7 +4,7 @@
 
 #include "spinlock.hpp"
 
-namespace base::common::util {
+namespace base::common::concurrency {
   void Spinlock::Lock() noexcept {
     for (;;) {
       if (!lock_.exchange(true, std::memory_order_acquire)) {
@@ -26,7 +26,7 @@ namespace base::common::util {
   }
 
   void RecursiveSpinlock::Lock() noexcept {
-    auto thread_id = std::this_thread::get_id();
+    const auto thread_id = std::this_thread::get_id();
     if (cur_locking_thread_.load(std::memory_order_consume) == thread_id) {
       lock_count_ += 1;
       return;
@@ -38,7 +38,7 @@ namespace base::common::util {
   }
 
   bool RecursiveSpinlock::TryLock() noexcept {
-    auto thread_id = std::this_thread::get_id();
+    const auto thread_id = std::this_thread::get_id();
 
     if (cur_locking_thread_.load(std::memory_order_consume) == thread_id) {
       lock_count_ += 1;

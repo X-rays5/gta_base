@@ -59,14 +59,15 @@ namespace base::common::logging::exception {
 
       // TODO: implement some cursed fatal exception recovery
 
-      auto stacktrace_res = WriteExceptionReport(except, 7);
-      if (stacktrace_res.has_value()) {
+      if (auto stacktrace_res = WriteExceptionReport(except, 7); stacktrace_res.has_value()) {
         LOG_CRITICAL(stacktrace_res.value());
       }
 
+#ifndef VECTORED_HANDLER_UNIT_TEST
       spdlog::default_logger_raw()->flush();
 
       Manager::Shutdown();
+#endif
 
       return EXCEPTION_CONTINUE_SEARCH;
     }

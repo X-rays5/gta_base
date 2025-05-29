@@ -4,7 +4,7 @@
 
 #ifndef PATTERN_HPP
 #define PATTERN_HPP
-#include <base-common/address.hpp>
+#include <base-common/memory/address.hpp>
 
 namespace base::menu::memory::signature {
   class Pattern {
@@ -12,6 +12,10 @@ namespace base::menu::memory::signature {
     explicit Pattern(const std::string& signature, const std::string& module_name = "") : signature_(signature), module_name_(module_name) {}
 
     StatusOr<common::memory::Address> Scan();
+
+    std::string GetSignature() {
+      return signature_;
+    }
 
     std::string GetModule() {
       return module_name_;

@@ -21,16 +21,18 @@ namespace base::menu::memory::signature {
 
   class BatchScan {
   public:
-    void Add(const std::string& name, Pattern pattern, const BatchJob::cb_t& cb) {
+    virtual ~BatchScan() = default;
+
+    virtual void Add(const std::string& name, const Pattern& pattern, const BatchJob::cb_t& cb) {
       if (scanned_)
         return;
 
       patterns_[name] = std::move(BatchJob(name, pattern, cb));
     }
 
-    void Scan();
+    virtual void Scan();
 
-  private:
+  protected:
     bool scanned_ = false;
     ankerl::unordered_dense::map<std::string, BatchJob> patterns_;
   };
