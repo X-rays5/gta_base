@@ -78,8 +78,8 @@ jobs:
         if: matrix.language == 'c-cpp' && steps.cache-cmake.outputs.cache-hit != 'true'
         uses: actions/cache@v4.2.3
         with:
-          path: vendor/.cache
-          key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('vendor/**/*.cmake') }}
+          path: ${{ env.BUILD_DIR }}/_deps
+          key: ${{ runner.os }}-vendor-${{ matrix.build-config }}-${{ hashFiles('**/vendor/**/*.cmake') }}
           restore-keys: |
             ${{ runner.os }}-vendor-${{ matrix.build-config }}-
 
