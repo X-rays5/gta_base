@@ -40,6 +40,10 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/thread_pool.hpp
         src/discord/rich_presence.cpp
         src/discord/rich_presence.hpp
+        src/memory/signature/cached_batch.cpp
+        src/memory/signature/cached_batch.hpp
+        src/util/common.cpp
+        src/util/common.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

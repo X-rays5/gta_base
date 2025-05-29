@@ -148,8 +148,7 @@ namespace base::common::logging::exception {
     EXCEPTION_POINTERS except_ptr;
     except_ptr.ExceptionRecord = except_rec;
     except_ptr.ContextRecord = ctx;
-    auto dump_res = WriteMiniDump(minidump_path, &except_ptr);
-    if (dump_res.error()) {
+    if (auto dump_res = WriteMiniDump(minidump_path, &except_ptr); dump_res.error()) {
       LOG_ERROR(dump_res);
       return dump_res.error().GetResultMessage();
     }

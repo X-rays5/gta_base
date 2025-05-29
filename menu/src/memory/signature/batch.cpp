@@ -5,12 +5,11 @@
 #include "batch.hpp"
 
 #include <ranges>
-
 #include "../../util/thread_pool.hpp"
 
 namespace base::menu::memory::signature {
   namespace {
-    bool ScanPattern(BatchJob job) {
+    bool ScanPattern(const BatchJob& job) {
       StatusOr<common::memory::Address> address = job.pattern->Scan();
       if (address.error()) {
         LOG_ERROR("Failed to find {}", job.name);

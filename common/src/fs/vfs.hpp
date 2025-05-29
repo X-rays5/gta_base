@@ -29,6 +29,8 @@ namespace base::common::fs::vfs {
 
     std::filesystem::create_directories(appdata_path);
     std::filesystem::current_path(appdata_path);
+
+    LOG_DEBUG("Set working directory to: {}", appdata_path);
   }
 
   GET_PATH(LoggingDir, "logs")

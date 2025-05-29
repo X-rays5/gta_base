@@ -134,7 +134,7 @@ namespace base::injector {
         exit(0);
         break;
       default:
-        LOG_WARN("Unhandled SDL event: {}", event.type);
+        LOG_DEBUG("Unhandled SDL event: {}", event.type);
       }
     }
   }

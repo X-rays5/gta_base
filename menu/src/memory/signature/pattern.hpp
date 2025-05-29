@@ -13,6 +13,10 @@ namespace base::menu::memory::signature {
 
     StatusOr<common::memory::Address> Scan();
 
+    std::string GetSignature() {
+      return signature_;
+    }
+
     std::string GetModule() {
       return module_name_;
     }
