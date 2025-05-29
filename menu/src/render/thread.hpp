@@ -5,10 +5,10 @@
 #pragma once
 #ifndef GTA_BASE_THREAD_E1B5110495AF4A36A7A7D235FBB8EC7D_HPP
 #define GTA_BASE_THREAD_E1B5110495AF4A36A7A7D235FBB8EC7D_HPP
+#include <algorithm>
 #include <functional>
 #include <vector>
-#include <algorithm>
-#include <base-common/util/spinlock.hpp>
+#include <base-common/concurrency/spinlock.hpp>
 #include "draw.hpp"
 
 namespace base::menu::render {
@@ -28,22 +28,22 @@ namespace base::menu::render {
     static void RenderMain();
 
     void AddRenderCallback(const std::size_t z_idx, const RenderCB::render_cb_t& cb) {
-      const auto lock = common::util::ScopedSpinlock(callback_lock_);
-      render_callbacks_.push_back({z_idx, cb});
+      const auto lock = common::concurrency::ScopedSpinlock(callback_lock_);
+      render_callbacks_.emplace_back(z_idx, cb);
 
       // While this really isn't optimal, render callbacks aren't constantly added.
-      std::sort(render_callbacks_.begin(), render_callbacks_.end(), [](const RenderCB& a, const RenderCB& b) {
+      std::ranges::sort(render_callbacks_, [](const RenderCB& a, const RenderCB& b) {
         return a.z_idx_ < b.z_idx_;
       });
     }
 
     std::vector<RenderCB>& GetRenderCallbacks() {
-      const auto lock = common::util::ScopedSpinlock(callback_lock_);
+      const auto lock = common::concurrency::ScopedSpinlock(callback_lock_);
       return render_callbacks_;
     }
 
   private:
-    common::util::Spinlock callback_lock_;
+    common::concurrency::Spinlock callback_lock_;
     std::vector<RenderCB> render_callbacks_;
   };
 
