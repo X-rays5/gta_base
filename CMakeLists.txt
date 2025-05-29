@@ -7,7 +7,7 @@ enable_testing()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CPM_SOURCE_CACHE ${CMAKE_CURRENT_SOURCE_DIR}/.vendor)
+set(CPM_SOURCE_CACHE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/.cache)
 include(cmake_scripts/get_cpm.cmake)
 
 add_subdirectory(common)
