@@ -48,6 +48,8 @@ add_library(${PROJECT_NAME} STATIC
         src/fs/vfs.hpp
         src/memory/address.cpp
         src/memory/address.hpp
+        src/fmt/glaze_formatter.cpp
+        src/fmt/glaze_formatter.hpp
 )
 add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 

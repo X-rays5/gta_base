@@ -83,7 +83,7 @@ namespace base::menu::render {
     Text(const ImVec2 pos, const ImU32 color, std::string text, const bool right_align, const bool center, const float y_size_text, const float max_width = 0.F, const std::size_t max_lines = 2, ImFont* font = nullptr) :
       pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_(center), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
 
-    void Draw() override {
+    virtual void Draw() override {
       if (!font_) {
         font_ = ImGui::GetFont();
       }
@@ -93,11 +93,12 @@ namespace base::menu::render {
       }
 
       if (right_align_) {
-        ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
         pos_.x -= text_size.x;
         pos_.y += text_size.y / 2;
       } else if (center_) {
-        ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        pos_.x -= text_size.x / 2.0f;
         pos_.y += text_size.y / 2;
       }
 

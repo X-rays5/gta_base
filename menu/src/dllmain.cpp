@@ -16,6 +16,7 @@ BOOL WINAPI DllMain(const HINSTANCE dll_handle, const DWORD call_reason, LPVOID)
   if (call_reason == DLL_PROCESS_ATTACH) {
     dll_inst = dll_handle;
     CreateThread(nullptr, 0, [](LPVOID) -> DWORD {
+      SetThreadDescription(GetCurrentThread(), L"main");
       base::common::fs::vfs::SetWorkingDir(BASE_SUBCOMPONENT);
 
       int exit_code = EXIT_FAILURE;

@@ -58,6 +58,10 @@ namespace base::menu::util::common {
     CryptDestroyHash(hHash);
     CryptReleaseContext(hProv, 0);
 
+    if (res.empty()) {
+      return MakeFailure<ResultCode::kINTERNAL_ERROR>("Failed to generate MD5 hash");
+    }
+
     return res;
   }
 }

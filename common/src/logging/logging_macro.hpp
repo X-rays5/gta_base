@@ -15,6 +15,7 @@
 #include <xorstr.hpp>
 #include <spdlog/spdlog.h>
 #include "../fmt/fs_formatter.hpp"
+#include "../fmt/glaze_formatter.hpp"
 
 #ifndef NDEBUG
 #define LOGGER_LOG(level, ...) if (auto __logger__ = spdlog::default_logger_raw(); __logger__) { __logger__->log(spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__); } (void)0
