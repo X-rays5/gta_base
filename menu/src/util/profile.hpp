@@ -37,7 +37,7 @@ namespace base::menu::util {
         const auto target_file = target_folder / fmt::format("{}.trace", common::util::time::GetTimeStamp());
         try {
           std::filesystem::create_directories(target_folder);
-        } catch (std::filesystem::filesystem_error ex) {
+        } catch (std::filesystem::filesystem_error& ex) {
           LOG_ERROR("{}", ex.what());
         }
 
