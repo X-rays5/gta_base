@@ -6,8 +6,7 @@
 #define PROFILE_HPP_08034048
 
 #include <filesystem>
-#include <base-common/vfs.hpp>
-#include <base-common/util/string.hpp>
+#include <base-common/fs/vfs.hpp>
 #include <base-common/util/time.hpp>
 #include <glaze/trace/trace.hpp>
 
@@ -34,7 +33,7 @@ namespace base::menu::util {
 
     [[nodiscard]] Status WriteToDisk(const std::string& folder) {
       if (!trace_.disabled) {
-        const auto target_folder = common::vfs::GetTimeTraceDir() / folder;
+        const auto target_folder = common::fs::vfs::GetTimeTraceDir() / folder;
         const auto target_file = target_folder / fmt::format("{}.trace", common::util::time::GetTimeStamp());
         try {
           std::filesystem::create_directories(target_folder);

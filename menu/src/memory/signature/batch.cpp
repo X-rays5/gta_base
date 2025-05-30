@@ -7,6 +7,7 @@
 #include <ranges>
 #include "../../util/thread_pool.hpp"
 #include "../../util/profile.hpp"
+#include <base-common/util/string.hpp>
 
 namespace base::menu::memory::signature {
   namespace {
@@ -18,7 +19,7 @@ namespace base::menu::memory::signature {
       }
 
       LOG_DEBUG("Found '{}' GTA5.exe+0x{:x}", job.name, address.value().As<DWORD64>() - reinterpret_cast<std::uintptr_t>(GetModuleHandle(job.pattern->GetModule().c_str())));
-      // Call callback to use found address
+      // Call callback to use the found address
       job.cb(&address.value());
 
       return true;

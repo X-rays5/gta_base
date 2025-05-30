@@ -39,6 +39,7 @@ namespace base::common::fs::vfs {
   GET_PATH(PatternCacheDir, "cache/patterns")
   GET_PATH(TranslationDir, "translations")
   GET_PATH(SettingsDir, "settings")
+  GET_PATH(TimeTraceDir, "logs/time_trace")
 }
 
 #undef GET_PATH
