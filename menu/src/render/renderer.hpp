@@ -49,7 +49,6 @@ namespace base::menu::render {
     std::unique_ptr<imfont::Manager> font_mgr_inst_;
   };
 
-  // skipcq: CXX-W2009
   inline Renderer* kRENDERER{};
 }
 #endif //BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP

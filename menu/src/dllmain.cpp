@@ -13,6 +13,8 @@ namespace {
 }
 
 BOOL WINAPI DllMain(const HINSTANCE dll_handle, const DWORD call_reason, LPVOID) {
+  DisableThreadLibraryCalls(dll_handle);
+
   if (call_reason == DLL_PROCESS_ATTACH) {
     dll_inst = dll_handle;
     CreateThread(nullptr, 0, [](LPVOID) -> DWORD {
