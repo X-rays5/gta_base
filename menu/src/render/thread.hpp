@@ -37,7 +37,7 @@ namespace base::menu::render {
       });
     }
 
-    std::vector<RenderCB>& GetRenderCallbacks() {
+    std::vector<RenderCB> GetRenderCallbacks() {
       const auto lock = common::concurrency::ScopedSpinlock(callback_lock_);
       return render_callbacks_;
     }
