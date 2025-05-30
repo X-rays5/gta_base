@@ -3,47 +3,38 @@
 //
 
 #include "notification.hpp"
-
-#include <imgui/imgui.h>
-
-#include <imfont/IconsFontAwesome6.hpp>
-#include "../../memory/pointers.hpp"
 #include "../../render/draw.hpp"
-#include "../../render/draw_util.hpp"
 
 namespace base::ui::notification {
-  namespace {
-    std::string GetTypeText(const Type type) {
-      std::string type_text;
-
-      switch (type) {
-      case Type::Info:
-        type_text = ICON_FA_CIRCLE_INFO "Info";
-        break;
-      case Type::Warning:
-        type_text = ICON_FA_TRIANGLE_EXCLAMATION "Warning";
-        break;
-      case Type::Error:
-        type_text = ICON_FA_CIRCLE_XMARK "Error";
-        break;
-      default:
-        type_text = "Unknown";
-      }
-
-      return type_text;
+  ImColor Notification::GetNotificationColor(const Type type) {
+    switch (type) {
+    case Type::Info:
+      return info_color_;
+    case Type::Warning:
+      return warning_color_;
+    case Type::Error:
+      return error_color_;
+    default:
+      LOG_ERROR("Unknown notification type: {}", static_cast<int>(type));
+      return info_color_;
     }
   }
 
-  void Notification::Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, const std::size_t delta_time, const bool right_align, const std::float_t y_offset, const std::size_t duration_ms) {
-    const std::string type_text = GetTypeText(type_);
+  std::float_t Notification::Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, const bool right_align, std::float_t y_offset) {
+    constexpr std::float_t y_size = .05f;
 
-    const auto notification_x_pos = right_align ? 1.f - notification_width_ : 0;
+    const auto notification_x_pos = right_align ? 1.f - notification_width_ - x_margin_ : 0 + x_margin_;
+    y_offset += y_margin_;
 
-    if (!notification_animation_) {
-      notification_animation_ = std::make_unique<render::animate::LerpWaitReturn<std::float_t>>(right_align ? 1.f : 0.f, notification_x_pos, duration_ms / 10, duration_ms - (duration_ms / 10));
-    }
+    // if (!notification_animation_) {
+    //   notification_animation_ = std::make_unique<render::animate::LerpWaitReturn<std::float_t>>(right_align ? 1.f : 0.f, notification_x_pos, slide_duration_ms_, duration_ms - slide_duration_ms_);
+    // }
 
-    auto x = notification_animation_->Animate(delta_time);
-    draw_queue_buffer->AddCommand(menu::render::Text({x, y_offset}, ImColor(255, 0, 0), "Hello World2!", 0.02f));
+    //auto x = notification_animation_->Animate(delta_time);
+    draw_queue_buffer->AddCommand(menu::render::Rect({notification_x_pos, y_offset}, {notification_width_, y_size}, ImColor(0, 0, 0, notification_transparency_)));
+    draw_queue_buffer->AddCommand(menu::render::Rect({notification_x_pos, y_offset}, {notification_width_, top_bar_thickness_}, notification_color_));
+    draw_queue_buffer->AddCommand(menu::render::Text({notification_x_pos + text_margin_, y_offset + text_margin_}, ImColor(255, 255, 255), title_, title_text_size_));
+
+    return y_size + y_margin_;
   }
 }

@@ -21,7 +21,7 @@ namespace base::menu::render {
       if (kTHREAD && kRENDERER) {
         const auto buffer = kRENDERER->GetDrawQueueBuffer();
 
-        for (auto& render_cb : kTHREAD->GetRenderCallbacks()) {
+        for (auto& [_, cb_] : kTHREAD->GetRenderCallbacks()) {
           if (!buffer) {
             if (globals::kRUNNING) {
               LOG_ERROR("DrawQueueBuffer is null. Skipping render tick.");
@@ -32,7 +32,7 @@ namespace base::menu::render {
             break;
           }
 
-          render_cb.cb_(buffer);
+          cb_(buffer);
         }
 
         if (buffer)

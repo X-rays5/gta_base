@@ -15,6 +15,7 @@ namespace base::ui::notification {
   class Manager {
   public:
     struct Notify {
+      std::size_t time_start;
       std::size_t duration_ms;
       Notification notification;
     };
@@ -42,8 +43,8 @@ namespace base::ui::notification {
 }
 
 #define ADD_NOTIFICATION(type, title, message) ::base::ui::notification::kMANAGER->AddNotification(type, 5000, title, message)
-#define NOTIFY_INFO(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Info, title, message)
-#define NOTIFY_WARN(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Warning, title, message)
-#define NOTIFY_ERR(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Error, title, message)
+#define NOTIFY_INFO(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Info, title, message); LOG_INFO("[NOTIFY] {}: {}", title, message)
+#define NOTIFY_WARN(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Warning, title, message); LOG_WARN("[NOTIFY] {}: {}", title, message)
+#define NOTIFY_ERR(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Error, title, message); LOG_ERROR("[NOTIFY] {}: {}", title, message)
 
 #endif //MANAGER_HPP_05174239

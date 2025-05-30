@@ -99,18 +99,12 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
 
       base::menu::render::kTHREAD->AddRenderCallback(0, [](base::menu::render::DrawQueueBuffer* buffer) {
         buffer->AddCommand(base::menu::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::ui::localization::kMANAGER->Localize("text/hello_world"), 0.02F, false, true, true));
-        buffer->AddCommand(base::menu::render::RunRenderCode([] {
-          if (ImGui::Begin("Hello World")) {
-            ImGui::Text(base::ui::localization::kMANAGER->Localize("text/hello_world").c_str());
-            ImGui::End();
-          }
-        }));
       });
 
       LOG_INFO("[INIT] Render thread");
       base::menu::render_thread_inst = std::make_unique<std::thread>(base::menu::render::Thread::RenderMain);
     } else {
-      // First make sure it's actually waiting then unblock it.
+      // First, make sure it's actually waiting, then unblock it.
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
       base::menu::render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
 
@@ -139,10 +133,6 @@ int base::menu::menu_main() {
   lifetime_helper->RunInit();
 
   hooking_inst->Enable();
-
-  NOTIFY_INFO("Hello", "World!");
-  NOTIFY_WARN("Hello", "World!");
-  NOTIFY_ERR("Hello", "World!");
 
   LOG_INFO("Loaded");
   while (globals::kRUNNING) {

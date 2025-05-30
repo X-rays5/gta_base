@@ -16,8 +16,9 @@ namespace base::menu::render {
   class DrawQueue {
   public:
     template <typename T> requires std::is_base_of_v<BaseDrawCommand, T>
-    FORCE_INLINE void AddCommand(T command) {
-      draw_commands_.push_back(std::make_unique<T>(command));
+    FORCE_INLINE
+    void AddCommand(T&& command) {
+      draw_commands_.push_back(std::make_unique<T>(std::forward<T>(command)));
     }
 
     FORCE_INLINE void Clear() {

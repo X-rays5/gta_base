@@ -17,17 +17,14 @@ namespace base::render::animate {
       duration_{duration_ms} {}
 
     [[nodiscard]] T Animate(const std::size_t delta_time) {
-      // use lerp to go from start to end
       curr_time_ += delta_time;
       if (curr_time_ >= duration_) {
-        return end_;
+        return end_; // Ensure it reaches the end value precisely
       }
 
-      float percentage = (static_cast<float>(curr_time_ * 100) / static_cast<float>(duration_)) / 100;
-      if (percentage >= 1)
-        return end_;
-
-      return std::lerp(start_, end_, percentage);
+      // Calculate the interpolation factor (t) between 0.0 and 1.0
+      float t = static_cast<float>(curr_time_) / duration_;
+      return std::lerp(start_, end_, t);
     }
 
     [[nodiscard]] T GetStart() {
@@ -58,30 +55,46 @@ namespace base::render::animate {
   class LerpWaitReturn {
   public:
     LerpWaitReturn(T start, T end, std::size_t duration_ms, const std::size_t wait_ms) :
-      lerp_{start, end, duration_ms},
+      lerp_start_{start, end, duration_ms},
+      lerp_end_{end, start, duration_ms},
       wait_ms_{wait_ms},
-      end_{end} {
-      LOG_DEBUG("LerpWaitReturn: start: {}, end: {}, duration: {}, wait: {}", start, end, duration_ms, wait_ms);
-    }
+      start_{start},
+      end_{end} {}
 
     [[nodiscard]] T Animate(std::size_t delta_time) {
-      if (!wait_time_elapsed_) {
+      if (waiting_) {
         curr_wait_time_ += delta_time;
         if (curr_wait_time_ >= wait_ms_) {
-          wait_time_elapsed_ = true;
+          waiting_ = false;
+          first_phase_ = false;
+          curr_wait_time_ = 0;
+          return lerp_end_.Animate(delta_time);
         }
-        return lerp_.GetStart(); // Return the start value during the wait period
+
+        return end_;
       }
 
-      return lerp_.Animate(delta_time);
+      if (first_phase_) {
+        T result = lerp_start_.Animate(delta_time);
+        if (result == end_) {
+          waiting_ = true;
+          curr_wait_time_ = 0;
+        }
+        return result;
+      }
+
+      return lerp_end_.Animate(delta_time);
     }
 
   private:
-    bool wait_time_elapsed_{false};
     std::size_t curr_wait_time_{0};
-    Lerp<T> lerp_;
+    Lerp<T> lerp_start_;
+    Lerp<T> lerp_end_;
     std::size_t wait_ms_;
+    T start_;
     T end_;
+    bool waiting_{false};
+    bool first_phase_{true};
   };
 }
 
