@@ -9,7 +9,7 @@ namespace base::menu::hooking {
     LRESULT WndProcHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
       if (!kWNDPROC) {
         LOG_DEBUG("kWNDPROC is null");
-        return 0;
+        return DefWindowProc(hwnd, msg, wparam, lparam);
       }
 
       if (globals::kRUNNING) {
