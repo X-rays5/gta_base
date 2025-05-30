@@ -8,11 +8,11 @@
 #include <gtest/gtest.h>
 
 TEST(FsFormatter, FormatPath) {
-    const std::string str_path = "C:\\Users\\X-ray\\Documents\\test.txt";
+    const std::string str_path = "C:/Users/X-ray/Documents/test.txt";
     const std::filesystem::path path = str_path;
 
     EXPECT_EQ(fmt::format("{}", path), str_path);
-    EXPECT_EQ(fmt::format("{}", path), path.string());
+    EXPECT_EQ(fmt::format("{}", path), path.generic_string());
 }
 
 #endif //FS_FORMATTER_TEST_HPP_04001712

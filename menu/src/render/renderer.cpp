@@ -9,6 +9,7 @@
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
 #include "../hooking/hooking.hpp"
+#include <base-common/util/time.hpp>
 #include "../hooking/wndproc.hpp"
 #include "../memory/pointers.hpp"
 
@@ -45,6 +46,7 @@ namespace base::menu::render {
     device_->GetImmediateContext(device_ctx_.GetAddressOf());
 
     InitImGui(device_.Get(), device_ctx_.Get());
+    init_imgui_ = true;
 
     DXGI_SWAP_CHAIN_DESC swap_chain_desc{};
     if (!SUCCEEDED(swap_chain_->GetDesc(&swap_chain_desc))) {
@@ -78,7 +80,11 @@ namespace base::menu::render {
   }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
-    if (globals::kRUNNING && kRENDERER) {
+    if (globals::kRUNNING && kRENDERER && kRENDERER->init_imgui_) {
+      const std::uint64_t now = common::util::time::GetTimeStamp();
+      kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
+      kRENDERER->SetLastTime(now);
+      
       ImGui_ImplWin32_NewFrame();
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
@@ -95,7 +101,7 @@ namespace base::menu::render {
   }
 
   HRESULT Renderer::ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags) {
-    if (globals::kRUNNING && kRENDERER) {
+    if (globals::kRUNNING && kRENDERER && kRENDERER->init_imgui_) {
       kRENDERER->SetResolution(width, height);
       ImGui_ImplDX11_InvalidateDeviceObjects();
 

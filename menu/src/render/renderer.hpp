@@ -38,6 +38,14 @@ namespace base::menu::render {
       return swap_chain_;
     }
 
+    [[nodiscard]] std::uint64_t GetDeltaTime() const {
+      return delta_time_;
+    }
+
+    [[nodiscard]] std::uint64_t GetLastTime() const {
+      return last_time_;
+    }
+      
     ImVec2 GetResolution() {
       common::concurrency::ScopedSpinlock lock(window_size_lock_);
       return {static_cast<float>(window_width_), static_cast<float>(window_height_)};
@@ -53,11 +61,23 @@ namespace base::menu::render {
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
 
   private:
+    bool init_imgui_ = false;
     device_ptr_t device_{};
     device_context_ptr_t device_ctx_{};
     swapchain_ptr_t swap_chain_{};
     DrawQueueBuffer draw_queue_buffer_;
     std::unique_ptr<imfont::Manager> font_mgr_inst_;
+    std::uint64_t delta_time_ = 0;
+    std::uint64_t last_time_ = common::util::time::GetTimeStamp();
+
+  private:
+    void SetDeltaTime(const std::uint64_t delta_time) {
+      delta_time_ = delta_time;
+    }
+
+    void SetLastTime(const std::uint64_t last_time) {
+      last_time_ = last_time;
+    }
     std::size_t wndproc_handler_id_{};
 
     common::concurrency::Spinlock window_size_lock_;

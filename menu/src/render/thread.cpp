@@ -15,13 +15,13 @@ namespace base::menu::render {
   }
 
   void Thread::RenderMain() {
-    SetThreadDescription(GetCurrentThread(), L"renderer");
+    SetThreadDescription(GetCurrentThread(), L"RenderLoop");
     LOG_INFO("Render thread started.");
     while (globals::kRUNNING) {
       if (kTHREAD && kRENDERER) {
         const auto buffer = kRENDERER->GetDrawQueueBuffer();
 
-        for (auto& cb : kTHREAD->GetRenderCallbacks()) {
+        for (auto& [_, cb_] : kTHREAD->GetRenderCallbacks()) {
           if (!buffer) {
             if (globals::kRUNNING) {
               LOG_ERROR("DrawQueueBuffer is null. Skipping render tick.");
@@ -32,7 +32,7 @@ namespace base::menu::render {
             break;
           }
 
-          cb(buffer);
+          cb_(buffer);
         }
 
         if (buffer)

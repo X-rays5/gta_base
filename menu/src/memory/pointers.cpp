@@ -21,6 +21,8 @@ namespace base::menu::memory {
                });
 
     BATCH_SCAN("resolution", "66 0F 6E 0D ? ? ? ? 0F B7 3D", "", [this](const common::memory::Address* ptr) {
+               screen_res_.x = *ptr->Sub(4).Rip().As<int*>();
+               screen_res_.y = *ptr->Add(4).Rip().As<int*>();
                LOG_DEBUG("Resolution x: {}, y: {}", *ptr->Sub(4).Rip().As<int*>(), *ptr->Add(4).Rip().As<int*>());
                });
 

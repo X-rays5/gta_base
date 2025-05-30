@@ -5,13 +5,16 @@
 #include "main.hpp"
 #include <chrono>
 #include <memory>
+#include <thread>
+#include <fmt/args.h>
 #include "discord/rich_presence.hpp"
-#include "hooking/wndproc.hpp"
 #include "hooking/hooking.hpp"
+#include "hooking/wndproc.hpp"
 #include "memory/pointers.hpp"
-#include "memory/signature/pattern.hpp"
 #include "render/renderer.hpp"
+#include "render/thread.hpp"
 #include "ui/localization/manager.hpp"
+#include "ui/notification/manager.hpp"
 #include "util/thread_pool.hpp"
 
 std::atomic<bool> base::menu::globals::kRUNNING = true;
@@ -27,6 +30,7 @@ namespace base::menu {
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<render::Thread> render_thread_manager_inst;
     std::unique_ptr<std::thread> render_thread_inst;
+    std::unique_ptr<ui::notification::Manager> notification_manager_inst;
   }
 }
 
@@ -65,11 +69,11 @@ private:
 #define MANAGER_PTR_LIFETIME(lifetime_helper_inst, init_name, manager_var, ...) lifetime_helper_inst->AddCallback([](LifeTimeHelper::Action action) { \
   if (action == LifeTimeHelper::Init) { \
     manager_var = std::make_unique<std::remove_reference_t<decltype(*manager_var)>>(__VA_ARGS__); \
-    LOG_INFO("[INIT] {}", init_name); \
+    LOG_INFO("[INIT] {}", xorstr_(init_name)); \
   } \
   else { \
     manager_var.reset(); \
-    LOG_INFO("[SHUTDOWN] {}", init_name); \
+    LOG_INFO("[SHUTDOWN] {}", xorstr_(init_name)); \
   } \
 })
 
@@ -94,8 +98,8 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
       base::menu::render_inst = std::make_unique<base::menu::render::Renderer>();
       base::menu::render_thread_manager_inst = std::make_unique<base::menu::render::Thread>();
 
-      base::menu::render::kTHREAD->AddRenderCallback([](base::menu::render::DrawQueueBuffer* buffer) {
-        buffer->AddCommand(base::menu::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::menu::ui::localization::kMANAGER->Localize("text/hello_world"), false, true, 0.02F));
+      base::menu::render::kTHREAD->AddRenderCallback(0, [](base::menu::render::DrawQueueBuffer* buffer) {
+        buffer->AddCommand(base::menu::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::ui::localization::kMANAGER->Localize("text/hello_world"), 0.02F, false, true, true));
       });
 
       LOG_INFO("[INIT] Render thread");
@@ -135,6 +139,7 @@ int base::menu::menu_main() {
   MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "DiscordRichPresence", discord_rich_presence_inst);
   RenderThreadLifeTime(lifetime_helper.get());
+  MANAGER_PTR_LIFETIME(lifetime_helper, "NotificationManager", notification_manager_inst);
 
   lifetime_helper->RunInit();
 

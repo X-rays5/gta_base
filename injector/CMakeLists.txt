@@ -21,6 +21,7 @@ include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
 
 include(vendor.cmake)
 
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY WIN32_EXECUTABLE TRUE)
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /wd4068 /diagnostics:caret /W4 /permissive- /WX)

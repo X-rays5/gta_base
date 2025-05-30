@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/main.cpp
@@ -40,6 +41,12 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/thread_pool.hpp
         src/discord/rich_presence.cpp
         src/discord/rich_presence.hpp
+        src/ui/notification/notification.cpp
+        src/ui/notification/notification.hpp
+        src/ui/notification/manager.cpp
+        src/ui/notification/manager.hpp
+        src/render/animate.hpp
+        src/util/profile.hpp
         src/memory/signature/cached_batch.cpp
         src/memory/signature/cached_batch.hpp
         src/util/common.cpp
@@ -54,7 +61,7 @@ include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
 
 include(vendor.cmake)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/menu_dll")
+set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
 target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
