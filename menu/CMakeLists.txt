@@ -44,6 +44,8 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/memory/signature/cached_batch.hpp
         src/util/common.cpp
         src/util/common.hpp
+        src/hooking/wndproc.cpp
+        src/hooking/wndproc.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

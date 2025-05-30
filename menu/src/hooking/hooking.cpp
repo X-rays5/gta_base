@@ -13,7 +13,7 @@ namespace base::menu::hooking {
                        {Hooks::swapchain_present_index, &Hooks::Present},
                        {Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers}
                      }) {
-    auto logger = std::make_shared<logging::PLH::Logger>();
+    const auto logger = std::make_shared<logging::PLH::Logger>();
     PLH::Log::registerLogger(logger);
 
     kMANAGER = this;

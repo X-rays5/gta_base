@@ -3,7 +3,8 @@
 //
 
 #include "draw_util.hpp"
-#include <stacktrace>
+
+#include "renderer.hpp"
 
 namespace base::menu::render::util {
   namespace {
@@ -32,11 +33,12 @@ namespace base::menu::render::util {
   // scale float in range [0, 1] to [0, screen_size]
   ImVec2 ScaleToScreen(ImVec2 xy) {
     if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) {
-      // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-      LOG_WARN("ScaleToScreen: xy out of range: {} {}\n{}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
+      return {};
     }
 
-    ImVec2 cur_res = ImGui::GetIO().DisplaySize;
+    ImVec2 cur_res{0, 0};
+    if (kRENDERER)
+      cur_res = kRENDERER->GetResolution();
 
     xy.x = (xy.x * cur_res.x);
     xy.y = (xy.y * cur_res.y);
@@ -44,15 +46,18 @@ namespace base::menu::render::util {
     return xy;
   }
 
+  /// scale float in range [0, screen_size] to [0, 1]
   ImVec2 ScaleFromScreen(ImVec2 xy) {
-    ImVec2 cur_res = ImGui::GetIO().DisplaySize;
+    ImVec2 cur_res{0, 0};
+    if (kRENDERER)
+      cur_res = kRENDERER->GetResolution();
+
     if (cur_res.x == 0 || cur_res.y == 0) {
       return {}; // Happens when the window is minimized.
     }
 
     if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) {
-      // Can't throw an exception here, because it will sometimes randomly happen for one frame. So just log it.
-      LOG_WARN("ScaleFromScreen: xy out of range: {} {}\n {}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
+      return {};
     }
 
     xy.x = (xy.x / cur_res.x);
@@ -105,7 +110,7 @@ namespace base::menu::render::util {
     const auto real_max_x = ScaleXToScreen(max_x);
 
     if (str.empty() || CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
-      return 1; // Wrapping is not needed so just return that there is 1 line
+      return 1; // Wrapping is not needed, so just return that there is 1 line
     }
 
     const auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;

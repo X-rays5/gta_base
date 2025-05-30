@@ -3,22 +3,24 @@
 //
 
 #include "main.hpp"
-#include <memory>
-#include "util/thread_pool.hpp"
-#include "render/renderer.hpp"
-#include "memory/pointers.hpp"
-#include "hooking/hooking.hpp"
-#include "ui/localization/manager.hpp"
-#include "memory/signature/pattern.hpp"
-#include "discord/rich_presence.hpp"
 #include <chrono>
+#include <memory>
+#include "discord/rich_presence.hpp"
+#include "hooking/wndproc.hpp"
+#include "hooking/hooking.hpp"
+#include "memory/pointers.hpp"
+#include "memory/signature/pattern.hpp"
+#include "render/renderer.hpp"
+#include "ui/localization/manager.hpp"
+#include "util/thread_pool.hpp"
 
 std::atomic<bool> base::menu::globals::kRUNNING = true;
 
 namespace base::menu {
   namespace {
-    std::unique_ptr<memory::Pointers> pointers_inst;
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
+    std::unique_ptr<hooking::WndProc> wndproc_inst;
+    std::unique_ptr<memory::Pointers> pointers_inst;
     std::unique_ptr<hooking::Manager> hooking_inst;
     std::unique_ptr<ui::localization::Manager> localization_manager_inst;
     std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
@@ -99,7 +101,7 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
       LOG_INFO("[INIT] Render thread");
       base::menu::render_thread_inst = std::make_unique<std::thread>(base::menu::render::Thread::RenderMain);
     } else {
-      // First make sure it's actually waiting then unblock it.
+      // First, make sure it's actually waiting, then unblock it.
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
       base::menu::render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
 
@@ -114,10 +116,20 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
   });
 }
 
+LRESULT UnloadKeyWatcher(HWND, UINT msg, WPARAM wparam, LPARAM) {
+  if (msg == WM_KEYDOWN && wparam == VK_END) {
+    LOG_INFO("Unloading key was pressed...");
+    base::menu::globals::kRUNNING = false;
+  }
+
+  return 0;
+}
+
 int base::menu::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
   ThreadPoolLifetime(lifetime_helper.get());
+  MANAGER_PTR_LIFETIME(lifetime_helper, "WndProc", wndproc_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "HookingManager", hooking_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);
@@ -128,17 +140,16 @@ int base::menu::menu_main() {
 
   hooking_inst->Enable();
 
+  auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
+
   LOG_INFO("Loaded");
   while (globals::kRUNNING) {
-    if (GetAsyncKeyState(VK_END)) {
-      globals::kRUNNING = false;
-      break;
-    }
-
     discord::kRICH_PRESENCE->Tick();
     std::this_thread::yield();
   }
   LOG_INFO("Unloading...");
+
+  hooking::kWNDPROC->RemoveWndProcHandler(unload_key_watcher_id);
 
   hooking_inst->Disable();
 

@@ -5,10 +5,10 @@
 #pragma once
 #ifndef BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
 #define BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
-#include "draw.hpp"
 #include "thread.hpp"
 #include <imfont/imfont.hpp>
 #include <wrl/client.h>
+#include "draw.hpp"
 
 namespace base::menu::render {
   class Renderer {
@@ -38,6 +38,17 @@ namespace base::menu::render {
       return swap_chain_;
     }
 
+    ImVec2 GetResolution() {
+      common::concurrency::ScopedSpinlock lock(window_size_lock_);
+      return {static_cast<float>(window_width_), static_cast<float>(window_height_)};
+    }
+
+    void SetResolution(const int width, const int height) {
+      common::concurrency::ScopedSpinlock lock(window_size_lock_);
+      window_width_ = static_cast<std::uint32_t>(width);
+      window_height_ = static_cast<std::uint32_t>(height);
+    }
+
     static HRESULT Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags);
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
 
@@ -47,9 +58,13 @@ namespace base::menu::render {
     swapchain_ptr_t swap_chain_{};
     DrawQueueBuffer draw_queue_buffer_;
     std::unique_ptr<imfont::Manager> font_mgr_inst_;
+    std::size_t wndproc_handler_id_{};
+
+    common::concurrency::Spinlock window_size_lock_;
+    std::uint32_t window_width_{};
+    std::uint32_t window_height_{};
   };
 
-  // skipcq: CXX-W2009
   inline Renderer* kRENDERER{};
 }
 #endif //BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
