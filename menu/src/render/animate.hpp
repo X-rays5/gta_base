@@ -59,17 +59,26 @@ namespace base::render::animate {
   public:
     LerpWaitReturn(T start, T end, std::size_t duration_ms, const std::size_t wait_ms) :
       lerp_{start, end, duration_ms},
-      end_{end},
-      wait_ms_{wait_ms} {
+      wait_ms_{wait_ms},
+      end_{end} {
       LOG_DEBUG("LerpWaitReturn: start: {}, end: {}, duration: {}, wait: {}", start, end, duration_ms, wait_ms);
     }
 
     [[nodiscard]] T Animate(std::size_t delta_time) {
+      if (!wait_time_elapsed_) {
+        curr_wait_time_ += delta_time;
+        if (curr_wait_time_ >= wait_ms_) {
+          wait_time_elapsed_ = true;
+        }
+        return lerp_.GetStart(); // Return the start value during the wait period
+      }
+
       return lerp_.Animate(delta_time);
     }
 
   private:
     bool wait_time_elapsed_{false};
+    std::size_t curr_wait_time_{0};
     Lerp<T> lerp_;
     std::size_t wait_ms_;
     T end_;
