@@ -116,6 +116,15 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
   });
 }
 
+LRESULT UnloadKeyWatcher(HWND, UINT msg, WPARAM wparam, LPARAM) {
+  if (msg == WM_KEYDOWN && wparam == VK_END) {
+    LOG_INFO("Unloading key was pressed...");
+    base::menu::globals::kRUNNING = false;
+  }
+
+  return 0;
+}
+
 int base::menu::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
@@ -131,17 +140,16 @@ int base::menu::menu_main() {
 
   hooking_inst->Enable();
 
+  auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
+
   LOG_INFO("Loaded");
   while (globals::kRUNNING) {
-    if (GetAsyncKeyState(VK_END)) {
-      globals::kRUNNING = false;
-      break;
-    }
-
     discord::kRICH_PRESENCE->Tick();
     std::this_thread::yield();
   }
   LOG_INFO("Unloading...");
+
+  hooking::kWNDPROC->RemoveWndProcHandler(unload_key_watcher_id);
 
   hooking_inst->Disable();
 
