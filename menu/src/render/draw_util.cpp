@@ -3,7 +3,7 @@
 //
 
 #include "draw_util.hpp"
-#include "../memory/pointers.hpp"
+#include "renderer.hpp"
 
 namespace base::menu::render::util {
   namespace {
@@ -35,7 +35,9 @@ namespace base::menu::render::util {
       return {};
     }
 
-    auto cur_res = memory::kPOINTERS->screen_res_;
+    ImVec2 cur_res{0, 0};
+    if (kRENDERER)
+      cur_res = kRENDERER->GetResolution();
 
     xy.x = (xy.x * cur_res.x);
     xy.y = (xy.y * cur_res.y);
@@ -45,7 +47,10 @@ namespace base::menu::render::util {
 
   /// scale float in range [0, screen_size] to [0, 1]
   ImVec2 ScaleFromScreen(ImVec2 xy) {
-    auto cur_res = memory::kPOINTERS->screen_res_;
+    ImVec2 cur_res{0, 0};
+    if (kRENDERER)
+      cur_res = kRENDERER->GetResolution();
+
     if (cur_res.x == 0 || cur_res.y == 0) {
       return {}; // Happens when the window is minimized.
     }
@@ -104,7 +109,7 @@ namespace base::menu::render::util {
     const auto real_max_x = ScaleXToScreen(max_x);
 
     if (str.empty() || CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
-      return 1; // Wrapping is not needed so just return that there is 1 line
+      return 1; // Wrapping is not needed, so just return that there is 1 line
     }
 
     const auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;

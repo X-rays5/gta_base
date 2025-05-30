@@ -3,14 +3,17 @@
 //
 
 #include "renderer.hpp"
+#include <d3d11.h>
 #include <dxgi.h>
 #include <imgui/imgui.h>
-#include <d3d11.h>
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
-#include "../memory/pointers.hpp"
 #include "../hooking/hooking.hpp"
 #include <base-common/util/time.hpp>
+#include "../hooking/wndproc.hpp"
+#include "../memory/pointers.hpp"
+
+IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace base::menu::render {
   namespace {
@@ -45,14 +48,25 @@ namespace base::menu::render {
     InitImGui(device_.Get(), device_ctx_.Get());
     init_imgui_ = true;
 
+    DXGI_SWAP_CHAIN_DESC swap_chain_desc{};
+    if (!SUCCEEDED(swap_chain_->GetDesc(&swap_chain_desc))) {
+      LOG_CRITICAL("Failed to get swap chain description");
+      throw std::runtime_error("Failed to get swap chain description");
+    }
+    SetResolution(swap_chain_desc.BufferDesc.Width, swap_chain_desc.BufferDesc.Height);
+
     LOG_DEBUG("Initializing font manager.");
     font_mgr_inst_ = std::make_unique<imfont::Manager>();
+
+    wndproc_handler_id_ = hooking::kWNDPROC->AddWndProcHandler(ImGui_ImplWin32_WndProcHandler);
 
     kRENDERER = this;
   }
 
   Renderer::~Renderer() {
     kRENDERER = nullptr;
+
+    hooking::kWNDPROC->RemoveWndProcHandler(wndproc_handler_id_);
 
     font_mgr_inst_.reset();
 
@@ -70,7 +84,7 @@ namespace base::menu::render {
       const std::uint64_t now = common::util::time::GetTimeStamp();
       kRENDERER->SetDeltaTime(now - kRENDERER->GetLastTime());
       kRENDERER->SetLastTime(now);
-
+      
       ImGui_ImplWin32_NewFrame();
       ImGui_ImplDX11_NewFrame();
       ImGui::NewFrame();
@@ -87,7 +101,8 @@ namespace base::menu::render {
   }
 
   HRESULT Renderer::ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags) {
-    if (globals::kRUNNING && kRENDERER->init_imgui_) {
+    if (globals::kRUNNING && kRENDERER && kRENDERER->init_imgui_) {
+      kRENDERER->SetResolution(width, height);
       ImGui_ImplDX11_InvalidateDeviceObjects();
 
       auto res = hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
