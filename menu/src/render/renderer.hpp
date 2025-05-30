@@ -57,7 +57,7 @@ namespace base::menu::render {
     DrawQueueBuffer draw_queue_buffer_;
     std::unique_ptr<imfont::Manager> font_mgr_inst_;
     std::uint64_t delta_time_ = 0;
-    std::uint64_t last_time_ = 0;
+    std::uint64_t last_time_ = common::util::time::GetTimeStamp();
 
   private:
     void SetDeltaTime(const std::uint64_t delta_time) {
