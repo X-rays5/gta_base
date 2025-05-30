@@ -47,7 +47,6 @@ namespace base::menu::render {
     std::vector<RenderCB> render_callbacks_;
   };
 
-  // skipcq: CXX-W2009
   inline Thread* kTHREAD{};
 }
 #endif //GTA_BASE_THREAD_E1B5110495AF4A36A7A7D235FBB8EC7D_HPP

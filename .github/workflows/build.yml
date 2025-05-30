@@ -189,6 +189,6 @@ jobs:
         uses: softprops/action-gh-release@v2.2.1
         with:
           files: |
-            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.exe
-            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.dll
+            ${{ env.BUILD_DIR }}/menu_bin/*.exe
+            ${{ env.BUILD_DIR }}/menu_bin/*.dll
           generate_release_notes: true
