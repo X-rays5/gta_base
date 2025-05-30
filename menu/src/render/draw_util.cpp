@@ -5,6 +5,8 @@
 #include "draw_util.hpp"
 #include <stacktrace>
 
+#include "renderer.hpp"
+
 namespace base::menu::render::util {
   namespace {
     FORCE_INLINE std::string WordWrapGetString(std::string* lines, std::uint32_t line_count) {
@@ -36,7 +38,7 @@ namespace base::menu::render::util {
       LOG_WARN("ScaleToScreen: xy out of range: {} {}\n{}", xy.x, xy.y, std::to_string(std::stacktrace::current()));
     }
 
-    ImVec2 cur_res = ImGui::GetIO().DisplaySize;
+    const ImVec2 cur_res = kRENDERER->GetResolution();
 
     xy.x = (xy.x * cur_res.x);
     xy.y = (xy.y * cur_res.y);
@@ -45,7 +47,7 @@ namespace base::menu::render::util {
   }
 
   ImVec2 ScaleFromScreen(ImVec2 xy) {
-    ImVec2 cur_res = ImGui::GetIO().DisplaySize;
+    const ImVec2 cur_res = kRENDERER->GetResolution();
     if (cur_res.x == 0 || cur_res.y == 0) {
       return {}; // Happens when the window is minimized.
     }
