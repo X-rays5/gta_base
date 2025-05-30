@@ -101,14 +101,6 @@ namespace base::common::util::result {
     }
     return cpp::fail(StatusErr(code, std::move(message)));
   }
-
-  /**
-   * Make a success status
-   * @return a cpp::failure instance containing kSUCCESS
-   */
-  [[nodiscard]] inline cpp::failure<StatusErr> MakeSuccess() {
-    return MakeFailure<ResultCode::kSUCCESS>();
-  }
 }
 
 namespace base {
