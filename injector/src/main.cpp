@@ -138,8 +138,8 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
       continue;
     }
 
-    // Limit to 30fps
-    if (delta_tick > 1000 / 30.0) {
+    // Limit to 30 fps
+    if (delta_tick > 1000 / 30) {
       prev_tick = cur_tick;
       DoFrame(window);
     }

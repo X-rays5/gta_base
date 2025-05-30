@@ -5,10 +5,10 @@
 #pragma once
 #ifndef BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
 #define BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
-#include "draw.hpp"
 #include "thread.hpp"
 #include <imfont/imfont.hpp>
 #include <wrl/client.h>
+#include "draw.hpp"
 
 namespace base::menu::render {
   class Renderer {
