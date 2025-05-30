@@ -6,21 +6,15 @@
 #include <chrono>
 #include <memory>
 #include <thread>
-#include "util/thread_pool.hpp"
+#include <fmt/args.h>
+#include "discord/rich_presence.hpp"
+#include "hooking/hooking.hpp"
+#include "hooking/wndproc.hpp"
+#include "memory/pointers.hpp"
 #include "render/renderer.hpp"
 #include "render/thread.hpp"
-#include "memory/pointers.hpp"
-#include "discord/rich_presence.hpp"
-#include "hooking/wndproc.hpp"
-#include "hooking/hooking.hpp"
-#include "memory/pointers.hpp"
-#include "memory/signature/pattern.hpp"
-#include "discord/rich_presence.hpp"
-#include "ui/notification/manager.hpp"
-#include <chrono>
-#include <fmt/args.h>
-#include "render/renderer.hpp"
 #include "ui/localization/manager.hpp"
+#include "ui/notification/manager.hpp"
 #include "util/thread_pool.hpp"
 
 std::atomic<bool> base::menu::globals::kRUNNING = true;
