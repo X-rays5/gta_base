@@ -54,6 +54,16 @@ TEST(SpinLock, LockUnlock) {
     ASSERT_EQ(fut.wait_for(std::chrono::seconds(0)), std::future_status::ready);
 }
 
+TEST(SpinLock, ScopedSpinlock) {
+    base::common::concurrency::Spinlock spinlock;
+    {
+        base::common::concurrency::ScopedSpinlock lock(spinlock);
+        ASSERT_FALSE(spinlock.TryLock()); // Should not be able to acquire the lock again
+    }
+    ASSERT_TRUE(spinlock.TryLock()); // The lock should now be released
+    spinlock.Unlock();
+}
+
 // Now for recursive spinlock
 TEST(RecursiveSpinLock, TryLock) {
     base::common::concurrency::RecursiveSpinlock spinlock;
@@ -96,4 +106,15 @@ TEST(RecursiveSpinLock, LockUnlock) {
     spinlock.Unlock();
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     ASSERT_EQ(fut.wait_for(std::chrono::seconds(0)), std::future_status::ready);
+}
+
+TEST(RecursiveSpinLock, ScopedSpinlock) {
+    base::common::concurrency::RecursiveSpinlock spinlock;
+    {
+        base::common::concurrency::ScopedSpinlock lock(spinlock);
+        ASSERT_TRUE(spinlock.TryLock()); // Should be able to acquire the lock again (recursive)
+        spinlock.Unlock();
+    }
+    ASSERT_TRUE(spinlock.TryLock()); // The lock should now be released
+    spinlock.Unlock();
 }
