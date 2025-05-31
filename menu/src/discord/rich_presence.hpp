@@ -7,6 +7,7 @@
 #include <string>
 #include <base-common/globals.hpp>
 #include <base-common/concurrency/spinlock.hpp>
+#include "../scripts/base_script.hpp"
 
 namespace base::menu::discord {
    struct Activity {
@@ -20,12 +21,18 @@ namespace base::menu::discord {
       std::int32_t party_max;
    };
 
-   class RichPresence {
+   class RichPresence : public scripts::BaseScript {
    public:
       RichPresence();
-      ~RichPresence();
+      virtual ~RichPresence() override;
 
-      void Tick();
+      virtual void Tick() override;
+
+      virtual void Init() override;
+
+      virtual Type GetScriptType() const override {
+         return Type::MainScriptThread;
+      }
 
       void SetState(const char* state) {
          common::concurrency::ScopedSpinlock lock(lock_);

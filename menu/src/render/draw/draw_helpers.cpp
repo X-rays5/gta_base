@@ -2,12 +2,12 @@
 // Created by xray on 07/09/2023.
 //
 
-#include "draw_util.hpp"
-#include "renderer.hpp"
+#include "draw_helpers.hpp"
+#include "../renderer.hpp"
 
-namespace base::menu::render::util {
+namespace base::menu::render::draw_helpers {
   namespace {
-    FORCE_INLINE std::string WordWrapGetString(std::string* lines, std::uint32_t line_count) {
+    FORCE_INLINE std::string WordWrapGetString(const std::string* lines, const std::uint32_t line_count) {
       std::string res;
       for (std::uint32_t i = 0; i < line_count; i++) {
         auto line = lines[i];

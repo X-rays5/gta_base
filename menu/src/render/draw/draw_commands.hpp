@@ -5,8 +5,8 @@
 #pragma once
 #ifndef GTA_BASE_DRAW_COMMANDS_545AB8D13AD244EE82FA159E81A729AD_HPP
 #define GTA_BASE_DRAW_COMMANDS_545AB8D13AD244EE82FA159E81A729AD_HPP
-#include "draw_util.hpp"
 #include <d3d11.h>
+#include "draw_helpers.hpp"
 
 // TODO: move most of this file to a cpp file
 
@@ -25,7 +25,7 @@ namespace base::menu::render {
       pos_(pos), size_(size), color_(color) {}
 
     virtual void Draw() override {
-      util::GetDrawList()->AddRectFilled(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_);
+      draw_helpers::GetDrawList()->AddRectFilled(draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(draw_helpers::GetSize(pos_, size_)), color_);
     }
 
   protected:
@@ -40,7 +40,7 @@ namespace base::menu::render {
       pos_(pos), size_(size), color_(color), thickness_(thickness) {}
 
     virtual void Draw() override {
-      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.F,NULL, thickness_);
+      draw_helpers::GetDrawList()->AddRect(draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(draw_helpers::GetSize(pos_, size_)), color_, 0.F,NULL, thickness_);
     }
 
   private:
@@ -58,15 +58,15 @@ namespace base::menu::render {
     virtual void Draw() override {
       Rect::Draw();
 
-      const auto draw_list = util::GetDrawList();
+      const auto draw_list = draw_helpers::GetDrawList();
       if (top_)
-        draw_list->AddLine(util::ScaleToScreen(pos_), util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y)), border_color_, thickness_);
+        draw_list->AddLine(draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y)), border_color_, thickness_);
       if (bottom_)
-        draw_list->AddLine(util::ScaleToScreen(ImVec2(pos_.x, pos_.y + size_.y)), util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y + size_.y)), border_color_, thickness_);
+        draw_list->AddLine(draw_helpers::ScaleToScreen(ImVec2(pos_.x, pos_.y + size_.y)), draw_helpers::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y + size_.y)), border_color_, thickness_);
       if (left_)
-        draw_list->AddLine(util::ScaleToScreen(pos_), util::ScaleToScreen(ImVec2(pos_.x, pos_.y + size_.y)), border_color_, thickness_);
+        draw_list->AddLine(draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(ImVec2(pos_.x, pos_.y + size_.y)), border_color_, thickness_);
       if (right_)
-        draw_list->AddLine(util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y)), util::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y + size_.y)), border_color_, thickness_);
+        draw_list->AddLine(draw_helpers::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y)), draw_helpers::ScaleToScreen(ImVec2(pos_.x + size_.x, pos_.y + size_.y)), border_color_, thickness_);
     }
 
   private:
@@ -89,26 +89,26 @@ namespace base::menu::render {
       }
 
       if (max_width_ > 0.F) {
-        util::WordWrap(y_size_text_, text_, max_width_, max_lines_);
+        draw_helpers::WordWrap(y_size_text_, text_, max_width_, max_lines_);
       }
 
       if (right_align_) {
-        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = draw_helpers::CalcTextSize(font_, y_size_text_, text_);
         pos_.x -= text_size.x;
         pos_.y += text_size.y / 2;
       }
 
       if (!right_align_ && center_y_) {
-        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = draw_helpers::CalcTextSize(font_, y_size_text_, text_);
         pos_.y += text_size.y / 2;
       }
 
       if (!right_align_ && center_x_) {
-        const ImVec2 text_size = util::CalcTextSize(font_, y_size_text_, text_);
+        const ImVec2 text_size = draw_helpers::CalcTextSize(font_, y_size_text_, text_);
         pos_.x -= text_size.x / 2;
       }
 
-      util::GetDrawList()->AddText(const_cast<ImFont*>(font_), util::ScaleFont(y_size_text_), util::ScaleToScreen(pos_), color_, text_.c_str());
+      draw_helpers::GetDrawList()->AddText(const_cast<ImFont*>(font_), draw_helpers::ScaleFont(y_size_text_), draw_helpers::ScaleToScreen(pos_), color_, text_.c_str());
     }
 
   protected:
@@ -133,7 +133,7 @@ namespace base::menu::render {
       rect_pos.x -= padding_side;
       rect_pos.y -= padding_bottom_top;
 
-      ImVec2 rect_size = util::CalcTextSize(font_, y_size_text_, text_);
+      ImVec2 rect_size = draw_helpers::CalcTextSize(font_, y_size_text_, text_);
       rect_size.x += (padding_side * 2);
       rect_size.y += (padding_bottom_top * 2);
 
@@ -155,7 +155,7 @@ namespace base::menu::render {
       texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
 
     virtual void Draw() override {
-      util::GetDrawList()->AddImage(reinterpret_cast<ImTextureID>(texture_), util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+      draw_helpers::GetDrawList()->AddImage(reinterpret_cast<ImTextureID>(texture_), draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(draw_helpers::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
   private:

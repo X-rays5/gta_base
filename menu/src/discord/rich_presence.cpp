@@ -4,11 +4,15 @@
 
 #include "rich_presence.hpp"
 #include <discord_rpc.h>
+#include "../scripts/script_manager.hpp"
 
 namespace base::menu::discord {
   namespace {
     void HandleDisconnect(int err_code, const char* message) {
       LOG_ERROR("Discord disconnected: {} - {}", err_code, message);
+      Discord_ClearPresence();
+      Discord_Shutdown();
+      kRICH_PRESENCE->Init();
     }
 
     void HandleError(int err_code, const char* message) {
@@ -17,12 +21,7 @@ namespace base::menu::discord {
   }
 
   RichPresence::RichPresence() {
-    DiscordEventHandlers handlers = {};
-    handlers.disconnected = HandleDisconnect;
-    handlers.errored = HandleError;
-
-    Discord_Initialize(xorstr_("1003792099059183676"), &handlers, 1, nullptr);
-    start_time_ = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    scripts::kSCRIPTMANAGER->AddScript(this);
 
     kRICH_PRESENCE = this;
   }
@@ -32,6 +31,15 @@ namespace base::menu::discord {
 
     Discord_ClearPresence();
     Discord_Shutdown();
+  }
+
+  void RichPresence::Init() {
+    DiscordEventHandlers handlers = {};
+    handlers.disconnected = HandleDisconnect;
+    handlers.errored = HandleError;
+
+    Discord_Initialize(xorstr_("1003792099059183676"), &handlers, 1, nullptr);
+    start_time_ = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   }
 
   void RichPresence::Tick() {

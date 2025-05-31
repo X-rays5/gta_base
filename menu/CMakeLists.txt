@@ -10,15 +10,14 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/main.cpp
         src/main.hpp
-        src/render/draw.hpp
         src/render/renderer.cpp
         src/render/renderer.hpp
         src/globals.hpp
-        src/render/draw_util.cpp
-        src/render/draw_util.hpp
-        src/render/draw_commands.hpp
-        src/render/thread.cpp
-        src/render/thread.hpp
+        src/render/draw/draw_helpers.cpp
+        src/render/draw/draw_helpers.hpp
+        src/render/draw/draw_commands.hpp
+        src/render/render_thread.cpp
+        src/render/render_thread.hpp
         src/hooking/hooking.cpp
         src/hooking/hooking.hpp
         src/hooking/helpers/detour.cpp
@@ -53,6 +52,12 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/common.hpp
         src/hooking/wndproc.cpp
         src/hooking/wndproc.hpp
+        src/scripts/base_script.hpp
+        src/scripts/script_manager.cpp
+        src/scripts/script_manager.hpp
+        src/util/startup_shutdown_handler.hpp
+        src/render/draw/draw_queue.cpp
+        src/render/draw/draw_queue.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

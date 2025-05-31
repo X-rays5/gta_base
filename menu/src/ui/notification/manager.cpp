@@ -3,13 +3,13 @@
 //
 
 #include "manager.hpp"
-#include "../../render/thread.hpp"
+#include "../../render/render_thread.hpp"
 #include "../../render/renderer.hpp"
 
 namespace base::ui::notification {
   Manager::Manager() {
     kMANAGER = this;
-    menu::render::kTHREAD->AddRenderCallback(999, [](menu::render::DrawQueueBuffer* draw_queue_buffer) {
+    menu::render::kRENDER_THREAD->AddRenderCallback(999, [](menu::render::DrawQueueBuffer* draw_queue_buffer) {
       if (kMANAGER) {
         kMANAGER->Render(draw_queue_buffer);
       }

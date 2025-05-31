@@ -9,10 +9,10 @@
 #include <functional>
 #include <vector>
 #include <base-common/concurrency/spinlock.hpp>
-#include "draw.hpp"
+#include "draw/draw_queue.hpp"
 
 namespace base::menu::render {
-  class Thread {
+  class RenderThread  {
   public:
     struct RenderCB {
       using render_cb_t = std::function<void(DrawQueueBuffer*)>;
@@ -22,8 +22,8 @@ namespace base::menu::render {
     };
 
   public:
-    Thread();
-    ~Thread();
+    RenderThread();
+    ~RenderThread();
 
     static void RenderMain();
 
@@ -45,8 +45,9 @@ namespace base::menu::render {
   private:
     common::concurrency::Spinlock callback_lock_;
     std::vector<RenderCB> render_callbacks_;
+    std::unique_ptr<std::thread> render_thread_;
   };
 
-  inline Thread* kTHREAD{};
+  inline RenderThread* kRENDER_THREAD{};
 }
 #endif //GTA_BASE_THREAD_E1B5110495AF4A36A7A7D235FBB8EC7D_HPP

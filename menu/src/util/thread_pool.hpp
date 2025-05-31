@@ -6,10 +6,24 @@
 #ifndef GTA_BASE_THREAD_POOL_HPP
 #define GTA_BASE_THREAD_POOL_HPP
 #include <glaze/thread/threadpool.hpp>
+#include "startup_shutdown_handler.hpp"
 
 namespace base::menu::util {
   using ThreadPool = glz::pool;
-
   inline ThreadPool* kTHREAD_POOL{};
+
+  inline void RegisterThreadPoolStartupShutdown(std::unique_ptr<ThreadPool>& thread_inst, StartupShutdownHandler* startup_shutdown_handler) {
+    startup_shutdown_handler->AddCallback([&](const StartupShutdownHandler::Action action) {
+      if (action == StartupShutdownHandler::Action::Init) {
+        thread_inst = std::make_unique<std::remove_reference_t<decltype(*thread_inst)>>(std::thread::hardware_concurrency() / 2);
+        kTHREAD_POOL = thread_inst.get();
+        LOG_INFO("[INIT] {}", "ThreadPool");
+      } else {
+        kTHREAD_POOL = nullptr;
+        thread_inst.reset();
+        LOG_INFO("[SHUTDOWN] {}", "ThreadPool");
+      }
+    });
+  }
 }
 #endif //GTA_BASE_THREAD_POOL_HPP
