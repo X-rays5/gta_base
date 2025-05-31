@@ -48,7 +48,7 @@ void DoFrame(const base::injector::Window& window) {
           ImGui::Text(!game_wnd ? "Game not running" : fmt::format("Game running: {}", base::win32::GetPIDFromHWND(game_wnd).value_or(0)).c_str());
           if (game_wnd) {
             if (ImGui::Button("Inject")) {
-              auto _ = std::async(std::launch::async, [=]() {
+              auto _ = std::async(std::launch::async, [game_wnd]() {
                 if (const auto res = base::injector::Inject(base::win32::GetPIDFromHWND(game_wnd).value_or(0), kSETTINGS.dll_path); res.error()) {
                   LOG_ERROR("Failed to inject: {}", res.error());
                   MessageBoxA(nullptr, res.error().GetResultMessage().c_str(), "Error", MB_OK | MB_ICONERROR);

@@ -9,9 +9,7 @@ namespace base::common::conversion {
     if (!addr)
       return "0x0";
 
-    std::ostringstream stream;
-    stream << "0x" << std::hex << std::uppercase << addr;
-    return stream.str();
+    return std::format("0x{:X}", addr);
   }
 
   struct HexToIntTable {
