@@ -38,7 +38,7 @@ namespace base::menu::memory::signature {
 
     std::vector<std::future<bool>> futures;
     for (auto&& job : std::views::values(patterns_)) {
-      futures.emplace_back(util::kTHREAD_POOL->emplace_back([&] {
+      futures.emplace_back(util::kTHREAD_POOL->emplace_back([&profile, &job]() {
         profile.Begin(job.name);
         const auto res = ScanPattern(job);
         profile.End(job.name);

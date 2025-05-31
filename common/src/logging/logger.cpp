@@ -90,7 +90,7 @@ namespace base::common::logging {
       formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%T] [%^%l%$] [thread: %N] [%s:%#] %v");
       spdlog::set_formatter(std::move(formatter));
 
-      logger->set_error_handler([&](const std::string& err) {
+      logger->set_error_handler([&logger](const std::string& err) {
         logger->critical("spdlog: {}", err);
       });
 
