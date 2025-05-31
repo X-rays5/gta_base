@@ -7,7 +7,6 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/main.cpp
         src/imfont_test.cpp
-        src/imfont_test.hpp
         src/test_globals.hpp
 )
 
