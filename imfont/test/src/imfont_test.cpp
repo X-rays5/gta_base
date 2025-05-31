@@ -41,3 +41,25 @@ TEST(ImFont, LoadFromMemory) {
   EXPECT_TRUE(manager.LoadFontFromMemory("robototestfa", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size()));
   EXPECT_TRUE(manager.LoadFontFromMemory("robototest", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size(), 20.f, false));
 }
+
+TEST(ImFont, LoadFontInvalidName) {
+  base::common::concurrency::ScopedSpinlock lock(kRENDER_LOCK);
+  imfont::Manager manager;
+  const auto roboto_mono_regular = b::embed<"assets/fonts/RobotoMono-Regular.ttf">();
+  EXPECT_FALSE(manager.LoadFontFromMemory("", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size()));
+}
+
+TEST(ImFont, LoadFontZeroSize) {
+  base::common::concurrency::ScopedSpinlock lock(kRENDER_LOCK);
+  imfont::Manager manager;
+  const auto roboto_mono_regular = b::embed<"assets/fonts/RobotoMono-Regular.ttf">();
+  EXPECT_FALSE(manager.LoadFontFromMemory("robototest", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size(), 0.f, false));
+}
+
+TEST(ImFont, LoadFontAlreadyLoaded) {
+  base::common::concurrency::ScopedSpinlock lock(kRENDER_LOCK);
+  imfont::Manager manager;
+  const auto roboto_mono_regular = b::embed<"assets/fonts/RobotoMono-Regular.ttf">();
+  EXPECT_TRUE(manager.LoadFontFromMemory("robototest", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size()));
+  EXPECT_FALSE(manager.LoadFontFromMemory("robototest", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size()));
+}
