@@ -24,6 +24,7 @@ add_executable(${PROJECT_NAME}
         src/fs/vfs_test.hpp
         src/memory/address_test.cpp
         src/memory/address_test.hpp
+        src/util/ranged_value.cpp
 )
 
 include(../../vendor/gtest.cmake)
