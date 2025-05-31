@@ -181,6 +181,7 @@ jobs:
         with:
           name: build-artifacts-${{ matrix.build-config }}
           path: |
-            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.exe
-            ${{ env.BUILD_DIR }}/**/${{ matrix.build-config }}/**/*.dll
+            ${{ env.BUILD_DIR }}/**/menu_bin/**/*.exe
+            ${{ env.BUILD_DIR }}/**/menu_bin/**/*.dll
+            ${{ env.BUILD_DIR }}/**/menu_bin/**/*.pdb
           retention-days: 7

@@ -47,6 +47,16 @@ namespace imfont {
   }
 
   bool Manager::LoadFontFromDisk(const std::string& name, const std::filesystem::path& path, const std::float_t font_size, const bool merge_fa) {
+    if (name.empty()) {
+      LOG_ERROR("Tried to load font with an empty name.");
+      return false;
+    }
+
+    if (font_size <= 0.f) {
+      LOG_ERROR("Tried to load font {} with a zero or negative size.", name);
+      return false;
+    }
+
     if (fonts_.contains(name)) {
       LOG_WARN("Tried to load an already loaded font with the name {}", name);
       return false;
@@ -69,6 +79,16 @@ namespace imfont {
   }
 
   bool Manager::LoadFontFromMemory(const std::string& name, void* font_data, const std::int32_t font_data_size, const std::float_t font_size, const bool merge_fa) {
+    if (name.empty()) {
+      LOG_ERROR("Tried to load font with an empty name.");
+      return false;
+    }
+
+    if (font_size <= 0.f) {
+      LOG_ERROR("Tried to load font {} with a zero or negative size.", name);
+      return false;
+    }
+
     if (fonts_.contains(name)) {
       LOG_WARN("Tried to load an already loaded font {}.", name);
       return false;
@@ -89,6 +109,16 @@ namespace imfont {
   }
 
   bool Manager::LoadFontFromMemoryCompressed(const std::string& name, const void* font_data, const std::int32_t font_data_size, const std::float_t font_size, const bool merge_fa) {
+    if (name.empty()) {
+      LOG_ERROR("Tried to load font with an empty name.");
+      return false;
+    }
+
+    if (font_size <= 0.f) {
+      LOG_ERROR("Tried to load font {} with a zero or negative size.", name);
+      return false;
+    }
+
     if (fonts_.contains(name)) {
       LOG_WARN("Tried to load an already loaded font {}.", name);
       return false;
