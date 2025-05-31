@@ -42,3 +42,23 @@ TEST(Win32Signal, WaitForNotify) {
   EXPECT_GE(time_diff, release_after);
   EXPECT_LE(time_diff, release_after + 1000);
 }
+
+TEST(Win32Signal, MultipleThreads) {
+  const base::win32::Signal signal;
+  constexpr int num_threads = 3;
+  constexpr int wait_time = 1000;
+
+  std::vector<std::jthread> threads;
+  for (int i = 0; i < num_threads; ++i) {
+    threads.emplace_back([&]() {
+      signal.Wait(wait_time * 2);
+    });
+  }
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(wait_time));
+  signal.Notify();
+
+  for (auto& thread : threads) {
+    thread.join();
+  }
+}

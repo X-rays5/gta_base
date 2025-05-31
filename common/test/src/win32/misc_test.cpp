@@ -27,9 +27,10 @@ TEST(Win32Misc, GetHwnd) {
 
   auto result = GetHwnd(test_dummy_window_class, test_dummy_window_name);
   ASSERT_TRUE(result.has_value()) << "Failed to get hwnd. Error: " << result.error();
-  EXPECT_NE(result.value(), nullptr) << "The hwnd should not be null.";
+  HWND hwnd = result.value();
+  ASSERT_NE(hwnd, nullptr) << "The hwnd should not be null.";
 
-  DestroyDummyWindow(result.value());
+  DestroyDummyWindow(hwnd);
 }
 
 TEST(Win32Misc, GetGameHwnd) {
