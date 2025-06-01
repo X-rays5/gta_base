@@ -51,7 +51,7 @@ namespace base::menu::util {
     }
 
   private:
-    glz::trace trace_{};
+    glz::trace<> trace_{};
   };
 }
 

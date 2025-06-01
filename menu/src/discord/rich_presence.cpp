@@ -12,7 +12,7 @@ namespace base::menu::discord {
       LOG_ERROR("Discord disconnected: {} - {}", err_code, message);
       Discord_ClearPresence();
       Discord_Shutdown();
-      kRICH_PRESENCE->Init();
+      kRICH_PRESENCE->ScriptInit();
     }
 
     void HandleError(int err_code, const char* message) {
@@ -33,7 +33,7 @@ namespace base::menu::discord {
     Discord_Shutdown();
   }
 
-  void RichPresence::Init() {
+  void RichPresence::ScriptInit() {
     DiscordEventHandlers handlers = {};
     handlers.disconnected = HandleDisconnect;
     handlers.errored = HandleError;
@@ -42,7 +42,7 @@ namespace base::menu::discord {
     start_time_ = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   }
 
-  void RichPresence::Tick() {
+  void RichPresence::ScriptTick() {
     common::concurrency::ScopedSpinlock lock(lock_);
     DiscordRichPresence discord_presence = {};
     discord_presence.state = activity_.state.c_str();

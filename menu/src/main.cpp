@@ -12,10 +12,9 @@
 #include "hooking/wndproc.hpp"
 #include "memory/pointers.hpp"
 #include "render/renderer.hpp"
-#include "render/render_thread.hpp"
 #include "scripts/script_manager.hpp"
 #include "ui/localization/manager.hpp"
-#include "ui/notification/manager.hpp"
+#include "ui/menu_renderer.hpp"
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
 
@@ -31,32 +30,36 @@ namespace base::menu {
     std::unique_ptr<ui::localization::Manager> localization_manager_inst;
     std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
     std::unique_ptr<render::Renderer> render_inst;
-    std::unique_ptr<ui::notification::Manager> notification_manager_inst;
+    std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
 
     void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptManager", script_manager_inst);
       RegisterThreadPoolStartupShutdown(thread_pool_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "WndProc", wndproc_inst);
-      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptManager", script_manager_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "Pointers", pointers_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "HookingManager", hooking_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "LocalizationManager", localization_manager_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DiscordRichPresence", discord_rich_presence_inst);
       render::RendererLifeTime(render_inst, handler);
-      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "NotificationManager", notification_manager_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "MenuRenderer", menu_renderer_inst);
     }
   }
 }
 
-LRESULT UnloadKeyWatcher(HWND, UINT msg, WPARAM wparam, LPARAM) {
-  if (msg == WM_KEYDOWN && wparam == VK_END) {
-    LOG_INFO("Unloading key was pressed...");
-    base::menu::globals::kRUNNING = false;
-  }
+class UnloadKeyWatcher final : public base::menu::hooking::WndProcEventListener {
+public:
+  virtual ~UnloadKeyWatcher() override = default;
 
-  return 0;
-}
+  virtual void OnWndProc(HWND, UINT msg, WPARAM wparam, LPARAM) override {
+    if (msg == WM_KEYDOWN && wparam == VK_END) {
+      LOG_INFO("Unloading key was pressed...");
+      base::menu::globals::kRUNNING = false;
+    }
+  }
+};
 
 int base::menu::menu_main() {
+  UnloadKeyWatcher unload_key_watcher;
   auto startup_shutdown_handler = std::make_unique<util::StartupShutdownHandler>();
   SetupStartupShutdownSequence(startup_shutdown_handler.get());
 
@@ -64,7 +67,7 @@ int base::menu::menu_main() {
 
   hooking_inst->Enable();
 
-  const auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
+  const auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(&unload_key_watcher);
 
   scripts::kSCRIPTMANAGER->InitScripts(scripts::BaseScript::Type::MainScriptThread);
 

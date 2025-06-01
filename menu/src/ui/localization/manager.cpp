@@ -6,7 +6,7 @@
 #include <base-common/fs/vfs.hpp>
 #include <glaze/glaze.hpp>
 
-namespace base::ui::localization {
+namespace base::menu::ui::localization {
     namespace {
         std::string GetProfilePath(const std::string& name) {
             return fmt::format("{}/{}.json", common::fs::vfs::GetTranslationDir(), name);

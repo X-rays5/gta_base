@@ -81,23 +81,23 @@ namespace base::common::logging::exception {
     std::string GetRegisters(const PCONTEXT ctx) {
       std::stringstream res;
       res << "\nDumping registers:\n";
-      res << "Rip: " << common::conversion::AddrToHex(ctx->Rip) << "\n";
-      res << "Rax: " << common::conversion::AddrToHex(ctx->Rax) << "\n";
-      res << "Rbx: " << common::conversion::AddrToHex(ctx->Rbx) << "\n";
-      res << "Rcx: " << common::conversion::AddrToHex(ctx->Rcx) << "\n";
-      res << "Rdx: " << common::conversion::AddrToHex(ctx->Rdx) << "\n";
-      res << "Rsi: " << common::conversion::AddrToHex(ctx->Rsi) << "\n";
-      res << "Rdi: " << common::conversion::AddrToHex(ctx->Rdi) << "\n";
-      res << "RSp: " << common::conversion::AddrToHex(ctx->Rsp) << "\n";
-      res << "Rbp: " << common::conversion::AddrToHex(ctx->Rbp) << "\n";
-      res << "R8: " << common::conversion::AddrToHex(ctx->R8) << "\n";
-      res << "R9: " << common::conversion::AddrToHex(ctx->R9) << "\n";
-      res << "R10: " << common::conversion::AddrToHex(ctx->R10) << "\n";
-      res << "R11: " << common::conversion::AddrToHex(ctx->R11) << "\n";
-      res << "R12: " << common::conversion::AddrToHex(ctx->R12) << "\n";
-      res << "R13: " << common::conversion::AddrToHex(ctx->R13) << "\n";
-      res << "R14: " << common::conversion::AddrToHex(ctx->R14) << "\n";
-      res << "R15: " << common::conversion::AddrToHex(ctx->R15) << "\n";
+      res << "Rip: " << conversion::AddrToHex(ctx->Rip) << "\n";
+      res << "Rax: " << conversion::AddrToHex(ctx->Rax) << "\n";
+      res << "Rbx: " << conversion::AddrToHex(ctx->Rbx) << "\n";
+      res << "Rcx: " << conversion::AddrToHex(ctx->Rcx) << "\n";
+      res << "Rdx: " << conversion::AddrToHex(ctx->Rdx) << "\n";
+      res << "Rsi: " << conversion::AddrToHex(ctx->Rsi) << "\n";
+      res << "Rdi: " << conversion::AddrToHex(ctx->Rdi) << "\n";
+      res << "RSp: " << conversion::AddrToHex(ctx->Rsp) << "\n";
+      res << "Rbp: " << conversion::AddrToHex(ctx->Rbp) << "\n";
+      res << "R8: " << conversion::AddrToHex(ctx->R8) << "\n";
+      res << "R9: " << conversion::AddrToHex(ctx->R9) << "\n";
+      res << "R10: " << conversion::AddrToHex(ctx->R10) << "\n";
+      res << "R11: " << conversion::AddrToHex(ctx->R11) << "\n";
+      res << "R12: " << conversion::AddrToHex(ctx->R12) << "\n";
+      res << "R13: " << conversion::AddrToHex(ctx->R13) << "\n";
+      res << "R14: " << conversion::AddrToHex(ctx->R14) << "\n";
+      res << "R15: " << conversion::AddrToHex(ctx->R15) << "\n";
 
       return res.str();
     }
@@ -109,7 +109,7 @@ namespace base::common::logging::exception {
 
     msg << "***** EXCEPTION RECEIVED *****\n";
     msg << "***** Exception name: " << exception_name << " *****\n";
-    msg << "***** Exception code: " << common::conversion::AddrToHex(except_rec->ExceptionCode) << " *****\n";
+    msg << "***** Exception code: " << conversion::AddrToHex(except_rec->ExceptionCode) << " *****\n";
     msg << "***** Exception pid: " << GetCurrentProcessId() << " *****\n";
 
     auto except_mod_res = win32::memory::GetModuleNameFromAddress(GetCurrentProcessId(), ctx->Rip);
@@ -130,7 +130,7 @@ namespace base::common::logging::exception {
 
     std::vector<MODULEENTRY32> modules = mod_res.value();
     for (auto&& mod : modules) {
-      msg << mod.szExePath << " addr: " << common::conversion::AddrToHex(reinterpret_cast<std::uintptr_t>(mod.modBaseAddr)) << " size: " << common::conversion::AddrToHex(mod.modBaseSize);
+      msg << mod.szExePath << " addr: " << conversion::AddrToHex(reinterpret_cast<std::uintptr_t>(mod.modBaseAddr)) << " size: " << conversion::AddrToHex(mod.modBaseSize);
       msg << '\n';
     }
 
@@ -138,7 +138,7 @@ namespace base::common::logging::exception {
     msg << GetRegisters(ctx);
     msg << '\n' << std::stacktrace::current(stacktrace_skip_count) << '\n';
 
-    std::filesystem::path report_dir = common::fs::vfs::GetExceptionReportsDir() / fmt::format("report_{}", common::util::time::GetTimeStamp());
+    std::filesystem::path report_dir = fs::vfs::GetExceptionReportsDir() / fmt::format("report_{}", util::time::GetTimeStamp());
     if (!std::filesystem::create_directories(report_dir)) {
       LOG_ERROR("Failed to create exception report directory '{}'", report_dir);
       return MakeFailure<ResultCode::kIO_ERROR>("Failed to create exception report directory '{}'", report_dir);

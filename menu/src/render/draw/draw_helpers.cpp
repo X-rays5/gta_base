@@ -25,22 +25,21 @@ namespace base::menu::render::draw_helpers {
     return ImGui::GetForegroundDrawList();
   }
 
-  ImVec2 GetSize(ImVec2 pos, ImVec2 size) {
+  ImVec2 GetSize(const ImVec2 pos, const ImVec2 size) {
     return {pos.x + size.x, pos.y + size.y};
   }
 
   // scale float in range [0, 1] to [0, screen_size]
   ImVec2 ScaleToScreen(ImVec2 xy) {
-    if (xy.x < 0 || xy.x > 1 || xy.y < 0 || xy.y > 1) {
-      return {};
-    }
+    xy.x = std::clamp(xy.x, 0.0F, 1.0F);
+    xy.y = std::clamp(xy.y, 0.0F, 1.0F);
 
     ImVec2 cur_res{0, 0};
     if (kRENDERER)
       cur_res = kRENDERER->GetResolution();
 
-    xy.x = (xy.x * cur_res.x);
-    xy.y = (xy.y * cur_res.y);
+    xy.x = std::floor(xy.x * cur_res.x);
+    xy.y = std::floor(xy.y * cur_res.y);
 
     return xy;
   }
@@ -52,15 +51,12 @@ namespace base::menu::render::draw_helpers {
       cur_res = kRENDERER->GetResolution();
 
     if (cur_res.x == 0 || cur_res.y == 0) {
-      return {}; // Happens when the window is minimized.
+      LOG_DEBUG("Cannot scale from screen, resolution is 0x0");
+      return {0,0};
     }
 
-    if (xy.x < 0 || xy.x > cur_res.x || xy.y < 0 || xy.y > cur_res.y) {
-      return {};
-    }
-
-    xy.x = (xy.x / cur_res.x);
-    xy.y = (xy.y / cur_res.y);
+    xy.x = std::clamp(xy.x / cur_res.x, 0.0F, 1.0F);
+    xy.y = std::clamp(xy.y / cur_res.y, 0.0F, 1.0F);
 
     return xy;
   }

@@ -8,11 +8,12 @@
 #include <imfont/imfont.hpp>
 #include <wrl/client.h>
 #include "render_thread.hpp"
-#include "draw/draw_queue.hpp"
+#include "../hooking/wndproc.hpp"
 #include "../util/startup_shutdown_handler.hpp"
+#include "draw/draw_queue.hpp"
 
 namespace base::menu::render {
-  class Renderer {
+  class Renderer final : public hooking::WndProcEventListener {
   public:
     using device_ptr_t = Microsoft::WRL::ComPtr<ID3D11Device>;
     using device_context_ptr_t = Microsoft::WRL::ComPtr<ID3D11DeviceContext>;
@@ -20,7 +21,7 @@ namespace base::menu::render {
 
   public:
     Renderer();
-    ~Renderer();
+    virtual ~Renderer() override;
 
     /// @note This pointer can die at any time, so don't store it.
     DrawQueueBuffer* GetDrawQueueBuffer() {
@@ -53,10 +54,13 @@ namespace base::menu::render {
     }
 
     void SetResolution(const int width, const int height) {
+      LOG_INFO("Setting resolution to {}x{}", width, height);
       common::concurrency::ScopedSpinlock lock(window_size_lock_);
       window_width_ = static_cast<std::uint32_t>(width);
       window_height_ = static_cast<std::uint32_t>(height);
     }
+
+    virtual void OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) override;
 
     static HRESULT Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags);
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);

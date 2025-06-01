@@ -52,12 +52,19 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/common.hpp
         src/hooking/wndproc.cpp
         src/hooking/wndproc.hpp
+        src/ui/theme.cpp
+        src/ui/theme.hpp
         src/scripts/base_script.hpp
         src/scripts/script_manager.cpp
         src/scripts/script_manager.hpp
         src/util/startup_shutdown_handler.hpp
         src/render/draw/draw_queue.cpp
         src/render/draw/draw_queue.hpp
+        src/ui/components/base_component.hpp
+        src/ui/components/label_component.hpp
+        src/ui/menu_renderer.cpp
+        src/ui/menu_renderer.hpp
+        src/ui/submenu.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

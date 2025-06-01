@@ -59,7 +59,7 @@ namespace base::menu::render {
     LOG_DEBUG("Initializing font manager.");
     font_mgr_inst_ = std::make_unique<imfont::Manager>();
 
-    wndproc_handler_id_ = hooking::kWNDPROC->AddWndProcHandler(ImGui_ImplWin32_WndProcHandler);
+    wndproc_handler_id_ = hooking::kWNDPROC->AddWndProcHandler(this);
 
     render_thread_ = std::make_unique<RenderThread>();
 
@@ -81,6 +81,12 @@ namespace base::menu::render {
       LOG_CRITICAL("Failed to shutdown ImGui: {}", e.what());
     } catch (...) {
       LOG_CRITICAL("Failed to shutdown ImGui due to an unknown error");
+    }
+  }
+
+  void Renderer::OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+    if (globals::kRUNNING && init_imgui_) {
+      ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
     }
   }
 

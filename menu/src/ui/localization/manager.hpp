@@ -8,7 +8,7 @@
 
 #define TRANSLATE_LITERAL(str) base::ui::localization::kMANAGER->Localize(xorstr_(str));
 
-namespace base::ui::localization {
+namespace base::menu::ui::localization {
     using translation_map_t = ankerl::unordered_dense::map<std::string, std::string>;
 
     extern const translation_map_t default_translation;
@@ -42,7 +42,7 @@ namespace base::ui::localization {
     inline Manager* kMANAGER{};
 }
 
-namespace base {
+namespace base::menu {
     [[nodiscard]] inline std::string operator ""_l10n(const char* key) {
         return ui::localization::kMANAGER->Localize(key);
     }

@@ -10,14 +10,15 @@ namespace base::menu::scripts {
   public:
     enum class Type {
       MainScriptThread,
+      MenuRenderThread,
       GameRenderThread,
     };
 
   public:
     virtual ~BaseScript() = default;
 
-    virtual void Init() = 0;
-    virtual void Tick() = 0;
+    virtual void ScriptInit() = 0;
+    virtual void ScriptTick() = 0;
 
     virtual Type GetScriptType() const = 0;
   };

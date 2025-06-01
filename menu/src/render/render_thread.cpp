@@ -4,10 +4,11 @@
 
 #include "render_thread.hpp"
 #include "renderer.hpp"
+#include "../scripts/script_manager.hpp"
 
 namespace base::menu::render {
   RenderThread::RenderThread() {
-    render_thread_ = std::make_unique<std::thread>(RenderThread::RenderMain);
+    render_thread_ = std::make_unique<std::thread>(RenderMain);
     kRENDER_THREAD = this;
   }
 
@@ -24,33 +25,31 @@ namespace base::menu::render {
   }
 
   void RenderThread::RenderMain() {
-    SetThreadDescription(GetCurrentThread(), L"RenderLoop");
+    SetThreadDescription(GetCurrentThread(), L"MenuRenderThread");
+
     LOG_INFO("Render thread started.");
     while (globals::kRUNNING) {
       if (kRENDER_THREAD && kRENDERER) {
-        const auto buffer = kRENDERER->GetDrawQueueBuffer();
-
-        for (auto& [_, cb_] : kRENDER_THREAD->GetRenderCallbacks()) {
-          if (!buffer) {
-            if (globals::kRUNNING) {
-              LOG_ERROR("DrawQueueBuffer is null. Skipping render tick.");
-              break;
-            }
-
-            LOG_INFO("Render thread is assuming shutdown. Exiting render thread...");
-            break;
-          }
-
-          cb_(buffer);
+        if (!scripts::kSCRIPTMANAGER) {
+          std::this_thread::yield();
+          continue;
         }
 
-        if (buffer)
+        if (!kRENDER_THREAD->HasInitRan()) {
+          kRENDER_THREAD->SetInitRan(true);
+          scripts::kSCRIPTMANAGER->InitScripts(scripts::BaseScript::Type::MenuRenderThread);
+        }
+
+        scripts::kSCRIPTMANAGER->TickScripts(scripts::BaseScript::Type::MenuRenderThread);
+
+        if (const auto buffer = kRENDERER->GetDrawQueueBuffer())
           buffer->SwapBuffers();
       } else {
         [[unlikely]]
         LOG_DEBUG("nullptr");
       }
     }
+
     LOG_INFO("Exiting render thread.");
   }
 }

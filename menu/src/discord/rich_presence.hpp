@@ -26,9 +26,8 @@ namespace base::menu::discord {
       RichPresence();
       virtual ~RichPresence() override;
 
-      virtual void Tick() override;
-
-      virtual void Init() override;
+      virtual void ScriptInit() override;
+      virtual void ScriptTick() override;
 
       virtual Type GetScriptType() const override {
          return Type::MainScriptThread;

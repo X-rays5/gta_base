@@ -20,7 +20,7 @@ namespace imfont {
 
       static const auto font_awesome = b::embed<"assets/fonts/fa-solid-900.ttf">();
 
-      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), static_cast<std::size_t>(font_awesome.size()), font_size, &icons_config, icons_ranges)) {
+      if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), font_awesome.size(), font_size, &icons_config, icons_ranges)) {
         LOG_ERROR("Failed to merge fa");
       }
     }
@@ -29,9 +29,14 @@ namespace imfont {
   Manager::Manager(const std::float_t default_font_size) {
     ImGui::GetIO().Fonts->Clear();
     static const auto roboto_mono_regular = b::embed<"assets/fonts/RobotoMono-Regular.ttf">();
-    if (!LoadFontFromMemory("roboto", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), static_cast<std::size_t>(roboto_mono_regular.size()), default_font_size)) {
+    if (!LoadFontFromMemory("roboto", const_cast<void*>(static_cast<const void*>(roboto_mono_regular.data())), roboto_mono_regular.size(), default_font_size)) {
       const ImFont* font = ImGui::GetIO().Fonts->AddFontDefault();
       FinalizeLoading("default", font, default_font_size, true);
+    }
+
+    static const auto roboto_mono_bold = b::embed<"assets/fonts/RobotoMono-Bold.ttf">();
+    if (!LoadFontFromMemory("roboto-bold", const_cast<void*>(static_cast<const void*>(roboto_mono_bold.data())), roboto_mono_bold.size(), default_font_size)) {
+      LOG_ERROR("Failed to load roboto-bold font from memory.");
     }
 
     kMANAGER = this;
@@ -47,6 +52,8 @@ namespace imfont {
   }
 
   bool Manager::LoadFontFromDisk(const std::string& name, const std::filesystem::path& path, const std::float_t font_size, const bool merge_fa) {
+    base::common::concurrency::ScopedSpinlock lock(lock_);
+
     if (name.empty()) {
       LOG_ERROR("Tried to load font with an empty name.");
       return false;
@@ -79,6 +86,8 @@ namespace imfont {
   }
 
   bool Manager::LoadFontFromMemory(const std::string& name, void* font_data, const std::int32_t font_data_size, const std::float_t font_size, const bool merge_fa) {
+    base::common::concurrency::ScopedSpinlock lock(lock_);
+
     if (name.empty()) {
       LOG_ERROR("Tried to load font with an empty name.");
       return false;
@@ -109,6 +118,8 @@ namespace imfont {
   }
 
   bool Manager::LoadFontFromMemoryCompressed(const std::string& name, const void* font_data, const std::int32_t font_data_size, const std::float_t font_size, const bool merge_fa) {
+    base::common::concurrency::ScopedSpinlock lock(lock_);
+
     if (name.empty()) {
       LOG_ERROR("Tried to load font with an empty name.");
       return false;
@@ -139,6 +150,7 @@ namespace imfont {
   }
 
   void Manager::PushFont(const std::string& name) {
+    base::common::concurrency::ScopedSpinlock lock(lock_);
     if (const auto it = fonts_.find(name); it != fonts_.end() && it->second) {
       ImGui::PushFont(static_cast<ImFont*>(it->second));
     } else {
@@ -150,6 +162,16 @@ namespace imfont {
     ImGui::PopFont();
   }
 
+  ImFont* Manager::GetFont(const std::string& name) {
+    base::common::concurrency::ScopedSpinlock lock(lock_);
+    if (const auto it = fonts_.find(name); it != fonts_.end() && it->second) {
+      return static_cast<ImFont*>(it->second);
+    }
+
+    LOG_WARN("Tried to get non existing font {}", name);
+    return nullptr;
+  }
+
   bool Manager::FinalizeLoading(const std::string& name, const void* font, const std::float_t font_size, const bool merge_fa) {
     if (merge_fa)
       MergeFa(font_size);
@@ -159,6 +181,7 @@ namespace imfont {
 
     fonts_[name] = const_cast<void*>(font);
 
+    LOG_INFO("Successfully loaded font {} with size {}.", name, font_size);
     return true;
   }
 }

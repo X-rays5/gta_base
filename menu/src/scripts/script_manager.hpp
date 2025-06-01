@@ -11,6 +11,8 @@
 namespace base::menu::scripts {
   class ScriptManager {
   public:
+    ScriptManager();
+    ~ScriptManager();
 
     std::size_t AddScript(BaseScript* script);
     void RemoveScript(std::size_t id, BaseScript::Type type);
