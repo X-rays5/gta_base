@@ -24,8 +24,7 @@ namespace base::menu::ui::localization {
             profile_path = GetProfilePath("default");
         }
 
-        const auto ec = glz::read_file_json(tmp_translation, profile_path, json_buffer);
-        if (ec) {
+        if (const auto ec = glz::read_file_json(tmp_translation, profile_path, json_buffer)) {
             return MakeFailure<ResultCode::kIO_ERROR>(glz::format_error(ec, json_buffer));
         }
 
@@ -38,8 +37,7 @@ namespace base::menu::ui::localization {
     }
 
     Status Translation::Save(const std::string& name) {
-        const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(loaded_translation_, GetProfilePath(name), std::string{});
-        if (ec) {
+        if (const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(loaded_translation_, GetProfilePath(name), std::string{})) {
             return MakeFailure<ResultCode::kIO_ERROR>(std::string(magic_enum::enum_name(ec.ec)));
         }
 
@@ -71,8 +69,7 @@ namespace base::menu::ui::localization {
     }
 
     Manager::Manager() {
-        auto status = translation_.Load("default");
-        if (status.error()) {
+        if (auto status = translation_.Load("default"); status.error()) {
             LOG_CRITICAL("Failed to load translation from disk: {}", status.error());
         }
 
@@ -82,16 +79,14 @@ namespace base::menu::ui::localization {
     Manager::~Manager() {
         kMANAGER = nullptr;
 
-        auto status = translation_.Save(active_translation_);
-        if (status.error()) {
+        if (auto status = translation_.Save(active_translation_); status.error()) {
             LOG_ERROR("Failed to save active translation to disk: {}", status.error());
         }
     }
 
-    std::string Manager::Localize(const char* key) {
+    std::string Manager::Localize(const std::string_view key) {
         const auto it = translation_.loaded_translation_.find(key);
-
-        return (it != translation_.loaded_translation_.end()) ? it->second : key;
+        return std::string((it != translation_.loaded_translation_.end()) ? it->second : key);
     }
 
     Status Manager::SetActiveTranslation(const std::string& name, bool save_current) {
