@@ -28,5 +28,17 @@ namespace base::menu::render::draw_helpers {
   std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::size_t max_lines);
 
   ImDrawList* GetDrawList();
+
+  class RotateVertices {
+  public:
+    void ImRotateStart();
+    void ImRotateEnd(std::int32_t degrees);
+
+  private:
+    std::int32_t rotation_start_idx_ = -1;
+
+  private:
+    ImVec2 ImRotateCenter() const;
+  };
 }
 #endif //GTA_BASE_DRAW_UTIL_AE07DB6C33FB43E1B6FE62992EE1D737_HPP

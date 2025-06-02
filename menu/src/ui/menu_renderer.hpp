@@ -10,15 +10,16 @@
 #include <magic_enum/magic_enum.hpp>
 #include "submenu.hpp"
 #include "theme.hpp"
-#include "../hooking/wndproc.hpp"
 #include "../scripts/base_script.hpp"
+#include "components/label_component.hpp"
+#include "../util/key_state.hpp"
 
 namespace base::menu::render {
   class DrawQueueBuffer;
 }
 
 namespace base::menu::ui {
-  class MenuRenderer final : public hooking::WndProcEventListener, public scripts::BaseScript {
+  class MenuRenderer final : public scripts::BaseScript {
   public:
     MenuRenderer();
     virtual ~MenuRenderer() override;
@@ -33,7 +34,8 @@ namespace base::menu::ui {
     }
 
     void AddSubmenu(const std::string& id, Submenu&& submenu) {
-      submenus_.emplace(id, std::make_shared<Submenu>(submenu));
+      common::concurrency::ScopedSpinlock lock(submenus_lock_);
+      submenus_.emplace(id, std::make_shared<Submenu>(std::move(submenu)));
       if (submenu_stack_.empty()) {
         submenu_stack_.push(id);
       }
@@ -44,14 +46,17 @@ namespace base::menu::ui {
     }
 
     std::shared_ptr<Submenu> GetCurrentSubmenu() {
+      common::concurrency::ScopedSpinlock lock(submenus_lock_);
       if (submenu_stack_.empty()) {
         return fallback_submenu_;
       }
 
-      return submenus_[submenu_stack_.top()];
+      const auto it = submenus_.find(submenu_stack_.top());
+      return (it != submenus_.end() && it->second) ? it->second : fallback_submenu_;
     }
 
     Status PushSubmenu(const std::string& id) {
+      common::concurrency::ScopedSpinlock lock(submenus_lock_);
       if (submenus_.find(id) == submenus_.end()) {
         return MakeFailure<ResultCode::kIO_ERROR>("Submenu not found: {}", id);
       }
@@ -60,37 +65,43 @@ namespace base::menu::ui {
       return {};
     }
 
-    bool IsOnHomeSubmenu() const {
+    bool IsOnHomeSubmenu() {
+      common::concurrency::ScopedSpinlock lock(submenus_lock_);
       return submenu_stack_.size() == 1;
     }
 
     void PopSubmenu() {
+      common::concurrency::ScopedSpinlock lock(submenus_lock_);
       if (!IsOnHomeSubmenu()) {
         submenu_stack_.pop();
-      }
-    }
-
-    virtual void OnWndProc(HWND, UINT msg, WPARAM wparam, LPARAM) override {
-      if (msg == WM_KEYDOWN && wparam == VK_F4) {
-        is_menu_opened_ = !is_menu_opened_;
-        LOG_DEBUG("Menu toggled: {}", is_menu_opened_ ? "opened" : "closed");
+      } else {
+        is_menu_opened_ = false;
       }
     }
 
   private:
-    MenuRenderProperties ui_props_;
+    MenuRenderProperties ui_props_{};
+    util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK}, ui_props_.menu_ui_key_state_cooldown};
     ankerl::unordered_dense::map<std::string, std::shared_ptr<Submenu>> submenus_;
     std::stack<std::string> submenu_stack_;
-    std::size_t wndproc_handler_id_ = 0;
     std::size_t script_id_ = 0;
     std::atomic<bool> is_menu_opened_ = true;
-    std::shared_ptr<Submenu> fallback_submenu_ = std::make_shared<Submenu>("Fallback SubMenu");
+    common::concurrency::RecursiveSpinlock submenus_lock_;
+
+    // Used when the current sub is empty
+    std::shared_ptr<components::BaseComponent> fallback_option_;
+    // Used when no sub can be found
+    std::shared_ptr<Submenu> fallback_submenu_ = std::make_shared<Submenu>("Fallback SubMenu", [this](Submenu* sub) {;
+      sub->AddComponent(components::LabelComponent("label/invalid_submenu"));
+    });
 
   private:
     std::float_t DrawTopBar(render::DrawQueueBuffer* draw_queue, std::string_view sub_name, std::float_t y_offset);
-    std::float_t DrawComponents(render::DrawQueueBuffer* draw_queue, const Submenu::component_list& components, std::float_t y_offset);
+    std::float_t DrawComponents(render::DrawQueueBuffer* draw_queue, const Submenu::component_list_t& components, std::float_t y_offset);
     void DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, std::float_t y_offset) const;
     std::float_t DrawBottomBar(render::DrawQueueBuffer* draw_queue, std::size_t cur_item_idx, std::size_t item_count, std::float_t y_offset);
+
+    std::float_t GetMenuCenterX() const;
   };
 
   inline MenuRenderer* kMENU_RENDERER{};

@@ -16,38 +16,48 @@ namespace base::menu::util {
 
     using cb_t = std::function<void(Action)>;
 
+    struct Handler {
+      std::string name;
+      cb_t callback;
+    };
+
   public:
     StartupShutdownHandler() = default;
 
     ~StartupShutdownHandler() {
       LOG_INFO("[SHUTDOWN] StartupShutdownHandler");
-      for (auto it = cb_vec_.rbegin(); it != cb_vec_.rend(); ++it)
-        (*it)(Action::Shutdown);
+      for (auto it = cb_vec_.rbegin(); it != cb_vec_.rend(); ++it) {
+        auto& [name, callback] = *it;
+        LOG_INFO("[SHUTDOWN] {}", name);
+        callback(Action::Shutdown);
+        LOG_DEBUG("[SHUTDOWN] {} completed", name);
+      }
     }
 
     void RunInit() const {
       LOG_INFO("[INIT] StartupShutdownHandler");
-      for (auto& cb : cb_vec_)
-        cb(Action::Init);
+      for (const auto& [name, callback] : cb_vec_) {
+        LOG_INFO("[INIT] {}...", name);
+        callback(Action::Init);
+        LOG_DEBUG("[INIT] {} completed", name);
+      }
     }
 
-    void AddCallback(const cb_t& cb) {
-      cb_vec_.push_back(cb);
+    void AddCallback(const std::string& name, const cb_t& cb) {
+      cb_vec_.push_back({name, cb});
     }
 
   private:
-    std::vector<cb_t> cb_vec_;
+    std::vector<Handler> cb_vec_;
   };
 }
 
-#define GTA_BASE_DEFAULT_START_DOWN_HANDLER(inst, init_name, manager_var, ...) inst->AddCallback([](::base::menu::util::StartupShutdownHandler::Action action) { \
+#define GTA_BASE_DEFAULT_START_DOWN_HANDLER(inst, init_name, manager_var, ...) inst->AddCallback(xorstr_(init_name), [](::base::menu::util::StartupShutdownHandler::Action action) { \
 if (action == ::base::menu::util::StartupShutdownHandler::Action::Init) { \
 manager_var = std::make_unique<std::remove_reference_t<decltype(*manager_var)>>(__VA_ARGS__); \
-LOG_INFO("[INIT] {}", xorstr_(init_name)); \
 } \
 else { \
 manager_var.reset(); \
-LOG_INFO("[SHUTDOWN] {}", xorstr_(init_name)); \
 } \
 })
 

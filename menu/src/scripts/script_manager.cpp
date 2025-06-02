@@ -7,8 +7,8 @@
 namespace base::menu::scripts {
   ScriptManager::ScriptManager() {
     // Get all script types from BaseScript::Type enum and initialize the scripts_ map
-    const auto t = magic_enum::enum_values<BaseScript::Type>();
-    for (const auto& type : t) {
+    for (constexpr auto t = magic_enum::enum_values<BaseScript::Type>(); const auto& type : t) {
+      script_locks_.emplace(type, std::make_unique<common::concurrency::Spinlock>());
       scripts_[type] = ankerl::unordered_dense::map<std::size_t, BaseScript*>();
     }
 
@@ -23,6 +23,7 @@ namespace base::menu::scripts {
   std::size_t ScriptManager::AddScript(BaseScript* script) {
     const auto id = next_id_.fetch_add(1, std::memory_order_relaxed);
     const auto type = script->GetScriptType();
+    common::concurrency::ScopedSpinlock lock(*script_locks_[type]);
     scripts_[script->GetScriptType()][id] = script;
 
     LOG_DEBUG("Added script of type {} with ID {}", magic_enum::enum_name(type), id);
@@ -30,12 +31,16 @@ namespace base::menu::scripts {
   }
 
   void ScriptManager::RemoveScript(const std::size_t id, const BaseScript::Type type) {
+    common::concurrency::ScopedSpinlock lock(*script_locks_[type]);
     if (scripts_.find(type) != scripts_.end()) {
       scripts_[type].erase(id);
+      LOG_INFO("Removed script of type {} with ID {}", magic_enum::enum_name(type), id);
     }
   }
 
-  void ScriptManager::InitScripts(BaseScript::Type type) {
+  void ScriptManager::InitScripts(const BaseScript::Type type) {
+    common::concurrency::ScopedSpinlock lock(*script_locks_[type]);
+    LOG_INFO("Initializing scripts of type {}", magic_enum::enum_name(type));
     if (scripts_.find(type) != scripts_.end()) {
       for (const auto script : scripts_[type] | std::views::values) {
         if (!script) {
@@ -59,6 +64,7 @@ namespace base::menu::scripts {
   }
 
   void ScriptManager::TickScripts(const BaseScript::Type type) {
+    common::concurrency::ScopedSpinlock lock(*script_locks_[type]);
     if (scripts_.find(type) != scripts_.end()) {
       for (const auto script : scripts_[type] | std::views::values) {
         if (!script) {

@@ -18,7 +18,7 @@ namespace imfont {
       icons_config.FontDataOwnedByAtlas = false;
       icons_config.GlyphOffset.y = 5;
 
-      static const auto font_awesome = b::embed<"assets/fonts/fa-solid-900.ttf">();
+      static const auto font_awesome = b::embed<"assets/fonts/fa-sharp-solid-900.ttf">();
 
       if (!ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(static_cast<const void*>(font_awesome.data())), font_awesome.size(), font_size, &icons_config, icons_ranges)) {
         LOG_ERROR("Failed to merge fa");

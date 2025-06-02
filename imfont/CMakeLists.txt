@@ -50,7 +50,7 @@ endforeach ()
 
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/include)
 
-b_embed(${PROJECT_NAME} assets/fonts/fa-solid-900.ttf)
+b_embed(${PROJECT_NAME} assets/fonts/fa-sharp-solid-900.ttf)
 b_embed(${PROJECT_NAME} assets/fonts/RobotoMono-Regular.ttf)
 b_embed(${PROJECT_NAME} assets/fonts/RobotoMono-Bold.ttf)
 

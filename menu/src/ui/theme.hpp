@@ -20,6 +20,7 @@ namespace base::menu::ui {
     const std::float_t x_margin = 0.005f;
     const std::float_t y_margin = 0.005f;
     const std::float_t font_size = 0.012f;
+    const std::float_t scroll_indicator_size = 0.02f;
     const ImColor text_color = ImColor(240, 240, 240);
     const ImColor inverse_text_color = ImColor(47, 47, 47);
     const ImColor sec_text_color = ImColor(155, 155, 155);
@@ -28,6 +29,7 @@ namespace base::menu::ui {
   struct MenuRenderProperties {
     Theme theme;
     Text text_props;
+    const std::chrono::milliseconds menu_ui_key_state_cooldown = std::chrono::milliseconds(200);
     const std::float_t header_height = 0.1f;
     const std::float_t seperator_height = 0.001f;
     const std::float_t menu_item_height = 0.025f;

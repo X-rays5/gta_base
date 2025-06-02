@@ -6,6 +6,7 @@
 #define SCRIPTMANAGER_HPP_05162518
 #include <memory>
 #include <ankerl/unordered_dense.h>
+#include <base-common/concurrency/spinlock.hpp>
 #include "base_script.hpp"
 
 namespace base::menu::scripts {
@@ -21,6 +22,7 @@ namespace base::menu::scripts {
     void TickScripts(BaseScript::Type type);
 
   private:
+    ankerl::unordered_dense::map<BaseScript::Type, std::unique_ptr<common::concurrency::Spinlock>> script_locks_;
     ankerl::unordered_dense::map<BaseScript::Type, ankerl::unordered_dense::map<std::size_t, BaseScript*>> scripts_;
     std::atomic<std::size_t> next_id_;
   };

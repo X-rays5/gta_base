@@ -65,6 +65,13 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/ui/menu_renderer.cpp
         src/ui/menu_renderer.hpp
         src/ui/submenu.hpp
+        src/ui/components/component_flags.hpp
+        src/ui/components/execute_component.hpp
+        src/ui/components/sub_link_component.hpp
+        src/util/key_event_listener.hpp
+        src/util/key_event_listener.cpp
+        src/util/key_state.cpp
+        src/util/key_state.hpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

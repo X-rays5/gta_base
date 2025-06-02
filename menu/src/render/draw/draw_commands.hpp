@@ -155,6 +155,23 @@ namespace base::menu::render {
     const ImFont* font_;
   };
 
+  class TextRotate final : public Text {
+  public:
+    TextRotate(const ImVec2 pos, const ImU32 text_color, std::string text, const bool right_align, const bool center_x, const bool center_y, const float y_size_text, const std::int32_t rotation_angle, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
+      Text(pos, text_color, std::move(text), y_size_text, right_align, center_x, center_y, max_width, max_lines, font),
+      rotation_angle_(rotation_angle) {}
+
+    virtual void Draw() const override {
+      draw_helpers::RotateVertices rotate;
+      rotate.ImRotateStart();
+      Text::Draw();
+      rotate.ImRotateEnd(rotation_angle_);
+    }
+
+  private:
+    const std::int32_t rotation_angle_;
+  };
+
   class TextBackground final : public Text {
   public:
     TextBackground(const ImVec2 pos, const ImU32 text_color, const ImU32 background_color, std::string text, const bool right_align, const bool center_x, const bool center_y, const float y_size_text, const float padding_side = 0.01F, const float padding_bottom_top = 0.01F, const bool border_top = false, const bool border_bottom = false, const bool border_left = false, const bool border_right = false, const ImU32 border_color = NULL, const float border_thickness = 1.F, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :

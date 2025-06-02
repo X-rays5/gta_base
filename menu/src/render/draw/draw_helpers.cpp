@@ -141,4 +141,56 @@ namespace base::menu::render::draw_helpers {
 
     return line_count;
   }
+
+  void RotateVertices::ImRotateStart() {
+    rotation_start_idx_ = GetDrawList()->VtxBuffer.Size;
+  }
+
+  ImVec2 RotateVertices::ImRotateCenter() const {
+    if (rotation_start_idx_ < 0) {
+      LOG_ERROR("Rotation start index is not set, cannot calculate center");
+      return {0, 0};
+    }
+
+    auto& vtx_buffer = GetDrawList()->VtxBuffer;
+    if (vtx_buffer.empty()) {
+      LOG_ERROR("Vertex buffer is empty, cannot calculate center");
+      return {0, 0};
+    }
+
+    ImVec2 l(FLT_MAX, FLT_MAX), u(-FLT_MAX, -FLT_MAX); // bounds
+
+    for (int i = rotation_start_idx_; i < vtx_buffer.Size; i++) {
+      const ImVec2& pos = vtx_buffer[i].pos;
+      l.x = std::min(l.x, pos.x);
+      l.y = std::min(l.y, pos.y);
+      u.x = std::max(u.x, pos.x);
+      u.y = std::max(u.y, pos.y);
+    }
+    return ImVec2((l.x + u.x) / 2, (l.y + u.y) / 2);
+  }
+
+  void RotateVertices::ImRotateEnd(const std::int32_t degrees) {
+    if (rotation_start_idx_ < 0) {
+      LOG_ERROR("Rotation start index is not set, cannot rotate vertices");
+      return;
+    }
+
+    const ImVec2 center = ImRotateCenter();
+
+    auto& vtx_buffer = GetDrawList()->VtxBuffer;
+    for (int i = rotation_start_idx_; i < vtx_buffer.Size; i++) {
+      const ImVec2 pos = vtx_buffer[i].pos;
+      const float rad = degrees * 3.14159265358979323846f / 180.0f;
+      const float cos_rad = cos(rad);
+      const float sin_rad = sin(rad);
+
+      // Rotate around a center
+      vtx_buffer[i].pos.x = center.x + (pos.x - center.x) * cos_rad - (pos.y - center.y) * sin_rad;
+      vtx_buffer[i].pos.y = center.y + (pos.x - center.x) * sin_rad + (pos.y - center.y) * cos_rad;
+
+      rotation_start_idx_ = -1; // Reset the rotation start index after rotating
+    }
+  }
+
 }

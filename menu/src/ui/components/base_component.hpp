@@ -4,6 +4,8 @@
 
 #ifndef BASE_COMPONENT_HPP_05184123
 #define BASE_COMPONENT_HPP_05184123
+#include "component_flags.hpp"
+#include "../localization/manager.hpp"
 
 namespace base::menu::ui::components {
   class BaseComponent {
@@ -17,24 +19,24 @@ namespace base::menu::ui::components {
   public:
     virtual ~BaseComponent() = default;
 
-    virtual std::string_view GetLeftText() const {
-      return left_text_;
+    virtual std::string GetLeftText() const {
+      return localization::kMANAGER->Localize(left_text_);
     }
 
     virtual bool HasLeftText() const {
       return !GetLeftText().empty();
     }
 
-    virtual std::string_view GetCenterText() const {
-      return center_text_;
+    virtual std::string GetCenterText() const {
+      return localization::kMANAGER->Localize(center_text_);
     }
 
     virtual bool HasCenterText() const {
       return !GetCenterText().empty();
     }
 
-    virtual std::string_view GetRightText() const {
-      return right_text_;
+    virtual std::string GetRightText() const {
+      return localization::kMANAGER->Localize(right_text_);
     }
 
     virtual bool HasRightText() const {
@@ -43,10 +45,15 @@ namespace base::menu::ui::components {
 
     virtual void HandleButtonPress(PressedButton) {}
 
+    virtual bool HasFlag(const Flags flag) const {
+      return (flags_ & flag) != Flags::None;
+    }
+
   protected:
     std::string left_text_;
     std::string center_text_;
     std::string right_text_;
+    Flags flags_ = Flags::None;
   };
 }
 

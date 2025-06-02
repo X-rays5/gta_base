@@ -12,7 +12,12 @@ namespace base::menu::ui::components {
   class LabelComponent final : public BaseComponent {
   public:
     explicit LabelComponent(const std::string& label) : BaseComponent() {
-      center_text_ = fmt::format("[{}]", label);
+      center_text_ = label;
+      flags_ = Flags::NotSelectable;
+    }
+
+    virtual std::string GetCenterText() const override {
+      return fmt::format("[{}]", BaseComponent::GetCenterText());
     }
   };
 }

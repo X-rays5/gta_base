@@ -95,9 +95,8 @@ namespace base::menu::render {
   inline Renderer* kRENDERER{};
 
   inline void RendererLifeTime(std::unique_ptr<Renderer>& renderer_inst, util::StartupShutdownHandler* startup_shutdown_handler) {
-    startup_shutdown_handler->AddCallback([&](const util::StartupShutdownHandler::Action action) {
+    startup_shutdown_handler->AddCallback("Renderer", [&](const util::StartupShutdownHandler::Action action) {
       if (action == util::StartupShutdownHandler::Action::Init) {
-        LOG_INFO("[INIT] Renderer");
         renderer_inst = std::make_unique<Renderer>();
       } else {
         // First, make sure it's actually waiting, then unblock it.

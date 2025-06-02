@@ -62,14 +62,13 @@ namespace base::menu::ui::localization {
     }
 
     void Translation::WriteDefaultTranslation() {
-        const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(default_translation, GetProfilePath("default"), std::string{});
-        if (ec) {
+        if (const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(default_translation, GetProfilePath("default"), std::string{})) {
             LOG_ERROR("Failed to write default translation to disk: {}", magic_enum::enum_name(ec.ec));
         }
     }
 
     Manager::Manager() {
-        if (auto status = translation_.Load("default"); status.error()) {
+        if (const auto status = translation_.Load("default"); status.error()) {
             LOG_CRITICAL("Failed to load translation from disk: {}", status.error());
         }
 
@@ -79,14 +78,14 @@ namespace base::menu::ui::localization {
     Manager::~Manager() {
         kMANAGER = nullptr;
 
-        if (auto status = translation_.Save(active_translation_); status.error()) {
+        if (const auto status = translation_.Save(active_translation_); status.error()) {
             LOG_ERROR("Failed to save active translation to disk: {}", status.error());
         }
     }
 
     std::string Manager::Localize(const std::string_view key) {
         const auto it = translation_.loaded_translation_.find(key);
-        return std::string((it != translation_.loaded_translation_.end()) ? it->second : key);
+        return std::string(it != translation_.loaded_translation_.end() ? it->second : key);
     }
 
     Status Manager::SetActiveTranslation(const std::string& name, bool save_current) {

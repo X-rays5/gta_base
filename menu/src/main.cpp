@@ -15,16 +15,21 @@
 #include "scripts/script_manager.hpp"
 #include "ui/localization/manager.hpp"
 #include "ui/menu_renderer.hpp"
+#include "ui/components/execute_component.hpp"
+#include "ui/components/label_component.hpp"
+#include "ui/components/sub_link_component.hpp"
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
+#include "util/key_event_listener.hpp"
 
 std::atomic<bool> base::menu::globals::kRUNNING = true;
 
 namespace base::menu {
   namespace {
+    std::unique_ptr<scripts::ScriptManager> script_manager_inst;
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
     std::unique_ptr<hooking::WndProc> wndproc_inst;
-    std::unique_ptr<scripts::ScriptManager> script_manager_inst;
+    std::unique_ptr<util::KeyEventWatcher> keywatch_inst;
     std::unique_ptr<memory::Pointers> pointers_inst;
     std::unique_ptr<hooking::Manager> hooking_inst;
     std::unique_ptr<ui::localization::Manager> localization_manager_inst;
@@ -36,6 +41,7 @@ namespace base::menu {
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptManager", script_manager_inst);
       RegisterThreadPoolStartupShutdown(thread_pool_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "WndProc", wndproc_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "KeyEventWatcher", keywatch_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "Pointers", pointers_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "HookingManager", hooking_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "LocalizationManager", localization_manager_inst);
@@ -66,6 +72,16 @@ int base::menu::menu_main() {
   startup_shutdown_handler->RunInit();
 
   hooking_inst->Enable();
+
+  ui::Submenu home_submenu("Home", [](ui::Submenu* sub) {
+    sub->AddComponent(ui::components::LabelComponent("label/home_submenu"));
+    sub->AddComponent(ui::components::ExecuteComponent("Execute Script", [](ui::components::ExecuteComponent*) {
+      LOG_INFO("Executing script from home submenu.");
+      // Here you can add the logic to execute a script or perform an action.
+    }));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+  });
+  ui::kMENU_RENDERER->AddSubmenu(ui::SubmenuIDs::kMAIN_MENU, std::move(home_submenu));
 
   const auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(&unload_key_watcher);
 

@@ -12,5 +12,6 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("label/cancel", "Cancel")
     ADD_TRANSLATION("label/yes", "Yes")
     ADD_TRANSLATION("label/no", "No")
+    ADD_TRANSLATION("label/invalid_submenu", "Invalid Submenu")
   };
 }
