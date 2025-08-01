@@ -2,7 +2,7 @@
 // Created by X-ray on 01/06/2025.
 //
 
-#include "key_state.hpp"
+#include "../key_state.hpp"
 
 namespace base::menu::util {
   KeyState::KeyState(const std::vector<std::uint32_t>& keys, const std::chrono::milliseconds cooldown_ms) : cooldown_ms_(cooldown_ms) {

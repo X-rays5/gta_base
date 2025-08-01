@@ -2,7 +2,7 @@
 // Created by X-ray on 01/06/2025.
 //
 
-#include "key_event_listener.hpp"
+#include "../key_event_listener.hpp"
 
 namespace base::menu::util {
   namespace {
@@ -34,14 +34,14 @@ namespace base::menu::util {
   void KeyEventWatcher::OnWndProc(HWND, const UINT msg, const WPARAM wparam, LPARAM) {
     if (msg == WM_KEYDOWN) {
       common::concurrency::ScopedSpinlock lock(spinlock_);
-      for (auto& handler : event_listeners_ | std::views::values) {
+      for (auto* handler : event_listeners_ | std::views::values) {
         if (handler) {
           handler->KeyDown(static_cast<std::uint32_t>(wparam), DetermineModifierKey());
         }
       }
     } else if (msg == WM_KEYUP) {
       common::concurrency::ScopedSpinlock lock(spinlock_);
-      for (auto& handler : event_listeners_ | std::views::values) {
+      for (auto* handler : event_listeners_ | std::views::values) {
         if (handler) {
           handler->KeyUp(static_cast<std::uint32_t>(wparam), DetermineModifierKey());
         }

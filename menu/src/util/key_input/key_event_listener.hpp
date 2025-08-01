@@ -4,7 +4,7 @@
 
 #ifndef KEY_EVENT_LISTENER_HPP_06155902
 #define KEY_EVENT_LISTENER_HPP_06155902
-#include "../hooking/wndproc.hpp"
+#include "../../hooking/wndproc.hpp"
 #include <ankerl/unordered_dense.h>
 
 namespace base::menu::util {
@@ -43,9 +43,9 @@ namespace base::menu::util {
 
   public:
     KeyEventWatcher();
-    virtual ~KeyEventWatcher() override;
+    ~KeyEventWatcher() override;
 
-    virtual void OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) override;
+    void OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) override;
 
     /**
      * Adds a key event listener to the watcher.

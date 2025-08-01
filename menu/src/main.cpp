@@ -20,7 +20,7 @@
 #include "ui/components/sub_link_component.hpp"
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
-#include "util/key_event_listener.hpp"
+#include "util/key_input/key_event_listener.hpp"
 
 std::atomic<bool> base::menu::globals::kRUNNING = true;
 

@@ -12,7 +12,7 @@
 #include "theme.hpp"
 #include "../scripts/base_script.hpp"
 #include "components/label_component.hpp"
-#include "../util/key_state.hpp"
+#include "../util/key_input/key_state.hpp"
 
 namespace base::menu::render {
   class DrawQueueBuffer;
