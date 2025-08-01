@@ -4,9 +4,9 @@
 
 #ifndef KEY_STATE_HPP_06162834
 #define KEY_STATE_HPP_06162834
-#include "key_event_listener.hpp"
 #include <chrono>
 #include <ankerl/unordered_dense.h>
+#include "key_event_listener.hpp"
 
 namespace base::menu::util {
   class KeyState final : public KeyEventListener {

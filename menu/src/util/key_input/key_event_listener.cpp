@@ -2,7 +2,7 @@
 // Created by X-ray on 01/06/2025.
 //
 
-#include "../key_event_listener.hpp"
+#include "key_event_listener.hpp"
 
 namespace base::menu::util {
   namespace {
