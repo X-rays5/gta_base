@@ -83,6 +83,10 @@ namespace base::menu::ui {
       return y_offset; // No components to draw
     }
 
+    if (!submenu || submenu->GetComponents().empty()) {
+      return y_offset; // No components to select
+    }
+
     const std::size_t total_components = components.size();
     const std::uint32_t max_visible_options = ui_props_.max_options_drawn;
     const std::uint32_t options_to_draw = std::min(static_cast<std::uint32_t>(total_components), max_visible_options);
@@ -90,22 +94,23 @@ namespace base::menu::ui {
     // Calculate the starting index for the visible window
     std::size_t start_index = 0;
     if (total_components > max_visible_options) {
-      if (submenu) {
         submenu->UpdateScrollOffset(max_visible_options);
         start_index = submenu->GetScrollOffset();
-      }
     }
 
     std::float_t y_size = ui_props_.menu_item_height * static_cast<std::float_t>(options_to_draw);
 
     draw_queue->AddCommand(render::Rect({ui_props_.theme.x_position, y_offset}, {ui_props_.menu_width, y_size}, ui_props_.background_color));
 
-    const std::size_t selected_component = DrawItemSelector(draw_queue, top_bar_y_offset, submenu);
+    const std::float_t y_pos = DrawItemSelector(draw_queue, top_bar_y_offset, submenu);
 
     // Draw the visible window of components
     for (std::uint32_t i = 0; i < options_to_draw; ++i) {
       if (const std::size_t component_index = start_index + i; component_index < total_components) {
-        DrawComponent(draw_queue, components[component_index].component.get(), y_offset, component_index == selected_component);
+        const float selector_center = y_pos + (ui_props_.menu_item_height / 2.0f);
+        const bool selector_past_halfway = selector_center >= y_offset + (ui_props_.menu_item_height / 2.0f) && selector_center < y_offset + ui_props_.menu_item_height;
+
+        DrawComponent(draw_queue, components[component_index].component.get(), y_offset, selector_past_halfway);
       }
       y_offset += ui_props_.menu_item_height;
     }
@@ -113,13 +118,13 @@ namespace base::menu::ui {
     return y_offset;
   }
 
-  void MenuRenderer::DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, const std::float_t y_offset, bool selected) const {
-    const ImColor text_color = selected ? ui_props_.text_props.inverse_text_color : ui_props_.text_props.text_color;
+  void MenuRenderer::DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, const std::float_t y_offset, bool inverse_text) const {
+    const ImColor text_color = inverse_text ? ui_props_.text_props.inverse_text_color : ui_props_.text_props.text_color;
 
     if (component->HasCenterText()) {
       static const std::float_t text_x_pos = ui_props_.theme.x_position + GetMenuCenterX();
       auto text_y_pos = y_offset + ui_props_.menu_item_height / 2;
-      draw_queue->AddCommand(render::Text({text_x_pos, text_y_pos}, text_color, component->GetCenterText(), ui_props_.text_props.font_size, false, true, true));
+      draw_queue->AddCommand(render::Text({text_x_pos, text_y_pos}, ui_props_.text_props.sec_text_color, component->GetCenterText(), ui_props_.text_props.font_size, false, true, true));
       return;
     }
 
@@ -156,7 +161,7 @@ namespace base::menu::ui {
     return y_offset + ui_props_.menu_item_height;
   }
 
-  std::size_t MenuRenderer::DrawItemSelector(render::DrawQueueBuffer* draw_queue, const std::float_t y_top, const Submenu* submenu) {
+  std::float_t MenuRenderer::DrawItemSelector(render::DrawQueueBuffer* draw_queue, const std::float_t y_top, const Submenu* submenu) {
     if (!submenu || submenu->GetComponents().empty()) {
       return 0; // No components to select
     }
@@ -213,7 +218,7 @@ namespace base::menu::ui {
     // Draw the selector background
     draw_queue->AddCommand(render::Rect({ui_props_.theme.x_position, current_selector_y_}, {ui_props_.menu_width, ui_props_.menu_item_height}, ui_props_.selector_color));
 
-    return current_option_index;
+    return current_selector_y_;
   }
 
   std::float_t MenuRenderer::GetMenuCenterX() const {

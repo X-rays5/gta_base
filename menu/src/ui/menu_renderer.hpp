@@ -104,9 +104,9 @@ namespace base::menu::ui {
   private:
     std::float_t DrawTopBar(render::DrawQueueBuffer* draw_queue, std::string_view sub_name, std::float_t y_offset);
     std::float_t DrawComponents(render::DrawQueueBuffer* draw_queue, std::float_t top_bar_y_offset, Submenu* submenu, const Submenu::component_list_t& components, std::float_t y_offset);
-    void DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, std::float_t y_offset, bool selected) const;
+    void DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, std::float_t y_offset, bool inverse_text) const;
     std::float_t DrawBottomBar(render::DrawQueueBuffer* draw_queue, std::size_t cur_item_idx, std::size_t item_count, std::float_t y_offset);
-    std::size_t DrawItemSelector(render::DrawQueueBuffer* draw_queue, std::float_t top_bar_y_offset, const Submenu* submenu);
+    std::float_t DrawItemSelector(render::DrawQueueBuffer* draw_queue, std::float_t top_bar_y_offset, const Submenu* submenu);
 
     std::float_t GetMenuCenterX() const;
   };
