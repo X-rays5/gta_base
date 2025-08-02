@@ -13,7 +13,7 @@ namespace base::menu::util {
   inline ThreadPool* kTHREAD_POOL{};
 
   inline void RegisterThreadPoolStartupShutdown(std::unique_ptr<ThreadPool>& thread_inst, StartupShutdownHandler* startup_shutdown_handler) {
-    startup_shutdown_handler->AddCallback("ThreadPool", [&](const StartupShutdownHandler::Action action) {
+    startup_shutdown_handler->AddCallback("ThreadPool", [&thread_inst](const StartupShutdownHandler::Action action) {
       if (action == StartupShutdownHandler::Action::Init) {
         thread_inst = std::make_unique<std::remove_reference_t<decltype(*thread_inst)>>(std::thread::hardware_concurrency() / 2);
         kTHREAD_POOL = thread_inst.get();

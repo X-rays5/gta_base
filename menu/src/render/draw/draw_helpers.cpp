@@ -2,6 +2,7 @@
 // Created by xray on 07/09/2023.
 //
 
+#include <numbers>
 #include "draw_helpers.hpp"
 #include "../renderer.hpp"
 
@@ -21,16 +22,16 @@ namespace base::menu::render::draw_helpers {
     }
   }
 
-  ImDrawList* GetDrawList() {
+  [[nodiscard]] ImDrawList* GetDrawList() {
     return ImGui::GetForegroundDrawList();
   }
 
-  ImVec2 GetSize(const ImVec2 pos, const ImVec2 size) {
+  [[nodiscard]] ImVec2 GetSize(const ImVec2 pos, const ImVec2 size) {
     return {pos.x + size.x, pos.y + size.y};
   }
 
   // scale float in range [0, 1] to [0, screen_size]
-  ImVec2 ScaleToScreen(ImVec2 xy) {
+  [[nodiscard]] ImVec2 ScaleToScreen(ImVec2 xy) {
     xy.x = std::clamp(xy.x, 0.0F, 1.0F);
     xy.y = std::clamp(xy.y, 0.0F, 1.0F);
 
@@ -45,7 +46,7 @@ namespace base::menu::render::draw_helpers {
   }
 
   /// scale float in range [0, screen_size] to [0, 1]
-  ImVec2 ScaleFromScreen(ImVec2 xy) {
+  [[nodiscard]] ImVec2 ScaleFromScreen(ImVec2 xy) {
     ImVec2 cur_res{0, 0};
     if (kRENDERER)
       cur_res = kRENDERER->GetResolution();
@@ -61,32 +62,32 @@ namespace base::menu::render::draw_helpers {
     return xy;
   }
 
-  float ScaleXToScreen(float x) {
+  [[nodiscard]] float ScaleXToScreen(float x) {
     return ScaleToScreen({x, 0}).x;
   }
 
-  float ScaleXFromScreen(float x) {
+  [[nodiscard]] float ScaleXFromScreen(float x) {
     return ScaleFromScreen({x, 0}).x;
   }
 
-  float ScaleYToScreen(float y) {
+  [[nodiscard]] float ScaleYToScreen(float y) {
     return ScaleToScreen({0, y}).y;
   }
 
-  float ScaleYFromScreen(float y) {
+  [[nodiscard]] float ScaleYFromScreen(float y) {
     return ScaleFromScreen({0, y}).y;
   }
 
-  ImVec2 ScaleSquare(float y) {
+  [[nodiscard]] ImVec2 ScaleSquare(float y) {
     auto tmp = ScaleYToScreen(y);
     return ScaleFromScreen({tmp, tmp});
   }
 
-  float ScaleFont(float size) {
+  [[nodiscard]] float ScaleFont(float size) {
     return ScaleYToScreen(size);
   }
 
-  ImVec2 CalcTextSizeRaw(const ImFont* font, const float font_size, const std::string& text, float wrap_width) {
+  [[nodiscard]] ImVec2 CalcTextSizeRaw(const ImFont* font, const float font_size, const std::string& text, float wrap_width) {
     if (!font) {
       font = ImGui::GetFont();
     }
@@ -97,7 +98,7 @@ namespace base::menu::render::draw_helpers {
     return text_size;
   }
 
-  ImVec2 CalcTextSize(const ImFont* font, const float font_size, const std::string& text, const float wrap_width) {
+  [[nodiscard]] ImVec2 CalcTextSize(const ImFont* font, const float font_size, const std::string& text, const float wrap_width) {
     return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
   }
 
@@ -105,7 +106,7 @@ namespace base::menu::render::draw_helpers {
     const auto real_max_x = ScaleXToScreen(max_x);
 
     if (str.empty() || CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
-      return 1; // Wrapping is not needed, so just return that there is 1 line
+      return 1; // Wrapping is not needed, so return that there is 1 line
     }
 
     const auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
@@ -158,9 +159,10 @@ namespace base::menu::render::draw_helpers {
       return {0, 0};
     }
 
-    ImVec2 l(FLT_MAX, FLT_MAX), u(-FLT_MAX, -FLT_MAX); // bounds
+    ImVec2 l(FLT_MAX, FLT_MAX);
+    ImVec2 u(-FLT_MAX, -FLT_MAX); // bounds
 
-    for (int i = rotation_start_idx_; i < vtx_buffer.Size; i++) {
+    for (std::int32_t i = rotation_start_idx_; i < vtx_buffer.Size; i++) {
       const ImVec2& pos = vtx_buffer[i].pos;
       l.x = std::min(l.x, pos.x);
       l.y = std::min(l.y, pos.y);
@@ -181,11 +183,11 @@ namespace base::menu::render::draw_helpers {
     auto& vtx_buffer = GetDrawList()->VtxBuffer;
     for (int i = rotation_start_idx_; i < vtx_buffer.Size; i++) {
       const ImVec2 pos = vtx_buffer[i].pos;
-      const float rad = degrees * 3.14159265358979323846f / 180.0f;
+      const float rad = degrees * std::numbers::pi_v<std::float_t> / 180.0f;
       const float cos_rad = cos(rad);
       const float sin_rad = sin(rad);
 
-      // Rotate around a center
+      // Rotate around the center
       vtx_buffer[i].pos.x = center.x + (pos.x - center.x) * cos_rad - (pos.y - center.y) * sin_rad;
       vtx_buffer[i].pos.y = center.y + (pos.x - center.x) * sin_rad + (pos.y - center.y) * cos_rad;
 

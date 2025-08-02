@@ -9,6 +9,9 @@
 #include "key_event_listener.hpp"
 
 namespace base::menu::util {
+  /**
+   * A class that registers the state of a set of keys and provides methods to check if a key was pressed or is currently down.
+   */
   class KeyState final : public KeyEventListener {
   public:
     struct KeyStateData {
@@ -18,8 +21,13 @@ namespace base::menu::util {
     };
 
   public:
+    /**
+     * 
+     * @param keys
+     * @param cooldown_ms
+     */
     KeyState(const std::vector<std::uint32_t>& keys, std::chrono::milliseconds cooldown_ms);
-    virtual ~KeyState() override;
+    ~KeyState() override;
 
     /**
      * Checks if a key was pressed since the last check and the cooldown period has passed.
@@ -35,8 +43,19 @@ namespace base::menu::util {
      */
     bool IsKeyDown(std::uint32_t key_code);
 
-    virtual void KeyDown(std::uint32_t vk_key, ModifierKey modifier) override;
-    virtual void KeyUp(std::uint32_t vk_key, ModifierKey modifier) override;
+    /**
+     * Checks if the specified key is currently down and the cooldown period has passed.
+     * @param vk_key Virtual key code of the key to check.
+     * @param modifier Modifier key that was pressed along with the key, if any.
+     */
+    void KeyDown(std::uint32_t vk_key, ModifierKey modifier) override;
+
+    /**
+     * Checks if the specified key was released, and the cooldown period has passed.
+     * @param vk_key Virtual key code of the key to check.
+     * @param modifier Modifier key that was pressed along with the key, if any.
+     */
+    void KeyUp(std::uint32_t vk_key, ModifierKey modifier) override;
 
   private:
     common::concurrency::Spinlock spinlock_;

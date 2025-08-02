@@ -22,7 +22,7 @@
 #include "util/thread_pool.hpp"
 #include "util/key_input/key_event_listener.hpp"
 
-std::atomic<bool> base::menu::globals::kRUNNING = true;
+std::atomic_bool base::menu::globals::kRUNNING = true;
 
 namespace base::menu {
   namespace {
@@ -54,9 +54,9 @@ namespace base::menu {
 
 class UnloadKeyWatcher final : public base::menu::hooking::WndProcEventListener {
 public:
-  virtual ~UnloadKeyWatcher() override = default;
+  ~UnloadKeyWatcher() override = default;
 
-  virtual void OnWndProc(HWND, UINT msg, WPARAM wparam, LPARAM) override {
+  void OnWndProc(HWND, const UINT msg, const WPARAM wparam, LPARAM) override {
     if (msg == WM_KEYDOWN && wparam == VK_END) {
       LOG_INFO("Unloading key was pressed...");
       base::menu::globals::kRUNNING = false;
@@ -64,7 +64,7 @@ public:
   }
 };
 
-int base::menu::menu_main() {
+DWORD base::menu::menu_main() {
   UnloadKeyWatcher unload_key_watcher;
   auto startup_shutdown_handler = std::make_unique<util::StartupShutdownHandler>();
   SetupStartupShutdownSequence(startup_shutdown_handler.get());
@@ -102,5 +102,3 @@ int base::menu::menu_main() {
 
   return 0;
 }
-
-#undef MANAGER_PTR_LIFETIME

@@ -17,6 +17,8 @@ namespace base::menu::ui {
   };
 
   struct Text {
+    const std::string font = "roboto-regular";
+    const std::string font_bold = "roboto-bold";
     const std::float_t x_margin = 0.005f;
     const std::float_t y_margin = 0.005f;
     const std::float_t font_size = 0.012f;
@@ -37,6 +39,7 @@ namespace base::menu::ui {
     const std::uint32_t max_options_drawn = 16;
     const ImColor seperator_color = ImColor(255, 255, 255);
     const ImColor background_color = ImColor(0, 0, 0);
+    const ImColor selector_color = text_props.text_color;
   };
 }
 
