@@ -19,7 +19,7 @@ namespace base::menu::ui::components {
     explicit SubLinkComponent(const SubmenuIDs navigate_to) : SubLinkComponent(std::string(magic_enum::enum_name(navigate_to))) {}
 
     virtual void HandleButtonPress(const PressedButton button) override {
-      if (button == PressedButton::kSUBMIT || button == PressedButton::kRIGHT) {
+      if (button == PressedButton::kSUBMIT) {
         NavigateToSubmenu();
       }
     }

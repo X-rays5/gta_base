@@ -59,7 +59,7 @@ namespace base::menu::ui {
     Status PushSubmenu(const std::string& id) {
       common::concurrency::ScopedSpinlock lock(submenus_lock_);
       if (submenus_.find(id) == submenus_.end()) {
-        return MakeFailure<ResultCode::kIO_ERROR>("Submenu not found: {}", id);
+        return MakeFailure<ResultCode::kNOT_FOUND>("Submenu not found: {}", id);
       }
 
       submenu_stack_.push(id);
@@ -82,7 +82,8 @@ namespace base::menu::ui {
 
   private:
     MenuRenderProperties ui_props_{};
-    util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK, VK_UP, VK_DOWN}, ui_props_.menu_ui_key_state_cooldown};
+    util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK}, ui_props_.menu_ui_key_state_cooldown};
+    util::KeyState menu_ui_navigation = {{VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT, VK_RETURN}, ui_props_.menu_ui_navigation_key_state_cooldown};
     ankerl::unordered_dense::map<std::string, std::shared_ptr<Submenu>> submenus_;
     std::stack<std::string> submenu_stack_;
     std::size_t script_id_ = 0;

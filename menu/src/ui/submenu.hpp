@@ -96,6 +96,56 @@ namespace base::menu::ui {
     }
 
     /**
+     * Get a specific component by index.
+     * @param idx The index of the component to retrieve.
+     * @return The component at the specified index.
+     */
+    [[nodiscard]] Component& GetComponent(const size_t idx) {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      if (idx >= components_.size()) {
+        throw std::out_of_range("Index out of range for submenu components");
+      }
+      return components_[idx];
+    }
+
+    /**
+     * Get a specific component by index (const version).
+     * @param idx The index of the component to retrieve.
+     * @return The component at the specified index.
+     */
+    [[nodiscard]] const Component& GetComponent(const size_t idx) const {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      if (idx >= components_.size()) {
+        throw std::out_of_range("Index out of range for submenu components");
+      }
+      return components_[idx];
+    }
+
+    /**
+     * Get the current component based on the current option index.
+     * @return The current component, or nullptr if no component is available.
+     */
+    [[nodiscard]] std::shared_ptr<components::BaseComponent> GetCurrentComponent() {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      if (cur_opt_idx_ >= components_.size()) {
+        return nullptr; // No current component available
+      }
+      return components_[cur_opt_idx_].component;
+    }
+
+    /**
+     * Get the current component based on the current option index (const version).
+     * @return The current component, or nullptr if no component is available.
+     */
+    [[nodiscard]] std::shared_ptr<components::BaseComponent> GetCurrentComponent() const {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      if (cur_opt_idx_ >= components_.size()) {
+        return nullptr; // No current component available
+      }
+      return components_[cur_opt_idx_].component;
+    }
+
+    /**
      * Get the name of this submenu.
      * @return The name of this submenu.
      */

@@ -32,6 +32,7 @@ namespace base::menu::ui {
     Theme theme;
     Text text_props;
     const std::chrono::milliseconds menu_ui_key_state_cooldown = std::chrono::milliseconds(200);
+    const std::chrono::milliseconds menu_ui_navigation_key_state_cooldown = std::chrono::milliseconds(100);
     const std::float_t header_height = 0.1f;
     const std::float_t seperator_height = 0.001f;
     const std::float_t menu_item_height = 0.025f;

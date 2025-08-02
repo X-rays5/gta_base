@@ -44,16 +44,25 @@ namespace base::menu::ui {
     }
 
     submenu->UpdateComponents();
-    if (menu_ui_key_state_.WasKeyPressed(VK_UP)) {
+    if (menu_ui_navigation.WasKeyPressed(VK_UP)) {
       submenu->Scroll(Submenu::ScrollDirection::kUP);
-    } else if (menu_ui_key_state_.WasKeyPressed(VK_DOWN)) {
+    } else if (menu_ui_navigation.WasKeyPressed(VK_DOWN)) {
       submenu->Scroll(Submenu::ScrollDirection::kDOWN);
     }
+
+    if (menu_ui_navigation.WasKeyPressed(VK_RETURN)) {
+      submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kSUBMIT);
+    } else if (menu_ui_navigation.WasKeyPressed(VK_LEFT)) {
+      submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kLEFT);
+    } else if (menu_ui_navigation.WasKeyPressed(VK_RIGHT)) {
+      submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kRIGHT);
+    }
+
     const Submenu::component_list_t& components = submenu->GetComponents();
 
     std::float_t y_offset = ui_props_.theme.y_position;
     y_offset = DrawTopBar(draw_queue, submenu->GetName(), y_offset);
-    std::float_t top_bar_y_offset = y_offset;
+    const std::float_t top_bar_y_offset = y_offset;
     if (components.empty()) {
       draw_queue->AddCommand(render::Rect({ui_props_.theme.x_position, y_offset}, {ui_props_.menu_width, ui_props_.menu_item_height}, ui_props_.background_color));
       DrawComponent(draw_queue, fallback_option_.get(), y_offset, false);
