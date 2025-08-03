@@ -129,7 +129,7 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
   const Window window(kWINDOW_WIDTH, kWINDOW_HEIGHT);
 
-  std::thread thread(GameRunningChecker);
+  std::thread game_running_check_thread(GameRunningChecker);
 
   // init to initial values
   strncpy_s(dll_path.get(), MAX_PATH, kSETTINGS.dll_path.c_str(), _TRUNCATE);
@@ -156,6 +156,10 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     }
 
     std::this_thread::yield();
+  }
+
+  if (game_running_check_thread.joinable()) {
+    game_running_check_thread.join();
   }
 
   return 0;
