@@ -68,10 +68,16 @@ namespace base::common::logging {
 
     void MovePossibleCrashLog() {
       const auto log_file_path = GetLogFile();
-      if (std::filesystem::exists(log_file_path)) {
-        const auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", util::time::GetTimeStamp(), log_file_path.stem().string(), log_file_path.extension().string());
-        std::filesystem::rename(log_file_path, log_file_path_tmp);
-        SaveLogFile(log_file_path_tmp);
+      try {
+        if (std::filesystem::exists(log_file_path)) {
+          const auto log_file_path_tmp = log_file_path.parent_path() / fmt::format("{}_{}_hard_crash{}", util::time::GetTimeStamp(), log_file_path.stem().string(), log_file_path.extension().string());
+          std::filesystem::rename(log_file_path, log_file_path_tmp);
+          SaveLogFile(log_file_path_tmp);
+        }
+      } catch (std::filesystem::filesystem_error& e) {
+        MessageBoxA(nullptr, fmt::format("{}\n{}\n{}", e.what(), e.path1().string(), e.path2().string()).c_str(), "exception while moving log file", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+      } catch (...) {
+        MessageBoxA(nullptr, xorstr_("An unknown error occurred while moving the log file."), xorstr_("Critical logging error"), MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
       }
     }
 

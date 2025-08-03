@@ -12,7 +12,8 @@
 #include "window.hpp"
 #include <SDL3/SDL_timer.h>
 
-std::atomic<bool> kRUNNING = true;
+std::atomic_bool kRUNNING = true;
+std::atomic_bool kGAME_RUNNING = false;
 
 namespace {
   auto dll_path = std::make_unique<char[]>(MAX_PATH);
@@ -36,19 +37,27 @@ void AtExit() {
   base::common::logging::Manager::Shutdown();
 }
 
-void DoFrame(const base::injector::Window& window) {
-  const HWND game_wnd = base::win32::GetHwnd(kSETTINGS.target_window_class, kSETTINGS.target_window_name).value_or(nullptr);
+void GameRunningChecker() {
+  while (kRUNNING) {
+    const HWND game_wnd = base::win32::GetHwnd(kSETTINGS.target_window_class, kSETTINGS.target_window_name).value_or(nullptr);
+    kGAME_RUNNING = base::win32::GetPIDFromHWND(game_wnd).has_error();
 
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
+}
+
+void DoFrame(const base::injector::Window& window) {
   window.PreFrame();
 
   {
     if (ImGui::Begin("Injector window", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
       if (ImGui::BeginTabBar("tabs")) {
         if (ImGui::BeginTabItem("Injector")) {
-          ImGui::Text(!game_wnd ? "Game not running" : fmt::format("Game running: {}", base::win32::GetPIDFromHWND(game_wnd).value_or(0)).c_str());
-          if (game_wnd) {
+          ImGui::Text((!kGAME_RUNNING ? "Game not running" : fmt::format("Game running: {}", kGAME_RUNNING ? "yes" : "no")).c_str());
+          if (kGAME_RUNNING) {
             if (ImGui::Button("Inject")) {
-              auto _ = std::async(std::launch::async, [game_wnd]() {
+              auto _ = std::async(std::launch::async, []() {
+                const HWND game_wnd = base::win32::GetHwnd(kSETTINGS.target_window_class, kSETTINGS.target_window_name).value_or(nullptr);
                 if (const auto res = base::injector::Inject(base::win32::GetPIDFromHWND(game_wnd).value_or(0), kSETTINGS.dll_path); res.error()) {
                   LOG_ERROR("Failed to inject: {}", res.error());
                   MessageBoxA(nullptr, res.error().GetResultMessage().c_str(), "Error", MB_OK | MB_ICONERROR);
@@ -120,6 +129,8 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
   const Window window(kWINDOW_WIDTH, kWINDOW_HEIGHT);
 
+  std::thread thread(GameRunningChecker);
+
   // init to initial values
   strncpy_s(dll_path.get(), MAX_PATH, kSETTINGS.dll_path.c_str(), _TRUNCATE);
   strncpy_s(target_window_name.get(), 255, kSETTINGS.target_window_name.c_str(), _TRUNCATE);
@@ -143,6 +154,8 @@ std::int32_t APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
       prev_tick = cur_tick;
       DoFrame(window);
     }
+
+    std::this_thread::yield();
   }
 
   return 0;
