@@ -90,19 +90,20 @@ namespace base::win32 {
     return foreground_window == GetConsoleWindow() || window;
   }
 
-  bool IsTargetProcess(const std::string& target_process) {
-    const auto exe_name = std::make_unique<CHAR[]>(MAX_PATH);
-    const std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name.get(), MAX_PATH);
+  bool IsGameProcess() {
+    static const auto exe_name = std::make_unique<CHAR[]>(MAX_PATH);
+    static const std::uint32_t str_len = GetModuleFileNameA(nullptr, exe_name.get(), MAX_PATH);
 
     if (str_len == 0) {
       LOG_ERROR("Failed to get module file name. win32 err code: {}", GetLastError());
       return false;
     }
 
-    const std::string cur_proc_name = std::filesystem::path(std::string(exe_name.get(), str_len)).filename().string();
+    static const std::string cur_proc_name = std::filesystem::path(std::string(exe_name.get(), str_len)).filename().string();
 
-    return cur_proc_name == target_process;
+    return cur_proc_name == common::globals::target_process_name || cur_proc_name == common::globals::target_process_name_be;
   }
+
 
   std::string GetLastErrorStr() {
     DWORD err = GetLastError();
