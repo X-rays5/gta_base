@@ -40,7 +40,7 @@ void AtExit() {
 void GameRunningChecker() {
   while (kRUNNING) {
     const HWND game_wnd = base::win32::GetHwnd(kSETTINGS.target_window_class, kSETTINGS.target_window_name).value_or(nullptr);
-    kGAME_RUNNING = base::win32::GetPIDFromHWND(game_wnd).has_error();
+    kGAME_RUNNING = !base::win32::GetPIDFromHWND(game_wnd).has_error();
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
