@@ -53,7 +53,7 @@ void DoFrame(const base::injector::Window& window) {
     if (ImGui::Begin("Injector window", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
       if (ImGui::BeginTabBar("tabs")) {
         if (ImGui::BeginTabItem("Injector")) {
-          ImGui::Text((!kGAME_RUNNING ? "Game not running" : fmt::format("Game running: {}", kGAME_RUNNING ? "yes" : "no")).c_str());
+          ImGui::Text(!kGAME_RUNNING ? "Game not running" : "Game running");
           if (kGAME_RUNNING) {
             if (ImGui::Button("Inject")) {
               auto _ = std::async(std::launch::async, []() {
