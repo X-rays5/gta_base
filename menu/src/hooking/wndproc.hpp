@@ -8,6 +8,13 @@
 #include <base-common/concurrency/spinlock.hpp>
 
 namespace base::menu::hooking {
+  class WndProcEventListener {
+  public:
+    virtual ~WndProcEventListener() = default;
+
+    virtual void OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) = 0;
+  };
+
   class WndProc {
   public:
     WndProc();
@@ -19,7 +26,7 @@ namespace base::menu::hooking {
       return og_wnd_proc_;
     }
 
-    std::size_t AddWndProcHandler(const WNDPROC handler) {
+    std::size_t AddWndProcHandler(WndProcEventListener* handler) {
       common::concurrency::ScopedSpinlock lock(spinlock_);
       const std::size_t id = next_event_handler_id_.fetch_add(1); // Shouldn't run out realistically
       wnd_proc_handlers_[id] = handler;
@@ -35,7 +42,7 @@ namespace base::menu::hooking {
 
   private:
     WNDPROC og_wnd_proc_{};
-    ankerl::unordered_dense::map<std::size_t, WNDPROC> wnd_proc_handlers_;
+    ankerl::unordered_dense::map<std::size_t, WndProcEventListener*> wnd_proc_handlers_;
     std::atomic<std::size_t> next_event_handler_id_ = 0;
     common::concurrency::RecursiveSpinlock spinlock_;
   };

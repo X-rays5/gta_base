@@ -12,10 +12,10 @@ namespace base::menu::render {
 }
 
 
-namespace base::ui::notification {
+namespace base::menu::ui::notification {
   class Manager;
 
-  enum class Type {
+  enum class NotificationType {
     Info,
     Warning,
     Error
@@ -23,16 +23,16 @@ namespace base::ui::notification {
 
   class Notification {
   private:
-    Notification(const Type type, const std::string& title, const std::string& message) : type_(type), title_(title), message_(message), notification_color_(GetNotificationColor(type)) {}
+    Notification(const NotificationType type, const std::string& title, const std::string& message) : type_(type), title_(title), message_(message), notification_color_(GetNotificationColor(type)) {}
 
-    static ImColor GetNotificationColor(Type type);
+    static ImColor GetNotificationColor(NotificationType type);
 
-    [[nodiscard]] std::float_t Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, bool right_align, std::float_t y_offset);
+    [[nodiscard]] std::float_t Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, bool right_align, std::float_t y_offset) const;
 
     friend class Manager;
 
   private:
-    Type type_;
+    NotificationType type_;
     std::string title_;
     std::string message_;
     //std::unique_ptr<render::animate::LerpWaitReturn<std::float_t>> notification_animation_;

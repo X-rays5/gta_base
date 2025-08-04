@@ -27,8 +27,7 @@ namespace base::common::logging::exception {
         offset = offset_res.value();
       }
 
-      const auto* exception = std::bit_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]);
-      if (exception && exception->what()) {
+      if (const auto* exception = std::bit_cast<std::exception*>(except->ExceptionRecord->ExceptionInformation[1]); exception && exception->what()) {
         LOG_ERROR("{}+{}: {}", mod_name, offset, exception->what());
       } else {
         LOG_ERROR("{}+{}: cpp exception thrown", mod_name, offset);
@@ -39,7 +38,11 @@ namespace base::common::logging::exception {
       auto err_code = except->ExceptionRecord->ExceptionCode;
 
       if (err_code == EXCEPTION_BREAKPOINT || err_code == EXCEPTION_SINGLE_STEP) {
+#ifdef NDEBUG
+        return EXCEPTION_CONTINUE_EXECUTION;
+#else
         return EXCEPTION_CONTINUE_SEARCH;
+#endif
       }
 
       if (ExceptionCodeToStr(err_code) == "UNKNOWN") {
@@ -64,7 +67,8 @@ namespace base::common::logging::exception {
       }
 
 #ifndef VECTORED_HANDLER_UNIT_TEST
-      spdlog::default_logger_raw()->flush();
+      if (const auto logger = spdlog::default_logger_raw())
+        logger->flush();
 
       Manager::Shutdown();
 #endif

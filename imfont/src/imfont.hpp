@@ -5,7 +5,10 @@
 #ifndef MANAGER_HPP_12174322
 #define MANAGER_HPP_12174322
 #include <filesystem>
-#include <unordered_map>
+#include <ankerl/unordered_dense.h>
+#include <base-common/concurrency/spinlock.hpp>
+
+struct ImFont;
 
 namespace imfont {
   class Manager {
@@ -20,9 +23,12 @@ namespace imfont {
     void PushFont(const std::string& name);
     static void PopFont();
 
+    ImFont* GetFont(const std::string& name);
+
   private:
     // std::string, ImFont*
-    std::unordered_map<std::string, void*> fonts_;
+    ankerl::unordered_dense::map<std::string, void*> fonts_;
+    base::common::concurrency::Spinlock lock_;
 
   private:
     bool FinalizeLoading(const std::string& name, const void* font, const std::float_t font_size, bool merge_fa);

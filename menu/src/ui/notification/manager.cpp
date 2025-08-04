@@ -3,29 +3,25 @@
 //
 
 #include "manager.hpp"
-#include "../../render/thread.hpp"
 #include "../../render/renderer.hpp"
+#include "../../scripts/script_manager.hpp"
 
-namespace base::ui::notification {
+namespace base::menu::ui::notification {
   Manager::Manager() {
+    script_id_ = scripts::kSCRIPTMANAGER->AddScript(this);
+
     kMANAGER = this;
-    menu::render::kTHREAD->AddRenderCallback(999, [](menu::render::DrawQueueBuffer* draw_queue_buffer) {
-      if (kMANAGER) {
-        kMANAGER->Render(draw_queue_buffer);
-      }
-    });
   }
 
   Manager::~Manager() {
     kMANAGER = nullptr;
+
+    scripts::kSCRIPTMANAGER->RemoveScript(script_id_, GetScriptType());
   }
 
-  void Manager::AddNotification(const Type type, const std::size_t duration_ms, const std::string& title, const std::string& message) {
-    Notify notif = {common::util::time::GetTimeStamp(), duration_ms, Notification(type, title, message)};
-    notifications_.emplace_back(notif);
-  }
+  void Manager::ScriptTick() {
+    const auto draw_queue_buffer = render::kRENDERER->GetDrawQueueBuffer();
 
-  void Manager::Render(menu::render::DrawQueueBuffer* draw_queue_buffer) {
     // Iterate through all notifications and render them also remove them if they are expired
     std::float_t y_offset = 0.0f;
     for (auto it = notifications_.begin(); it != notifications_.end();) {
@@ -37,5 +33,10 @@ namespace base::ui::notification {
         ++it;
       }
     }
+  }
+
+  void Manager::AddNotification(const NotificationType type, const std::size_t duration_ms, const std::string& title, const std::string& message) {
+    Notify notif = {common::util::time::GetTimeStamp(), duration_ms, Notification(type, title, message)};
+    notifications_.emplace_back(notif);
   }
 }

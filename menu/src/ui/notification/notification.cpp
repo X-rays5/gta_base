@@ -3,16 +3,16 @@
 //
 
 #include "notification.hpp"
-#include "../../render/draw.hpp"
+#include "../../render/draw/draw_queue.hpp"
 
-namespace base::ui::notification {
-  ImColor Notification::GetNotificationColor(const Type type) {
+namespace base::menu::ui::notification {
+  ImColor Notification::GetNotificationColor(const NotificationType type) {
     switch (type) {
-    case Type::Info:
+    case NotificationType::Info:
       return info_color_;
-    case Type::Warning:
+    case NotificationType::Warning:
       return warning_color_;
-    case Type::Error:
+    case NotificationType::Error:
       return error_color_;
     default:
       LOG_ERROR("Unknown notification type: {}", static_cast<int>(type));
@@ -20,7 +20,7 @@ namespace base::ui::notification {
     }
   }
 
-  std::float_t Notification::Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, const bool right_align, std::float_t y_offset) {
+  std::float_t Notification::Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, const bool right_align, std::float_t y_offset) const {
     constexpr std::float_t y_size = .05f;
 
     const auto notification_x_pos = right_align ? 1.f - notification_width_ - x_margin_ : 0 + x_margin_;
