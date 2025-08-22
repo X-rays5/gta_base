@@ -6,7 +6,7 @@
 
 namespace base::menu::hooking {
   namespace {
-    LRESULT WndProcHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+    LRESULT WndProcHandler(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam) {
       if (!kWNDPROC) {
         LOG_DEBUG("kWNDPROC is null");
         return DefWindowProc(hwnd, msg, wparam, lparam);
@@ -36,10 +36,11 @@ namespace base::menu::hooking {
   WndProc::~WndProc() {
     kWNDPROC = nullptr;
 
+    LOG_DEBUG("Restoring old WndProc handler: {}", fmt::ptr(og_wnd_proc_));
     SetWindowLongPtr(win32::GetGameHwnd().value(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(og_wnd_proc_));
   }
 
-  void WndProc::HandleWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+  void WndProc::HandleWndProc(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam) {
     common::concurrency::ScopedSpinlock lock(spinlock_);
     for (auto&& handler : wnd_proc_handlers_ | std::views::values) {
       if (handler) {

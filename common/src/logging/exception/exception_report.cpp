@@ -121,6 +121,9 @@ namespace base::common::logging::exception {
     msg << "***** Exception flags: " << except_rec->ExceptionFlags << " *****\n";
     msg << "***** Exception instruction: " << GetInstructionsStr(ctx->Rip).value_or("Failed to decompile exception area.") << " *****\n";
 
+    msg << "\n***** STACK DUMP *****\n";
+    msg << GetRegisters(ctx);
+    msg << '\n' << std::stacktrace::current(stacktrace_skip_count) << '\n';
 
     msg << "\nLoaded Modules:\n";
 
@@ -133,10 +136,6 @@ namespace base::common::logging::exception {
       msg << mod.szExePath << " addr: " << common::conversion::AddrToHex(reinterpret_cast<std::uintptr_t>(mod.modBaseAddr)) << " size: " << common::conversion::AddrToHex(mod.modBaseSize);
       msg << '\n';
     }
-
-    msg << "\n***** STACKDUMP *****\n";
-    msg << GetRegisters(ctx);
-    msg << '\n' << std::stacktrace::current(stacktrace_skip_count) << '\n';
 
     std::filesystem::path report_dir = common::fs::vfs::GetExceptionReportsDir() / fmt::format("report_{}", common::util::time::GetTimeStamp());
     if (!std::filesystem::create_directories(report_dir)) {
