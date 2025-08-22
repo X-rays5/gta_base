@@ -53,6 +53,10 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/common.hpp
         src/hooking/wndproc.cpp
         src/hooking/wndproc.hpp
+        src/render/d3d12/heap/descriptor_heap_allocator.cpp
+        src/render/d3d12/heap/descriptor_heap_allocator.hpp
+        src/render/d3d12/context.hpp
+        src/render/d3d12/context.cpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

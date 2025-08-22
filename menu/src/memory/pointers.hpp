@@ -4,7 +4,8 @@
 
 #ifndef POINTERS_HPP
 #define POINTERS_HPP
-#include <dxgi.h>
+#include <d3d12.h>
+#include <dxgi1_4.h>
 
 namespace base::menu::memory {
   class Pointers {
@@ -12,12 +13,8 @@ namespace base::menu::memory {
     Pointers();
     ~Pointers();
 
-    struct ScreenRes {
-      std::uint32_t x;
-      std::uint32_t y;
-    } screen_res_;
-
-    IDXGISwapChain** swap_chain_{};
+    IDXGISwapChain3** swap_chain_{};
+    ID3D12CommandQueue** command_queue_{};
   };
 
   inline Pointers* kPOINTERS{};

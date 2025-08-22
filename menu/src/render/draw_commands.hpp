@@ -5,8 +5,8 @@
 #pragma once
 #ifndef GTA_BASE_DRAW_COMMANDS_545AB8D13AD244EE82FA159E81A729AD_HPP
 #define GTA_BASE_DRAW_COMMANDS_545AB8D13AD244EE82FA159E81A729AD_HPP
+#include <d3d12.h>
 #include "draw_util.hpp"
-#include <d3d11.h>
 
 // TODO: move most of this file to a cpp file
 
@@ -151,15 +151,15 @@ namespace base::menu::render {
 
   class Image final : public BaseDrawCommand {
   public:
-    Image(ID3D11ShaderResourceView* texture, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) :
-      texture_(texture), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
+    Image(const D3D12_GPU_DESCRIPTOR_HANDLE texture_handle, const ImVec2 pos, const ImVec2 size, const ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) :
+      texture_handle_(texture_handle), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
 
     virtual void Draw() override {
-      util::GetDrawList()->AddImage(reinterpret_cast<ImTextureID>(texture_), util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+      util::GetDrawList()->AddImage(texture_handle_.ptr, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
   private:
-    ID3D11ShaderResourceView* texture_;
+    D3D12_GPU_DESCRIPTOR_HANDLE texture_handle_;
     ImVec2 pos_;
     ImVec2 size_;
     ImVec2 uv_min_;

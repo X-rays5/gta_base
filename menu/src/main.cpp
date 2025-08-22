@@ -145,7 +145,7 @@ int base::menu::menu_main() {
 
   hooking_inst->Enable();
 
-  auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
+  const auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
 
   LOG_INFO("Loaded");
   while (globals::kRUNNING) {

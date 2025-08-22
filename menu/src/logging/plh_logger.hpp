@@ -14,7 +14,7 @@ namespace base::menu::logging::PLH {
     virtual void log(const std::string& msg, ::PLH::ErrorLevel level) override {
       switch (level) {
       case ::PLH::ErrorLevel::INFO:
-        LOG_INFO(msg);
+        LOG_DEBUG("[PLH INFO]: {}", msg); // This logs way too much to be relevant outside of debug builds
         break;
       case ::PLH::ErrorLevel::WARN:
         LOG_WARN(msg);
