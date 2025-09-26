@@ -43,7 +43,7 @@ namespace base::menu::hooking {
     common::concurrency::ScopedSpinlock lock(spinlock_);
     for (auto&& handler : wnd_proc_handlers_ | std::views::values) {
       if (handler) {
-        handler(hwnd, msg, wparam, lparam);
+        handler->OnWndProc(hwnd, msg, wparam, lparam);
       }
     }
   }

@@ -8,9 +8,7 @@
 #include <memory>
 #include <vector>
 #include <base-common/concurrency/spinlock.hpp>
-#include <imgui/imgui.h>
 #include "draw_commands.hpp"
-#include "draw_util.hpp"
 
 namespace base::menu::render {
   class DrawQueue {
@@ -37,48 +35,25 @@ namespace base::menu::render {
 
   class DrawQueueBuffer {
   public:
-    explicit DrawQueueBuffer(const std::size_t draw_queue_buffers = 3) {
-      GTA_BASE_ASSERT(draw_queue_buffers > 1, "Draw queue buffers must be greater than 1.");
-
-      draw_queue_.resize(draw_queue_buffers);
-    }
-
-    ~DrawQueueBuffer() {
-      // Just in case to prevent a deadlock on shutdown.
-      common::concurrency::ScopedSpinlock lock(spinlock_);
-      read_signal_.Notify();
-    }
+    explicit DrawQueueBuffer(std::size_t draw_queue_buffers = 3);
+    ~DrawQueueBuffer();
 
     /// @note This function is only supposed to be called when shutting down to prevent a deadlock. In the case the render thread was waiting for a signal, but the render detour is already disabled.
-    void UnblockRenderThread() const {
+    FORCE_INLINE void UnblockRenderThread() const {
       read_signal_.Notify();
     }
 
-    void RenderFrame() {
-      common::concurrency::ScopedSpinlock lock(spinlock_);
-      draw_queue_[read_idx_].Draw();
-      read_signal_.Notify();
-    }
+    void RenderFrame();
 
     /// @note This function should ONLY be called from the render thread.
     template <typename... Args>
-    void AddCommand(Args&&... command) {
+    FORCE_INLINE void AddCommand(Args&&... command) {
       common::concurrency::ScopedSpinlock lock(spinlock_);
       draw_queue_[write_idx_].AddCommand(std::forward<Args>(command)...);
     }
 
-    /// @warning This function may ONLY be called from Thread::RenderMain().
-    void SwapBuffers() {
-      spinlock_.Lock();
-
-      read_idx_ = write_idx_;
-      write_idx_ = (write_idx_ + 1) % draw_queue_.size();
-      draw_queue_[write_idx_].Clear();
-
-      spinlock_.Unlock();
-
-      read_signal_.Wait();
-    }
+    /// @warning This function may ONLY be called from RenderThread::RenderMain().
+    void SwapBuffers();
 
   private:
     std::vector<DrawQueue> draw_queue_;

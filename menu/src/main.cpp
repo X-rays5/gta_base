@@ -12,144 +12,84 @@
 #include "hooking/wndproc.hpp"
 #include "memory/pointers.hpp"
 #include "render/renderer.hpp"
-#include "render/thread.hpp"
+#include "scripts/script_manager.hpp"
 #include "ui/localization/manager.hpp"
-#include "ui/notification/manager.hpp"
+#include "ui/menu_renderer.hpp"
+#include "ui/components/execute_component.hpp"
+#include "ui/components/label_component.hpp"
+#include "ui/components/sub_link_component.hpp"
+#include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
+#include "util/key_input/key_event_listener.hpp"
 
-std::atomic<bool> base::menu::globals::kRUNNING = true;
+std::atomic_bool base::menu::globals::kRUNNING = true;
 
 namespace base::menu {
   namespace {
+    std::unique_ptr<scripts::ScriptManager> script_manager_inst;
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
     std::unique_ptr<hooking::WndProc> wndproc_inst;
+    std::unique_ptr<util::KeyEventWatcher> keywatch_inst;
     std::unique_ptr<memory::Pointers> pointers_inst;
     std::unique_ptr<hooking::Manager> hooking_inst;
     std::unique_ptr<ui::localization::Manager> localization_manager_inst;
     std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
     std::unique_ptr<render::Renderer> render_inst;
-    std::unique_ptr<render::Thread> render_thread_manager_inst;
-    std::unique_ptr<std::thread> render_thread_inst;
-    std::unique_ptr<ui::notification::Manager> notification_manager_inst;
+    std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
+
+    void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptManager", script_manager_inst);
+      RegisterThreadPoolStartupShutdown(thread_pool_inst, handler);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "WndProc", wndproc_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "KeyEventWatcher", keywatch_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "Pointers", pointers_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "HookingManager", hooking_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "LocalizationManager", localization_manager_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DiscordRichPresence", discord_rich_presence_inst);
+      render::RendererLifeTime(render_inst, handler);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "MenuRenderer", menu_renderer_inst);
+    }
   }
 }
 
-class LifeTimeHelper {
+class UnloadKeyWatcher final : public base::menu::hooking::WndProcEventListener {
 public:
-  enum Action {
-    Init,
-    Shutdown
-  };
+  ~UnloadKeyWatcher() override = default;
 
-  using cb_t = std::function<void(Action)>;
-
-public:
-  LifeTimeHelper() = default;
-
-  ~LifeTimeHelper() {
-    LOG_INFO("[SHUTDOWN] LifeTimeHelper");
-    for (auto it = cb_vec_.rbegin(); it != cb_vec_.rend(); ++it)
-      (*it)(Shutdown);
+  void OnWndProc(HWND, const UINT msg, const WPARAM wparam, LPARAM) override {
+    if (msg == WM_KEYDOWN && wparam == VK_END) {
+      LOG_INFO("Unloading key was pressed...");
+      base::menu::globals::kRUNNING = false;
+    }
   }
-
-  void RunInit() const {
-    LOG_INFO("[INIT] LifeTimeHelper");
-    for (auto& cb : cb_vec_)
-      cb(Init);
-  }
-
-  void AddCallback(const cb_t& cb) {
-    cb_vec_.push_back(cb);
-  }
-
-private:
-  std::vector<cb_t> cb_vec_;
 };
 
-#define MANAGER_PTR_LIFETIME(lifetime_helper_inst, init_name, manager_var, ...) lifetime_helper_inst->AddCallback([](LifeTimeHelper::Action action) { \
-  if (action == LifeTimeHelper::Init) { \
-    manager_var = std::make_unique<std::remove_reference_t<decltype(*manager_var)>>(__VA_ARGS__); \
-    LOG_INFO("[INIT] {}", xorstr_(init_name)); \
-  } \
-  else { \
-    manager_var.reset(); \
-    LOG_INFO("[SHUTDOWN] {}", xorstr_(init_name)); \
-  } \
-})
+DWORD base::menu::menu_main() {
+  UnloadKeyWatcher unload_key_watcher;
+  auto startup_shutdown_handler = std::make_unique<util::StartupShutdownHandler>();
+  SetupStartupShutdownSequence(startup_shutdown_handler.get());
 
-void ThreadPoolLifetime(LifeTimeHelper* life_time_helper) {
-  life_time_helper->AddCallback([&](LifeTimeHelper::Action action) {
-    if (action == LifeTimeHelper::Init) {
-      base::menu::thread_pool_inst = std::make_unique<std::remove_reference_t<decltype(*base::menu::thread_pool_inst)>>(std::thread::hardware_concurrency() / 2);
-      base::menu::util::kTHREAD_POOL = base::menu::thread_pool_inst.get();
-      LOG_INFO("[INIT] {}", "ThreadPool");
-    } else {
-      base::menu::util::kTHREAD_POOL = nullptr;
-      base::menu::thread_pool_inst.reset();
-      LOG_INFO("[SHUTDOWN] {}", "ThreadPool");
-    }
-  });
-}
-
-void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
-  lifetime_helper->AddCallback([](LifeTimeHelper::Action action) {
-    if (action == LifeTimeHelper::Init) {
-      LOG_INFO("[INIT] Renderer");
-      base::menu::render_inst = std::make_unique<base::menu::render::Renderer>();
-      base::menu::render_thread_manager_inst = std::make_unique<base::menu::render::Thread>();
-
-      base::menu::render::kTHREAD->AddRenderCallback(0, [](base::menu::render::DrawQueueBuffer* buffer) {
-        buffer->AddCommand(base::menu::render::Text({0.5, 0.5}, ImColor(255, 0, 0), base::ui::localization::kMANAGER->Localize("text/hello_world"), 0.02F, false, true, true));
-      });
-
-      LOG_INFO("[INIT] Render thread");
-      base::menu::render_thread_inst = std::make_unique<std::thread>(base::menu::render::Thread::RenderMain);
-    } else {
-      // First, make sure it's actually waiting, then unblock it.
-      std::this_thread::sleep_for(std::chrono::milliseconds(200));
-      base::menu::render::kRENDERER->GetDrawQueueBuffer()->UnblockRenderThread();
-
-      LOG_DEBUG("[SHUTDOWN] Stopping render thread...");
-      if (base::menu::render_thread_inst->joinable())
-        base::menu::render_thread_inst->join();
-      LOG_INFO("[SHUTDOWN] Render thread stopped.");
-
-      base::menu::render_thread_manager_inst.reset();
-      base::menu::render_inst.reset();
-    }
-  });
-}
-
-LRESULT UnloadKeyWatcher(HWND, UINT msg, WPARAM wparam, LPARAM) {
-  if (msg == WM_KEYDOWN && wparam == VK_END) {
-    LOG_INFO("Unloading key was pressed...");
-    base::menu::globals::kRUNNING = false;
-  }
-
-  return 0;
-}
-
-int base::menu::menu_main() {
-  auto lifetime_helper = std::make_unique<LifeTimeHelper>();
-
-  ThreadPoolLifetime(lifetime_helper.get());
-  MANAGER_PTR_LIFETIME(lifetime_helper, "WndProc", wndproc_inst);
-  MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
-  MANAGER_PTR_LIFETIME(lifetime_helper, "HookingManager", hooking_inst);
-  MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);
-  MANAGER_PTR_LIFETIME(lifetime_helper, "DiscordRichPresence", discord_rich_presence_inst);
-  RenderThreadLifeTime(lifetime_helper.get());
-  MANAGER_PTR_LIFETIME(lifetime_helper, "NotificationManager", notification_manager_inst);
-
-  lifetime_helper->RunInit();
+  startup_shutdown_handler->RunInit();
 
   hooking_inst->Enable();
 
-  auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
+  ui::Submenu home_submenu("Home", [](ui::Submenu* sub) {
+    sub->AddComponent(ui::components::LabelComponent("label/home_submenu"));
+    sub->AddComponent(ui::components::ExecuteComponent("Execute Script", [](ui::components::ExecuteComponent*) {
+      LOG_INFO("Executing script from home submenu.");
+      // Here you can add the logic to execute a script or perform an action.
+    }));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+  });
+  ui::kMENU_RENDERER->AddSubmenu(ui::SubmenuIDs::kMAIN_MENU, std::move(home_submenu));
+
+  const auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(&unload_key_watcher);
+
+  scripts::kSCRIPTMANAGER->InitScripts(scripts::BaseScript::Type::MainScriptThread);
 
   LOG_INFO("Loaded");
   while (globals::kRUNNING) {
-    discord::kRICH_PRESENCE->Tick();
+    scripts::kSCRIPTMANAGER->TickScripts(scripts::BaseScript::Type::MainScriptThread);
     std::this_thread::yield();
   }
   LOG_INFO("Unloading...");
@@ -158,9 +98,7 @@ int base::menu::menu_main() {
 
   hooking_inst->Disable();
 
-  lifetime_helper.reset();
+  startup_shutdown_handler.reset();
 
   return 0;
 }
-
-#undef MANAGER_PTR_LIFETIME

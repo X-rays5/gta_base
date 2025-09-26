@@ -40,6 +40,7 @@ namespace base::common::fs::vfs {
   GET_PATH(TranslationDir, "translations")
   GET_PATH(SettingsDir, "settings")
   GET_PATH(TimeTraceDir, "logs/time_trace")
+  GET_PATH(UIThemeDir, "settings/themes")
 }
 
 #undef GET_PATH

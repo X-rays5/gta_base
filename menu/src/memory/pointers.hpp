@@ -12,11 +12,6 @@ namespace base::menu::memory {
     Pointers();
     ~Pointers();
 
-    struct ScreenRes {
-      std::uint32_t x;
-      std::uint32_t y;
-    } screen_res_;
-
     IDXGISwapChain** swap_chain_{};
   };
 

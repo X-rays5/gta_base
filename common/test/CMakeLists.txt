@@ -15,6 +15,7 @@ add_executable(${PROJECT_NAME}
         src/fmt/fs_formatter_test.cpp
         src/fs/vfs_test.cpp
         src/memory/address_test.cpp
+        src/util/ranged_value.cpp
 )
 
 include(../../vendor/gtest.cmake)
