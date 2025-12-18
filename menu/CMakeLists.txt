@@ -53,7 +53,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/common.hpp
         src/hooking/wndproc.cpp
         src/hooking/wndproc.hpp
-        test/src/main.cpp
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 
