@@ -4,8 +4,8 @@
 
 #ifndef THREAD_ID_HPP
 #define THREAD_ID_HPP
+#include "../conversion/cw2a.hpp"
 #include "spdlog/pattern_formatter.h"
-#include <atlstr.h>
 
 inline thread_local std::unordered_map<std::size_t, HANDLE> thread_handles = {};
 
@@ -21,7 +21,7 @@ public:
     if (handle_kv->second != nullptr) {
       PWSTR thread_description;
       if (const HRESULT hr = GetThreadDescription(handle_kv->second, &thread_description); SUCCEEDED(hr)) {
-        thread_id = fmt::format("{}", std::string(CW2A(thread_description)));
+        thread_id = fmt::format("{}", std::string(base::common::conversion::CW2A(thread_description)));
         LocalFree(thread_description);
       }
     }
