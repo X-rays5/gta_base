@@ -52,6 +52,8 @@ add_library(${PROJECT_NAME} STATIC
         src/fmt/glaze_formatter.hpp
         src/util/ranged_value.hpp
         src/util/enum_bitops.hpp
+        src/conversion/cw2a.cpp
+        src/conversion/cw2a.hpp
 )
 add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
