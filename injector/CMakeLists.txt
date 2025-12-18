@@ -30,3 +30,5 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.hpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
 target_link_libraries(${PROJECT_NAME} PRIVATE base::imfont)
+
+add_subdirectory(test)
