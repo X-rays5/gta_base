@@ -99,7 +99,7 @@ jobs:
 
       - name: Install build-wrapper
         if: matrix.language == 'c-cpp'
-        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.3.1
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6.0.0
 
       - name: Build with build-wrapper
         if: matrix.language == 'c-cpp'
@@ -167,7 +167,7 @@ jobs:
 
       - name: Run SonarCloud scan
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
-        uses: SonarSource/sonarqube-scan-action@v5.1.0
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
