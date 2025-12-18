@@ -3,18 +3,12 @@ project(injector_test LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 
-file(GLOB_RECURSE INJECTOR_CPP_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.cpp)
-list(REMOVE_ITEM INJECTOR_CPP_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
-)
-
-file(GLOB_RECURSE INJECTOR_HEADER_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.hpp)
-
 add_executable(${PROJECT_NAME}
-        ${INJECTOR_CPP_FILES}
-        ${INJECTOR_HEADER_FILES}
         src/main.cpp
 )
+
+# Link against the core library to share dependencies and avoid recompilation
+target_link_libraries(${PROJECT_NAME} PRIVATE base::injector_core)
 
 include(../../vendor/gtest.cmake)
 enable_testing()
