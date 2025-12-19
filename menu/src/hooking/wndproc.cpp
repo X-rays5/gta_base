@@ -6,17 +6,23 @@
 
 namespace base::menu::hooking {
   namespace {
-    LRESULT WndProcHandler(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam) {
-      if (!kWNDPROC) {
-        LOG_DEBUG("kWNDPROC is null");
-        return DefWindowProc(hwnd, msg, wparam, lparam);
+    LRESULT WndProcDetour(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+      auto* instance = kWNDPROC;
+
+      if (instance && globals::kRUNNING) {
+        instance->HandleWndProc(hwnd, msg, wparam, lparam);
       }
 
-      if (globals::kRUNNING) {
-        kWNDPROC->HandleWndProc(hwnd, msg, wparam, lparam);
+      // Call the original WndProc
+      if (instance) {
+        auto* hook = instance->GetHook();
+        if (hook) {
+          return hook->CallOriginal<WNDPROC>(hwnd, msg, wparam, lparam);
+        }
       }
 
-      return CallWindowProcA(kWNDPROC->GetOriginalWndProc(), hwnd, msg, wparam, lparam);
+      // Fallback if the instance is null (shouldn't happen during normal operation)
+      return DefWindowProcW(hwnd, msg, wparam, lparam);
     }
   }
 
@@ -27,17 +33,35 @@ namespace base::menu::hooking {
       exit(1);
     }
 
-    og_wnd_proc_ = reinterpret_cast<WNDPROC>(SetWindowLongPtr(hwnd.value(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WndProcHandler)));
-    LOG_DEBUG("Old WndProc handler: {}", fmt::ptr(og_wnd_proc_));
+    // Get the current WndProc address using GetWindowLongPtr
+    auto wndproc_addr = reinterpret_cast<WNDPROC>(GetWindowLongPtrW(hwnd.value(), GWLP_WNDPROC));
+    if (!wndproc_addr) {
+      LOG_ERROR("Failed to get WndProc address: {}", win32::GetLastErrorStr());
+      exit(1);
+    }
 
+    LOG_DEBUG("Original WndProc at: 0x{:X}", reinterpret_cast<LONG_PTR>(wndproc_addr));
+
+    // Set the global before creating the hook so the detour can use it
     kWNDPROC = this;
+
+    // Create and enable the detour hook
+    wndproc_hook_ = std::make_unique<DetourHook>("WndProc", reinterpret_cast<void*>(wndproc_addr), reinterpret_cast<void*>(&WndProcDetour));
+    wndproc_hook_->Enable();
   }
 
   WndProc::~WndProc() {
+    LOG_DEBUG("Disabling WndProc hook...");
+
+    // Disable the detour - PolyHook handles the cleanup safely
+    if (wndproc_hook_) {
+      wndproc_hook_->Disable();
+    }
+
+    // Clear the global
     kWNDPROC = nullptr;
 
-    LOG_DEBUG("Restoring old WndProc handler: {}", fmt::ptr(og_wnd_proc_));
-    SetWindowLongPtr(win32::GetGameHwnd().value(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(og_wnd_proc_));
+    LOG_DEBUG("WndProc hook disabled successfully");
   }
 
   void WndProc::HandleWndProc(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam) {

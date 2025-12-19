@@ -22,6 +22,7 @@ namespace base::menu::hooking {
 
   public:
     Manager();
+    ~Manager();
 
     void Enable();
     void Disable();
