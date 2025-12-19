@@ -7,14 +7,16 @@
 
 namespace base::menu::render::util {
   namespace {
-    FORCE_INLINE std::string WordWrapGetString(std::string* lines, std::uint32_t line_count) {
+    FORCE_INLINE std::string WordWrapGetString(const std::vector<std::string>& lines) {
       std::string res;
-      for (std::uint32_t i = 0; i < line_count; i++) {
-        auto line = lines[i];
-        while (line.back() == ' ') {
-          line.pop_back();
+      res.reserve(lines.size() * 40); // Pre-allocate approximate size
+      for (const auto& line : lines) {
+        std::string_view trimmed = line;
+        while (!trimmed.empty() && trimmed.back() == ' ') {
+          trimmed.remove_suffix(1);
         }
-        res = fmt::format("{}{}\n", res, line);
+        res.append(trimmed);
+        res.push_back('\n');
       }
 
       return res;
@@ -115,34 +117,34 @@ namespace base::menu::render::util {
     const auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
     const auto chars_per_line = static_cast<std::uint32_t>(real_max_x / char_x_size);
 
-    auto* lines = new std::string[max_lines];
-    std::uint32_t line_count = 0;
-    while (!str.empty()) {
-      if (line_count >= max_lines) {
-        auto last_line = lines[max_lines - 1];
-        last_line.replace(last_line.end() - 3, last_line.end(), "...");
-        lines[max_lines - 1] = last_line;
-        break;
-      }
+    std::vector<std::string> lines;
+    lines.reserve(max_lines);
 
+    while (!str.empty() && lines.size() < max_lines) {
       std::size_t pos = chars_per_line < str.size() ? str.rfind(' ', chars_per_line) : str.size();
       if (pos != std::string::npos) {
-        lines[line_count] = str.substr(0, pos + 1);
+        lines.push_back(str.substr(0, pos + 1));
         str.erase(0, pos + 1);
       } else {
-        lines[line_count] = str.substr(0, chars_per_line);
+        lines.push_back(str.substr(0, chars_per_line));
         str.erase(0, chars_per_line);
       }
-      line_count += 1;
 
-      if (str.empty() && CalcTextSizeRaw(ImGui::GetFont(), font_size, lines[line_count - 1]).x <= real_max_x) {
+      if (str.empty() && CalcTextSizeRaw(ImGui::GetFont(), font_size, lines.back()).x <= real_max_x) {
         break;
       }
     }
 
-    str = WordWrapGetString(lines, line_count);
-    delete[] lines;
+    // If we hit max lines and there's still text, add ellipsis
+    if (!str.empty() && !lines.empty()) {
+      auto& last_line = lines.back();
+      if (last_line.size() >= 3) {
+        last_line.replace(last_line.end() - 3, last_line.end(), "...");
+      }
+    }
 
-    return line_count;
+    str = WordWrapGetString(lines);
+
+    return static_cast<std::uint32_t>(lines.size());
   }
 }

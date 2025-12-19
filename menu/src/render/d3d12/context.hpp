@@ -223,6 +223,10 @@ namespace base::menu::render::d3d12 {
 
     bool IsDeviceValid() const;
 
+    bool IsResizing() const {
+      return resizing_;
+    }
+
   private:
     bool initialized_ = false;
     bool resizing_ = false;

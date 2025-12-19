@@ -218,7 +218,7 @@ namespace base::menu::render::d3d12 {
   }
 
   void Context::WaitForNextFrame() {
-    const std::uint32_t next_frame_idx = frame_index_ + 1;;
+    const std::uint32_t next_frame_idx = frame_index_ + 1;
     frame_index_ = next_frame_idx;
 
     HANDLE waitable_objects[] = {swap_chain_waitable_object_, nullptr};

@@ -30,7 +30,6 @@ namespace base::menu::render {
   Renderer::~Renderer() {
     init_imgui_ = false;
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     if (d3d12_context_.IsInitialized()) {
       d3d12_context_.WaitForLastFrame();
@@ -91,7 +90,7 @@ namespace base::menu::render {
 
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
-    if (!globals::kRUNNING || !kRENDERER || !kRENDERER->init_imgui_ || kRENDERER->d3d12_resizing_) {
+    if (!globals::kRUNNING || !kRENDERER || !kRENDERER->init_imgui_ || kRENDERER->d3d12_context_.IsResizing()) {
       return hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&Present)>(hooking::Hooks::swapchain_present_index, swap_chain, sync_interval, flags);
     }
 

@@ -18,11 +18,12 @@ namespace base::menu::render {
     SetThreadDescription(GetCurrentThread(), L"RenderLoop");
     LOG_INFO("Render thread started.");
     while (globals::kRUNNING) {
-      if (kTHREAD && kRENDERER) {
+      if (kTHREAD && kRENDERER) [[likely]] {
         const auto buffer = kRENDERER->GetDrawQueueBuffer();
+        const auto callbacks = kTHREAD->GetRenderCallbacks();
 
-        for (auto& [_, cb_] : kTHREAD->GetRenderCallbacks()) {
-          if (!buffer) {
+        for (const auto& [z_idx, cb] : callbacks) {
+          if (!buffer) [[unlikely]] {
             if (globals::kRUNNING) {
               LOG_ERROR("DrawQueueBuffer is null. Skipping render tick.");
               break;
@@ -32,7 +33,7 @@ namespace base::menu::render {
             break;
           }
 
-          cb_(buffer);
+          cb(buffer);
         }
 
         if (buffer)

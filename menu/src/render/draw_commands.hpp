@@ -24,7 +24,7 @@ namespace base::menu::render {
     Rect(const ImVec2 pos, const ImVec2 size, const ImU32 color) :
       pos_(pos), size_(size), color_(color) {}
 
-    virtual void Draw() override {
+    void Draw() override {
       util::GetDrawList()->AddRectFilled(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_);
     }
 
@@ -39,8 +39,8 @@ namespace base::menu::render {
     RectOutline(const ImVec2 pos, const ImVec2 size, const ImU32 color, const float thickness = 1.0F) :
       pos_(pos), size_(size), color_(color), thickness_(thickness) {}
 
-    virtual void Draw() override {
-      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.F,NULL, thickness_);
+    void Draw() override {
+      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.F, 0, thickness_);
     }
 
   private:
@@ -55,7 +55,7 @@ namespace base::menu::render {
     RectBorder(const ImVec2 pos, const ImVec2 size, const ImU32 background_color, const ImU32 border_color, const bool top, const bool bottom, const bool left, const bool right, const float thickness = 0.005F) :
       Rect(pos, size, background_color), border_color_(border_color), top_(top), bottom_(bottom), left_(left), right_(right), thickness_(thickness) {}
 
-    virtual void Draw() override {
+    void Draw() override {
       Rect::Draw();
 
       const auto draw_list = util::GetDrawList();
@@ -81,9 +81,9 @@ namespace base::menu::render {
   class Text : public BaseDrawCommand {
   public:
     Text(const ImVec2 pos, const ImU32 color, std::string text, const float y_size_text, const bool right_align = false, const bool center_x = false, const bool center_y = false, const float max_width = 0.F, const std::size_t max_lines = 2, const ImFont* font = nullptr) :
-      pos_(pos), color_(color), text_(std::move(text)), right_align_(right_align), center_x_(center_x), center_y_(center_y), y_size_text_(y_size_text), max_width_(max_width), max_lines_(max_lines), font_(font) {}
+      pos_(pos), color_(color), text_(std::move(text)), y_size_text_(y_size_text), right_align_(right_align), center_x_(center_x), center_y_(center_y), max_width_(max_width), max_lines_(max_lines), font_(font) {}
 
-    virtual void Draw() override {
+    void Draw() override {
       if (!font_) {
         font_ = ImGui::GetFont();
       }
@@ -140,7 +140,7 @@ namespace base::menu::render {
       rect_ = RectBorder(rect_pos, rect_size, background_color, border_color, border_top, border_bottom, border_left, border_right, border_thickness);
     }
 
-    virtual void Draw() override {
+    void Draw() override {
       rect_.Draw();
       Text::Draw();
     }
@@ -154,7 +154,7 @@ namespace base::menu::render {
     Image(const D3D12_GPU_DESCRIPTOR_HANDLE texture_handle, const ImVec2 pos, const ImVec2 size, const ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1)) :
       texture_handle_(texture_handle), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
 
-    virtual void Draw() override {
+    void Draw() override {
       util::GetDrawList()->AddImage(texture_handle_.ptr, util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
     }
 
@@ -172,7 +172,7 @@ namespace base::menu::render {
     explicit RunRenderCode(std::function<void()> render_code) :
       render_code_(std::move(render_code)) {}
 
-    virtual void Draw() override {
+    void Draw() override {
       render_code_();
     }
 

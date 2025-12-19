@@ -30,7 +30,7 @@ namespace base::menu::render {
       return last_time_;
     }
 
-    ImVec2 GetResolution() {
+    [[nodiscard]] ImVec2 GetResolution() const {
       common::concurrency::ScopedSpinlock lock(window_size_lock_);
       return {static_cast<float>(window_width_), static_cast<float>(window_height_)};
     }
@@ -45,9 +45,8 @@ namespace base::menu::render {
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
 
   private:
-    common::concurrency::Spinlock window_size_lock_;
+    mutable common::concurrency::Spinlock window_size_lock_;
     bool init_imgui_ = false;
-    bool d3d12_resizing_ = false;
     std::uint32_t window_width_{};
     std::uint32_t window_height_{};
     DrawQueueBuffer draw_queue_buffer_;
