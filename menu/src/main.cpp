@@ -120,7 +120,7 @@ void RenderThreadLifeTime(LifeTimeHelper* lifetime_helper) {
   });
 }
 
-LRESULT UnloadKeyWatcher(HWND, UINT msg, WPARAM wparam, LPARAM) {
+LRESULT UnloadKeyWatcher(HWND, const UINT msg, const WPARAM wparam, LPARAM) {
   if (msg == WM_KEYDOWN && wparam == VK_END) {
     LOG_INFO("Unloading key was pressed...");
     base::menu::globals::kRUNNING = false;
@@ -133,8 +133,8 @@ int base::menu::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
   ThreadPoolLifetime(lifetime_helper.get());
-  MANAGER_PTR_LIFETIME(lifetime_helper, "WndProc", wndproc_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
+  MANAGER_PTR_LIFETIME(lifetime_helper, "WndProc", wndproc_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "HookingManager", hooking_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "DiscordRichPresence", discord_rich_presence_inst);
@@ -143,18 +143,17 @@ int base::menu::menu_main() {
 
   lifetime_helper->RunInit();
 
+  hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
+
   hooking_inst->Enable();
 
-  const auto unload_key_watcher_id = hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
-
   LOG_INFO("Loaded");
+  NOTIFY_INFO("Menu Loaded", "Press END to unload the menu.");
   while (globals::kRUNNING) {
     discord::kRICH_PRESENCE->Tick();
     std::this_thread::yield();
   }
   LOG_INFO("Unloading...");
-
-  hooking::kWNDPROC->RemoveWndProcHandler(unload_key_watcher_id);
 
   hooking_inst->Disable();
 

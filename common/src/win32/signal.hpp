@@ -4,37 +4,35 @@
 
 #ifndef SIGNAL_HPP_02232550
 #define SIGNAL_HPP_02232550
-#include <string>
-#include <Windows.h>
-#include "../util/time.hpp"
+#include <chrono>
+#include <semaphore>
 
 namespace base::win32 {
   /**
-   * \brief A class for thread synchronization using Windows events
+   * \brief A class for thread synchronization using std::binary_semaphore
    */
   class Signal {
   public:
-    Signal() {
-      signal_h_ = CreateEvent(nullptr, false, false, (std::to_string(common::util::time::GetTimeStamp()) + "signal_helper").c_str());
-    }
+    Signal() : signal_(0) {}
 
     ~Signal() {
-      SetEvent(signal_h_);
-      CloseHandle(signal_h_);
+      (void)signal_.try_acquire();
+      signal_.release();
     }
 
     /**
      * \brief Notify all threads currently waiting on the signal
      */
     void Notify() const {
-      SetEvent(signal_h_);
+      (void)signal_.try_acquire();
+      signal_.release();
     }
 
     /**
      * \brief Infinitely wait for the signal to be notified
      */
     void Wait() const {
-      Wait(INFINITE);
+      Wait(-1);
     }
 
     /**
@@ -42,11 +40,15 @@ namespace base::win32 {
      * \param timeout Timeout in milliseconds
      */
     void Wait(const std::int32_t timeout) const {
-      WaitForSingleObject(signal_h_, timeout);
+      if (timeout < 0) {
+        signal_.acquire();
+      } else {
+        (void)signal_.try_acquire_for(std::chrono::milliseconds(timeout));
+      }
     }
 
   private:
-    HANDLE signal_h_;
+    mutable std::binary_semaphore signal_;
   };
 }
 #endif //SIGNAL_HPP_02232550

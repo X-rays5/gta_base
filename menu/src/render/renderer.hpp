@@ -6,6 +6,7 @@
 #ifndef BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
 #define BASE_MODULES_MANAGER_291A40EA31B145B997BBD872BCDC21D6_HPP
 #include <dxgi.h>
+#include <base-common/util/time.hpp>
 #include <imfont/imfont.hpp>
 #include "draw.hpp"
 #include "d3d12/context.hpp"

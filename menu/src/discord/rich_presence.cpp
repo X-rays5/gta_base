@@ -5,6 +5,8 @@
 #include "rich_presence.hpp"
 #include <discord_rpc.h>
 
+#include <base-common/util/time.hpp>
+
 namespace base::menu::discord {
   namespace {
     void HandleReady(const DiscordUser* user) {
