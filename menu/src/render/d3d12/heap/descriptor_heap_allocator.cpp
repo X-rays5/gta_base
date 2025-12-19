@@ -71,7 +71,10 @@ namespace base::menu::render::d3d12 {
   void DescriptorHeapAllocator::Free(const D3D12_CPU_DESCRIPTOR_HANDLE out_cpu_desc_handle, const D3D12_GPU_DESCRIPTOR_HANDLE out_gpu_desc_handle) {
     common::concurrency::ScopedSpinlock lock(lock_);
     const std::int32_t cpu_idx = static_cast<std::int32_t>((out_cpu_desc_handle.ptr - heap_start_cpu_.ptr) / heap_handle_increment_);
+#pragma warning(push)
+#pragma warning(disable : 4189)
     const std::int32_t gpu_idx = static_cast<std::int32_t>((out_gpu_desc_handle.ptr - heap_start_gpu_.ptr) / heap_handle_increment_);
+#pragma warning(pop)
     GTA_BASE_ASSERT(cpu_idx == gpu_idx, "CPU and GPU descriptor indices do not match");
     free_indices_.push_back(cpu_idx);
   }
