@@ -4,7 +4,7 @@
 
 #include "pointers.hpp"
 
-#include "signature/cached_batch.hpp"
+#include "signature/batch.hpp"
 
 #define BATCH_SCAN(name, pattern, mod, cb) batch.Add(xorstr_(name), signature::Pattern(xorstr_(pattern), xorstr_(mod)), cb)
 

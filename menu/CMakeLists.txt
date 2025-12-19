@@ -47,8 +47,6 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/ui/notification/manager.hpp
         src/render/animate.hpp
         src/util/profile.hpp
-        src/memory/signature/cached_batch.cpp
-        src/memory/signature/cached_batch.hpp
         src/util/common.cpp
         src/util/common.hpp
         src/hooking/wndproc.cpp
