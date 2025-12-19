@@ -207,7 +207,7 @@ namespace base::menu::render::d3d12 {
      * @return Reference to the frame context
      * @throws std::out_of_range if frame_index is invalid
      */
-    Frame& GetFrame(const size_t frame_index);
+    Frame& GetFrame(size_t frame_index);
 
     /**
    * @brief Gets the current frame index

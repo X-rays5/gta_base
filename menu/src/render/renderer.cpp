@@ -76,8 +76,6 @@ namespace base::menu::render {
     init_info.NumFramesInFlight = d3d12_context_.GetSwapChainDesc().BufferCount;
     init_info.RTVFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
     init_info.DSVFormat = DXGI_FORMAT_UNKNOWN;
-    // Allocating SRV descriptors (for textures) is up to the application, so we provide callbacks.
-    // (current version of the backend will only allocate one descriptor, future versions will need to allocate more)
     init_info.SrvDescriptorHeap = d3d12_context_.GetDescriptorHeap();
     init_info.SrvDescriptorAllocFn = [](ImGui_ImplDX12_InitInfo*, D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle, D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
       kRENDERER->d3d12_context_.GetDescriptorHeapAllocator().Alloc(out_cpu_handle, out_gpu_handle);
