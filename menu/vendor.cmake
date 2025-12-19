@@ -1,3 +1,6 @@
+set(PROJECT_NAME_COPY ${PROJECT_NAME})
+set(PROJECT_NAME ${PROJECT_NAME}_core)
+
 include(../vendor/battery_embed.cmake)
 include(../vendor/discord-rpc.cmake)
 include(../vendor/fmt.cmake)
@@ -13,3 +16,5 @@ include(../vendor/tweeny.cmake)
 include(../vendor/unordered_dense.cmake)
 include(../vendor/xorstr.cmake)
 include(../vendor/ctninja.cmake)
+
+set(PROJECT_NAME ${PROJECT_NAME_COPY})

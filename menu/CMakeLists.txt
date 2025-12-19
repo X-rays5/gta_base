@@ -7,7 +7,9 @@ set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 
-add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
+# Core library containing all source files except dllmain.cpp
+# This allows sharing code between the main module and tests
+add_library(${PROJECT_NAME}_core OBJECT
         src/main.cpp
         src/main.hpp
         src/render/draw.hpp
@@ -56,6 +58,11 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/render/d3d12/context.hpp
         src/render/d3d12/context.cpp
 )
+add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
+
+# Main module (DLL) that uses the core library
+add_library(${PROJECT_NAME} MODULE src/dllmain.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_core)
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
@@ -63,11 +70,20 @@ include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
 
 include(vendor.cmake)
 
+# Configure core library
+target_compile_definitions(${PROJECT_NAME}_core PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
+set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
+target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
+target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
+target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
+
+# Configure main module
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
 target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
-target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.hpp)
+target_precompile_headers(${PROJECT_NAME} REUSE_FROM ${PROJECT_NAME}_core)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
-target_link_libraries(${PROJECT_NAME} PRIVATE base::imfont)
+add_subdirectory(test)
