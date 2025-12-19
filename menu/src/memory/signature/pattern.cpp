@@ -40,7 +40,7 @@ namespace base::menu::memory::signature {
     std::string tmp_sig = FixIdaSignature(signature_);
     LOG_DEBUG("Starting scan in '{}' from 0x{:X} to 0x{:X} with signature '{}'", module_name_.empty() ? "GTA5.exe" : module_name_, reinterpret_cast<std::uintptr_t>(hmod), reinterpret_cast<std::uintptr_t>(mod_info.lpBaseOfDll) + mod_info.SizeOfImage, tmp_sig);
     const auto addr = common::memory::Address(Pattern16::scan(hmod, mod_info.SizeOfImage, tmp_sig));
-    if (!(std::uintptr_t)addr) {
+    if (!static_cast<std::uintptr_t>(addr)) {
       return MakeFailure<ResultCode::kNOT_FOUND>("Failed to find signature");
     }
 

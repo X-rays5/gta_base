@@ -5,8 +5,14 @@
 #include "rich_presence.hpp"
 #include <discord_rpc.h>
 
+#include <base-common/util/time.hpp>
+
 namespace base::menu::discord {
   namespace {
+    void HandleReady(const DiscordUser* user) {
+      LOG_INFO("Connected to discord as: {}", user->username);
+    }
+
     void HandleDisconnect(int err_code, const char* message) {
       LOG_ERROR("Discord disconnected: {} - {}", err_code, message);
     }
@@ -18,6 +24,7 @@ namespace base::menu::discord {
 
   RichPresence::RichPresence() {
     DiscordEventHandlers handlers = {};
+    handlers.ready = HandleReady;
     handlers.disconnected = HandleDisconnect;
     handlers.errored = HandleError;
 
@@ -36,6 +43,11 @@ namespace base::menu::discord {
 
   void RichPresence::Tick() {
     common::concurrency::ScopedSpinlock lock(lock_);
+    if (common::util::time::GetTimeStamp() - last_tick_time_ < 5000) {
+      return;
+    }
+    last_tick_time_ = common::util::time::GetTimeStamp();
+
     DiscordRichPresence discord_presence = {};
     discord_presence.state = activity_.state.c_str();
     discord_presence.details = activity_.details.c_str();

@@ -23,15 +23,15 @@ namespace base::render::animate {
       }
 
       // Calculate the interpolation factor (t) between 0.0 and 1.0
-      float t = static_cast<float>(curr_time_) / duration_;
+      const float t = static_cast<float>(curr_time_) / static_cast<float>(duration_);
       return std::lerp(start_, end_, t);
     }
 
-    [[nodiscard]] T GetStart() {
+    [[nodiscard]] T GetStart() const {
       return start_;
     }
 
-    [[nodiscard]] T GetEnd() {
+    [[nodiscard]] T GetEnd() const {
       return end_;
     }
 
@@ -41,6 +41,14 @@ namespace base::render::animate {
 
     [[nodiscard]] std::size_t GetDuration() const {
       return duration_;
+    }
+
+    [[nodiscard]] bool IsComplete() const {
+      return curr_time_ >= duration_;
+    }
+
+    void Reset() {
+      curr_time_ = 0;
     }
 
   private:

@@ -116,6 +116,7 @@ namespace base::menu::discord {
       common::concurrency::Spinlock lock_;
       Activity activity_{};
       std::uint64_t start_time_;
+      std::uint64_t last_tick_time_;
    };
 
    inline RichPresence* kRICH_PRESENCE{};

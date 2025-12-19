@@ -25,7 +25,7 @@ BOOL WINAPI DllMain(const HINSTANCE dll_handle, const DWORD call_reason, LPVOID)
       try {
         auto logger_inst = std::make_unique<base::common::logging::Manager>();
 
-        if (!base::win32::GetGameHwnd().error() && base::win32::IsTargetProcess()) {
+        if (!base::win32::GetGameHwnd().error() && base::win32::IsGameProcess()) {
           exit_code = base::menu::menu_main();
         } else {
           LOG_CRITICAL("Process doesn't seem to be GTA V, aborting...");

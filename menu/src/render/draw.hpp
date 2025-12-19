@@ -9,6 +9,7 @@
 #include <vector>
 #include <base-common/concurrency/spinlock.hpp>
 #include <imgui/imgui.h>
+#include <base-common/win32/signal.hpp>
 #include "draw_commands.hpp"
 #include "draw_util.hpp"
 
@@ -85,7 +86,7 @@ namespace base::menu::render {
     std::size_t read_idx_ = 0;
     std::size_t write_idx_ = 1;
     common::concurrency::Spinlock spinlock_;
-    win32::Signal read_signal_;
+    mutable win32::Signal read_signal_;
   };
 }
 #endif //BASE_MODULES_DRAW_A89C088DF5454E269488B233901B0790_HPP

@@ -42,7 +42,7 @@ namespace base::ui::notification {
   inline Manager* kMANAGER{};
 }
 
-#define ADD_NOTIFICATION(type, title, message) ::base::ui::notification::kMANAGER->AddNotification(type, 5000, title, message)
+#define ADD_NOTIFICATION(type, title, message) do { if (::base::ui::notification::kMANAGER ) { ::base::ui::notification::kMANAGER->AddNotification(type, 5000, title, message); } } while (false)
 #define NOTIFY_INFO(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Info, title, message); LOG_INFO("[NOTIFY] {}: {}", title, message)
 #define NOTIFY_WARN(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Warning, title, message); LOG_WARN("[NOTIFY] {}: {}", title, message)
 #define NOTIFY_ERR(title, message) ADD_NOTIFICATION(::base::ui::notification::Type::Error, title, message); LOG_ERROR("[NOTIFY] {}: {}", title, message)

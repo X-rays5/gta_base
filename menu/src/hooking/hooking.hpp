@@ -22,12 +22,12 @@ namespace base::menu::hooking {
 
   public:
     Manager();
+    ~Manager();
 
     void Enable();
     void Disable();
   };
 
-  // skipqc: CXX-W2009
   inline Manager* kMANAGER{};
 }
 #endif //HOOKING_HPP
