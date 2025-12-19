@@ -83,15 +83,22 @@ namespace base::common::logging::exception {
     }
 
     void MSVCException(const PEXCEPTION_POINTERS except) {
+      const auto exception_address = except->ContextRecord->Rip;
+
+      // Only log exceptions from our own module
+      if (!win32::memory::IsAddressInCurrentModule(exception_address)) {
+        return;
+      }
+
       const std::uint32_t pid = GetCurrentProcessId();
 
-      auto mod_name_res = win32::memory::GetModuleNameFromAddress(pid, except->ContextRecord->Rip);
+      auto mod_name_res = win32::memory::GetModuleNameFromAddress(pid, exception_address);
       std::string mod_name;
       if (mod_name_res.has_value()) {
         mod_name = mod_name_res.value();
       }
 
-      auto offset_res = win32::memory::GetModuleOffsetFromAddress(pid, except->ContextRecord->Rip);
+      auto offset_res = win32::memory::GetModuleOffsetFromAddress(pid, exception_address);
       std::uintptr_t offset = 0;
       if (offset_res.has_value()) {
         offset = offset_res.value();

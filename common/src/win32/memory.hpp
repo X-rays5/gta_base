@@ -44,6 +44,12 @@ namespace base::win32::memory {
   * \return The module entry of the module
   */
  StatusOr<MODULEENTRY32> GetModuleFromHModule(HMODULE mod);
+ /**
+  * \brief Check if an address is within the current module's memory space
+  * \param addr address to check
+  * \return true if the address is within the current module, false otherwise
+  */
+ bool IsAddressInCurrentModule(std::uintptr_t addr);
 }
 
 #endif //GTA_BASE_MEMORY_6E2CBAF0C25F49E69A8329E5694C9C0B_HPP

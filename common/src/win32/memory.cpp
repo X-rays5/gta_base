@@ -3,6 +3,7 @@
 //
 
 #include "memory.hpp"
+#include <intrin.h>
 
 namespace base::win32::memory {
   StatusOr<std::uintptr_t> GetModuleBaseAddress(const std::uint32_t pid, const std::string& mod_name) {
@@ -82,5 +83,27 @@ namespace base::win32::memory {
     }
     CloseHandle(hSnapshot);
     return mod_entry;
+  }
+
+  __declspec(noinline) bool IsAddressInCurrentModule(const std::uintptr_t addr) {
+    const std::uint32_t pid = GetCurrentProcessId();
+
+    // Get the module name of the caller (our DLL) using the return address
+    auto caller_address = reinterpret_cast<std::uintptr_t>(_ReturnAddress());
+    static auto our_module_name = GetModuleNameFromAddress(pid, caller_address);
+
+    if (!our_module_name.has_value()) {
+      return false;
+    }
+
+    // Get the module name of the input address
+    auto addr_module_name = GetModuleNameFromAddress(pid, addr);
+
+    if (!addr_module_name.has_value()) {
+      return false;
+    }
+
+    // Compare the module names
+    return _stricmp(our_module_name->c_str(), addr_module_name->c_str()) == 0;
   }
 }
