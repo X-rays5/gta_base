@@ -218,13 +218,12 @@ namespace base::menu::render::d3d12 {
   }
 
   void Context::WaitForNextFrame() {
-    const std::uint32_t next_frame_idx = frame_index_ + 1;
-    frame_index_ = next_frame_idx;
+    frame_index_ = (frame_index_ + 1) % swap_chain_desc_.BufferCount;
 
     HANDLE waitable_objects[] = {swap_chain_waitable_object_, nullptr};
     DWORD num_waitable_objects = 1;
 
-    const Frame& cur_frame_ctx = frame_ctx_[next_frame_idx % swap_chain_desc_.BufferCount];
+    const Frame& cur_frame_ctx = frame_ctx_[frame_index_];
     const std::uint64_t fence_value = cur_frame_ctx.fence_value;
 
     if (fence_value != 0) {
