@@ -8,3 +8,6 @@
 !.idea/sonarlint.xml
 
 .vendor
+
+native_gen/*.cpp
+native_gen/*.hpp
