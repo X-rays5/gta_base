@@ -90,7 +90,7 @@ namespace base::win32::memory {
 
     // Get the module name of the caller (our DLL) using the return address
     auto caller_address = reinterpret_cast<std::uintptr_t>(_ReturnAddress());
-    static auto our_module_name = GetModuleNameFromAddress(pid, caller_address);
+    auto our_module_name = GetModuleNameFromAddress(pid, caller_address);
 
     if (!our_module_name.has_value()) {
       return false;

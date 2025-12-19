@@ -40,7 +40,7 @@ namespace base::menu::render {
       pos_(pos), size_(size), color_(color), thickness_(thickness) {}
 
     void Draw() override {
-      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.F, 0, thickness_);
+      util::GetDrawList()->AddRect(util::ScaleToScreen(pos_), util::ScaleToScreen(util::GetSize(pos_, size_)), color_, 0.F, NULL, thickness_);
     }
 
   private:

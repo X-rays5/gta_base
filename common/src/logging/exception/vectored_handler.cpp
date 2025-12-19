@@ -64,14 +64,14 @@ namespace base::common::logging::exception {
         return false;
       }
 
-      const auto instructionOpt = GetInstructionAtAddr(exception_address);
-      if (!instructionOpt.has_value()) {
+      const auto instruction_opt = GetInstructionAtAddr(exception_address);
+      if (!instruction_opt.has_value()) {
         LOG_ERROR("Failed to decode instruction at {:X}", exception_address);
         recovery_attempts++; // Count failed decode as an attempt
         return false;
       }
 
-      const auto& instruction = instructionOpt.value();
+      const auto& instruction = instruction_opt.value();
       auto next_instruction = exception_address + instruction.length;
 
       recovery_attempts++;
