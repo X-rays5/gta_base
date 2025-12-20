@@ -57,11 +57,25 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/render/d3d12/heap/descriptor_heap_allocator.hpp
         src/render/d3d12/context.hpp
         src/render/d3d12/context.cpp
+        src/natives/invoker.cpp
+        src/natives/invoker.hpp
+        src/natives/natives_gen9.cpp
+        src/natives/natives_gen9.hpp
+        src/natives/crossmap.cpp
+        src/natives/crossmap.hpp
+        src/game/native_types.hpp
+        src/script/script_base.hpp
+        src/script/script_manager.cpp
+        src/script/script_manager.hpp
+        src/script/game_task_executor.cpp
+        src/script/game_task_executor.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
 # Main module (DLL) that uses the core library
-add_library(${PROJECT_NAME} MODULE src/dllmain.cpp)
+add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
+        src/game/script.cpp
+        src/game/script.hpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_core)
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 
@@ -73,11 +87,12 @@ include(vendor.cmake)
 # Configure core library
 target_compile_definitions(${PROJECT_NAME}_core PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
-target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
+target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4068 /wd4324 /diagnostics:caret /W4 /permissive- /WX)
 target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
 target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::rage)
 
 # Configure main module
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")

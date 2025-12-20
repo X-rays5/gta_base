@@ -9,7 +9,7 @@
 #include "../logger.hpp"
 #include "../../win32/memory.hpp"
 
-#define VECTORED_HANDLER_ATTEMPT_RECOVERY
+//#define VECTORED_HANDLER_ATTEMPT_RECOVERY
 
 namespace base::common::logging::exception {
   namespace {
