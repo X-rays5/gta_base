@@ -6,4 +6,6 @@
 
 #include "custom_call_context.hpp"
 #include "native_call_context.hpp"
+#include "program.hpp"
+#include "program_base.hpp"
 #include "vector.hpp"

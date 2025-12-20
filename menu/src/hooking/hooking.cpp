@@ -12,7 +12,8 @@ namespace base::menu::hooking {
     swap_chain_hook_("swap_chain", *memory::kPOINTERS->swap_chain_, {
                        {Hooks::swapchain_present_index, &Hooks::Present},
                        {Hooks::swapchain_resizebuffers_index, &Hooks::ResizeBuffers}
-                     })
+                     }),
+    run_script_threads_hook_("run_script_threads", memory::kPOINTERS->run_script_threads_, &Hooks::RunScriptThreads)
   {
     const auto logger = std::make_shared<logging::PLH::Logger>();
     PLH::Log::registerLogger(logger);
@@ -28,9 +29,11 @@ namespace base::menu::hooking {
 
   void Manager::Enable() {
     swap_chain_hook_.EnableAll();
+    run_script_threads_hook_.Enable();
   }
 
   void Manager::Disable() {
+    run_script_threads_hook_.Disable();
     swap_chain_hook_.DisableAll();
   }
 
@@ -40,5 +43,10 @@ namespace base::menu::hooking {
 
   HRESULT Hooks::ResizeBuffers(IDXGISwapChain* swap_chain, const UINT buffer_count, const UINT width, const UINT height, const DXGI_FORMAT new_format, const UINT swap_chain_flags) {
     return render::Renderer::ResizeBuffers(swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
+  }
+
+  bool Hooks::RunScriptThreads(const int ops_to_execute) {
+    return kMANAGER->run_script_threads_hook_.CallOriginal<decltype(&RunScriptThreads)>(ops_to_execute);
+    // TODO: Run tick here
   }
 }

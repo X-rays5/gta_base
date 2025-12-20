@@ -21,6 +21,14 @@ namespace base::menu::memory {
       command_queue_ = ptr->Add(0x1A).Add(3).Rip().As<ID3D12CommandQueue**>();
     });
 
+    BATCH_SCAN("init_native_tables", "EB 2A 0F 1F 40 00 48 8B 54 17 10", "", [this](const common::memory::Address* ptr) {
+      init_native_tables_ = ptr->Sub(0x2A).As<decltype(init_native_tables_)>();
+    });
+
+    BATCH_SCAN("run_script_threads", "BE 40 5D C6 00", "", [this](const common::memory::Address* ptr) {
+      run_script_threads_ = ptr->Sub(0xA).As<decltype(run_script_threads_)>();
+    });
+
     batch.Scan();
     kPOINTERS = this;
   }

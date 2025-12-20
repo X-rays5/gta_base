@@ -16,6 +16,7 @@
 #include "ui/localization/manager.hpp"
 #include "ui/notification/manager.hpp"
 #include "util/thread_pool.hpp"
+#include "natives/invoker.hpp"
 
 std::atomic<bool> base::menu::globals::kRUNNING = true;
 
@@ -24,6 +25,7 @@ namespace base::menu {
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
     std::unique_ptr<hooking::WndProc> wndproc_inst;
     std::unique_ptr<memory::Pointers> pointers_inst;
+    std::unique_ptr<natives::Invoker> invoker_inst;
     std::unique_ptr<hooking::Manager> hooking_inst;
     std::unique_ptr<ui::localization::Manager> localization_manager_inst;
     std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
@@ -134,6 +136,7 @@ int base::menu::menu_main() {
 
   ThreadPoolLifetime(lifetime_helper.get());
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
+  MANAGER_PTR_LIFETIME(lifetime_helper, "Invoker", invoker_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "WndProc", wndproc_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "HookingManager", hooking_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "LocalizationManager", localization_manager_inst);

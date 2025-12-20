@@ -4,6 +4,7 @@
 
 #pragma once
 #include <rage/script/custom_call_context.hpp>
+#include "crossmap.hpp"
 
 namespace base::menu::natives {
   class Invoker {
@@ -16,13 +17,7 @@ namespace base::menu::natives {
         context_.PushArg(std::forward<T>(value));
       }
 
-#pragma warning(push)
-#pragma warning(disable: 4100)
-      void EndCall(const std::uint64_t native_hash)
-      {
-          context_.FixVectors();
-      }
-#pragma warning(pop)
+      void EndCall(std::uint64_t native_idx);
 
       template<typename T>
       T& GetReturnValue()
@@ -35,12 +30,14 @@ namespace base::menu::natives {
     };
 
   public:
+    Invoker();
+    ~Invoker();
 
-    template<typename Ret, std::uint64_t native_hash, typename... Args>
+    template<typename Ret, std::uint64_t native_idx, typename... Args>
     static Ret Invoke(Args... args) {
       NativeCall call;
       (call.PushArg(std::forward<Args>(args)), ...);
-      call.EndCall(native_hash);
+      call.EndCall(native_idx);
 
       if constexpr (!std::is_same_v<Ret, void>) {
         return call.GetReturnValue<Ret>();
@@ -48,5 +45,9 @@ namespace base::menu::natives {
         return;
       }
     }
+
+  private:
+    std::array<rage::script::NativeHandler, NATIVE_CROSSMAP_SIZE> native_handlers_{};
   };
+  inline Invoker* kINVOKER{};
 }
