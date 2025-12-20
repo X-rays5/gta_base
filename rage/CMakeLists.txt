@@ -23,6 +23,9 @@ add_library(${PROJECT_NAME} STATIC
         src/script/custom_call_context.hpp
         src/script/program.hpp
         src/script/program_base.hpp
+        src/script/thread.hpp
+        src/tls_context.hpp
+        src/atArray.hpp
 )
 add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 

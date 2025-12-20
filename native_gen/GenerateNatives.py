@@ -20,7 +20,7 @@ LOG_NATIVE_ERROR_FUNC = "LOG_ERROR"
 
 # Optional header includes to add at the top of the generated header file
 HEADER_INCLUDES = [
-    "#include \"../rage/native_types.hpp\"",
+    "#include \"../game/native_types.hpp\"",
     "#include \"invoker.hpp\""
 ]
 

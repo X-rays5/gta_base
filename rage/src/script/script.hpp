@@ -8,4 +8,5 @@
 #include "native_call_context.hpp"
 #include "program.hpp"
 #include "program_base.hpp"
+#include "thread.hpp"
 #include "vector.hpp"

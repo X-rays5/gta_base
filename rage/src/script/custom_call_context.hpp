@@ -10,6 +10,7 @@ namespace rage::script {
   public:
     constexpr CustomCallContext()
     {
+      reset();
       return_val_ = &return_stack_[0];
       args_ = &arg_stack_[0];
     }

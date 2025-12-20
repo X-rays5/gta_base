@@ -3,9 +3,11 @@
 //
 
 #include "hooking.hpp"
+#include "../game/script.hpp"
 #include "../logging/plh_logger.hpp"
 #include "../memory/pointers.hpp"
 #include "../render/renderer.hpp"
+#include "../script/script_manager.hpp"
 
 namespace base::menu::hooking {
   Manager::Manager() :
@@ -46,7 +48,20 @@ namespace base::menu::hooking {
   }
 
   bool Hooks::RunScriptThreads(const int ops_to_execute) {
-    return kMANAGER->run_script_threads_hook_.CallOriginal<decltype(&RunScriptThreads)>(ops_to_execute);
-    // TODO: Run tick here
+    const auto retVal = kMANAGER->run_script_threads_hook_.CallOriginal<decltype(&RunScriptThreads)>(ops_to_execute);
+    if (globals::kRUNNING) {
+      script::kSCRIPT_MANAGER->TickScripts(script::ScriptBase::Type::GameScript);
+      auto thread = game::FindScriptThread("freemode"_J);
+      if (!thread)
+        thread = game::FindScriptThread("main_persistent"_J);
+      if (!thread)
+        thread = game::FindScriptThread("startup"_J);
+
+      if (thread) {
+        game::RunAsScript(thread, [] {script::kSCRIPT_MANAGER->TickScripts(script::ScriptBase::Type::GameScript);});
+      }
+    }
+
+    return retVal;
   }
 }

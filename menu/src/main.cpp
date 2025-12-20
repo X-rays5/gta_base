@@ -11,18 +11,21 @@
 #include "hooking/hooking.hpp"
 #include "hooking/wndproc.hpp"
 #include "memory/pointers.hpp"
+#include "natives/invoker.hpp"
 #include "render/renderer.hpp"
 #include "render/thread.hpp"
+#include "script/game_task_executor.hpp"
+#include "script/script_manager.hpp"
 #include "ui/localization/manager.hpp"
 #include "ui/notification/manager.hpp"
 #include "util/thread_pool.hpp"
-#include "natives/invoker.hpp"
 
 std::atomic<bool> base::menu::globals::kRUNNING = true;
 
 namespace base::menu {
   namespace {
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
+    std::unique_ptr<script::ScriptManager> script_manager_inst;
     std::unique_ptr<hooking::WndProc> wndproc_inst;
     std::unique_ptr<memory::Pointers> pointers_inst;
     std::unique_ptr<natives::Invoker> invoker_inst;
@@ -135,6 +138,7 @@ int base::menu::menu_main() {
   auto lifetime_helper = std::make_unique<LifeTimeHelper>();
 
   ThreadPoolLifetime(lifetime_helper.get());
+  MANAGER_PTR_LIFETIME(lifetime_helper, "ScriptManager", script_manager_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "Pointers", pointers_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "Invoker", invoker_inst);
   MANAGER_PTR_LIFETIME(lifetime_helper, "WndProc", wndproc_inst);
@@ -146,8 +150,7 @@ int base::menu::menu_main() {
 
   lifetime_helper->RunInit();
 
-  hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
-
+  wndproc_inst->AddWndProcHandler(UnloadKeyWatcher);
   hooking_inst->Enable();
 
   LOG_INFO("Loaded");

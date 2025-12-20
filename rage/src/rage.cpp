@@ -3,4 +3,6 @@
 //
 
 #include "script/script.hpp"
+#include "atArray.hpp"
+#include "tls_context.hpp"
 #include "vector.hpp"

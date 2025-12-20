@@ -25,6 +25,10 @@ namespace base::menu::memory {
       init_native_tables_ = ptr->Sub(0x2A).As<decltype(init_native_tables_)>();
     });
 
+    BATCH_SCAN("script_threads", "48 8B 05 ? ? ? ? 48 89 34 F8 48 FF C7 48 39 FB 75 97", "", [this](const common::memory::Address* ptr) {
+      scriptThreads_ = ptr->Add(3).Rip().As<decltype(scriptThreads_)>();
+    });
+
     BATCH_SCAN("run_script_threads", "BE 40 5D C6 00", "", [this](const common::memory::Address* ptr) {
       run_script_threads_ = ptr->Sub(0xA).As<decltype(run_script_threads_)>();
     });

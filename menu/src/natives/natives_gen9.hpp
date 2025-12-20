@@ -6,7 +6,7 @@
 // Auto-generated file - DO NOT EDIT
 // Generated from GTA5 NativeDB data
 
-#include "../rage/native_types.hpp"
+#include "../game/native_types.hpp"
 #include "invoker.hpp"
 
 namespace base::menu::natives {

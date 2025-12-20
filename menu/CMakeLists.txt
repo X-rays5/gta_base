@@ -63,16 +63,19 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/natives/natives_gen9.hpp
         src/natives/crossmap.cpp
         src/natives/crossmap.hpp
+        src/game/native_types.hpp
+        src/script/script_base.hpp
+        src/script/script_manager.cpp
+        src/script/script_manager.hpp
+        src/script/game_task_executor.cpp
+        src/script/game_task_executor.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
 # Main module (DLL) that uses the core library
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
-        src/rage/entity/Entity.hpp
-        src/rage/entity/Ped.hpp
-        src/rage/entity/vehicle.hpp
-        src/rage/entity/player.hpp
-        src/rage/native_types.hpp)
+        src/game/script.cpp
+        src/game/script.hpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_core)
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 

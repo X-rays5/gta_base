@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "native_call_context.hpp"
 #include "program_base.hpp"
 
 namespace rage::script {
