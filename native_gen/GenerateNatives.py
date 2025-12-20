@@ -24,14 +24,20 @@ HEADER_INCLUDES = [
     "#include \"invoker.hpp\""
 ]
 
+# Native groups to exclude from generation (case-insensitive)
+EXCLUDED_GROUPS = [
+    "BUILTIN"
+]
+
 
 class NativeGenerator:
     """Generates C++ header and implementation files for GTA5 natives."""
 
-    def __init__(self, base_namespace: str, invoker_function: str, header_includes: List[str] = None):
+    def __init__(self, base_namespace: str, invoker_function: str, header_includes: List[str] = None, excluded_groups: List[str] = None):
         self.base_namespace = base_namespace
         self.invoker_function = invoker_function
         self.header_includes = header_includes or []
+        self.excluded_groups = {g.lower() for g in (excluded_groups or [])}  # Normalize to lowercase
         self.natives_data = {}
         self.crossmap = []  # List of (hash1, hash2) tuples
         self.hash_to_index = {}  # Maps native hash to array index
@@ -98,6 +104,10 @@ class NativeGenerator:
         call_parts = [p['name'] for p in params]
 
         return ", ".join(signature_parts), ", ".join(call_parts)
+
+    def _is_group_excluded(self, group_name: str) -> bool:
+        """Check if a native group should be excluded from generation."""
+        return group_name.lower() in self.excluded_groups
 
     def _generate_function_declaration(self, native_name: str, native_data: Dict, native_comment: str, native_hash: str) -> str:
         """Generate function declaration for header file."""
@@ -178,6 +188,11 @@ class NativeGenerator:
 
 
         for group_name, group in self.natives_data.items():
+            # Skip excluded groups
+            if self._is_group_excluded(group_name):
+                print(f"Skipping excluded group: {group_name}")
+                continue
+
             lines.append(f"\tnamespace {group_name} {{\n\n")
 
             for native_hash, native_data in group.items():
@@ -211,6 +226,10 @@ class NativeGenerator:
         ]
 
         for group_name, group in self.natives_data.items():
+            # Skip excluded groups
+            if self._is_group_excluded(group_name):
+                continue
+
             lines.append(f"\tnamespace {group_name} {{\n\n")
 
             for native_hash, native_data in group.items():
@@ -321,7 +340,7 @@ class NativeGenerator:
 
 def main():
     """Main entry point."""
-    generator = NativeGenerator(BASE_NAMESPACE, INVOKER_FUNCTION, HEADER_INCLUDES)
+    generator = NativeGenerator(BASE_NAMESPACE, INVOKER_FUNCTION, HEADER_INCLUDES, EXCLUDED_GROUPS)
 
     if not generator.fetch_natives(NATIVES_URL):
         sys.exit(1)

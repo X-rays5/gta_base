@@ -8,114 +8,6 @@
 
 namespace base::menu::natives {
 
-	namespace BUILTIN {
-
-		void WAIT(int ms) {
-			Invoker::Invoke<void, 0>(ms);
-		}
-
-		int START_NEW_SCRIPT(const char* scriptName, int stackSize) {
-			return Invoker::Invoke<int, 1>(scriptName, stackSize);
-		}
-
-		int START_NEW_SCRIPT_WITH_ARGS(const char* scriptName, Any* args, int argCount, int stackSize) {
-			return Invoker::Invoke<int, 2>(scriptName, args, argCount, stackSize);
-		}
-
-		int START_NEW_SCRIPT_WITH_NAME_HASH(Hash scriptHash, int stackSize) {
-			return Invoker::Invoke<int, 3>(scriptHash, stackSize);
-		}
-
-		int START_NEW_SCRIPT_WITH_NAME_HASH_AND_ARGS(Hash scriptHash, Any* args, int argCount, int stackSize) {
-			return Invoker::Invoke<int, 4>(scriptHash, args, argCount, stackSize);
-		}
-
-		int TIMERA() {
-			return Invoker::Invoke<int, 5>();
-		}
-
-		int TIMERB() {
-			return Invoker::Invoke<int, 6>();
-		}
-
-		void SETTIMERA(int value) {
-			Invoker::Invoke<void, 7>(value);
-		}
-
-		void SETTIMERB(int value) {
-			Invoker::Invoke<void, 8>(value);
-		}
-
-		float TIMESTEP() {
-			return Invoker::Invoke<float, 9>();
-		}
-
-		float SIN(float value) {
-			return Invoker::Invoke<float, 10>(value);
-		}
-
-		float COS(float value) {
-			return Invoker::Invoke<float, 11>(value);
-		}
-
-		float SQRT(float value) {
-			return Invoker::Invoke<float, 12>(value);
-		}
-
-		float POW(float base, float exponent) {
-			return Invoker::Invoke<float, 13>(base, exponent);
-		}
-
-		float LOG10(float value) {
-			return Invoker::Invoke<float, 14>(value);
-		}
-
-		float VMAG(float x, float y, float z) {
-			return Invoker::Invoke<float, 15>(x, y, z);
-		}
-
-		float VMAG2(float x, float y, float z) {
-			return Invoker::Invoke<float, 16>(x, y, z);
-		}
-
-		float VDIST(float x1, float y1, float z1, float x2, float y2, float z2) {
-			return Invoker::Invoke<float, 17>(x1, y1, z1, x2, y2, z2);
-		}
-
-		float VDIST2(float x1, float y1, float z1, float x2, float y2, float z2) {
-			return Invoker::Invoke<float, 18>(x1, y1, z1, x2, y2, z2);
-		}
-
-		int SHIFT_LEFT(int value, int bitShift) {
-			return Invoker::Invoke<int, 19>(value, bitShift);
-		}
-
-		int SHIFT_RIGHT(int value, int bitShift) {
-			return Invoker::Invoke<int, 20>(value, bitShift);
-		}
-
-		int FLOOR(float value) {
-			return Invoker::Invoke<int, 21>(value);
-		}
-
-		int CEIL(float value) {
-			return Invoker::Invoke<int, 22>(value);
-		}
-
-		int ROUND(float value) {
-			return Invoker::Invoke<int, 23>(value);
-		}
-
-		float TO_FLOAT(int value) {
-			return Invoker::Invoke<float, 24>(value);
-		}
-
-		void SET_THIS_THREAD_PRIORITY(int priority) {
-			Invoker::Invoke<void, 25>(priority);
-		}
-
-	} // namespace BUILTIN
-
 	namespace APP {
 
 		BOOL APP_DATA_VALID() {
@@ -567,7 +459,7 @@ namespace base::menu::natives {
 		}
 
 		void PLAY_PED_AUDIO_EVENT_ANIM(Ped pedHandle, const char* audioEvent) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: PLAY_PED_AUDIO_EVENT_ANIM");
+			Invoker::Invoke<void, 6703>(pedHandle, audioEvent);
 		}
 
 		BOOL IS_MOBILE_PHONE_RADIO_ACTIVE() {
@@ -1263,7 +1155,7 @@ namespace base::menu::natives {
 		}
 
 		void SET_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE(Hash interiorNameHash, int roomIndex, int doorIndex, const char* newPortalSettingsName) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE");
+			Invoker::Invoke<void, 6702>(interiorNameHash, roomIndex, doorIndex, newPortalSettingsName);
 		}
 
 		void REMOVE_PORTAL_SETTINGS_OVERRIDE(const char* p0) {
@@ -1271,7 +1163,7 @@ namespace base::menu::natives {
 		}
 
 		void REMOVE_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE(Hash interiorNameHash, int roomIndex, int doorIndex) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: REMOVE_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE");
+			Invoker::Invoke<void, 6701>(interiorNameHash, roomIndex, doorIndex);
 		}
 
 		void STOP_SMOKE_GRENADE_EXPLOSION_SOUNDS() {
@@ -2478,8 +2370,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 3345>(cutsceneName);
 		}
 
-		void GET_CUT_FILE_OFFSET(const char* cutsceneName, int index) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: GET_CUT_FILE_OFFSET");
+		Vector3 GET_CUT_FILE_OFFSET(const char* cutsceneName, int index) {
+			return Invoker::Invoke<Vector3, 6700>(cutsceneName, index);
 		}
 
 		int GET_CUT_FILE_CONCAT_COUNT(const char* cutsceneName) {
@@ -2986,16 +2878,16 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 3333>();
 		}
 
-		void ARE_USER_ENTITLEMENTS_UP_TO_DATE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: ARE_USER_ENTITLEMENTS_UP_TO_DATE");
+		BOOL ARE_USER_ENTITLEMENTS_UP_TO_DATE() {
+			return Invoker::Invoke<BOOL, 6699>();
 		}
 
-		void TRY_GET_USER_ENTITLEMENTS(Any* entitlements) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: TRY_GET_USER_ENTITLEMENTS");
+		BOOL TRY_GET_USER_ENTITLEMENTS(Any* entitlements) {
+			return Invoker::Invoke<BOOL, 6698>(entitlements);
 		}
 
 		void DECLARE_IN_MULTIPLAYER_THIS_FRAME() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: DECLARE_IN_MULTIPLAYER_THIS_FRAME");
+			Invoker::Invoke<void, 6697>();
 		}
 
 	} // namespace DLC
@@ -3687,7 +3579,7 @@ namespace base::menu::natives {
 		}
 
 		void _SET_ENTITY_NO_COLLISION_WITH_NETWORKED_ENTITY(Entity entity1, Entity entity2) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_ENTITY_NO_COLLISION_WITH_NETWORKED_ENTITY");
+			Invoker::Invoke<void, 6696>(entity1, entity2);
 		}
 
 		void SET_ENTITY_MOTION_BLUR(Entity entity, BOOL toggle) {
@@ -4091,15 +3983,15 @@ namespace base::menu::natives {
 		}
 
 		void _NETWORK_EXPECT_EXPLOSION_EVENTS_FOR_PLAYER(BOOL expect, Player player) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_EXPECT_EXPLOSION_EVENTS_FOR_PLAYER");
+			Invoker::Invoke<void, 6695>(expect, player);
 		}
 
-		void _GET_MAXIMUM_NUMBER_OF_WATER_CANNONS() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_MAXIMUM_NUMBER_OF_WATER_CANNONS");
+		int _GET_MAXIMUM_NUMBER_OF_WATER_CANNONS() {
+			return Invoker::Invoke<int, 6694>();
 		}
 
-		void _GET_WATER_CANNON_COORDS(int index) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_WATER_CANNON_COORDS");
+		Vector3 _GET_WATER_CANNON_COORDS(int index) {
+			return Invoker::Invoke<Vector3, 6693>(index);
 		}
 
 	} // namespace FIRE
@@ -4551,7 +4443,7 @@ namespace base::menu::natives {
 		}
 
 		void DISPLAY_LOADING_SCREEN_NOW(BOOL onOff) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: DISPLAY_LOADING_SCREEN_NOW");
+			Invoker::Invoke<void, 6692>(onOff);
 		}
 
 		void SET_NIGHTVISION(BOOL toggle) {
@@ -5115,7 +5007,7 @@ namespace base::menu::natives {
 		}
 
 		void _REGISTER_PTFX_FOG_VOLUME(float posX, float posY, float posZ, float range, float density) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _REGISTER_PTFX_FOG_VOLUME");
+			Invoker::Invoke<void, 6691>(posX, posY, posZ, range, density);
 		}
 
 		void REGISTER_POSTFX_BULLET_IMPACT(float weaponWorldPosX, float weaponWorldPosY, float weaponWorldPosZ, float intensity) {
@@ -5426,8 +5318,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 1483>(scaleformHandle);
 		}
 
-		void _HAS_SCALEFORM_MOVIE_NAMED_LOADED(int* scaleformHandle, const char* scaleformName) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _HAS_SCALEFORM_MOVIE_NAMED_LOADED");
+		BOOL _HAS_SCALEFORM_MOVIE_NAMED_LOADED(int* scaleformHandle, const char* scaleformName) {
+			return Invoker::Invoke<BOOL, 6690>(scaleformHandle, scaleformName);
 		}
 
 		BOOL IS_ACTIVE_SCALEFORM_MOVIE_DELETING(int val) {
@@ -5451,7 +5343,7 @@ namespace base::menu::natives {
 		}
 
 		void _SET_SCALEFORM_MOVIE_NAMED_AS_NO_LONGER_NEEDED(int scaleformHandle, const char* scaleformName) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_SCALEFORM_MOVIE_NAMED_AS_NO_LONGER_NEEDED");
+			Invoker::Invoke<void, 6689>(scaleformHandle, scaleformName);
 		}
 
 		void SET_SCALEFORM_MOVIE_TO_USE_SYSTEM_TIME(int scaleform, BOOL toggle) {
@@ -6671,7 +6563,7 @@ namespace base::menu::natives {
 		}
 
 		void _SHOW_PURCHASE_INSTRUCTIONAL_BUTTON(BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SHOW_PURCHASE_INSTRUCTIONAL_BUTTON");
+			Invoker::Invoke<void, 6688>(toggle);
 		}
 
 		void RELOAD_MAP_MENU() {
@@ -6814,12 +6706,12 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 6315>(x, y);
 		}
 
-		void GET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: GET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE");
+		int GET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE() {
+			return Invoker::Invoke<int, 6687>();
 		}
 
 		void SET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE(int mode) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE");
+			Invoker::Invoke<void, 6686>(mode);
 		}
 
 		void SET_BLIP_BRIGHT(Blip blip, BOOL toggle) {
@@ -7218,8 +7110,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 6413>(id);
 		}
 
-		void IS_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: IS_HUD_COMPONENT_HIDDEN_THIS_FRAME");
+		BOOL IS_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id) {
+			return Invoker::Invoke<BOOL, 6685>(id);
 		}
 
 		void SHOW_HUD_COMPONENT_THIS_FRAME(int id) {
@@ -7579,11 +7471,11 @@ namespace base::menu::natives {
 		}
 
 		void PAUSE_MENU_SET_CLOUD_BUSY_SPINNER(const char* TextLabel, BOOL bNoMenu, BOOL bBlackBackground) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: PAUSE_MENU_SET_CLOUD_BUSY_SPINNER");
+			Invoker::Invoke<void, 6684>(TextLabel, bNoMenu, bBlackBackground);
 		}
 
 		void PAUSE_MENU_CLEAR_CLOUD_BUSY_SPINNER() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: PAUSE_MENU_CLEAR_CLOUD_BUSY_SPINNER");
+			Invoker::Invoke<void, 6683>();
 		}
 
 		BOOL IS_FRONTEND_READY_FOR_CONTROL() {
@@ -7811,7 +7703,7 @@ namespace base::menu::natives {
 	namespace IIS {
 
 		void SET_SHOULD_LAUNCH_IIS() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_SHOULD_LAUNCH_IIS");
+			Invoker::Invoke<void, 6682>();
 		}
 
 	} // namespace IIS
@@ -8042,20 +7934,20 @@ namespace base::menu::natives {
 
 	namespace LANDINGPAGE {
 
-		void IS_LANDING_PAGE_ACTIVE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: IS_LANDING_PAGE_ACTIVE");
+		BOOL IS_LANDING_PAGE_ACTIVE() {
+			return Invoker::Invoke<BOOL, 6681>();
 		}
 
 		void SET_SHOULD_LAUNCH_LANDING_PAGE(int entrypointId) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_SHOULD_LAUNCH_LANDING_PAGE");
+			Invoker::Invoke<void, 6680>(entrypointId);
 		}
 
 		void SET_SHOULD_DISMISS_LANDING_PAGE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_SHOULD_DISMISS_LANDING_PAGE");
+			Invoker::Invoke<void, 6679>();
 		}
 
-		void GET_LANDING_PAGE_SELECTED_CHARACTER_SLOT() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: GET_LANDING_PAGE_SELECTED_CHARACTER_SLOT");
+		int GET_LANDING_PAGE_SELECTED_CHARACTER_SLOT() {
+			return Invoker::Invoke<int, 6678>();
 		}
 
 	} // namespace LANDINGPAGE
@@ -8874,8 +8766,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 2549>();
 		}
 
-		void _IS_XBOXPC_VERSION() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _IS_XBOXPC_VERSION");
+		BOOL _IS_XBOXPC_VERSION() {
+			return Invoker::Invoke<BOOL, 6677>();
 		}
 
 		BOOL IS_AUSSIE_VERSION() {
@@ -9434,48 +9326,48 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 2688>();
 		}
 
-		void GET_SCRIPT_ROUTER_CONTEXT(Any* contextData) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: GET_SCRIPT_ROUTER_CONTEXT");
+		BOOL GET_SCRIPT_ROUTER_CONTEXT(Any* contextData) {
+			return Invoker::Invoke<BOOL, 6676>(contextData);
 		}
 
-		void SET_SCRIPT_ROUTER_LINK(Any* contextData) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_SCRIPT_ROUTER_LINK");
+		BOOL SET_SCRIPT_ROUTER_LINK(Any* contextData) {
+			return Invoker::Invoke<BOOL, 6675>(contextData);
 		}
 
-		void HAS_PENDING_SCRIPT_ROUTER_LINK() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: HAS_PENDING_SCRIPT_ROUTER_LINK");
+		BOOL HAS_PENDING_SCRIPT_ROUTER_LINK() {
+			return Invoker::Invoke<BOOL, 6674>();
 		}
 
 		void CLEAR_SCRIPT_ROUTER_LINK() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: CLEAR_SCRIPT_ROUTER_LINK");
+			Invoker::Invoke<void, 6673>();
 		}
 
 		void REPORT_INVALID_SCRIPT_ROUTER_ARGUMENT(const char* argument) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: REPORT_INVALID_SCRIPT_ROUTER_ARGUMENT");
+			Invoker::Invoke<void, 6672>(argument);
 		}
 
 		void SET_ACTIVITY_SCRIPT_ROUTING_ENABLED(BOOL enabled) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_ACTIVITY_SCRIPT_ROUTING_ENABLED");
+			Invoker::Invoke<void, 6671>(enabled);
 		}
 
-		void IS_SESSION_INITIALIZED() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: IS_SESSION_INITIALIZED");
+		BOOL IS_SESSION_INITIALIZED() {
+			return Invoker::Invoke<BOOL, 6670>();
 		}
 
-		void GET_CHOSEN_CRIMINAL_CAREER() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: GET_CHOSEN_CRIMINAL_CAREER");
+		int GET_CHOSEN_CRIMINAL_CAREER() {
+			return Invoker::Invoke<int, 6669>();
 		}
 
-		void HAS_FINALIZED_CHOSEN_CRIMINAL_CAREER() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: HAS_FINALIZED_CHOSEN_CRIMINAL_CAREER");
+		BOOL HAS_FINALIZED_CHOSEN_CRIMINAL_CAREER() {
+			return Invoker::Invoke<BOOL, 6668>();
 		}
 
-		void GET_CHOSEN_MP_CHARACTER_SLOT() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: GET_CHOSEN_MP_CHARACTER_SLOT");
+		int GET_CHOSEN_MP_CHARACTER_SLOT() {
+			return Invoker::Invoke<int, 6667>();
 		}
 
 		void RESET_CHOSEN_MP_CHARACTER_SLOT() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: RESET_CHOSEN_MP_CHARACTER_SLOT");
+			Invoker::Invoke<void, 6666>();
 		}
 
 		void SET_CONTENT_ID_INDEX(Hash contentId, int index) {
@@ -11026,8 +10918,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 5188>(p0);
 		}
 
-		void NETWORK_GET_MP_WINDFALL_AVAILABLE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_GET_MP_WINDFALL_AVAILABLE");
+		BOOL NETWORK_GET_MP_WINDFALL_AVAILABLE() {
+			return Invoker::Invoke<BOOL, 6665>();
 		}
 
 	} // namespace MONEY
@@ -11110,8 +11002,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 44>();
 		}
 
-		void _NET_GAMESERVER_FLAG_FOR_SESSION_RESTART() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NET_GAMESERVER_FLAG_FOR_SESSION_RESTART");
+		BOOL _NET_GAMESERVER_FLAG_FOR_SESSION_RESTART() {
+			return Invoker::Invoke<BOOL, 6664>();
 		}
 
 		BOOL NET_GAMESERVER_START_SESSION_RESTART(BOOL inventory, BOOL playerbalance) {
@@ -11154,8 +11046,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 54>(transactionId);
 		}
 
-		void NET_GAMESERVER_CHECKOUT_PENDING(int transactionId) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NET_GAMESERVER_CHECKOUT_PENDING");
+		BOOL NET_GAMESERVER_CHECKOUT_PENDING(int transactionId) {
+			return Invoker::Invoke<BOOL, 6663>(transactionId);
 		}
 
 		BOOL NET_GAMESERVER_BEGIN_SERVICE(int* transactionId, Hash categoryHash, Hash itemHash, Hash actionTypeHash, int value, int flags) {
@@ -11274,8 +11166,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 5205>();
 		}
 
-		void _NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED");
+		BOOL _NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED() {
+			return Invoker::Invoke<BOOL, 6662>();
 		}
 
 		BOOL NETWORK_HAS_AGE_RESTRICTIONS() {
@@ -11390,16 +11282,16 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 5233>(loadingState);
 		}
 
-		void NETWORK_CHECK_CAN_ACCESS_AND_ALERT() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_CHECK_CAN_ACCESS_AND_ALERT");
+		BOOL NETWORK_CHECK_CAN_ACCESS_AND_ALERT() {
+			return Invoker::Invoke<BOOL, 6661>();
 		}
 
-		void _NETWORK_GET_ACCESS_CODE_LABEL_HEADING(int accessCode) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_ACCESS_CODE_LABEL_HEADING");
+		const char* _NETWORK_GET_ACCESS_CODE_LABEL_HEADING(int accessCode) {
+			return Invoker::Invoke<const char*, 6660>(accessCode);
 		}
 
-		void _NETWORK_GET_ACCESS_CODE_LABEL_BODY(int accessCode) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_ACCESS_CODE_LABEL_BODY");
+		const char* _NETWORK_GET_ACCESS_CODE_LABEL_BODY(int accessCode) {
+			return Invoker::Invoke<const char*, 6659>(accessCode);
 		}
 
 		BOOL NETWORK_IS_MULTIPLAYER_DISABLED() {
@@ -11686,12 +11578,12 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 5305>();
 		}
 
-		void _NETWORK_INVITE_GET_JOIN_FAIL_REASON() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_INVITE_GET_JOIN_FAIL_REASON");
+		const char* _NETWORK_INVITE_GET_JOIN_FAIL_REASON() {
+			return Invoker::Invoke<const char*, 6658>();
 		}
 
 		void _NETWORK_INVITE_CLEAR_JOIN_FAIL_REASON() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_INVITE_CLEAR_JOIN_FAIL_REASON");
+			Invoker::Invoke<void, 6657>();
 		}
 
 		void NETWORK_SESSION_HOST_SINGLE_PLAYER(int p0) {
@@ -12055,11 +11947,11 @@ namespace base::menu::natives {
 		}
 
 		void NETWORK_OVERRIDE_REALTIME_MULTIPLAYER_CONTROL_DISABLE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_OVERRIDE_REALTIME_MULTIPLAYER_CONTROL_DISABLE");
+			Invoker::Invoke<void, 6656>();
 		}
 
 		void NETWORK_DISABLE_REALTIME_MULTIPLAYER_SPECTATOR() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_DISABLE_REALTIME_MULTIPLAYER_SPECTATOR");
+			Invoker::Invoke<void, 6655>();
 		}
 
 		void NETWORK_SET_PRESENCE_SESSION_INVITES_BLOCKED(BOOL toggle) {
@@ -12350,20 +12242,20 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 5467>();
 		}
 
-		void _NETWORK_GET_HOST_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_HOST_BROADCAST_DATA_SIZE_UNSYNCED");
+		int _NETWORK_GET_HOST_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
+			return Invoker::Invoke<int, 6654>(scriptNameHash, instance, positionHash, handlerNum);
 		}
 
-		void _NETWORK_GET_PLAYER_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_PLAYER_BROADCAST_DATA_SIZE_UNSYNCED");
+		int _NETWORK_GET_PLAYER_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
+			return Invoker::Invoke<int, 6653>(scriptNameHash, instance, positionHash, handlerNum);
 		}
 
-		void _NETWORK_GET_BROADCAST_DATA_HOST_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_BROADCAST_DATA_HOST_UPDATE_SIZE");
+		int _NETWORK_GET_BROADCAST_DATA_HOST_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
+			return Invoker::Invoke<int, 6652>(scriptNameHash, instance, positionHash, handlerNum);
 		}
 
-		void _NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE");
+		int _NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum) {
+			return Invoker::Invoke<int, 6651>(scriptNameHash, instance, positionHash, handlerNum);
 		}
 
 		BOOL NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA() {
@@ -12418,8 +12310,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<Player, 5480>(scriptName, instance_id, position_hash);
 		}
 
-		void NETWORK_GET_HOST_OF_THREAD(int threadId) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_GET_HOST_OF_THREAD");
+		Player NETWORK_GET_HOST_OF_THREAD(int threadId) {
+			return Invoker::Invoke<Player, 6650>(threadId);
 		}
 
 		void NETWORK_SET_MISSION_FINISHED() {
@@ -12818,20 +12710,20 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 5578>(communicationType);
 		}
 
-		void _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED(int communicationType) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED");
+		BOOL _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED(int communicationType) {
+			return Invoker::Invoke<BOOL, 6649>(communicationType);
 		}
 
 		int _NETWORK_GET_COMMUNICATION_GROUP_FLAGS(int communicationType) {
 			return Invoker::Invoke<int, 5579>(communicationType);
 		}
 
-		void _NETWORK_GET_COMMUNICATION_GROUP_DEFAULT_FLAGS(int communicationType) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_COMMUNICATION_GROUP_DEFAULT_FLAGS");
+		int _NETWORK_GET_COMMUNICATION_GROUP_DEFAULT_FLAGS(int communicationType) {
+			return Invoker::Invoke<int, 6648>(communicationType);
 		}
 
-		void _NETWORK_GET_COMMUNICATION_GROUP_VALUE(int communicationType) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_COMMUNICATION_GROUP_VALUE");
+		int _NETWORK_GET_COMMUNICATION_GROUP_VALUE(int communicationType) {
+			return Invoker::Invoke<int, 6647>(communicationType);
 		}
 
 		void _NETWORK_SET_COMMUNICATION_GROUP_FLAGS(int communicationType, int communicationGroupFlag) {
@@ -13279,11 +13171,11 @@ namespace base::menu::natives {
 		}
 
 		void _NETWORK_SET_TUTORIAL_SPECIAL_SESSION(BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_SET_TUTORIAL_SPECIAL_SESSION");
+			Invoker::Invoke<void, 6646>(toggle);
 		}
 
-		void _NETWORK_IS_SPECIAL_TUTORIAL_SESSION() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_IS_SPECIAL_TUTORIAL_SESSION");
+		BOOL _NETWORK_IS_SPECIAL_TUTORIAL_SESSION() {
+			return Invoker::Invoke<BOOL, 6645>();
 		}
 
 		BOOL IS_NETWORK_ID_OWNED_BY_PARTICIPANT(int netId) {
@@ -13626,8 +13518,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 6577>(gamerHandle, reportData);
 		}
 
-		void IS_OBJECT_REASSIGNMENT_IN_PROGRESS() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: IS_OBJECT_REASSIGNMENT_IN_PROGRESS");
+		BOOL IS_OBJECT_REASSIGNMENT_IN_PROGRESS() {
+			return Invoker::Invoke<BOOL, 6644>();
 		}
 
 		void USE_PLAYER_COLOUR_INSTEAD_OF_TEAM_COLOUR(BOOL toggle) {
@@ -13775,11 +13667,11 @@ namespace base::menu::natives {
 		}
 
 		void _NETWORK_CLEAR_CLOCK_SYNC_TIME_OVERRIDE(BOOL startGlobalTransition, int transitionTime) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_CLEAR_CLOCK_SYNC_TIME_OVERRIDE");
+			Invoker::Invoke<void, 6643>(startGlobalTransition, transitionTime);
 		}
 
 		void NETWORK_SYNC_CLOCK_TIME_OVERRIDE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_SYNC_CLOCK_TIME_OVERRIDE");
+			Invoker::Invoke<void, 6642>();
 		}
 
 		BOOL NETWORK_IS_CLOCK_TIME_OVERRIDDEN() {
@@ -14007,7 +13899,7 @@ namespace base::menu::natives {
 		}
 
 		void _NETWORK_SET_IGNORE_VEHICLE_RAMMED_BY_NON_VEHICLE(BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_SET_IGNORE_VEHICLE_RAMMED_BY_NON_VEHICLE");
+			Invoker::Invoke<void, 6641>(toggle);
 		}
 
 		int GET_NUM_COMMERCE_ITEMS() {
@@ -14047,7 +13939,7 @@ namespace base::menu::natives {
 		}
 
 		void RESERVE_COMMERCE_STORE_PURCHASE_LOCATION(int location) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: RESERVE_COMMERCE_STORE_PURCHASE_LOCATION");
+			Invoker::Invoke<void, 6640>(location);
 		}
 
 		void OPEN_COMMERCE_STORE(const char* productID, const char* category, int location, BOOL launchLandingPageOnClose) {
@@ -14055,7 +13947,7 @@ namespace base::menu::natives {
 		}
 
 		void CHECKOUT_COMMERCE_PRODUCT(const char* productID, int location, BOOL launchLandingPageOnClose) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: CHECKOUT_COMMERCE_PRODUCT");
+			Invoker::Invoke<void, 6639>(productID, location, launchLandingPageOnClose);
 		}
 
 		BOOL IS_COMMERCE_STORE_OPEN() {
@@ -14310,8 +14202,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<const char*, 5932>(p0);
 		}
 
-		void UGC_GET_CONTENT_DESCRIPTION(int index) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: UGC_GET_CONTENT_DESCRIPTION");
+		const char* UGC_GET_CONTENT_DESCRIPTION(int index) {
+			return Invoker::Invoke<const char*, 6638>(index);
 		}
 
 		int UGC_GET_CONTENT_DESCRIPTION_HASH(Any p0) {
@@ -14675,7 +14567,7 @@ namespace base::menu::natives {
 		}
 
 		void _NETWORK_GET_DUMP_OF_ASSET_VERIFIER(Any* p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_DUMP_OF_ASSET_VERIFIER");
+			Invoker::Invoke<void, 6637>(p0);
 		}
 
 		Vector3 NETWORK_GET_LAST_ENTITY_POS_RECEIVED_OVER_NETWORK(Entity entity) {
@@ -14711,39 +14603,39 @@ namespace base::menu::natives {
 		}
 
 		void NETWORK_POST_UDS_ACTIVITY_START(const char* activityId) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_POST_UDS_ACTIVITY_START");
+			Invoker::Invoke<void, 6636>(activityId);
 		}
 
 		void NETWORK_POST_UDS_ACTIVITY_END(const char* activityId, int iOutcome, int iScore) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_POST_UDS_ACTIVITY_END");
+			Invoker::Invoke<void, 6635>(activityId, iOutcome, iScore);
 		}
 
 		void NETWORK_POST_UDS_ACTIVITY_RESUME(const char* activityId) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_POST_UDS_ACTIVITY_RESUME");
+			Invoker::Invoke<void, 6634>(activityId);
 		}
 
 		void NETWORK_POST_UDS_ACTIVITY_RESUME_WITH_TASKS(const char* activityId, Any* taskStatus) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_POST_UDS_ACTIVITY_RESUME_WITH_TASKS");
+			Invoker::Invoke<void, 6633>(activityId, taskStatus);
 		}
 
 		void NETWORK_POST_UDS_ACTIVITY_AVAILABILITY_CHANGE(Any* availablityData) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_POST_UDS_ACTIVITY_AVAILABILITY_CHANGE");
+			Invoker::Invoke<void, 6632>(availablityData);
 		}
 
 		void NETWORK_POST_UDS_ACTIVITY_TERMINATE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_POST_UDS_ACTIVITY_TERMINATE");
+			Invoker::Invoke<void, 6631>();
 		}
 
-		void NETWORK_HAS_SC_MEMBERSHIP_INFO() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_HAS_SC_MEMBERSHIP_INFO");
+		BOOL NETWORK_HAS_SC_MEMBERSHIP_INFO() {
+			return Invoker::Invoke<BOOL, 6630>();
 		}
 
-		void NETWORK_HAS_SC_MEMBERSHIP() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_HAS_SC_MEMBERSHIP");
+		BOOL NETWORK_HAS_SC_MEMBERSHIP() {
+			return Invoker::Invoke<BOOL, 6629>();
 		}
 
 		void NETWORK_GET_SC_MEMBERSHIP_INFO(Any* info) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: NETWORK_GET_SC_MEMBERSHIP_INFO");
+			Invoker::Invoke<void, 6628>(info);
 		}
 
 		void NETWORK_UGC_NAV(Any p0, Any p1) {
@@ -14755,15 +14647,15 @@ namespace base::menu::natives {
 		}
 
 		void _NETWORK_CONFIRM_GAME_RESTART() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_CONFIRM_GAME_RESTART");
+			Invoker::Invoke<void, 6627>();
 		}
 
-		void _NETWORK_GET_GAME_RESTART_REASON_MESSAGE_LABEL() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_GAME_RESTART_REASON_MESSAGE_LABEL");
+		const char* _NETWORK_GET_GAME_RESTART_REASON_MESSAGE_LABEL() {
+			return Invoker::Invoke<const char*, 6626>();
 		}
 
-		void _NETWORK_GET_BATTLEYE_ERROR_MESSAGE_LABEL(int errorCode) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_BATTLEYE_ERROR_MESSAGE_LABEL");
+		const char* _NETWORK_GET_BATTLEYE_ERROR_MESSAGE_LABEL(int errorCode) {
+			return Invoker::Invoke<const char*, 6625>(errorCode);
 		}
 
 	} // namespace NETWORK
@@ -14894,8 +14786,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<float, 132>(doorHash);
 		}
 
-		void DOOR_SYSTEM_GET_IS_SPRING_REMOVED(Hash doorHash) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: DOOR_SYSTEM_GET_IS_SPRING_REMOVED");
+		BOOL DOOR_SYSTEM_GET_IS_SPRING_REMOVED(Hash doorHash) {
+			return Invoker::Invoke<BOOL, 6624>(doorHash);
 		}
 
 		void DOOR_SYSTEM_SET_SPRING_REMOVED(Hash doorHash, BOOL removed, BOOL requestDoor, BOOL forceUpdate) {
@@ -15227,7 +15119,7 @@ namespace base::menu::natives {
 		}
 
 		void _SET_PICKUP_GLOW_DISABLED(Pickup pickup, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_PICKUP_GLOW_DISABLED");
+			Invoker::Invoke<void, 6623>(pickup, toggle);
 		}
 
 		void SET_PICKUP_GLOW_OFFSET(Pickup pickup, float p1) {
@@ -15458,8 +15350,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 1112>(control, action);
 		}
 
-		void _IS_CONTROL_HELD_DOWN(int control, int action, int duration) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _IS_CONTROL_HELD_DOWN");
+		BOOL _IS_CONTROL_HELD_DOWN(int control, int action, int duration) {
+			return Invoker::Invoke<BOOL, 6622>(control, action, duration);
 		}
 
 		int GET_CONTROL_VALUE(int control, int action) {
@@ -15634,8 +15526,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 1155>(control);
 		}
 
-		void _GET_GAMEPAD_TYPE() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_GAMEPAD_TYPE");
+		int _GET_GAMEPAD_TYPE() {
+			return Invoker::Invoke<int, 6621>();
 		}
 
 	} // namespace PAD
@@ -16686,8 +16578,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 615>(ped, toggle);
 		}
 
-		void _SET_PED_SURVIVES_BEING_OUT_OF_WATER(Ped ped, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_PED_SURVIVES_BEING_OUT_OF_WATER");
+		BOOL _SET_PED_SURVIVES_BEING_OUT_OF_WATER(Ped ped, BOOL toggle) {
+			return Invoker::Invoke<BOOL, 6620>(ped, toggle);
 		}
 
 		void APPLY_DAMAGE_TO_PED(Ped ped, int damageAmount, BOOL p2, Any p3, Hash weaponType) {
@@ -17607,7 +17499,7 @@ namespace base::menu::natives {
 		}
 
 		void SET_PED_CAN_BODY_RECOIL_IK(Ped ped, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_PED_CAN_BODY_RECOIL_IK");
+			Invoker::Invoke<void, 6619>(ped, toggle);
 		}
 
 		void SET_PED_CAN_HEAD_IK(Ped ped, BOOL toggle) {
@@ -18494,8 +18386,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 1843>(entity, vertex, value);
 		}
 
-		void GET_DAMPING(Entity entity, int type) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: GET_DAMPING");
+		Vector3 GET_DAMPING(Entity entity, int type) {
+			return Invoker::Invoke<Vector3, 6618>(entity, type);
 		}
 
 		void ACTIVATE_PHYSICS(Entity entity) {
@@ -19682,8 +19574,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<int, 6564>();
 		}
 
-		void SAVEMIGRATION_MP_IS_PLATFORM_GENERATION(int generation) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SAVEMIGRATION_MP_IS_PLATFORM_GENERATION");
+		BOOL SAVEMIGRATION_MP_IS_PLATFORM_GENERATION(int generation) {
+			return Invoker::Invoke<BOOL, 6617>(generation);
 		}
 
 	} // namespace SAVEMIGRATION
@@ -19794,8 +19686,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 91>();
 		}
 
-		void SET_LOADING_SCREEN_BLANK() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_LOADING_SCREEN_BLANK");
+		BOOL SET_LOADING_SCREEN_BLANK() {
+			return Invoker::Invoke<BOOL, 6616>();
 		}
 
 		void COMMIT_TO_LOADINGSCREEN_SELCTION() {
@@ -20222,8 +20114,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 2888>();
 		}
 
-		void SC_PAUSE_NEWS_INIT_STORY_TYPE(int storyType, BOOL textOnly) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SC_PAUSE_NEWS_INIT_STORY_TYPE");
+		BOOL SC_PAUSE_NEWS_INIT_STORY_TYPE(int storyType, BOOL textOnly) {
+			return Invoker::Invoke<BOOL, 6615>(storyType, textOnly);
 		}
 
 		BOOL SC_PAUSE_NEWS_GET_PENDING_STORY(Any p0) {
@@ -20451,7 +20343,7 @@ namespace base::menu::natives {
 		}
 
 		void STATS_CHARACTER_CREATION_OUTFIT_SELECTED(int outfit) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: STATS_CHARACTER_CREATION_OUTFIT_SELECTED");
+			Invoker::Invoke<void, 6614>(outfit);
 		}
 
 		void STATS_COMPLETED_CHARACTER_CREATION(Any p0) {
@@ -20503,7 +20395,7 @@ namespace base::menu::natives {
 		}
 
 		void _PLAYSTATS_FLOW_HIGH(float posX, float posY, float posZ, const char* action, BOOL p4, int p5) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_FLOW_HIGH");
+			Invoker::Invoke<void, 6613>(posX, posY, posZ, action, p4, p5);
 		}
 
 		void PLAYSTATS_NPC_INVITE(const char* p0) {
@@ -21443,7 +21335,7 @@ namespace base::menu::natives {
 		}
 
 		void _PLAYSTATS_DEATH_INFO(Ped victimPed, Ped killerPed, int mentalState, BOOL revengeKill, int victimKvK, int killerKvK) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_DEATH_INFO");
+			Invoker::Invoke<void, 6612>(victimPed, killerPed, mentalState, revengeKill, victimKvK, killerKvK);
 		}
 
 		void PLAYSTATS_FM_MISSION_END(Any p0, Any p1, Any p2, Any p3) {
@@ -21507,7 +21399,7 @@ namespace base::menu::natives {
 		}
 
 		void _PLAYSTATS_INIT_MULTIPLAYER(Any p0, Any p1, Any p2) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_INIT_MULTIPLAYER");
+			Invoker::Invoke<void, 6611>(p0, p1, p2);
 		}
 
 		void PLAYSTATS_INST_MISSION_END(Any p0) {
@@ -21519,11 +21411,11 @@ namespace base::menu::natives {
 		}
 
 		void PLAYSTATS_LP_NAV(Any* data) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: PLAYSTATS_LP_NAV");
+			Invoker::Invoke<void, 6610>(data);
 		}
 
 		void _PLAYSTATS_LP_SUBTILE(Any p0, Any p1, Any p2, Any p3, Any p4) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_LP_SUBTILE");
+			Invoker::Invoke<void, 6609>(p0, p1, p2, p3, p4);
 		}
 
 		void PLAYSTATS_VEH_DEL(int bossId1, int bossId2, int bossType, int vehicleID, int reason) {
@@ -21555,23 +21447,23 @@ namespace base::menu::natives {
 		}
 
 		void _PLAYSTATS_PH_SNAPSHOT(Any p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_PH_SNAPSHOT");
+			Invoker::Invoke<void, 6608>(p0);
 		}
 
 		void _PLAYSTATS_PH_PROGRESS_TIERS(Any p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_PH_PROGRESS_TIERS");
+			Invoker::Invoke<void, 6607>(p0);
 		}
 
 		void _PLAYSTATS_PH_NAV(Any p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_PH_NAV");
+			Invoker::Invoke<void, 6606>(p0);
 		}
 
 		void _PLAYSTATS_PH_ACTIVITY(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_PH_ACTIVITY");
+			Invoker::Invoke<void, 6605>(p0, p1, p2, p3, p4, p5, p6, p7);
 		}
 
 		void _PLAYSTATS_PH_PROGRESS_OBJECTIVES(Any p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_PH_PROGRESS_OBJECTIVES");
+			Invoker::Invoke<void, 6604>(p0);
 		}
 
 		void _PLAYSTATS_ALERT(Any* data) {
@@ -21599,19 +21491,19 @@ namespace base::menu::natives {
 		}
 
 		void _PLAYSTATS_SCRIPT_EVENT_FPOM(Any* data) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_SCRIPT_EVENT_FPOM");
+			Invoker::Invoke<void, 6603>(data);
 		}
 
 		void _PLAYSTATS_LOBBY_EXIT(Any* p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_LOBBY_EXIT");
+			Invoker::Invoke<void, 6602>(p0);
 		}
 
 		void _PLAYSTATS_LOBBY_STARTED(Any* p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_LOBBY_STARTED");
+			Invoker::Invoke<void, 6601>(p0);
 		}
 
 		void _PLAYSTATS_CREATOR_END(Any* p0) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_CREATOR_END");
+			Invoker::Invoke<void, 6600>(p0);
 		}
 
 	} // namespace STATS
@@ -22094,12 +21986,12 @@ namespace base::menu::natives {
 			return Invoker::Invoke<float, 2811>();
 		}
 
-		void _GET_MODEL_ADDITIONAL_COST(Hash modelHash) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_MODEL_ADDITIONAL_COST");
+		float _GET_MODEL_ADDITIONAL_COST(Hash modelHash) {
+			return Invoker::Invoke<float, 6599>(modelHash);
 		}
 
-		void _GET_TOTAL_MODEL_COST(Hash modelHash) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_TOTAL_MODEL_COST");
+		float _GET_TOTAL_MODEL_COST(Hash modelHash) {
+			return Invoker::Invoke<float, 6598>(modelHash);
 		}
 
 		void SET_ISLAND_ENABLED(const char* name, BOOL toggle) {
@@ -22107,11 +21999,11 @@ namespace base::menu::natives {
 		}
 
 		void _SET_SPHERICAL_STREAM_DISTANT_HILODS_THIS_FRAME() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_SPHERICAL_STREAM_DISTANT_HILODS_THIS_FRAME");
+			Invoker::Invoke<void, 6597>();
 		}
 
-		void IS_GAME_INSTALLED() {
-			LOG_ERROR("[NATIVES] Missing in crossmap: IS_GAME_INSTALLED");
+		BOOL IS_GAME_INSTALLED() {
+			return Invoker::Invoke<BOOL, 6596>();
 		}
 
 	} // namespace STREAMING
@@ -22267,7 +22159,7 @@ namespace base::menu::natives {
 		}
 
 		void TASK_SHARK_CIRCLE_COORD(Ped ped, float x, float y, float z, float moveBlendRatio, float radius) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: TASK_SHARK_CIRCLE_COORD");
+			Invoker::Invoke<void, 6704>(ped, x, y, z, moveBlendRatio, radius);
 		}
 
 		void TASK_FOLLOW_NAV_MESH_TO_COORD(Ped ped, float x, float y, float z, float moveBlendRatio, int time, float targetRadius, int flags, float targetHeading) {
@@ -22435,7 +22327,7 @@ namespace base::menu::natives {
 		}
 
 		void SET_SEQUENCE_PREVENT_MIGRATION(int taskSequenceId) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_SEQUENCE_PREVENT_MIGRATION");
+			Invoker::Invoke<void, 6705>(taskSequenceId);
 		}
 
 		int GET_SEQUENCE_PROGRESS(Ped ped) {
@@ -22499,7 +22391,7 @@ namespace base::menu::natives {
 		}
 
 		void CLEAR_PED_SCRIPT_TASK_IF_RUNNING_THREAT_RESPONSE_NON_TEMP_TASK(Ped ped) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: CLEAR_PED_SCRIPT_TASK_IF_RUNNING_THREAT_RESPONSE_NON_TEMP_TASK");
+			Invoker::Invoke<void, 6706>(ped);
 		}
 
 		void CLEAR_PED_SECONDARY_TASK(Ped ped) {
@@ -23087,7 +22979,7 @@ namespace base::menu::natives {
 		}
 
 		void SET_PED_WAYPOINT_PROGRESS(Ped ped, int progress) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_PED_WAYPOINT_PROGRESS");
+			Invoker::Invoke<void, 6707>(ped, progress);
 		}
 
 		float GET_PED_WAYPOINT_DISTANCE(Any p0) {
@@ -23186,8 +23078,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 2306>(vehicle);
 		}
 
-		void VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED(Vehicle vehicle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED");
+		BOOL VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED(Vehicle vehicle) {
+			return Invoker::Invoke<BOOL, 6708>(vehicle);
 		}
 
 		void VEHICLE_WAYPOINT_PLAYBACK_RESUME(Vehicle vehicle) {
@@ -23287,7 +23179,7 @@ namespace base::menu::natives {
 		}
 
 		void _SET_AMBIENT_PED_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_AMBIENT_PED_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED");
+			Invoker::Invoke<void, 6709>(ped, enable);
 		}
 
 		BOOL IS_MOVE_BLEND_RATIO_STILL(Ped ped) {
@@ -23386,8 +23278,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 4037>(vehicle, toggle, p2);
 		}
 
-		void _GET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED");
+		BOOL _GET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle) {
+			return Invoker::Invoke<BOOL, 6710>(vehicle);
 		}
 
 		void SET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle, BOOL canBeLockedOn, BOOL p2) {
@@ -23859,7 +23751,7 @@ namespace base::menu::natives {
 		}
 
 		void _SET_PLANE_AVOIDS_OTHERS(Vehicle vehicle, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_PLANE_AVOIDS_OTHERS");
+			Invoker::Invoke<void, 6711>(vehicle, toggle);
 		}
 
 		void SET_BOAT_DISABLE_AVOIDANCE(Vehicle vehicle, BOOL p1) {
@@ -24243,11 +24135,11 @@ namespace base::menu::natives {
 		}
 
 		void _SET_MAKE_TRAIN_SCAN_FOR_BLOCKING_ENTITIES(Vehicle train, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_MAKE_TRAIN_SCAN_FOR_BLOCKING_ENTITIES");
+			Invoker::Invoke<void, 6712>(train, toggle);
 		}
 
-		void _GET_MISSION_TRAIN_CONFIG_INDEX_BY_NAME(const char* name) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_MISSION_TRAIN_CONFIG_INDEX_BY_NAME");
+		int _GET_MISSION_TRAIN_CONFIG_INDEX_BY_NAME(const char* name) {
+			return Invoker::Invoke<int, 6713>(name);
 		}
 
 		BOOL IS_MISSION_TRAIN(Vehicle train) {
@@ -25023,7 +24915,7 @@ namespace base::menu::natives {
 		}
 
 		void SET_VEHICLE_TAIL_BROKEN(Vehicle vehicle, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_VEHICLE_TAIL_BROKEN");
+			Invoker::Invoke<void, 6714>(vehicle, toggle);
 		}
 
 		void SET_CONVERTIBLE_ROOF_LATCH_STATE(Vehicle vehicle, BOOL state) {
@@ -25803,7 +25695,7 @@ namespace base::menu::natives {
 		}
 
 		void _ENABLE_INDIVIDUAL_PLANE_PROPELLER(Vehicle vehicle, int propeller) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _ENABLE_INDIVIDUAL_PLANE_PROPELLER");
+			Invoker::Invoke<void, 6715>(vehicle, propeller);
 		}
 
 		void SET_VEHICLE_FORCE_AFTERBURNER(Vehicle vehicle, BOOL toggle) {
@@ -25974,8 +25866,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 4676>(vehicle, p1);
 		}
 
-		void _SET_VEHICLE_EXPLOSIVE_DAMAGE_SCALE(Vehicle vehicle, float scale) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_VEHICLE_EXPLOSIVE_DAMAGE_SCALE");
+		Any _SET_VEHICLE_EXPLOSIVE_DAMAGE_SCALE(Vehicle vehicle, float scale) {
+			return Invoker::Invoke<Any, 6716>(vehicle, scale);
 		}
 
 		BOOL SET_VEHICLE_WEAPON_DAMAGE_SCALE(Vehicle vehicle, float multiplier) {
@@ -26171,7 +26063,7 @@ namespace base::menu::natives {
 		}
 
 		void _SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_RECEIVED_BY_AI_VEHICLE(Vehicle vehicle, BOOL disable) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_RECEIVED_BY_AI_VEHICLE");
+			Invoker::Invoke<void, 6717>(vehicle, disable);
 		}
 
 		void SET_TRAILER_ATTACHMENT_ENABLED(Any p0, Any p1) {
@@ -26215,7 +26107,7 @@ namespace base::menu::natives {
 		}
 
 		void SET_PLANE_CONTROL_SECTIONS_SHOULD_BREAK_OFF_FROM_EXPLOSIONS(Vehicle vehicle, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_PLANE_CONTROL_SECTIONS_SHOULD_BREAK_OFF_FROM_EXPLOSIONS");
+			Invoker::Invoke<void, 6718>(vehicle, toggle);
 		}
 
 		void SET_HELI_CAN_PICKUP_ENTITY_THAT_HAS_PICK_UP_DISABLED(Vehicle vehicle, BOOL toggle) {
@@ -26330,8 +26222,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 4762>(toggle);
 		}
 
-		void _IS_VEHICLE_ON_BOOST_PAD(Vehicle vehicle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _IS_VEHICLE_ON_BOOST_PAD");
+		BOOL _IS_VEHICLE_ON_BOOST_PAD(Vehicle vehicle) {
+			return Invoker::Invoke<BOOL, 6719>(vehicle);
 		}
 
 		BOOL GET_IS_VEHICLE_SHUNTING(Vehicle vehicle) {
@@ -26375,7 +26267,7 @@ namespace base::menu::natives {
 		}
 
 		void _SET_REMAINING_NITROUS_DURATION(Vehicle vehicle, float duration) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_REMAINING_NITROUS_DURATION");
+			Invoker::Invoke<void, 6720>(vehicle, duration);
 		}
 
 		float _GET_REMAINING_NITROUS_DURATION(Vehicle vehicle) {
@@ -26391,7 +26283,7 @@ namespace base::menu::natives {
 		}
 
 		void SET_NITROUS_IS_ACTIVE(Vehicle vehicle, BOOL toggle) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: SET_NITROUS_IS_ACTIVE");
+			Invoker::Invoke<void, 6721>(vehicle, toggle);
 		}
 
 		void SET_INCREASE_WHEEL_CRUSH_DAMAGE(Vehicle vehicle, BOOL toggle) {
@@ -26698,28 +26590,28 @@ namespace base::menu::natives {
 			return Invoker::Invoke<int, 321>(ped, weaponHash, p2);
 		}
 
-		void _GET_TIME_BEFORE_VEHICLE_WEAPON_RELOAD_FINISHES(Vehicle vehicle, int seat) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_TIME_BEFORE_VEHICLE_WEAPON_RELOAD_FINISHES");
+		int _GET_TIME_BEFORE_VEHICLE_WEAPON_RELOAD_FINISHES(Vehicle vehicle, int seat) {
+			return Invoker::Invoke<int, 6722>(vehicle, seat);
 		}
 
-		void _HAS_WEAPON_RELOADING_IN_VEHICLE(Vehicle vehicle, int seat) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _HAS_WEAPON_RELOADING_IN_VEHICLE");
+		BOOL _HAS_WEAPON_RELOADING_IN_VEHICLE(Vehicle vehicle, int seat) {
+			return Invoker::Invoke<BOOL, 6723>(vehicle, seat);
 		}
 
-		void _GET_VEHICLE_WEAPON_RELOAD_TIME(Vehicle vehicle, int seat) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_VEHICLE_WEAPON_RELOAD_TIME");
+		float _GET_VEHICLE_WEAPON_RELOAD_TIME(Vehicle vehicle, int seat) {
+			return Invoker::Invoke<float, 6724>(vehicle, seat);
 		}
 
-		void _GET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int* ammo) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_AMMO_IN_VEHICLE_WEAPON_CLIP");
+		BOOL _GET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int* ammo) {
+			return Invoker::Invoke<BOOL, 6725>(vehicle, seat, ammo);
 		}
 
 		BOOL GET_AMMO_IN_CLIP(Ped ped, Hash weaponHash, int* ammo) {
 			return Invoker::Invoke<BOOL, 322>(ped, weaponHash, ammo);
 		}
 
-		void _SET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int ammo) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_AMMO_IN_VEHICLE_WEAPON_CLIP");
+		BOOL _SET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int ammo) {
+			return Invoker::Invoke<BOOL, 6726>(vehicle, seat, ammo);
 		}
 
 		BOOL SET_AMMO_IN_CLIP(Ped ped, Hash weaponHash, int ammo) {
@@ -26822,8 +26714,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<BOOL, 347>(ped);
 		}
 
-		void _TRIGGER_VEHICLE_WEAPON_RELOAD(Vehicle vehicle, int seat, Ped ped) {
-			LOG_ERROR("[NATIVES] Missing in crossmap: _TRIGGER_VEHICLE_WEAPON_RELOAD");
+		BOOL _TRIGGER_VEHICLE_WEAPON_RELOAD(Vehicle vehicle, int seat, Ped ped) {
+			return Invoker::Invoke<BOOL, 6727>(vehicle, seat, ped);
 		}
 
 		void REQUEST_WEAPON_ASSET(Hash weaponHash, int p1, int p2) {

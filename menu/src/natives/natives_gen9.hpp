@@ -11,104 +11,6 @@
 
 namespace base::menu::natives {
 
-	namespace BUILTIN {
-
-		/**
-		 * Pauses execution of the current script, please note this behavior is only seen when called from one of the game script files(ysc). In order to wait an asi script use "static void WAIT(DWORD time);" found in main.h
-		 */
-		void WAIT(int ms);
-		/**
-		 * Examples:
-		 * g_384A = SYSTEM::START_NEW_SCRIPT("cellphone_flashhand", 1424);
-		 * l_10D = SYSTEM::START_NEW_SCRIPT("taxiService", 1828);
-		 * SYSTEM::START_NEW_SCRIPT("AM_MP_YACHT", 5000);
-		 * SYSTEM::START_NEW_SCRIPT("emergencycall", 512);
-		 * SYSTEM::START_NEW_SCRIPT("emergencycall", 512);
-		 * SYSTEM::START_NEW_SCRIPT("FM_maintain_cloud_header_data", 1424);
-		 * SYSTEM::START_NEW_SCRIPT("FM_Mission_Controller", 31000);
-		 * SYSTEM::START_NEW_SCRIPT("tennis_family", 3650);
-		 * SYSTEM::START_NEW_SCRIPT("Celebrations", 3650);
-		 * 
-		 * Decompiled examples of usage when starting a script:
-		 * 
-		 * SCRIPT::REQUEST_SCRIPT(a_0);
-		 * if (SCRIPT::HAS_SCRIPT_LOADED(a_0)) {
-		 * SYSTEM::START_NEW_SCRIPT(a_0, v_3);
-		 * SCRIPT::SET_SCRIPT_AS_NO_LONGER_NEEDED(a_0);
-		 * return 1;
-		 * }
-		 * 
-		 * or:
-		 * 
-		 * v_2 = "MrsPhilips2";
-		 * SCRIPT::REQUEST_SCRIPT(v_2);
-		 * while (!SCRIPT::HAS_SCRIPT_LOADED(v_2)) {
-		 * SCRIPT::REQUEST_SCRIPT(v_2);
-		 * SYSTEM::WAIT(0);
-		 * }
-		 * sub_8792(36);
-		 * SYSTEM::START_NEW_SCRIPT(v_2, 17000);
-		 * SCRIPT::SET_SCRIPT_AS_NO_LONGER_NEEDED(v_2);
-		 */
-		int START_NEW_SCRIPT(const char* scriptName, int stackSize);
-		/**
-		 * return : script thread id, 0 if failed
-		 * Pass pointer to struct of args in p1, size of struct goes into p2
-		 */
-		int START_NEW_SCRIPT_WITH_ARGS(const char* scriptName, Any* args, int argCount, int stackSize);
-		int START_NEW_SCRIPT_WITH_NAME_HASH(Hash scriptHash, int stackSize);
-		int START_NEW_SCRIPT_WITH_NAME_HASH_AND_ARGS(Hash scriptHash, Any* args, int argCount, int stackSize);
-		/**
-		 * Counts up. Every 1000 is 1 real-time second. Use SETTIMERA(int value) to set the timer (e.g.: SETTIMERA(0)).
-		 */
-		int TIMERA();
-		int TIMERB();
-		void SETTIMERA(int value);
-		void SETTIMERB(int value);
-		/**
-		 * Gets the current frame time.
-		 */
-		float TIMESTEP();
-		float SIN(float value);
-		float COS(float value);
-		float SQRT(float value);
-		float POW(float base, float exponent);
-		float LOG10(float value);
-		/**
-		 * Calculates the magnitude of a vector.
-		 */
-		float VMAG(float x, float y, float z);
-		/**
-		 * Calculates the magnitude of a vector but does not perform Sqrt operations. (Its way faster)
-		 */
-		float VMAG2(float x, float y, float z);
-		/**
-		 * Calculates distance between vectors.
-		 */
-		float VDIST(float x1, float y1, float z1, float x2, float y2, float z2);
-		/**
-		 * Calculates distance between vectors but does not perform Sqrt operations. (Its way faster)
-		 */
-		float VDIST2(float x1, float y1, float z1, float x2, float y2, float z2);
-		int SHIFT_LEFT(int value, int bitShift);
-		int SHIFT_RIGHT(int value, int bitShift);
-		int FLOOR(float value);
-		/**
-		 * I'm guessing this rounds a float value up to the next whole number, and FLOOR rounds it down
-		 */
-		int CEIL(float value);
-		int ROUND(float value);
-		float TO_FLOAT(int value);
-		/**
-		 * THREAD_PRIO_HIGHEST = 0
-		 * THREAD_PRIO_NORMAL = 1
-		 * THREAD_PRIO_LOWEST = 2
-		 * THREAD_PRIO_MANUAL_UPDATE = 100
-		 */
-		void SET_THIS_THREAD_PRIORITY(int priority);
-
-	} // namespace BUILTIN
-
 	namespace APP {
 
 		BOOL APP_DATA_VALID();
@@ -528,7 +430,7 @@ namespace base::menu::natives {
 		 * mood can be 0 or 1 (it's not a boolean value!). Effects audio of the animal.
 		 */
 		void SET_ANIMAL_MOOD(Ped animal, int mood);
-		void PLAY_PED_AUDIO_EVENT_ANIM(Ped pedHandle, const char* audioEvent); // Missing in crossmap
+		void PLAY_PED_AUDIO_EVENT_ANIM(Ped pedHandle, const char* audioEvent);
 		BOOL IS_MOBILE_PHONE_RADIO_ACTIVE();
 		void SET_MOBILE_PHONE_RADIO_STATE(BOOL state);
 		/**
@@ -1175,7 +1077,7 @@ namespace base::menu::natives {
 		 * AUDIO::SET_PORTAL_SETTINGS_OVERRIDE("V_MICHAEL_PS_BATHROOM_WITH_WINDOW", "V_MICHAEL_PS_BATHROOM_WITHOUT_WINDOW");
 		 */
 		void SET_PORTAL_SETTINGS_OVERRIDE(const char* p0, const char* p1);
-		void SET_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE(Hash interiorNameHash, int roomIndex, int doorIndex, const char* newPortalSettingsName); // Missing in crossmap
+		void SET_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE(Hash interiorNameHash, int roomIndex, int doorIndex, const char* newPortalSettingsName);
 		/**
 		 * Found in the b617d scripts, duplicates removed:
 		 * 
@@ -1186,7 +1088,7 @@ namespace base::menu::natives {
 		 * AUDIO::REMOVE_PORTAL_SETTINGS_OVERRIDE("V_MICHAEL_PS_BATHROOM_WITH_WINDOW");
 		 */
 		void REMOVE_PORTAL_SETTINGS_OVERRIDE(const char* p0);
-		void REMOVE_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE(Hash interiorNameHash, int roomIndex, int doorIndex); // Missing in crossmap
+		void REMOVE_INDIVIDUAL_PORTAL_SETTINGS_OVERRIDE(Hash interiorNameHash, int roomIndex, int doorIndex);
 		void STOP_SMOKE_GRENADE_EXPLOSION_SOUNDS();
 		int GET_MUSIC_VOL_SLIDER();
 		void REQUEST_TENNIS_BANKS(Ped ped);
@@ -2114,7 +2016,7 @@ namespace base::menu::natives {
 		 * Full list of cutscene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/cutsceneNames.json
 		 */
 		void REMOVE_CUT_FILE(const char* cutsceneName);
-		void GET_CUT_FILE_OFFSET(const char* cutsceneName, int index); // Missing in crossmap
+		Vector3 GET_CUT_FILE_OFFSET(const char* cutsceneName, int index);
 		/**
 		 * Full list of cutscene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/cutsceneNames.json
 		 */
@@ -2371,9 +2273,9 @@ namespace base::menu::natives {
 		 * In order to use GTA:O heist IPL's you have to call this native with the following params: SET_INSTANCE_PRIORITY_MODE(1);
 		 */
 		void ON_ENTER_MP();
-		void ARE_USER_ENTITLEMENTS_UP_TO_DATE(); // Missing in crossmap
-		void TRY_GET_USER_ENTITLEMENTS(Any* entitlements); // Missing in crossmap
-		void DECLARE_IN_MULTIPLAYER_THIS_FRAME(); // Missing in crossmap
+		BOOL ARE_USER_ENTITLEMENTS_UP_TO_DATE();
+		BOOL TRY_GET_USER_ENTITLEMENTS(Any* entitlements);
+		void DECLARE_IN_MULTIPLAYER_THIS_FRAME();
 
 	} // namespace DLC
 
@@ -3110,7 +3012,7 @@ namespace base::menu::natives {
 		 * The third parameter, `thisFrame`, decides whether the collision is to be disabled until it is turned back on, or if it's just this frame.
 		 */
 		void SET_ENTITY_NO_COLLISION_ENTITY(Entity entity1, Entity entity2, BOOL thisFrameOnly);
-		void _SET_ENTITY_NO_COLLISION_WITH_NETWORKED_ENTITY(Entity entity1, Entity entity2); // Missing in crossmap
+		void _SET_ENTITY_NO_COLLISION_WITH_NETWORKED_ENTITY(Entity entity1, Entity entity2);
 		void SET_ENTITY_MOTION_BLUR(Entity entity, BOOL toggle);
 		/**
 		 * p1 always false.
@@ -3531,9 +3433,9 @@ namespace base::menu::natives {
 		 * explosionType: See ADD_EXPLOSION.
 		 */
 		Entity GET_OWNER_OF_EXPLOSION_IN_ANGLED_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float radius);
-		void _NETWORK_EXPECT_EXPLOSION_EVENTS_FOR_PLAYER(BOOL expect, Player player); // Missing in crossmap
-		void _GET_MAXIMUM_NUMBER_OF_WATER_CANNONS(); // Missing in crossmap
-		void _GET_WATER_CANNON_COORDS(int index); // Missing in crossmap
+		void _NETWORK_EXPECT_EXPLOSION_EVENTS_FOR_PLAYER(BOOL expect, Player player);
+		int _GET_MAXIMUM_NUMBER_OF_WATER_CANNONS();
+		Vector3 _GET_WATER_CANNON_COORDS(int index);
 
 	} // namespace FIRE
 
@@ -4093,7 +3995,7 @@ namespace base::menu::natives {
 		 */
 		BOOL GET_IS_HIDEF();
 		void ADJUST_NEXT_POS_SIZE_AS_NORMALIZED_16_9();
-		void DISPLAY_LOADING_SCREEN_NOW(BOOL onOff); // Missing in crossmap
+		void DISPLAY_LOADING_SCREEN_NOW(BOOL onOff);
 		/**
 		 * Enables Night Vision.
 		 * 
@@ -4499,7 +4401,7 @@ namespace base::menu::natives {
 		void SET_PARTICLE_FX_FOOT_OVERRIDE_NAME(const char* p0);
 		void SET_SKIDMARK_RANGE_SCALE(float scale);
 		void SET_PTFX_FORCE_VEHICLE_INTERIOR_FLAG(Any p0);
-		void _REGISTER_PTFX_FOG_VOLUME(float posX, float posY, float posZ, float range, float density); // Missing in crossmap
+		void _REGISTER_PTFX_FOG_VOLUME(float posX, float posY, float posZ, float range, float density);
 		void REGISTER_POSTFX_BULLET_IMPACT(float weaponWorldPosX, float weaponWorldPosY, float weaponWorldPosZ, float intensity);
 		void FORCE_POSTFX_BULLET_IMPACTS_AFTER_HUD(BOOL p0);
 		/**
@@ -4732,7 +4634,7 @@ namespace base::menu::natives {
 		 */
 		int REQUEST_SCALEFORM_MOVIE_SKIP_RENDER_WHILE_PAUSED(const char* scaleformName);
 		BOOL HAS_SCALEFORM_MOVIE_LOADED(int scaleformHandle);
-		void _HAS_SCALEFORM_MOVIE_NAMED_LOADED(int* scaleformHandle, const char* scaleformName); // Missing in crossmap
+		BOOL _HAS_SCALEFORM_MOVIE_NAMED_LOADED(int* scaleformHandle, const char* scaleformName);
 		/**
 		 * val is 1-20 (0 will return false)
 		 */
@@ -4752,7 +4654,7 @@ namespace base::menu::natives {
 		BOOL HAS_SCALEFORM_MOVIE_FILENAME_LOADED(const char* scaleformName);
 		BOOL HAS_SCALEFORM_CONTAINER_MOVIE_LOADED_INTO_PARENT(int scaleformHandle);
 		void SET_SCALEFORM_MOVIE_AS_NO_LONGER_NEEDED(int* scaleformHandle);
-		void _SET_SCALEFORM_MOVIE_NAMED_AS_NO_LONGER_NEEDED(int scaleformHandle, const char* scaleformName); // Missing in crossmap
+		void _SET_SCALEFORM_MOVIE_NAMED_AS_NO_LONGER_NEEDED(int scaleformHandle, const char* scaleformName);
 		void SET_SCALEFORM_MOVIE_TO_USE_SYSTEM_TIME(int scaleform, BOOL toggle);
 		void SET_SCALEFORM_MOVIE_TO_USE_LARGE_RT(int scaleformHandle, BOOL toggle);
 		/**
@@ -5890,7 +5792,7 @@ namespace base::menu::natives {
 		BOOL IS_HOVERING_OVER_MISSION_CREATOR_BLIP();
 		void SHOW_START_MISSION_INSTRUCTIONAL_BUTTON(BOOL toggle);
 		void SHOW_CONTACT_INSTRUCTIONAL_BUTTON(BOOL toggle);
-		void _SHOW_PURCHASE_INSTRUCTIONAL_BUTTON(BOOL toggle); // Missing in crossmap
+		void _SHOW_PURCHASE_INSTRUCTIONAL_BUTTON(BOOL toggle);
 		void RELOAD_MAP_MENU();
 		void SET_BLIP_MARKER_LONG_DISTANCE(Any p0, Any p1);
 		void SET_BLIP_FLASHES(Blip blip, BOOL toggle);
@@ -6044,8 +5946,8 @@ namespace base::menu::natives {
 		void REFRESH_WAYPOINT();
 		BOOL IS_WAYPOINT_ACTIVE();
 		void SET_NEW_WAYPOINT(float x, float y);
-		void GET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE(); // Missing in crossmap
-		void SET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE(int mode); // Missing in crossmap
+		int GET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE();
+		void SET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE(int mode);
 		void SET_BLIP_BRIGHT(Blip blip, BOOL toggle);
 		/**
 		 * As of b2189, the third parameter sets the color of the cone (before b2189 it was ignored). Note that it uses HUD colors, not blip colors.
@@ -6371,7 +6273,7 @@ namespace base::menu::natives {
 		 * These integers also work for the `SHOW_HUD_COMPONENT_THIS_FRAME` native, but instead shows the HUD Component.
 		 */
 		void HIDE_HUD_COMPONENT_THIS_FRAME(int id);
-		void IS_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id); // Missing in crossmap
+		BOOL IS_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id);
 		/**
 		 * This function hides various HUD (Heads-up Display) components.
 		 * Listed below are the integers and the corresponding HUD component.
@@ -6779,8 +6681,8 @@ namespace base::menu::natives {
 		void PAUSE_MENU_REDRAW_INSTRUCTIONAL_BUTTONS(int p0);
 		void PAUSE_MENU_SET_BUSY_SPINNER(BOOL p0, int position, int spinnerIndex);
 		void PAUSE_MENU_SET_WARN_ON_TAB_CHANGE(BOOL p0);
-		void PAUSE_MENU_SET_CLOUD_BUSY_SPINNER(const char* TextLabel, BOOL bNoMenu, BOOL bBlackBackground); // Missing in crossmap
-		void PAUSE_MENU_CLEAR_CLOUD_BUSY_SPINNER(); // Missing in crossmap
+		void PAUSE_MENU_SET_CLOUD_BUSY_SPINNER(const char* TextLabel, BOOL bNoMenu, BOOL bBlackBackground);
+		void PAUSE_MENU_CLEAR_CLOUD_BUSY_SPINNER();
 		BOOL IS_FRONTEND_READY_FOR_CONTROL();
 		/**
 		 * Disables frontend (works in custom frontends, not sure about regular pause menu) navigation keys on keyboard. Not sure about controller. Does not disable mouse controls. No need to call this every tick.
@@ -6930,7 +6832,7 @@ namespace base::menu::natives {
 		/**
 		 * Launches the Initial Interactive Screen
 		 */
-		void SET_SHOULD_LAUNCH_IIS(); // Missing in crossmap
+		void SET_SHOULD_LAUNCH_IIS();
 
 	} // namespace IIS
 
@@ -7100,10 +7002,10 @@ namespace base::menu::natives {
 
 	namespace LANDINGPAGE {
 
-		void IS_LANDING_PAGE_ACTIVE(); // Missing in crossmap
-		void SET_SHOULD_LAUNCH_LANDING_PAGE(int entrypointId); // Missing in crossmap
-		void SET_SHOULD_DISMISS_LANDING_PAGE(); // Missing in crossmap
-		void GET_LANDING_PAGE_SELECTED_CHARACTER_SLOT(); // Missing in crossmap
+		BOOL IS_LANDING_PAGE_ACTIVE();
+		void SET_SHOULD_LAUNCH_LANDING_PAGE(int entrypointId);
+		void SET_SHOULD_DISMISS_LANDING_PAGE();
+		int GET_LANDING_PAGE_SELECTED_CHARACTER_SLOT();
 
 	} // namespace LANDINGPAGE
 
@@ -7763,7 +7665,7 @@ namespace base::menu::natives {
 		BOOL IS_PS3_VERSION();
 		BOOL IS_PC_VERSION();
 		BOOL IS_STEAM_VERSION();
-		void _IS_XBOXPC_VERSION(); // Missing in crossmap
+		BOOL _IS_XBOXPC_VERSION();
 		/**
 		 * Used to block some of the prostitute stuff due to laws in Australia.
 		 */
@@ -8212,23 +8114,23 @@ namespace base::menu::natives {
 		void DISABLE_SCREEN_DIMMING_THIS_FRAME();
 		float GET_CITY_DENSITY();
 		void USE_ACTIVE_CAMERA_FOR_TIMESLICING_CENTRE();
-		void GET_SCRIPT_ROUTER_CONTEXT(Any* contextData); // Missing in crossmap
-		void SET_SCRIPT_ROUTER_LINK(Any* contextData); // Missing in crossmap
-		void HAS_PENDING_SCRIPT_ROUTER_LINK(); // Missing in crossmap
-		void CLEAR_SCRIPT_ROUTER_LINK(); // Missing in crossmap
+		BOOL GET_SCRIPT_ROUTER_CONTEXT(Any* contextData);
+		BOOL SET_SCRIPT_ROUTER_LINK(Any* contextData);
+		BOOL HAS_PENDING_SCRIPT_ROUTER_LINK();
+		void CLEAR_SCRIPT_ROUTER_LINK();
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
-		void REPORT_INVALID_SCRIPT_ROUTER_ARGUMENT(const char* argument); // Missing in crossmap
+		void REPORT_INVALID_SCRIPT_ROUTER_ARGUMENT(const char* argument);
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
-		void SET_ACTIVITY_SCRIPT_ROUTING_ENABLED(BOOL enabled); // Missing in crossmap
-		void IS_SESSION_INITIALIZED(); // Missing in crossmap
-		void GET_CHOSEN_CRIMINAL_CAREER(); // Missing in crossmap
-		void HAS_FINALIZED_CHOSEN_CRIMINAL_CAREER(); // Missing in crossmap
-		void GET_CHOSEN_MP_CHARACTER_SLOT(); // Missing in crossmap
-		void RESET_CHOSEN_MP_CHARACTER_SLOT(); // Missing in crossmap
+		void SET_ACTIVITY_SCRIPT_ROUTING_ENABLED(BOOL enabled);
+		BOOL IS_SESSION_INITIALIZED();
+		int GET_CHOSEN_CRIMINAL_CAREER();
+		BOOL HAS_FINALIZED_CHOSEN_CRIMINAL_CAREER();
+		int GET_CHOSEN_MP_CHARACTER_SLOT();
+		void RESET_CHOSEN_MP_CHARACTER_SLOT();
 		void SET_CONTENT_ID_INDEX(Hash contentId, int index);
 		int GET_CONTENT_ID_INDEX(Hash contentId);
 		void _SET_CONTENT_PROP_TYPE(Hash model, int type);
@@ -8830,7 +8732,7 @@ namespace base::menu::natives {
 		 * This function is hard-coded to always return 1.
 		 */
 		BOOL WAS_VC_WITHDRAWAL_SUCCESSFUL(Any p0);
-		void NETWORK_GET_MP_WINDFALL_AVAILABLE(); // Missing in crossmap
+		BOOL NETWORK_GET_MP_WINDFALL_AVAILABLE();
 
 	} // namespace MONEY
 
@@ -8863,7 +8765,7 @@ namespace base::menu::natives {
 		 * This is different from NET_GAMESERVER_START_SESSION_RESTART which, despite its name, does not actually restart the session (it only requests fresh inventory and/or balance data from the server).
 		 * Returns true if it was possible to set the flag.
 		 */
-		void _NET_GAMESERVER_FLAG_FOR_SESSION_RESTART(); // Missing in crossmap
+		BOOL _NET_GAMESERVER_FLAG_FOR_SESSION_RESTART();
 		/**
 		 * Note: only one of the arguments can be set to true at a time
 		 */
@@ -8877,7 +8779,7 @@ namespace base::menu::natives {
 		BOOL NET_GAMESERVER_BASKET_IS_FULL();
 		BOOL NET_GAMESERVER_BASKET_APPLY_SERVER_DATA(Any p0, Any* p1);
 		BOOL NET_GAMESERVER_CHECKOUT_START(int transactionId);
-		void NET_GAMESERVER_CHECKOUT_PENDING(int transactionId); // Missing in crossmap
+		BOOL NET_GAMESERVER_CHECKOUT_PENDING(int transactionId);
 		BOOL NET_GAMESERVER_BEGIN_SERVICE(int* transactionId, Hash categoryHash, Hash itemHash, Hash actionTypeHash, int value, int flags);
 		BOOL NET_GAMESERVER_END_SERVICE(int transactionId);
 		BOOL NET_GAMESERVER_DELETE_CHARACTER(int slot, BOOL transfer, Hash reason);
@@ -8978,7 +8880,7 @@ namespace base::menu::natives {
 		 * 
 		 * Always returns false for non-XboxPC versions.
 		 */
-		void _NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED(); // Missing in crossmap
+		BOOL _NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED();
 		BOOL NETWORK_HAS_AGE_RESTRICTIONS();
 		BOOL NETWORK_HAVE_USER_CONTENT_PRIVILEGES(int p0);
 		BOOL NETWORK_HAVE_COMMUNICATION_PRIVILEGES(int p0, Player player);
@@ -9022,9 +8924,9 @@ namespace base::menu::natives {
 		 * Returns 1 if the multiplayer is loaded, otherwhise 0.
 		 */
 		BOOL NETWORK_CAN_ACCESS_MULTIPLAYER(int* loadingState);
-		void NETWORK_CHECK_CAN_ACCESS_AND_ALERT(); // Missing in crossmap
-		void _NETWORK_GET_ACCESS_CODE_LABEL_HEADING(int accessCode); // Missing in crossmap
-		void _NETWORK_GET_ACCESS_CODE_LABEL_BODY(int accessCode); // Missing in crossmap
+		BOOL NETWORK_CHECK_CAN_ACCESS_AND_ALERT();
+		const char* _NETWORK_GET_ACCESS_CODE_LABEL_HEADING(int accessCode);
+		const char* _NETWORK_GET_ACCESS_CODE_LABEL_BODY(int accessCode);
 		BOOL NETWORK_IS_MULTIPLAYER_DISABLED();
 		BOOL NETWORK_CAN_ENTER_MULTIPLAYER();
 		BOOL NETWORK_SESSION_DO_FREEROAM_QUICKMATCH(Any p0, Any p1, Any p2);
@@ -9146,11 +9048,11 @@ namespace base::menu::natives {
 		/**
 		 * Retrieves the failed invite join alert reason
 		 */
-		void _NETWORK_INVITE_GET_JOIN_FAIL_REASON(); // Missing in crossmap
+		const char* _NETWORK_INVITE_GET_JOIN_FAIL_REASON();
 		/**
 		 * Clears the failed invite join alert reason
 		 */
-		void _NETWORK_INVITE_CLEAR_JOIN_FAIL_REASON(); // Missing in crossmap
+		void _NETWORK_INVITE_CLEAR_JOIN_FAIL_REASON();
 		/**
 		 * Loads up the map that is loaded when beeing in mission creator
 		 * Player gets placed in a mix between online/offline mode
@@ -9294,8 +9196,8 @@ namespace base::menu::natives {
 		BOOL NETWORK_HAS_TRANSITION_INVITE_BEEN_ACKED(Any* p0);
 		BOOL NETWORK_IS_ACTIVITY_SESSION();
 		void NETWORK_DISABLE_REALTIME_MULTIPLAYER();
-		void NETWORK_OVERRIDE_REALTIME_MULTIPLAYER_CONTROL_DISABLE(); // Missing in crossmap
-		void NETWORK_DISABLE_REALTIME_MULTIPLAYER_SPECTATOR(); // Missing in crossmap
+		void NETWORK_OVERRIDE_REALTIME_MULTIPLAYER_CONTROL_DISABLE();
+		void NETWORK_DISABLE_REALTIME_MULTIPLAYER_SPECTATOR();
 		/**
 		 * Does nothing. It's just a nullsub.
 		 */
@@ -9391,19 +9293,19 @@ namespace base::menu::natives {
 		/**
 		 * Note: this native was added in build 889.19
 		 */
-		void _NETWORK_GET_HOST_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum); // Missing in crossmap
+		int _NETWORK_GET_HOST_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum);
 		/**
 		 * Note: this native was added in build 889.19
 		 */
-		void _NETWORK_GET_PLAYER_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum); // Missing in crossmap
+		int _NETWORK_GET_PLAYER_BROADCAST_DATA_SIZE_UNSYNCED(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum);
 		/**
 		 * Note: this native was added in build 889.19
 		 */
-		void _NETWORK_GET_BROADCAST_DATA_HOST_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum); // Missing in crossmap
+		int _NETWORK_GET_BROADCAST_DATA_HOST_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum);
 		/**
 		 * Note: this native was added in build 889.19
 		 */
-		void _NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum); // Missing in crossmap
+		int _NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum);
 		BOOL NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA();
 		Player NETWORK_GET_PLAYER_INDEX(Player player);
 		int NETWORK_GET_PARTICIPANT_INDEX(int index);
@@ -9431,7 +9333,7 @@ namespace base::menu::natives {
 		 * position_hash = 0
 		 */
 		Player NETWORK_GET_HOST_OF_SCRIPT(const char* scriptName, int instance_id, int position_hash);
-		void NETWORK_GET_HOST_OF_THREAD(int threadId); // Missing in crossmap
+		Player NETWORK_GET_HOST_OF_THREAD(int threadId);
 		void NETWORK_SET_MISSION_FINISHED();
 		BOOL NETWORK_IS_SCRIPT_ACTIVE(const char* scriptName, int instance_id, BOOL p2, int position_hash);
 		BOOL NETWORK_IS_SCRIPT_ACTIVE_BY_HASH(Hash scriptHash, int p1, BOOL p2, int p3);
@@ -9641,7 +9543,7 @@ namespace base::menu::natives {
 		 * communicationType: 0 = VOICE; 1 = TEXT_CHAT; 2 = TEXT_MESSAGE; 3 = EMAIL; 4 = USER_CONTENT; 5 = USER_TEXT
 		 */
 		BOOL _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_PERMISSION(int communicationType);
-		void _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED(int communicationType); // Missing in crossmap
+		BOOL _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED(int communicationType);
 		/**
 		 * Returns communicationGroupFlag
 		 * communicationType: see 0xDBDF80673BBA3D65
@@ -9659,8 +9561,8 @@ namespace base::menu::natives {
 		 * };
 		 */
 		int _NETWORK_GET_COMMUNICATION_GROUP_FLAGS(int communicationType);
-		void _NETWORK_GET_COMMUNICATION_GROUP_DEFAULT_FLAGS(int communicationType); // Missing in crossmap
-		void _NETWORK_GET_COMMUNICATION_GROUP_VALUE(int communicationType); // Missing in crossmap
+		int _NETWORK_GET_COMMUNICATION_GROUP_DEFAULT_FLAGS(int communicationType);
+		int _NETWORK_GET_COMMUNICATION_GROUP_VALUE(int communicationType);
 		/**
 		 * communicationType: see 0xDBDF80673BBA3D65
 		 * communicationGroupFlag: see 0x40DF02F371F40883
@@ -9869,8 +9771,8 @@ namespace base::menu::natives {
 		 */
 		BOOL ARE_CUTSCENE_ENTITIES_NETWORKED();
 		void SET_NETWORK_ID_PASS_CONTROL_IN_TUTORIAL(int netId, BOOL state);
-		void _NETWORK_SET_TUTORIAL_SPECIAL_SESSION(BOOL toggle); // Missing in crossmap
-		void _NETWORK_IS_SPECIAL_TUTORIAL_SESSION(); // Missing in crossmap
+		void _NETWORK_SET_TUTORIAL_SPECIAL_SESSION(BOOL toggle);
+		BOOL _NETWORK_IS_SPECIAL_TUTORIAL_SESSION();
 		BOOL IS_NETWORK_ID_OWNED_BY_PARTICIPANT(int netId);
 		void SET_REMOTE_PLAYER_VISIBLE_IN_CUTSCENE(Player player, BOOL locallyVisible);
 		void SET_LOCAL_PLAYER_VISIBLE_IN_CUTSCENE(BOOL p0, BOOL p1);
@@ -10047,7 +9949,7 @@ namespace base::menu::natives {
 		 * reportData includes mc, ceo, yacht and licenceplate names
 		 */
 		void _SET_FREEMODE_REPORT_DATA(Any* gamerHandle, Any* reportData);
-		void IS_OBJECT_REASSIGNMENT_IN_PROGRESS(); // Missing in crossmap
+		BOOL IS_OBJECT_REASSIGNMENT_IN_PROGRESS();
 		void USE_PLAYER_COLOUR_INSTEAD_OF_TEAM_COLOUR(BOOL toggle);
 		int NETWORK_CREATE_SYNCHRONISED_SCENE(float x, float y, float z, float xRot, float yRot, float zRot, int rotationOrder, BOOL useOcclusionPortal, BOOL looped, float p9, float animTime, float p11);
 		void NETWORK_ADD_PED_TO_SYNCHRONISED_SCENE(Ped ped, int netScene, const char* animDict, const char* animnName, float speed, float speedMultiplier, int duration, int flag, float playbackRate, Any p9);
@@ -10112,11 +10014,11 @@ namespace base::menu::natives {
 		void NETWORK_OVERRIDE_CLOCK_TIME(int hours, int minutes, int seconds);
 		void NETWORK_OVERRIDE_CLOCK_RATE(int ms);
 		void NETWORK_CLEAR_CLOCK_TIME_OVERRIDE();
-		void _NETWORK_CLEAR_CLOCK_SYNC_TIME_OVERRIDE(BOOL startGlobalTransition, int transitionTime); // Missing in crossmap
+		void _NETWORK_CLEAR_CLOCK_SYNC_TIME_OVERRIDE(BOOL startGlobalTransition, int transitionTime);
 		/**
 		 * Does nothing in final builds.
 		 */
-		void NETWORK_SYNC_CLOCK_TIME_OVERRIDE(); // Missing in crossmap
+		void NETWORK_SYNC_CLOCK_TIME_OVERRIDE();
 		BOOL NETWORK_IS_CLOCK_TIME_OVERRIDDEN();
 		int NETWORK_ADD_ENTITY_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
 		/**
@@ -10240,7 +10142,7 @@ namespace base::menu::natives {
 		void NETWORK_CACHE_LOCAL_PLAYER_HEAD_BLEND_DATA();
 		BOOL NETWORK_HAS_CACHED_PLAYER_HEAD_BLEND_DATA(Player player);
 		BOOL NETWORK_APPLY_CACHED_PLAYER_HEAD_BLEND_DATA(Ped ped, Player player);
-		void _NETWORK_SET_IGNORE_VEHICLE_RAMMED_BY_NON_VEHICLE(BOOL toggle); // Missing in crossmap
+		void _NETWORK_SET_IGNORE_VEHICLE_RAMMED_BY_NON_VEHICLE(BOOL toggle);
 		int GET_NUM_COMMERCE_ITEMS();
 		BOOL IS_COMMERCE_DATA_VALID();
 		/**
@@ -10256,9 +10158,9 @@ namespace base::menu::natives {
 		 * index2 is unused
 		 */
 		const char* GET_COMMERCE_ITEM_CAT(int index, int index2);
-		void RESERVE_COMMERCE_STORE_PURCHASE_LOCATION(int location); // Missing in crossmap
+		void RESERVE_COMMERCE_STORE_PURCHASE_LOCATION(int location);
 		void OPEN_COMMERCE_STORE(const char* productID, const char* category, int location, BOOL launchLandingPageOnClose);
-		void CHECKOUT_COMMERCE_PRODUCT(const char* productID, int location, BOOL launchLandingPageOnClose); // Missing in crossmap
+		void CHECKOUT_COMMERCE_PRODUCT(const char* productID, int location, BOOL launchLandingPageOnClose);
 		BOOL IS_COMMERCE_STORE_OPEN();
 		/**
 		 * Access to the store for shark cards etc...
@@ -10352,7 +10254,7 @@ namespace base::menu::natives {
 		 */
 		const char* UGC_GET_ROOT_CONTENT_ID(int p0);
 		const char* UGC_GET_CONTENT_NAME(Any p0);
-		void UGC_GET_CONTENT_DESCRIPTION(int index); // Missing in crossmap
+		const char* UGC_GET_CONTENT_DESCRIPTION(int index);
 		int UGC_GET_CONTENT_DESCRIPTION_HASH(Any p0);
 		const char* UGC_GET_CONTENT_PATH(int p0, int p1);
 		void UGC_GET_CONTENT_UPDATED_DATE(Any p0, Any* p1);
@@ -10488,7 +10390,7 @@ namespace base::menu::natives {
 		int NETWORK_GET_UNRELIABLE_RESEND_COUNT(Player player);
 		int NETWORK_GET_HIGHEST_RELIABLE_RESEND_COUNT(Player player);
 		void NETWORK_REPORT_CODE_TAMPER();
-		void _NETWORK_GET_DUMP_OF_ASSET_VERIFIER(Any* p0); // Missing in crossmap
+		void _NETWORK_GET_DUMP_OF_ASSET_VERIFIER(Any* p0);
 		Vector3 NETWORK_GET_LAST_ENTITY_POS_RECEIVED_OVER_NETWORK(Entity entity);
 		/**
 		 * Returns the coordinates of another player.
@@ -10513,18 +10415,18 @@ namespace base::menu::natives {
 		 */
 		void NETWORK_GET_NET_STATISTICS_INFO(Any* p0);
 		int NETWORK_GET_PLAYER_ACCOUNT_ID(Player player);
-		void NETWORK_POST_UDS_ACTIVITY_START(const char* activityId); // Missing in crossmap
-		void NETWORK_POST_UDS_ACTIVITY_END(const char* activityId, int iOutcome, int iScore); // Missing in crossmap
-		void NETWORK_POST_UDS_ACTIVITY_RESUME(const char* activityId); // Missing in crossmap
-		void NETWORK_POST_UDS_ACTIVITY_RESUME_WITH_TASKS(const char* activityId, Any* taskStatus); // Missing in crossmap
-		void NETWORK_POST_UDS_ACTIVITY_AVAILABILITY_CHANGE(Any* availablityData); // Missing in crossmap
+		void NETWORK_POST_UDS_ACTIVITY_START(const char* activityId);
+		void NETWORK_POST_UDS_ACTIVITY_END(const char* activityId, int iOutcome, int iScore);
+		void NETWORK_POST_UDS_ACTIVITY_RESUME(const char* activityId);
+		void NETWORK_POST_UDS_ACTIVITY_RESUME_WITH_TASKS(const char* activityId, Any* taskStatus);
+		void NETWORK_POST_UDS_ACTIVITY_AVAILABILITY_CHANGE(Any* availablityData);
 		/**
 		 * Does nothing.
 		 */
-		void NETWORK_POST_UDS_ACTIVITY_TERMINATE(); // Missing in crossmap
-		void NETWORK_HAS_SC_MEMBERSHIP_INFO(); // Missing in crossmap
-		void NETWORK_HAS_SC_MEMBERSHIP(); // Missing in crossmap
-		void NETWORK_GET_SC_MEMBERSHIP_INFO(Any* info); // Missing in crossmap
+		void NETWORK_POST_UDS_ACTIVITY_TERMINATE();
+		BOOL NETWORK_HAS_SC_MEMBERSHIP_INFO();
+		BOOL NETWORK_HAS_SC_MEMBERSHIP();
+		void NETWORK_GET_SC_MEMBERSHIP_INFO(Any* info);
 		void NETWORK_UGC_NAV(Any p0, Any p1);
 		/**
 		 * enum eNetworkGameRestartReason
@@ -10544,11 +10446,11 @@ namespace base::menu::natives {
 		 * 
 		 * Note that this 'confirmation' itself does not restart the game, a call to QUIT_GAME or similar is required afterwards.
 		 */
-		void _NETWORK_CONFIRM_GAME_RESTART(); // Missing in crossmap
+		void _NETWORK_CONFIRM_GAME_RESTART();
 		/**
 		 * Returns the restart reason as a string, see _NETWORK_GET_GAME_RESTART_REASON. Returns a null pointer when a restart hasn't been requested (reason == 0 or reason > 6).
 		 */
-		void _NETWORK_GET_GAME_RESTART_REASON_MESSAGE_LABEL(); // Missing in crossmap
+		const char* _NETWORK_GET_GAME_RESTART_REASON_MESSAGE_LABEL();
 		/**
 		 * 0x20211000 = HUD_BE_ERROR_FAILED_UNKNOWN
 		 * 0x20212000 = HUD_BE_ERROR_FAILED_CLIENT_INIT
@@ -10561,7 +10463,7 @@ namespace base::menu::natives {
 		 * 
 		 * Note: an invalid error code returns a null pointer!
 		 */
-		void _NETWORK_GET_BATTLEYE_ERROR_MESSAGE_LABEL(int errorCode); // Missing in crossmap
+		const char* _NETWORK_GET_BATTLEYE_ERROR_MESSAGE_LABEL(int errorCode);
 
 	} // namespace NETWORK
 
@@ -10699,7 +10601,7 @@ namespace base::menu::natives {
 		void DOOR_SYSTEM_SET_OPEN_RATIO(Hash doorHash, float ajar, BOOL requestDoor, BOOL forceUpdate);
 		float DOOR_SYSTEM_GET_AUTOMATIC_DISTANCE(Hash doorHash);
 		float DOOR_SYSTEM_GET_OPEN_RATIO(Hash doorHash);
-		void DOOR_SYSTEM_GET_IS_SPRING_REMOVED(Hash doorHash); // Missing in crossmap
+		BOOL DOOR_SYSTEM_GET_IS_SPRING_REMOVED(Hash doorHash);
 		/**
 		 * Includes networking check: ownership vs. or the door itself **isn't** networked.
 		 * `forceUpdate` on true invokes DOOR_SYSTEM_SET_DOOR_STATE otherwise requestDoor is unused.
@@ -10937,7 +10839,7 @@ namespace base::menu::natives {
 		void SET_TEAM_PICKUP_OBJECT(Object object, Any p1, BOOL p2);
 		void PREVENT_COLLECTION_OF_PORTABLE_PICKUP(Object object, BOOL p1, BOOL p2);
 		void SET_PICKUP_OBJECT_GLOW_WHEN_UNCOLLECTABLE(Pickup pickup, BOOL toggle);
-		void _SET_PICKUP_GLOW_DISABLED(Pickup pickup, BOOL toggle); // Missing in crossmap
+		void _SET_PICKUP_GLOW_DISABLED(Pickup pickup, BOOL toggle);
 		/**
 		 * p1 is always 0.51. This native is called before SET_PICKUP_REGENERATION_TIME in all occurances.
 		 */
@@ -11095,7 +10997,7 @@ namespace base::menu::natives {
 		 * control: see IS_CONTROL_ENABLED
 		 */
 		BOOL IS_CONTROL_JUST_RELEASED(int control, int action);
-		void _IS_CONTROL_HELD_DOWN(int control, int action, int duration); // Missing in crossmap
+		BOOL _IS_CONTROL_HELD_DOWN(int control, int action, int duration);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
@@ -11295,7 +11197,7 @@ namespace base::menu::natives {
 		/**
 		 * Returns 0 (default) or 5 (alternate/DualSense).
 		 */
-		void _GET_GAMEPAD_TYPE(); // Missing in crossmap
+		int _GET_GAMEPAD_TYPE();
 
 	} // namespace PAD
 
@@ -12156,7 +12058,7 @@ namespace base::menu::natives {
 		 * PED::SET_PED_GRAVITY(Local_289[iVar0 /*20* /], 0x00000001);
 		 */
 		void SET_PED_GRAVITY(Ped ped, BOOL toggle);
-		void _SET_PED_SURVIVES_BEING_OUT_OF_WATER(Ped ped, BOOL toggle); // Missing in crossmap
+		BOOL _SET_PED_SURVIVES_BEING_OUT_OF_WATER(Ped ped, BOOL toggle);
 		/**
 		 * damages a ped with the given amount
 		 */
@@ -13300,7 +13202,7 @@ namespace base::menu::natives {
 		void SET_PED_CAN_PLAY_AMBIENT_BASE_ANIMS(Ped ped, BOOL toggle);
 		void TRIGGER_IDLE_ANIMATION_ON_PED(Ped ped);
 		void SET_PED_CAN_ARM_IK(Ped ped, BOOL toggle);
-		void SET_PED_CAN_BODY_RECOIL_IK(Ped ped, BOOL toggle); // Missing in crossmap
+		void SET_PED_CAN_BODY_RECOIL_IK(Ped ped, BOOL toggle);
 		void SET_PED_CAN_HEAD_IK(Ped ped, BOOL toggle);
 		void SET_PED_CAN_LEG_IK(Ped ped, BOOL toggle);
 		void SET_PED_CAN_TORSO_IK(Ped ped, BOOL toggle);
@@ -14542,7 +14444,7 @@ namespace base::menu::natives {
 		void ROPE_RESET_LENGTH(int ropeId, float length);
 		void APPLY_IMPULSE_TO_CLOTH(float posX, float posY, float posZ, float vecX, float vecY, float vecZ, float impulse);
 		void SET_DAMPING(Entity entity, int vertex, float value);
-		void GET_DAMPING(Entity entity, int type); // Missing in crossmap
+		Vector3 GET_DAMPING(Entity entity, int type);
 		void ACTIVATE_PHYSICS(Entity entity);
 		void SET_CGOFFSET(Entity entity, float x, float y, float z);
 		Vector3 GET_CGOFFSET(Entity entity);
@@ -15597,7 +15499,7 @@ namespace base::menu::natives {
 		BOOL SAVEMIGRATION_MP_GET_ACCOUNT(int p0, Any* p1);
 		BOOL SAVEMIGRATION_MP_REQUEST_STATUS();
 		int SAVEMIGRATION_MP_GET_STATUS();
-		void SAVEMIGRATION_MP_IS_PLATFORM_GENERATION(int generation); // Missing in crossmap
+		BOOL SAVEMIGRATION_MP_IS_PLATFORM_GENERATION(int generation);
 
 	} // namespace SAVEMIGRATION
 
@@ -15671,7 +15573,7 @@ namespace base::menu::natives {
 		void SHUTDOWN_LOADING_SCREEN();
 		void SET_NO_LOADING_SCREEN(BOOL toggle);
 		BOOL GET_NO_LOADING_SCREEN();
-		void SET_LOADING_SCREEN_BLANK(); // Missing in crossmap
+		BOOL SET_LOADING_SCREEN_BLANK();
 		void COMMIT_TO_LOADINGSCREEN_SELCTION();
 		/**
 		 * Returns true if bit 0 in GtaThread+0x154 is set.
@@ -15867,7 +15769,7 @@ namespace base::menu::natives {
 		BOOL SC_TRANSITION_NEWS_HAS_EXTRA_DATA_TU();
 		BOOL SC_TRANSITION_NEWS_GET_EXTRA_DATA_INT_TU(const char* p0, int* p1);
 		void SC_TRANSITION_NEWS_END();
-		void SC_PAUSE_NEWS_INIT_STORY_TYPE(int storyType, BOOL textOnly); // Missing in crossmap
+		BOOL SC_PAUSE_NEWS_INIT_STORY_TYPE(int storyType, BOOL textOnly);
 		/**
 		 * Fills some 0x30 sized struct
 		 */
@@ -16076,7 +15978,7 @@ namespace base::menu::natives {
 		 * profileSetting seems to only be 936, 937 and 938 in scripts
 		 */
 		void STAT_SET_PROFILE_SETTING_VALUE(int profileSetting, int value);
-		void STATS_CHARACTER_CREATION_OUTFIT_SELECTED(int outfit); // Missing in crossmap
+		void STATS_CHARACTER_CREATION_OUTFIT_SELECTED(int outfit);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
@@ -16116,7 +16018,7 @@ namespace base::menu::natives {
 		void PLAYSTATS_BACKGROUND_SCRIPT_ACTION(const char* action, int value);
 		void _PLAYSTATS_FLOW_LOW(float posX, float posY, float posZ, const char* action, BOOL p4, int p5);
 		void _PLAYSTATS_FLOW_MEDIUM(float posX, float posY, float posZ, const char* action, BOOL p4, int p5);
-		void _PLAYSTATS_FLOW_HIGH(float posX, float posY, float posZ, const char* action, BOOL p4, int p5); // Missing in crossmap
+		void _PLAYSTATS_FLOW_HIGH(float posX, float posY, float posZ, const char* action, BOOL p4, int p5);
 		void PLAYSTATS_NPC_INVITE(const char* p0);
 		void PLAYSTATS_AWARD_XP(int amount, Hash type, Hash category);
 		void PLAYSTATS_RANK_UP(int rank);
@@ -16472,7 +16374,7 @@ namespace base::menu::natives {
 		void PLAYSTATS_QUIT_MODE(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void PLAYSTATS_MISSION_VOTE(Any p0);
 		void PLAYSTATS_NJVS_VOTE(Any p0);
-		void _PLAYSTATS_DEATH_INFO(Ped victimPed, Ped killerPed, int mentalState, BOOL revengeKill, int victimKvK, int killerKvK); // Missing in crossmap
+		void _PLAYSTATS_DEATH_INFO(Ped victimPed, Ped killerPed, int mentalState, BOOL revengeKill, int victimKvK, int killerKvK);
 		void PLAYSTATS_FM_MISSION_END(Any p0, Any p1, Any p2, Any p3);
 		void PLAYSTATS_HEIST4_PREP(Any p0);
 		void PLAYSTATS_HEIST4_FINALE(Any p0);
@@ -16488,11 +16390,11 @@ namespace base::menu::natives {
 		void PLAYSTATS_CARCLUB_CHALLENGE(Any p0, Any p1, Any p2, Any p3);
 		void PLAYSTATS_CARCLUB_PRIZE(int p0, Hash vehicleModel);
 		void PLAYSTATS_AWARD_NAV(Any p0, Any p1, Any p2, Any p3);
-		void _PLAYSTATS_INIT_MULTIPLAYER(Any p0, Any p1, Any p2); // Missing in crossmap
+		void _PLAYSTATS_INIT_MULTIPLAYER(Any p0, Any p1, Any p2);
 		void PLAYSTATS_INST_MISSION_END(Any p0);
 		void PLAYSTATS_HUB_EXIT(Any p0);
-		void PLAYSTATS_LP_NAV(Any* data); // Missing in crossmap
-		void _PLAYSTATS_LP_SUBTILE(Any p0, Any p1, Any p2, Any p3, Any p4); // Missing in crossmap
+		void PLAYSTATS_LP_NAV(Any* data);
+		void _PLAYSTATS_LP_SUBTILE(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void PLAYSTATS_VEH_DEL(int bossId1, int bossId2, int bossType, int vehicleID, int reason);
 		void PLAYSTATS_INVENTORY(Any p0);
 		void _PLAYSTATS_ACID_MISSION_END(Any p0);
@@ -16500,11 +16402,11 @@ namespace base::menu::natives {
 		void _PLAYSTATS_IDLE(Any p0, Any p1, Any p2);
 		void _PLAYSTATS_PLAYER_STYLE(Any p0);
 		void _PLAYSTATS_RANDOM_EVENT(Any p0);
-		void _PLAYSTATS_PH_SNAPSHOT(Any p0); // Missing in crossmap
-		void _PLAYSTATS_PH_PROGRESS_TIERS(Any p0); // Missing in crossmap
-		void _PLAYSTATS_PH_NAV(Any p0); // Missing in crossmap
-		void _PLAYSTATS_PH_ACTIVITY(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7); // Missing in crossmap
-		void _PLAYSTATS_PH_PROGRESS_OBJECTIVES(Any p0); // Missing in crossmap
+		void _PLAYSTATS_PH_SNAPSHOT(Any p0);
+		void _PLAYSTATS_PH_PROGRESS_TIERS(Any p0);
+		void _PLAYSTATS_PH_NAV(Any p0);
+		void _PLAYSTATS_PH_ACTIVITY(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7);
+		void _PLAYSTATS_PH_PROGRESS_OBJECTIVES(Any p0);
 		void _PLAYSTATS_ALERT(Any* data);
 		void _PLAYSTATS_ATTRITION_STAGE_END(Any p0);
 		void _PLAYSTATS_SHOWROOM_NAV(Any p0, Any p1, Hash entity);
@@ -16514,10 +16416,10 @@ namespace base::menu::natives {
 		void _PLAYSTATS_SHOWROOM_OVERVIEW(Any* data);
 		void _PLAYSTATS_PIMENU_NAV(Any* data);
 		void _PLAYSTATS_RECOVER_VEHICLE(Any* data);
-		void _PLAYSTATS_SCRIPT_EVENT_FPOM(Any* data); // Missing in crossmap
-		void _PLAYSTATS_LOBBY_EXIT(Any* p0); // Missing in crossmap
-		void _PLAYSTATS_LOBBY_STARTED(Any* p0); // Missing in crossmap
-		void _PLAYSTATS_CREATOR_END(Any* p0); // Missing in crossmap
+		void _PLAYSTATS_SCRIPT_EVENT_FPOM(Any* data);
+		void _PLAYSTATS_LOBBY_EXIT(Any* p0);
+		void _PLAYSTATS_LOBBY_STARTED(Any* p0);
+		void _PLAYSTATS_CREATOR_END(Any* p0);
 
 	} // namespace STATS
 
@@ -16887,14 +16789,14 @@ namespace base::menu::natives {
 		 * Maximum model memory (as defined in common\data\missioncreatordata.meta) is 100 MiB
 		 */
 		float GET_USED_CREATOR_BUDGET();
-		void _GET_MODEL_ADDITIONAL_COST(Hash modelHash); // Missing in crossmap
-		void _GET_TOTAL_MODEL_COST(Hash modelHash); // Missing in crossmap
+		float _GET_MODEL_ADDITIONAL_COST(Hash modelHash);
+		float _GET_TOTAL_MODEL_COST(Hash modelHash);
 		/**
 		 * Enables the specified island. For more information, see islandhopper.meta
 		 */
 		void SET_ISLAND_ENABLED(const char* name, BOOL toggle);
-		void _SET_SPHERICAL_STREAM_DISTANT_HILODS_THIS_FRAME(); // Missing in crossmap
-		void IS_GAME_INSTALLED(); // Missing in crossmap
+		void _SET_SPHERICAL_STREAM_DISTANT_HILODS_THIS_FRAME();
+		BOOL IS_GAME_INSTALLED();
 
 	} // namespace STREAMING
 
@@ -17080,7 +16982,7 @@ namespace base::menu::natives {
 		 */
 		void TASK_STEALTH_KILL(Ped killer, Ped target, Hash stealthKillActionResultHash, float desiredMoveBlendRatio, int stealthFlags);
 		void TASK_PLANT_BOMB(Ped ped, float x, float y, float z, float heading);
-		void TASK_SHARK_CIRCLE_COORD(Ped ped, float x, float y, float z, float moveBlendRatio, float radius); // Missing in crossmap
+		void TASK_SHARK_CIRCLE_COORD(Ped ped, float x, float y, float z, float moveBlendRatio, float radius);
 		/**
 		 * If no timeout, set timeout to -1.
 		 */
@@ -17321,7 +17223,7 @@ namespace base::menu::natives {
 		void TASK_PERFORM_SEQUENCE_LOCALLY(Ped ped, int taskSequenceId);
 		void CLEAR_SEQUENCE_TASK(int* taskSequenceId);
 		void SET_SEQUENCE_TO_REPEAT(int taskSequenceId, BOOL repeat);
-		void SET_SEQUENCE_PREVENT_MIGRATION(int taskSequenceId); // Missing in crossmap
+		void SET_SEQUENCE_PREVENT_MIGRATION(int taskSequenceId);
 		/**
 		 * returned values:
 		 * 0 to 7 = task that's currently in progress, 0 meaning the first one.
@@ -17368,7 +17270,7 @@ namespace base::menu::natives {
 		 */
 		void TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT(Ped ped, Vehicle vehicle, BOOL useAlternateShuffle);
 		void CLEAR_PED_TASKS(Ped ped);
-		void CLEAR_PED_SCRIPT_TASK_IF_RUNNING_THREAT_RESPONSE_NON_TEMP_TASK(Ped ped); // Missing in crossmap
+		void CLEAR_PED_SCRIPT_TASK_IF_RUNNING_THREAT_RESPONSE_NON_TEMP_TASK(Ped ped);
 		void CLEAR_PED_SECONDARY_TASK(Ped ped);
 		void TASK_EVERYONE_LEAVE_VEHICLE(Vehicle vehicle);
 		/**
@@ -18342,7 +18244,7 @@ namespace base::menu::natives {
 		void TASK_FOLLOW_WAYPOINT_RECORDING(Ped ped, const char* name, int p2, int p3, int p4);
 		BOOL IS_WAYPOINT_PLAYBACK_GOING_ON_FOR_PED(Ped ped);
 		int GET_PED_WAYPOINT_PROGRESS(Ped ped);
-		void SET_PED_WAYPOINT_PROGRESS(Ped ped, int progress); // Missing in crossmap
+		void SET_PED_WAYPOINT_PROGRESS(Ped ped, int progress);
 		float GET_PED_WAYPOINT_DISTANCE(Any p0);
 		BOOL SET_PED_WAYPOINT_ROUTE_OFFSET(Ped ped, float x, float y, float z);
 		float GET_WAYPOINT_DISTANCE_ALONG_ROUTE(const char* name, int point);
@@ -18384,7 +18286,7 @@ namespace base::menu::natives {
 		int GET_VEHICLE_WAYPOINT_PROGRESS(Vehicle vehicle);
 		int GET_VEHICLE_WAYPOINT_TARGET_POINT(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_PAUSE(Vehicle vehicle);
-		void VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED(Vehicle vehicle); // Missing in crossmap
+		BOOL VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_RESUME(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_USE_DEFAULT_SPEED(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_OVERRIDE_SPEED(Vehicle vehicle, float speed);
@@ -18448,7 +18350,7 @@ namespace base::menu::natives {
 		 */
 		BOOL SET_TASK_MOVE_NETWORK_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable);
 		void _SET_SCRIPT_TASK_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable);
-		void _SET_AMBIENT_PED_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable); // Missing in crossmap
+		void _SET_AMBIENT_PED_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable);
 		BOOL IS_MOVE_BLEND_RATIO_STILL(Ped ped);
 		BOOL IS_MOVE_BLEND_RATIO_WALKING(Ped ped);
 		BOOL IS_MOVE_BLEND_RATIO_RUNNING(Ped ped);
@@ -18520,7 +18422,7 @@ namespace base::menu::natives {
 		 */
 		void DELETE_VEHICLE(Vehicle* vehicle);
 		void SET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON(Vehicle vehicle, BOOL toggle, BOOL p2);
-		void _GET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle); // Missing in crossmap
+		BOOL _GET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle);
 		void SET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle, BOOL canBeLockedOn, BOOL p2);
 		/**
 		 * Makes the vehicle accept no passengers.
@@ -18880,7 +18782,7 @@ namespace base::menu::natives {
 		void ATTACH_CONTAINER_TO_HANDLER_FRAME_WHEN_LINED_UP(Vehicle vehicle, Entity entity);
 		void DETACH_CONTAINER_FROM_HANDLER_FRAME(Vehicle vehicle);
 		void SET_VEHICLE_DISABLE_HEIGHT_MAP_AVOIDANCE(Vehicle vehicle, BOOL p1);
-		void _SET_PLANE_AVOIDS_OTHERS(Vehicle vehicle, BOOL toggle); // Missing in crossmap
+		void _SET_PLANE_AVOIDS_OTHERS(Vehicle vehicle, BOOL toggle);
 		void SET_BOAT_DISABLE_AVOIDANCE(Vehicle vehicle, BOOL p1);
 		BOOL IS_HELI_LANDING_AREA_BLOCKED(Vehicle vehicle);
 		/**
@@ -19324,8 +19226,8 @@ namespace base::menu::natives {
 		 * Corrected p1. it's basically the 'carriage/trailer number'. So if the train has 3 trailers you'd call the native once with a var or 3 times with 1, 2, 3.
 		 */
 		Vehicle GET_TRAIN_CARRIAGE(Vehicle train, int trailerNumber);
-		void _SET_MAKE_TRAIN_SCAN_FOR_BLOCKING_ENTITIES(Vehicle train, BOOL toggle); // Missing in crossmap
-		void _GET_MISSION_TRAIN_CONFIG_INDEX_BY_NAME(const char* name); // Missing in crossmap
+		void _SET_MAKE_TRAIN_SCAN_FOR_BLOCKING_ENTITIES(Vehicle train, BOOL toggle);
+		int _GET_MISSION_TRAIN_CONFIG_INDEX_BY_NAME(const char* name);
 		BOOL IS_MISSION_TRAIN(Vehicle train);
 		void DELETE_MISSION_TRAIN(Vehicle* train);
 		/**
@@ -19989,7 +19891,7 @@ namespace base::menu::natives {
 		 */
 		void SET_VEHICLE_USES_LARGE_REAR_RAMP(Vehicle vehicle, BOOL toggle);
 		void SET_VEHICLE_RUDDER_BROKEN(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_TAIL_BROKEN(Vehicle vehicle, BOOL toggle); // Missing in crossmap
+		void SET_VEHICLE_TAIL_BROKEN(Vehicle vehicle, BOOL toggle);
 		void SET_CONVERTIBLE_ROOF_LATCH_STATE(Vehicle vehicle, BOOL state);
 		float GET_VEHICLE_ESTIMATED_MAX_SPEED(Vehicle vehicle);
 		float GET_VEHICLE_MAX_BRAKING(Vehicle vehicle);
@@ -20697,7 +20599,7 @@ namespace base::menu::natives {
 		void SET_VEHICLE_EXCLUSIVE_DRIVER(Vehicle vehicle, Ped ped, int index);
 		BOOL IS_PED_EXCLUSIVE_DRIVER_OF_VEHICLE(Ped ped, Vehicle vehicle, int* outIndex);
 		void DISABLE_INDIVIDUAL_PLANE_PROPELLER(Vehicle vehicle, int propeller);
-		void _ENABLE_INDIVIDUAL_PLANE_PROPELLER(Vehicle vehicle, int propeller); // Missing in crossmap
+		void _ENABLE_INDIVIDUAL_PLANE_PROPELLER(Vehicle vehicle, int propeller);
 		void SET_VEHICLE_FORCE_AFTERBURNER(Vehicle vehicle, BOOL toggle);
 		/**
 		 * R* used it to "remove" vehicle windows when "nightshark" had some mod, which adding some kind of armored windows. When enabled, you can't break vehicles glass. All your bullets wiil shoot through glass. You also will not able to break the glass with any other way (hitting and etc)
@@ -20845,7 +20747,7 @@ namespace base::menu::natives {
 		/**
 		 * Does not actually return anything.
 		 */
-		void _SET_VEHICLE_EXPLOSIVE_DAMAGE_SCALE(Vehicle vehicle, float scale); // Missing in crossmap
+		Any _SET_VEHICLE_EXPLOSIVE_DAMAGE_SCALE(Vehicle vehicle, float scale);
 		BOOL SET_VEHICLE_WEAPON_DAMAGE_SCALE(Vehicle vehicle, float multiplier);
 		BOOL SET_DISABLE_DAMAGE_WITH_PICKED_UP_ENTITY(Any p0, Any p1);
 		void SET_VEHICLE_USES_MP_PLAYER_DAMAGE_MULTIPLIER(Any p0, Any p1);
@@ -20956,7 +20858,7 @@ namespace base::menu::natives {
 		/**
 		 * Prevents the vehicle from exploding when taking body damage if the inflictor is an AI-controlled vehicle. Only works for planes.
 		 */
-		void _SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_RECEIVED_BY_AI_VEHICLE(Vehicle vehicle, BOOL disable); // Missing in crossmap
+		void _SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_RECEIVED_BY_AI_VEHICLE(Vehicle vehicle, BOOL disable);
 		void SET_TRAILER_ATTACHMENT_ENABLED(Any p0, Any p1);
 		void SET_ROCKET_BOOST_FILL(Vehicle vehicle, float percentage);
 		/**
@@ -20979,7 +20881,7 @@ namespace base::menu::natives {
 		void SET_DISABLE_PED_STAND_ON_TOP(Vehicle vehicle, BOOL toggle);
 		void SET_VEHICLE_DAMAGE_SCALES(Vehicle vehicle, Any p1, Any p2, Any p3, Any p4);
 		void SET_PLANE_SECTION_DAMAGE_SCALE(Vehicle vehicle, Any p1, Any p2);
-		void SET_PLANE_CONTROL_SECTIONS_SHOULD_BREAK_OFF_FROM_EXPLOSIONS(Vehicle vehicle, BOOL toggle); // Missing in crossmap
+		void SET_PLANE_CONTROL_SECTIONS_SHOULD_BREAK_OFF_FROM_EXPLOSIONS(Vehicle vehicle, BOOL toggle);
 		/**
 		 * Stops the cargobob from being able to attach any vehicle
 		 */
@@ -21102,7 +21004,7 @@ namespace base::menu::natives {
 		 * Does nothing. It's a nullsub.
 		 */
 		void SET_VEHICLE_SHUNT_ON_STICK(BOOL toggle);
-		void _IS_VEHICLE_ON_BOOST_PAD(Vehicle vehicle); // Missing in crossmap
+		BOOL _IS_VEHICLE_ON_BOOST_PAD(Vehicle vehicle);
 		BOOL GET_IS_VEHICLE_SHUNTING(Vehicle vehicle);
 		BOOL GET_HAS_VEHICLE_BEEN_HIT_BY_SHUNT(Vehicle vehicle);
 		/**
@@ -21119,11 +21021,11 @@ namespace base::menu::natives {
 		void _SET_DRIFT_SLIP_ANGLE_LIMITS(Vehicle vehicle, float durationScalar, float amplitudeScalar, float slipAngleLimit);
 		void _SET_MINIMUM_TIME_BETWEEN_GEAR_SHIFTS(Vehicle vehicle, int time);
 		void FULLY_CHARGE_NITROUS(Vehicle vehicle);
-		void _SET_REMAINING_NITROUS_DURATION(Vehicle vehicle, float duration); // Missing in crossmap
+		void _SET_REMAINING_NITROUS_DURATION(Vehicle vehicle, float duration);
 		float _GET_REMAINING_NITROUS_DURATION(Vehicle vehicle);
 		BOOL IS_NITROUS_ACTIVE(Vehicle vehicle);
 		void CLEAR_NITROUS(Vehicle vehicle);
-		void SET_NITROUS_IS_ACTIVE(Vehicle vehicle, BOOL toggle); // Missing in crossmap
+		void SET_NITROUS_IS_ACTIVE(Vehicle vehicle, BOOL toggle);
 		void SET_INCREASE_WHEEL_CRUSH_DAMAGE(Vehicle vehicle, BOOL toggle);
 		/**
 		 * Sets some global vehicle related bool
@@ -21504,15 +21406,15 @@ namespace base::menu::natives {
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
 		int GET_MAX_AMMO_IN_CLIP(Ped ped, Hash weaponHash, BOOL p2);
-		void _GET_TIME_BEFORE_VEHICLE_WEAPON_RELOAD_FINISHES(Vehicle vehicle, int seat); // Missing in crossmap
-		void _HAS_WEAPON_RELOADING_IN_VEHICLE(Vehicle vehicle, int seat); // Missing in crossmap
-		void _GET_VEHICLE_WEAPON_RELOAD_TIME(Vehicle vehicle, int seat); // Missing in crossmap
-		void _GET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int* ammo); // Missing in crossmap
+		int _GET_TIME_BEFORE_VEHICLE_WEAPON_RELOAD_FINISHES(Vehicle vehicle, int seat);
+		BOOL _HAS_WEAPON_RELOADING_IN_VEHICLE(Vehicle vehicle, int seat);
+		float _GET_VEHICLE_WEAPON_RELOAD_TIME(Vehicle vehicle, int seat);
+		BOOL _GET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int* ammo);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
 		BOOL GET_AMMO_IN_CLIP(Ped ped, Hash weaponHash, int* ammo);
-		void _SET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int ammo); // Missing in crossmap
+		BOOL _SET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int ammo);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
@@ -21616,7 +21518,7 @@ namespace base::menu::natives {
 		 * Forces a ped to reload only if they are able to; if they have a full magazine, they will not reload.
 		 */
 		BOOL MAKE_PED_RELOAD(Ped ped);
-		void _TRIGGER_VEHICLE_WEAPON_RELOAD(Vehicle vehicle, int seat, Ped ped); // Missing in crossmap
+		BOOL _TRIGGER_VEHICLE_WEAPON_RELOAD(Vehicle vehicle, int seat, Ped ped);
 		/**
 		 * Nearly every instance of p1 I found was 31. Nearly every instance of p2 I found was 0.
 		 * 

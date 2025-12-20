@@ -11,7 +11,7 @@
 namespace base::menu::natives {
 
 	// Crossmap array size
-	constexpr std::size_t NATIVE_CROSSMAP_SIZE = 6596;
+	constexpr std::size_t NATIVE_CROSSMAP_SIZE = 6728;
 
 	// Native crossmap array declaration
 	extern const std::uint64_t NATIVE_CROSSMAP[NATIVE_CROSSMAP_SIZE];
