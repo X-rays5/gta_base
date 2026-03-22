@@ -30,6 +30,6 @@ namespace base::common::conversion {
   }
 }
 
-consteval base::common::conversion::joaat_t operator""_J(const char* str, std::size_t length) {
+inline consteval base::common::conversion::joaat_t operator""_J(const char* str, std::size_t length) {
   return base::common::conversion::joaat(str, length);
 }
