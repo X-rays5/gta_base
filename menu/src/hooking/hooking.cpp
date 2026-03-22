@@ -50,7 +50,6 @@ namespace base::menu::hooking {
   bool Hooks::RunScriptThreads(const int ops_to_execute) {
     const auto retVal = kMANAGER->run_script_threads_hook_.CallOriginal<decltype(&RunScriptThreads)>(ops_to_execute);
     if (globals::kRUNNING) {
-      script::kSCRIPT_MANAGER->TickScripts(script::ScriptBase::Type::GameScript);
       auto thread = game::FindScriptThread("freemode"_J);
       if (!thread)
         thread = game::FindScriptThread("main_persistent"_J);
