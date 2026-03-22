@@ -30,8 +30,6 @@ namespace base::menu::script {
       task.Tick();
     }
 
-    natives::PLAYER::GET_PLAYER_INDEX();
-
     tasks_.erase(std::ranges::remove_if(tasks_,
                                         [](const GameTask& task) {
                                           return task.IsDone();
