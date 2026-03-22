@@ -69,13 +69,13 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/script/script_manager.hpp
         src/script/game_task_executor.cpp
         src/script/game_task_executor.hpp
+        src/game/script.cpp
+        src/game/script.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
 # Main module (DLL) that uses the core library
-add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
-        src/game/script.cpp
-        src/game/script.hpp)
+add_library(${PROJECT_NAME} MODULE src/dllmain.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_core)
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 
