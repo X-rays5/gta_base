@@ -7,7 +7,7 @@
 
 namespace base::menu::natives {
   Invoker::Invoker() {
-    memcpy(native_handlers_.data(), NATIVE_CROSSMAP, NATIVE_CROSSMAP_SIZE);
+    memcpy(native_handlers_.data(), NATIVE_CROSSMAP, sizeof(NATIVE_CROSSMAP));
     const auto program = static_cast<rage::script::Program*>(calloc(1, sizeof(rage::script::Program)));
     program->m_NativeCount = NATIVE_CROSSMAP_SIZE;
     program->m_NativeEntrypoints = native_handlers_.data();
