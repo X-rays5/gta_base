@@ -4,6 +4,8 @@
 
 #pragma once
 #include <future>
+#include <memory>
+#include <vector>
 #include "script_base.hpp"
 
 #undef Yield
@@ -15,6 +17,11 @@ namespace base::menu::script {
     public:
       explicit GameTask(LPVOID main_fiber, const std::function<void(GameTask* task)>& cb);
       ~GameTask();
+
+      GameTask(const GameTask&) = delete;
+      GameTask(GameTask&&) = delete;
+      GameTask& operator=(const GameTask&) = delete;
+      GameTask& operator=(GameTask&&) = delete;
 
       void Tick() const;
       void Yield();
@@ -48,7 +55,7 @@ namespace base::menu::script {
 
   private:
     LPVOID main_fiber_{nullptr};
-    std::vector<GameTask> tasks_;
+    std::vector<std::unique_ptr<GameTask>> tasks_;
   };
   inline GameTaskExecutor* kGAME_TASK_EXECUTOR{};
 }

@@ -3,6 +3,7 @@
 //
 
 #include "game_task_executor.hpp"
+#include <algorithm>
 #include "../natives/natives_gen9.hpp"
 
 namespace base::menu::script {
@@ -15,24 +16,28 @@ namespace base::menu::script {
   }
 
   std::future<void> GameTaskExecutor::QueueTask(const std::function<void(GameTask* task)>& cb) {
-    GameTask task(main_fiber_, cb);
-    auto future = task.GetFuture();
+    auto task = std::make_unique<GameTask>(main_fiber_, cb);
+    auto future = task->GetFuture();
     tasks_.emplace_back(std::move(task));
     return future;
   }
 
   void GameTaskExecutor::OnInit() {
-    main_fiber_ = ConvertThreadToFiber(nullptr);
+    if (IsThreadAFiber()) {
+      main_fiber_ = GetCurrentFiber();
+    } else {
+      main_fiber_ = ConvertThreadToFiber(nullptr);
+    }
   }
 
   void GameTaskExecutor::OnTick() {
     for (auto& task : tasks_) {
-      task.Tick();
+      task->Tick();
     }
 
     tasks_.erase(std::ranges::remove_if(tasks_,
-                                        [](const GameTask& task) {
-                                          return task.IsDone();
+                                        [](const auto& task) {
+                                          return task->IsDone();
                                         }).begin(),
                  tasks_.end());
   }
