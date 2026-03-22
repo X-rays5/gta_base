@@ -54,6 +54,12 @@ namespace base::menu::game {
       return;
 
     ScriptTlsGuard tls_guard(thread);
+    try {
       callback();
+    } catch (const std::exception& ex) {
+      LOG_ERROR("Exception in script thread: {}", ex.what());
+    } catch (...) {
+      LOG_ERROR("Unknown exception in script thread");
+    }
   }
 }
