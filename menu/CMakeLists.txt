@@ -87,7 +87,7 @@ include(vendor.cmake)
 # Configure core library
 target_compile_definitions(${PROJECT_NAME}_core PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
-target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4068 /wd4324 /diagnostics:caret /W4 /permissive- /WX)
+target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4189 /wd4068 /wd4324 /diagnostics:caret /W4 /permissive- /WX)
 target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
 target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
