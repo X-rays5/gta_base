@@ -34,7 +34,7 @@ namespace base::menu::natives {
     ~Invoker();
 
     template<typename Ret, std::uint64_t native_idx, typename... Args>
-    static Ret Invoke(Args... args) {
+    static Ret Invoke(Args&&... args) {
       NativeCall call;
       (call.PushArg(std::forward<Args>(args)), ...);
       call.EndCall(native_idx);
