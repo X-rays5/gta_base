@@ -5,10 +5,12 @@
 #ifndef NOTIFICATION_HPP_05174124
 #define NOTIFICATION_HPP_05174124
 #include <imgui/imgui.h>
+#include "../../render/animate.hpp"
 
 namespace base::menu::render {
   class DrawQueueBuffer;
 }
+
 
 namespace base::ui::notification {
   class Manager;

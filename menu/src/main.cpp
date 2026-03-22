@@ -3,7 +3,6 @@
 //
 
 #include "main.hpp"
-#include <chrono>
 #include <memory>
 #include <thread>
 #include <fmt/args.h>
@@ -19,7 +18,6 @@
 #include "ui/components/execute_component.hpp"
 #include "ui/components/label_component.hpp"
 #include "ui/components/sub_link_component.hpp"
-#include "ui/notification/manager.hpp"
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
 #include "util/key_input/key_event_listener.hpp"

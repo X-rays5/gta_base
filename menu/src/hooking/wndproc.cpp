@@ -66,8 +66,6 @@ namespace base::menu::hooking {
 
   void WndProc::HandleWndProc(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam) {
     common::concurrency::ScopedSpinlock lock(spinlock_);
-
-    // Call all registered handlers (including wrapped listeners)
     for (auto&& handler : wnd_proc_handlers_ | std::views::values) {
       if (handler) {
         handler(hwnd, msg, wparam, lparam);
