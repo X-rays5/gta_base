@@ -22,12 +22,19 @@ namespace base::menu::natives {
   }
 
   void Invoker::NativeCall::EndCall(const std::uint64_t native_idx) {
-    if (native_idx >= NATIVE_CROSSMAP_SIZE) {
+    if (kINVOKER == nullptr || native_idx >= NATIVE_CROSSMAP_SIZE) {
+      LOG_WARN("Invalid native index: {}", native_idx);
       context_.SetReturnValue(0);
       return;
     }
 
     const auto handler = kINVOKER->native_handlers_[native_idx];
+    if (!handler) {
+        LOG_WARN("No handler for native index: {}", native_idx);
+      context_.SetReturnValue(0);
+      return;
+    }
+
     handler(&context_);
     context_.FixVectors();
   }
