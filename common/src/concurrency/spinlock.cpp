@@ -11,7 +11,9 @@ namespace base::common::concurrency {
         return;
       }
 
-      while (lock_.load(std::memory_order_relaxed)) {
+      // Exponential backoff
+      for (int i = 0; i < 16; ++i) {
+        if (!lock_.load(std::memory_order_relaxed)) break;
         std::this_thread::yield();
       }
     }
@@ -27,7 +29,7 @@ namespace base::common::concurrency {
 
   void RecursiveSpinlock::Lock() noexcept {
     const auto thread_id = std::this_thread::get_id();
-    if (cur_locking_thread_.load(std::memory_order_consume) == thread_id) {
+    if (cur_locking_thread_.load(std::memory_order_acquire) == thread_id) {
       lock_count_ += 1;
       return;
     }

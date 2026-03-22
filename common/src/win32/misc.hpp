@@ -68,12 +68,12 @@ namespace base::win32 {
   * \return bool
   */
  bool IsForegroundWindow(HWND window = GetGameHwnd().value());
+
  /**
-  * \brief Check if the current process is the target process
-  * \param target_process The name of the target process
+  * \brief Check if the current process is the game process
   * \return bool
   */
- bool IsTargetProcess(const std::string& target_process = common::globals::target_process_name);
+ bool IsGameProcess();
 
  /**
   * \brief Convert the return value of GetLastError() to a string message

@@ -71,7 +71,7 @@ namespace base::common::concurrency {
     Spinlock spinlock_;
     std::atomic<std::thread::id> cur_locking_thread_;
     std::thread::id default_thread_id_;
-    std::size_t lock_count_{};
+    std::atomic<std::size_t> lock_count_{0};
   };
 
   /**

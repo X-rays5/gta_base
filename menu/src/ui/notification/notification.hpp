@@ -5,17 +5,15 @@
 #ifndef NOTIFICATION_HPP_05174124
 #define NOTIFICATION_HPP_05174124
 #include <imgui/imgui.h>
-#include "../../render/animate.hpp"
 
 namespace base::menu::render {
   class DrawQueueBuffer;
 }
 
-
-namespace base::menu::ui::notification {
+namespace base::ui::notification {
   class Manager;
 
-  enum class NotificationType {
+  enum class Type {
     Info,
     Warning,
     Error
@@ -23,16 +21,16 @@ namespace base::menu::ui::notification {
 
   class Notification {
   private:
-    Notification(const NotificationType type, const std::string& title, const std::string& message) : type_(type), title_(title), message_(message), notification_color_(GetNotificationColor(type)) {}
+    Notification(const Type type, const std::string& title, const std::string& message) : type_(type), title_(title), message_(message), notification_color_(GetNotificationColor(type)) {}
 
-    static ImColor GetNotificationColor(NotificationType type);
+    static ImColor GetNotificationColor(Type type);
 
-    [[nodiscard]] std::float_t Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, bool right_align, std::float_t y_offset) const;
+    [[nodiscard]] std::float_t Draw(menu::render::DrawQueueBuffer* draw_queue_buffer, bool right_align, std::float_t y_offset);
 
     friend class Manager;
 
   private:
-    NotificationType type_;
+    Type type_;
     std::string title_;
     std::string message_;
     //std::unique_ptr<render::animate::LerpWaitReturn<std::float_t>> notification_animation_;

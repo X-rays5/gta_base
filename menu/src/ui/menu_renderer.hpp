@@ -11,7 +11,6 @@
 #include "submenu.hpp"
 #include "theme.hpp"
 #include "../render/animate.hpp"
-#include "../scripts/base_script.hpp"
 #include "../util/key_input/key_state.hpp"
 #include "components/label_component.hpp"
 
@@ -20,19 +19,12 @@ namespace base::menu::render {
 }
 
 namespace base::menu::ui {
-  class MenuRenderer final : public scripts::BaseScript {
+  class MenuRenderer final {
   public:
     MenuRenderer();
-    virtual ~MenuRenderer() override;
+    ~MenuRenderer();
 
-    virtual void ScriptInit() override {}
-    virtual void ScriptTick() override;
-
-    void RenderMenu();
-
-    virtual Type GetScriptType() const override {
-      return Type::MenuRenderThread;
-    }
+    void RenderMenu(render::DrawQueueBuffer* draw_queue);
 
     void AddSubmenu(const std::string& id, Submenu&& submenu) {
       common::concurrency::ScopedSpinlock lock(submenus_lock_);
@@ -87,11 +79,11 @@ namespace base::menu::ui {
     ankerl::unordered_dense::map<std::string, std::shared_ptr<Submenu>> submenus_;
     std::stack<std::string> submenu_stack_;
     std::size_t script_id_ = 0;
-    std::atomic<bool> is_menu_opened_ = true;
+
     common::concurrency::RecursiveSpinlock submenus_lock_;
 
-    // Animation state for item selector
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> selector_animation_;
+    std::atomic<bool> is_menu_opened_ = true;
     std::float_t current_selector_y_ = 0.0f;
     std::chrono::steady_clock::time_point last_update_time_ = std::chrono::steady_clock::now();
 

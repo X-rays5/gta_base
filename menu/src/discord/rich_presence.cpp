@@ -4,15 +4,17 @@
 
 #include "rich_presence.hpp"
 #include <discord_rpc.h>
-#include "../scripts/script_manager.hpp"
+
+#include <base-common/util/time.hpp>
 
 namespace base::menu::discord {
   namespace {
+    void HandleReady(const DiscordUser* user) {
+      LOG_INFO("Connected to discord as: {}", user->username);
+    }
+
     void HandleDisconnect(int err_code, const char* message) {
       LOG_ERROR("Discord disconnected: {} - {}", err_code, message);
-      Discord_ClearPresence();
-      Discord_Shutdown();
-      kRICH_PRESENCE->ScriptInit();
     }
 
     void HandleError(int err_code, const char* message) {
@@ -21,7 +23,13 @@ namespace base::menu::discord {
   }
 
   RichPresence::RichPresence() {
-    scripts::kSCRIPTMANAGER->AddScript(this);
+    DiscordEventHandlers handlers = {};
+    handlers.ready = HandleReady;
+    handlers.disconnected = HandleDisconnect;
+    handlers.errored = HandleError;
+
+    Discord_Initialize(xorstr_("1003792099059183676"), &handlers, 1, nullptr);
+    start_time_ = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
     kRICH_PRESENCE = this;
   }
@@ -33,17 +41,13 @@ namespace base::menu::discord {
     Discord_Shutdown();
   }
 
-  void RichPresence::ScriptInit() {
-    DiscordEventHandlers handlers = {};
-    handlers.disconnected = HandleDisconnect;
-    handlers.errored = HandleError;
-
-    Discord_Initialize(xorstr_("1003792099059183676"), &handlers, 1, nullptr);
-    start_time_ = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-  }
-
-  void RichPresence::ScriptTick() {
+  void RichPresence::Tick() {
     common::concurrency::ScopedSpinlock lock(lock_);
+    if (common::util::time::GetTimeStamp() - last_tick_time_ < 5000) {
+      return;
+    }
+    last_tick_time_ = common::util::time::GetTimeStamp();
+
     DiscordRichPresence discord_presence = {};
     discord_presence.state = activity_.state.c_str();
     discord_presence.details = activity_.details.c_str();

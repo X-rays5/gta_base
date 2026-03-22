@@ -27,7 +27,7 @@ namespace base::menu::hooking {
 
     template <typename T, typename... Args> requires std::is_function_v<std::remove_pointer_t<T>>
     std::invoke_result_t<T, Args...> CallOriginal(Args&&... args) {
-      void* og = reinterpret_cast<void*>(og_);
+      auto og = reinterpret_cast<void*>(og_);
       if (!og) {
         LOG_WARN("nullptr og {}", name_);
 

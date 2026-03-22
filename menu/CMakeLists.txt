@@ -7,7 +7,9 @@ set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 
-add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
+# Core library containing all source files except dllmain.cpp
+# This allows sharing code between the main module and tests
+add_library(${PROJECT_NAME}_core OBJECT
         src/main.cpp
         src/main.hpp
         src/render/renderer.cpp
@@ -46,17 +48,30 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/ui/notification/manager.hpp
         src/render/animate.hpp
         src/util/profile.hpp
-        src/memory/signature/cached_batch.cpp
-        src/memory/signature/cached_batch.hpp
         src/util/common.cpp
         src/util/common.hpp
         src/hooking/wndproc.cpp
         src/hooking/wndproc.hpp
+        src/render/d3d12/heap/descriptor_heap_allocator.cpp
+        src/render/d3d12/heap/descriptor_heap_allocator.hpp
+        src/render/d3d12/context.hpp
+        src/render/d3d12/context.cpp
+        src/natives/invoker.cpp
+        src/natives/invoker.hpp
+        src/natives/natives_gen9.cpp
+        src/natives/natives_gen9.hpp
+        src/natives/crossmap.cpp
+        src/natives/crossmap.hpp
+        src/game/native_types.hpp
+        src/script/script_base.hpp
+        src/script/script_manager.cpp
+        src/script/script_manager.hpp
+        src/script/game_task_executor.cpp
+        src/script/game_task_executor.hpp
+        src/game/script.cpp
+        src/game/script.hpp
         src/ui/theme.cpp
         src/ui/theme.hpp
-        src/scripts/base_script.hpp
-        src/scripts/script_manager.cpp
-        src/scripts/script_manager.hpp
         src/util/startup_shutdown_handler.hpp
         src/render/draw/draw_queue.cpp
         src/render/draw/draw_queue.hpp
@@ -73,6 +88,11 @@ add_library(${PROJECT_NAME} MODULE src/dllmain.cpp
         src/util/key_input/key_state.cpp
         src/util/key_input/key_state.hpp
 )
+add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
+
+# Main module (DLL) that uses the core library
+add_library(${PROJECT_NAME} MODULE src/dllmain.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_core)
 target_compile_definitions(${PROJECT_NAME} PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 
 include(${CMAKE_SOURCE_DIR}/cmake_scripts/arch_macro.cmake)
@@ -80,11 +100,21 @@ include(${CMAKE_SOURCE_DIR}/cmake_scripts/compiler_id_macro.cmake)
 
 include(vendor.cmake)
 
+# Configure core library
+target_compile_definitions(${PROJECT_NAME}_core PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
+set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
+target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4189 /wd4068 /wd4324 /diagnostics:caret /W4 /permissive- /WX)
+target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
+target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::rage)
+
+# Configure main module
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
 target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
-target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.hpp)
+target_precompile_headers(${PROJECT_NAME} REUSE_FROM ${PROJECT_NAME}_core)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE base::common)
-target_link_libraries(${PROJECT_NAME} PRIVATE base::imfont)
+add_subdirectory(test)

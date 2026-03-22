@@ -5,7 +5,6 @@
 #include "menu_renderer.hpp"
 
 #include "../render/renderer.hpp"
-#include "../scripts/script_manager.hpp"
 #include "components/label_component.hpp"
 #include "../render/animate.hpp"
 
@@ -14,29 +13,27 @@ namespace base::menu::ui {
     fallback_option_ = std::make_shared<components::LabelComponent>("label/invalid_submenu");
     fallback_submenu_->AddComponent(components::LabelComponent("label/invalid_submenu"));
 
-    script_id_ = scripts::kSCRIPTMANAGER->AddScript(this);
-
     kMENU_RENDERER = this;
+
+    render::kRENDER_THREAD->AddRenderCallback(0, [](render::DrawQueueBuffer* draw_queue_buffer) {
+      if (!kMENU_RENDERER)
+        return;
+
+      if (kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_F4))
+        kMENU_RENDERER->is_menu_opened_ = !kMENU_RENDERER->is_menu_opened_;
+      if (kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_BACK))
+        kMENU_RENDERER->PopSubmenu();
+
+      if (kMENU_RENDERER->is_menu_opened_)
+        kMENU_RENDERER->RenderMenu(draw_queue_buffer);
+    });
   }
 
   MenuRenderer::~MenuRenderer() {
     kMENU_RENDERER = nullptr;
-
-    scripts::kSCRIPTMANAGER->RemoveScript(script_id_, GetScriptType());
   }
 
-  void MenuRenderer::ScriptTick() {
-    if (menu_ui_key_state_.WasKeyPressed(VK_F4))
-      is_menu_opened_ = !is_menu_opened_;
-    if (menu_ui_key_state_.WasKeyPressed(VK_BACK))
-      PopSubmenu();
-
-    if (is_menu_opened_)
-      RenderMenu();
-  }
-
-  void MenuRenderer::RenderMenu() {
-    render::DrawQueueBuffer* draw_queue = render::kRENDERER->GetDrawQueueBuffer();
+  void MenuRenderer::RenderMenu(render::DrawQueueBuffer* draw_queue) {
     const auto submenu = GetCurrentSubmenu();
     if (!draw_queue || !submenu) {
       LOG_ERROR("Draw queue or submenu is null, cannot render menu.");

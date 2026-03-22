@@ -3,7 +3,8 @@
 //
 
 #include "pointers.hpp"
-#include "signature/cached_batch.hpp"
+
+#include "signature/batch.hpp"
 
 #define BATCH_SCAN(name, pattern, mod, cb) batch.Add(xorstr_(name), signature::Pattern(xorstr_(pattern), xorstr_(mod)), cb)
 
@@ -15,10 +16,22 @@ namespace base::menu::memory {
   Pointers::Pointers() {
     signature::BatchScan batch;
 
-    BATCH_SCAN("swap_chain", "48 8B 0D ? ? ? ? 48 8B 01 44 8D 43 01 33 D2 FF 50 40 8B C8", "", [this](const common::memory::Address* ptr) {
-               swap_chain_ = ptr->Add(3).Rip().As<IDXGISwapChain**>();
-               GTA_BASE_ASSERT(swap_chain_, "Invalid swap_chain pointer");
-               });
+    BATCH_SCAN("swap_chain", "72 C7 EB 02 31 C0 8B 0D", "", [this](const common::memory::Address* ptr) {
+      swap_chain_ = ptr->Add(0x21).Add(3).Rip().As<IDXGISwapChain3**>();
+      command_queue_ = ptr->Add(0x1A).Add(3).Rip().As<ID3D12CommandQueue**>();
+    });
+
+    BATCH_SCAN("init_native_tables", "EB 2A 0F 1F 40 00 48 8B 54 17 10", "", [this](const common::memory::Address* ptr) {
+      init_native_tables_ = ptr->Sub(0x2A).As<decltype(init_native_tables_)>();
+    });
+
+    BATCH_SCAN("script_threads", "48 8B 05 ? ? ? ? 48 89 34 F8 48 FF C7 48 39 FB 75 97", "", [this](const common::memory::Address* ptr) {
+      scriptThreads_ = ptr->Add(3).Rip().As<decltype(scriptThreads_)>();
+    });
+
+    BATCH_SCAN("run_script_threads", "BE 40 5D C6 00", "", [this](const common::memory::Address* ptr) {
+      run_script_threads_ = ptr->Sub(0xA).As<decltype(run_script_threads_)>();
+    });
 
     batch.Scan();
     kPOINTERS = this;

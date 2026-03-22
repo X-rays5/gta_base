@@ -99,7 +99,7 @@ jobs:
 
       - name: Install build-wrapper
         if: matrix.language == 'c-cpp'
-        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.1.0
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5.3.1
 
       - name: Build with build-wrapper
         if: matrix.language == 'c-cpp'

@@ -4,7 +4,11 @@
 
 #ifndef POINTERS_HPP
 #define POINTERS_HPP
-#include <dxgi.h>
+#include <d3d12.h>
+#include <dxgi1_4.h>
+#include <rage/atArray.hpp>
+#include <rage/script/program.hpp>
+#include <rage/script/thread.hpp>
 
 namespace base::menu::memory {
   class Pointers {
@@ -12,7 +16,13 @@ namespace base::menu::memory {
     Pointers();
     ~Pointers();
 
-    IDXGISwapChain** swap_chain_{};
+    IDXGISwapChain3** swap_chain_{};
+    ID3D12CommandQueue** command_queue_{};
+
+    void(*init_native_tables_)(rage::script::Program*);
+
+    rage::atArray<rage::script::Thread*>* scriptThreads_{};
+    void* run_script_threads_{};
   };
 
   inline Pointers* kPOINTERS{};
