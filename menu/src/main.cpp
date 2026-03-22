@@ -14,7 +14,6 @@
 #include "natives/invoker.hpp"
 #include "render/renderer.hpp"
 #include "render/thread.hpp"
-#include "script/game_task_executor.hpp"
 #include "script/script_manager.hpp"
 #include "ui/localization/manager.hpp"
 #include "ui/notification/manager.hpp"
@@ -150,7 +149,8 @@ int base::menu::menu_main() {
 
   lifetime_helper->RunInit();
 
-  wndproc_inst->AddWndProcHandler(UnloadKeyWatcher);
+  hooking::kWNDPROC->AddWndProcHandler(UnloadKeyWatcher);
+
   hooking_inst->Enable();
 
   LOG_INFO("Loaded");

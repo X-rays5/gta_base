@@ -6,9 +6,9 @@
 #define POINTERS_HPP
 #include <d3d12.h>
 #include <dxgi1_4.h>
+#include <rage/atArray.hpp>
 #include <rage/script/program.hpp>
 #include <rage/script/thread.hpp>
-#include <rage/atArray.hpp>
 
 namespace base::menu::memory {
   class Pointers {
