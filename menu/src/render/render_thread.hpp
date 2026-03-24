@@ -32,6 +32,8 @@ namespace base::menu::render {
       std::ranges::sort(render_callbacks_, [](const RenderCB& a, const RenderCB& b) {
         return a.z_idx_ < b.z_idx_;
       });
+
+      LOG_DEBUG("Added render callback with z-index: {}", z_idx);
     }
 
     std::vector<RenderCB> GetRenderCallbacks() {
@@ -42,6 +44,7 @@ namespace base::menu::render {
   private:
     common::concurrency::Spinlock callback_lock_;
     std::vector<RenderCB> render_callbacks_;
+    std::unique_ptr<std::thread> render_thread_;
   };
 
   inline RenderThread* kRENDER_THREAD{};

@@ -8,9 +8,15 @@
 namespace base::menu::render {
   RenderThread::RenderThread() {
     kRENDER_THREAD = this;
+
+    render_thread_ = std::make_unique<std::thread>(RenderMain);
   }
 
   RenderThread::~RenderThread() {
+    if (render_thread_ && render_thread_->joinable()) {
+      render_thread_->join();
+    }
+
     kRENDER_THREAD = nullptr;
   }
 
