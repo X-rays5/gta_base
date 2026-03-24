@@ -71,6 +71,7 @@ DWORD base::menu::menu_main() {
   auto startup_shutdown_handler = std::make_unique<util::StartupShutdownHandler>();
   SetupStartupShutdownSequence(startup_shutdown_handler.get());
 
+  startup_shutdown_handler->RunInit();
   hooking_inst->Enable();
 
   ui::Submenu home_submenu("Home", [](ui::Submenu* sub) {
