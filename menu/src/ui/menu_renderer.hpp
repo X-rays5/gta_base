@@ -72,6 +72,10 @@ namespace base::menu::ui {
       }
     }
 
+    bool isMenuOpened() const {
+      return is_menu_opened_;
+    }
+
   private:
     MenuRenderProperties ui_props_{};
     util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK}, ui_props_.menu_ui_key_state_cooldown};

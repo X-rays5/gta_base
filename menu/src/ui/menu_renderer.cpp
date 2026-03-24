@@ -24,8 +24,9 @@ namespace base::menu::ui {
       if (kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_BACK))
         kMENU_RENDERER->PopSubmenu();
 
-      if (kMENU_RENDERER->is_menu_opened_)
+      if (kMENU_RENDERER->is_menu_opened_) {
         kMENU_RENDERER->RenderMenu(draw_queue_buffer);
+      }
     });
   }
 
@@ -111,17 +112,20 @@ namespace base::menu::ui {
     const std::float_t y_pos = DrawItemSelector(draw_queue, top_bar_y_offset, submenu);
 
     // Draw the visible window of components
+    std::float_t current_y_offset = y_offset;
     for (std::uint32_t i = 0; i < options_to_draw; ++i) {
       if (const std::size_t component_index = start_index + i; component_index < total_components) {
+        // Check if the selector's center is within the current item's bounds
         const float selector_center = y_pos + (ui_props_.menu_item_height / 2.0f);
-        const bool selector_past_halfway = selector_center >= y_offset + (ui_props_.menu_item_height / 2.0f) && selector_center < y_offset + ui_props_.menu_item_height;
+        const bool is_selected = selector_center >= current_y_offset &&
+                                 selector_center < current_y_offset + ui_props_.menu_item_height;
 
-        DrawComponent(draw_queue, components[component_index].component.get(), y_offset, selector_past_halfway);
+        DrawComponent(draw_queue, components[component_index].component.get(), current_y_offset, is_selected);
       }
-      y_offset += ui_props_.menu_item_height;
+      current_y_offset += ui_props_.menu_item_height;
     }
 
-    return y_offset;
+    return current_y_offset;
   }
 
   void MenuRenderer::DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, const std::float_t y_offset, bool inverse_text) const {
