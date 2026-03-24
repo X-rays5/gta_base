@@ -8,14 +8,14 @@
 
 namespace base::menu::render::draw_helpers {
   namespace {
-    FORCE_INLINE std::string WordWrapGetString(const std::string* lines, const std::uint32_t line_count) {
+    FORCE_INLINE std::string WordWrapGetString(const std::vector<std::string>& lines) {
       std::string res;
-      for (std::uint32_t i = 0; i < line_count; i++) {
-        auto line = lines[i];
-        while (line.back() == ' ') {
-          line.pop_back();
+      for (const auto& line : lines) {
+        std::string trimmed_line = line;
+        while (!trimmed_line.empty() && trimmed_line.back() == ' ') {
+          trimmed_line.pop_back();
         }
-        res = fmt::format("{}{}\n", res, line);
+        res = fmt::format("{}{}\n", res, trimmed_line);
       }
 
       return res;

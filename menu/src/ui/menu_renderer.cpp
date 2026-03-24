@@ -148,6 +148,20 @@ namespace base::menu::ui {
     auto sub_name_x = ui_props_.theme.x_position + ui_props_.text_props.x_margin;
     auto option_count_x = ui_props_.theme.x_position + ui_props_.menu_width - ui_props_.text_props.x_margin;
     auto text_y_pos = y_offset + ui_props_.menu_item_height / 2;
+    auto center_x = ui_props_.theme.x_position + GetMenuCenterX();
+
+    // Calculate available width for submenu name (leave margin from center)
+    const float center_margin = 30.0f; // Space to reserve around the center arrow
+    const float max_name_width = center_x - sub_name_x - center_margin;
+
+    // Use WordWrap to truncate the name to fit available width
+    std::string display_name = std::string(sub_name);
+    render::draw_helpers::WordWrap(ui_props_.text_props.font_size, display_name, max_name_width, 1);
+
+    // Remove trailing newline from WordWrap
+    if (!display_name.empty() && display_name.back() == '\n') {
+      display_name.pop_back();
+    }
 
     std::string arrow_icon = ICON_FA_ARROW_DOWN_ARROW_UP;
     if (cur_item_idx == 1) {
@@ -158,8 +172,8 @@ namespace base::menu::ui {
 
     draw_queue->AddCommand(render::RectBorder({ui_props_.theme.x_position, y_offset}, {ui_props_.menu_width, ui_props_.menu_item_height}, ui_props_.background_color, ui_props_.seperator_color, true, false, false, false, ui_props_.seperator_height));
     draw_queue->AddCommand(render::PushFont(ui_props_.text_props.font_bold));
-    draw_queue->AddCommand(render::Text({sub_name_x, text_y_pos}, ui_props_.text_props.text_color, std::string(sub_name), ui_props_.text_props.font_size, false, false, true));
-    draw_queue->AddCommand(render::Text({ui_props_.theme.x_position + GetMenuCenterX(), text_y_pos}, ui_props_.text_props.text_color, arrow_icon, ui_props_.text_props.font_size, false, true, true));
+    draw_queue->AddCommand(render::Text({sub_name_x, text_y_pos}, ui_props_.text_props.text_color, display_name, ui_props_.text_props.font_size, false, false, true));
+    draw_queue->AddCommand(render::Text({center_x, text_y_pos}, ui_props_.text_props.text_color, arrow_icon, ui_props_.text_props.font_size, false, true, true));
     draw_queue->AddCommand(render::Text({option_count_x, text_y_pos}, ui_props_.text_props.text_color, fmt::format("{}/{}", cur_item_idx, item_count), ui_props_.text_props.font_size, true, false, true));
     draw_queue->AddCommand(render::PopFont());
 

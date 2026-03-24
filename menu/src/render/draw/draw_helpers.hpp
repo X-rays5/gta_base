@@ -23,7 +23,7 @@ namespace base::menu::render::draw_helpers {
 
   ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
   ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
-  
+
   std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::size_t max_lines);
 
   ImDrawList* GetDrawList();
