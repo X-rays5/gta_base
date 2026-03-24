@@ -106,77 +106,41 @@ namespace base::menu::render::draw_helpers {
     const auto real_max_x = ScaleXToScreen(max_x);
 
     if (str.empty() || CalcTextSizeRaw(ImGui::GetFont(), font_size, str).x <= real_max_x) {
-      return 1; // Wrapping is not needed, so just return that there is 1 line
+      return 1; // Wrapping is not needed, so return that there is 1 line
     }
 
-    std::vector<std::string> lines;
-    lines.reserve(max_lines);
+    const auto char_x_size = CalcTextSizeRaw(ImGui::GetFont(), font_size, " ").x;
+    const auto chars_per_line = static_cast<std::uint32_t>(real_max_x / char_x_size);
 
-    while (!str.empty() && lines.size() < max_lines) {
-      std::size_t best_break_pos = 0;
-      std::size_t last_space_pos = std::string::npos;
-
-      // Build the line character by character, measuring width as we go
-      for (std::size_t i = 0; i < str.size(); ++i) {
-        // Check if current character is a space
-        if (str[i] == ' ') {
-          last_space_pos = i;
-        }
-
-        // Measure text from start to current position
-        std::string current_line = str.substr(0, i + 1);
-        float line_width = CalcTextSizeRaw(ImGui::GetFont(), font_size, current_line).x;
-
-        // If we've exceeded the max width
-        if (line_width > real_max_x) {
-          // If we found a space before this point, break there
-          if (last_space_pos != std::string::npos && last_space_pos > 0) {
-            best_break_pos = last_space_pos + 1; // Include the space
-          } else {
-            // No space found, break at current position
-            best_break_pos = i;
-          }
-          break;
-        }
-
-        best_break_pos = i + 1; // Update best position as we go
-      }
-
-      // If we didn't find a break point, it means the entire remaining string fits
-      if (best_break_pos == 0) {
-        best_break_pos = str.size();
-      }
-
-      // Extract the line and remove trailing spaces
-      std::string line = str.substr(0, best_break_pos);
-      while (!line.empty() && line.back() == ' ') {
-        line.pop_back();
-      }
-
-      if (!line.empty()) {
-        lines.push_back(line);
-      }
-
-      // Remove the processed part from str
-      str.erase(0, best_break_pos);
-
-      // Skip leading spaces in the remaining string
-      while (!str.empty() && str.front() == ' ') {
-        str.erase(0, 1);
-      }
-    }
-
-    // If we hit max lines and there's still text, add ellipsis to the last line
-    if (!str.empty() && !lines.empty()) {
-      auto& last_line = lines.back();
-      if (last_line.size() >= 3) {
+    auto* lines = new std::string[max_lines];
+    std::uint32_t line_count = 0;
+    while (!str.empty()) {
+      if (line_count >= max_lines) {
+        auto last_line = lines[max_lines - 1];
         last_line.replace(last_line.end() - 3, last_line.end(), "...");
+        lines[max_lines - 1] = last_line;
+        break;
+      }
+
+      std::size_t pos = chars_per_line < str.size() ? str.rfind(' ', chars_per_line) : str.size();
+      if (pos != std::string::npos) {
+        lines[line_count] = str.substr(0, pos + 1);
+        str.erase(0, pos + 1);
+      } else {
+        lines[line_count] = str.substr(0, chars_per_line);
+        str.erase(0, chars_per_line);
+      }
+      line_count += 1;
+
+      if (str.empty() && CalcTextSizeRaw(ImGui::GetFont(), font_size, lines[line_count - 1]).x <= real_max_x) {
+        break;
       }
     }
 
-    str = WordWrapGetString(lines);
+    str = WordWrapGetString(lines, line_count);
+    delete[] lines;
 
-    return static_cast<std::uint32_t>(lines.size());
+    return line_count;
   }
 
   void RotateVertices::ImRotateStart() {
