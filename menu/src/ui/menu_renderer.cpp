@@ -59,7 +59,7 @@ namespace base::menu::ui {
     const Submenu::component_list_t& components = submenu->GetComponents();
 
     std::float_t y_offset = ui_props_.theme.y_position;
-    y_offset = DrawTopBar(draw_queue, submenu->GetName(), y_offset);
+    y_offset = DrawTopBar(draw_queue, y_offset);
     const std::float_t top_bar_y_offset = y_offset;
     if (components.empty()) {
       draw_queue->AddCommand(render::Rect({ui_props_.theme.x_position, y_offset}, {ui_props_.menu_width, ui_props_.menu_item_height}, ui_props_.background_color));
@@ -68,19 +68,12 @@ namespace base::menu::ui {
     }
 
     y_offset = DrawComponents(draw_queue, top_bar_y_offset, submenu.get(), components, y_offset);
-    DrawBottomBar(draw_queue, submenu->GetCurrentOptionIndexForDisplay(), submenu->GetOptionCountForDisplay(), y_offset);
+    DrawBottomBar(draw_queue, submenu->GetName(), submenu->GetCurrentOptionIndexForDisplay(), submenu->GetOptionCountForDisplay(), y_offset);
   }
 
-  std::float_t MenuRenderer::DrawTopBar(render::DrawQueueBuffer* draw_queue, const std::string_view sub_name, std::float_t y_offset) {
-    static const std::float_t sub_title_x = ui_props_.theme.x_position + ui_props_.text_props.x_margin;
-    static const std::float_t sub_title_top_y_offset = ui_props_.menu_item_height / 2;
-    auto sub_title_y = y_offset + sub_title_top_y_offset;
-
+  std::float_t MenuRenderer::DrawTopBar(render::DrawQueueBuffer* draw_queue, std::float_t y_offset) {
     draw_queue->AddCommand(render::RectBorder({ui_props_.theme.x_position, y_offset},{ui_props_.menu_width, ui_props_.menu_item_height}, ui_props_.background_color, ui_props_.seperator_color, false, true, false, false, ui_props_.seperator_height));
     y_offset += ui_props_.menu_item_height;
-    draw_queue->AddCommand(render::PushFont(ui_props_.text_props.font_bold));
-    draw_queue->AddCommand(render::Text({sub_title_x, sub_title_y}, ui_props_.text_props.text_color, std::string(sub_name), ui_props_.text_props.font_size, false, false, true));
-    draw_queue->AddCommand(render::PopFont());
 
     return y_offset;
   }
@@ -151,7 +144,8 @@ namespace base::menu::ui {
     }
   }
 
-  std::float_t MenuRenderer::DrawBottomBar(render::DrawQueueBuffer* draw_queue, std::size_t cur_item_idx, std::size_t item_count, std::float_t y_offset) {
+  std::float_t MenuRenderer::DrawBottomBar(render::DrawQueueBuffer* draw_queue, const std::string_view sub_name, std::size_t cur_item_idx, std::size_t item_count, std::float_t y_offset) {
+    auto sub_name_x = ui_props_.theme.x_position + ui_props_.text_props.x_margin;
     auto option_count_x = ui_props_.theme.x_position + ui_props_.menu_width - ui_props_.text_props.x_margin;
     auto text_y_pos = y_offset + ui_props_.menu_item_height / 2;
 
@@ -164,6 +158,7 @@ namespace base::menu::ui {
 
     draw_queue->AddCommand(render::RectBorder({ui_props_.theme.x_position, y_offset}, {ui_props_.menu_width, ui_props_.menu_item_height}, ui_props_.background_color, ui_props_.seperator_color, true, false, false, false, ui_props_.seperator_height));
     draw_queue->AddCommand(render::PushFont(ui_props_.text_props.font_bold));
+    draw_queue->AddCommand(render::Text({sub_name_x, text_y_pos}, ui_props_.text_props.text_color, std::string(sub_name), ui_props_.text_props.font_size, false, false, true));
     draw_queue->AddCommand(render::Text({ui_props_.theme.x_position + GetMenuCenterX(), text_y_pos}, ui_props_.text_props.text_color, arrow_icon, ui_props_.text_props.font_size, false, true, true));
     draw_queue->AddCommand(render::Text({option_count_x, text_y_pos}, ui_props_.text_props.text_color, fmt::format("{}/{}", cur_item_idx, item_count), ui_props_.text_props.font_size, true, false, true));
     draw_queue->AddCommand(render::PopFont());
