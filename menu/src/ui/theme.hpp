@@ -37,7 +37,7 @@ namespace base::menu::ui {
     const std::float_t seperator_height = 0.001f;
     const std::float_t menu_item_height = 0.025f;
     const std::float_t menu_width = 0.16f;
-    const std::uint32_t max_options_drawn = 16;
+    const std::uint32_t max_options_drawn = 12;
     const ImColor seperator_color = ImColor(255, 255, 255);
     const ImColor background_color = ImColor(0, 0, 0);
     const ImColor selector_color = text_props.text_color;
