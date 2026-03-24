@@ -87,6 +87,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/util/key_input/key_event_listener.cpp
         src/util/key_input/key_state.cpp
         src/util/key_input/key_state.hpp
+        src/feature/feature_loop.cpp
+        src/feature/feature_loop.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
