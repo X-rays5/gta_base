@@ -13,11 +13,16 @@
 #include "natives/invoker.hpp"
 #include "render/renderer.hpp"
 #include "script/script_manager.hpp"
-#include "ui/localization/manager.hpp"
 #include "ui/menu_renderer.hpp"
 #include "ui/components/execute_component.hpp"
 #include "ui/components/label_component.hpp"
 #include "ui/components/sub_link_component.hpp"
+#include "ui/components/toggle_component.hpp"
+#include "ui/components/number_range_component.hpp"
+#include "ui/components/list_component.hpp"
+#include "ui/components/toggle_list_component.hpp"
+#include "ui/components/toggle_number_range_component.hpp"
+#include "ui/localization/manager.hpp"
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
 #include "util/key_input/key_event_listener.hpp"
@@ -77,13 +82,48 @@ DWORD base::menu::menu_main() {
 
   hooking_inst->Enable();
 
-  ui::Submenu home_submenu("Home", [](ui::Submenu* sub) {
+  auto test_state = std::make_shared<std::atomic_bool>(false);
+  auto test_num_state = std::make_shared<std::atomic<std::uint32_t>>(0);
+
+  // Examples for ListComponent
+  auto list_items = std::make_shared<std::vector<std::string>>(std::vector<std::string>{"Option A", "Option B", "Option C", "Option D"});
+  auto list_selected_index = std::make_shared<std::atomic<std::size_t>>(0);
+
+  // Examples for ToggleListComponent
+  auto toggle_list_items = std::make_shared<std::vector<std::string>>(std::vector<std::string>{"Low", "Medium", "High"});
+  auto toggle_list_selected_index = std::make_shared<std::atomic<std::size_t>>(0);
+  auto toggle_list_state = std::make_shared<std::atomic<bool>>(false);
+
+  // Examples for ToggleNumberRangeComponent
+  auto toggle_number_state = std::make_shared<std::atomic<std::int32_t>>(25);
+  auto toggle_number_bool_state = std::make_shared<std::atomic<bool>>(false);
+
+  ui::Submenu home_submenu("Home", [test_state, test_num_state, list_items, list_selected_index, toggle_list_items, toggle_list_selected_index, toggle_list_state, toggle_number_state, toggle_number_bool_state](ui::Submenu* sub) {
     sub->AddComponent(ui::components::LabelComponent("label/home_submenu"));
     sub->AddComponent(ui::components::ExecuteComponent("Execute Script", [](ui::components::ExecuteComponent*) {
       LOG_INFO("Executing script from home submenu.");
       // Here you can add the logic to execute a script or perform an action.
     }));
     sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::ToggleComponent("Test Toggle", test_state));
+    sub->AddComponent(ui::components::NumberRangeComponent<std::uint32_t>("Test Number", test_num_state, 0, 100, 1));
+    sub->AddComponent(ui::components::ListComponent("List Example", list_items, list_selected_index));
+    sub->AddComponent(ui::components::ToggleListComponent("Toggle List Example", toggle_list_items, toggle_list_selected_index, toggle_list_state));
+    sub->AddComponent(ui::components::ToggleNumberRangeComponent<std::int32_t>("Toggle Number Example", toggle_number_state, 0, 50, 5, toggle_number_bool_state));
+    sub->AddComponent(ui::components::LabelComponent("label/home_submenu"));
+    sub->AddComponent(ui::components::ToggleComponent("Test Toggle", test_state));
+    sub->AddComponent(ui::components::NumberRangeComponent<std::uint32_t>("Test Number", test_num_state, 0, 100, 1));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::LabelComponent("label/home_submenu"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::SubLinkComponent("non existing sub"));
+    sub->AddComponent(ui::components::LabelComponent("label/home_submenu"));
   });
   ui::kMENU_RENDERER->AddSubmenu(ui::SubmenuIDs::kMAIN_MENU, std::move(home_submenu));
 
