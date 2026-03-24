@@ -72,6 +72,9 @@ DWORD base::menu::menu_main() {
   SetupStartupShutdownSequence(startup_shutdown_handler.get());
 
   startup_shutdown_handler->RunInit();
+
+  wndproc_inst->AddWndProcHandler(&unload_key_watcher);
+
   hooking_inst->Enable();
 
   ui::Submenu home_submenu("Home", [](ui::Submenu* sub) {
