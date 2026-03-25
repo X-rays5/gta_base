@@ -53,6 +53,8 @@ add_library(${PROJECT_NAME} STATIC
         src/conversion/cw2a.hpp
         src/conversion/cw2a.cpp
         src/conversion/joaat.hpp
+        src/util/ranged_value.hpp
+        src/util/enum_bitops.hpp
 )
 add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 

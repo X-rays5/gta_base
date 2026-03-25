@@ -6,6 +6,7 @@
 #include <magic_enum/magic_enum.hpp>
 
 #include "game_task_executor.hpp"
+#include "../feature/feature_loop.hpp"
 
 namespace base::menu::script {
   ScriptManager::ScriptManager() {
@@ -16,6 +17,7 @@ namespace base::menu::script {
     kSCRIPT_MANAGER = this;
 
     AddScript(std::make_unique<GameTaskExecutor>());
+    AddScript(std::make_unique<feature::GameFeatureLoop>());
   }
 
   ScriptManager::~ScriptManager() {

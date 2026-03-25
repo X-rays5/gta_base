@@ -8,11 +8,14 @@
 #include <dxgi.h>
 #include <base-common/util/time.hpp>
 #include <imfont/imfont.hpp>
-#include "draw.hpp"
+#include "render_thread.hpp"
+#include "../hooking/wndproc.hpp"
+#include "../util/startup_shutdown_handler.hpp"
 #include "d3d12/context.hpp"
+#include "draw/draw_queue.hpp"
 
 namespace base::menu::render {
-  class Renderer {
+  class Renderer final {
   public:
     Renderer();
     ~Renderer();
@@ -36,6 +39,7 @@ namespace base::menu::render {
     }
 
     void SetResolution(const int width, const int height) {
+      LOG_INFO("Setting resolution to {}x{}", width, height);
       common::concurrency::ScopedSpinlock lock(window_size_lock_);
       window_width_ = static_cast<std::uint32_t>(width);
       window_height_ = static_cast<std::uint32_t>(height);
@@ -43,6 +47,21 @@ namespace base::menu::render {
 
     static HRESULT Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags);
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
+
+    static void RendererLifeTime(std::unique_ptr<Renderer>& renderer_inst, util::StartupShutdownHandler* startup_shutdown_handler) {
+      startup_shutdown_handler->AddCallback("Renderer", [&](const util::StartupShutdownHandler::Action action) {
+        if (action == util::StartupShutdownHandler::Action::Init) {
+          renderer_inst = std::make_unique<Renderer>();
+          renderer_inst->render_thread_ = std::make_unique<RenderThread>();
+        } else {
+          // First, make sure it's actually waiting, then unblock it.
+          std::this_thread::sleep_for(std::chrono::milliseconds(200));
+          renderer_inst->GetDrawQueueBuffer()->UnblockRenderThread();
+
+          renderer_inst.reset();
+        }
+      });
+    }
 
   private:
     mutable common::concurrency::Spinlock window_size_lock_;
@@ -54,6 +73,7 @@ namespace base::menu::render {
     std::uint64_t delta_time_ = 0;
     std::uint64_t last_time_ = common::util::time::GetTimeStamp();
     std::size_t wndproc_handler_id_{};
+    std::unique_ptr<RenderThread> render_thread_;
     d3d12::Context d3d12_context_;
 
   private:

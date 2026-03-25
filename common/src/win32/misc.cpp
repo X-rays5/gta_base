@@ -50,7 +50,7 @@ namespace base::win32 {
     return modules;
   }
 
-  StatusOr<HWND> GetHwnd(std::string_view window_class, std::string_view window_name) {
+  StatusOr<HWND> GetHwnd(const std::string_view window_class, const std::string_view window_name) {
     auto hwnd = FindWindowA(window_class.empty() ? nullptr : window_class.data(), window_name.empty() ? nullptr : window_name.data());
     if (hwnd == nullptr) {
       return MakeFailure<ResultCode::kNOT_FOUND>("Failed to retrieve valid hwnd handle for target window");

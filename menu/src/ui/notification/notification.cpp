@@ -3,7 +3,8 @@
 //
 
 #include "notification.hpp"
-#include "../../render/draw.hpp"
+#include "../../render/draw/draw_commands.hpp"
+#include "../../render/draw/draw_queue.hpp"
 
 namespace base::ui::notification {
   ImColor Notification::GetNotificationColor(const Type type) {

@@ -12,15 +12,14 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 add_library(${PROJECT_NAME}_core OBJECT
         src/main.cpp
         src/main.hpp
-        src/render/draw.hpp
         src/render/renderer.cpp
         src/render/renderer.hpp
         src/globals.hpp
-        src/render/draw_util.cpp
-        src/render/draw_util.hpp
-        src/render/draw_commands.hpp
-        src/render/thread.cpp
-        src/render/thread.hpp
+        src/render/draw/draw_helpers.cpp
+        src/render/draw/draw_helpers.hpp
+        src/render/draw/draw_commands.hpp
+        src/render/render_thread.cpp
+        src/render/render_thread.hpp
         src/hooking/hooking.cpp
         src/hooking/hooking.hpp
         src/hooking/helpers/detour.cpp
@@ -71,6 +70,30 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/script/game_task_executor.hpp
         src/game/script.cpp
         src/game/script.hpp
+        src/ui/theme.cpp
+        src/ui/theme.hpp
+        src/util/startup_shutdown_handler.hpp
+        src/render/draw/draw_queue.cpp
+        src/render/draw/draw_queue.hpp
+        src/ui/components/base_component.hpp
+        src/ui/components/label_component.hpp
+        src/ui/menu_renderer.cpp
+        src/ui/menu_renderer.hpp
+        src/ui/submenu.hpp
+        src/ui/components/component_flags.hpp
+        src/ui/components/execute_component.hpp
+        src/ui/components/sub_link_component.hpp
+        src/util/key_input/key_event_listener.hpp
+        src/util/key_input/key_event_listener.cpp
+        src/util/key_input/key_state.cpp
+        src/util/key_input/key_state.hpp
+        src/feature/feature_loop.cpp
+        src/feature/feature_loop.hpp
+        src/ui/components/toggle_component.hpp
+        src/ui/components/number_range_component.hpp
+        src/ui/components/list_component.hpp
+        src/ui/components/toggle_number_range_component.hpp
+        src/ui/components/toggle_list_component.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

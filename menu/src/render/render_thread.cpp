@@ -2,25 +2,31 @@
 // Created by X-ray on 05/11/2023.
 //
 
-#include "thread.hpp"
+#include "render_thread.hpp"
 #include "renderer.hpp"
 
 namespace base::menu::render {
-  Thread::Thread() {
-    kTHREAD = this;
+  RenderThread::RenderThread() {
+    kRENDER_THREAD = this;
+
+    render_thread_ = std::make_unique<std::thread>(RenderMain);
   }
 
-  Thread::~Thread() {
-    kTHREAD = nullptr;
+  RenderThread::~RenderThread() {
+    if (render_thread_ && render_thread_->joinable()) {
+      render_thread_->join();
+    }
+
+    kRENDER_THREAD = nullptr;
   }
 
-  void Thread::RenderMain() {
+  void RenderThread::RenderMain() {
     SetThreadDescription(GetCurrentThread(), L"RenderLoop");
     LOG_INFO("Render thread started.");
     while (globals::kRUNNING) {
-      if (kTHREAD && kRENDERER) [[likely]] {
+      if (kRENDER_THREAD && kRENDERER) [[likely]] {
         const auto buffer = kRENDERER->GetDrawQueueBuffer();
-        const auto callbacks = kTHREAD->GetRenderCallbacks();
+        const auto callbacks = kRENDER_THREAD->GetRenderCallbacks();
 
         for (const auto& [z_idx, cb] : callbacks) {
           if (!buffer) [[unlikely]] {
