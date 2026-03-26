@@ -13,7 +13,13 @@ namespace base::menu::ui::components {
   class SubLinkComponent final : public BaseComponent {
   public:
     explicit SubLinkComponent(const std::string& navigate_to) : BaseComponent(), navigation_link_(navigate_to) {
-      left_text_ = navigate_to;
+      auto sub = kMENU_RENDERER->GetSubmenu(navigate_to);
+      if (sub) {
+        left_text_ = sub->GetName();
+      } else {
+        left_text_ = navigate_to;
+      }
+
       right_text_ = ICON_FA_ARROW_RIGHT;
     }
     explicit SubLinkComponent(const SubmenuIDs navigate_to) : SubLinkComponent(std::string(magic_enum::enum_name(navigate_to))) {}

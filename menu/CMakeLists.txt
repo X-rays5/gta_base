@@ -94,6 +94,11 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/components/list_component.hpp
         src/ui/components/toggle_number_range_component.hpp
         src/ui/components/toggle_list_component.hpp
+        src/ui/layout/home.cpp
+        src/ui/layout/home.hpp
+        src/ui/layout/settings/settings.cpp
+        src/ui/layout/settings/settings.hpp
+        src/ui/components/components.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

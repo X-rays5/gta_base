@@ -153,9 +153,9 @@ namespace base::menu::ui {
      * Get the name of this submenu.
      * @return The name of this submenu.
      */
-    [[nodiscard]] std::string_view GetName() {
+    [[nodiscard]] std::string GetName() {
       common::concurrency::ScopedSpinlock lock(spinlock_);
-      return sub_name_;
+      return localization::kMANAGER->Localize(sub_name_);
     }
 
     /**
@@ -341,6 +341,11 @@ namespace base::menu::ui {
 
   enum class SubmenuIDs : std::uint32_t {
     kMAIN_MENU = 0,
+    kSETTINGS,
+    kLOAD_TRANSLATIONS,
+    kLOAD_SETTINGS,
+    kUNLOAD_CONFIRM,
+    kTHEME_SETTINGS,
   };
 }
 

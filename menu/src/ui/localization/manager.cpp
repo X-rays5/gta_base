@@ -88,7 +88,7 @@ namespace base::menu::ui::localization {
         return std::string(it != translation_.loaded_translation_.end() ? it->second : key);
     }
 
-    Status Manager::SetActiveTranslation(const std::string& name, bool save_current) {
+    Status Manager::SetActiveTranslation(const std::string& name, const bool save_current) {
         if (save_current && translation_.Save(name).error()) {
             LOG_ERROR("Failed to save current translation");
 

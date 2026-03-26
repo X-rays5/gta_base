@@ -72,8 +72,18 @@ namespace base::menu::ui {
       }
     }
 
-    bool isMenuOpened() const {
+    bool IsMenuOpened() const {
       return is_menu_opened_;
+    }
+
+    std::shared_ptr<Theme> GetTheme() {
+      return ui_props_.theme;
+    }
+
+    std::shared_ptr<Submenu> GetSubmenu(const std::string& id) {
+      common::concurrency::ScopedSpinlock lock(submenus_lock_);
+      const auto it = submenus_.find(id);
+      return (it != submenus_.end() && it->second) ? it->second : nullptr;
     }
 
   private:

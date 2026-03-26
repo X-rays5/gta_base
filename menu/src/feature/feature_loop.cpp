@@ -9,7 +9,7 @@
 namespace base::menu::feature {
   namespace {
     void DisableGameUIInteractWhenMenuOpened() {
-      if (ui::kMENU_RENDERER->isMenuOpened()) {
+      if (ui::kMENU_RENDERER->IsMenuOpened()) {
         natives::PAD::DISABLE_CONTROL_ACTION(0, 18, false); // INPUT_SKIP_CUTSCENE
         natives::PAD::DISABLE_CONTROL_ACTION(0, 27, false); // INPUT_PHONE
         natives::PAD::DISABLE_CONTROL_ACTION(0, 172, false); // INPUT_CELLPHONE_UP

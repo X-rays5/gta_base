@@ -5,6 +5,7 @@
 #pragma once
 
 #include "base_component.hpp"
+#include <base-common/util/ranged_value.hpp>
 
 namespace base::menu::ui::components {
   /**
@@ -16,6 +17,8 @@ namespace base::menu::ui::components {
   class BaseRangeComponent : public BaseComponent {
   protected:
     std::shared_ptr<std::atomic<T>> optVal_;
+    std::function<T()> ranged_value_getter_;  // Callback to get current value from RangedValue
+    std::function<void(T)> ranged_value_setter_;  // Callback to set value in RangedValue
     const T optMin_;
     const T optMax_;
     const T optStep_;
@@ -29,9 +32,22 @@ namespace base::menu::ui::components {
     virtual ~BaseRangeComponent() = default;
 
     /**
+     * Set callbacks for RangedValue direct modification
+     */
+    template <typename RangedValueType>
+    void SetRangedValuePtr(RangedValueType* ptr) {
+      ranged_value_getter_ = [ptr]() -> T { return static_cast<T>(*ptr); };
+      ranged_value_setter_ = [ptr](T val) { *ptr = val; };
+    }
+
+    /**
      * Get the current value
      */
     T GetCurrentValue() const {
+      if (ranged_value_getter_) {
+        // Use RangedValue directly via callback
+        return ranged_value_getter_();
+      }
       return optVal_->load();
     }
 
@@ -62,7 +78,12 @@ namespace base::menu::ui::components {
       if (newVal < optMin_) {
         newVal = optMin_;
       }
-      optVal_->store(newVal);
+
+      if (ranged_value_setter_) {
+        ranged_value_setter_(newVal);
+      } else {
+        optVal_->store(newVal);
+      }
     }
 
     /**
@@ -78,7 +99,12 @@ namespace base::menu::ui::components {
       if (newVal > optMax_) {
         newVal = optMax_;
       }
-      optVal_->store(newVal);
+
+      if (ranged_value_setter_) {
+        ranged_value_setter_(newVal);
+      } else {
+        optVal_->store(newVal);
+      }
     }
 
     /**

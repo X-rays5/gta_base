@@ -7,25 +7,24 @@
 #include "base_component.hpp"
 
 namespace base::menu::ui::components {
+  template <typename Func>
   class ExecuteComponent : public BaseComponent {
-  public:
-    using exec_handler = void(*)(ExecuteComponent*);
 
   public:
-    ExecuteComponent(const std::string& name, const exec_handler handler) :
+    ExecuteComponent(const std::string& name, const Func handler) :
       BaseComponent(),
       exec_handler_(handler) {
       left_text_ = name;
     };
 
     virtual void HandleButtonPress(const PressedButton button) override {
-      if (button == PressedButton::kSUBMIT && exec_handler_) {
-        exec_handler_(this);
+      if (button == PressedButton::kSUBMIT) {
+        exec_handler_();
       }
     }
 
   private:
-    exec_handler exec_handler_;
+    Func exec_handler_;
   };
 }
 
