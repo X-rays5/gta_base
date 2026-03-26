@@ -17,7 +17,15 @@ namespace base::common::util {
     RangedValue(T val) : value_(Clamp(val)) {}
 
     operator T() const {
+      return get();
+    }
+
+    T get() const {
       return value_;
+    }
+
+    void set(const T& val) {
+      value_ = Clamp(val);
     }
 
     bool operator==(const T& val) const {
@@ -37,7 +45,7 @@ namespace base::common::util {
     }
 
     RangedValue& operator=(const T& val) {
-      value_ = Clamp(val);
+      set(val);
       return *this;
     }
 
@@ -51,23 +59,10 @@ namespace base::common::util {
 }
 
 namespace glz {
-  template <typename T, T min_val, T max_val>
-  struct meta<base::common::util::RangedValue<T, min_val, max_val>> {
-    using Value = base::common::util::RangedValue<T, min_val, max_val>;
-
-    // Tell glaze to treat RangedValue as its underlying type
-    static constexpr auto value = T{};
-
-    // Conversion functions
-    static constexpr auto to_value = [](auto&& self) -> T {
-      return static_cast<T>(self);
-    };
-
-    // Change the parameter name from "value" to "val" to avoid the conflict
-    static constexpr auto from_value = [](Value& self, T&& val) {
-      self = val;
-      return true;
-    };
+  template <typename RangedValType, RangedValType min_val, RangedValType max_val>
+  struct meta<base::common::util::RangedValue<RangedValType, min_val, max_val>> {
+    using T = base::common::util::RangedValue<RangedValType, min_val, max_val>;
+    static constexpr auto value = custom<&T::set, &T::get>;
   };
 }
 
