@@ -22,8 +22,8 @@ namespace base::menu::options {
     virtual bool IsSavable() const = 0;
 
     virtual void HandleHotkey() = 0;
-    virtual std::string Save() = 0;
-    virtual void Load(const std::string& json) = 0;
+    virtual void Save(glz::generic& data) = 0;
+    virtual void Load(const glz::generic& data) = 0;
 
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) = 0;
 

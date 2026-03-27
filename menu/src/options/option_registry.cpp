@@ -4,6 +4,7 @@
 
 #include "option_registry.hpp"
 #include <base-common/fs/vfs.hpp>
+#include <glaze/toml.hpp>
 #include "../default.hpp"
 
 namespace base::menu::options {
@@ -30,12 +31,21 @@ namespace base::menu::options {
     LOG_INFO("Saving options to profile '{}'", profile_name);
 
     glz::generic save;
+    std::string glz_buff;
 
     common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
     for (auto&& opt : opt_name_to_option_) {
       LOG_INFO("Saving options from file: {}", opt.first);
       if (opt.second->IsSavable()) {
-        save[opt.first] = opt.second->Save();
+        glz::generic opt_data;
+        opt.second->Save(opt_data);
+        const auto ec = glz::write_toml(opt_data, glz_buff);
+        if (ec) {
+          LOG_ERROR("Failed to save options to file: {}", ec);
+          continue;
+        }
+
+        save[opt.first] = glz_buff;
         LOG_DEBUG("Saving option '{}': {}", opt.first, save[opt.first].get_string());
       }
     }
@@ -68,7 +78,7 @@ namespace base::menu::options {
     common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
     for (auto&& opt : opt_name_to_option_) {
       if (opt.second->IsSavable() && save.contains(opt.first)) {
-        opt.second->Load(save[opt.first].get_string());
+        opt.second->Load(save[opt.first]);
       }
     }
 

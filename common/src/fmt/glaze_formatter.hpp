@@ -14,4 +14,18 @@ struct fmt::formatter<glz::error_ctx> : formatter<std::string_view> {
     return formatter<std::string_view>::format(glz::format_error(err, std::string{}), ctx);
   }
 };
+
+template <>
+struct fmt::formatter<glz::generic> : formatter<std::string_view> {
+  template <typename FormatContext>
+  auto format(const glz::generic& gen, FormatContext& ctx) const {
+    auto exp = gen.dump();
+    if (exp.has_value()) {
+      return formatter<std::string_view>::format(exp.value(), ctx);
+    }
+
+    return formatter<std::string_view>::format(fmt::format("{}", exp.error()), ctx);
+  }
+};
+
 #endif //GLAZE_FORMATTER_HPP_04004256

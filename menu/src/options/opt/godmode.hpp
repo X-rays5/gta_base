@@ -14,8 +14,8 @@ namespace base::menu::options {
     virtual bool IsHotkeyAble() const override;
     virtual bool IsSavable() const override;
     virtual void HandleHotkey() override;
-    virtual std::string Save() override;
-    virtual void Load(const std::string& json) override;
+    virtual void Save(glz::generic& data) override;
+    virtual void Load(const glz::generic& data) override;
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;
     virtual bool IsTickable() const override;
     virtual TickThread GetTickThread() const override;

@@ -39,25 +39,15 @@ namespace base::menu::options {
     return TickThread::kGAME_SCRIPT;
   }
 
-  std::string GodModeOption::Save() {
-    std::string res;
-    glz::generic tmp;
-    tmp["enabled"] = enabled_;
-
-    const auto ec = glz::write_toml(tmp, res);
-    LOG_ERROR_CONDITIONAL(ec, "Failed to save godmode option state to JSON: {}", ec);
-    return res;
+  void GodModeOption::Save(glz::generic& data) {
+    data["enabled"] = enabled_;
   }
 
-  void GodModeOption::Load(const std::string& json) {
-    glz::generic tmp;
-    const auto ec = glz::read_toml(tmp, json);
-    LOG_ERROR_CONDITIONAL(ec, "Failed to load godmode option state from JSON: {}, {}", json, ec);
-
-    if (tmp.contains("enabled") && tmp["enabled"].is_boolean()) {
-      enabled_ = tmp["enabled"].get<bool>();
+  void GodModeOption::Load(const glz::generic& data) {
+    if (data.contains("enabled") && data["enabled"].is_boolean()) {
+      enabled_ = data["enabled"].get<bool>();
     } else {
-      LOG_ERROR("Invalid JSON for godmode option state: {}", json);
+      LOG_ERROR("Invalid data for godmode option state: {}", data);
     }
   }
 }
