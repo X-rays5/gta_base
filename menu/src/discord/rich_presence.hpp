@@ -117,6 +117,7 @@ namespace base::menu::discord {
       Activity activity_{};
       std::uint64_t start_time_;
       std::uint64_t last_tick_time_;
+      std::thread tick_thread_;
    };
 
    inline RichPresence* kRICH_PRESENCE{};

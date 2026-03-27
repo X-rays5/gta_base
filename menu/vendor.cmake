@@ -2,7 +2,7 @@ set(PROJECT_NAME_COPY ${PROJECT_NAME})
 set(PROJECT_NAME ${PROJECT_NAME}_core)
 
 include(../vendor/battery_embed.cmake)
-include(../vendor/discord-rpc.cmake)
+include(../vendor/discord-presence.cmake)
 include(../vendor/fmt.cmake)
 include(../vendor/glaze.cmake)
 include(../vendor/imgui.cmake)
