@@ -341,9 +341,11 @@ namespace base::menu::ui {
 
   enum class SubmenuIDs : std::uint32_t {
     kMAIN_MENU = 0,
+    kSELF,
+    kSELF_HEALTH,
     kSETTINGS,
     kLOAD_TRANSLATIONS,
-    kLOAD_SETTINGS,
+    kLOAD_FEATURE_SETTINGS,
     kUNLOAD_CONFIRM,
     kTHEME_SETTINGS,
   };

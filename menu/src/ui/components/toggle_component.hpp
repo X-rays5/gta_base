@@ -9,7 +9,7 @@
 namespace base::menu::ui::components {
   class ToggleComponent final : public BaseComponent {
     public:
-    ToggleComponent(const std::string& name, const std::shared_ptr<std::atomic<bool>>& optState) {
+    ToggleComponent(const std::string& name, std::atomic<bool>* optState) {
       BaseComponent();
       left_text_ = name;
       optState_ = optState;
@@ -30,6 +30,6 @@ namespace base::menu::ui::components {
     }
 
   private:
-    std::shared_ptr<std::atomic<bool>> optState_;
+    std::atomic<bool>* optState_;
   };
 }

@@ -31,7 +31,7 @@ namespace base::menu::script {
   }
 
   void GameTaskExecutor::OnTick() {
-    for (auto& task : tasks_) {
+    for (const auto& task : tasks_) {
       task->Tick();
     }
 

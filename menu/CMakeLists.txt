@@ -99,6 +99,12 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/layout/settings/settings.cpp
         src/ui/layout/settings/settings.hpp
         src/ui/components/components.hpp
+        src/ui/layout/self/self.cpp
+        src/ui/layout/self/self.hpp
+        src/feature/feature_settings.cpp
+        src/feature/feature_settings.hpp
+        src/feature/settings_data.cpp
+        src/feature/settings_data.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

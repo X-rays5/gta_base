@@ -5,6 +5,7 @@
 #include "settings.hpp"
 #include "../../menu_renderer.hpp"
 #include "../../components/components.hpp"
+#include "../../../feature/feature_settings.hpp"
 
 namespace base::menu::ui::layout {
   void ThemeSub() {
@@ -25,6 +26,24 @@ namespace base::menu::ui::layout {
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kTHEME_SETTINGS, std::move(theme_submenu));
   }
 
+  void FeatureSettingsSub() {
+    Submenu feature_submenu("ui/sub/feature_settings", [](Submenu* sub) {
+      sub->AddComponent(components::ExecuteComponent("label/save", [] {
+        if (!feature::kSETTINGS)
+          return;
+
+        auto status = feature::kSETTINGS->Save("default");
+      }));
+      sub->AddComponent(components::ExecuteComponent("label/load", [] {
+        if (!feature::kSETTINGS)
+          return;
+
+        auto status = feature::kSETTINGS->Load("default");
+      }));
+    });
+    kMENU_RENDERER->AddSubmenu(SubmenuIDs::kLOAD_FEATURE_SETTINGS, std::move(feature_submenu));
+  }
+
   void UnloadConfirmSub() {
     Submenu unload_sub("ui/sub/unload", [](Submenu* sub) {
       sub->AddComponent(components::ExecuteComponent("label/confirm", [] {
@@ -42,6 +61,7 @@ namespace base::menu::ui::layout {
   void InitSettingsLayout() {
     Submenu settings_submenu("ui/sub/settings", [](Submenu* sub) {
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kTHEME_SETTINGS));
+      sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kLOAD_FEATURE_SETTINGS));
 #ifndef NDEBUG
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kUNLOAD_CONFIRM));
 #endif
@@ -49,6 +69,7 @@ namespace base::menu::ui::layout {
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kSETTINGS, std::move(settings_submenu));
 
     ThemeSub();
+    FeatureSettingsSub();
 
 #ifndef NDEBUG
     UnloadConfirmSub();

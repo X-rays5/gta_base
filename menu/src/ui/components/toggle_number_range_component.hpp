@@ -13,8 +13,8 @@ namespace base::menu::ui::components {
   public:
     using BaseComponent::PressedButton;
 
-    ToggleNumberRangeComponent(const std::string& name, std::shared_ptr<std::atomic<T>> optVal, const T& optMin, const T& optMax,
-                               const T& optStep, const std::shared_ptr<std::atomic<bool>>& toggle_state)
+    ToggleNumberRangeComponent(const std::string& name, std::atomic<T>* optVal, const T& optMin, const T& optMax,
+                               const T& optStep, std::atomic<bool>* toggle_state)
         : BaseRangeComponent<T>(name, optVal, optMin, optMax, optStep), toggle_state_(toggle_state) {
     }
 
@@ -36,7 +36,7 @@ namespace base::menu::ui::components {
     }
 
   private:
-    std::shared_ptr<std::atomic<bool>> toggle_state_;
+    std::atomic<bool>* toggle_state_;
   };
 }
 

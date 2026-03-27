@@ -14,18 +14,11 @@
 #include "render/renderer.hpp"
 #include "script/script_manager.hpp"
 #include "ui/menu_renderer.hpp"
-#include "ui/components/execute_component.hpp"
-#include "ui/components/label_component.hpp"
-#include "ui/components/sub_link_component.hpp"
-#include "ui/components/toggle_component.hpp"
-#include "ui/components/number_range_component.hpp"
-#include "ui/components/list_component.hpp"
-#include "ui/components/toggle_list_component.hpp"
-#include "ui/components/toggle_number_range_component.hpp"
 #include "ui/localization/manager.hpp"
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
 #include "util/key_input/key_event_listener.hpp"
+#include "feature/feature_settings.hpp"
 
 std::atomic_bool base::menu::globals::kRUNNING = true;
 
@@ -42,6 +35,7 @@ namespace base::menu {
     std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
+    std::unique_ptr<feature::Settings> settings_inst;
 
     void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptManager", script_manager_inst);
@@ -55,6 +49,7 @@ namespace base::menu {
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DiscordRichPresence", discord_rich_presence_inst);
       render::Renderer::RendererLifeTime(render_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "MenuRenderer", menu_renderer_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "FeatureSettings", settings_inst);
     }
   }
 }

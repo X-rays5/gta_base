@@ -5,9 +5,15 @@
 #include "feature_loop.hpp"
 #include "../natives/natives_gen9.hpp"
 #include "../ui/menu_renderer.hpp"
+#include "feature_settings.hpp"
 
 namespace base::menu::feature {
   namespace {
+    thread_local natives::Player player_id;
+    thread_local natives::Ped player_ped;
+    thread_local bool is_player_in_vehicle;
+    thread_local natives::Vehicle player_vehicle;
+
     void DisableGameUIInteractWhenMenuOpened() {
       if (ui::kMENU_RENDERER->IsMenuOpened()) {
         natives::PAD::DISABLE_CONTROL_ACTION(0, 18, false); // INPUT_SKIP_CUTSCENE
@@ -33,6 +39,30 @@ namespace base::menu::feature {
         natives::PAD::DISABLE_CONTROL_ACTION(0, 308, false); // INPUT_REPLAY_BACK
       }
     }
+
+    void SelfHealth() {
+      const auto settings = kSETTINGS->getSettings().lock();
+      if (settings->self.health.god_mode) {
+        natives::ENTITY::SET_ENTITY_INVINCIBLE(player_ped, true, false);
+      } else if (settings->self.health.semi_god_mode) {
+        natives::ENTITY::SET_ENTITY_HEALTH(player_ped, natives::ENTITY::GET_ENTITY_MAX_HEALTH(player_ped), player_ped, NULL);
+      } else {
+        natives::ENTITY::SET_ENTITY_INVINCIBLE(player_ped, false, false);
+      }
+    }
+
+    void SelfOptions() {
+      SelfHealth();
+
+      const auto settings = kSETTINGS->getSettings().lock();
+      if (settings->self.force_wanted_level) {
+        natives::PLAYER::SET_PLAYER_WANTED_LEVEL(player_id, settings->self.wanted_level_force.load(), false);
+        natives::PLAYER::SET_PLAYER_WANTED_LEVEL_NOW(player_id, false);
+      } else if (settings->self.never_wanted) {
+        natives::PLAYER::CLEAR_PLAYER_WANTED_LEVEL(player_id);
+        natives::PLAYER::SUPPRESS_WITNESSES_CALLING_POLICE_THIS_FRAME(player_id);
+      }
+    }
   }
 
   GameFeatureLoop::GameFeatureLoop() : ScriptBase{"GameFeatureLoop"} {}
@@ -42,8 +72,22 @@ namespace base::menu::feature {
   }
 
   void GameFeatureLoop::OnTick() {
+    player_id = natives::PLAYER::PLAYER_ID();
+    player_ped = natives::PLAYER::PLAYER_PED_ID();
+    is_player_in_vehicle = natives::PED::IS_PED_IN_ANY_VEHICLE(player_ped, false);
+    if (is_player_in_vehicle) {
+      player_vehicle = natives::PED::GET_VEHICLE_PED_IS_IN(player_ped, false);
+    } else {
+      player_vehicle = 0;
+    }
+
     if (ui::kMENU_RENDERER) {
       DisableGameUIInteractWhenMenuOpened();
     }
+
+    if (kSETTINGS == nullptr)
+      return;
+
+    SelfOptions();
   }
 }

@@ -16,7 +16,7 @@ namespace base::menu::ui::components {
    requires std::is_integral_v<T> or std::is_floating_point_v<T>
   class BaseRangeComponent : public BaseComponent {
   protected:
-    std::shared_ptr<std::atomic<T>> optVal_;
+    std::atomic<T>* optVal_;
     std::function<T()> ranged_value_getter_;  // Callback to get current value from RangedValue
     std::function<void(T)> ranged_value_setter_;  // Callback to set value in RangedValue
     const T optMin_;
@@ -24,7 +24,7 @@ namespace base::menu::ui::components {
     const T optStep_;
 
   public:
-    BaseRangeComponent(const std::string& name, std::shared_ptr<std::atomic<T>> optVal, const T& optMin, const T& optMax, const T& optStep)
+    BaseRangeComponent(const std::string& name, std::atomic<T>* optVal, const T& optMin, const T& optMax, const T& optStep)
         : optVal_(optVal), optMin_(optMin), optMax_(optMax), optStep_(optStep) {
       left_text_ = name;
     }

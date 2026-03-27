@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 #include "script_base.hpp"
+#include "../natives/natives_gen9.hpp"
 
 #undef Yield
 
@@ -15,6 +16,8 @@ namespace base::menu::script {
   public:
     class GameTask {
     public:
+      friend class GameTaskExecutor;
+
       explicit GameTask(LPVOID main_fiber, const std::function<void(GameTask* task)>& cb);
       ~GameTask();
 
@@ -23,12 +26,15 @@ namespace base::menu::script {
       GameTask& operator=(const GameTask&) = delete;
       GameTask& operator=(GameTask&&) = delete;
 
-      void Tick() const;
+
       void Yield();
       void Yield(std::chrono::milliseconds duration);
 
       bool IsDone() const;
       std::future<void> GetFuture() const;
+
+    protected:
+      void Tick() const;
 
     private:
       std::function<void(GameTask* task)> cb_;
