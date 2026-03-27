@@ -89,6 +89,10 @@ namespace base::common::concurrency {
       lock_.Unlock();
     }
 
+    void Unlock() noexcept {
+      lock_.Unlock();
+    }
+
   private:
     T& lock_;
   };
