@@ -10,6 +10,7 @@ namespace base::menu::options {
   class BaseOption : public BaseCommand {
   public:
     enum class TickThread {
+      kNONE,
       kGAME_SCRIPT
     };
 
@@ -18,17 +19,42 @@ namespace base::menu::options {
     BaseOption(const std::string& name, const std::string& description) : BaseCommand(name, description) {}
     ~BaseOption() override = default;
 
-    virtual bool IsHotkeyAble() const = 0;
-    virtual bool IsSavable() const = 0;
+    virtual bool IsHotkeyAble() const {
+      return false;
+    }
 
-    virtual void HandleHotkey() = 0;
-    virtual void Save(glz::generic& data) = 0;
-    virtual void Load(const glz::generic& data) = 0;
+    virtual bool IsSavable() const {
+      return false;
+    }
+
+    virtual void HandleHotkey() {
+      if (IsHotkeyAble()) {
+        LOG_ERROR("HandleHotkey called on option {} which is does not have a hotkey handler", GetName());
+      }
+    }
+
+    virtual void Save(glz::generic&) {
+      if (IsSavable()) {
+        LOG_ERROR("Save called on option {} which is not savable", GetName());
+      }
+    }
+
+    virtual void Load(const glz::generic&) {
+      if (IsSavable()) {
+        LOG_ERROR("Load called on option {} which is not savable", GetName());
+      }
+    }
 
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) = 0;
 
     virtual void Tick() {}
-    virtual bool IsTickable() const = 0;
-    virtual TickThread GetTickThread() const = 0;
+
+    virtual bool IsTickable() const {
+      return false;
+    }
+
+    virtual TickThread GetTickThread() const {
+      return TickThread::kNONE;
+    }
   };
 }

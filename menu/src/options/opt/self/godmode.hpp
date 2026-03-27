@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "../base_option.hpp"
+#include "../../base_option.hpp"
 
 namespace base::menu::options {
   class GodModeOption final : public BaseOption {

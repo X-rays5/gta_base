@@ -5,7 +5,6 @@
 #include "settings.hpp"
 #include "../../menu_renderer.hpp"
 #include "../../components/components.hpp"
-#include "../../../feature/feature_settings.hpp"
 #include "../../../options/option_registry.hpp"
 
 namespace base::menu::ui::layout {
@@ -14,35 +13,27 @@ namespace base::menu::ui::layout {
     auto menuTheme = kMENU_RENDERER->GetTheme();
 
     Submenu theme_submenu("ui/sub/theme", [menuTheme] (Submenu* sub) {
-      sub->AddComponent(components::ExecuteComponent("label/save", [menuTheme] {
+      sub->AddComponent(components::ExecuteComponent("label/save", "", [menuTheme] {
         auto res = menuTheme->Save("default");
       }));
-      sub->AddComponent(components::ExecuteComponent("label/load", [menuTheme] {
+      sub->AddComponent(components::ExecuteComponent("label/load", "", [menuTheme] {
         auto res = menuTheme->Load("default");
       }));
       // Pass references directly to theme member variables so changes affect the actual theme object
-      sub->AddComponent(components::NumberRangeComponent("ui/option/ui_x_pos", menuTheme->x_position, 0.005F));
-      sub->AddComponent(components::NumberRangeComponent("ui/option/ui_y_pos", menuTheme->y_position, 0.005F));
+      sub->AddComponent(components::NumberRangeComponent("ui/option/ui_x_pos", "", menuTheme->x_position, 0.005F));
+      sub->AddComponent(components::NumberRangeComponent("ui/option/ui_y_pos", "", menuTheme->y_position, 0.005F));
     });
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kTHEME_SETTINGS, std::move(theme_submenu));
   }
 
   void FeatureSettingsSub() {
     Submenu feature_submenu("ui/sub/feature_settings", [](Submenu* sub) {
-      sub->AddComponent(components::ExecuteComponent("label/save", [] {
-        if (!feature::kSETTINGS)
-          return;
-
-        auto status = feature::kSETTINGS->Save("default");
+      sub->AddComponent(components::ExecuteComponent("label/save", "", [] {
         if (options::kOPTION_REGISTRY) {
           auto stat = options::kOPTION_REGISTRY->SaveOptions("default");
         }
       }));
-      sub->AddComponent(components::ExecuteComponent("label/load", [] {
-        if (!feature::kSETTINGS)
-          return;
-
-        auto status = feature::kSETTINGS->Load("default");
+      sub->AddComponent(components::ExecuteComponent("label/load", "", [] {
         if (options::kOPTION_REGISTRY) {
           auto stat = options::kOPTION_REGISTRY->LoadOptions("default");
         }
@@ -53,10 +44,10 @@ namespace base::menu::ui::layout {
 
   void UnloadConfirmSub() {
     Submenu unload_sub("ui/sub/unload", [](Submenu* sub) {
-      sub->AddComponent(components::ExecuteComponent("label/confirm", [] {
+      sub->AddComponent(components::ExecuteComponent("label/confirm", "", [] {
         globals::kRUNNING = false;
       }));
-      sub->AddComponent(components::ExecuteComponent("label/cancel", [] {
+      sub->AddComponent(components::ExecuteComponent("label/cancel", "", [] {
         if (kMENU_RENDERER) {
           kMENU_RENDERER->PopSubmenu();
         }

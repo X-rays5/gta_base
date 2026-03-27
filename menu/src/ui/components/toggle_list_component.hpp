@@ -9,9 +9,9 @@
 namespace base::menu::ui::components {
   class ToggleListComponent final : public BaseListComponent {
   public:
-    ToggleListComponent(const std::string& name, const std::shared_ptr<std::vector<std::string>>& items,
+    ToggleListComponent(const std::string& name, const std::string& description, const std::shared_ptr<std::vector<std::string>>& items,
                         const std::shared_ptr<std::atomic<std::size_t>>& selected_index, const std::shared_ptr<std::atomic<bool>>& toggle_state)
-        : BaseListComponent(name, items, selected_index), toggle_state_(toggle_state) {
+        : BaseListComponent(name, description, items, selected_index), toggle_state_(toggle_state) {
     }
 
     virtual std::string GetRightText() const override {

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <argparse/argparse.hpp>
+#include "../ui/localization/manager.hpp"
 
 namespace base::menu::options {
   class BaseCommand {
@@ -29,7 +30,11 @@ namespace base::menu::options {
       return name_;
     }
 
-    virtual std::string GetDescription() const {
+    std::string GetDescription() const {
+      return ui::localization::kMANAGER->Localize(description_);
+    }
+
+    std::string GetDescriptionRaw() const {
       return description_;
     }
 

@@ -17,10 +17,11 @@ namespace base::menu::ui::components {
     std::shared_ptr<std::atomic<std::size_t>> selected_index_;
 
   public:
-    BaseListComponent(const std::string& name, const std::shared_ptr<std::vector<std::string>>& items,
+    BaseListComponent(const std::string& name, const std::string& description, const std::shared_ptr<std::vector<std::string>>& items,
                       const std::shared_ptr<std::atomic<std::size_t>>& selected_index)
         : items_(items), selected_index_(selected_index) {
       left_text_ = name;
+      description_ = description;
     }
 
     virtual ~BaseListComponent() = default;

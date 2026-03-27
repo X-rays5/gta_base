@@ -9,8 +9,8 @@
 namespace base::menu::ui::components {
   class ListComponent final : public BaseListComponent {
   public:
-    ListComponent(const std::string& name, const std::shared_ptr<std::vector<std::string>>& items, const std::shared_ptr<std::atomic<std::size_t>>& selected_index)
-        : BaseListComponent(name, items, selected_index) {
+    ListComponent(const std::string& name, const std::string& description, const std::shared_ptr<std::vector<std::string>>& items, const std::shared_ptr<std::atomic<std::size_t>>& selected_index)
+        : BaseListComponent(name, description, items, selected_index) {
     }
 
     virtual std::string GetRightText() const override {

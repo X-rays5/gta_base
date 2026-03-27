@@ -13,10 +13,11 @@ namespace base::menu::ui::components {
   class ExecuteComponent : public BaseComponent {
 
   public:
-    ExecuteComponent(const std::string& name, const Func handler) :
+    ExecuteComponent(const std::string& name, const std::string& description, const Func handler) :
       BaseComponent(),
       exec_handler_(handler) {
       left_text_ = name;
+      description_ = description;
     };
 
     virtual void HandleButtonPress(const PressedButton button) override {

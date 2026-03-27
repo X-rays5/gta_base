@@ -101,22 +101,34 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/components/components.hpp
         src/ui/layout/self/self.cpp
         src/ui/layout/self/self.hpp
-        src/feature/feature_settings.cpp
-        src/feature/feature_settings.hpp
-        src/feature/settings_data.cpp
-        src/feature/settings_data.hpp
         src/ui/layout/vehicle/vehicle.cpp
         src/ui/layout/vehicle/vehicle.hpp
         src/options/base_command.hpp
         src/options/base_option.hpp
-        src/options/opt/godmode.hpp
-        src/options/opt/godmode.cpp
+        src/options/opt/self/godmode.hpp
+        src/options/opt/self/godmode.cpp
         src/options/option_registry.cpp
         src/options/option_registry.hpp
         src/options/options.cpp
         src/options/options.hpp
         src/default.cpp
         src/default.hpp
+        src/options/opt/self/semi_godmode.cpp
+        src/options/opt/self/semi_godmode.hpp
+        src/options/opt/self/self_heal.cpp
+        src/options/opt/self/self_heal.hpp
+        src/options/opt/self/suicide.cpp
+        src/options/opt/self/suicide.hpp
+        src/options/opt/self/self_max_armour.cpp
+        src/options/opt/self/self_max_armour.hpp
+        src/options/opt/self/self_remove_armour.cpp
+        src/options/opt/self/self_remove_armour.hpp
+        src/options/opt/self/force_wanted_level.cpp
+        src/options/opt/self/force_wanted_level.hpp
+        src/options/opt/self/never_wanted.cpp
+        src/options/opt/self/never_wanted.hpp
+        src/options/opt/vehicle/vehicle_repair.cpp
+        src/options/opt/vehicle/vehicle_repair.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

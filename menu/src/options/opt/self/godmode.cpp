@@ -3,12 +3,11 @@
 //
 
 #include "godmode.hpp"
-#include "../../natives/natives_gen9.hpp"
-#include <glaze/toml.hpp>
+#include "../../../natives/natives_gen9.hpp"
 
 namespace base::menu::options {
   void GodModeOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    sub->AddComponent(ui::components::ToggleComponent(label, &enabled_));
+    sub->AddComponent(ui::components::ToggleComponent(label, GetDescriptionRaw(), &enabled_));
   }
 
   void GodModeOption::execute(std::shared_ptr<argparse::ArgumentParser>) {

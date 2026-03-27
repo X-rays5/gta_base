@@ -14,19 +14,19 @@ namespace base::menu::ui::components {
     std::shared_ptr<std::atomic<T>> shared_atomic_;  // Keep shared_ptr alive for managed lifetime
 
   public:
-    NumberRangeComponent(const std::string& name, std::shared_ptr<std::atomic<T>> optVal, const T& optMin, const T& optMax, const T& optStep)
-        : BaseRangeComponent<T>(name, optVal.get(), optMin, optMax, optStep), shared_atomic_(optVal) {
+    NumberRangeComponent(const std::string& name, const std::string& description, std::shared_ptr<std::atomic<T>> optVal, const T& optMin, const T& optMax, const T& optStep)
+        : BaseRangeComponent<T>(name, description, optVal.get(), optMin, optMax, optStep), shared_atomic_(optVal) {
     }
 
-    NumberRangeComponent(const std::string& name, T& optVal, const T& optMin, const T& optMax, const T& optStep)
+    NumberRangeComponent(const std::string& name, const std::string& description, T& optVal, const T& optMin, const T& optMax, const T& optStep)
         : shared_atomic_(std::make_shared<std::atomic<T>>(optVal)),
-          BaseRangeComponent<T>(name, shared_atomic_.get(), optMin, optMax, optStep) {
+          BaseRangeComponent<T>(name, description, shared_atomic_.get(), optMin, optMax, optStep) {
     }
 
     template <T min_val, T max_val>
-    NumberRangeComponent(const std::string& name, common::util::RangedValue<T, min_val, max_val>& optVal, const T& optStep = static_cast<T>(1))
+    NumberRangeComponent(const std::string& name, const std::string& description, common::util::RangedValue<T, min_val, max_val>& optVal, const T& optStep = static_cast<T>(1))
         : shared_atomic_(std::make_shared<std::atomic<T>>(static_cast<T>(optVal))),
-          BaseRangeComponent<T>(name, shared_atomic_.get(), min_val, max_val, optStep) {
+          BaseRangeComponent<T>(name, description, shared_atomic_.get(), min_val, max_val, optStep) {
       // Store pointer to actual RangedValue for direct modification
       this->SetRangedValuePtr(&optVal);
     }

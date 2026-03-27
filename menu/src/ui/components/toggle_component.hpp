@@ -9,9 +9,10 @@
 namespace base::menu::ui::components {
   class ToggleComponent final : public BaseComponent {
     public:
-    ToggleComponent(const std::string& name, std::atomic<bool>* optState) {
+    ToggleComponent(const std::string& name, const std::string& description, std::atomic<bool>* optState) {
       BaseComponent();
       left_text_ = name;
+      description_ = description;
       optState_ = optState;
     }
 

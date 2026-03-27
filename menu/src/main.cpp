@@ -18,7 +18,6 @@
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
 #include "util/key_input/key_event_listener.hpp"
-#include "feature/feature_settings.hpp"
 #include "default.hpp"
 #include "options/option_registry.hpp"
 
@@ -39,7 +38,6 @@ namespace base::menu {
     std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
-    std::unique_ptr<feature::Settings> settings_inst;
 
     void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DefaultProfiles", default_profiles_inst);
@@ -55,7 +53,6 @@ namespace base::menu {
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DiscordRichPresence", discord_rich_presence_inst);
       render::Renderer::RendererLifeTime(render_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "MenuRenderer", menu_renderer_inst);
-      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "FeatureSettings", settings_inst);
     }
   }
 }

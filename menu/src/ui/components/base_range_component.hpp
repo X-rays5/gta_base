@@ -24,9 +24,10 @@ namespace base::menu::ui::components {
     const T optStep_;
 
   public:
-    BaseRangeComponent(const std::string& name, std::atomic<T>* optVal, const T& optMin, const T& optMax, const T& optStep)
+    BaseRangeComponent(const std::string& name, const std::string& description, std::atomic<T>* optVal, const T& optMin, const T& optMax, const T& optStep)
         : optVal_(optVal), optMin_(optMin), optMax_(optMax), optStep_(optStep) {
       left_text_ = name;
+      description_ = description;
     }
 
     virtual ~BaseRangeComponent() = default;

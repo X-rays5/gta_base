@@ -43,6 +43,14 @@ namespace base::menu::ui::components {
       return !GetRightText().empty();
     }
 
+    virtual std::string GetDescription() const {
+      return localization::kMANAGER->Localize(description_);
+    }
+
+    virtual bool HasDescription() const {
+      return !GetDescription().empty();
+    }
+
     virtual void HandleButtonPress(PressedButton) {}
 
     virtual bool HasFlag(const Flags flag) const {
@@ -53,6 +61,7 @@ namespace base::menu::ui::components {
     std::string left_text_;
     std::string center_text_;
     std::string right_text_;
+    std::string description_;
     Flags flags_ = Flags::None;
   };
 }

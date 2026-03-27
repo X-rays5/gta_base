@@ -13,9 +13,9 @@ namespace base::menu::ui::components {
   public:
     using BaseComponent::PressedButton;
 
-    ToggleNumberRangeComponent(const std::string& name, std::atomic<T>* optVal, const T& optMin, const T& optMax,
+    ToggleNumberRangeComponent(const std::string& name, const std::string& description, std::atomic<T>* optVal, const T& optMin, const T& optMax,
                                const T& optStep, std::atomic<bool>* toggle_state)
-        : BaseRangeComponent<T>(name, optVal, optMin, optMax, optStep), toggle_state_(toggle_state) {
+        : BaseRangeComponent<T>(name, description, optVal, optMin, optMax, optStep), toggle_state_(toggle_state) {
     }
 
     virtual std::string GetRightText() const override {

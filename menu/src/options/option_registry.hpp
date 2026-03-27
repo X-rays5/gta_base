@@ -34,6 +34,16 @@ namespace base::menu::options {
       return available_options_;
     }
 
+    std::vector<std::shared_ptr<BaseOption>> GetAllOptions() {
+      common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
+      std::vector<std::shared_ptr<BaseOption>> options;
+      options.reserve(opt_name_to_option_.size());
+      for (const auto& val : opt_name_to_option_ | std::views::values) {
+        options.push_back(val);
+      }
+      return options;
+    }
+
     Status SaveOptions(const std::string& profile_name);
     Status LoadOptions(const std::string& profile_name);
 

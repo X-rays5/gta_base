@@ -13,7 +13,7 @@ namespace base::menu::ui::components {
   class SubLinkComponent final : public BaseComponent {
   public:
     explicit SubLinkComponent(const std::string& navigate_to) : BaseComponent(), navigation_link_(navigate_to) {
-      auto sub = kMENU_RENDERER->GetSubmenu(navigate_to);
+      const auto sub = kMENU_RENDERER->GetSubmenu(navigate_to);
       if (sub) {
         left_text_ = sub->GetName();
       } else {
