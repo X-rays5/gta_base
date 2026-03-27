@@ -4,12 +4,12 @@
 
 #include "manager.hpp"
 #include <base-common/fs/vfs.hpp>
-#include <glaze/glaze.hpp>
+#include <glaze/toml.hpp>
 
 namespace base::menu::ui::localization {
     namespace {
         std::string GetProfilePath(const std::string& name) {
-            return fmt::format("{}/{}.json", common::fs::vfs::GetTranslationDir(), name);
+            return fmt::format("{}/{}.toml", common::fs::vfs::GetTranslationDir(), name);
         }
     }
 
@@ -24,7 +24,7 @@ namespace base::menu::ui::localization {
             profile_path = GetProfilePath("default");
         }
 
-        if (const auto ec = glz::read_file_json(tmp_translation, profile_path, json_buffer)) {
+        if (const auto ec = glz::read_file_toml(tmp_translation, profile_path, json_buffer)) {
             return MakeFailure<ResultCode::kIO_ERROR>(glz::format_error(ec, json_buffer));
         }
 
@@ -37,7 +37,7 @@ namespace base::menu::ui::localization {
     }
 
     Status Translation::Save(const std::string& name) {
-        if (const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(loaded_translation_, GetProfilePath(name), std::string{})) {
+        if (const auto ec = glz::write_file_toml<glz::opts{.prettify = true}>(loaded_translation_, GetProfilePath(name), std::string{})) {
             return MakeFailure<ResultCode::kIO_ERROR>(std::string(magic_enum::enum_name(ec.ec)));
         }
 
@@ -62,7 +62,7 @@ namespace base::menu::ui::localization {
     }
 
     void Translation::WriteDefaultTranslation() {
-        if (const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(default_translation, GetProfilePath("default"), std::string{})) {
+        if (const auto ec = glz::write_file_toml<glz::opts{.prettify = true}>(default_translation, GetProfilePath("default"), std::string{})) {
             LOG_ERROR("Failed to write default translation to disk: {}", magic_enum::enum_name(ec.ec));
         }
     }
