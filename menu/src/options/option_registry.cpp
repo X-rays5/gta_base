@@ -51,7 +51,7 @@ namespace base::menu::options {
     }
     lock.Unlock();
 
-    const auto ec = glz::write_file_json(save, GetSettingsFilePath(profile_name).string(), std::string{});
+    const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(save, GetSettingsFilePath(profile_name).string(), std::string{});
     if (ec) {
       LOG_ERROR("Failed to save options to file: {}", ec);
       return MakeFailure<ResultCode::kIO_ERROR>("Failed to save options to file: {}", ec);

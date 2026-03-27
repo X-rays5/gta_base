@@ -4,6 +4,7 @@
 
 #include "menu_renderer.hpp"
 
+#include <sstream>
 #include "../render/animate.hpp"
 #include "../render/renderer.hpp"
 #include "components/label_component.hpp"
@@ -71,7 +72,12 @@ namespace base::menu::ui {
     }
 
     y_offset = DrawComponents(draw_queue, top_bar_y_offset, submenu.get(), components, y_offset);
-    DrawBottomBar(draw_queue, submenu->GetName(), submenu->GetCurrentOptionIndexForDisplay(), submenu->GetOptionCountForDisplay(), y_offset);
+    y_offset = DrawBottomBar(draw_queue, submenu->GetName(), submenu->GetCurrentOptionIndexForDisplay(), submenu->GetOptionCountForDisplay(), y_offset);
+    
+    constexpr std::float_t info_box_spacing = 0.01f;
+    y_offset += info_box_spacing;
+
+    DrawInfoBox(draw_queue, submenu.get(), y_offset);
   }
 
   std::float_t MenuRenderer::DrawTopBar(render::DrawQueueBuffer* draw_queue, std::float_t y_offset) {
@@ -245,6 +251,60 @@ namespace base::menu::ui {
   std::float_t MenuRenderer::GetMenuCenterX() const {
     static const std::float_t center_x = ui_props_.theme->x_position + ui_props_.menu_width / 2;
     return center_x;
+  }
+
+  std::float_t MenuRenderer::DrawInfoBox(render::DrawQueueBuffer* draw_queue, const Submenu* submenu, std::float_t y_offset) {
+    if (!draw_queue || !submenu || submenu->GetComponents().empty()) {
+      return y_offset;
+    }
+
+    const auto current_component = submenu->GetCurrentComponent();
+    if (!current_component || !current_component->HasDescription()) {
+      return y_offset;
+    }
+
+    const std::string description = current_component->GetDescription();
+    if (description.empty()) {
+      return y_offset;
+    }
+
+    // Split description into lines and limit to max 2 lines
+    std::vector<std::string> description_lines;
+    std::stringstream ss(description);
+    std::string line;
+
+    constexpr std::size_t max_description_lines = 2;
+    std::size_t line_count = 0;
+    while (std::getline(ss, line) && line_count < max_description_lines) {
+      if (!line.empty()) {
+        description_lines.push_back(line);
+        line_count++;
+      }
+    }
+
+    if (description_lines.empty()) {
+      return y_offset;
+    }
+
+    // Calculate the height needed for the info box (one line per description line)
+    const std::float_t line_height = ui_props_.menu_item_height;
+    const std::float_t info_box_height = line_height * static_cast<std::float_t>(description_lines.size());
+
+    // Draw the background box with border for visibility as a floating element
+    draw_queue->AddCommand(render::Rect({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, info_box_height}, ui_props_.theme->background_color));
+    draw_queue->AddCommand(render::RectBorder({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, info_box_height}, ui_props_.theme->background_color, ui_props_.theme->seperator_color, false, false, true, true, ui_props_.seperator_height));
+
+    // Draw each line of the description
+    const std::float_t text_x_pos = ui_props_.theme->x_position + ui_props_.theme->text_props.x_margin;
+    std::float_t current_y = y_offset;
+
+    for (const auto& desc_line : description_lines) {
+      const std::float_t text_y_pos = current_y + line_height / 2;
+      draw_queue->AddCommand(render::Text({text_x_pos, text_y_pos}, ui_props_.theme->text_props.sec_text_color, desc_line, ui_props_.theme->text_props.font_size, false, false, true));
+      current_y += line_height;
+    }
+
+    return current_y;
   }
 
 }
