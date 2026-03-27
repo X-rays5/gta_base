@@ -6,6 +6,7 @@
 #include "../../../feature/feature_settings.hpp"
 #include "../../../script/game_task_executor.hpp"
 #include "../../components/components.hpp"
+#include "../../../options/option_registry.hpp"
 
 namespace base::menu::ui::layout {
   void InitHealthSub() {
@@ -15,7 +16,9 @@ namespace base::menu::ui::layout {
 
       const auto settings = feature::kSETTINGS->getSettings().lock();
 
-      sub->AddComponent(components::ToggleComponent("ui/option/self_godmode", &settings->self.health.god_mode));
+      if (options::kOPTION_REGISTRY) {
+        options::kOPTION_REGISTRY->options().lock()->god_mode_option->CreateOptionUi("ui/option/self_godmode", sub);
+      }
       sub->AddComponent(components::ToggleComponent("ui/option/self_semigodmode", &settings->self.health.semi_god_mode));
       sub->AddComponent(components::ExecuteComponent("ui/action/self_heal", [] {
         script::kGAME_TASK_EXECUTOR->QueueTask([](script::GameTaskExecutor::GameTask*) {

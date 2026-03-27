@@ -4,10 +4,6 @@
 
 #pragma once
 
-namespace base::menu::ui {
-  class Submenu;
-}
-
 namespace base::menu::ui::layout {
   void InitSettingsLayout();
 }

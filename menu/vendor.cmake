@@ -15,5 +15,6 @@ include(../vendor/spdlog.cmake)
 include(../vendor/unordered_dense.cmake)
 include(../vendor/xorstr.cmake)
 include(../vendor/ctninja.cmake)
+include(../vendor/argparse.cmake)
 
 set(PROJECT_NAME ${PROJECT_NAME_COPY})

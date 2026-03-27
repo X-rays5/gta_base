@@ -6,6 +6,7 @@
 #include "../../menu_renderer.hpp"
 #include "../../components/components.hpp"
 #include "../../../feature/feature_settings.hpp"
+#include "../../../options/option_registry.hpp"
 
 namespace base::menu::ui::layout {
   void ThemeSub() {
@@ -33,12 +34,18 @@ namespace base::menu::ui::layout {
           return;
 
         auto status = feature::kSETTINGS->Save("default");
+        if (options::kOPTION_REGISTRY) {
+          auto stat = options::kOPTION_REGISTRY->SaveOptions("default");
+        }
       }));
       sub->AddComponent(components::ExecuteComponent("label/load", [] {
         if (!feature::kSETTINGS)
           return;
 
         auto status = feature::kSETTINGS->Load("default");
+        if (options::kOPTION_REGISTRY) {
+          auto stat = options::kOPTION_REGISTRY->LoadOptions("default");
+        }
       }));
     });
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kLOAD_FEATURE_SETTINGS, std::move(feature_submenu));

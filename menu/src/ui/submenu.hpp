@@ -343,6 +343,7 @@ namespace base::menu::ui {
     kMAIN_MENU = 0,
     kSELF,
     kSELF_HEALTH,
+    kVEHICLE,
     kSETTINGS,
     kLOAD_TRANSLATIONS,
     kLOAD_FEATURE_SETTINGS,

@@ -105,6 +105,18 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/feature/feature_settings.hpp
         src/feature/settings_data.cpp
         src/feature/settings_data.hpp
+        src/ui/layout/vehicle/vehicle.cpp
+        src/ui/layout/vehicle/vehicle.hpp
+        src/options/base_command.hpp
+        src/options/base_option.hpp
+        src/options/opt/godmode.hpp
+        src/options/opt/godmode.cpp
+        src/options/option_registry.cpp
+        src/options/option_registry.hpp
+        src/options/options.cpp
+        src/options/options.hpp
+        src/default.cpp
+        src/default.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
