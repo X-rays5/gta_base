@@ -4,7 +4,6 @@
 
 #ifndef ANIMATE_HPP_05193205
 #define ANIMATE_HPP_05193205
-#include <tweeny.h>
 
 namespace base::render::animate {
   template <typename T>

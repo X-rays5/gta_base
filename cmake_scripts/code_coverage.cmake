@@ -23,17 +23,16 @@ function(add_combined_coverage_target TARGET_NAME OUTPUT_DIR)
         # Use generator expression to get the actual executable path
         set(TEST_EXE_PATH "$<TARGET_FILE:${TEST_TARGET}>")
 
-        # Use file(GENERATE) for proper path expansion of generator expressions
-        set(TEST_CMD_FILE "${CMAKE_BINARY_DIR}/run_${TEST_TARGET}.cmake")
+        # Create a unique output file per config to avoid multi-config issues
+        set(TEST_CMD_FILE "${CMAKE_BINARY_DIR}/run_${TEST_TARGET}_$<CONFIG>.cmake")
         file(GENERATE
                 OUTPUT "${TEST_CMD_FILE}"
                 CONTENT "file(APPEND \"${BATCH_FILE}\" \"\\\"${TEST_EXE_PATH}\\\"\\r\\nif %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%\\r\\n\")"
-                CONDITION $<TARGET_EXISTS:${TEST_TARGET}>
         )
 
         # Process the generated file during build time
         add_custom_command(
-                OUTPUT "${CMAKE_BINARY_DIR}/run_${TEST_TARGET}.stamp"
+                OUTPUT "${CMAKE_BINARY_DIR}/run_${TEST_TARGET}_$<CONFIG>.stamp"
                 COMMAND ${CMAKE_COMMAND} -P "${TEST_CMD_FILE}"
                 DEPENDS ${TEST_TARGET}
                 COMMENT "Adding ${TEST_TARGET} to test batch file"
@@ -41,7 +40,7 @@ function(add_combined_coverage_target TARGET_NAME OUTPUT_DIR)
         )
 
         # Add the stamp file as a dependency
-        set(STAMP_FILES ${STAMP_FILES} "${CMAKE_BINARY_DIR}/run_${TEST_TARGET}.stamp")
+        set(STAMP_FILES ${STAMP_FILES} "${CMAKE_BINARY_DIR}/run_${TEST_TARGET}_$<CONFIG>.stamp")
     endforeach ()
 
     # Create a custom target to generate the batch file
