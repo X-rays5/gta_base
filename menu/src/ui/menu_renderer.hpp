@@ -12,6 +12,7 @@
 #include "theme.hpp"
 #include "../render/animate.hpp"
 #include "../util/key_input/key_state.hpp"
+#include "../util/input/mouse_input_listener.hpp"
 #include "components/label_component.hpp"
 
 namespace base::menu::render {
@@ -19,7 +20,7 @@ namespace base::menu::render {
 }
 
 namespace base::menu::ui {
-  class MenuRenderer final {
+  class MenuRenderer final : public util::input::MouseInputListener {
   public:
     MenuRenderer();
     ~MenuRenderer();
@@ -139,7 +140,11 @@ namespace base::menu::ui {
 
     // Mouse support
     void HandleMouseInput(Submenu* submenu);
-    std::int32_t GetMenuItemIndexAtMousePosition(std::float_t y_offset, std::uint32_t visible_items) const;
+
+    // MouseInputListener implementations
+    void OnMouseLeftClick() override;
+    void OnMouseRightClick() override;
+    void OnMouseWheel(float delta) override;
   };
 
   inline MenuRenderer* kMENU_RENDERER{};

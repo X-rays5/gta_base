@@ -213,8 +213,6 @@ namespace base::menu::render::d3d12 {
       return;
     }
 
-    // Process all input events that were queued from WndProc on the message pump thread.
-    // This is safe because we're on the render thread where ImGui state can be safely modified.
     ImGuiInputQueue::Get().ProcessQueuedEvents();
 
     ImGui_ImplDX12_NewFrame();

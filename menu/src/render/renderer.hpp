@@ -11,6 +11,7 @@
 #include "render_thread.hpp"
 #include "../hooking/wndproc.hpp"
 #include "../util/startup_shutdown_handler.hpp"
+#include "../util/input/mouse_input_listener.hpp"
 #include "d3d12/context.hpp"
 #include "draw/draw_queue.hpp"
 
@@ -48,6 +49,23 @@ namespace base::menu::render {
     static HRESULT Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags);
     static HRESULT ResizeBuffers(IDXGISwapChain* swap_chain, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swap_chain_flags);
 
+    /// Request to show cursor (reference counted)
+    void RequestShowCursor();
+
+    /// Request to hide cursor (reference counted)
+    void RequestHideCursor();
+
+    /// Get mouse state from ImGui input processing
+    const ImGuiIO& GetMouseState() const {
+      return ImGui::GetIO();
+    }
+
+    /// Register a mouse input listener
+    void RegisterMouseInputListener(util::input::MouseInputListener* listener);
+
+    /// Unregister a mouse input listener
+    void UnregisterMouseInputListener(util::input::MouseInputListener* listener);
+
     static void RendererLifeTime(std::unique_ptr<Renderer>& renderer_inst, util::StartupShutdownHandler* startup_shutdown_handler) {
       startup_shutdown_handler->AddCallback("Renderer", [&](const util::StartupShutdownHandler::Action action) {
         if (action == util::StartupShutdownHandler::Action::Init) {
@@ -68,6 +86,7 @@ namespace base::menu::render {
     bool init_imgui_ = false;
     std::uint32_t window_width_{};
     std::uint32_t window_height_{};
+    std::atomic<std::int32_t> cursor_show_requests_ = 0;
     DrawQueueBuffer draw_queue_buffer_;
     std::unique_ptr<imfont::Manager> font_mgr_inst_;
     std::uint64_t delta_time_ = 0;
@@ -75,6 +94,7 @@ namespace base::menu::render {
     std::size_t wndproc_handler_id_{};
     std::unique_ptr<RenderThread> render_thread_;
     d3d12::Context d3d12_context_;
+    std::vector<util::input::MouseInputListener*> mouse_input_listeners_;
 
   private:
     void SetDeltaTime(const std::uint64_t delta_time) {

@@ -9,7 +9,6 @@
 #include "../render/renderer.hpp"
 #include "components/label_component.hpp"
 #include "layout/home.hpp"
-#include <imgui/imgui.h>
 
 namespace base::menu::ui {
   MenuRenderer::MenuRenderer() {
@@ -19,6 +18,11 @@ namespace base::menu::ui {
     kMENU_RENDERER = this;
 
     layout::InitHomeLayout();
+
+    // Register as mouse input listener with Renderer
+    if (render::kRENDERER) {
+      render::kRENDERER->RegisterMouseInputListener(this);
+    }
 
     // Initialize fade animation - start visible
     fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(1.0f, 1.0f, 0);
@@ -46,15 +50,6 @@ namespace base::menu::ui {
       kMENU_RENDERER->UpdateFadeAnimation();
       kMENU_RENDERER->UpdateHeightAnimation();
 
-      // Set ImGui IO flags before rendering
-      if (kMENU_RENDERER->is_menu_opened_) {
-        ImGui::GetIO().MouseDrawCursor = true;
-        ImGui::GetIO().WantCaptureMouse = true;
-      } else {
-        ImGui::GetIO().MouseDrawCursor = false;
-        ImGui::GetIO().WantCaptureMouse = false;
-      }
-
       // Render menu if visible or fading
       if (kMENU_RENDERER->current_alpha_ > 0.0f) {
         draw_queue_buffer->AddCommand(render::PushFont(kMENU_RENDERER->ui_props_.theme->text_props.font_bold));
@@ -65,6 +60,10 @@ namespace base::menu::ui {
   }
 
   MenuRenderer::~MenuRenderer() {
+    // Unregister as mouse input listener
+    if (render::kRENDERER) {
+      render::kRENDERER->UnregisterMouseInputListener(this);
+    }
     kMENU_RENDERER = nullptr;
   }
 
@@ -360,6 +359,7 @@ namespace base::menu::ui {
 
   void MenuRenderer::OpenMenu() {
     is_menu_opened_ = true;
+    render::kRENDERER->RequestShowCursor();
     const std::float_t start_alpha = current_alpha_;
     constexpr std::float_t end_alpha = 1.0f;
     fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(start_alpha, end_alpha, 100);
@@ -367,23 +367,51 @@ namespace base::menu::ui {
 
   void MenuRenderer::CloseMenu() {
     is_menu_opened_ = false;
+    render::kRENDERER->RequestHideCursor();
     const std::float_t start_alpha = current_alpha_;
     constexpr std::float_t end_alpha = 0.0f;
     fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(start_alpha, end_alpha, 100);
   }
 
   void MenuRenderer::HandleMouseInput(Submenu* submenu) {
-    if (!submenu || !ImGui::GetIO().WantCaptureMouse) {
+    if (!submenu || !is_menu_opened_) {
       return;
     }
 
-    const ImGuiIO& io = ImGui::GetIO();
-    const ImVec2 mouse_pos = io.MousePos;
+    // Get current mouse state directly from Windows, not from ImGui
+    POINT mouse_pos;
+    if (!GetCursorPos(&mouse_pos)) {
+      return;  // Failed to get mouse position
+    }
+
+    // Get window handle
+    auto game_hwnd = win32::GetGameHwnd();
+    if (!game_hwnd) {
+      return;
+    }
+
+    // Convert screen coordinates to client coordinates
+    if (!ScreenToClient(game_hwnd.value(), &mouse_pos)) {
+      return;
+    }
+
+    // Get window client area size
+    RECT client_rect;
+    if (!GetClientRect(game_hwnd.value(), &client_rect)) {
+      return;
+    }
+
+    const float display_width = static_cast<float>(client_rect.right - client_rect.left);
+    const float display_height = static_cast<float>(client_rect.bottom - client_rect.top);
+
+    // Convert to normalized coordinates [0, 1]
+    const float norm_mouse_x = static_cast<float>(mouse_pos.x) / display_width;
+    const float norm_mouse_y = static_cast<float>(mouse_pos.y) / display_height;
 
     // Check if mouse is within menu bounds
-    const float menu_left = ui_props_.theme->x_position * io.DisplaySize.x;
-    const float menu_right = (ui_props_.theme->x_position + ui_props_.menu_width) * io.DisplaySize.x;
-    const float menu_top = ui_props_.theme->y_position * io.DisplaySize.y;
+    const float menu_left = ui_props_.theme->x_position;
+    const float menu_right = ui_props_.theme->x_position + ui_props_.menu_width;
+    const float menu_top = ui_props_.theme->y_position;
 
     const auto& components = submenu->GetComponents();
     const std::size_t total_components = components.size();
@@ -391,14 +419,14 @@ namespace base::menu::ui {
     const std::uint32_t visible_items = std::min(static_cast<std::uint32_t>(total_components), max_visible_options);
 
     // Calculate the Y offset of the components area (after top bar)
-    float components_y_offset = menu_top + (ui_props_.menu_item_height * io.DisplaySize.y); // After top bar
+    float components_y_offset = menu_top + ui_props_.menu_item_height; // After top bar
 
-    if (mouse_pos.x >= menu_left && mouse_pos.x <= menu_right && mouse_pos.y >= components_y_offset) {
-      const float mouse_y_relative = mouse_pos.y - components_y_offset;
-      const float item_height_pixels = ui_props_.menu_item_height * io.DisplaySize.y;
+    if (norm_mouse_x >= menu_left && norm_mouse_x <= menu_right && norm_mouse_y >= components_y_offset) {
+      const float mouse_y_relative = norm_mouse_y - components_y_offset;
+      const float item_height = ui_props_.menu_item_height;
 
       // Determine which item is under the mouse
-      const std::int32_t item_index = static_cast<std::int32_t>(mouse_y_relative / item_height_pixels);
+      const std::int32_t item_index = static_cast<std::int32_t>(mouse_y_relative / item_height);
 
       if (item_index >= 0 && item_index < static_cast<std::int32_t>(visible_items)) {
         // Select the item under the mouse
@@ -413,50 +441,55 @@ namespace base::menu::ui {
         if (actual_index < total_components && actual_index != current_index) {
           submenu->SetCurrentOptionIndex(actual_index);
         }
-
-        // Handle mouse clicks - consume them so they don't affect game
-        if (io.MouseClicked[0]) {
-          // Left click - submit
-          const auto current_component = submenu->GetCurrentComponent();
-          if (current_component) {
-            current_component->HandleButtonPress(components::BaseComponent::PressedButton::kSUBMIT);
-          }
-        } else if (io.MouseClicked[1]) {
-          // Right click - go back
-          PopSubmenu();
-        }
-      }
-    }
-
-    // Handle mouse wheel scrolling
-    if (io.MouseWheel != 0.0f && total_components > max_visible_options) {
-      if (io.MouseWheel > 0) {
-        submenu->Scroll(Submenu::ScrollDirection::kUP);
-      } else {
-        submenu->Scroll(Submenu::ScrollDirection::kDOWN);
       }
     }
   }
 
-  std::int32_t MenuRenderer::GetMenuItemIndexAtMousePosition(std::float_t y_offset, std::uint32_t visible_items) const {
-    const ImGuiIO& io = ImGui::GetIO();
-    const ImVec2 mouse_pos = io.MousePos;
-
-    const float menu_left = ui_props_.theme->x_position * io.DisplaySize.x;
-    const float menu_right = (ui_props_.theme->x_position + ui_props_.menu_width) * io.DisplaySize.x;
-    const float menu_top_pixels = y_offset * io.DisplaySize.y;
-
-    if (mouse_pos.x >= menu_left && mouse_pos.x <= menu_right && mouse_pos.y >= menu_top_pixels) {
-      const float mouse_y_relative = mouse_pos.y - menu_top_pixels;
-      const float item_height_pixels = ui_props_.menu_item_height * io.DisplaySize.y;
-      const std::int32_t item_index = static_cast<std::int32_t>(mouse_y_relative / item_height_pixels);
-
-      if (item_index >= 0 && item_index < static_cast<std::int32_t>(visible_items)) {
-        return item_index;
-      }
+  // MouseInputListener interface implementations
+  void MenuRenderer::OnMouseLeftClick() {
+    if (!is_menu_opened_) {
+      return;
     }
 
-    return -1;
+    const auto submenu = GetCurrentSubmenu();
+    if (!submenu) {
+      return;
+    }
+
+    const auto current_component = submenu->GetCurrentComponent();
+    if (current_component) {
+      current_component->HandleButtonPress(components::BaseComponent::PressedButton::kSUBMIT);
+    }
+  }
+
+  void MenuRenderer::OnMouseRightClick() {
+    if (!is_menu_opened_) {
+      return;
+    }
+
+    PopSubmenu();
+  }
+
+  void MenuRenderer::OnMouseWheel(float delta) {
+    if (!is_menu_opened_) {
+      return;
+    }
+
+    const auto submenu = GetCurrentSubmenu();
+    if (!submenu) {
+      return;
+    }
+
+    const auto& components = submenu->GetComponents();
+    if (components.size() <= ui_props_.max_options_drawn) {
+      return;
+    }
+
+    if (delta > 0) {
+      submenu->Scroll(Submenu::ScrollDirection::kUP);
+    } else {
+      submenu->Scroll(Submenu::ScrollDirection::kDOWN);
+    }
   }
 
   std::float_t MenuRenderer::DrawInfoBox(render::DrawQueueBuffer* draw_queue, const Submenu* submenu, std::float_t y_offset) const {
@@ -513,3 +546,26 @@ namespace base::menu::ui {
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -12,6 +12,8 @@
 #include "../hooking/hooking.hpp"
 #include "../hooking/wndproc.hpp"
 #include "../memory/pointers.hpp"
+#include "../ui/menu_renderer.hpp"
+#include <vector>
 
 namespace base::menu::render {
   Renderer::Renderer() : d3d12_context_(*memory::kPOINTERS->swap_chain_, *memory::kPOINTERS->command_queue_) {
@@ -92,6 +94,40 @@ namespace base::menu::render {
     font_mgr_inst_ = std::make_unique<imfont::Manager>();
   }
 
+  // Static state for mouse input dispatch
+  static ImVec2 last_mouse_pos = {};
+  static bool last_left_clicked = false;
+  static bool last_right_clicked = false;
+  static float last_wheel = 0.0f;
+
+  void DispatchMouseInputToListeners(const std::vector<util::input::MouseInputListener*>& listeners) {
+    const ImGuiIO& io = ImGui::GetIO();
+
+    // Dispatch left click
+    if (io.MouseClicked[0] && !last_left_clicked) {
+      for (auto listener : listeners) {
+        listener->OnMouseLeftClick();
+      }
+    }
+    last_left_clicked = io.MouseClicked[0];
+
+    // Dispatch right click
+    if (io.MouseClicked[1] && !last_right_clicked) {
+      for (auto listener : listeners) {
+        listener->OnMouseRightClick();
+      }
+    }
+    last_right_clicked = io.MouseClicked[1];
+
+    // Dispatch wheel
+    if (io.MouseWheel != 0.0f && io.MouseWheel != last_wheel) {
+      const float wheel_delta = io.MouseWheel > 0 ? 1.0f : -1.0f;
+      for (auto listener : listeners) {
+        listener->OnMouseWheel(wheel_delta);
+      }
+    }
+    last_wheel = io.MouseWheel;
+  }
 
   HRESULT Renderer::Present(IDXGISwapChain* swap_chain, UINT sync_interval, UINT flags) {
     if (!globals::kRUNNING || !kRENDERER || !kRENDERER->init_imgui_ || kRENDERER->d3d12_context_.IsResizing()) {
@@ -106,6 +142,15 @@ namespace base::menu::render {
       kRENDERER->d3d12_context_.NewFrame();
 
       imfont::kMANAGER->PushFont("roboto");
+
+      // Update ImGui IO flags based on cursor requests (reference counting)
+      const bool show_cursor = kRENDERER->cursor_show_requests_ > 0;
+      ImGui::GetIO().MouseDrawCursor = show_cursor;
+      ImGui::GetIO().WantCaptureMouse = show_cursor;
+
+      // Dispatch mouse events to listeners
+      DispatchMouseInputToListeners(kRENDERER->mouse_input_listeners_);
+
       kRENDERER->GetDrawQueueBuffer()->RenderFrame();
       imfont::kMANAGER->PopFont();
 
@@ -131,5 +176,28 @@ namespace base::menu::render {
     }
 
     return hooking::kMANAGER->swap_chain_hook_.CallOriginal<decltype(&ResizeBuffers)>(hooking::Hooks::swapchain_resizebuffers_index, swap_chain, buffer_count, width, height, new_format, swap_chain_flags);
+  }
+
+  void Renderer::RequestShowCursor() {
+    cursor_show_requests_++;
+  }
+
+  void Renderer::RequestHideCursor() {
+    if (cursor_show_requests_ > 0) {
+      cursor_show_requests_--;
+    }
+  }
+
+  void Renderer::RegisterMouseInputListener(util::input::MouseInputListener* listener) {
+    if (!listener) return;
+    mouse_input_listeners_.push_back(listener);
+  }
+
+  void Renderer::UnregisterMouseInputListener(util::input::MouseInputListener* listener) {
+    if (!listener) return;
+    auto it = std::find(mouse_input_listeners_.begin(), mouse_input_listeners_.end(), listener);
+    if (it != mouse_input_listeners_.end()) {
+      mouse_input_listeners_.erase(it);
+    }
   }
 }
