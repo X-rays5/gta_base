@@ -192,6 +192,17 @@ namespace base::menu::ui {
     }
 
     /**
+     * Sets the current option index directly.
+     * @param index The index to set as current.
+     */
+    void SetCurrentOptionIndex(std::size_t index) {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      if (index < components_.size()) {
+        cur_opt_idx_ = index;
+      }
+    }
+
+    /**
      * Get the current option index for display purposes.
      * @return The current option index for display purposes, which is 1-based among selectable components only.
      */

@@ -136,6 +136,10 @@ namespace base::menu::ui {
     // Menu opening/closing with animations
     void OpenMenu();
     void CloseMenu();
+
+    // Mouse support
+    void HandleMouseInput(Submenu* submenu);
+    std::int32_t GetMenuItemIndexAtMousePosition(std::float_t y_offset, std::uint32_t visible_items) const;
   };
 
   inline MenuRenderer* kMENU_RENDERER{};
