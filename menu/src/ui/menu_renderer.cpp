@@ -28,16 +28,19 @@ namespace base::menu::ui {
         return;
 
       if (kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_F4)) {
-        kMENU_RENDERER->is_menu_opened_ = !kMENU_RENDERER->is_menu_opened_;
-
-        // Start fade animation
-        const std::float_t start_alpha = kMENU_RENDERER->current_alpha_;
-        const std::float_t end_alpha = kMENU_RENDERER->is_menu_opened_ ? 1.0f : 0.0f;
-        kMENU_RENDERER->fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(start_alpha, end_alpha, 100);
-        kMENU_RENDERER->last_update_time_ = std::chrono::steady_clock::now();
+        if (kMENU_RENDERER->is_menu_opened_) {
+          kMENU_RENDERER->CloseMenu();
+        } else {
+          kMENU_RENDERER->OpenMenu();
+        }
       }
-      if (kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_BACK))
-        kMENU_RENDERER->PopSubmenu();
+      if (kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_BACK)) {
+        if (kMENU_RENDERER->IsOnHomeSubmenu()) {
+          kMENU_RENDERER->CloseMenu();
+        } else {
+          kMENU_RENDERER->PopSubmenu();
+        }
+      }
 
       kMENU_RENDERER->UpdateFadeAnimation();
       kMENU_RENDERER->UpdateHeightAnimation();
@@ -292,7 +295,8 @@ namespace base::menu::ui {
     }
 
     const auto current_time = std::chrono::steady_clock::now();
-    const auto delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_update_time_).count();
+    const auto delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - fade_animation_update_time_).count();
+    fade_animation_update_time_ = current_time;
 
     current_alpha_ = fade_animation_->Animate(delta_time);
   }
@@ -303,7 +307,8 @@ namespace base::menu::ui {
     }
 
     const auto current_time = std::chrono::steady_clock::now();
-    const auto delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_update_time_).count();
+    const auto delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - height_animation_update_time_).count();
+    height_animation_update_time_ = current_time;
 
     current_menu_height_ = height_animation_->Animate(delta_time);
   }
@@ -323,6 +328,20 @@ namespace base::menu::ui {
   RgbColor MenuRenderer::ApplyAlphaToColor(const RgbColor& color) const {
     const std::uint8_t faded_alpha = static_cast<std::uint8_t>(color.a * current_alpha_);
     return RgbColor(color.r, color.g, color.b, faded_alpha);
+  }
+
+  void MenuRenderer::OpenMenu() {
+    is_menu_opened_ = true;
+    const std::float_t start_alpha = current_alpha_;
+    const std::float_t end_alpha = 1.0f;
+    fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(start_alpha, end_alpha, 100);
+  }
+
+  void MenuRenderer::CloseMenu() {
+    is_menu_opened_ = false;
+    const std::float_t start_alpha = current_alpha_;
+    const std::float_t end_alpha = 0.0f;
+    fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(start_alpha, end_alpha, 100);
   }
 
   std::float_t MenuRenderer::DrawInfoBox(render::DrawQueueBuffer* draw_queue, const Submenu* submenu, std::float_t y_offset) const {

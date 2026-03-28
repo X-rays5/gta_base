@@ -68,7 +68,7 @@ namespace base::menu::ui {
       if (!IsOnHomeSubmenu()) {
         submenu_stack_.pop();
       } else {
-        is_menu_opened_ = false;
+        CloseMenu();
       }
     }
 
@@ -105,6 +105,8 @@ namespace base::menu::ui {
     std::float_t current_menu_height_ = 0.0f;
     std::float_t target_menu_height_ = 0.0f;
     std::chrono::steady_clock::time_point last_update_time_ = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point fade_animation_update_time_ = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point height_animation_update_time_ = std::chrono::steady_clock::now();
 
     // Used when the current sub is empty
     std::shared_ptr<components::BaseComponent> fallback_option_;
@@ -130,6 +132,10 @@ namespace base::menu::ui {
     // Helper methods for height animation
     void UpdateHeightAnimation();
     void SetTargetMenuHeight(std::float_t target_height);
+
+    // Menu opening/closing with animations
+    void OpenMenu();
+    void CloseMenu();
   };
 
   inline MenuRenderer* kMENU_RENDERER{};
