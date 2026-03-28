@@ -144,7 +144,7 @@ namespace base::menu::render {
       imfont::kMANAGER->PushFont("roboto");
 
       // Update ImGui IO flags based on cursor requests (reference counting)
-      const bool show_cursor = kRENDERER->cursor_show_requests_ > 0;
+      const bool show_cursor = kRENDERER->IsCursorVisible();
       ImGui::GetIO().MouseDrawCursor = show_cursor;
       ImGui::GetIO().WantCaptureMouse = show_cursor;
 

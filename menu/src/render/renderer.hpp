@@ -55,9 +55,8 @@ namespace base::menu::render {
     /// Request to hide cursor (reference counted)
     void RequestHideCursor();
 
-    /// Get mouse state from ImGui input processing
-    const ImGuiIO& GetMouseState() const {
-      return ImGui::GetIO();
+    bool IsCursorVisible() {
+      return cursor_show_requests_ > 0;
     }
 
     /// Register a mouse input listener

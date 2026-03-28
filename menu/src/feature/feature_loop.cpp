@@ -5,6 +5,7 @@
 #include "feature_loop.hpp"
 #include "../natives/natives_gen9.hpp"
 #include "../options/option_registry.hpp"
+#include "../render/renderer.hpp"
 #include "../ui/menu_renderer.hpp"
 
 namespace base::menu::feature {
@@ -13,6 +14,7 @@ namespace base::menu::feature {
     thread_local natives::Ped player_ped;
     thread_local bool is_player_in_vehicle;
     thread_local natives::Vehicle player_vehicle;
+    thread_local bool last_tick_mouse_visible;
 
     void DisableGameUIInteractWhenMenuOpened() {
       if (ui::kMENU_RENDERER->IsMenuOpened()) {
@@ -59,6 +61,11 @@ namespace base::menu::feature {
 
     if (ui::kMENU_RENDERER) {
       DisableGameUIInteractWhenMenuOpened();
+    }
+
+    if (render::kRENDERER && render::kRENDERER->IsCursorVisible()) {
+      last_tick_mouse_visible = true;
+      natives::PAD::DISABLE_ALL_CONTROL_ACTIONS(0);
     }
 
     if (options::kOPTION_REGISTRY) {
