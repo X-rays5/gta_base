@@ -91,6 +91,7 @@ namespace base::common::logging {
       logger->set_level(spdlog::level::trace);
 
       spdlog::register_logger(logger);
+      spdlog::flush_every(std::chrono::milliseconds(200));
 
       auto formatter = std::make_unique<spdlog::pattern_formatter>();
       formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%T] [%^%l%$] [thread: %N] [%s:%#] %v");
