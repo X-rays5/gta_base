@@ -98,9 +98,12 @@ namespace base::menu::ui {
 
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> selector_animation_;
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> fade_animation_;
+    std::unique_ptr<base::render::animate::Lerp<std::float_t>> height_animation_;
     std::atomic<bool> is_menu_opened_ = true;
     std::float_t current_selector_y_ = 0.0f;
     std::float_t current_alpha_ = 1.0f;
+    std::float_t current_menu_height_ = 0.0f;
+    std::float_t target_menu_height_ = 0.0f;
     std::chrono::steady_clock::time_point last_update_time_ = std::chrono::steady_clock::now();
 
     // Used when the current sub is empty
@@ -123,6 +126,10 @@ namespace base::menu::ui {
     // Helper methods for fade animation
     void UpdateFadeAnimation();
     RgbColor ApplyAlphaToColor(const RgbColor& color) const;
+
+    // Helper methods for height animation
+    void UpdateHeightAnimation();
+    void SetTargetMenuHeight(std::float_t target_height);
   };
 
   inline MenuRenderer* kMENU_RENDERER{};

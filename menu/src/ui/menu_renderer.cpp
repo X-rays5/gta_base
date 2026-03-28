@@ -40,6 +40,7 @@ namespace base::menu::ui {
         kMENU_RENDERER->PopSubmenu();
 
       kMENU_RENDERER->UpdateFadeAnimation();
+      kMENU_RENDERER->UpdateHeightAnimation();
 
       // Render menu if visible or fading
       if (kMENU_RENDERER->current_alpha_ > 0.0f) {
@@ -150,9 +151,15 @@ namespace base::menu::ui {
         start_index = submenu->GetScrollOffset();
     }
 
-    std::float_t y_size = ui_props_.menu_item_height * static_cast<std::float_t>(options_to_draw);
+    std::float_t target_y_size = ui_props_.menu_item_height * static_cast<std::float_t>(options_to_draw);
 
-    draw_queue->AddCommand(render::Rect({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, y_size}, ApplyAlphaToColor(ui_props_.theme->background_color)));
+    // Set target height and animate if it changes
+    SetTargetMenuHeight(target_y_size);
+
+    // Use the animated height for rendering
+    std::float_t animated_y_size = current_menu_height_;
+
+    draw_queue->AddCommand(render::Rect({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, animated_y_size}, ApplyAlphaToColor(ui_props_.theme->background_color)));
 
     const std::float_t y_pos = DrawItemSelector(draw_queue, top_bar_y_offset, submenu);
 
@@ -170,7 +177,7 @@ namespace base::menu::ui {
       current_y_offset += ui_props_.menu_item_height;
     }
 
-    return current_y_offset;
+    return y_offset + animated_y_size;
   }
 
   void MenuRenderer::DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, const std::float_t y_offset, bool inverse_text) const {
@@ -288,6 +295,29 @@ namespace base::menu::ui {
     const auto delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_update_time_).count();
 
     current_alpha_ = fade_animation_->Animate(delta_time);
+  }
+
+  void MenuRenderer::UpdateHeightAnimation() {
+    if (!height_animation_) {
+      return;
+    }
+
+    const auto current_time = std::chrono::steady_clock::now();
+    const auto delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_update_time_).count();
+
+    current_menu_height_ = height_animation_->Animate(delta_time);
+  }
+
+  void MenuRenderer::SetTargetMenuHeight(std::float_t target_height) {
+    // Only animate if the height actually changes and it's not the first initialization
+    if (current_menu_height_ > 0.0f && std::abs(target_height - target_menu_height_) > 0.0001f) {
+      // Create animation from current height to target height - quick animation (50ms)
+      height_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(current_menu_height_, target_height, 50);
+    } else if (current_menu_height_ == 0.0f) {
+      // Initialize without animation
+      current_menu_height_ = target_height;
+    }
+    target_menu_height_ = target_height;
   }
 
   RgbColor MenuRenderer::ApplyAlphaToColor(const RgbColor& color) const {
