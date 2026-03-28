@@ -20,7 +20,7 @@ namespace base::menu::options {
   }
 
   void VehicleRepairOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    sub->AddComponent(ui::components::ExecuteComponent(label, GetDescriptionRaw(), RepairVehicle));
+    GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), RepairVehicle));
   }
 
   bool VehicleRepairOption::IsHotkeyAble() const {
