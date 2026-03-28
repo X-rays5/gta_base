@@ -47,7 +47,7 @@ namespace base::menu::hotkey {
       return;
     }
 
-    NOTIFY_INFO("ui/hotkey", "ui/hotkey/add_success", opt->GetName(), new_hotkey_.vk_key, static_cast<std::uint32_t>(new_hotkey_.modifier));
+    NOTIFY_INFO("ui/hotkey", "ui/hotkey/add_success", option->GetName(), static_cast<std::uint32_t>(new_hotkey_.modifier), new_hotkey_.vk_key);
     key_opt_map_.emplace(new_hotkey_, option);
 
     Save();
@@ -88,7 +88,7 @@ namespace base::menu::hotkey {
       data[it.second->GetName()] = hotkey_data;
     }
 
-    auto ec = glz::write_file_json(data, GetHotkeySavePath().string(), std::string{});
+    auto ec = glz::write_file_json<glz::opts{.prettify = true}>(data, GetHotkeySavePath().string(), std::string{});
     if (ec) {
       LOG_ERROR("Failed to save hotkey data: {}", ec);
     }

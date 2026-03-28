@@ -21,6 +21,7 @@
 #include "util/thread_pool.hpp"
 #include "util/key_input/key_event_listener.hpp"
 #include "hotkey/hotkey_manager.hpp"
+#include "ui/notification/manager.hpp"
 
 std::atomic_bool base::menu::globals::kRUNNING = true;
 
@@ -40,6 +41,7 @@ namespace base::menu {
     std::unique_ptr<discord::RichPresence> discord_rich_presence_inst;
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
+    std::unique_ptr<ui::notification::Manager> notification_manager_inst;
 
     void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
       RegisterThreadPoolStartupShutdown(thread_pool_inst, handler);
@@ -56,6 +58,7 @@ namespace base::menu {
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DiscordRichPresence", discord_rich_presence_inst);
       render::Renderer::RendererLifeTime(render_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "MenuRenderer", menu_renderer_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "NotificationManager", notification_manager_inst);
     }
   }
 }

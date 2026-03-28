@@ -8,7 +8,7 @@
 namespace base::menu::options {
   class SemiGodModeOpt final : public BaseOption {
   public:
-    SemiGodModeOpt() : BaseOption("semigodmode", "ui/option/self_semigodmode/desc") {}
+    SemiGodModeOpt() : BaseOption("semi_god_mode", "ui/option/self_semigodmode/desc") {}
 
     virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual bool IsHotkeyAble() const override;

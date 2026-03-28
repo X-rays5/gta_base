@@ -10,7 +10,12 @@
 
 namespace base::menu::ui {
   struct RgbColor {
-    RgbColor(const std::uint8_t r, const std::uint8_t g, const std::uint8_t b, const std::uint8_t a = 255) : r(r), g(g), b(b), a(a) {}
+    constexpr RgbColor(const std::uint8_t r, const std::uint8_t g, const std::uint8_t b, const std::uint8_t a = 255) : r(r), g(g), b(b), a(a) {}
+
+    RgbColor(RgbColor&&) = default;
+    RgbColor& operator=(RgbColor&&) = default;
+    RgbColor(const RgbColor&) = default;
+    RgbColor& operator=(const RgbColor&) = default;
 
     union {
       struct {
@@ -19,7 +24,7 @@ namespace base::menu::ui {
       std::uint32_t value;
     };
 
-    operator ImU32() const {
+    constexpr operator ImU32() const {
       return value;
     }
   };

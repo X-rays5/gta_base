@@ -8,7 +8,7 @@
 namespace base::menu::options {
   class SelfRemoveArmourOption : public BaseOption {
   public:
-    SelfRemoveArmourOption() : BaseOption("selfremovearmour") {}
+    SelfRemoveArmourOption() : BaseOption("self_remove_armour") {}
 
     virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;

@@ -8,7 +8,7 @@
 namespace base::menu::options {
   class GodModeOption final : public BaseOption {
     public:
-    GodModeOption() : BaseOption("godmode") {}
+    GodModeOption() : BaseOption("god_mode") {}
 
     virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual bool IsHotkeyAble() const override;

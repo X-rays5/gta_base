@@ -13,6 +13,9 @@
 namespace base::menu::ui::layout {
   void InitHomeLayout() {
     Submenu home_submenu("ui/sub/home", [](Submenu* sub) {
+      sub->AddComponent(components::ExecuteComponent("notif", "", []{
+        NOTIFY_INFO("home_layout", "home_layout/notif_test {}", 123);
+      }));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSELF));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kVEHICLE));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSETTINGS));

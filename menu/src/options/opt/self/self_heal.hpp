@@ -8,7 +8,7 @@
 namespace base::menu::options {
   class SelfHealOption final : public BaseOption {
   public:
-    SelfHealOption() : BaseOption("selfheal") {}
+    SelfHealOption() : BaseOption("self_heal") {}
 
     virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual bool IsHotkeyAble() const override;

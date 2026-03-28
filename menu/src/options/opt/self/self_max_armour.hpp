@@ -8,7 +8,7 @@
 namespace base::menu::options {
   class SelfMaxArmourOption : public BaseOption {
   public:
-    SelfMaxArmourOption() : BaseOption("selfmaxarmour") {}
+    SelfMaxArmourOption() : BaseOption("self_max_armour") {}
 
     virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;

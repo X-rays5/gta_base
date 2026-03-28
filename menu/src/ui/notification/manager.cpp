@@ -5,36 +5,54 @@
 #include "manager.hpp"
 #include "../../render/render_thread.hpp"
 #include "../../render/renderer.hpp"
+#include <base-common/util/time.hpp>
 
-namespace base::ui::notification {
+namespace base::menu::ui::notification {
   Manager::Manager() {
-    kMANAGER = this;
+    kNOTIFICATION_MANAGER = this;
     menu::render::kRENDER_THREAD->AddRenderCallback(999, [](menu::render::DrawQueueBuffer* draw_queue_buffer) {
-      if (kMANAGER) {
-        kMANAGER->Render(draw_queue_buffer);
+      if (kNOTIFICATION_MANAGER) {
+        kNOTIFICATION_MANAGER->Render(draw_queue_buffer);
       }
     });
   }
 
   Manager::~Manager() {
-    kMANAGER = nullptr;
+    kNOTIFICATION_MANAGER = nullptr;
   }
 
-  void Manager::AddNotification(const Type type, const std::size_t duration_ms, const std::string& title, const std::string& message) {
-    Notify notif = {common::util::time::GetTimeStamp(), duration_ms, Notification(type, title, message)};
-    notifications_.emplace_back(notif);
-  }
+  void Manager::Render(render::DrawQueueBuffer* draw_queue_buffer) {
+    if (!draw_queue_buffer) {
+      return;
+    }
 
-  void Manager::Render(menu::render::DrawQueueBuffer* draw_queue_buffer) {
-    // Iterate through all notifications and render them also remove them if they are expired
-    std::float_t y_offset = 0.0f;
-    for (auto it = notifications_.begin(); it != notifications_.end();) {
-      y_offset += it->notification.Draw(draw_queue_buffer, true, y_offset);
-      if (common::util::time::GetTimeStamp() - it->time_start >= it->duration_ms) {
-        LOG_DEBUG("Notification expired: {}", it->notification.title_);
-        it = notifications_.erase(it);
-      } else {
-        ++it;
+    common::concurrency::ScopedSpinlock lock(notification_lock_);
+
+    const auto current_time = common::util::time::GetTimeStamp();
+
+    // Remove expired notifications
+    std::erase_if(notifications_,
+                  [current_time](const Notify& notif) {
+                    const auto elapsed_ms = current_time - notif.time_start;
+                    // Remove only after fade-in + hold + fade-out completes
+                    return elapsed_ms >= (notif.duration_ms + Notification::fade_in_duration_ms_ + Notification::fade_out_duration_ms_);
+                  });
+
+    // Calculate max visible based on screen height and notification dimensions
+    constexpr std::size_t max_visible = Notification::GetMaxVisibleNotifications();
+    const std::size_t notifications_to_render = std::min(notifications_.size(), max_visible);
+
+    // Render visible notifications from top to bottom (right aligned)
+    float current_y_offset = Notification::y_margin_;  // Start from top
+
+    for (std::size_t i = 0; i < notifications_to_render; ++i) {
+      auto& notif = notifications_[i];
+
+      // Draw the notification and get its height
+      const float notification_height = notif.notification.Draw(draw_queue_buffer, true, current_y_offset, notif.time_start, notif.duration_ms);
+
+      if (notification_height > 0.f) {
+        current_y_offset += notification_height;
       }
     }
   }
