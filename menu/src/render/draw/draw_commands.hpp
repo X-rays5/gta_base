@@ -55,25 +55,44 @@ namespace base::menu::render {
   class RectBorder final : public Rect {
   public:
     RectBorder(const ImVec2 pos, const ImVec2 size, const ImU32 background_color, const ImU32 border_color, const bool top, const bool bottom, const bool left, const bool right, const float thickness = 0.005F) :
-      Rect(pos, size, background_color), border_color_(border_color), top_(top), bottom_(bottom), left_(left), right_(right), thickness_(thickness) {}
+      Rect(pos, size, background_color), border_color_(border_color), thickness_(thickness), top_(top), bottom_(bottom), left_(left), right_(right) {
+    }
 
     void Draw() const override {
       Rect::Draw();
 
       const auto draw_list = draw_helpers::GetDrawList();
+
+      // Calculate consistent thickness in screen pixels
+      const float thickness_x_screen = draw_helpers::ScaleXToScreen(thickness_);
+      const float thickness_y_screen = draw_helpers::ScaleYToScreen(thickness_);
+
+      // Use the smaller value to ensure all borders match
+      const float thickness_screen = std::min(thickness_x_screen, thickness_y_screen);
+
+      // For converting back to normalized coordinates
+      const float thickness_x_norm = thickness_screen / draw_helpers::ScaleXToScreen(1.0f);
+      const float thickness_y_norm = thickness_screen / draw_helpers::ScaleYToScreen(1.0f);
+
       if (top_) {
-        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(draw_helpers::GetSize(pos_, {size_.x, thickness_})), border_color_);
+        const auto top_pos = pos_;
+        const auto top_size_end = draw_helpers::GetSize(top_pos, {size_.x, thickness_y_norm});
+        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(top_pos), draw_helpers::ScaleToScreen(top_size_end), border_color_);
       }
       if (bottom_) {
-        const ImVec2 bottom_pos =  {pos_.x, pos_.y + size_.y - thickness_};
-        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(bottom_pos), draw_helpers::ScaleToScreen(draw_helpers::GetSize(bottom_pos, {size_.x, thickness_})), border_color_);
+        const auto bottom_pos = ImVec2(pos_.x, pos_.y + size_.y - thickness_y_norm);
+        const auto bottom_size_end = draw_helpers::GetSize(bottom_pos, {size_.x, thickness_y_norm});
+        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(bottom_pos), draw_helpers::ScaleToScreen(bottom_size_end), border_color_);
       }
       if (left_) {
-        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(draw_helpers::GetSize(pos_, {thickness_, size_.y})), border_color_);
+        const auto left_pos = pos_;
+        const auto left_size_end = draw_helpers::GetSize(left_pos, {thickness_x_norm, size_.y});
+        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(left_pos), draw_helpers::ScaleToScreen(left_size_end), border_color_);
       }
       if (right_) {
-        const ImVec2 right_pos = {pos_.x + size_.x - thickness_, pos_.y};
-        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(right_pos), draw_helpers::ScaleToScreen(draw_helpers::GetSize(right_pos, {thickness_, size_.y})), border_color_);
+        const auto right_pos = ImVec2(pos_.x + size_.x - thickness_x_norm, pos_.y);
+        const auto right_size_end = draw_helpers::GetSize(right_pos, {thickness_x_norm, size_.y});
+        draw_list->AddRectFilled(draw_helpers::ScaleToScreen(right_pos), draw_helpers::ScaleToScreen(right_size_end), border_color_);
       }
     }
 

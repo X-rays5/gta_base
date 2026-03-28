@@ -32,15 +32,15 @@ namespace base::menu::ui {
     const std::float_t font_size = 0.012f;
     const std::float_t scroll_indicator_size = 0.02f;
     const RgbColor text_color = RgbColor(240, 240, 240);
-    const RgbColor inverse_text_color = RgbColor(47, 47, 47);
+    const RgbColor inverse_text_color = text_color;
     const RgbColor sec_text_color = RgbColor(155, 155, 155);
   };
 
   struct Theme {
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> x_position;
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> y_position;
-    const RgbColor seperator_color = RgbColor(255, 255, 255);
-    const RgbColor background_color = RgbColor(28, 31, 32);
+    const RgbColor seperator_color = RgbColor(74, 144, 226);
+    const RgbColor background_color = RgbColor(30, 30, 30);
     Text text_props;
 
     Status Save(const std::string& theme_name);
@@ -52,11 +52,11 @@ namespace base::menu::ui {
     const std::chrono::milliseconds menu_ui_key_state_cooldown = std::chrono::milliseconds(200);
     const std::chrono::milliseconds menu_ui_navigation_key_state_cooldown = std::chrono::milliseconds(200);
     const std::float_t header_height = 0.1f;
-    const std::float_t seperator_height = 0.001f;
+    const std::float_t seperator_height = 0.0015f;
     const std::float_t menu_item_height = 0.025f;
     const std::float_t menu_width = 0.16f;
     const std::uint32_t max_options_drawn = 12;
-    const RgbColor selector_color = theme->text_props.text_color;
+    const RgbColor selector_color = RgbColor(47, 47, 47);
   };
 }
 
