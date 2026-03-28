@@ -132,6 +132,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/components/base_component.cpp
         src/render/imgui_input_queue.cpp
         src/render/imgui_input_queue.hpp
+        src/hotkey/hotkey_manager.cpp
+        src/hotkey/hotkey_manager.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

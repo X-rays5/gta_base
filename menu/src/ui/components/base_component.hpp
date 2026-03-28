@@ -69,6 +69,7 @@ namespace base::menu::ui::components {
     }
 
     bool IsHotkeyAble() const;
+    void AddNewHotkey() const;
     bool IsSavable() const;
     void Save() const;
 

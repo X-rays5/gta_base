@@ -94,9 +94,13 @@ namespace base::menu::ui {
     }
 
     if (option_interaction.WasKeyPressed(VK_F11)) {
-      submenu->GetCurrentComponent()->Save();
+      util::kTHREAD_POOL->emplace_back([submenu] {
+        submenu->GetCurrentComponent()->Save();
+      });
     } else if (option_interaction.WasKeyPressed(VK_F12)) {
-      //submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kEXTRA_2);
+      util::kTHREAD_POOL->emplace_back([submenu] {
+        submenu->GetCurrentComponent()->AddNewHotkey();
+      });
     }
 
     const Submenu::component_list_t& components = submenu->GetComponents();

@@ -12,6 +12,7 @@
 #include <base-common/win32/all.hpp>
 #include <imfont/IconsFontAwesome6.hpp>
 #include "globals.hpp"
+#include "ui/notification/manager.hpp"
 
 #ifdef MSVC
 #define FORCE_INLINE __forceinline

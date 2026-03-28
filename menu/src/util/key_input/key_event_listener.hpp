@@ -4,8 +4,8 @@
 
 #ifndef KEY_EVENT_LISTENER_HPP_06155902
 #define KEY_EVENT_LISTENER_HPP_06155902
-#include "../../hooking/wndproc.hpp"
 #include <ankerl/unordered_dense.h>
+#include "../../hooking/wndproc.hpp"
 
 namespace base::menu::util {
   /**
@@ -13,7 +13,7 @@ namespace base::menu::util {
    */
   class KeyEventListener {
   public:
-    enum class ModifierKey : std::int32_t {
+    enum class ModifierKey : std::uint32_t {
       kNONE,
       kSHIFT,
       kCTRL,

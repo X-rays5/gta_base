@@ -6,11 +6,13 @@
 #include <memory>
 #include <thread>
 #include <fmt/args.h>
+#include "default.hpp"
 #include "discord/rich_presence.hpp"
 #include "hooking/hooking.hpp"
 #include "hooking/wndproc.hpp"
 #include "memory/pointers.hpp"
 #include "natives/invoker.hpp"
+#include "options/option_registry.hpp"
 #include "render/renderer.hpp"
 #include "script/script_manager.hpp"
 #include "ui/menu_renderer.hpp"
@@ -18,8 +20,7 @@
 #include "util/startup_shutdown_handler.hpp"
 #include "util/thread_pool.hpp"
 #include "util/key_input/key_event_listener.hpp"
-#include "default.hpp"
-#include "options/option_registry.hpp"
+#include "hotkey/hotkey_manager.hpp"
 
 std::atomic_bool base::menu::globals::kRUNNING = true;
 
@@ -27,6 +28,7 @@ namespace base::menu {
   namespace {
     std::unique_ptr<Default> default_profiles_inst;
     std::unique_ptr<options::OptionRegistry> option_registry_inst;
+    std::unique_ptr<hotkey::HotkeyManager> hotkey_manager_inst;
     std::unique_ptr<util::ThreadPool> thread_pool_inst;
     std::unique_ptr<script::ScriptManager> script_manager_inst;
     std::unique_ptr<hooking::WndProc> wndproc_inst;
@@ -40,12 +42,13 @@ namespace base::menu {
     std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
 
     void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
-      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DefaultProfiles", default_profiles_inst);
-      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "OptionRegistry", option_registry_inst);
-      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptManager", script_manager_inst);
       RegisterThreadPoolStartupShutdown(thread_pool_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "WndProc", wndproc_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "KeyEventWatcher", keywatch_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "DefaultProfiles", default_profiles_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "OptionRegistry", option_registry_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "HotkeyManager", hotkey_manager_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptManager", script_manager_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "Pointers", pointers_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "Invoker", invoker_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "HookingManager", hooking_inst);

@@ -32,6 +32,6 @@ namespace base::menu::render {
 
     spinlock_.Unlock();
 
-    read_signal_.Wait();
+    auto _ = read_signal_.Wait();
   }
 }
