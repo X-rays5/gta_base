@@ -375,29 +375,34 @@ namespace base::menu::ui {
 
   void MenuRenderer::HandleMouseInput(Submenu* submenu) {
     if (!submenu || !is_menu_opened_) {
+      mouse_in_menu_bounds_ = false;
       return;
     }
 
     // Get current mouse state directly from Windows, not from ImGui
     POINT mouse_pos;
     if (!GetCursorPos(&mouse_pos)) {
+      mouse_in_menu_bounds_ = false;
       return;  // Failed to get mouse position
     }
 
     // Get window handle
     auto game_hwnd = win32::GetGameHwnd();
     if (!game_hwnd) {
+      mouse_in_menu_bounds_ = false;
       return;
     }
 
     // Convert screen coordinates to client coordinates
     if (!ScreenToClient(game_hwnd.value(), &mouse_pos)) {
+      mouse_in_menu_bounds_ = false;
       return;
     }
 
     // Get window client area size
     RECT client_rect;
     if (!GetClientRect(game_hwnd.value(), &client_rect)) {
+      mouse_in_menu_bounds_ = false;
       return;
     }
 
@@ -421,6 +426,8 @@ namespace base::menu::ui {
     // Calculate the Y offset of the components area (after top bar)
     float components_y_offset = menu_top + ui_props_.menu_item_height; // After top bar
 
+    mouse_in_menu_bounds_ = false;
+
     if (norm_mouse_x >= menu_left && norm_mouse_x <= menu_right && norm_mouse_y >= components_y_offset) {
       const float mouse_y_relative = norm_mouse_y - components_y_offset;
       const float item_height = ui_props_.menu_item_height;
@@ -441,13 +448,15 @@ namespace base::menu::ui {
         if (actual_index < total_components && actual_index != current_index) {
           submenu->SetCurrentOptionIndex(actual_index);
         }
+
+        mouse_in_menu_bounds_ = true;
       }
     }
   }
 
   // MouseInputListener interface implementations
   void MenuRenderer::OnMouseLeftClick() {
-    if (!is_menu_opened_) {
+    if (!is_menu_opened_ || !mouse_in_menu_bounds_) {
       return;
     }
 
@@ -463,7 +472,7 @@ namespace base::menu::ui {
   }
 
   void MenuRenderer::OnMouseRightClick() {
-    if (!is_menu_opened_) {
+    if (!is_menu_opened_ || !mouse_in_menu_bounds_) {
       return;
     }
 

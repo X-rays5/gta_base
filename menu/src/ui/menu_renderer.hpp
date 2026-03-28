@@ -116,6 +116,9 @@ namespace base::menu::ui {
       sub->AddComponent(components::LabelComponent("label/invalid_submenu"));
     });
 
+    // Mouse state tracking
+    bool mouse_in_menu_bounds_ = false;
+
   private:
     std::float_t DrawTopBar(render::DrawQueueBuffer* draw_queue, std::string_view sub_name, std::size_t cur_item_idx, std::size_t item_count, std::float_t y_offset);
     std::float_t DrawComponents(render::DrawQueueBuffer* draw_queue, std::float_t top_bar_y_offset, Submenu* submenu, const Submenu::component_list_t& components, std::float_t y_offset);
