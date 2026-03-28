@@ -8,7 +8,7 @@
 namespace base::menu::options {
   class VehicleRepairOption final : public BaseOption {
   public:
-    VehicleRepairOption() : BaseOption("vehicle_repair", "ui/action/vehicle_repair/desc") {}
+    VehicleRepairOption() : BaseOption("vehicle_repair") {}
 
     virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;
