@@ -9,8 +9,8 @@
 #include <glaze/core/meta.hpp>
 
 namespace base::menu::ui {
-  struct RdrColor {
-    RdrColor(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a = 255) : r(r), g(g), b(b), a(a) {}
+  struct RgbColor {
+    RgbColor(const std::uint8_t r, const std::uint8_t g, const std::uint8_t b, const std::uint8_t a = 255) : r(r), g(g), b(b), a(a) {}
 
     union {
       struct {
@@ -31,16 +31,16 @@ namespace base::menu::ui {
     const std::float_t y_margin = 0.005f;
     const std::float_t font_size = 0.012f;
     const std::float_t scroll_indicator_size = 0.02f;
-    const RdrColor text_color = RdrColor(240, 240, 240);
-    const RdrColor inverse_text_color = RdrColor(47, 47, 47);
-    const RdrColor sec_text_color = RdrColor(155, 155, 155);
+    const RgbColor text_color = RgbColor(240, 240, 240);
+    const RgbColor inverse_text_color = RgbColor(47, 47, 47);
+    const RgbColor sec_text_color = RgbColor(155, 155, 155);
   };
 
   struct Theme {
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> x_position;
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> y_position;
-    const RdrColor seperator_color = RdrColor(255, 255, 255);
-    const RdrColor background_color = RdrColor(0, 0, 0);
+    const RgbColor seperator_color = RgbColor(255, 255, 255);
+    const RgbColor background_color = RgbColor(28, 31, 32);
     Text text_props;
 
     Status Save(const std::string& theme_name);
@@ -56,13 +56,13 @@ namespace base::menu::ui {
     const std::float_t menu_item_height = 0.025f;
     const std::float_t menu_width = 0.16f;
     const std::uint32_t max_options_drawn = 12;
-    const RdrColor selector_color = theme->text_props.text_color;
+    const RgbColor selector_color = theme->text_props.text_color;
   };
 }
 
 template <>
-struct glz::meta<::base::menu::ui::RdrColor> {
-  using T = ::base::menu::ui::RdrColor;
+struct glz::meta<::base::menu::ui::RgbColor> {
+  using T = ::base::menu::ui::RgbColor;
   static constexpr auto value = object(
     &T::r,
     &T::g,

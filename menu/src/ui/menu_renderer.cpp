@@ -160,7 +160,7 @@ namespace base::menu::ui {
   }
 
   void MenuRenderer::DrawComponent(render::DrawQueueBuffer* draw_queue, const components::BaseComponent* component, const std::float_t y_offset, bool inverse_text) const {
-    const RdrColor text_color = inverse_text ? ui_props_.theme->text_props.inverse_text_color : ui_props_.theme->text_props.text_color;
+    const RgbColor text_color = inverse_text ? ui_props_.theme->text_props.inverse_text_color : ui_props_.theme->text_props.text_color;
     auto text_y_pos = y_offset + ui_props_.menu_item_height / 2;
 
     const std::float_t left_text_x_pos = ui_props_.theme->x_position + ui_props_.theme->text_props.x_margin;
