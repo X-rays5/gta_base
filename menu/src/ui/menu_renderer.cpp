@@ -206,7 +206,7 @@ namespace base::menu::ui {
 
     const std::float_t left_text_x_pos = ui_props_.theme->x_position + ui_props_.theme->text_props.x_margin;
     const std::float_t right_text_x_pos = ui_props_.theme->x_position + ui_props_.menu_width - ui_props_.theme->text_props.x_margin;
-    const std::float_t center_x_pos = ui_props_.theme->x_position + GetMenuCenterX();
+    const std::float_t center_x_pos = GetMenuCenterX();
 
     if (component->HasCenterText()) {
       draw_queue->AddCommand(render::Text({center_x_pos, text_y_pos}, ApplyAlphaToColor(ui_props_.theme->text_props.sec_text_color), component->GetCenterText(), ui_props_.theme->text_props.font_size, false, true, true));
@@ -224,7 +224,7 @@ namespace base::menu::ui {
 
   std::float_t MenuRenderer::DrawBottomBar(render::DrawQueueBuffer* draw_queue, const std::size_t cur_item_idx, const std::size_t item_count, std::float_t y_offset) const {
     auto text_y_pos = y_offset + ui_props_.menu_item_height / 2;
-    auto center_x = GetMenuCenterX();
+    const std::float_t center_x_pos = GetMenuCenterX();
 
     std::string arrow_icon = ICON_FA_ARROW_DOWN_ARROW_UP;
     if (cur_item_idx == 1) {
@@ -240,7 +240,7 @@ namespace base::menu::ui {
       ApplyAlphaToColor(ui_props_.theme->seperator_color),
       false, true, true, true,
       ui_props_.seperator_height));
-    draw_queue->AddCommand(render::Text({center_x, text_y_pos}, ApplyAlphaToColor(ui_props_.theme->text_props.text_color), arrow_icon, ui_props_.theme->text_props.font_size, false, true, true));
+    draw_queue->AddCommand(render::Text({center_x_pos, text_y_pos}, ApplyAlphaToColor(ui_props_.theme->text_props.text_color), arrow_icon, ui_props_.theme->text_props.font_size, false, true, true));
 
     return y_offset + ui_props_.menu_item_height;
   }
@@ -312,7 +312,7 @@ namespace base::menu::ui {
   }
 
   std::float_t MenuRenderer::GetMenuCenterX() const {
-    static const std::float_t center_x = ui_props_.theme->x_position + ui_props_.menu_width / 2;
+    const std::float_t center_x = ui_props_.theme->x_position + ui_props_.menu_width / 2;
     return center_x;
   }
 
