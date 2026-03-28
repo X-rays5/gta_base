@@ -27,6 +27,6 @@ namespace base::menu::options {
   }
 
   void SelfHealOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    sub->AddComponent(ui::components::ExecuteComponent(label, GetDescriptionRaw(), HealPlayer));
+    GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), HealPlayer));
   }
 }

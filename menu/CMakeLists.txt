@@ -129,6 +129,7 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/options/opt/self/never_wanted.hpp
         src/options/opt/vehicle/vehicle_repair.cpp
         src/options/opt/vehicle/vehicle_repair.hpp
+        src/ui/components/base_component.cpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

@@ -19,7 +19,7 @@ namespace base::menu::options {
   }
 
   void SelfMaxArmourOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    sub->AddComponent(ui::components::ExecuteComponent(label, GetDescriptionRaw(), MaxArmour));
+    GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), MaxArmour));
   }
 
   bool SelfMaxArmourOption::IsHotkeyAble() const {

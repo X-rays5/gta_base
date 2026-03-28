@@ -19,7 +19,7 @@ namespace base::menu::options {
   }
 
   void SuicideOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    sub->AddComponent(ui::components::ExecuteComponent(label, GetDescriptionRaw(), Suicide));
+   GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), Suicide));
   }
 
   bool SuicideOption::IsHotkeyAble() const {

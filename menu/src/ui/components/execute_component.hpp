@@ -14,7 +14,6 @@ namespace base::menu::ui::components {
 
   public:
     ExecuteComponent(const std::string& name, const std::string& description, const Func handler) :
-      BaseComponent(),
       exec_handler_(handler) {
       left_text_ = name;
       description_ = description;

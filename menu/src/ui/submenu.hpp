@@ -9,6 +9,10 @@
 #include <base-common/concurrency/spinlock.hpp>
 #include "components/base_component.hpp"
 
+namespace base::menu::options {
+  class BaseOption;
+}
+
 namespace base::menu::ui {
   class Submenu {
   public:
@@ -50,6 +54,17 @@ namespace base::menu::ui {
     template <typename T> requires std::is_base_of_v<components::BaseComponent, T>
     void AddComponent(T&& component) {
       common::concurrency::ScopedSpinlock lock(spinlock_);
+      components_.emplace_back(Component{std::make_shared<T>(std::forward<T>(component))});
+    }
+
+    /**
+     * Adds a component linked to an option. The component will automatically have the option set.
+     * This is the preferred way to add option-backed components.
+     */
+    template <typename T, typename V> requires std::is_base_of_v<components::BaseComponent, T> and std::is_base_of_v<options::BaseOption, V>
+    void AddComponent(V* option, T&& component) {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      component.SetOption(option);
       components_.emplace_back(Component{std::make_shared<T>(std::forward<T>(component))});
     }
 

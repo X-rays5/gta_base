@@ -41,7 +41,7 @@ namespace base::menu::options {
   }
 
   void ForceWantedLevelOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    sub->AddComponent(ui::components::ToggleNumberRangeComponent<std::uint8_t>(label, GetDescriptionRaw(), &level_, 0, 5, 1, &enabled_));
+   GTA_BASE_OPTION_UI_COMP(sub, ui::components::ToggleNumberRangeComponent<std::uint8_t>(label, GetDescriptionRaw(), &level_, 0, 5, 1, &enabled_));
   }
 
   void ForceWantedLevelOption::Tick() {

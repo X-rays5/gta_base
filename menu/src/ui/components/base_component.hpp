@@ -7,6 +7,14 @@
 #include "component_flags.hpp"
 #include "../localization/manager.hpp"
 
+namespace base::menu::options {
+  class BaseOption;
+}
+
+namespace base::menu::ui {
+  class Submenu;
+}
+
 namespace base::menu::ui::components {
   class BaseComponent {
   public:
@@ -17,6 +25,9 @@ namespace base::menu::ui::components {
     };
 
   public:
+    friend Submenu;
+
+    explicit BaseComponent(options::BaseOption* opt = nullptr) : option_(opt) {}
     virtual ~BaseComponent() = default;
 
     virtual std::string GetLeftText() const {
@@ -57,12 +68,22 @@ namespace base::menu::ui::components {
       return (flags_ & flag) != Flags::None;
     }
 
+    bool IsHotkeyAble() const;
+    bool IsSavable() const;
+
   protected:
     std::string left_text_;
     std::string center_text_;
     std::string right_text_;
     std::string description_;
     Flags flags_ = Flags::None;
+    options::BaseOption* option_ = nullptr;
+
+    virtual BaseComponent& SetOption(options::BaseOption* opt) {
+      option_ = opt;
+      return *this;
+    }
+
   };
 }
 

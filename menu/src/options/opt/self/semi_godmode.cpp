@@ -34,7 +34,7 @@ namespace base::menu::options {
   }
 
   void SemiGodModeOpt::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    sub->AddComponent(ui::components::ToggleComponent(label, GetDescriptionRaw(), &enabled_));
+    GTA_BASE_OPTION_UI_COMP(sub, ui::components::ToggleComponent(label, GetDescriptionRaw(), &enabled_));
   }
 
   bool SemiGodModeOpt::IsTickable() const {

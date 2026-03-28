@@ -7,6 +7,8 @@
 #include "../ui/components/components.hpp"
 
 namespace base::menu::options {
+#define GTA_BASE_OPTION_UI_COMP(sub, comp) sub->AddComponent(this, comp)
+
   class BaseOption : public BaseCommand {
   public:
     enum class TickThread {
