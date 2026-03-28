@@ -511,12 +511,14 @@ namespace base::menu::ui {
       return y_offset;
     }
 
+    const std::float_t text_max_x = ui_props_.menu_width - ui_props_.theme->text_props.x_margin * 2;
+
     std::string description = current_component->GetDescription();
-    render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, description, ui_props_.menu_width - 2 * ui_props_.theme->text_props.x_margin, 2);
+    render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, description, text_max_x, 2);
 
     if (current_component->IsSavable()) {
-      std::string savable_text = localization::kMANAGER->Localize("info/savable");
-      render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, savable_text, ui_props_.menu_width - 2 * ui_props_.theme->text_props.x_margin, 1);
+      std::string savable_text = localization::kMANAGER->Localize("info/save_able");
+      render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, savable_text, text_max_x, 1);
       if (description.empty()) {
         description = savable_text;
       } else {
@@ -525,7 +527,7 @@ namespace base::menu::ui {
     }
     if (current_component->IsHotkeyAble()) {
       std::string hotkey_text = localization::kMANAGER->Localize("info/hotkey_able");
-      render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, hotkey_text, ui_props_.menu_width - 2 * ui_props_.theme->text_props.x_margin, 1);
+      render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, hotkey_text, text_max_x, 1);
       if (description.empty()) {
         description = hotkey_text;
       } else {
@@ -537,10 +539,10 @@ namespace base::menu::ui {
       return y_offset;
     }
 
-    constexpr std::float_t padding = 0.005f;
-    const ImVec2 text_size = render::draw_helpers::CalcTextSize(nullptr, ui_props_.theme->text_props.font_size, description, ui_props_.menu_width - 2 * ui_props_.theme->text_props.x_margin);
+    const ImVec2 text_size = render::draw_helpers::CalcTextSize(nullptr, ui_props_.theme->text_props.font_size, description, text_max_x);
 
-    const std::float_t info_box_height = (ui_props_.menu_item_height + text_size.x) + padding + (ui_props_.theme->text_props.y_margin * 2);
+    // Height = text height + top margin + bottom margin
+    const std::float_t info_box_height = text_size.y + ui_props_.theme->text_props.y_margin * 2;
 
     // Draw the background box with border
     draw_queue->AddCommand(render::Rect({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, info_box_height}, ApplyAlphaToColor(ui_props_.theme->background_color)));

@@ -105,7 +105,7 @@ namespace base::menu::render::draw_helpers {
   }
 
   [[nodiscard]] ImVec2 CalcTextSize(const ImFont* font, const float font_size, const std::string& text, const float wrap_width) {
-    return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, wrap_width));
+    return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, ScaleXToScreen(wrap_width)));
   }
 
   std::uint32_t WordWrap(const float font_size, std::string& str, const float max_x, const std::size_t max_lines) {
@@ -181,6 +181,11 @@ namespace base::menu::render::draw_helpers {
     }
 
     str = WordWrapGetString(lines);
+
+    // Remove trailing newline
+    if (!str.empty() && str.back() == '\n') {
+      str.pop_back();
+    }
 
     return static_cast<std::uint32_t>(lines.size());
   }
