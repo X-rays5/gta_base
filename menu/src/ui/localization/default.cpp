@@ -25,7 +25,7 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/hotkey/press_key_timeout", "Hotkey binding timed out, no key was bound")
     ADD_TRANSLATION("ui/hotkey/add_failed", "Failed to add hotkey, an error occurred while waiting for key input")
     ADD_TRANSLATION("ui/hotkey/add_success", "Successfully added hotkey for option '{}': {} + {}")
-    ADD_TRANSLATION("ui/hotkey/activated", "Activated '{}'")
+    ADD_TRANSLATION("ui/hotkey/activated", "Triggered '{}'")
 
     ADD_TRANSLATION("ui/sub/home", "Home")
     ADD_TRANSLATION("ui/sub/self", "Self")
