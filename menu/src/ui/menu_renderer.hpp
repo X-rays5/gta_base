@@ -97,8 +97,10 @@ namespace base::menu::ui {
     common::concurrency::RecursiveSpinlock submenus_lock_;
 
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> selector_animation_;
+    std::unique_ptr<base::render::animate::Lerp<std::float_t>> fade_animation_;
     std::atomic<bool> is_menu_opened_ = true;
     std::float_t current_selector_y_ = 0.0f;
+    std::float_t current_alpha_ = 1.0f;
     std::chrono::steady_clock::time_point last_update_time_ = std::chrono::steady_clock::now();
 
     // Used when the current sub is empty
@@ -117,6 +119,10 @@ namespace base::menu::ui {
     std::float_t DrawInfoBox(render::DrawQueueBuffer* draw_queue, const Submenu* submenu, std::float_t y_offset) const;
 
     std::float_t GetMenuCenterX() const;
+
+    // Helper methods for fade animation
+    void UpdateFadeAnimation();
+    RgbColor ApplyAlphaToColor(const RgbColor& color) const;
   };
 
   inline MenuRenderer* kMENU_RENDERER{};
