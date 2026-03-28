@@ -4,6 +4,7 @@
 #include "context.hpp"
 #include <imgui/imgui_impl_dx12.h>
 #include <imgui/imgui_impl_win32.h>
+#include "../imgui_input_queue.hpp"
 
 namespace base::menu::render::d3d12 {
   Context::Context(const Microsoft::WRL::ComPtr<IDXGISwapChain1>& game_swap_chain, const Microsoft::WRL::ComPtr<ID3D12CommandQueue>& command_queue) : swap_chain_1_(game_swap_chain), command_queue_(command_queue) {}
@@ -211,6 +212,10 @@ namespace base::menu::render::d3d12 {
       LOG_ERROR("Context not initialized - cannot create new frame");
       return;
     }
+
+    // Process all input events that were queued from WndProc on the message pump thread.
+    // This is safe because we're on the render thread where ImGui state can be safely modified.
+    ImGuiInputQueue::Get().ProcessQueuedEvents();
 
     ImGui_ImplDX12_NewFrame();
     ImGui_ImplWin32_NewFrame();

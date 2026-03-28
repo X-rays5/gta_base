@@ -130,6 +130,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/options/opt/vehicle/vehicle_repair.cpp
         src/options/opt/vehicle/vehicle_repair.hpp
         src/ui/components/base_component.cpp
+        src/render/imgui_input_queue.cpp
+        src/render/imgui_input_queue.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

@@ -8,11 +8,10 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_dx12.h>
 #include <imgui/imgui_impl_win32.h>
+#include "imgui_input_queue.hpp"
 #include "../hooking/hooking.hpp"
 #include "../hooking/wndproc.hpp"
 #include "../memory/pointers.hpp"
-
-IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace base::menu::render {
   Renderer::Renderer() : d3d12_context_(*memory::kPOINTERS->swap_chain_, *memory::kPOINTERS->command_queue_) {
@@ -24,12 +23,17 @@ namespace base::menu::render {
 
     init_imgui_ = true;
 
-    wndproc_handler_id_ = hooking::kWNDPROC->AddWndProcHandler(ImGui_ImplWin32_WndProcHandler);
+    // Queue input events on message pump thread, process them on render thread before ImGui::NewFrame()
+    // This avoids blocking WndProc which runs on the game's message pump thread
+    wndproc_handler_id_ = hooking::kWNDPROC->AddWndProcHandler([](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+      ImGuiInputQueue::Get().QueueEvent(hwnd, msg, wparam, lparam);
+    });
   }
 
   Renderer::~Renderer() {
     init_imgui_ = false;
 
+    ImGuiInputQueue::Get().Clear();
 
     if (d3d12_context_.IsInitialized()) {
       d3d12_context_.WaitForLastFrame();
