@@ -93,6 +93,12 @@ namespace base::menu::ui {
       submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kRIGHT);
     }
 
+    if (option_interaction.WasKeyPressed(VK_F11)) {
+      submenu->GetCurrentComponent()->Save();
+    } else if (option_interaction.WasKeyPressed(VK_F12)) {
+      //submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kEXTRA_2);
+    }
+
     const Submenu::component_list_t& components = submenu->GetComponents();
 
     std::float_t y_offset = ui_props_.theme->y_position;

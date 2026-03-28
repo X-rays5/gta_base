@@ -12,6 +12,32 @@ namespace base::menu::options {
     std::filesystem::path GetSettingsFilePath(const std::string& profile_name) {
       return common::fs::vfs::GetOptionSettingsDir() / fmt::format("{}.json", profile_name);
     }
+
+    StatusOr<glz::generic> ReadProfile(const std::string& profile_name) {
+      const auto path = GetSettingsFilePath(profile_name);
+      if (!std::filesystem::exists(path)) {
+        return MakeFailure<ResultCode::kNOT_FOUND>("Options profile not found: {}", profile_name);
+      }
+
+      glz::generic save;
+      const auto ec = glz::read_file_json(save, path.string(), std::string{});
+      if (ec) {
+        LOG_ERROR("Failed to load options from file: {}", ec);
+        return MakeFailure<ResultCode::kIO_ERROR>("Failed to load options from file: {}", ec);
+      }
+
+      return save;
+    }
+
+    Status WriteProfile(const std::string& profile_name, const glz::generic& data) {
+      const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(data, GetSettingsFilePath(profile_name).string(), std::string{});
+      if (ec) {
+        LOG_ERROR("Failed to save options to file: {}", ec);
+        return MakeFailure<ResultCode::kIO_ERROR>("Failed to save options to file: {}", ec);
+      }
+
+      return {};
+    }
   }
 
   OptionRegistry::OptionRegistry() {
@@ -25,6 +51,39 @@ namespace base::menu::options {
 
   OptionRegistry::~OptionRegistry() {
     kOPTION_REGISTRY = nullptr;
+  }
+
+  Status OptionRegistry::SaveOption(BaseOption* opt) {
+    if (!opt) {
+      return MakeFailure<ResultCode::kINVALID_ARGUMENT>("Option pointer is null");
+    }
+
+    if (!opt->IsSavable()) {
+      return MakeFailure<ResultCode::kINVALID_ARGUMENT>("Option '{}' is not savable", opt->GetName());
+    }
+
+    LOG_INFO("Saving option '{}'", opt->GetName());
+
+    common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
+    auto res = ReadProfile(active_profile_name_);
+    if (!res) {
+      LOG_ERROR("Failed to read active options profile '{}': {}", active_profile_name_, res);
+      return res.error().Forward();
+    }
+
+    std::string opt_saved;
+    glz::generic opt_data;
+    opt->Save(opt_data);
+    auto ec = glz::write_toml(opt_data, opt_saved);
+    if (ec) {
+      LOG_ERROR("Failed to save options from file: {}", ec);
+      return MakeFailure<ResultCode::kIO_ERROR>("Failed to save options from file: {}", ec);
+    }
+
+    glz::generic save = res.value();
+    save[opt->GetName()] = opt_saved;
+
+    return WriteProfile(active_profile_name_, save);
   }
 
   Status OptionRegistry::SaveOptions(const std::string& profile_name) {
@@ -51,30 +110,19 @@ namespace base::menu::options {
     }
     lock.Unlock();
 
-    const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(save, GetSettingsFilePath(profile_name).string(), std::string{});
-    if (ec) {
-      LOG_ERROR("Failed to save options to file: {}", ec);
-      return MakeFailure<ResultCode::kIO_ERROR>("Failed to save options to file: {}", ec);
-    }
-
-    return {};
+    return WriteProfile(profile_name, save);
   }
 
   Status OptionRegistry::LoadOptions(const std::string& profile_name) {
     LOG_INFO("Loading options from profile '{}'", profile_name);
 
-    const auto path = GetSettingsFilePath(profile_name);
-    if (!std::filesystem::exists(path)) {
-      return MakeFailure<ResultCode::kNOT_FOUND>("Options profile not found: {}", profile_name);
+    auto res = ReadProfile(profile_name);
+    if (!res) {
+      LOG_ERROR("Failed to load options profile '{}': {}", profile_name, res);
+      return res.error().Forward();
     }
 
-    glz::generic save;
-    const auto ec = glz::read_file_json(save, path.string(), std::string{});
-    if (ec) {
-      LOG_ERROR("Failed to load options from file: {}", ec);
-      return MakeFailure<ResultCode::kIO_ERROR>("Failed to load options from file: {}", ec);
-    }
-
+    auto save = res.value();
     common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
     for (auto&& opt : opt_name_to_option_) {
       if (opt.second->IsSavable() && save.contains(opt.first)) {
@@ -82,6 +130,7 @@ namespace base::menu::options {
       }
     }
 
+    active_profile_name_ = profile_name;
     return {};
   }
 }

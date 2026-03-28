@@ -44,11 +44,13 @@ namespace base::menu::options {
       return options;
     }
 
+    Status SaveOption(BaseOption* opt);
     Status SaveOptions(const std::string& profile_name);
     Status LoadOptions(const std::string& profile_name);
 
   private:
     common::concurrency::Spinlock opt_registry_lock_;
+    std::string active_profile_name_;
     ankerl::unordered_dense::map<std::string, std::shared_ptr<BaseOption>> opt_name_to_option_{};
     std::shared_ptr<AvailableOptions> available_options_;
   };

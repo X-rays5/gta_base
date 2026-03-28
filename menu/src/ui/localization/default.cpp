@@ -17,6 +17,8 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("label/confirm", "Confirm")
     ADD_TRANSLATION("label/reset", "Cancel")
     ADD_TRANSLATION("label/invalid_submenu", "Invalid Submenu")
+    ADD_TRANSLATION("info/save_able", "Press F11 to save this option")
+    ADD_TRANSLATION("info/hotkey_able", "")
 
     ADD_TRANSLATION("ui/sub/home", "Home")
     ADD_TRANSLATION("ui/sub/self", "Self")

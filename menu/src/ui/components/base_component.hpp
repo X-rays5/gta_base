@@ -70,6 +70,7 @@ namespace base::menu::ui::components {
 
     bool IsHotkeyAble() const;
     bool IsSavable() const;
+    void Save() const;
 
   protected:
     std::string left_text_;

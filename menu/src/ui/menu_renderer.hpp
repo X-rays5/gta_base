@@ -91,6 +91,7 @@ namespace base::menu::ui {
     MenuRenderProperties ui_props_{};
     util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK}, ui_props_.menu_ui_key_state_cooldown};
     util::KeyState menu_ui_navigation = {{VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT, VK_RETURN}, ui_props_.menu_ui_navigation_key_state_cooldown};
+    util::KeyState option_interaction = {{VK_F11, VK_F12}, ui_props_.option_interaction_key_state_cooldown};
     ankerl::unordered_dense::map<std::string, std::shared_ptr<Submenu>> submenus_;
     std::stack<std::string> submenu_stack_;
     std::size_t script_id_ = 0;
