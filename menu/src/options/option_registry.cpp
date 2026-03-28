@@ -41,11 +41,10 @@ namespace base::menu::options {
   }
 
   OptionRegistry::OptionRegistry() {
-    auto status = LoadOptions(kDEFAULT_PROFILES->GetDefaultOptSettings());
-
     kOPTION_REGISTRY = this;
 
     available_options_ = std::make_shared<AvailableOptions>();
+    auto status = LoadOptions(kDEFAULT_PROFILES->GetDefaultOptSettings());
     LOG_INFO("Loaded default options profile '{}': {}. {} options are ready for use", kDEFAULT_PROFILES->GetDefaultOptSettings(), status, opt_name_to_option_.size());
   }
 
@@ -125,8 +124,14 @@ namespace base::menu::options {
     auto save = res.value();
     common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
     for (auto&& opt : opt_name_to_option_) {
-      if (opt.second->IsSavable() && save.contains(opt.first)) {
-        opt.second->Load(save[opt.first]);
+      if (opt.second->IsSavable() && save.contains(opt.first) && save[opt.first].is_string()) {
+        glz::generic opt_data;
+        auto ec = glz::read_toml(opt_data, save[opt.first].get_string());
+        if (ec) {
+          LOG_ERROR("Failed to load option '{}': {}", opt.first, ec);
+          continue;
+        }
+        opt.second->Load(opt_data);
       }
     }
 
