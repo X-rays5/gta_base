@@ -384,7 +384,7 @@ namespace base::menu::ui {
   }
 
   void MenuRenderer::HandleMouseInput(Submenu* submenu) {
-    if (!submenu || !is_menu_opened_) {
+    if (!submenu || !is_menu_opened_ || !render::kRENDERER->IsCursorVisible()) {
       mouse_in_menu_bounds_ = false;
       return;
     }
