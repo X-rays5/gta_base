@@ -8,7 +8,7 @@
 namespace base::menu::options {
   namespace {
     void RemoveArmour() {
-      script::kGAME_TASK_EXECUTOR->QueueTask([](script::GameTaskExecutor::GameTask*) {
+      script::kGAME_TASK_EXECUTOR->QueueTask([] {
         natives::PED::SET_PED_ARMOUR(natives::PLAYER::PLAYER_PED_ID(), 0);
       });
     }

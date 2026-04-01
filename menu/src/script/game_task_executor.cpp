@@ -15,19 +15,15 @@ namespace base::menu::script {
     kGAME_TASK_EXECUTOR = nullptr;
   }
 
-  std::future<void> GameTaskExecutor::QueueTask(const std::function<void(GameTask* task)>& cb) {
-    auto task = std::make_unique<GameTask>(main_fiber_, cb);
+  std::future<void> GameTaskExecutor::QueueTask(const std::function<void()>& cb) {
+    auto task = std::make_unique<GameTask>(cb);
     auto future = task->GetFuture();
     tasks_.emplace_back(std::move(task));
     return future;
   }
 
   void GameTaskExecutor::OnInit() {
-    if (IsThreadAFiber()) {
-      main_fiber_ = GetCurrentFiber();
-    } else {
-      main_fiber_ = ConvertThreadToFiber(nullptr);
-    }
+    // Coroutines do not require OS-level fiber setup on the main thread
   }
 
   void GameTaskExecutor::OnTick() {
@@ -42,44 +38,30 @@ namespace base::menu::script {
                  tasks_.end());
   }
 
-  GameTaskExecutor::GameTask::GameTask(const LPVOID main_fiber, const std::function<void(GameTask* task)>& cb) {
-    main_fiber_ = main_fiber;
-    cb_ = cb;
+  GameTaskExecutor::GameTask::GameTask(const std::function<void()>& cb) : cb_(cb) {
     promise_ = std::make_shared<std::promise<void>>();
-    fiber_ = CreateFiber(0, [](const LPVOID param) {
-      auto* task = static_cast<GameTask*>(param);
-      task->cb_(task);
-      task->done_ = true;
-      task->promise_->set_value();
-      SwitchToFiber(task->main_fiber_);
-    }, this);
+    coro_ = std::make_unique<common::coroutine::Coroutine>([this] {
+      cb_();
+      done_ = true;
+      promise_->set_value();
+    });
   }
 
-  GameTaskExecutor::GameTask::~GameTask() {
-    if (fiber_) {
-      DeleteFiber(fiber_);
-      fiber_ = nullptr;
-    }
-  }
-
-  void GameTaskExecutor::GameTask::Tick() const {
+  void GameTaskExecutor::GameTask::Tick() {
     if (done_)
       return;
 
-    const auto now = std::chrono::steady_clock::now();
-    if (now < wake_time_)
-      return;
-
-    SwitchToFiber(fiber_);
-  }
-
-  void GameTaskExecutor::GameTask::Yield() {
-    Yield(std::chrono::milliseconds(0));
-  }
-
-  void GameTaskExecutor::GameTask::Yield(const std::chrono::milliseconds duration) {
-    wake_time_ = std::chrono::steady_clock::now() + duration;
-    SwitchToFiber(main_fiber_);
+    const auto res = coro_->resume();
+    if (res != common::coroutine::CoroResult::kSUCCESS && res != common::coroutine::CoroResult::kYIELDING) {
+      // If the coroutine threw an exception, capture it and mark as done
+      if (res == common::coroutine::CoroResult::kEXCEPTION) {
+        promise_->set_exception(coro_->exception());
+      } else {
+        // For any other unexpected result, set a generic exception
+        promise_->set_exception(std::make_exception_ptr(std::runtime_error("Coroutine failed with unexpected result")));
+      }
+      done_ = true;
+    }
   }
 
   bool GameTaskExecutor::GameTask::IsDone() const {

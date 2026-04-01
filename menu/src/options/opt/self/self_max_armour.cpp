@@ -8,7 +8,7 @@
 namespace base::menu::options {
   namespace {
     void MaxArmour() {
-      script::kGAME_TASK_EXECUTOR->QueueTask([](script::GameTaskExecutor::GameTask*) {
+      script::kGAME_TASK_EXECUTOR->QueueTask([] {
         natives::PED::SET_PED_ARMOUR(natives::PLAYER::PLAYER_PED_ID(), natives::PLAYER::GET_PLAYER_MAX_ARMOUR(natives::PLAYER::PLAYER_ID()));
       });
     }

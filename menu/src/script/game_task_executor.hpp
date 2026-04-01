@@ -6,10 +6,9 @@
 #include <future>
 #include <memory>
 #include <vector>
+#include <base-common/coro/coroutine.hpp>
 #include "script_base.hpp"
 #include "../natives/natives_gen9.hpp"
-
-#undef Yield
 
 namespace base::menu::script {
   class GameTaskExecutor : public ScriptBase {
@@ -18,31 +17,25 @@ namespace base::menu::script {
     public:
       friend class GameTaskExecutor;
 
-      explicit GameTask(LPVOID main_fiber, const std::function<void(GameTask* task)>& cb);
-      ~GameTask();
+      explicit GameTask(const std::function<void()>& cb);
+      ~GameTask() = default;
 
       GameTask(const GameTask&) = delete;
       GameTask(GameTask&&) = delete;
       GameTask& operator=(const GameTask&) = delete;
       GameTask& operator=(GameTask&&) = delete;
 
-
-      void Yield();
-      void Yield(std::chrono::milliseconds duration);
-
       bool IsDone() const;
       std::future<void> GetFuture() const;
 
     protected:
-      void Tick() const;
+      void Tick();
 
     private:
-      std::function<void(GameTask* task)> cb_;
-      LPVOID fiber_{nullptr};
-      LPVOID main_fiber_{nullptr};
-      std::chrono::steady_clock::time_point wake_time_;
+      std::function<void()> cb_;
       bool done_{false};
       std::shared_ptr<std::promise<void>> promise_;
+      std::unique_ptr<common::coroutine::Coroutine> coro_;
     };
 
   public:
@@ -53,14 +46,13 @@ namespace base::menu::script {
       return Type::GameScript;
     }
 
-    std::future<void> QueueTask(const std::function<void(GameTask* task)>& cb);
+    std::future<void> QueueTask(const std::function<void()>& cb);
 
   protected:
     void OnInit() override;
     void OnTick() override;
 
   private:
-    LPVOID main_fiber_{nullptr};
     std::vector<std::unique_ptr<GameTask>> tasks_;
   };
   inline GameTaskExecutor* kGAME_TASK_EXECUTOR{};

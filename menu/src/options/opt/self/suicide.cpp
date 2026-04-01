@@ -8,7 +8,7 @@
 namespace base::menu::options {
   namespace {
     void Suicide() {
-      script::kGAME_TASK_EXECUTOR->QueueTask([](script::GameTaskExecutor::GameTask*) {
+      script::kGAME_TASK_EXECUTOR->QueueTask([] {
         natives::ENTITY::SET_ENTITY_HEALTH(natives::PLAYER::PLAYER_PED_ID(), 0, natives::PLAYER::PLAYER_PED_ID(), NULL);
       });
     }

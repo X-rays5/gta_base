@@ -8,7 +8,7 @@
 namespace base::menu::options {
   namespace {
     void HealPlayer() {
-      script::kGAME_TASK_EXECUTOR->QueueTask([](script::GameTaskExecutor::GameTask*) {
+      script::kGAME_TASK_EXECUTOR->QueueTask([] {
         natives::ENTITY::SET_ENTITY_HEALTH(natives::PLAYER::PLAYER_PED_ID(), natives::ENTITY::GET_ENTITY_MAX_HEALTH(natives::PLAYER::PLAYER_PED_ID()), natives::PLAYER::PLAYER_PED_ID(), NULL);
       });
     }
