@@ -9,6 +9,7 @@ add_executable(${PROJECT_NAME}
         src/win32/misc_test.cpp
         src/test_globals.hpp
         src/concurrency/spinlock_test.cpp
+        src/coro/coroutine_test.cpp
         src/util/string_test.cpp
         src/util/time_test.cpp
         src/conversion/hex_test.cpp
