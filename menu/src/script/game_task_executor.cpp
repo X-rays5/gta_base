@@ -36,9 +36,9 @@ namespace base::menu::script {
       return;
 
     const auto res = coro_->resume();
-    if (res != common::coroutine::CoroResult::kSUCCESS && res != common::coroutine::CoroResult::kYIELDING) {
+    if (res != minicoropp::CoroResult::kSUCCESS && res != minicoropp::CoroResult::kYIELDING) {
       // If the coroutine threw an exception, capture it and mark as done
-      if (res == common::coroutine::CoroResult::kEXCEPTION) {
+      if (res == minicoropp::CoroResult::kEXCEPTION) {
         promise_->set_exception(coro_->exception());
       } else {
         // For any other unexpected result, set a generic exception

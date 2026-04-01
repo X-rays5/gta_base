@@ -3,11 +3,11 @@
 //
 
 #include <gtest/gtest.h>
-#include <base-common/coro/coroutine.hpp>
-#include <base-common/coro/mutex.hpp>
+#include <base-coro/coroutine.hpp>
+#include <base-coro/mutex.hpp>
 #include <chrono>
 
-using namespace base::common::coroutine;
+using namespace minicoropp;
 
 TEST(CoroutineTest, ExecutionAndState) {
   bool executed = false;
@@ -16,7 +16,7 @@ TEST(CoroutineTest, ExecutionAndState) {
   });
 
   EXPECT_EQ(coro.state(), CoroState::kSUSPENDED);
-  auto res = coro.resume();
+  const auto res = coro.resume();
   EXPECT_EQ(res, CoroResult::kSUCCESS);
   EXPECT_EQ(coro.state(), CoroState::kDEAD);
   EXPECT_TRUE(executed);
@@ -24,7 +24,7 @@ TEST(CoroutineTest, ExecutionAndState) {
 
 TEST(CoroutineTest, UserDataPassing) {
   int data = 42;
-  Coroutine coro([&] {
+  const Coroutine coro([&] {
     auto* usr_data = static_cast<int*>(this_coro::get_data());
     EXPECT_NE(usr_data, nullptr);
     if (usr_data) {
@@ -37,7 +37,7 @@ TEST(CoroutineTest, UserDataPassing) {
 
 TEST(CoroutineTest, Yielding) {
   int counter = 0;
-  Coroutine coro([&] {
+  const Coroutine coro([&] {
     counter++;
     this_coro::yield();
     counter++;
@@ -159,7 +159,7 @@ TEST(CoroutineTest, MoveSemantics) {
 
 TEST(CoroutineTest, SleepUntil) {
   const Coroutine coro([] {
-    auto wake_time = std::chrono::high_resolution_clock::now() + std::chrono::milliseconds(50);
+    const auto wake_time = std::chrono::high_resolution_clock::now() + std::chrono::milliseconds(50);
     this_coro::sleep_until(wake_time);
   });
 
@@ -189,7 +189,7 @@ TEST(CoroutineTest, ResumeAfterDead) {
 
 TEST(CoroutineTest, NonCoroutineContext) {
   // Calling these outside of a resumed coroutine context should safely fall back
-  // to the main thread's equivalent functions, or safely return nullptrs, without crashing.
+  // to the main thread's equivalent functions or safely return nullptrs, without crashing.
   EXPECT_NO_THROW({
     this_coro::yield();
     this_coro::sleep_for(std::chrono::milliseconds(1));

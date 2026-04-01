@@ -7,9 +7,8 @@
 #include <chrono>
 #include <cstdint>
 #include <exception>
-#include <memory>
 
-namespace base::common::coroutine {
+namespace minicoropp {
   /**
    * @brief Lightweight coroutine wrapper around minicoro library
    *

@@ -6,7 +6,7 @@
 #include <future>
 #include <memory>
 #include <vector>
-#include <base-common/coro/coroutine.hpp>
+#include <base-coro/coroutine.hpp>
 #include "script_base.hpp"
 #include "../natives/natives_gen9.hpp"
 
@@ -20,7 +20,7 @@ namespace base::menu::script {
       template <typename F>
       explicit GameTask(F&& cb) {
         promise_ = std::make_shared<std::promise<void>>();
-        coro_ = std::make_unique<common::coroutine::Coroutine>([this, callback = std::forward<F>(cb)]() mutable {
+        coro_ = std::make_unique<minicoropp::Coroutine>([this, callback = std::forward<F>(cb)]() mutable {
           callback();
           done_ = true;
           promise_->set_value();
@@ -43,7 +43,7 @@ namespace base::menu::script {
     private:
       bool done_{false};
       std::shared_ptr<std::promise<void>> promise_;
-      std::unique_ptr<common::coroutine::Coroutine> coro_;
+      std::unique_ptr<minicoropp::Coroutine> coro_;
     };
 
   public:

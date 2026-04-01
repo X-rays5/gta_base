@@ -9,7 +9,7 @@
 #include <thread>
 #include "coroutine.hpp"
 
-namespace base::common::coroutine {
+namespace minicoropp {
   /**
    * @brief A true coroutine-aware mutex.
    *

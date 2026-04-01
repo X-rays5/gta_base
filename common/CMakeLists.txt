@@ -55,9 +55,6 @@ add_library(${PROJECT_NAME} STATIC
         src/conversion/joaat.hpp
         src/util/ranged_value.hpp
         src/util/enum_bitops.hpp
-        src/coro/coroutine.cpp
-        src/coro/coroutine.hpp
-        src/coro/mutex.cpp
 )
 add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 

@@ -11,17 +11,18 @@ endif ()
 set(MINICORO_COMPILE_DIR ${CMAKE_CURRENT_BINARY_DIR}/tmp/minicoro)
 set(MINICORO_COMPILE_FILE ${MINICORO_COMPILE_DIR}/minicoro.c)
 
-file(WRITE ${MINICORO_COMPILE_FILE} "#include \"minicoro.h\"")
+file(WRITE ${MINICORO_COMPILE_FILE} "#include \"minicoro_config.h\"\n#include \"minicoro.h\"\n")
 
 add_library(minicoro STATIC ${MINICORO_COMPILE_FILE})
 add_library(minicoro::minicoro ALIAS minicoro)
 
-target_compile_definitions(minicoro PRIVATE MINICORO_IMPL MCO_USE_ASM)
+target_compile_definitions(minicoro PRIVATE MINICORO_IMPL)
 
 configure_file(${minicoro_SOURCE_DIR}/minicoro.h ${MINICORO_COMPILE_DIR}/minicoro.h COPYONLY)
 configure_file(${minicoro_SOURCE_DIR}/minicoro.h ${CMAKE_CURRENT_BINARY_DIR}/include/minicoro/include/minicoro/minicoro.h COPYONLY)
 message(STATUS "minicoro header copied to ${CMAKE_CURRENT_BINARY_DIR}/include/minicoro/include/minicoro/minicoro.h")
 
 target_include_directories(minicoro INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include/minicoro/include)
+target_include_directories(minicoro PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/include/base-coro)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE minicoro::minicoro)

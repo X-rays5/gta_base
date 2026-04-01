@@ -17,6 +17,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CPM_SOURCE_CACHE ${CMAKE_CURRENT_SOURCE_DIR}/.vendor)
 include(cmake_scripts/get_cpm.cmake)
 
+add_subdirectory(coro)
 add_subdirectory(common)
 add_subdirectory(imfont)
 add_subdirectory(rage)
@@ -29,6 +30,7 @@ if (OPENCPPCOVERAGE_EXECUTABLE)
 
     # Define the test targets
     set(ALL_TEST_TARGETS
+            minicoropp_test
             common_test
             imfont_test
             # Add other test targets as they're created

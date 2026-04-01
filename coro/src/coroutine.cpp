@@ -3,13 +3,16 @@
 //
 
 #include "coroutine.hpp"
+
+#include <cassert>
 #include <exception>
 #include <stdexcept>
 #include <thread>
+#include <base-coro/minicoro_config.h>
+#define MINICORO_IMPL
 #include <minicoro/minicoro.h>
-#include "../logging/logging_macro.hpp"
 
-namespace base::common::coroutine {
+namespace minicoropp {
   namespace detail {
     void CoreExecWrapper(mco_coro* co);
 
@@ -29,11 +32,8 @@ namespace base::common::coroutine {
       ~CoroutineDetail() {
         if (co != nullptr) {
           const auto state = mco_status(co);
-          if (state != MCO_DEAD && state != MCO_SUSPENDED) {
-            LOG_CRITICAL("Attempting to destroy a coroutine that is not dead or suspended. State: {}", static_cast<int>(state));
-          } else {
-            mco_destroy(co);
-          }
+          assert(state == MCO_DEAD || state == MCO_SUSPENDED);
+          mco_destroy(co);
         }
         if (destroy_fn_ && func_ptr_) {
           destroy_fn_(func_ptr_);
@@ -139,7 +139,7 @@ namespace base::common::coroutine {
   }
 
   void this_coro::yield() {
-    const auto* coro = coroutine::detail::this_coro::GetCurrentCoroutineDetail();
+    const auto* coro = minicoropp::detail::this_coro::GetCurrentCoroutineDetail();
     if (!coro) {
       std::this_thread::yield();
       return;
@@ -150,7 +150,7 @@ namespace base::common::coroutine {
 
 
   void* this_coro::get_data() {
-    const auto* coro = coroutine::detail::this_coro::GetCurrentCoroutineDetail();
+    const auto* coro = minicoropp::detail::this_coro::GetCurrentCoroutineDetail();
     if (!coro) {
       return nullptr;
     }
@@ -159,11 +159,11 @@ namespace base::common::coroutine {
   }
 
   void* this_coro::get_current_handle() {
-    return coroutine::detail::this_coro::GetCurrentCoroutineDetail();
+    return minicoropp::detail::this_coro::GetCurrentCoroutineDetail();
   }
 
   void this_coro::suspend_indefinitely() {
-    auto* coro = coroutine::detail::this_coro::GetCurrentCoroutineDetail();
+    auto* coro = minicoropp::detail::this_coro::GetCurrentCoroutineDetail();
     if (!coro) {
       return; // Or yield thread depending on context
     }
@@ -174,7 +174,7 @@ namespace base::common::coroutine {
 
   void this_coro::wake_handle(void* handle) {
     if (!handle) return;
-    auto* coro = static_cast<coroutine::detail::CoroutineDetail*>(handle);
+    auto* coro = static_cast<minicoropp::detail::CoroutineDetail*>(handle);
     coro->SetYieldTill(std::chrono::time_point<std::chrono::high_resolution_clock>::min());
   }
 
@@ -216,7 +216,7 @@ namespace base::common::coroutine {
 
   namespace this_coro::detail {
     void sleep_for_impl(const std::chrono::high_resolution_clock::duration& sleep_duration) {
-      auto* coro = coroutine::detail::this_coro::GetCurrentCoroutineDetail();
+      auto* coro = minicoropp::detail::this_coro::GetCurrentCoroutineDetail();
       if (!coro) {
         std::this_thread::sleep_for(sleep_duration);
         return;
@@ -228,7 +228,7 @@ namespace base::common::coroutine {
     }
 
     void sleep_until_impl(const std::chrono::high_resolution_clock::time_point& sleep_time) {
-      auto* coro = coroutine::detail::this_coro::GetCurrentCoroutineDetail();
+      auto* coro = minicoropp::detail::this_coro::GetCurrentCoroutineDetail();
       if (!coro) {
         std::this_thread::sleep_until(sleep_time);
         return;

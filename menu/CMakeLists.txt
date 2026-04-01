@@ -156,6 +156,7 @@ target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::rage)
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::minicoropp)
 
 # Configure main module
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")

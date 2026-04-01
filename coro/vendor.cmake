@@ -1,0 +1,1 @@
+include(../vendor/minicoro.cmake)
