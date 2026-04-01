@@ -17,7 +17,16 @@ namespace base::menu::script {
     public:
       friend class GameTaskExecutor;
 
-      explicit GameTask(const std::function<void()>& cb);
+      template <typename F>
+      explicit GameTask(F&& cb) {
+        promise_ = std::make_shared<std::promise<void>>();
+        coro_ = std::make_unique<common::coroutine::Coroutine>([this, callback = std::forward<F>(cb)]() mutable {
+          callback();
+          done_ = true;
+          promise_->set_value();
+        });
+      }
+
       ~GameTask() = default;
 
       GameTask(const GameTask&) = delete;
@@ -32,7 +41,6 @@ namespace base::menu::script {
       void Tick();
 
     private:
-      std::function<void()> cb_;
       bool done_{false};
       std::shared_ptr<std::promise<void>> promise_;
       std::unique_ptr<common::coroutine::Coroutine> coro_;
@@ -46,7 +54,13 @@ namespace base::menu::script {
       return Type::GameScript;
     }
 
-    std::future<void> QueueTask(const std::function<void()>& cb);
+    template <typename F>
+    std::future<void> QueueTask(F&& cb) {
+      auto task = std::make_unique<GameTask>(std::forward<F>(cb));
+      auto future = task->GetFuture();
+      tasks_.emplace_back(std::move(task));
+      return future;
+    }
 
   protected:
     void OnInit() override;

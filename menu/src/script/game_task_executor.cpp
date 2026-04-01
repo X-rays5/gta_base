@@ -15,13 +15,6 @@ namespace base::menu::script {
     kGAME_TASK_EXECUTOR = nullptr;
   }
 
-  std::future<void> GameTaskExecutor::QueueTask(const std::function<void()>& cb) {
-    auto task = std::make_unique<GameTask>(cb);
-    auto future = task->GetFuture();
-    tasks_.emplace_back(std::move(task));
-    return future;
-  }
-
   void GameTaskExecutor::OnInit() {
     // Coroutines do not require OS-level fiber setup on the main thread
   }
@@ -36,15 +29,6 @@ namespace base::menu::script {
                                           return task->IsDone();
                                         }).begin(),
                  tasks_.end());
-  }
-
-  GameTaskExecutor::GameTask::GameTask(const std::function<void()>& cb) : cb_(cb) {
-    promise_ = std::make_shared<std::promise<void>>();
-    coro_ = std::make_unique<common::coroutine::Coroutine>([this] {
-      cb_();
-      done_ = true;
-      promise_->set_value();
-    });
   }
 
   void GameTaskExecutor::GameTask::Tick() {
