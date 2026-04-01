@@ -33,16 +33,16 @@ namespace base::win32 {
     /**
      * \brief Infinitely wait for the signal to be notified
      */
-    void Wait() const {
-      Wait(INFINITE);
+    std::size_t Wait() const {
+      return Wait(INFINITE);
     }
 
     /**
      * \brief Wait for a signal notify to occur within a set timeout
      * \param timeout Timeout in milliseconds
      */
-    void Wait(const std::int32_t timeout) const {
-      WaitForSingleObject(signal_h_, timeout);
+    std::size_t Wait(const std::int32_t timeout) const {
+      return WaitForSingleObject(signal_h_, timeout);
     }
 
   private:
