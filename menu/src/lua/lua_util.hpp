@@ -18,21 +18,23 @@ namespace base::menu::lua {
 
   int ReadOnly(lua_State* L);
 
-  void SetInternalLuaVar(const sol::state& L, const std::string& name, const std::string& val);
+  void SetInternalLuaVar(lua_State* L, const std::string& name, const std::string& val);
 
-  std::string GetInternalLuaVar(const sol::state& L, const std::string& name);
+  std::string GetInternalLuaVar(lua_State* L, const std::string& name);
 
-  std::string GetCurrentFile(const sol::state& L);
-  int GetCurrentLine(const sol::state& L);
+  std::string GetCurrentFile(lua_State* L);
+  int GetCurrentLine(lua_State* L);
 
-  std::string GetScriptName(const sol::state& L);
-  void SetScriptName(const sol::state& L, const std::string& name);
+  std::string GetScriptName(lua_State* L);
+  void SetScriptName(lua_State* L, const std::string& name);
 
-  std::filesystem::path GetScriptPath(const sol::state& L);
-  void SetScriptPath(const sol::state& L, const std::filesystem::path& path);
+  std::filesystem::path GetScriptPath(lua_State* L);
+  void SetScriptPath(lua_State* L, const std::filesystem::path& path);
 
-  std::filesystem::path GetMainFile(const sol::state& L);
-  void SetMainFile(const sol::state& L, const std::filesystem::path& path);
+  std::filesystem::path GetMainFile(lua_State* L);
+  void SetMainFile(lua_State* L, const std::filesystem::path& path);
 
   std::vector<std::filesystem::path> GetLuaScripts();
+
+  [[nodiscard]] sol::protected_function_result RunScriptFileSafe(sol::state& sol, const std::filesystem::path& path);
 }

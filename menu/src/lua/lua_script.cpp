@@ -2,10 +2,12 @@
 // Created by X-ray on 04/04/2026.
 //
 
-#include "script.hpp"
+#include "lua_script.hpp"
 #include <stacktrace>
 #include "lua_util.hpp"
-#include "lib/logging.hpp"
+#include "../script/game_task_executor.hpp"
+#include "lib/lua_coroutine.hpp"
+#include "lib/lua_logging.hpp"
 
 namespace base::menu::lua {
   namespace {
@@ -13,7 +15,6 @@ namespace base::menu::lua {
       lua_state.open_libraries(
         sol::lib::base,
         sol::lib::package,
-        sol::lib::coroutine,
         sol::lib::string,
         sol::lib::math,
         sol::lib::table,
@@ -35,6 +36,9 @@ namespace base::menu::lua {
     void SetFuncs(sol::state& lua_state) {
       auto log_table = SetupLuaLogging(lua_state);
       CreateReadOnlyTable(lua_state, "LOG", log_table);
+
+      auto coro_table = SetupCoroutine(lua_state);
+      CreateReadOnlyTable(lua_state, "coro", coro_table);
     }
   }
 
@@ -58,14 +62,16 @@ namespace base::menu::lua {
 
   }
 
-  void Script::Start() {
+  std::future<void> Script::Start() {
     const auto script_file = absolute(meta_data_.GetMainFile()).string();
     LOG_INFO("Starting script: {} ({})", meta_data_.GetName(), script_file);
 
-    const auto res = lua_state_.safe_script_file(script_file);
-    if (!res.valid()) {
-      const sol::error err = res;
-      LOG_ERROR("Failed to execute script: {}", err.what());
-    }
+    return script::kGAME_TASK_EXECUTOR->QueueTask([this, script_file] {
+      const auto res = RunScriptFileSafe(lua_state_, script_file);
+      if (!res.valid()) {
+        const sol::error err = res;
+        LOG_ERROR(err.what());
+      }
+    });
   }
 }

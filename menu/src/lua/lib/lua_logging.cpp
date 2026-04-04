@@ -2,7 +2,7 @@
 // Created by X-ray on 04/04/2026.
 //
 
-#include "logging.hpp"
+#include "lua_logging.hpp"
 #include <fmt/args.h>
 #include "../lua_util.hpp"
 

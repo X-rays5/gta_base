@@ -3,6 +3,8 @@
 //
 
 #include "vectored_handler.hpp"
+
+#include <set>
 #include <Zydis/Zydis.h>
 #include "exception_report.hpp"
 #include "util.hpp"
@@ -16,6 +18,7 @@
 namespace base::common::logging::exception {
   namespace {
     PVOID cur_handler = nullptr;
+    static const std::set<std::size_t> msvc_ex_codes = {3796650498, 3765269347};
 
     // Thread-local variables to track recovery attempts
     thread_local std::uint32_t recovery_attempts = 0;
@@ -133,7 +136,7 @@ namespace base::common::logging::exception {
         return EXCEPTION_CONTINUE_SEARCH;
       }
 
-      if (err_code == 3765269347 && except->ExceptionRecord->NumberParameters >= 3) {
+      if (msvc_ex_codes.contains(err_code) && except->ExceptionRecord->NumberParameters >= 3) {
         MSVCException(except);
 
         return EXCEPTION_CONTINUE_SEARCH;

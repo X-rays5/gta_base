@@ -34,4 +34,4 @@ endif ()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libluajit)
 target_include_directories(${PROJECT_NAME} PRIVATE ${sol2_SOURCE_DIR}/include)
-target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON=1 SOL_STRINGS_ARE_NUMBERS=1 SOL_LUAJIT=1)
+target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON=1 SOL_STRINGS_ARE_NUMBERS=1 SOL_LUAJIT=1 SOL_NO_EXCEPTIONS=1 SOL_PRINT_ERRORS=0)

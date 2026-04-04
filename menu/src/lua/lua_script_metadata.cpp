@@ -2,7 +2,7 @@
 // Created by X-ray on 04/04/2026.
 //
 
-#include "script_metadata.hpp"
+#include "lua_script_metadata.hpp"
 
 #pragma warning(push)
 #pragma warning(disable : 5321)

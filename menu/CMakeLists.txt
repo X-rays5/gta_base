@@ -134,16 +134,18 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/render/imgui_input_queue.hpp
         src/hotkey/hotkey_manager.cpp
         src/hotkey/hotkey_manager.hpp
-        src/lua/script.cpp
-        src/lua/script.hpp
-        src/lua/script_metadata.cpp
-        src/lua/script_metadata.hpp
-        src/lua/lib/logging.cpp
-        src/lua/lib/logging.hpp
+        src/lua/lua_script.cpp
+        src/lua/lua_script.hpp
+        src/lua/lua_script_metadata.cpp
+        src/lua/lua_script_metadata.hpp
+        src/lua/lib/lua_logging.cpp
+        src/lua/lib/lua_logging.hpp
         src/lua/lua_util.cpp
         src/lua/lua_util.hpp
         src/ui/layout/lua/lua.cpp
         src/ui/layout/lua/lua.hpp
+        src/lua/lib/lua_coroutine.cpp
+        src/lua/lib/lua_coroutine.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
@@ -173,7 +175,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMA
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
 target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
-target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON=1 SOL_STRINGS_ARE_NUMBERS=1 SOL_LUAJIT=1)
+target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON=1 SOL_STRINGS_ARE_NUMBERS=1 SOL_LUAJIT=1 SOL_NO_EXCEPTIONS=1 SOL_PRINT_ERRORS=0)
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM ${PROJECT_NAME}_core)
 
 add_subdirectory(test)

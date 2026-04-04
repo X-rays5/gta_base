@@ -6,6 +6,30 @@
 #include <base-common/fs/vfs.hpp>
 
 namespace base::menu::lua {
+  namespace {
+    sol::protected_function_result SafeScriptErrorHandler(lua_State* L, sol::protected_function_result result) {
+      const std::string script_name = GetScriptName(L);
+
+      const sol::type t = sol::type_of(L, result.stack_index());
+      auto err = fmt::format("A '{}' error occurred during the execution of {}", sol::to_string(result.status()), script_name);
+      if (t == sol::type::string) {
+        err = fmt::format("{}: {}", err, sol::stack::unqualified_get<sol::string_view>(L, result.stack_index()));
+      }
+      // replacing information of stack error into pfr
+      const int target = result.stack_index();
+      if (result.pop_count() > 0) {
+        sol::stack::remove(L, target, result.pop_count());
+      }
+      sol::stack::push(L, err);
+      const int top = lua_gettop(L);
+      const int towards = top - target;
+      if (towards != 0) {
+        lua_rotate(L, top, towards);
+      }
+      return result;
+    }
+  }
+
   std::string StackValueToString(lua_State* L, const std::int32_t index) {
     return luaL_tolstring(L, index, nullptr);
   }
@@ -38,33 +62,26 @@ namespace base::menu::lua {
     return luaL_error(L, "This table is read only");
   }
 
-  void SetInternalLuaVar(const sol::state& L, const std::string& name, const std::string& val) {
-    lua_getglobal(L, "__SCRIPT_INFO__");
-    if (lua_isnil(L, -1)) {
-      lua_pop(L, 1);
-      lua_newtable(L);
-      lua_setglobal(L, "__SCRIPT_INFO__");
-      lua_getglobal(L, "__SCRIPT_INFO__");
-    }
+  void SetInternalLuaVar(lua_State* L, const std::string& name, const std::string& val) {
+    // Use registry prefix to avoid stack manipulation of globals
+    std::string registry_key = "__gta_" + name;
+    lua_pushstring(L, registry_key.c_str());
     lua_pushstring(L, val.c_str());
-    lua_setfield(L, -2, name.c_str());
-    lua_pop(L, 1);
+    lua_rawset(L, LUA_REGISTRYINDEX);
   }
 
-  std::string GetInternalLuaVar(const sol::state& L, const std::string& name) {
-    lua_getglobal(L, "__SCRIPT_INFO__");
-    if (lua_isnil(L, -1)) {
-      lua_pop(L, 1);
-      return "";
-    }
-    lua_getfield(L, -1, name.c_str());
-    std::string result = StackValueToString(L, -1);
-    lua_pop(L, 2);
+  std::string GetInternalLuaVar(lua_State* L, const std::string& name) {
+    // Use registry prefix to avoid stack manipulation of globals
+    std::string registry_key = "__gta_" + name;
+    lua_pushstring(L, registry_key.c_str());
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    std::string result = luaL_optstring(L, -1, "");
+    lua_pop(L, 1);
 
     return result;
   }
   
-  std::string GetCurrentFile(const sol::state& L) {
+  std::string GetCurrentFile(lua_State* L) {
     lua_Debug ar;
     lua_getstack(L, 1, &ar);
     lua_getinfo(L, "S", &ar);
@@ -73,7 +90,7 @@ namespace base::menu::lua {
     return file;
   }
 
-  int GetCurrentLine(const sol::state& L) {
+  int GetCurrentLine(lua_State* L) {
     lua_Debug ar;
     lua_getstack(L, 1, &ar);
     lua_getinfo(L, "l", &ar);
@@ -81,25 +98,25 @@ namespace base::menu::lua {
     return ar.currentline;
   }
 
-  std::string GetScriptName(const sol::state& L) {
+  std::string GetScriptName(lua_State* L) {
     return GetInternalLuaVar(L, "script_name");
   }
 
-  void SetScriptName(const sol::state& L, const std::string& name) {
+  void SetScriptName(lua_State* L, const std::string& name) {
     SetInternalLuaVar(L, "script_name", name);
   }
 
-  std::filesystem::path GetScriptPath(const sol::state& L) {
+  std::filesystem::path GetScriptPath(lua_State* L) {
     return GetInternalLuaVar(L, "script_dir");
   }
-  void SetScriptPath(const sol::state& L, const std::filesystem::path& path) {
+  void SetScriptPath(lua_State* L, const std::filesystem::path& path) {
     SetInternalLuaVar(L, "script_dir", path.string());
   }
 
-  std::filesystem::path GetMainFile(const sol::state& L) {
+  std::filesystem::path GetMainFile(lua_State* L) {
     return GetInternalLuaVar(L, "script_main_file");
   }
-  void SetMainFile(const sol::state& L, const std::filesystem::path& path) {
+  void SetMainFile(lua_State* L, const std::filesystem::path& path) {
     SetInternalLuaVar(L, "script_main_file", path.string());
   }
 
@@ -115,5 +132,9 @@ namespace base::menu::lua {
     }
 
     return paths;
+  }
+
+  sol::protected_function_result RunScriptFileSafe(sol::state& sol, const std::filesystem::path& path) {
+    return sol.safe_script_file(path.string(), SafeScriptErrorHandler);
   }
 }

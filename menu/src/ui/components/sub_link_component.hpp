@@ -42,11 +42,20 @@ namespace base::menu::ui::components {
 
     virtual void HandleButtonPress(const PressedButton button) override {
       if (button == PressedButton::kSUBMIT) {
-        util::kTHREAD_POOL->emplace_back([handler = handler_, this] {
-          handler();
+        util::kTHREAD_POOL->emplace_back([handler = handler_] {
+          if constexpr (std::is_same_v<Func, std::function<void()>>) {
+            if (handler)
+              handler();
+          } else {
+            handler();
+          }
         });
         NavigateToSubmenu();
       }
+    }
+
+    void SetName(const std::string& name) {
+      left_text_ = name;
     }
 
   private:

@@ -8,7 +8,9 @@
 #pragma warning(disable : 5321)
 #include <sol/sol.hpp>
 #pragma warning(pop)
-#include "script_metadata.hpp"
+#include <future>
+
+#include "lua_script_metadata.hpp"
 
 namespace base::menu::lua {
   class Script {
@@ -21,7 +23,7 @@ namespace base::menu::lua {
     Script& operator=(const Script&) = delete;
     Script& operator=(Script&&) = delete;
 
-    void Start();
+    std::future<void> Start();
 
     sol::state& GetLuaState() { return lua_state_; }
 
