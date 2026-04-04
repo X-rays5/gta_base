@@ -16,9 +16,22 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("label/load", "Load")
     ADD_TRANSLATION("label/confirm", "Confirm")
     ADD_TRANSLATION("label/reset", "Cancel")
+    ADD_TRANSLATION("label/refresh", "Refresh")
     ADD_TRANSLATION("label/invalid_submenu", "Invalid Submenu")
     ADD_TRANSLATION("info/save_able", "Press F11 to save this option")
     ADD_TRANSLATION("info/hotkey_able", "Press F12 to set a hotkey for this option")
+
+    ADD_TRANSLATION("label/scripts", "Scripts")
+    ADD_TRANSLATION("label/script_info", "Script Info")
+    ADD_TRANSLATION("label/script_name", "Name")
+    ADD_TRANSLATION("label/script_main_file", "Main file")
+    ADD_TRANSLATION("label/script_desc", "Description")
+    ADD_TRANSLATION("label/script_no_desc", "Script has no description")
+    ADD_TRANSLATION("label/script_authors", "Authors")
+    ADD_TRANSLATION("label/script_version", "Version")
+    ADD_TRANSLATION("label/script_repository", "Repository")
+    ADD_TRANSLATION("label/script_license", "License")
+    ADD_TRANSLATION("ui/action/run_script", "Run Script")
 
     ADD_TRANSLATION("ui/hotkey", "Hotkey")
     ADD_TRANSLATION("ui/hotkey/press_key", "Press a key on the keyboard to bind the hotkey, or wait 5 seconds to cancel")
@@ -40,6 +53,12 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/option/force_wanted_level", "Force Wanted Level")
     ADD_TRANSLATION("ui/option/force_wanted_level/desc", "Forces the wanted level to the specified level (0-5).")
     ADD_TRANSLATION("ui/option/never_wanted", "Never Wanted")
+
+    ADD_TRANSLATION("ui/sub/vehicle", "Vehicle")
+    ADD_TRANSLATION("ui/action/vehicle_repair", "Repair Vehicle")
+
+    ADD_TRANSLATION("ui/sub/lua", "Lua Scripts")
+
     ADD_TRANSLATION("ui/sub/settings", "Settings")
     ADD_TRANSLATION("ui/sub/unload", "Unload")
     ADD_TRANSLATION("ui/sub/theme", "Theme")
