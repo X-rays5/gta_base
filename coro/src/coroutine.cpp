@@ -31,7 +31,10 @@ namespace minicoropp {
 
       ~CoroutineDetail() {
         if (co != nullptr) {
+#pragma warning(push)
+#pragma warning(suppress:4189)
           const auto state = mco_status(co);
+#pragma warning(pop)
           assert(state == MCO_DEAD || state == MCO_SUSPENDED);
           mco_destroy(co);
         }
