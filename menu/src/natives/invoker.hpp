@@ -22,7 +22,15 @@ namespace base::menu::natives {
       template<typename T>
       T& GetReturnValue()
       {
-        return *context_.GetReturnValue<T>();
+        // Special handling for Vector3 - convert from script::Vector to rage::Vector3
+        if constexpr (std::is_same_v<T, ::rage::Vector3>) {
+          auto* script_vec = static_cast<::rage::script::Vector*>(context_.GetReturnValue<void>());
+          static thread_local ::rage::Vector3 converted;
+          converted = ::rage::Vector3(script_vec->x, script_vec->y, script_vec->z);
+          return *reinterpret_cast<T*>(&converted);
+        } else {
+          return *context_.GetReturnValue<T>();
+        }
       }
 
     private:

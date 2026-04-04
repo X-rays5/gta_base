@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <fmt/format.h>
 #include <rage/vector.hpp>
 
 namespace base::menu::natives {
@@ -22,3 +23,11 @@ namespace base::menu::natives {
   using Vehicle = Entity;
   using Vector3 = ::rage::Vector3;
 }
+
+template <>
+struct fmt::formatter<::rage::Vector3> : formatter<std::string_view> {
+  template <typename FormatContext>
+  auto format(const ::rage::Vector3& v3, FormatContext& ctx) const {
+    return formatter<std::string_view>::format(fmt::format("(x={},y={},z={})", v3.x, v3.y, v3.z), ctx);
+  }
+};

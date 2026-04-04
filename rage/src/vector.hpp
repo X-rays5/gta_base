@@ -5,6 +5,7 @@
 #pragma once
 #include <cmath>
 
+#pragma pack(push, 0x10)
 namespace rage {
   class Vector2 {
   public:
@@ -124,3 +125,4 @@ namespace rage {
     };
   };
 }
+#pragma pack(pop)
