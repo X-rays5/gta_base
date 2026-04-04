@@ -8,6 +8,7 @@
 #include "../script/game_task_executor.hpp"
 #include "lib/lua_coroutine.hpp"
 #include "lib/lua_logging.hpp"
+#include "../natives/natives_sol2.hpp"
 
 namespace base::menu::lua {
   namespace {
@@ -33,12 +34,47 @@ namespace base::menu::lua {
     });
     }
 
+    void register_vector3(sol::state& lua) {
+      auto vector3_type = lua.new_usertype<natives::Vector3>(
+        "Vector3",
+        sol::constructors<natives::Vector3(), natives::Vector3(float, float, float)>()
+      );
+
+      // Register members
+      vector3_type["x"] = &natives::Vector3::x;
+      vector3_type["y"] = &natives::Vector3::y;
+      vector3_type["z"] = &natives::Vector3::z;
+
+      // Optional: add methods for common operations
+      vector3_type["length"] = [](const natives::Vector3& v) {
+        return std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+      };
+
+      vector3_type["__add"] = [](const natives::Vector3& a, const natives::Vector3& b) {
+        return natives::Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+      };
+
+      vector3_type["__sub"] = [](const natives::Vector3& a, const natives::Vector3& b) {
+        return natives::Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
+      };
+
+      vector3_type["__mul"] = [](const natives::Vector3& v, float scalar) {
+        return natives::Vector3(v.x * scalar, v.y * scalar, v.z * scalar);
+      };
+    }
+
     void SetFuncs(sol::state& lua_state) {
       auto log_table = SetupLuaLogging(lua_state);
       CreateReadOnlyTable(lua_state, "LOG", log_table);
 
       auto coro_table = SetupCoroutine(lua_state);
       CreateReadOnlyTable(lua_state, "coro", coro_table);
+
+      // Register custom types before natives
+      register_vector3(lua_state);
+
+      auto natives_table = natives::register_natives(lua_state);
+      CreateReadOnlyTable(lua_state, "natives", natives_table);
     }
   }
 

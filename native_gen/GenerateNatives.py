@@ -15,6 +15,8 @@ OUTPUT_HEADER = "natives_gen9.hpp"
 OUTPUT_IMPL = "natives_gen9.cpp"
 OUTPUT_CROSSMAP_HEADER = "crossmap.hpp"
 OUTPUT_CROSSMAP_IMPL = "crossmap.cpp"
+OUTPUT_SOL2_HEADER = "natives_sol2.hpp"
+OUTPUT_SOL2_IMPL = "natives_sol2.cpp"
 CROSSMAP_FILE = "crossmap.txt"
 LOG_NATIVE_ERROR_FUNC = "LOG_ERROR"
 
@@ -28,7 +30,6 @@ HEADER_INCLUDES = [
 EXCLUDED_GROUPS = [
     "BUILTIN"
 ]
-
 
 class NativeGenerator:
     """Generates C++ header and implementation files for GTA5 natives."""
@@ -100,10 +101,20 @@ class NativeGenerator:
         if not params:
             return "", ""
 
-        signature_parts = [f"{p['type']} {p['name']}" for p in params]
+        signature_parts = [f"{self._normalize_type(p['type'])} {p['name']}" for p in params]
         call_parts = [p['name'] for p in params]
 
         return ", ".join(signature_parts), ", ".join(call_parts)
+
+    def _to_pascal_case(self, snake_str: str) -> str:
+        """Convert snake_case to PascalCase."""
+        components = snake_str.split('_')
+        # Capitalize all components for PascalCase
+        return ''.join(x.capitalize() for x in components)
+
+    def _normalize_type(self, type_str: str) -> str:
+        """Normalize type names - convert BOOL to bool."""
+        return type_str.replace("BOOL", "bool")
 
     def _is_group_excluded(self, group_name: str) -> bool:
         """Check if a native group should be excluded from generation."""
@@ -111,23 +122,20 @@ class NativeGenerator:
 
     def _generate_function_declaration(self, native_name: str, native_data: Dict, native_comment: str, native_hash: str) -> str:
         """Generate function declaration for header file."""
-        ret_type = native_data.get("return_type", "void")
+        ret_type = self._normalize_type(native_data.get("return_type", "void"))
         params_str, _ = self._build_params(native_data.get("params", []))
         comment = ""
         if native_comment:
-            # Format multi-line comments properly
-            # Split by newlines and clean up each line
+            # ...existing code...
             comment_lines = native_comment.split('\n')
             formatted_lines = []
             for line in comment_lines:
-                # Strip whitespace from each line
+                # ...existing code...
                 cleaned = line.strip()
-                # Escape */ sequences to prevent premature comment closure
                 cleaned = cleaned.replace('*/', '* /')
                 if cleaned:
                     formatted_lines.append(cleaned)
                 else:
-                    # Preserve empty lines as separators
                     formatted_lines.append("")
 
             if formatted_lines:
@@ -143,10 +151,10 @@ class NativeGenerator:
     def _generate_function_implementation(self, native_name: str, native_data: Dict,
                                          native_hash: str) -> str:
         """Generate function implementation for cpp file."""
-        ret_type = native_data.get("return_type", "void")
+        ret_type = self._normalize_type(native_data.get("return_type", "void"))
         params_str, call_params = self._build_params(native_data.get("params", []))
 
-        # Determine whether to use index or hash
+        # ...existing code...
         if self.crossmap and native_hash in self.hash_to_index:
             # Use index-based invocation
             index = self.hash_to_index[native_hash]
@@ -309,7 +317,104 @@ class NativeGenerator:
 
         return "".join(lines)
 
-    def write_files(self, header_path: str, impl_path: str, crossmap_header_path: str = None, crossmap_impl_path: str = None) -> bool:
+    def generate_sol2_header(self) -> str:
+        """Generate the sol2 registration header file content."""
+        lines = [
+            "#pragma once\n",
+            "\n",
+            "#pragma warning(push)\n",
+            "#pragma warning(disable: 4100)\n",
+            "\n",
+            "// Auto-generated file - DO NOT EDIT\n",
+            "// Sol2 native registration functions\n",
+            "\n",
+            "#pragma warning(push)\n",
+            "#pragma warning(disable: 5321)\n",
+            "#include <sol/sol.hpp>\n",
+            "#pragma warning(pop)\n",
+            "\n",
+            f"namespace {self.base_namespace} {{\n",
+            "\n",
+            "\t/**\n",
+            "\t * Register all natives to a sol2 lua state.\n",
+            "\t * \n",
+            "\t * @param lua The sol::state to register natives into\n",
+            "\t * @return A sol::table containing all registered native groups\n",
+            "\t */\n",
+            "\tsol::table register_natives(sol::state& lua);\n",
+            "\n",
+            f"}} // namespace {self.base_namespace}\n",
+            "\n#pragma warning(pop)\n"
+        ]
+
+        return "".join(lines)
+
+    def generate_sol2_implementation(self) -> str:
+        """Generate the sol2 registration implementation file content."""
+        lines = [
+            "#pragma warning(push)\n",
+            "#pragma warning(disable: 4100)\n",
+            "\n",
+            "// Auto-generated file - DO NOT EDIT\n",
+            "// Sol2 native registration functions\n",
+            "\n",
+            f'#include "{OUTPUT_SOL2_HEADER}"\n',
+            f'#include "{OUTPUT_HEADER}"\n',
+            "\n",
+            f"namespace {self.base_namespace} {{\n",
+            "\n"
+        ]
+
+        # Collect active groups (not excluded)
+        active_groups = []
+
+        # Generate individual registration functions for each group
+        for group_name, group in self.natives_data.items():
+            # Skip excluded groups
+            if self._is_group_excluded(group_name):
+                continue
+
+            active_groups.append(group_name)
+            group_name_lower = group_name.lower()
+            native_list = list(group.items())
+
+            # Generate group registration function
+            lines.append(f"\tnamespace {group_name_lower} {{\n")
+            lines.append(f"\t\tsol::table register_{group_name_lower}(sol::state& lua) {{\n")
+            lines.append(f"\t\t\tauto {group_name_lower}_table = lua.create_table();\n")
+            lines.append("\n")
+
+            # Register all natives in this group
+            for native_hash, native_data in native_list:
+                native_name = native_data.get("name", "UNKNOWN")
+                native_name_camel = self._to_pascal_case(native_name)
+
+                lines.append(f"\t\t\t{group_name_lower}_table[\"{native_name_camel}\"] = sol::c_call<decltype(&{self.base_namespace}::{group_name}::{native_name}), &{self.base_namespace}::{group_name}::{native_name}>;\n")
+
+            lines.append("\n")
+            lines.append(f"\t\t\treturn {group_name_lower}_table;\n")
+            lines.append("\t\t}\n")
+            lines.append(f"\t}} // namespace {group_name_lower}\n\n")
+
+        # Generate main register_natives function that calls all group functions and returns master table
+        lines.append("\tsol::table register_natives(sol::state& lua) {\n")
+        lines.append("\t\tauto natives = lua.create_table();\n")
+        lines.append("\n")
+
+        for group_name in active_groups:
+            group_name_lower = group_name.lower()
+            lines.append(f"\t\tnatives[\"{group_name_lower}\"] = {group_name_lower}::register_{group_name_lower}(lua);\n")
+
+        lines.append("\n")
+        lines.append("\t\treturn natives;\n")
+        lines.append("\t}\n")
+        lines.append("\n")
+        lines.append(f"}} // namespace {self.base_namespace}\n")
+        lines.append("\n#pragma warning(pop)\n")
+
+        return "".join(lines)
+
+    def write_files(self, header_path: str, impl_path: str, crossmap_header_path: str = None, crossmap_impl_path: str = None, sol2_header_path: str = None, sol2_impl_path: str = None) -> bool:
         """Write generated header and implementation files."""
         try:
             header_content = self.generate_header()
@@ -332,6 +437,17 @@ class NativeGenerator:
                 Path(crossmap_impl_path).write_text(crossmap_impl_content, encoding='utf-8')
                 print(f"✓ Generated {crossmap_impl_path}")
 
+            # Generate sol2 registration files
+            if sol2_header_path and sol2_impl_path:
+                sol2_header_content = self.generate_sol2_header()
+                sol2_impl_content = self.generate_sol2_implementation()
+
+                Path(sol2_header_path).write_text(sol2_header_content, encoding='utf-8')
+                print(f"✓ Generated {sol2_header_path}")
+
+                Path(sol2_impl_path).write_text(sol2_impl_content, encoding='utf-8')
+                print(f"✓ Generated {sol2_impl_path}")
+
             return True
         except IOError as e:
             print(f"Error: Failed to write files: {e}")
@@ -348,7 +464,7 @@ def main():
     # Load crossmap if available
     generator.load_crossmap(CROSSMAP_FILE)
 
-    if not generator.write_files(OUTPUT_HEADER, OUTPUT_IMPL, OUTPUT_CROSSMAP_HEADER, OUTPUT_CROSSMAP_IMPL):
+    if not generator.write_files(OUTPUT_HEADER, OUTPUT_IMPL, OUTPUT_CROSSMAP_HEADER, OUTPUT_CROSSMAP_IMPL, OUTPUT_SOL2_HEADER, OUTPUT_SOL2_IMPL):
         sys.exit(1)
 
     print("\n✓ Native generation completed successfully!")

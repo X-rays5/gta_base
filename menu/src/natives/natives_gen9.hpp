@@ -13,7 +13,7 @@ namespace base::menu::natives {
 
 	namespace APP {
 
-		BOOL APP_DATA_VALID();
+		bool APP_DATA_VALID();
 		int APP_GET_INT(const char* property);
 		float APP_GET_FLOAT(const char* property);
 		const char* APP_GET_STRING(const char* property);
@@ -30,11 +30,11 @@ namespace base::menu::natives {
 		void APP_CLEAR_BLOCK();
 		void APP_CLOSE_APP();
 		void APP_CLOSE_BLOCK();
-		BOOL APP_HAS_LINKED_SOCIAL_CLUB_ACCOUNT();
-		BOOL APP_HAS_SYNCED_DATA(const char* appName);
+		bool APP_HAS_LINKED_SOCIAL_CLUB_ACCOUNT();
+		bool APP_HAS_SYNCED_DATA(const char* appName);
 		void APP_SAVE_DATA();
 		int APP_GET_DELETED_FILE_STATUS();
-		BOOL APP_DELETE_APP_DATA(const char* appName);
+		bool APP_DELETE_APP_DATA(const char* appName);
 
 	} // namespace APP
 
@@ -47,11 +47,11 @@ namespace base::menu::natives {
 		 * AUDIO::PLAY_PED_RINGTONE("Dial_and_Remote_Ring", PLAYER::PLAYER_PED_ID(), 1);
 		 * 
 		 */
-		void PLAY_PED_RINGTONE(const char* ringtoneName, Ped ped, BOOL p2);
-		BOOL IS_PED_RINGTONE_PLAYING(Ped ped);
+		void PLAY_PED_RINGTONE(const char* ringtoneName, Ped ped, bool p2);
+		bool IS_PED_RINGTONE_PLAYING(Ped ped);
 		void STOP_PED_RINGTONE(Ped ped);
-		BOOL IS_MOBILE_PHONE_CALL_ONGOING();
-		BOOL IS_MOBILE_INTERFERENCE_ACTIVE();
+		bool IS_MOBILE_PHONE_CALL_ONGOING();
+		bool IS_MOBILE_INTERFERENCE_ACTIVE();
 		int GET_CURRENT_TV_SHOW_PLAY_TIME();
 		void CREATE_NEW_SCRIPTED_CONVERSATION();
 		/**
@@ -72,7 +72,7 @@ namespace base::menu::natives {
 		 * p11 is either 0 or 1 (The func to determine this is bool)
 		 * p12 is unknown as in TU27 X360 scripts it only goes to p11.
 		 */
-		void ADD_LINE_TO_CONVERSATION(int index, const char* p1, const char* p2, int p3, int p4, BOOL p5, BOOL p6, BOOL p7, BOOL p8, int p9, BOOL p10, BOOL p11, BOOL p12);
+		void ADD_LINE_TO_CONVERSATION(int index, const char* p1, const char* p2, int p3, int p4, bool p5, bool p6, bool p7, bool p8, int p9, bool p10, bool p11, bool p12);
 		/**
 		 * 4 calls in the b617d scripts. The only one with p0 and p2 in clear text:
 		 * 
@@ -91,21 +91,21 @@ namespace base::menu::natives {
 		 * The scripts mostly use it with only one position such as in fbi3.c:
 		 * AUDIO::SET_MICROPHONE_POSITION(true, ENTITY::GET_ENTITY_COORDS(iLocal_3091, true), ENTITY::GET_ENTITY_COORDS(iLocal_3091, true), ENTITY::GET_ENTITY_COORDS(iLocal_3091, true));
 		 */
-		void SET_MICROPHONE_POSITION(BOOL toggle, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3);
-		void SET_CONVERSATION_AUDIO_CONTROLLED_BY_ANIM(BOOL p0);
-		void SET_CONVERSATION_AUDIO_PLACEHOLDER(BOOL p0);
-		void START_SCRIPT_PHONE_CONVERSATION(BOOL p0, BOOL p1);
-		void PRELOAD_SCRIPT_PHONE_CONVERSATION(BOOL p0, BOOL p1);
-		void START_SCRIPT_CONVERSATION(BOOL p0, BOOL p1, BOOL p2, BOOL p3);
-		void PRELOAD_SCRIPT_CONVERSATION(BOOL p0, BOOL p1, BOOL p2, BOOL p3);
+		void SET_MICROPHONE_POSITION(bool toggle, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3);
+		void SET_CONVERSATION_AUDIO_CONTROLLED_BY_ANIM(bool p0);
+		void SET_CONVERSATION_AUDIO_PLACEHOLDER(bool p0);
+		void START_SCRIPT_PHONE_CONVERSATION(bool p0, bool p1);
+		void PRELOAD_SCRIPT_PHONE_CONVERSATION(bool p0, bool p1);
+		void START_SCRIPT_CONVERSATION(bool p0, bool p1, bool p2, bool p3);
+		void PRELOAD_SCRIPT_CONVERSATION(bool p0, bool p1, bool p2, bool p3);
 		void START_PRELOADED_CONVERSATION();
-		BOOL GET_IS_PRELOADED_CONVERSATION_READY();
-		BOOL IS_SCRIPTED_CONVERSATION_ONGOING();
-		BOOL IS_SCRIPTED_CONVERSATION_LOADED();
+		bool GET_IS_PRELOADED_CONVERSATION_READY();
+		bool IS_SCRIPTED_CONVERSATION_ONGOING();
+		bool IS_SCRIPTED_CONVERSATION_LOADED();
 		int GET_CURRENT_SCRIPTED_CONVERSATION_LINE();
-		void PAUSE_SCRIPTED_CONVERSATION(BOOL p0);
+		void PAUSE_SCRIPTED_CONVERSATION(bool p0);
 		void RESTART_SCRIPTED_CONVERSATION();
-		int STOP_SCRIPTED_CONVERSATION(BOOL p0);
+		int STOP_SCRIPTED_CONVERSATION(bool p0);
 		void SKIP_TO_NEXT_SCRIPTED_CONVERSATION_LINE();
 		/**
 		 * Example from carsteal3.c: AUDIO::INTERRUPT_CONVERSATION(PLAYER::PLAYER_PED_ID(), "CST4_CFAA", "FRANKLIN");
@@ -119,7 +119,7 @@ namespace base::menu::natives {
 		 */
 		void INTERRUPT_CONVERSATION_AND_PAUSE(Ped ped, const char* p1, const char* speaker);
 		int GET_VARIATION_CHOSEN_FOR_SCRIPTED_LINE(Any* p0);
-		void SET_NO_DUCKING_FOR_CONVERSATION(BOOL p0);
+		void SET_NO_DUCKING_FOR_CONVERSATION(bool p0);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
@@ -133,31 +133,31 @@ namespace base::menu::natives {
 		 * Full list of mission audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/missionAudioBankNames.json
 		 * p2 is always -1
 		 */
-		BOOL REQUEST_MISSION_AUDIO_BANK(const char* audioBank, BOOL p1, Any p2);
+		bool REQUEST_MISSION_AUDIO_BANK(const char* audioBank, bool p1, Any p2);
 		/**
 		 * All occurrences and usages found in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/XZ1tmGEz
 		 * Full list of ambient audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientAudioBankNames.json
 		 * p2 is always -1
 		 */
-		BOOL REQUEST_AMBIENT_AUDIO_BANK(const char* audioBank, BOOL p1, Any p2);
+		bool REQUEST_AMBIENT_AUDIO_BANK(const char* audioBank, bool p1, Any p2);
 		/**
 		 * All occurrences and usages found in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/AkmDAVn6
 		 * Full list of script audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scriptAudioBankNames.json
 		 * p2 is always -1
 		 */
-		BOOL REQUEST_SCRIPT_AUDIO_BANK(const char* audioBank, BOOL p1, Any p2);
+		bool REQUEST_SCRIPT_AUDIO_BANK(const char* audioBank, bool p1, Any p2);
 		/**
 		 * p2 is always -1
 		 */
-		BOOL HINT_MISSION_AUDIO_BANK(const char* audioBank, BOOL p1, Any p2);
+		bool HINT_MISSION_AUDIO_BANK(const char* audioBank, bool p1, Any p2);
 		/**
 		 * p2 is always -1
 		 */
-		BOOL HINT_AMBIENT_AUDIO_BANK(const char* audioBank, BOOL p1, Any p2);
+		bool HINT_AMBIENT_AUDIO_BANK(const char* audioBank, bool p1, Any p2);
 		/**
 		 * p2 is always -1
 		 */
-		BOOL HINT_SCRIPT_AUDIO_BANK(const char* audioBank, BOOL p1, Any p2);
+		bool HINT_SCRIPT_AUDIO_BANK(const char* audioBank, bool p1, Any p2);
 		void RELEASE_MISSION_AUDIO_BANK();
 		void RELEASE_AMBIENT_AUDIO_BANK();
 		/**
@@ -175,7 +175,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
-		void PLAY_SOUND(int soundId, const char* audioName, const char* audioRef, BOOL p3, Any p4, BOOL p5);
+		void PLAY_SOUND(int soundId, const char* audioName, const char* audioRef, bool p3, Any p4, bool p5);
 		/**
 		 * List: https://pastebin.com/DCeRiaLJ
 		 * 
@@ -183,7 +183,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
-		void PLAY_SOUND_FRONTEND(int soundId, const char* audioName, const char* audioRef, BOOL p3);
+		void PLAY_SOUND_FRONTEND(int soundId, const char* audioName, const char* audioRef, bool p3);
 		/**
 		 * Only call found in the b617d scripts:
 		 * 
@@ -200,7 +200,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
-		void PLAY_SOUND_FROM_ENTITY(int soundId, const char* audioName, Entity entity, const char* audioRef, BOOL isNetwork, Any p5);
+		void PLAY_SOUND_FROM_ENTITY(int soundId, const char* audioName, Entity entity, const char* audioRef, bool isNetwork, Any p5);
 		/**
 		 * Only used with "formation_flying_blips_soundset" and "biker_formation_blips_soundset".
 		 * p1 is always the model of p2
@@ -213,7 +213,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
-		void PLAY_SOUND_FROM_COORD(int soundId, const char* audioName, float x, float y, float z, const char* audioRef, BOOL isNetwork, int range, BOOL p8);
+		void PLAY_SOUND_FROM_COORD(int soundId, const char* audioName, float x, float y, float z, const char* audioRef, bool isNetwork, int range, bool p8);
 		void UPDATE_SOUND_COORD(int soundId, float x, float y, float z);
 		void STOP_SOUND(int soundId);
 		/**
@@ -232,13 +232,13 @@ namespace base::menu::natives {
 		 * "ZoomLevel"
 		 */
 		void SET_VARIABLE_ON_STREAM(const char* variable, float p1);
-		void OVERRIDE_UNDERWATER_STREAM(const char* p0, BOOL p1);
+		void OVERRIDE_UNDERWATER_STREAM(const char* p0, bool p1);
 		/**
 		 * AUDIO::SET_VARIABLE_ON_UNDER_WATER_STREAM("inTunnel", 1.0);
 		 * AUDIO::SET_VARIABLE_ON_UNDER_WATER_STREAM("inTunnel", 0.0);
 		 */
 		void SET_VARIABLE_ON_UNDER_WATER_STREAM(const char* variableName, float value);
-		BOOL HAS_SOUND_FINISHED(int soundId);
+		bool HAS_SOUND_FINISHED(int soundId);
 		/**
 		 * Plays ambient speech. See also _0x444180DB.
 		 * 
@@ -306,7 +306,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of speeches and voices names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/speeches.json
 		 */
-		void PLAY_PED_AMBIENT_SPEECH_WITH_VOICE_NATIVE(Ped ped, const char* speechName, const char* voiceName, const char* speechParam, BOOL p4);
+		void PLAY_PED_AMBIENT_SPEECH_WITH_VOICE_NATIVE(Ped ped, const char* speechName, const char* voiceName, const char* speechParam, bool p4);
 		/**
 		 * Full list of speeches and voices names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/speeches.json
 		 */
@@ -316,7 +316,7 @@ namespace base::menu::natives {
 		 */
 		void OVERRIDE_TREVOR_RAGE(const char* voiceEffect);
 		void RESET_TREVOR_RAGE();
-		void SET_PLAYER_ANGRY(Ped ped, BOOL toggle);
+		void SET_PLAYER_ANGRY(Ped ped, bool toggle);
 		/**
 		 * Needs another parameter [int p2]. The signature is PED::PLAY_PAIN(Ped ped, int painID, int p1, int p2);
 		 * 
@@ -384,18 +384,18 @@ namespace base::menu::natives {
 		/**
 		 * BOOL p1: 0 = Female; 1 = Male
 		 */
-		void SET_PED_GENDER(Ped ped, BOOL p1);
+		void SET_PED_GENDER(Ped ped, bool p1);
 		void STOP_CURRENT_PLAYING_SPEECH(Ped ped);
 		void STOP_CURRENT_PLAYING_AMBIENT_SPEECH(Ped ped);
-		BOOL IS_AMBIENT_SPEECH_PLAYING(Ped ped);
-		BOOL IS_SCRIPTED_SPEECH_PLAYING(Ped p0);
-		BOOL IS_ANY_SPEECH_PLAYING(Ped ped);
-		BOOL IS_ANY_POSITIONAL_SPEECH_PLAYING();
+		bool IS_AMBIENT_SPEECH_PLAYING(Ped ped);
+		bool IS_SCRIPTED_SPEECH_PLAYING(Ped p0);
+		bool IS_ANY_SPEECH_PLAYING(Ped ped);
+		bool IS_ANY_POSITIONAL_SPEECH_PLAYING();
 		/**
 		 * Checks if the ped can play the speech or has the speech file, p2 is usually false.
 		 */
-		BOOL DOES_CONTEXT_EXIST_FOR_THIS_PED(Ped ped, const char* speechName, BOOL p2);
-		BOOL IS_PED_IN_CURRENT_CONVERSATION(Ped ped);
+		bool DOES_CONTEXT_EXIST_FOR_THIS_PED(Ped ped, const char* speechName, bool p2);
+		bool IS_PED_IN_CURRENT_CONVERSATION(Ped ped);
 		/**
 		 * Sets the ped drunk sounds.  Only works with PLAYER_PED_ID
 		 * 
@@ -418,21 +418,21 @@ namespace base::menu::natives {
 		 * And to stop the effect use
 		 * RESET_PED_MOVEMENT_CLIPSET
 		 */
-		void SET_PED_IS_DRUNK(Ped ped, BOOL toggle);
+		void SET_PED_IS_DRUNK(Ped ped, bool toggle);
 		/**
 		 * Plays sounds from a ped with chop model. For example it used to play bark or sniff sounds. p1 is always 3 or 4294967295 in decompiled scripts. By a quick disassembling I can assume that this arg is unused.
 		 * This native is works only when you call it on the ped with right model (ac_chop only ?)
 		 * Speech Name can be: CHOP_SNIFF_SEQ CHOP_WHINE CHOP_LICKS_MOUTH CHOP_PANT bark GROWL SNARL BARK_SEQ
 		 */
 		void PLAY_ANIMAL_VOCALIZATION(Ped pedHandle, int p1, const char* speechName);
-		BOOL IS_ANIMAL_VOCALIZATION_PLAYING(Ped pedHandle);
+		bool IS_ANIMAL_VOCALIZATION_PLAYING(Ped pedHandle);
 		/**
 		 * mood can be 0 or 1 (it's not a boolean value!). Effects audio of the animal.
 		 */
 		void SET_ANIMAL_MOOD(Ped animal, int mood);
 		void PLAY_PED_AUDIO_EVENT_ANIM(Ped pedHandle, const char* audioEvent);
-		BOOL IS_MOBILE_PHONE_RADIO_ACTIVE();
-		void SET_MOBILE_PHONE_RADIO_STATE(BOOL state);
+		bool IS_MOBILE_PHONE_RADIO_ACTIVE();
+		void SET_MOBILE_PHONE_RADIO_STATE(bool state);
 		/**
 		 * Returns 255 (radio off index) if the function fails.
 		 */
@@ -446,8 +446,8 @@ namespace base::menu::natives {
 		 */
 		const char* GET_RADIO_STATION_NAME(int radioStation);
 		int GET_PLAYER_RADIO_STATION_GENRE();
-		BOOL IS_RADIO_RETUNING();
-		BOOL IS_RADIO_FADED_OUT();
+		bool IS_RADIO_RETUNING();
+		bool IS_RADIO_FADED_OUT();
 		/**
 		 * Tune Forward...
 		 */
@@ -467,7 +467,7 @@ namespace base::menu::natives {
 		 */
 		void SET_VEH_RADIO_STATION(Vehicle vehicle, const char* radioStation);
 		void SET_VEH_HAS_NORMAL_RADIO(Vehicle vehicle);
-		BOOL IS_VEHICLE_RADIO_ON(Vehicle vehicle);
+		bool IS_VEHICLE_RADIO_ON(Vehicle vehicle);
 		void SET_VEH_FORCED_RADIO_THIS_FRAME(Vehicle vehicle);
 		/**
 		 * Full list of static emitters by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/staticEmitters.json
@@ -481,7 +481,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of static emitters by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/staticEmitters.json
 		 */
-		void SET_STATIC_EMITTER_ENABLED(const char* emitterName, BOOL toggle);
+		void SET_STATIC_EMITTER_ENABLED(const char* emitterName, bool toggle);
 		/**
 		 * Full list of static emitters by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/staticEmitters.json
 		 */
@@ -490,20 +490,20 @@ namespace base::menu::natives {
 		 * Sets radio station by index.
 		 */
 		void SET_RADIO_TO_STATION_INDEX(int radioStation);
-		void SET_FRONTEND_RADIO_ACTIVE(BOOL active);
+		void SET_FRONTEND_RADIO_ACTIVE(bool active);
 		/**
 		 * "news" that play on the radio after you've done something in story mode(?)
 		 */
 		void UNLOCK_MISSION_NEWS_STORY(int newsStory);
-		BOOL IS_MISSION_NEWS_STORY_UNLOCKED(int newsStory);
+		bool IS_MISSION_NEWS_STORY_UNLOCKED(int newsStory);
 		int GET_AUDIBLE_MUSIC_TRACK_TEXT_ID();
-		void PLAY_END_CREDITS_MUSIC(BOOL play);
+		void PLAY_END_CREDITS_MUSIC(bool play);
 		void SKIP_RADIO_FORWARD();
 		void FREEZE_RADIO_STATION(const char* radioStation);
 		void UNFREEZE_RADIO_STATION(const char* radioStation);
-		void SET_RADIO_AUTO_UNFREEZE(BOOL toggle);
+		void SET_RADIO_AUTO_UNFREEZE(bool toggle);
 		void SET_INITIAL_PLAYER_STATION(const char* radioStation);
-		void SET_USER_RADIO_CONTROL_ENABLED(BOOL toggle);
+		void SET_USER_RADIO_CONTROL_ENABLED(bool toggle);
 		/**
 		 * Only found this one in the decompiled scripts:
 		 * 
@@ -513,15 +513,15 @@ namespace base::menu::natives {
 		void SET_RADIO_TRACK(const char* radioStation, const char* radioTrack);
 		void SET_RADIO_TRACK_WITH_START_OFFSET(const char* radioStationName, const char* mixName, int p2);
 		void SET_NEXT_RADIO_TRACK(const char* radioName, const char* radioTrack, const char* p2, const char* p3);
-		void SET_VEHICLE_RADIO_LOUD(Vehicle vehicle, BOOL toggle);
-		BOOL CAN_VEHICLE_RECEIVE_CB_RADIO(Vehicle vehicle);
-		void SET_MOBILE_RADIO_ENABLED_DURING_GAMEPLAY(BOOL toggle);
-		BOOL DOES_PLAYER_VEH_HAVE_RADIO();
-		BOOL IS_PLAYER_VEH_RADIO_ENABLE();
+		void SET_VEHICLE_RADIO_LOUD(Vehicle vehicle, bool toggle);
+		bool CAN_VEHICLE_RECEIVE_CB_RADIO(Vehicle vehicle);
+		void SET_MOBILE_RADIO_ENABLED_DURING_GAMEPLAY(bool toggle);
+		bool DOES_PLAYER_VEH_HAVE_RADIO();
+		bool IS_PLAYER_VEH_RADIO_ENABLE();
 		/**
 		 * can't seem to enable radio on cop cars etc
 		 */
-		void SET_VEHICLE_RADIO_ENABLED(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_RADIO_ENABLED(Vehicle vehicle, bool toggle);
 		void SET_POSITIONED_PLAYER_VEHICLE_RADIO_EMITTER_ENABLED(Any p0);
 		/**
 		 * Examples:
@@ -535,7 +535,7 @@ namespace base::menu::natives {
 		 * AUDIO::SET_CUSTOM_RADIO_TRACK_LIST("RADIO_16_SILVERLAKE", "SEA_RACE_RADIO_PLAYLIST", 1);
 		 * AUDIO::SET_CUSTOM_RADIO_TRACK_LIST("RADIO_01_CLASS_ROCK", "OFF_ROAD_RADIO_ROCK_LIST", 1);
 		 */
-		void SET_CUSTOM_RADIO_TRACK_LIST(const char* radioStation, const char* trackListName, BOOL p2);
+		void SET_CUSTOM_RADIO_TRACK_LIST(const char* radioStation, const char* trackListName, bool p2);
 		/**
 		 * 3 calls in the b617d scripts, removed duplicate.
 		 * 
@@ -552,7 +552,7 @@ namespace base::menu::natives {
 		 * AUDIO::SET_RADIO_STATION_MUSIC_ONLY(AUDIO::GET_RADIO_STATION_NAME(10), 0);
 		 * AUDIO::SET_RADIO_STATION_MUSIC_ONLY(AUDIO::GET_RADIO_STATION_NAME(10), 1);
 		 */
-		void SET_RADIO_STATION_MUSIC_ONLY(const char* radioStation, BOOL toggle);
+		void SET_RADIO_STATION_MUSIC_ONLY(const char* radioStation, bool toggle);
 		void SET_RADIO_FRONTEND_FADE_TIME(float fadeTime);
 		/**
 		 * AUDIO::UNLOCK_RADIO_STATION_TRACK_LIST("RADIO_16_SILVERLAKE", "MIRRORPARK_LOCKED");
@@ -562,17 +562,17 @@ namespace base::menu::natives {
 		/**
 		 * Just a nullsub (i.e. does absolutely nothing) since build 1604.
 		 */
-		void UPDATE_UNLOCKABLE_DJ_RADIO_TRACKS(BOOL enableMixes);
+		void UPDATE_UNLOCKABLE_DJ_RADIO_TRACKS(bool enableMixes);
 		/**
 		 * Disables the radio station (hides it from the radio wheel).
 		 */
-		void LOCK_RADIO_STATION(const char* radioStationName, BOOL toggle);
+		void LOCK_RADIO_STATION(const char* radioStationName, bool toggle);
 		/**
 		 * Doesn't have an effect in Story Mode.
 		 */
-		void SET_RADIO_STATION_AS_FAVOURITE(const char* radioStation, BOOL toggle);
-		BOOL IS_RADIO_STATION_FAVOURITED(const char* radioStation);
-		BOOL GET_NEXT_AUDIBLE_BEAT(float* out1, float* out2, int* out3);
+		void SET_RADIO_STATION_AS_FAVOURITE(const char* radioStation, bool toggle);
+		bool IS_RADIO_STATION_FAVOURITED(const char* radioStation);
+		bool GET_NEXT_AUDIBLE_BEAT(float* out1, float* out2, int* out3);
 		/**
 		 * Changes start time of a tracklist (milliseconds)
 		 * R* uses a random int: MISC::GET_RANDOM_INT_IN_RANGE(0, 13) * 60000)
@@ -580,11 +580,11 @@ namespace base::menu::natives {
 		void FORCE_MUSIC_TRACK_LIST(const char* radioStation, const char* trackListName, int milliseconds);
 		int GET_CURRENT_TRACK_PLAY_TIME(const char* radioStationName);
 		Hash GET_CURRENT_TRACK_SOUND_NAME(const char* radioStationName);
-		void SET_VEHICLE_MISSILE_WARNING_ENABLED(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_MISSILE_WARNING_ENABLED(Vehicle vehicle, bool toggle);
 		/**
 		 * Full list of ambient zones by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientZones.json
 		 */
-		void SET_AMBIENT_ZONE_STATE(const char* zoneName, BOOL p1, BOOL p2);
+		void SET_AMBIENT_ZONE_STATE(const char* zoneName, bool p1, bool p2);
 		/**
 		 * This function also has a p2, unknown. Signature AUDIO::CLEAR_AMBIENT_ZONE_STATE(const char* zoneName, bool p1, Any p2);
 		 * 
@@ -592,21 +592,21 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of ambient zones by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientZones.json
 		 */
-		void CLEAR_AMBIENT_ZONE_STATE(const char* zoneName, BOOL p1);
-		void SET_AMBIENT_ZONE_LIST_STATE(const char* ambientZone, BOOL p1, BOOL p2);
-		void CLEAR_AMBIENT_ZONE_LIST_STATE(const char* ambientZone, BOOL p1);
+		void CLEAR_AMBIENT_ZONE_STATE(const char* zoneName, bool p1);
+		void SET_AMBIENT_ZONE_LIST_STATE(const char* ambientZone, bool p1, bool p2);
+		void CLEAR_AMBIENT_ZONE_LIST_STATE(const char* ambientZone, bool p1);
 		/**
 		 * Full list of ambient zones by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientZones.json
 		 */
-		void SET_AMBIENT_ZONE_STATE_PERSISTENT(const char* ambientZone, BOOL p1, BOOL p2);
+		void SET_AMBIENT_ZONE_STATE_PERSISTENT(const char* ambientZone, bool p1, bool p2);
 		/**
 		 * Full list of ambient zones by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientZones.json
 		 */
-		void SET_AMBIENT_ZONE_LIST_STATE_PERSISTENT(const char* ambientZone, BOOL p1, BOOL p2);
+		void SET_AMBIENT_ZONE_LIST_STATE_PERSISTENT(const char* ambientZone, bool p1, bool p2);
 		/**
 		 * Full list of ambient zones by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientZones.json
 		 */
-		BOOL IS_AMBIENT_ZONE_ENABLED(const char* ambientZone);
+		bool IS_AMBIENT_ZONE_ENABLED(const char* ambientZone);
 		void REFRESH_CLOSEST_OCEAN_SHORELINE();
 		/**
 		 * All occurrences found in b617d, sorted alphabetically and identical lines removed:
@@ -637,22 +637,22 @@ namespace base::menu::natives {
 		 * 
 		 * vehicle - the vehicle whose horn should be overwritten
 		 */
-		void OVERRIDE_VEH_HORN(Vehicle vehicle, BOOL override, int hornHash);
+		void OVERRIDE_VEH_HORN(Vehicle vehicle, bool override, int hornHash);
 		/**
 		 * Checks whether the horn of a vehicle is currently played.
 		 */
-		BOOL IS_HORN_ACTIVE(Vehicle vehicle);
+		bool IS_HORN_ACTIVE(Vehicle vehicle);
 		/**
 		 * Makes pedestrians sound their horn longer, faster and more agressive when they use their horn.
 		 */
-		void SET_AGGRESSIVE_HORNS(BOOL toggle);
+		void SET_AGGRESSIVE_HORNS(bool toggle);
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
-		void SET_RADIO_POSITION_AUDIO_MUTE(BOOL p0);
-		void SET_VEHICLE_CONVERSATIONS_PERSIST(BOOL p0, BOOL p1);
-		void SET_VEHICLE_CONVERSATIONS_PERSIST_NEW(BOOL p0, BOOL p1, BOOL p2);
-		BOOL IS_STREAM_PLAYING();
+		void SET_RADIO_POSITION_AUDIO_MUTE(bool p0);
+		void SET_VEHICLE_CONVERSATIONS_PERSIST(bool p0, bool p1);
+		void SET_VEHICLE_CONVERSATIONS_PERSIST_NEW(bool p0, bool p1, bool p2);
+		bool IS_STREAM_PLAYING();
 		int GET_STREAM_PLAY_TIME();
 		/**
 		 * Example:
@@ -666,7 +666,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
-		BOOL LOAD_STREAM(const char* streamName, const char* soundSet);
+		bool LOAD_STREAM(const char* streamName, const char* soundSet);
 		/**
 		 * Example:
 		 * AUDIO::LOAD_STREAM_WITH_START_OFFSET("STASH_TOXIN_STREAM", 2400, "FBI_05_SOUNDS");
@@ -675,7 +675,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
-		BOOL LOAD_STREAM_WITH_START_OFFSET(const char* streamName, int startOffset, const char* soundSet);
+		bool LOAD_STREAM_WITH_START_OFFSET(const char* streamName, int startOffset, const char* soundSet);
 		void PLAY_STREAM_FROM_PED(Ped ped);
 		void PLAY_STREAM_FROM_VEHICLE(Vehicle vehicle);
 		/**
@@ -695,25 +695,25 @@ namespace base::menu::natives {
 		void PLAY_STREAM_FRONTEND();
 		void PLAY_STREAM_FROM_POSITION(float x, float y, float z);
 		void STOP_STREAM();
-		void STOP_PED_SPEAKING(Ped ped, BOOL shaking);
-		void BLOCK_ALL_SPEECH_FROM_PED(Ped ped, BOOL p1, BOOL p2);
-		void STOP_PED_SPEAKING_SYNCED(Ped ped, BOOL p1);
-		void DISABLE_PED_PAIN_AUDIO(Ped ped, BOOL toggle);
+		void STOP_PED_SPEAKING(Ped ped, bool shaking);
+		void BLOCK_ALL_SPEECH_FROM_PED(Ped ped, bool p1, bool p2);
+		void STOP_PED_SPEAKING_SYNCED(Ped ped, bool p1);
+		void DISABLE_PED_PAIN_AUDIO(Ped ped, bool toggle);
 		/**
 		 * Common in the scripts:
 		 * AUDIO::IS_AMBIENT_SPEECH_DISABLED(PLAYER::PLAYER_PED_ID());
 		 */
-		BOOL IS_AMBIENT_SPEECH_DISABLED(Ped ped);
+		bool IS_AMBIENT_SPEECH_DISABLED(Ped ped);
 		void BLOCK_SPEECH_CONTEXT_GROUP(const char* p0, int p1);
 		void UNBLOCK_SPEECH_CONTEXT_GROUP(const char* p0);
-		void SET_SIREN_WITH_NO_DRIVER(Vehicle vehicle, BOOL toggle);
-		void SET_SIREN_BYPASS_MP_DRIVER_CHECK(Vehicle vehicle, BOOL toggle);
+		void SET_SIREN_WITH_NO_DRIVER(Vehicle vehicle, bool toggle);
+		void SET_SIREN_BYPASS_MP_DRIVER_CHECK(Vehicle vehicle, bool toggle);
 		void TRIGGER_SIREN_AUDIO(Vehicle vehicle);
 		void SET_HORN_PERMANENTLY_ON(Vehicle vehicle);
-		void SET_HORN_ENABLED(Vehicle vehicle, BOOL toggle);
+		void SET_HORN_ENABLED(Vehicle vehicle, bool toggle);
 		void SET_AUDIO_VEHICLE_PRIORITY(Vehicle vehicle, Any p1);
 		void SET_HORN_PERMANENTLY_ON_TIME(Vehicle vehicle, float time);
-		void USE_SIREN_AS_HORN(Vehicle vehicle, BOOL toggle);
+		void USE_SIREN_AS_HORN(Vehicle vehicle, bool toggle);
 		/**
 		 * This native sets the audio of the specified vehicle to the audioName (p1).
 		 * 
@@ -728,7 +728,7 @@ namespace base::menu::natives {
 		void SET_VEHICLE_STARTUP_REV_SOUND(Vehicle vehicle, const char* p1, const char* p2);
 		void RESET_VEHICLE_STARTUP_REV_SOUND(Vehicle vehicle);
 		void SET_VEHICLE_FORCE_REVERSE_WARNING(Any p0, Any p1);
-		BOOL IS_VEHICLE_AUDIBLY_DAMAGED(Vehicle vehicle);
+		bool IS_VEHICLE_AUDIBLY_DAMAGED(Vehicle vehicle);
 		void SET_VEHICLE_AUDIO_ENGINE_DAMAGE_FACTOR(Vehicle vehicle, float damageFactor);
 		/**
 		 * intensity: 0.0f - 1.0f, only used once with 1.0f in R* Scripts (nigel2)
@@ -738,18 +738,18 @@ namespace base::menu::natives {
 		/**
 		 * Called together with SET_VEHICLE_TYRES_CAN_BURST
 		 */
-		void _FORCE_VEHICLE_ENGINE_SYNTH(Vehicle vehicle, BOOL force);
-		void ENABLE_VEHICLE_FANBELT_DAMAGE(Vehicle vehicle, BOOL toggle);
-		void ENABLE_VEHICLE_EXHAUST_POPS(Vehicle vehicle, BOOL toggle);
+		void _FORCE_VEHICLE_ENGINE_SYNTH(Vehicle vehicle, bool force);
+		void ENABLE_VEHICLE_FANBELT_DAMAGE(Vehicle vehicle, bool toggle);
+		void ENABLE_VEHICLE_EXHAUST_POPS(Vehicle vehicle, bool toggle);
 		/**
 		 * SET_VEHICLE_BOOST_ACTIVE(vehicle, 1, 0);
 		 * SET_VEHICLE_BOOST_ACTIVE(vehicle, 0, 0);
 		 * 
 		 * Will give a boost-soundeffect.
 		 */
-		void SET_VEHICLE_BOOST_ACTIVE(Vehicle vehicle, BOOL toggle);
-		void SET_PLAYER_VEHICLE_ALARM_AUDIO_ACTIVE(Vehicle vehicle, BOOL toggle);
-		void SET_SCRIPT_UPDATE_DOOR_AUDIO(Hash doorHash, BOOL toggle);
+		void SET_VEHICLE_BOOST_ACTIVE(Vehicle vehicle, bool toggle);
+		void SET_PLAYER_VEHICLE_ALARM_AUDIO_ACTIVE(Vehicle vehicle, bool toggle);
+		void SET_SCRIPT_UPDATE_DOOR_AUDIO(Hash doorHash, bool toggle);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
@@ -761,13 +761,13 @@ namespace base::menu::natives {
 		/**
 		 * Works for planes only.
 		 */
-		void ENABLE_STALL_WARNING_SOUNDS(Vehicle vehicle, BOOL toggle);
-		void _ENABLE_DRAG_RACE_STATIONARY_WARNING_SOUNDS(Vehicle vehicle, BOOL enable);
+		void ENABLE_STALL_WARNING_SOUNDS(Vehicle vehicle, bool toggle);
+		void _ENABLE_DRAG_RACE_STATIONARY_WARNING_SOUNDS(Vehicle vehicle, bool enable);
 		/**
 		 * Hardcoded to return 1
 		 */
-		BOOL IS_GAME_IN_CONTROL_OF_MUSIC();
-		void SET_GPS_ACTIVE(BOOL active);
+		bool IS_GAME_IN_CONTROL_OF_MUSIC();
+		void SET_GPS_ACTIVE(bool active);
 		/**
 		 * Called 38 times in the scripts. There are 5 different audioNames used.
 		 * One unknown removed below.
@@ -778,16 +778,16 @@ namespace base::menu::natives {
 		 * AUDIO::PLAY_MISSION_COMPLETE_AUDIO("TREVOR_SMALL_01");
 		 */
 		void PLAY_MISSION_COMPLETE_AUDIO(const char* audioName);
-		BOOL IS_MISSION_COMPLETE_PLAYING();
-		BOOL IS_MISSION_COMPLETE_READY_FOR_UI();
-		void BLOCK_DEATH_JINGLE(BOOL toggle);
+		bool IS_MISSION_COMPLETE_PLAYING();
+		bool IS_MISSION_COMPLETE_READY_FOR_UI();
+		void BLOCK_DEATH_JINGLE(bool toggle);
 		/**
 		 * Used to prepare a scene where the surrounding sound is muted or a bit changed. This does not play any sound.
 		 * 
 		 * List of all usable scene names found in b617d. Sorted alphabetically and identical names removed: https://pastebin.com/MtM9N9CC
 		 * Full list of audio scene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/audioSceneNames.json
 		 */
-		BOOL START_AUDIO_SCENE(const char* scene);
+		bool START_AUDIO_SCENE(const char* scene);
 		/**
 		 * Full list of audio scene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/audioSceneNames.json
 		 */
@@ -796,7 +796,7 @@ namespace base::menu::natives {
 		/**
 		 * Full list of audio scene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/audioSceneNames.json
 		 */
-		BOOL IS_AUDIO_SCENE_ACTIVE(const char* scene);
+		bool IS_AUDIO_SCENE_ACTIVE(const char* scene);
 		/**
 		 * Full list of audio scene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/audioSceneNames.json
 		 */
@@ -808,34 +808,34 @@ namespace base::menu::natives {
 		 */
 		void ADD_ENTITY_TO_AUDIO_MIX_GROUP(Entity entity, const char* groupName, float p2);
 		void REMOVE_ENTITY_FROM_AUDIO_MIX_GROUP(Entity entity, float p1);
-		BOOL AUDIO_IS_MUSIC_PLAYING();
+		bool AUDIO_IS_MUSIC_PLAYING();
 		/**
 		 * This is an alias of AUDIO_IS_MUSIC_PLAYING.
 		 */
-		BOOL AUDIO_IS_SCRIPTED_MUSIC_PLAYING();
+		bool AUDIO_IS_SCRIPTED_MUSIC_PLAYING();
 		/**
 		 * All music event names found in the b617d scripts: https://pastebin.com/GnYt0R3P
 		 * Full list of music event names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/musicEventNames.json
 		 */
-		BOOL PREPARE_MUSIC_EVENT(const char* eventName);
+		bool PREPARE_MUSIC_EVENT(const char* eventName);
 		/**
 		 * All music event names found in the b617d scripts: https://pastebin.com/GnYt0R3P
 		 * Full list of music event names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/musicEventNames.json
 		 */
-		BOOL CANCEL_MUSIC_EVENT(const char* eventName);
+		bool CANCEL_MUSIC_EVENT(const char* eventName);
 		/**
 		 * List of all usable event names found in b617d used with this native. Sorted alphabetically and identical names removed: https://pastebin.com/RzDFmB1W
 		 * 
 		 * All music event names found in the b617d scripts: https://pastebin.com/GnYt0R3P
 		 * Full list of music event names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/musicEventNames.json
 		 */
-		BOOL TRIGGER_MUSIC_EVENT(const char* eventName);
-		BOOL IS_MUSIC_ONESHOT_PLAYING();
+		bool TRIGGER_MUSIC_EVENT(const char* eventName);
+		bool IS_MUSIC_ONESHOT_PLAYING();
 		int GET_MUSIC_PLAYTIME();
 		void SET_GLOBAL_RADIO_SIGNAL_LEVEL(Any p0);
 		void RECORD_BROKEN_GLASS(float x, float y, float z, float radius);
 		void CLEAR_ALL_BROKEN_GLASS();
-		void SCRIPT_OVERRIDES_WIND_ELEVATION(BOOL p0, Any p1);
+		void SCRIPT_OVERRIDES_WIND_ELEVATION(bool p0, Any p1);
 		void SET_PED_WALLA_DENSITY(float p0, float p1);
 		void SET_PED_INTERIOR_WALLA_DENSITY(float p0, float p1);
 		void FORCE_PED_PANIC_WALLA();
@@ -845,7 +845,7 @@ namespace base::menu::natives {
 		 * bool prepareAlarm = AUDIO::PREPARE_ALARM("PORT_OF_LS_HEIST_FORT_ZANCUDO_ALARMS");
 		 * Full list of alarm names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/alarmSounds.json
 		 */
-		BOOL PREPARE_ALARM(const char* alarmName);
+		bool PREPARE_ALARM(const char* alarmName);
 		/**
 		 * Example:
 		 * 
@@ -879,7 +879,7 @@ namespace base::menu::natives {
 		 * AUDIO::START_ALARM("PROLOGUE_VAULT_ALARMS", 0);
 		 * Full list of alarm names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/alarmSounds.json
 		 */
-		void START_ALARM(const char* alarmName, BOOL p2);
+		void START_ALARM(const char* alarmName, bool p2);
 		/**
 		 * Example:
 		 * 
@@ -891,15 +891,15 @@ namespace base::menu::natives {
 		 * Second parameter (bool) has to be true (1) to have any effect.
 		 * Full list of alarm names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/alarmSounds.json
 		 */
-		void STOP_ALARM(const char* alarmName, BOOL toggle);
-		void STOP_ALL_ALARMS(BOOL stop);
+		void STOP_ALARM(const char* alarmName, bool toggle);
+		void STOP_ALL_ALARMS(bool stop);
 		/**
 		 * Example:
 		 * 
 		 * bool playing = AUDIO::IS_ALARM_PLAYING("PORT_OF_LS_HEIST_FORT_ZANCUDO_ALARMS");
 		 * Full list of alarm names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/alarmSounds.json
 		 */
-		BOOL IS_ALARM_PLAYING(const char* alarmName);
+		bool IS_ALARM_PLAYING(const char* alarmName);
 		/**
 		 * Returns hash of default vehicle horn
 		 * 
@@ -911,27 +911,27 @@ namespace base::menu::natives {
 		/**
 		 * Enables/disables ped's "loud" footstep sound.
 		 */
-		void SET_PED_FOOTSTEPS_EVENTS_ENABLED(Ped ped, BOOL toggle);
+		void SET_PED_FOOTSTEPS_EVENTS_ENABLED(Ped ped, bool toggle);
 		/**
 		 * Enables/disables ped's "quiet" footstep sound.
 		 */
-		void SET_PED_CLOTH_EVENTS_ENABLED(Ped ped, BOOL toggle);
+		void SET_PED_CLOTH_EVENTS_ENABLED(Ped ped, bool toggle);
 		/**
 		 * Sets audio flag "OverridePlayerGroundMaterial"
 		 */
-		void OVERRIDE_PLAYER_GROUND_MATERIAL(Hash hash, BOOL toggle);
-		void USE_FOOTSTEP_SCRIPT_SWEETENERS(Ped ped, BOOL p1, Hash hash);
+		void OVERRIDE_PLAYER_GROUND_MATERIAL(Hash hash, bool toggle);
+		void USE_FOOTSTEP_SCRIPT_SWEETENERS(Ped ped, bool p1, Hash hash);
 		/**
 		 * Sets audio flag "OverrideMicrophoneSettings"
 		 */
-		void OVERRIDE_MICROPHONE_SETTINGS(Hash hash, BOOL toggle);
+		void OVERRIDE_MICROPHONE_SETTINGS(Hash hash, bool toggle);
 		void FREEZE_MICROPHONE();
 		/**
 		 * If value is set to true, and ambient siren sound will be played.
 		 * Appears to enable/disable an audio flag.
 		 */
-		void DISTANT_COP_CAR_SIRENS(BOOL value);
-		void SET_SIREN_CAN_BE_CONTROLLED_BY_AUDIO(Vehicle vehicle, BOOL p1);
+		void DISTANT_COP_CAR_SIRENS(bool value);
+		void SET_SIREN_CAN_BE_CONTROLLED_BY_AUDIO(Vehicle vehicle, bool p1);
 		void ENABLE_STUNT_JUMP_AUDIO();
 		/**
 		 * Possible flag names:
@@ -1048,14 +1048,14 @@ namespace base::menu::natives {
 		 * ID: 62 | Hash: 0xE24C3AA6
 		 * ID: 63 | Hash: 0xBFFDD2B7
 		 */
-		void SET_AUDIO_FLAG(const char* flagName, BOOL toggle);
+		void SET_AUDIO_FLAG(const char* flagName, bool toggle);
 		/**
 		 * p1 is always 0 in the scripts
 		 */
-		BOOL PREPARE_SYNCHRONIZED_AUDIO_EVENT(const char* audioEvent, Any p1);
-		BOOL PREPARE_SYNCHRONIZED_AUDIO_EVENT_FOR_SCENE(int sceneID, const char* audioEvent);
-		BOOL PLAY_SYNCHRONIZED_AUDIO_EVENT(int sceneID);
-		BOOL STOP_SYNCHRONIZED_AUDIO_EVENT(int sceneID);
+		bool PREPARE_SYNCHRONIZED_AUDIO_EVENT(const char* audioEvent, Any p1);
+		bool PREPARE_SYNCHRONIZED_AUDIO_EVENT_FOR_SCENE(int sceneID, const char* audioEvent);
+		bool PLAY_SYNCHRONIZED_AUDIO_EVENT(int sceneID);
+		bool STOP_SYNCHRONIZED_AUDIO_EVENT(int sceneID);
 		void INIT_SYNCH_SCENE_AUDIO_WITH_POSITION(const char* audioEvent, float x, float y, float z);
 		void INIT_SYNCH_SCENE_AUDIO_WITH_ENTITY(const char* audioEvent, Entity entity);
 		/**
@@ -1093,10 +1093,10 @@ namespace base::menu::natives {
 		int GET_MUSIC_VOL_SLIDER();
 		void REQUEST_TENNIS_BANKS(Ped ped);
 		void UNREQUEST_TENNIS_BANKS();
-		void SET_SKIP_MINIGUN_SPIN_UP_AUDIO(BOOL p0);
+		void SET_SKIP_MINIGUN_SPIN_UP_AUDIO(bool p0);
 		void STOP_CUTSCENE_AUDIO();
-		BOOL HAS_LOADED_MP_DATA_SET();
-		BOOL HAS_LOADED_SP_DATA_SET();
+		bool HAS_LOADED_MP_DATA_SET();
+		bool HAS_LOADED_SP_DATA_SET();
 		int GET_VEHICLE_HORN_SOUND_INDEX(Vehicle vehicle);
 		void SET_VEHICLE_HORN_SOUND_INDEX(Vehicle vehicle, int value);
 
@@ -1122,12 +1122,12 @@ namespace base::menu::natives {
 		 * - Nacorpio
 		 */
 		void REGISTER_OBJECT_SCRIPT_BRAIN(const char* scriptName, Hash modelHash, int p2, float activationRange, int p4, int p5);
-		BOOL IS_OBJECT_WITHIN_BRAIN_ACTIVATION_RANGE(Object object);
+		bool IS_OBJECT_WITHIN_BRAIN_ACTIVATION_RANGE(Object object);
 		void REGISTER_WORLD_POINT_SCRIPT_BRAIN(const char* scriptName, float activationRange, int p2);
 		/**
 		 * Gets whether the world point the calling script is registered to is within desired range of the player.
 		 */
-		BOOL IS_WORLD_POINT_WITHIN_BRAIN_ACTIVATION_RANGE();
+		bool IS_WORLD_POINT_WITHIN_BRAIN_ACTIVATION_RANGE();
 		void ENABLE_SCRIPT_BRAIN_SET(int brainSet);
 		void DISABLE_SCRIPT_BRAIN_SET(int brainSet);
 		void REACTIVATE_ALL_WORLD_BRAINS_THAT_ARE_WAITING_TILL_OUT_OF_RANGE();
@@ -1185,11 +1185,11 @@ namespace base::menu::natives {
 		 * character (gameplay) camera, call this native with render set to 0.
 		 * Setting ease to 1 will smooth the transition.
 		 */
-		void RENDER_SCRIPT_CAMS(BOOL render, BOOL ease, int easeTime, BOOL p3, BOOL p4, Any p5);
+		void RENDER_SCRIPT_CAMS(bool render, bool ease, int easeTime, bool p3, bool p4, Any p5);
 		/**
 		 * This native makes the gameplay camera zoom into first person/third person with a special effect.
 		 */
-		void STOP_RENDERING_SCRIPT_CAMS_USING_CATCH_UP(BOOL render, float p1, int p2, Any p3);
+		void STOP_RENDERING_SCRIPT_CAMS_USING_CATCH_UP(bool render, float p1, int p2, Any p3);
 		/**
 		 * "DEFAULT_SCRIPTED_CAMERA"
 		 * "DEFAULT_ANIMATED_CAMERA"
@@ -1197,7 +1197,7 @@ namespace base::menu::natives {
 		 * "DEFAULT_SCRIPTED_FLY_CAMERA"
 		 * "TIMED_SPLINE_CAMERA"
 		 */
-		Cam CREATE_CAM(const char* camName, BOOL p1);
+		Cam CREATE_CAM(const char* camName, bool p1);
 		/**
 		 * camName is always set to "DEFAULT_SCRIPTED_CAMERA" in Rockstar's scripts.
 		 * ------------
@@ -1209,33 +1209,33 @@ namespace base::menu::natives {
 		 * ------------
 		 * Side Note: It seems p8 is basically to represent what would be the bool p1 within CREATE_CAM native. As well as the p9 since it's always 2 in scripts seems to represent what would be the last param within SET_CAM_ROT native which normally would be 2.
 		 */
-		Cam CREATE_CAM_WITH_PARAMS(const char* camName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, BOOL p8, int p9);
-		Cam CREATE_CAMERA(Hash camHash, BOOL p1);
+		Cam CREATE_CAM_WITH_PARAMS(const char* camName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, bool p8, int p9);
+		Cam CREATE_CAMERA(Hash camHash, bool p1);
 		/**
 		 * p9 uses 2 by default
 		 */
-		Cam CREATE_CAMERA_WITH_PARAMS(Hash camHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, BOOL p8, Any p9);
+		Cam CREATE_CAMERA_WITH_PARAMS(Hash camHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, bool p8, Any p9);
 		/**
 		 * BOOL param indicates whether the cam should be destroyed if it belongs to the calling script.
 		 */
-		void DESTROY_CAM(Cam cam, BOOL bScriptHostCam);
+		void DESTROY_CAM(Cam cam, bool bScriptHostCam);
 		/**
 		 * BOOL param indicates whether the cam should be destroyed if it belongs to the calling script.
 		 */
-		void DESTROY_ALL_CAMS(BOOL bScriptHostCam);
+		void DESTROY_ALL_CAMS(bool bScriptHostCam);
 		/**
 		 * Returns whether or not the passed camera handle exists.
 		 */
-		BOOL DOES_CAM_EXIST(Cam cam);
+		bool DOES_CAM_EXIST(Cam cam);
 		/**
 		 * Set camera as active/inactive.
 		 */
-		void SET_CAM_ACTIVE(Cam cam, BOOL active);
+		void SET_CAM_ACTIVE(Cam cam, bool active);
 		/**
 		 * Returns whether or not the passed camera handle is active.
 		 */
-		BOOL IS_CAM_ACTIVE(Cam cam);
-		BOOL IS_CAM_RENDERING(Cam cam);
+		bool IS_CAM_ACTIVE(Cam cam);
+		bool IS_CAM_RENDERING(Cam cam);
 		Cam GET_RENDERING_CAM();
 		Vector3 GET_CAM_COORD(Cam cam);
 		/**
@@ -1275,7 +1275,7 @@ namespace base::menu::natives {
 		void SET_CAM_FAR_DOF(Cam cam, float farDOF);
 		void SET_CAM_DOF_STRENGTH(Cam cam, float dofStrength);
 		void SET_CAM_DOF_PLANES(Cam cam, float p1, float p2, float p3, float p4);
-		void SET_CAM_USE_SHALLOW_DOF_MODE(Cam cam, BOOL toggle);
+		void SET_CAM_USE_SHALLOW_DOF_MODE(Cam cam, bool toggle);
 		void SET_USE_HI_DOF();
 		/**
 		 * Only used in R* Script fm_mission_controller_2020
@@ -1307,23 +1307,23 @@ namespace base::menu::natives {
 		/**
 		 * This native has a name defined inside its code
 		 */
-		void SET_CAM_DOF_SHOULD_KEEP_LOOK_AT_TARGET_IN_FOCUS(Cam camera, BOOL state);
+		void SET_CAM_DOF_SHOULD_KEEP_LOOK_AT_TARGET_IN_FOCUS(Cam camera, bool state);
 		/**
 		 * Last param determines if its relative to the Entity
 		 */
-		void ATTACH_CAM_TO_ENTITY(Cam cam, Entity entity, float xOffset, float yOffset, float zOffset, BOOL isRelative);
-		void ATTACH_CAM_TO_PED_BONE(Cam cam, Ped ped, int boneIndex, float x, float y, float z, BOOL heading);
-		void HARD_ATTACH_CAM_TO_PED_BONE(Cam cam, Ped ped, int boneIndex, float p3, float p4, float p5, float p6, float p7, float p8, BOOL p9);
+		void ATTACH_CAM_TO_ENTITY(Cam cam, Entity entity, float xOffset, float yOffset, float zOffset, bool isRelative);
+		void ATTACH_CAM_TO_PED_BONE(Cam cam, Ped ped, int boneIndex, float x, float y, float z, bool heading);
+		void HARD_ATTACH_CAM_TO_PED_BONE(Cam cam, Ped ped, int boneIndex, float p3, float p4, float p5, float p6, float p7, float p8, bool p9);
 		/**
 		 * Example from am_mp_drone script:
 		 * 
 		 * CAM::HARD_ATTACH_CAM_TO_ENTITY(Local_190.f_169, NETWORK::NET_TO_OBJ(Local_190.f_159), 0f, 0f, 180f, Var0, 1);
 		 */
-		void HARD_ATTACH_CAM_TO_ENTITY(Cam cam, Entity entity, float xRot, float yRot, float zRot, float xOffset, float yOffset, float zOffset, BOOL isRelative);
+		void HARD_ATTACH_CAM_TO_ENTITY(Cam cam, Entity entity, float xRot, float yRot, float zRot, float xOffset, float yOffset, float zOffset, bool isRelative);
 		/**
 		 * This native works with vehicles only. Bone indexes are usually given by this native GET_ENTITY_BONE_INDEX_BY_NAME.
 		 */
-		void ATTACH_CAM_TO_VEHICLE_BONE(Cam cam, Vehicle vehicle, int boneIndex, BOOL relativeRotation, float rotX, float rotY, float rotZ, float offsetX, float offsetY, float offsetZ, BOOL fixedDirection);
+		void ATTACH_CAM_TO_VEHICLE_BONE(Cam cam, Vehicle vehicle, int boneIndex, bool relativeRotation, float rotX, float rotY, float rotZ, float offsetX, float offsetY, float offsetZ, bool fixedDirection);
 		void DETACH_CAM(Cam cam);
 		/**
 		 * The native seems to only be called once.
@@ -1332,31 +1332,31 @@ namespace base::menu::natives {
 		 * CAM::SET_CAM_INHERIT_ROLL_VEHICLE(l_544, getElem(2, &l_525, 4));
 		 * In the exile1 script.
 		 */
-		void SET_CAM_INHERIT_ROLL_VEHICLE(Cam cam, BOOL p1);
+		void SET_CAM_INHERIT_ROLL_VEHICLE(Cam cam, bool p1);
 		void POINT_CAM_AT_COORD(Cam cam, float x, float y, float z);
 		/**
 		 * p5 always seems to be 1 i.e TRUE
 		 */
-		void POINT_CAM_AT_ENTITY(Cam cam, Entity entity, float p2, float p3, float p4, BOOL p5);
+		void POINT_CAM_AT_ENTITY(Cam cam, Entity entity, float p2, float p3, float p4, bool p5);
 		/**
 		 * Parameters p0-p5 seems correct. The bool p6 is unknown, but through every X360 script it's always 1. Please correct p0-p5 if any prove to be wrong.
 		 */
-		void POINT_CAM_AT_PED_BONE(Cam cam, Ped ped, int boneIndex, float x, float y, float z, BOOL p6);
+		void POINT_CAM_AT_PED_BONE(Cam cam, Ped ped, int boneIndex, float x, float y, float z, bool p6);
 		void STOP_CAM_POINTING(Cam cam);
 		/**
 		 * Allows you to aim and shoot at the direction the camera is facing.
 		 */
-		void SET_CAM_AFFECTS_AIMING(Cam cam, BOOL toggle);
+		void SET_CAM_AFFECTS_AIMING(Cam cam, bool toggle);
 		/**
 		 * Rotates the radar to match the camera's Z rotation
 		 */
-		void SET_CAM_CONTROLS_MINI_MAP_HEADING(Cam cam, BOOL toggle);
+		void SET_CAM_CONTROLS_MINI_MAP_HEADING(Cam cam, bool toggle);
 		/**
 		 * When set to true shadows appear more smooth but less detailed.
 		 * Set to false by default.
 		 */
-		void SET_CAM_IS_INSIDE_VEHICLE(Cam cam, BOOL toggle);
-		void ALLOW_MOTION_BLUR_DECAY(Any p0, BOOL p1);
+		void SET_CAM_IS_INSIDE_VEHICLE(Cam cam, bool toggle);
+		void ALLOW_MOTION_BLUR_DECAY(Any p0, bool p1);
 		/**
 		 * NOTE: Debugging functions are not present in the retail version of the game.
 		 */
@@ -1413,15 +1413,15 @@ namespace base::menu::natives {
 		 */
 		void OVERRIDE_CAM_SPLINE_MOTION_BLUR(Cam cam, int p1, float p2, float p3);
 		void SET_CAM_SPLINE_NODE_EXTRA_FLAGS(Cam cam, int p1, int flags);
-		BOOL IS_CAM_SPLINE_PAUSED(Cam cam);
-		void _INTERPOLATE_CAM_WITH_PARAMS(Cam camera, float camPosX, float camPosY, float camPosZ, float camRotX, float camRotY, float camRotZ, float fov, int duration, int posCurveType, int rotCurveType, int rotOrder, int fovCurveType);
+		bool IS_CAM_SPLINE_PAUSED(Cam cam);
+		void INTERPOLATE_CAMERA_WITH_PARAMS(Cam camera, float camPosX, float camPosY, float camPosZ, float camRotX, float camRotY, float camRotZ, float fov, int duration, int posCurveType, int rotCurveType, int rotOrder, int fovCurveType);
 		void _ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE(Cam camTo, Cam camFrom, int duration, int easeLocation, int easeRotation, int easeFov);
 		/**
 		 * Previous declaration void SET_CAM_ACTIVE_WITH_INTERP(Cam camTo, Cam camFrom, int duration, BOOL easeLocation, BOOL easeRotation) is completely wrong. The last two params are integers not BOOLs...
 		 * 
 		 */
 		void SET_CAM_ACTIVE_WITH_INTERP(Cam camTo, Cam camFrom, int duration, int easeLocation, int easeRotation);
-		BOOL IS_CAM_INTERPOLATING(Cam cam);
+		bool IS_CAM_INTERPOLATING(Cam cam);
 		/**
 		 * Possible shake types (updated b617d):
 		 * 
@@ -1446,9 +1446,9 @@ namespace base::menu::natives {
 		 * CAM::ANIMATED_SHAKE_CAM(l_5069, "shake_cam_all@", "light", "", 1f);
 		 */
 		void ANIMATED_SHAKE_CAM(Cam cam, const char* p1, const char* p2, const char* p3, float amplitude);
-		BOOL IS_CAM_SHAKING(Cam cam);
+		bool IS_CAM_SHAKING(Cam cam);
 		void SET_CAM_SHAKE_AMPLITUDE(Cam cam, float amplitude);
-		void STOP_CAM_SHAKING(Cam cam, BOOL p1);
+		void STOP_CAM_SHAKING(Cam cam, bool p1);
 		/**
 		 * CAM::SHAKE_SCRIPT_GLOBAL("HAND_SHAKE", 0.2);
 		 * 
@@ -1467,14 +1467,14 @@ namespace base::menu::natives {
 		 * CAM::STOP_SCRIPT_GLOBAL_SHAKING(0);
 		 * }
 		 */
-		BOOL IS_SCRIPT_GLOBAL_SHAKING();
+		bool IS_SCRIPT_GLOBAL_SHAKING();
 		/**
 		 * In drunk_controller.c4, sub_309
 		 * if (CAM::IS_SCRIPT_GLOBAL_SHAKING()) {
 		 * CAM::STOP_SCRIPT_GLOBAL_SHAKING(0);
 		 * }
 		 */
-		void STOP_SCRIPT_GLOBAL_SHAKING(BOOL p0);
+		void STOP_SCRIPT_GLOBAL_SHAKING(bool p0);
 		/**
 		 * p1: 0..16
 		 */
@@ -1487,8 +1487,8 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL PLAY_CAM_ANIM(Cam cam, const char* animName, const char* animDictionary, float x, float y, float z, float xRot, float yRot, float zRot, BOOL p9, int p10);
-		BOOL IS_CAM_PLAYING_ANIM(Cam cam, const char* animName, const char* animDictionary);
+		bool PLAY_CAM_ANIM(Cam cam, const char* animName, const char* animDictionary, float x, float y, float z, float xRot, float yRot, float zRot, bool p9, int p10);
+		bool IS_CAM_PLAYING_ANIM(Cam cam, const char* animName, const char* animDictionary);
 		void SET_CAM_ANIM_CURRENT_PHASE(Cam cam, float phase);
 		float GET_CAM_ANIM_CURRENT_PHASE(Cam cam);
 		/**
@@ -1498,17 +1498,17 @@ namespace base::menu::natives {
 		 * 
 		 * CAM::PLAY_SYNCHRONIZED_CAM_ANIM(l_F0D[7/*1* /], l_F4D[15/*1* /], "ah3b_attackheli_cam2", "missheistfbi3b_helicrash");
 		 */
-		BOOL PLAY_SYNCHRONIZED_CAM_ANIM(Any p0, Any p1, const char* animName, const char* animDictionary);
+		bool PLAY_SYNCHRONIZED_CAM_ANIM(Any p0, Any p1, const char* animName, const char* animDictionary);
 		void SET_FLY_CAM_HORIZONTAL_RESPONSE(Cam cam, float p1, float p2, float p3);
 		void SET_FLY_CAM_VERTICAL_RESPONSE(Cam cam, float p1, float p2, float p3);
 		void SET_FLY_CAM_MAX_HEIGHT(Cam cam, float height);
 		void SET_FLY_CAM_COORD_AND_CONSTRAIN(Cam cam, float x, float y, float z);
 		void SET_FLY_CAM_VERTICAL_CONTROLS_THIS_UPDATE(Cam cam);
-		BOOL WAS_FLY_CAM_CONSTRAINED_ON_PREVIOUS_UDPATE(Cam cam);
-		BOOL IS_SCREEN_FADED_OUT();
-		BOOL IS_SCREEN_FADED_IN();
-		BOOL IS_SCREEN_FADING_OUT();
-		BOOL IS_SCREEN_FADING_IN();
+		bool WAS_FLY_CAM_CONSTRAINED_ON_PREVIOUS_UDPATE(Cam cam);
+		bool IS_SCREEN_FADED_OUT();
+		bool IS_SCREEN_FADED_IN();
+		bool IS_SCREEN_FADING_OUT();
+		bool IS_SCREEN_FADING_IN();
 		/**
 		 * Fades the screen in.
 		 * 
@@ -1521,8 +1521,8 @@ namespace base::menu::natives {
 		 * duration: The time the fade should take, in milliseconds.
 		 */
 		void DO_SCREEN_FADE_OUT(int duration);
-		void SET_WIDESCREEN_BORDERS(BOOL p0, int p1);
-		BOOL ARE_WIDESCREEN_BORDERS_ACTIVE();
+		void SET_WIDESCREEN_BORDERS(bool p0, int p1);
+		bool ARE_WIDESCREEN_BORDERS_ACTIVE();
 		Vector3 GET_GAMEPLAY_CAM_COORD();
 		/**
 		 * p0 dosen't seem to change much, I tried it with 0, 1, 2:
@@ -1566,7 +1566,7 @@ namespace base::menu::natives {
 		 */
 		void SET_FIRST_PERSON_SHOOTER_CAMERA_HEADING(float yaw);
 		void SET_FIRST_PERSON_SHOOTER_CAMERA_PITCH(float pitch);
-		void SET_SCRIPTED_CAMERA_IS_FIRST_PERSON_THIS_FRAME(BOOL p0);
+		void SET_SCRIPTED_CAMERA_IS_FIRST_PERSON_THIS_FRAME(bool p0);
 		/**
 		 * Possible shake types (updated b617d):
 		 * 
@@ -1585,12 +1585,12 @@ namespace base::menu::natives {
 		 * Full list of cam shake types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/camShakeTypesCompact.json
 		 */
 		void SHAKE_GAMEPLAY_CAM(const char* shakeName, float intensity);
-		BOOL IS_GAMEPLAY_CAM_SHAKING();
+		bool IS_GAMEPLAY_CAM_SHAKING();
 		/**
 		 * Sets the amplitude for the gameplay (i.e. 3rd or 1st) camera to shake. Used in script "drunk_controller.ysc.c4" to simulate making the player drunk.
 		 */
 		void SET_GAMEPLAY_CAM_SHAKE_AMPLITUDE(float amplitude);
-		void STOP_GAMEPLAY_CAM_SHAKING(BOOL p0);
+		void STOP_GAMEPLAY_CAM_SHAKING(bool p0);
 		/**
 		 * Forces gameplay cam to specified ped as if you were the ped or spectating it
 		 */
@@ -1602,15 +1602,15 @@ namespace base::menu::natives {
 		 * - When player is coming out from a police station.
 		 * - When player is buying gun from AmmuNation.
 		 */
-		BOOL IS_GAMEPLAY_CAM_RENDERING();
-		BOOL IS_INTERPOLATING_FROM_SCRIPT_CAMS();
-		BOOL IS_INTERPOLATING_TO_SCRIPT_CAMS();
-		void SET_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_STATE(BOOL p0);
+		bool IS_GAMEPLAY_CAM_RENDERING();
+		bool IS_INTERPOLATING_FROM_SCRIPT_CAMS();
+		bool IS_INTERPOLATING_TO_SCRIPT_CAMS();
+		void SET_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_STATE(bool p0);
 		/**
 		 * Shows the crosshair even if it wouldn't show normally. Only works for one frame, so make sure to call it repeatedly.
 		 */
 		void DISABLE_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_THIS_UPDATE();
-		BOOL IS_GAMEPLAY_CAM_LOOKING_BEHIND();
+		bool IS_GAMEPLAY_CAM_LOOKING_BEHIND();
 		void SET_GAMEPLAY_CAM_IGNORE_ENTITY_COLLISION_THIS_UPDATE(Entity entity);
 		void DISABLE_CAM_COLLISION_FOR_OBJECT(Entity entity);
 		void BYPASS_CAMERA_COLLISION_BUOYANCY_TEST_THIS_UPDATE();
@@ -1620,8 +1620,8 @@ namespace base::menu::natives {
 		 */
 		void DISABLE_FIRST_PERSON_CAMERA_WATER_CLIPPING_TEST_THIS_UPDATE();
 		void SET_FOLLOW_CAM_IGNORE_ATTACH_PARENT_MOVEMENT_THIS_UPDATE();
-		BOOL IS_SPHERE_VISIBLE(float x, float y, float z, float radius);
-		BOOL IS_FOLLOW_PED_CAM_ACTIVE();
+		bool IS_SPHERE_VISIBLE(float x, float y, float z, float radius);
+		bool IS_FOLLOW_PED_CAM_ACTIVE();
 		/**
 		 * From the scripts:
 		 * 
@@ -1632,8 +1632,8 @@ namespace base::menu::natives {
 		 * CAM::SET_FOLLOW_PED_CAM_THIS_UPDATE("FOLLOW_PED_SKY_DIVING_FAMILY5_CAMERA", 0);
 		 * CAM::SET_FOLLOW_PED_CAM_THIS_UPDATE("FOLLOW_PED_SKY_DIVING_CAMERA", 0);
 		 */
-		BOOL SET_FOLLOW_PED_CAM_THIS_UPDATE(const char* camName, int p1);
-		void USE_SCRIPT_CAM_FOR_AMBIENT_POPULATION_ORIGIN_THIS_FRAME(BOOL p0, BOOL p1);
+		bool SET_FOLLOW_PED_CAM_THIS_UPDATE(const char* camName, int p1);
+		void USE_SCRIPT_CAM_FOR_AMBIENT_POPULATION_ORIGIN_THIS_FRAME(bool p0, bool p1);
 		void SET_FOLLOW_PED_CAM_LADDER_ALIGN_THIS_UPDATE();
 		/**
 		 * minimum: Degrees between -180f and 180f.
@@ -1701,10 +1701,10 @@ namespace base::menu::natives {
 		 * 4 - First Person
 		 */
 		void SET_FOLLOW_PED_CAM_VIEW_MODE(int viewMode);
-		BOOL IS_FOLLOW_VEHICLE_CAM_ACTIVE();
-		void SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_THIS_UPDATE(BOOL p0);
-		void SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_EVERY_UPDATE(BOOL p0, BOOL p1);
-		BOOL SET_TABLE_GAMES_CAMERA_THIS_UPDATE(Hash hash);
+		bool IS_FOLLOW_VEHICLE_CAM_ACTIVE();
+		void SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_THIS_UPDATE(bool p0);
+		void SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_EVERY_UPDATE(bool p0, bool p1);
+		bool SET_TABLE_GAMES_CAMERA_THIS_UPDATE(Hash hash);
 		int GET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL();
 		void SET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL(int zoomLevel);
 		/**
@@ -1754,9 +1754,9 @@ namespace base::menu::natives {
 		void USE_DEDICATED_STUNT_CAMERA_THIS_UPDATE(const char* camName);
 		void FORCE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE();
 		void SET_FOLLOW_VEHICLE_CAM_SEAT_THIS_UPDATE(int seatIndex);
-		BOOL IS_AIM_CAM_ACTIVE();
-		BOOL IS_AIM_CAM_ACTIVE_IN_ACCURATE_MODE();
-		BOOL IS_FIRST_PERSON_AIM_CAM_ACTIVE();
+		bool IS_AIM_CAM_ACTIVE();
+		bool IS_AIM_CAM_ACTIVE_IN_ACCURATE_MODE();
+		bool IS_FIRST_PERSON_AIM_CAM_ACTIVE();
 		void DISABLE_AIM_CAM_THIS_UPDATE();
 		float GET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR();
 		void SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR(float zoomFactor);
@@ -1765,7 +1765,7 @@ namespace base::menu::natives {
 		void SET_FIRST_PERSON_AIM_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE(float p0, float p1);
 		void SET_FIRST_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE(float p0);
 		void SET_THIRD_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE(float p0);
-		void SET_ALLOW_CUSTOM_VEHICLE_DRIVE_BY_CAM_THIS_UPDATE(BOOL p0);
+		void SET_ALLOW_CUSTOM_VEHICLE_DRIVE_BY_CAM_THIS_UPDATE(bool p0);
 		void FORCE_TIGHTSPACE_CUSTOM_FRAMING_THIS_UPDATE();
 		Vector3 GET_FINAL_RENDERED_CAM_COORD();
 		/**
@@ -1786,12 +1786,12 @@ namespace base::menu::natives {
 		float GET_FINAL_RENDERED_CAM_FAR_DOF();
 		float GET_FINAL_RENDERED_CAM_MOTION_BLUR_STRENGTH();
 		void SET_GAMEPLAY_COORD_HINT(float x, float y, float z, int duration, int blendOutDuration, int blendInDuration, int p6);
-		void SET_GAMEPLAY_PED_HINT(Ped ped, float x1, float y1, float z1, BOOL p4, int duration, int blendOutDuration, int blendInDuration);
+		void SET_GAMEPLAY_PED_HINT(Ped ped, float x1, float y1, float z1, bool p4, int duration, int blendOutDuration, int blendInDuration);
 		/**
 		 * Focuses the camera on the specified vehicle.
 		 */
-		void SET_GAMEPLAY_VEHICLE_HINT(Vehicle vehicle, float offsetX, float offsetY, float offsetZ, BOOL p4, int time, int easeInTime, int easeOutTime);
-		void SET_GAMEPLAY_OBJECT_HINT(Object object, float xOffset, float yOffset, float zOffset, BOOL p4, int time, int easeInTime, int easeOutTime);
+		void SET_GAMEPLAY_VEHICLE_HINT(Vehicle vehicle, float offsetX, float offsetY, float offsetZ, bool p4, int time, int easeInTime, int easeOutTime);
+		void SET_GAMEPLAY_OBJECT_HINT(Object object, float xOffset, float yOffset, float zOffset, bool p4, int time, int easeInTime, int easeOutTime);
 		/**
 		 * p8 could be some sort of flag. Scripts use:
 		 * -244429742
@@ -1799,32 +1799,32 @@ namespace base::menu::natives {
 		 * 1726668277
 		 * 1844968929
 		 */
-		void SET_GAMEPLAY_ENTITY_HINT(Entity entity, float xOffset, float yOffset, float zOffset, BOOL p4, int time, int easeInTime, int easeOutTime, int p8);
-		BOOL IS_GAMEPLAY_HINT_ACTIVE();
-		void STOP_GAMEPLAY_HINT(BOOL p0);
+		void SET_GAMEPLAY_ENTITY_HINT(Entity entity, float xOffset, float yOffset, float zOffset, bool p4, int time, int easeInTime, int easeOutTime, int p8);
+		bool IS_GAMEPLAY_HINT_ACTIVE();
+		void STOP_GAMEPLAY_HINT(bool p0);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
-		void STOP_GAMEPLAY_HINT_BEING_CANCELLED_THIS_UPDATE(BOOL p0);
-		void STOP_CODE_GAMEPLAY_HINT(BOOL p0);
-		BOOL IS_CODE_GAMEPLAY_HINT_ACTIVE();
+		void STOP_GAMEPLAY_HINT_BEING_CANCELLED_THIS_UPDATE(bool p0);
+		void STOP_CODE_GAMEPLAY_HINT(bool p0);
+		bool IS_CODE_GAMEPLAY_HINT_ACTIVE();
 		void SET_GAMEPLAY_HINT_FOV(float FOV);
 		void SET_GAMEPLAY_HINT_FOLLOW_DISTANCE_SCALAR(float value);
 		void SET_GAMEPLAY_HINT_BASE_ORBIT_PITCH_OFFSET(float value);
 		void SET_GAMEPLAY_HINT_CAMERA_RELATIVE_SIDE_OFFSET(float xOffset);
 		void SET_GAMEPLAY_HINT_CAMERA_RELATIVE_VERTICAL_OFFSET(float yOffset);
-		void SET_GAMEPLAY_HINT_CAMERA_BLEND_TO_FOLLOW_PED_MEDIUM_VIEW_MODE(BOOL toggle);
-		void SET_CINEMATIC_BUTTON_ACTIVE(BOOL p0);
-		BOOL IS_CINEMATIC_CAM_RENDERING();
+		void SET_GAMEPLAY_HINT_CAMERA_BLEND_TO_FOLLOW_PED_MEDIUM_VIEW_MODE(bool toggle);
+		void SET_CINEMATIC_BUTTON_ACTIVE(bool p0);
+		bool IS_CINEMATIC_CAM_RENDERING();
 		/**
 		 * p0 argument found in the b617d scripts: "DRUNK_SHAKE"
 		 * 
 		 * Full list of cam shake types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/camShakeTypesCompact.json
 		 */
 		void SHAKE_CINEMATIC_CAM(const char* shakeType, float amount);
-		BOOL IS_CINEMATIC_CAM_SHAKING();
+		bool IS_CINEMATIC_CAM_SHAKING();
 		void SET_CINEMATIC_CAM_SHAKE_AMPLITUDE(float p0);
-		void STOP_CINEMATIC_CAM_SHAKING(BOOL p0);
+		void STOP_CINEMATIC_CAM_SHAKING(bool p0);
 		void DISABLE_CINEMATIC_BONNET_CAMERA_THIS_UPDATE();
 		void DISABLE_CINEMATIC_VEHICLE_IDLE_MODE_THIS_UPDATE();
 		/**
@@ -1835,33 +1835,33 @@ namespace base::menu::natives {
 		 * Resets the idle camera timer. Calling that in a loop once every few seconds is enough to disable the idle cinematic camera.
 		 */
 		void INVALIDATE_IDLE_CAM();
-		BOOL IS_CINEMATIC_IDLE_CAM_RENDERING();
-		BOOL IS_CINEMATIC_FIRST_PERSON_VEHICLE_INTERIOR_CAM_RENDERING();
+		bool IS_CINEMATIC_IDLE_CAM_RENDERING();
+		bool IS_CINEMATIC_FIRST_PERSON_VEHICLE_INTERIOR_CAM_RENDERING();
 		/**
 		 * hash is always JOAAT("CAMERA_MAN_SHOT") in decompiled scripts
 		 */
-		void CREATE_CINEMATIC_SHOT(Hash p0, int time, BOOL p2, Entity entity);
+		void CREATE_CINEMATIC_SHOT(Hash p0, int time, bool p2, Entity entity);
 		/**
 		 * Hash is always JOAAT("CAMERA_MAN_SHOT") in decompiled scripts
 		 */
-		BOOL IS_CINEMATIC_SHOT_ACTIVE(Hash p0);
+		bool IS_CINEMATIC_SHOT_ACTIVE(Hash p0);
 		/**
 		 * Only used once in carsteal3 with p0 set to -1096069633 (CAMERA_MAN_SHOT)
 		 */
 		void STOP_CINEMATIC_SHOT(Hash p0);
-		void FORCE_CINEMATIC_RENDERING_THIS_UPDATE(BOOL toggle);
+		void FORCE_CINEMATIC_RENDERING_THIS_UPDATE(bool toggle);
 		void SET_CINEMATIC_NEWS_CHANNEL_ACTIVE_THIS_UPDATE();
 		/**
 		 * Toggles the vehicle cinematic cam; requires the player ped to be in a vehicle to work.
 		 */
-		void SET_CINEMATIC_MODE_ACTIVE(BOOL toggle);
-		BOOL IS_IN_VEHICLE_MOBILE_PHONE_CAMERA_RENDERING();
-		BOOL DISABLE_CINEMATIC_SLOW_MO_THIS_UPDATE();
-		BOOL IS_BONNET_CINEMATIC_CAM_RENDERING();
+		void SET_CINEMATIC_MODE_ACTIVE(bool toggle);
+		bool IS_IN_VEHICLE_MOBILE_PHONE_CAMERA_RENDERING();
+		bool DISABLE_CINEMATIC_SLOW_MO_THIS_UPDATE();
+		bool IS_BONNET_CINEMATIC_CAM_RENDERING();
 		/**
 		 * Tests some cinematic camera flags
 		 */
-		BOOL IS_CINEMATIC_CAM_INPUT_ACTIVE();
+		bool IS_CINEMATIC_CAM_INPUT_ACTIVE();
 		void IGNORE_MENU_PREFERENCE_FOR_BONNET_CAMERA_THIS_UPDATE();
 		void BYPASS_CUTSCENE_CAM_RENDERING_THIS_UPDATE();
 		void STOP_CUTSCENE_CAM_SHAKING(Any p0);
@@ -1889,7 +1889,7 @@ namespace base::menu::natives {
 		 */
 		void SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_NAME(const char* vehicleName);
 		void SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_HASH(Hash vehicleModel);
-		BOOL IS_ALLOWED_INDEPENDENT_CAMERA_MODES();
+		bool IS_ALLOWED_INDEPENDENT_CAMERA_MODES();
 		void CAMERA_PREVENT_COLLISION_SETTINGS_FOR_TRIPLEHEAD_IN_INTERIORS_THIS_UPDATE();
 		float REPLAY_GET_MAX_DISTANCE_ALLOWED_FROM_PLAYER();
 
@@ -1901,7 +1901,7 @@ namespace base::menu::natives {
 		 * SET_CLOCK_TIME(12, 34, 56);
 		 */
 		void SET_CLOCK_TIME(int hour, int minute, int second);
-		void PAUSE_CLOCK(BOOL toggle);
+		void PAUSE_CLOCK(bool toggle);
 		void ADVANCE_CLOCK_TIME_TO(int hour, int minute, int second);
 		void ADD_TO_CLOCK_TIME(int hours, int minutes, int seconds);
 		/**
@@ -1989,17 +1989,17 @@ namespace base::menu::natives {
 		 */
 		void REQUEST_CUTSCENE_WITH_PLAYBACK_LIST(const char* cutsceneName, int playbackFlags, int flags);
 		void REMOVE_CUTSCENE();
-		BOOL HAS_CUTSCENE_LOADED();
+		bool HAS_CUTSCENE_LOADED();
 		/**
 		 * Full list of cutscene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/cutsceneNames.json
 		 */
-		BOOL HAS_THIS_CUTSCENE_LOADED(const char* cutsceneName);
+		bool HAS_THIS_CUTSCENE_LOADED(const char* cutsceneName);
 		/**
 		 * Sets the cutscene's owning thread ID.
 		 */
 		void SET_SCRIPT_CAN_START_CUTSCENE(int threadId);
-		BOOL CAN_REQUEST_ASSETS_FOR_CUTSCENE_ENTITY();
-		BOOL IS_CUTSCENE_PLAYBACK_FLAG_SET(int flag);
+		bool CAN_REQUEST_ASSETS_FOR_CUTSCENE_ENTITY();
+		bool IS_CUTSCENE_PLAYBACK_FLAG_SET(int flag);
 		void SET_CUTSCENE_ENTITY_STREAMING_FLAGS(const char* cutsceneEntName, int p1, int p2);
 		/**
 		 * Simply loads the cutscene and doesn't do extra stuff that REQUEST_CUTSCENE does.
@@ -2010,7 +2010,7 @@ namespace base::menu::natives {
 		 * Simply checks if the cutscene has loaded and doesn't check via CutSceneManager as opposed to HAS_[THIS]_CUTSCENE_LOADED.
 		 * Full list of cutscene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/cutsceneNames.json
 		 */
-		BOOL HAS_CUT_FILE_LOADED(const char* cutsceneName);
+		bool HAS_CUT_FILE_LOADED(const char* cutsceneName);
 		/**
 		 * Simply unloads the cutscene and doesn't do extra stuff that REMOVE_CUTSCENE does.
 		 * Full list of cutscene names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/cutsceneNames.json
@@ -2029,7 +2029,7 @@ namespace base::menu::natives {
 		 * flags: Usually 0.
 		 */
 		void START_CUTSCENE_AT_COORDS(float x, float y, float z, int flags);
-		void STOP_CUTSCENE(BOOL p0);
+		void STOP_CUTSCENE(bool p0);
 		void STOP_CUTSCENE_IMMEDIATELY();
 		/**
 		 * p3 could be heading. Needs more research.
@@ -2041,17 +2041,17 @@ namespace base::menu::natives {
 		int GET_CUTSCENE_TOTAL_DURATION();
 		int GET_CUTSCENE_END_TIME();
 		int GET_CUTSCENE_PLAY_DURATION();
-		BOOL WAS_CUTSCENE_SKIPPED();
-		BOOL HAS_CUTSCENE_FINISHED();
-		BOOL IS_CUTSCENE_ACTIVE();
-		BOOL IS_CUTSCENE_PLAYING();
+		bool WAS_CUTSCENE_SKIPPED();
+		bool HAS_CUTSCENE_FINISHED();
+		bool IS_CUTSCENE_ACTIVE();
+		bool IS_CUTSCENE_PLAYING();
 		int GET_CUTSCENE_SECTION_PLAYING();
 		Entity GET_ENTITY_INDEX_OF_CUTSCENE_ENTITY(const char* cutsceneEntName, Hash modelHash);
 		int GET_CUTSCENE_CONCAT_SECTION_PLAYING();
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL IS_CUTSCENE_AUTHORIZED(const char* cutsceneName);
+		bool IS_CUTSCENE_AUTHORIZED(const char* cutsceneName);
 		int DOES_CUTSCENE_HANDLE_EXIST(int cutsceneHandle);
 		void REGISTER_ENTITY_FOR_CUTSCENE(Ped cutscenePed, const char* cutsceneEntName, int p2, Hash modelHash, int p4);
 		Entity GET_ENTITY_INDEX_OF_REGISTERED_ENTITY(const char* cutsceneEntName, Hash modelHash);
@@ -2066,28 +2066,28 @@ namespace base::menu::natives {
 		/**
 		 * modelHash (p1) was always 0 in R* scripts
 		 */
-		BOOL CAN_SET_ENTER_STATE_FOR_REGISTERED_ENTITY(const char* cutsceneEntName, Hash modelHash);
-		BOOL CAN_SET_EXIT_STATE_FOR_REGISTERED_ENTITY(const char* cutsceneEntName, Hash modelHash);
-		BOOL CAN_SET_EXIT_STATE_FOR_CAMERA(BOOL p0);
+		bool CAN_SET_ENTER_STATE_FOR_REGISTERED_ENTITY(const char* cutsceneEntName, Hash modelHash);
+		bool CAN_SET_EXIT_STATE_FOR_REGISTERED_ENTITY(const char* cutsceneEntName, Hash modelHash);
+		bool CAN_SET_EXIT_STATE_FOR_CAMERA(bool p0);
 		/**
 		 * Toggles a value (bool) for cutscenes.
 		 */
-		void SET_PAD_CAN_SHAKE_DURING_CUTSCENE(BOOL toggle);
-		void SET_CUTSCENE_FADE_VALUES(BOOL p0, BOOL p1, BOOL p2, BOOL p3);
-		void SET_CUTSCENE_MULTIHEAD_FADE(BOOL p0, BOOL p1, BOOL p2, BOOL p3);
-		void SET_CUTSCENE_MULTIHEAD_FADE_MANUAL(BOOL p0);
-		BOOL IS_MULTIHEAD_FADE_UP();
-		void NETWORK_SET_MOCAP_CUTSCENE_CAN_BE_SKIPPED(BOOL toggle);
-		void SET_CAR_GENERATORS_CAN_UPDATE_DURING_CUTSCENE(BOOL p0);
-		BOOL CAN_USE_MOBILE_PHONE_DURING_CUTSCENE();
-		void SET_CUTSCENE_CAN_BE_SKIPPED(BOOL p0);
+		void SET_PAD_CAN_SHAKE_DURING_CUTSCENE(bool toggle);
+		void SET_CUTSCENE_FADE_VALUES(bool p0, bool p1, bool p2, bool p3);
+		void SET_CUTSCENE_MULTIHEAD_FADE(bool p0, bool p1, bool p2, bool p3);
+		void SET_CUTSCENE_MULTIHEAD_FADE_MANUAL(bool p0);
+		bool IS_MULTIHEAD_FADE_UP();
+		void NETWORK_SET_MOCAP_CUTSCENE_CAN_BE_SKIPPED(bool toggle);
+		void SET_CAR_GENERATORS_CAN_UPDATE_DURING_CUTSCENE(bool p0);
+		bool CAN_USE_MOBILE_PHONE_DURING_CUTSCENE();
+		void SET_CUTSCENE_CAN_BE_SKIPPED(bool p0);
 		void SET_CAN_DISPLAY_MINIMAP_DURING_CUTSCENE_THIS_UPDATE();
 		/**
 		 * Full list of ped components by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pedComponentVariations.json
 		 */
 		void SET_CUTSCENE_PED_COMPONENT_VARIATION(const char* cutsceneEntName, int componentId, int drawableId, int textureId, Hash modelHash);
 		void SET_CUTSCENE_PED_COMPONENT_VARIATION_FROM_PED(const char* cutsceneEntName, Ped ped, Hash modelHash);
-		BOOL DOES_CUTSCENE_ENTITY_EXIST(const char* cutsceneEntName, Hash modelHash);
+		bool DOES_CUTSCENE_ENTITY_EXIST(const char* cutsceneEntName, Hash modelHash);
 		/**
 		 * Thanks R*! ;)
 		 * 
@@ -2102,7 +2102,7 @@ namespace base::menu::natives {
 		/**
 		 * Possibly HAS_CUTSCENE_CUT_THIS_FRAME, needs more research.
 		 */
-		BOOL HAS_CUTSCENE_CUT_THIS_FRAME();
+		bool HAS_CUTSCENE_CUT_THIS_FRAME();
 
 	} // namespace CUTSCENE
 
@@ -2113,20 +2113,20 @@ namespace base::menu::natives {
 		 */
 		void DATAFILE_WATCH_REQUEST_ID(int requestId);
 		void DATAFILE_CLEAR_WATCH_LIST();
-		BOOL DATAFILE_IS_VALID_REQUEST_ID(int index);
-		BOOL DATAFILE_HAS_LOADED_FILE_DATA(int requestId);
-		BOOL DATAFILE_HAS_VALID_FILE_DATA(int requestId);
-		BOOL DATAFILE_SELECT_ACTIVE_FILE(int requestId, Any p1);
-		BOOL DATAFILE_DELETE_REQUESTED_FILE(int requestId);
-		BOOL UGC_CREATE_CONTENT(Any* data, int dataCount, const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, BOOL publish, Any p7);
-		BOOL UGC_CREATE_MISSION(const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, BOOL publish, Any p5);
-		BOOL UGC_UPDATE_CONTENT(const char* contentId, Any* data, int dataCount, const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, Any p7);
-		BOOL UGC_UPDATE_MISSION(const char* contentId, const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, Any p5);
-		BOOL UGC_SET_PLAYER_DATA(const char* contentId, float rating, const char* contentTypeName, Any p3);
-		BOOL DATAFILE_SELECT_UGC_DATA(int p0, Any p1);
-		BOOL DATAFILE_SELECT_UGC_STATS(int p0, BOOL p1, Any p2);
-		BOOL DATAFILE_SELECT_UGC_PLAYER_DATA(int p0, Any p1);
-		BOOL DATAFILE_SELECT_CREATOR_STATS(int p0, Any p1);
+		bool DATAFILE_IS_VALID_REQUEST_ID(int index);
+		bool DATAFILE_HAS_LOADED_FILE_DATA(int requestId);
+		bool DATAFILE_HAS_VALID_FILE_DATA(int requestId);
+		bool DATAFILE_SELECT_ACTIVE_FILE(int requestId, Any p1);
+		bool DATAFILE_DELETE_REQUESTED_FILE(int requestId);
+		bool UGC_CREATE_CONTENT(Any* data, int dataCount, const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, bool publish, Any p7);
+		bool UGC_CREATE_MISSION(const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, bool publish, Any p5);
+		bool UGC_UPDATE_CONTENT(const char* contentId, Any* data, int dataCount, const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, Any p7);
+		bool UGC_UPDATE_MISSION(const char* contentId, const char* contentName, const char* description, const char* tagsCsv, const char* contentTypeName, Any p5);
+		bool UGC_SET_PLAYER_DATA(const char* contentId, float rating, const char* contentTypeName, Any p3);
+		bool DATAFILE_SELECT_UGC_DATA(int p0, Any p1);
+		bool DATAFILE_SELECT_UGC_STATS(int p0, bool p1, Any p2);
+		bool DATAFILE_SELECT_UGC_PLAYER_DATA(int p0, Any p1);
+		bool DATAFILE_SELECT_CREATOR_STATS(int p0, Any p1);
 		/**
 		 * Loads a User-Generated Content (UGC) file. These files can be found in "[GTA5]\data\ugc" and "[GTA5]\common\patch\ugc". They seem to follow a naming convention, most likely of "[name]_[part].ugc". See example below for usage.
 		 * 
@@ -2135,26 +2135,26 @@ namespace base::menu::natives {
 		 * Example:
 		 * DATAFILE::DATAFILE_LOAD_OFFLINE_UGC("RockstarPlaylists") // loads "rockstarplaylists_00.ugc"
 		 */
-		BOOL DATAFILE_LOAD_OFFLINE_UGC(const char* filename, Any p1);
+		bool DATAFILE_LOAD_OFFLINE_UGC(const char* filename, Any p1);
 		void DATAFILE_CREATE(int p0);
 		void DATAFILE_DELETE(int p0);
 		void DATAFILE_STORE_MISSION_HEADER(int p0);
 		void DATAFILE_FLUSH_MISSION_HEADER();
 		Any* DATAFILE_GET_FILE_DICT(int p0);
-		BOOL DATAFILE_START_SAVE_TO_CLOUD(const char* filename, Any p1);
-		BOOL DATAFILE_UPDATE_SAVE_TO_CLOUD(BOOL* p0);
-		BOOL DATAFILE_IS_SAVE_PENDING();
-		BOOL DATAFILE_LOAD_OFFLINE_UGC_FOR_ADDITIONAL_DATA_FILE(Any p0, Any p1);
+		bool DATAFILE_START_SAVE_TO_CLOUD(const char* filename, Any p1);
+		bool DATAFILE_UPDATE_SAVE_TO_CLOUD(bool* p0);
+		bool DATAFILE_IS_SAVE_PENDING();
+		bool DATAFILE_LOAD_OFFLINE_UGC_FOR_ADDITIONAL_DATA_FILE(Any p0, Any p1);
 		void DATAFILE_DELETE_FOR_ADDITIONAL_DATA_FILE(Any p0);
 		Any* DATAFILE_GET_FILE_DICT_FOR_ADDITIONAL_DATA_FILE(Any p0);
-		void DATADICT_SET_BOOL(Any* objectData, const char* key, BOOL value);
+		void DATADICT_SET_BOOL(Any* objectData, const char* key, bool value);
 		void DATADICT_SET_INT(Any* objectData, const char* key, int value);
 		void DATADICT_SET_FLOAT(Any* objectData, const char* key, float value);
 		void DATADICT_SET_STRING(Any* objectData, const char* key, const char* value);
 		void DATADICT_SET_VECTOR(Any* objectData, const char* key, float valueX, float valueY, float valueZ);
 		Any* DATADICT_CREATE_DICT(Any* objectData, const char* key);
 		Any* DATADICT_CREATE_ARRAY(Any* objectData, const char* key);
-		BOOL DATADICT_GET_BOOL(Any* objectData, const char* key);
+		bool DATADICT_GET_BOOL(Any* objectData, const char* key);
 		int DATADICT_GET_INT(Any* objectData, const char* key);
 		float DATADICT_GET_FLOAT(Any* objectData, const char* key);
 		const char* DATADICT_GET_STRING(Any* objectData, const char* key);
@@ -2172,13 +2172,13 @@ namespace base::menu::natives {
 		 * 7 = Array
 		 */
 		int DATADICT_GET_TYPE(Any* objectData, const char* key);
-		void DATAARRAY_ADD_BOOL(Any* arrayData, BOOL value);
+		void DATAARRAY_ADD_BOOL(Any* arrayData, bool value);
 		void DATAARRAY_ADD_INT(Any* arrayData, int value);
 		void DATAARRAY_ADD_FLOAT(Any* arrayData, float value);
 		void DATAARRAY_ADD_STRING(Any* arrayData, const char* value);
 		void DATAARRAY_ADD_VECTOR(Any* arrayData, float valueX, float valueY, float valueZ);
 		Any* DATAARRAY_ADD_DICT(Any* arrayData);
-		BOOL DATAARRAY_GET_BOOL(Any* arrayData, int arrayIndex);
+		bool DATAARRAY_GET_BOOL(Any* arrayData, int arrayIndex);
 		int DATAARRAY_GET_INT(Any* arrayData, int arrayIndex);
 		float DATAARRAY_GET_FLOAT(Any* arrayData, int arrayIndex);
 		const char* DATAARRAY_GET_STRING(Any* arrayData, int arrayIndex);
@@ -2201,25 +2201,25 @@ namespace base::menu::natives {
 
 	namespace DECORATOR {
 
-		BOOL DECOR_SET_TIME(Entity entity, const char* propertyName, int timestamp);
+		bool DECOR_SET_TIME(Entity entity, const char* propertyName, int timestamp);
 		/**
 		 * This function sets metadata of type bool to specified entity.
 		 * 
 		 */
-		BOOL DECOR_SET_BOOL(Entity entity, const char* propertyName, BOOL value);
-		BOOL DECOR_SET_FLOAT(Entity entity, const char* propertyName, float value);
+		bool DECOR_SET_BOOL(Entity entity, const char* propertyName, bool value);
+		bool DECOR_SET_FLOAT(Entity entity, const char* propertyName, float value);
 		/**
 		 * Sets property to int.
 		 */
-		BOOL DECOR_SET_INT(Entity entity, const char* propertyName, int value);
-		BOOL DECOR_GET_BOOL(Entity entity, const char* propertyName);
+		bool DECOR_SET_INT(Entity entity, const char* propertyName, int value);
+		bool DECOR_GET_BOOL(Entity entity, const char* propertyName);
 		float DECOR_GET_FLOAT(Entity entity, const char* propertyName);
 		int DECOR_GET_INT(Entity entity, const char* propertyName);
 		/**
 		 * Returns whether or not the specified property is set for the entity.
 		 */
-		BOOL DECOR_EXIST_ON(Entity entity, const char* propertyName);
-		BOOL DECOR_REMOVE(Entity entity, const char* propertyName);
+		bool DECOR_EXIST_ON(Entity entity, const char* propertyName);
+		bool DECOR_REMOVE(Entity entity, const char* propertyName);
 		/**
 		 * https://alloc8or.re/gta5/doc/enums/eDecorType.txt
 		 */
@@ -2227,7 +2227,7 @@ namespace base::menu::natives {
 		/**
 		 * type: see DECOR_REGISTER
 		 */
-		BOOL DECOR_IS_REGISTERED_AS_TYPE(const char* propertyName, int type);
+		bool DECOR_IS_REGISTERED_AS_TYPE(const char* propertyName, int type);
 		/**
 		 * Called after all decorator type initializations.
 		 */
@@ -2237,15 +2237,15 @@ namespace base::menu::natives {
 
 	namespace DLC {
 
-		BOOL ARE_ANY_CCS_PENDING();
+		bool ARE_ANY_CCS_PENDING();
 		/**
 		 * Returns true if the given DLC pack is present.
 		 */
-		BOOL IS_DLC_PRESENT(Hash dlcHash);
+		bool IS_DLC_PRESENT(Hash dlcHash);
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL DLC_CHECK_CLOUD_DATA_CORRECT();
+		bool DLC_CHECK_CLOUD_DATA_CORRECT();
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
@@ -2253,15 +2253,15 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL DLC_CHECK_COMPAT_PACK_CONFIGURATION();
-		BOOL GET_EVER_HAD_BAD_PACK_ORDER();
-		BOOL GET_IS_LOADING_SCREEN_ACTIVE();
-		BOOL GET_IS_INITIAL_LOADING_SCREEN_ACTIVE();
+		bool DLC_CHECK_COMPAT_PACK_CONFIGURATION();
+		bool GET_EVER_HAD_BAD_PACK_ORDER();
+		bool GET_IS_LOADING_SCREEN_ACTIVE();
+		bool GET_IS_INITIAL_LOADING_SCREEN_ACTIVE();
 		/**
 		 * Sets the value of the specified variable to 0.
 		 * Always returns true.
 		 */
-		BOOL HAS_CLOUD_REQUESTS_FINISHED(BOOL* p0, int unused);
+		bool HAS_CLOUD_REQUESTS_FINISHED(bool* p0, int unused);
 		/**
 		 * Unloads GROUP_MAP (GTAO/MP) DLC data and loads GROUP_MAP_SP DLC. Neither are loaded by default, ON_ENTER_MP is a cognate to this function and loads MP DLC (and unloads SP DLC by extension).
 		 * Works in singleplayer.
@@ -2273,8 +2273,8 @@ namespace base::menu::natives {
 		 * In order to use GTA:O heist IPL's you have to call this native with the following params: SET_INSTANCE_PRIORITY_MODE(1);
 		 */
 		void ON_ENTER_MP();
-		BOOL ARE_USER_ENTITLEMENTS_UP_TO_DATE();
-		BOOL TRY_GET_USER_ENTITLEMENTS(Any* entitlements);
+		bool ARE_USER_ENTITLEMENTS_UP_TO_DATE();
+		bool TRY_GET_USER_ENTITLEMENTS(Any* entitlements);
 		void DECLARE_IN_MULTIPLAYER_THIS_FRAME();
 
 	} // namespace DLC
@@ -2284,28 +2284,28 @@ namespace base::menu::natives {
 		/**
 		 * Checks whether an entity exists in the game world.
 		 */
-		BOOL DOES_ENTITY_EXIST(Entity entity);
-		BOOL DOES_ENTITY_BELONG_TO_THIS_SCRIPT(Entity entity, BOOL p1);
-		BOOL DOES_ENTITY_HAVE_DRAWABLE(Entity entity);
-		BOOL DOES_ENTITY_HAVE_PHYSICS(Entity entity);
-		BOOL DOES_ENTITY_HAVE_SKELETON(Entity entity);
-		BOOL DOES_ENTITY_HAVE_ANIM_DIRECTOR(Entity entity);
+		bool DOES_ENTITY_EXIST(Entity entity);
+		bool DOES_ENTITY_BELONG_TO_THIS_SCRIPT(Entity entity, bool p1);
+		bool DOES_ENTITY_HAVE_DRAWABLE(Entity entity);
+		bool DOES_ENTITY_HAVE_PHYSICS(Entity entity);
+		bool DOES_ENTITY_HAVE_SKELETON(Entity entity);
+		bool DOES_ENTITY_HAVE_ANIM_DIRECTOR(Entity entity);
 		/**
 		 * P3 is always 3 as far as i cant tell
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL HAS_ENTITY_ANIM_FINISHED(Entity entity, const char* animDict, const char* animName, int p3);
-		BOOL HAS_ENTITY_BEEN_DAMAGED_BY_ANY_OBJECT(Entity entity);
-		BOOL HAS_ENTITY_BEEN_DAMAGED_BY_ANY_PED(Entity entity);
-		BOOL HAS_ENTITY_BEEN_DAMAGED_BY_ANY_VEHICLE(Entity entity);
+		bool HAS_ENTITY_ANIM_FINISHED(Entity entity, const char* animDict, const char* animName, int p3);
+		bool HAS_ENTITY_BEEN_DAMAGED_BY_ANY_OBJECT(Entity entity);
+		bool HAS_ENTITY_BEEN_DAMAGED_BY_ANY_PED(Entity entity);
+		bool HAS_ENTITY_BEEN_DAMAGED_BY_ANY_VEHICLE(Entity entity);
 		/**
 		 * Entity 1 = Victim
 		 * Entity 2 = Attacker
 		 * 
 		 * p2 seems to always be 1
 		 */
-		BOOL HAS_ENTITY_BEEN_DAMAGED_BY_ENTITY(Entity entity1, Entity entity2, BOOL p2);
+		bool HAS_ENTITY_BEEN_DAMAGED_BY_ENTITY(Entity entity1, Entity entity2, bool p2);
 		/**
 		 * traceType is always 17 in the scripts.
 		 * 
@@ -2314,20 +2314,20 @@ namespace base::menu::natives {
 		 * 126 - in am_hunt_the_beast
 		 * 256 & 287 - in fm_mission_controller
 		 */
-		BOOL HAS_ENTITY_CLEAR_LOS_TO_ENTITY(Entity entity1, Entity entity2, int traceType);
-		BOOL HAS_ENTITY_CLEAR_LOS_TO_ENTITY_ADJUST_FOR_COVER(Entity entity1, Entity entity2, int traceType);
+		bool HAS_ENTITY_CLEAR_LOS_TO_ENTITY(Entity entity1, Entity entity2, int traceType);
+		bool HAS_ENTITY_CLEAR_LOS_TO_ENTITY_ADJUST_FOR_COVER(Entity entity1, Entity entity2, int traceType);
 		/**
 		 * Has the entity1 got a clear line of sight to the other entity2 from the direction entity1 is facing.
 		 * This is one of the most CPU demanding BOOL natives in the game; avoid calling this in things like nested for-loops
 		 */
-		BOOL HAS_ENTITY_CLEAR_LOS_TO_ENTITY_IN_FRONT(Entity entity1, Entity entity2);
+		bool HAS_ENTITY_CLEAR_LOS_TO_ENTITY_IN_FRONT(Entity entity1, Entity entity2);
 		/**
 		 * Called on tick.
 		 * Tested with vehicles, returns true whenever the vehicle is touching any entity.
 		 * 
 		 * Note: for vehicles, the wheels can touch the ground and it will still return false, but if the body of the vehicle touches the ground, it will return true.
 		 */
-		BOOL HAS_ENTITY_COLLIDED_WITH_ANYTHING(Entity entity);
+		bool HAS_ENTITY_COLLIDED_WITH_ANYTHING(Entity entity);
 		Entity _GET_LAST_ENTITY_HIT_BY_ENTITY(Entity entity);
 		Hash GET_LAST_MATERIAL_HIT_BY_ENTITY(Entity entity);
 		Vector3 GET_COLLISION_NORMAL_OF_LAST_HIT_FOR_ENTITY(Entity entity);
@@ -2366,7 +2366,7 @@ namespace base::menu::natives {
 		 * `entity` = The entity to get the coordinates from.
 		 * `alive` = Unused by the game, potentially used by debug builds of GTA in order to assert whether or not an entity was alive.
 		 */
-		Vector3 GET_ENTITY_COORDS(Entity entity, BOOL alive);
+		Vector3 GET_ENTITY_COORDS(Entity entity, bool alive);
 		/**
 		 * Gets the entity's forward vector.
 		 */
@@ -2415,7 +2415,7 @@ namespace base::menu::natives {
 		 * For instance: ENTITY::SET_ENTITY_MAX_HEALTH(PLAYER::PLAYER_PED_ID(), 200); // director_mode.c4: 67849
 		 */
 		void SET_ENTITY_MAX_HEALTH(Entity entity, int value);
-		float GET_ENTITY_HEIGHT(Entity entity, float X, float Y, float Z, BOOL atTop, BOOL inWorldCoords);
+		float GET_ENTITY_HEIGHT(Entity entity, float X, float Y, float Z, bool atTop, bool inWorldCoords);
 		/**
 		 * Return height (z-dimension) above ground.
 		 * Example: The pilot in a titan plane is 1.844176 above ground.
@@ -2493,7 +2493,7 @@ namespace base::menu::natives {
 		/**
 		 * Relative can be used for getting speed relative to the frame of the vehicle, to determine for example, if you are going in reverse (-y speed) or not (+y speed).
 		 */
-		Vector3 GET_ENTITY_SPEED_VECTOR(Entity entity, BOOL relative);
+		Vector3 GET_ENTITY_SPEED_VECTOR(Entity entity, bool relative);
 		float GET_ENTITY_UPRIGHT_VALUE(Entity entity);
 		Vector3 GET_ENTITY_VELOCITY(Entity entity);
 		/**
@@ -2527,56 +2527,56 @@ namespace base::menu::natives {
 		 * A population type, from the following enum: https://alloc8or.re/gta5/doc/enums/ePopulationType.txt
 		 */
 		int GET_ENTITY_POPULATION_TYPE(Entity entity);
-		BOOL IS_AN_ENTITY(ScrHandle handle);
-		BOOL IS_ENTITY_A_PED(Entity entity);
-		BOOL IS_ENTITY_A_MISSION_ENTITY(Entity entity);
-		BOOL IS_ENTITY_A_VEHICLE(Entity entity);
-		BOOL IS_ENTITY_AN_OBJECT(Entity entity);
+		bool IS_AN_ENTITY(ScrHandle handle);
+		bool IS_ENTITY_A_PED(Entity entity);
+		bool IS_ENTITY_A_MISSION_ENTITY(Entity entity);
+		bool IS_ENTITY_A_VEHICLE(Entity entity);
+		bool IS_ENTITY_AN_OBJECT(Entity entity);
 		/**
 		 * Checks if entity is within x/y/zSize distance of x/y/z.
 		 * 
 		 * Last three are unknown ints, almost always p7 = 0, p8 = 1, p9 = 0
 		 */
-		BOOL IS_ENTITY_AT_COORD(Entity entity, float xPos, float yPos, float zPos, float xSize, float ySize, float zSize, BOOL p7, BOOL p8, int p9);
+		bool IS_ENTITY_AT_COORD(Entity entity, float xPos, float yPos, float zPos, float xSize, float ySize, float zSize, bool p7, bool p8, int p9);
 		/**
 		 * Checks if entity1 is within the box defined by x/y/zSize of entity2.
 		 * 
 		 * Last three parameters are almost alwasy p5 = 0, p6 = 1, p7 = 0
 		 */
-		BOOL IS_ENTITY_AT_ENTITY(Entity entity1, Entity entity2, float xSize, float ySize, float zSize, BOOL p5, BOOL p6, int p7);
+		bool IS_ENTITY_AT_ENTITY(Entity entity1, Entity entity2, float xSize, float ySize, float zSize, bool p5, bool p6, int p7);
 		/**
 		 * Whether the entity is attached to any other entity.
 		 */
-		BOOL IS_ENTITY_ATTACHED(Entity entity);
-		BOOL IS_ENTITY_ATTACHED_TO_ANY_OBJECT(Entity entity);
-		BOOL IS_ENTITY_ATTACHED_TO_ANY_PED(Entity entity);
-		BOOL IS_ENTITY_ATTACHED_TO_ANY_VEHICLE(Entity entity);
-		BOOL IS_ENTITY_ATTACHED_TO_ENTITY(Entity from, Entity to);
-		BOOL IS_ENTITY_DEAD(Entity entity, BOOL p1);
-		BOOL IS_ENTITY_IN_AIR(Entity entity);
+		bool IS_ENTITY_ATTACHED(Entity entity);
+		bool IS_ENTITY_ATTACHED_TO_ANY_OBJECT(Entity entity);
+		bool IS_ENTITY_ATTACHED_TO_ANY_PED(Entity entity);
+		bool IS_ENTITY_ATTACHED_TO_ANY_VEHICLE(Entity entity);
+		bool IS_ENTITY_ATTACHED_TO_ENTITY(Entity from, Entity to);
+		bool IS_ENTITY_DEAD(Entity entity, bool p1);
+		bool IS_ENTITY_IN_AIR(Entity entity);
 		/**
 		 * `p8` is a debug flag invoking functions in the same path as ``DRAW_MARKER``
 		 * `p10` is some entity flag check, also used in `IS_ENTITY_AT_ENTITY`, `IS_ENTITY_IN_AREA`, and `IS_ENTITY_AT_COORD`.
 		 * See IS_POINT_IN_ANGLED_AREA for the definition of an angled area.
 		 */
-		BOOL IS_ENTITY_IN_ANGLED_AREA(Entity entity, float x1, float y1, float z1, float x2, float y2, float z2, float width, BOOL debug, BOOL includeZ, Any p10);
-		BOOL IS_ENTITY_IN_AREA(Entity entity, float x1, float y1, float z1, float x2, float y2, float z2, BOOL p7, BOOL p8, Any p9);
+		bool IS_ENTITY_IN_ANGLED_AREA(Entity entity, float x1, float y1, float z1, float x2, float y2, float z2, float width, bool debug, bool includeZ, Any p10);
+		bool IS_ENTITY_IN_AREA(Entity entity, float x1, float y1, float z1, float x2, float y2, float z2, bool p7, bool p8, Any p9);
 		/**
 		 * Full list of zones by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/zones.json
 		 */
-		BOOL IS_ENTITY_IN_ZONE(Entity entity, const char* zone);
-		BOOL IS_ENTITY_IN_WATER(Entity entity);
+		bool IS_ENTITY_IN_ZONE(Entity entity, const char* zone);
+		bool IS_ENTITY_IN_WATER(Entity entity);
 		/**
 		 * Get how much of the entity is submerged.  1.0f is whole entity.
 		 */
 		float GET_ENTITY_SUBMERGED_LEVEL(Entity entity);
-		void SET_ENTITY_REQUIRES_MORE_EXPENSIVE_RIVER_CHECK(Entity entity, BOOL toggle);
+		void SET_ENTITY_REQUIRES_MORE_EXPENSIVE_RIVER_CHECK(Entity entity, bool toggle);
 		/**
 		 * Returns true if the entity is in between the minimum and maximum values for the 2d screen coords.
 		 * This means that it will return true even if the entity is behind a wall for example, as long as you're looking at their location.
 		 * Chipping
 		 */
-		BOOL IS_ENTITY_ON_SCREEN(Entity entity);
+		bool IS_ENTITY_ON_SCREEN(Entity entity);
 		/**
 		 * See also PED::IS_SCRIPTED_SCENARIO_PED_USING_CONDITIONAL_ANIM 0x6EC47A344923E1ED 0x3C30B447
 		 * 
@@ -2586,20 +2586,20 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL IS_ENTITY_PLAYING_ANIM(Entity entity, const char* animDict, const char* animName, int taskFlag);
+		bool IS_ENTITY_PLAYING_ANIM(Entity entity, const char* animDict, const char* animName, int taskFlag);
 		/**
 		 * a static ped will not react to natives like "APPLY_FORCE_TO_ENTITY" or "SET_ENTITY_VELOCITY" and oftentimes will not react to task-natives like "TASK::TASK_COMBAT_PED". The only way I know of to make one of these peds react is to ragdoll them (or sometimes to use CLEAR_PED_TASKS_IMMEDIATELY(). Static peds include almost all far-away peds, beach-combers, peds in certain scenarios, peds crossing a crosswalk, peds walking to get back into their cars, and others. If anyone knows how to make a ped non-static without ragdolling them, please edit this with the solution.
 		 */
-		BOOL IS_ENTITY_STATIC(Entity entity);
-		BOOL IS_ENTITY_TOUCHING_ENTITY(Entity entity, Entity targetEntity);
-		BOOL IS_ENTITY_TOUCHING_MODEL(Entity entity, Hash modelHash);
-		BOOL IS_ENTITY_UPRIGHT(Entity entity, float angle);
-		BOOL IS_ENTITY_UPSIDEDOWN(Entity entity);
-		BOOL IS_ENTITY_VISIBLE(Entity entity);
-		BOOL IS_ENTITY_VISIBLE_TO_SCRIPT(Entity entity);
-		BOOL IS_ENTITY_OCCLUDED(Entity entity);
-		BOOL WOULD_ENTITY_BE_OCCLUDED(Hash entityModelHash, float x, float y, float z, BOOL p4);
-		BOOL IS_ENTITY_WAITING_FOR_WORLD_COLLISION(Entity entity);
+		bool IS_ENTITY_STATIC(Entity entity);
+		bool IS_ENTITY_TOUCHING_ENTITY(Entity entity, Entity targetEntity);
+		bool IS_ENTITY_TOUCHING_MODEL(Entity entity, Hash modelHash);
+		bool IS_ENTITY_UPRIGHT(Entity entity, float angle);
+		bool IS_ENTITY_UPSIDEDOWN(Entity entity);
+		bool IS_ENTITY_VISIBLE(Entity entity);
+		bool IS_ENTITY_VISIBLE_TO_SCRIPT(Entity entity);
+		bool IS_ENTITY_OCCLUDED(Entity entity);
+		bool WOULD_ENTITY_BE_OCCLUDED(Hash entityModelHash, float x, float y, float z, bool p4);
+		bool IS_ENTITY_WAITING_FOR_WORLD_COLLISION(Entity entity);
 		/**
 		 * Applies a force to the specified entity.
 		 * 
@@ -2618,7 +2618,7 @@ namespace base::menu::natives {
 		 * p6/relative - makes the xyz force not relative to world coords, but to something else
 		 * p7/highForce - setting false will make the force really low
 		 */
-		void APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(Entity entity, int forceType, float x, float y, float z, BOOL p5, BOOL isDirectionRel, BOOL isForceRel, BOOL p8);
+		void APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(Entity entity, int forceType, float x, float y, float z, bool p5, bool isDirectionRel, bool isForceRel, bool p8);
 		/**
 		 * Documented here:
 		 * gtaforums.com/topic/885669-precisely-define-object-physics/
@@ -2645,7 +2645,7 @@ namespace base::menu::natives {
 		 * 
 		 * p8 !!! Whenever I set this !=0, my script stopped.
 		 */
-		void APPLY_FORCE_TO_ENTITY(Entity entity, int forceFlags, float x, float y, float z, float offX, float offY, float offZ, int boneIndex, BOOL isDirectionRel, BOOL ignoreUpVec, BOOL isForceRel, BOOL p12, BOOL p13);
+		void APPLY_FORCE_TO_ENTITY(Entity entity, int forceFlags, float x, float y, float z, float offX, float offY, float offZ, int boneIndex, bool isDirectionRel, bool ignoreUpVec, bool isForceRel, bool p12, bool p13);
 		/**
 		 * Attaches entity1 to bone (boneIndex) of entity2.
 		 * 
@@ -2658,9 +2658,9 @@ namespace base::menu::natives {
 		 * fixedRot - if false it ignores entity vector
 		 * 
 		 */
-		void ATTACH_ENTITY_TO_ENTITY(Entity entity1, Entity entity2, int boneIndex, float xPos, float yPos, float zPos, float xRot, float yRot, float zRot, BOOL p9, BOOL useSoftPinning, BOOL collision, BOOL isPed, int vertexIndex, BOOL fixedRot, Any p15);
-		void ATTACH_ENTITY_BONE_TO_ENTITY_BONE(Entity entity1, Entity entity2, int boneIndex1, int boneIndex2, BOOL p4, BOOL p5);
-		void ATTACH_ENTITY_BONE_TO_ENTITY_BONE_Y_FORWARD(Entity entity1, Entity entity2, int boneIndex1, int boneIndex2, BOOL p4, BOOL p5);
+		void ATTACH_ENTITY_TO_ENTITY(Entity entity1, Entity entity2, int boneIndex, float xPos, float yPos, float zPos, float xRot, float yRot, float zRot, bool p9, bool useSoftPinning, bool collision, bool isPed, int vertexIndex, bool fixedRot, Any p15);
+		void ATTACH_ENTITY_BONE_TO_ENTITY_BONE(Entity entity1, Entity entity2, int boneIndex1, int boneIndex2, bool p4, bool p5);
+		void ATTACH_ENTITY_BONE_TO_ENTITY_BONE_Y_FORWARD(Entity entity1, Entity entity2, int boneIndex1, int boneIndex2, bool p4, bool p5);
 		/**
 		 * breakForce is the amount of force required to break the bond.
 		 * p14 - is always 1 in scripts
@@ -2671,8 +2671,8 @@ namespace base::menu::natives {
 		 * 
 		 * 
 		 */
-		void ATTACH_ENTITY_TO_ENTITY_PHYSICALLY(Entity entity1, Entity entity2, int boneIndex1, int boneIndex2, float xPos1, float yPos1, float zPos1, float xPos2, float yPos2, float zPos2, float xRot, float yRot, float zRot, float breakForce, BOOL fixedRot, BOOL p15, BOOL collision, BOOL p17, int p18);
-		void ATTACH_ENTITY_TO_ENTITY_PHYSICALLY_OVERRIDE_INVERSE_MASS(Entity firstEntityIndex, Entity secondEntityIndex, int firstEntityBoneIndex, int secondEntityBoneIndex, float secondEntityOffsetX, float secondEntityOffsetY, float secondEntityOffsetZ, float firstEntityOffsetX, float firstEntityOffsetY, float firstEntityOffsetZ, float vecRotationX, float vecRotationY, float vecRotationZ, float physicalStrength, BOOL constrainRotation, BOOL doInitialWarp, BOOL collideWithEntity, BOOL addInitialSeperation, int rotOrder, float invMassScaleA, float invMassScaleB);
+		void ATTACH_ENTITY_TO_ENTITY_PHYSICALLY(Entity entity1, Entity entity2, int boneIndex1, int boneIndex2, float xPos1, float yPos1, float zPos1, float xPos2, float yPos2, float zPos2, float xRot, float yRot, float zRot, float breakForce, bool fixedRot, bool p15, bool collision, bool p17, int p18);
+		void ATTACH_ENTITY_TO_ENTITY_PHYSICALLY_OVERRIDE_INVERSE_MASS(Entity firstEntityIndex, Entity secondEntityIndex, int firstEntityBoneIndex, int secondEntityBoneIndex, float secondEntityOffsetX, float secondEntityOffsetY, float secondEntityOffsetZ, float firstEntityOffsetX, float firstEntityOffsetY, float firstEntityOffsetZ, float vecRotationX, float vecRotationY, float vecRotationZ, float physicalStrength, bool constrainRotation, bool doInitialWarp, bool collideWithEntity, bool addInitialSeperation, int rotOrder, float invMassScaleA, float invMassScaleB);
 		/**
 		 * Called to update entity attachments.
 		 */
@@ -2739,17 +2739,17 @@ namespace base::menu::natives {
 		 * If `collision` is set to true, both entities won't collide with the other until the distance between them is above 4 meters.
 		 * Set `dynamic` to true to keep velocity after dettaching
 		 */
-		void DETACH_ENTITY(Entity entity, BOOL dynamic, BOOL collision);
+		void DETACH_ENTITY(Entity entity, bool dynamic, bool collision);
 		/**
 		 * Freezes or unfreezes an entity preventing its coordinates to change by the player if set to `true`. You can still change the entity position using SET_ENTITY_COORDS.
 		 */
-		void FREEZE_ENTITY_POSITION(Entity entity, BOOL toggle);
+		void FREEZE_ENTITY_POSITION(Entity entity, bool toggle);
 		/**
 		 * True means it can be deleted by the engine when switching lobbies/missions/etc, false means the script is expected to clean it up.
 		 * 
 		 * "Allow Freeze If No Collision"
 		 */
-		void SET_ENTITY_SHOULD_FREEZE_WAITING_ON_COLLISION(Entity entity, BOOL toggle);
+		void SET_ENTITY_SHOULD_FREEZE_WAITING_ON_COLLISION(Entity entity, bool toggle);
 		/**
 		 * delta and bitset are guessed fields. They are based on the fact that most of the calls have 0 or nil field types passed in.
 		 * 
@@ -2757,31 +2757,31 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL PLAY_ENTITY_ANIM(Entity entity, const char* animName, const char* animDict, float p3, BOOL loop, BOOL stayInAnim, BOOL p6, float delta, Any bitset);
+		bool PLAY_ENTITY_ANIM(Entity entity, const char* animName, const char* animDict, float p3, bool loop, bool stayInAnim, bool p6, float delta, Any bitset);
 		/**
 		 * p4 and p7 are usually 1000.0f.
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL PLAY_SYNCHRONIZED_ENTITY_ANIM(Entity entity, int syncedScene, const char* animation, const char* propName, float p4, float p5, Any p6, float p7);
+		bool PLAY_SYNCHRONIZED_ENTITY_ANIM(Entity entity, int syncedScene, const char* animation, const char* propName, float p4, float p5, Any p6, float p7);
 		/**
 		 * p6,p7 probably animname and animdict
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL PLAY_SYNCHRONIZED_MAP_ENTITY_ANIM(float x1, float y1, float z1, float x2, Any y2, float z2, const char* p6, const char* p7, float p8, float p9, Any p10, float p11);
-		BOOL STOP_SYNCHRONIZED_MAP_ENTITY_ANIM(float x1, float y1, float z1, float x2, Any y2, float z2);
+		bool PLAY_SYNCHRONIZED_MAP_ENTITY_ANIM(float x1, float y1, float z1, float x2, Any y2, float z2, const char* p6, const char* p7, float p8, float p9, Any p10, float p11);
+		bool STOP_SYNCHRONIZED_MAP_ENTITY_ANIM(float x1, float y1, float z1, float x2, Any y2, float z2);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 * 
 		 * RAGEPluginHook list: docs.ragepluginhook.net/html/62951c37-a440-478c-b389-c471230ddfc5.htm
 		 */
-		BOOL STOP_ENTITY_ANIM(Entity entity, const char* animation, const char* animGroup, float p3);
-		BOOL STOP_SYNCHRONIZED_ENTITY_ANIM(Entity entity, float p1, BOOL p2);
+		bool STOP_ENTITY_ANIM(Entity entity, const char* animation, const char* animGroup, float p3);
+		bool STOP_SYNCHRONIZED_ENTITY_ANIM(Entity entity, float p1, bool p2);
 		/**
 		 * if (ENTITY::HAS_ANIM_EVENT_FIRED(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY("CreateObject")))
 		 */
-		BOOL HAS_ANIM_EVENT_FIRED(Entity entity, Hash actionHash);
+		bool HAS_ANIM_EVENT_FIRED(Entity entity, Hash actionHash);
 		/**
 		 * In the script "player_scene_t_bbfight.c4":
 		 * "if (ENTITY::FIND_ANIM_EVENT_PHASE(&l_16E, &l_19F[v_4/*16* /], v_9, &v_A, &v_B))"
@@ -2794,7 +2794,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL FIND_ANIM_EVENT_PHASE(const char* animDictionary, const char* animName, const char* p2, Any* p3, Any* p4);
+		bool FIND_ANIM_EVENT_PHASE(const char* animDictionary, const char* animName, const char* p2, Any* p3, Any* p4);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
@@ -2812,7 +2812,7 @@ namespace base::menu::natives {
 		 * p2 has no effect when either its on or off
 		 * maybe a quick disassembly will tell us what it does
 		 */
-		void SET_ENTITY_AS_MISSION_ENTITY(Entity entity, BOOL p1, BOOL p2);
+		void SET_ENTITY_AS_MISSION_ENTITY(Entity entity, bool p1, bool p2);
 		/**
 		 * Marks the specified entity (ped, vehicle or object) as no longer needed if its population type is set to the mission type.
 		 * If the entity is ped, it will also clear their tasks immediately just like when CLEAR_PED_TASKS_IMMEDIATELY is called.
@@ -2843,17 +2843,17 @@ namespace base::menu::natives {
 		 * This is an alias of SET_ENTITY_AS_NO_LONGER_NEEDED.
 		 */
 		void SET_OBJECT_AS_NO_LONGER_NEEDED(Object* object);
-		void SET_ENTITY_CAN_BE_DAMAGED(Entity entity, BOOL toggle);
-		BOOL GET_ENTITY_CAN_BE_DAMAGED(Entity entity);
-		void SET_ENTITY_CAN_BE_DAMAGED_BY_RELATIONSHIP_GROUP(Entity entity, BOOL bCanBeDamaged, int relGroup);
-		void SET_ENTITY_CAN_ONLY_BE_DAMAGED_BY_SCRIPT_PARTICIPANTS(Entity entity, BOOL toggle);
+		void SET_ENTITY_CAN_BE_DAMAGED(Entity entity, bool toggle);
+		bool GET_ENTITY_CAN_BE_DAMAGED(Entity entity);
+		void SET_ENTITY_CAN_BE_DAMAGED_BY_RELATIONSHIP_GROUP(Entity entity, bool bCanBeDamaged, int relGroup);
+		void SET_ENTITY_CAN_ONLY_BE_DAMAGED_BY_SCRIPT_PARTICIPANTS(Entity entity, bool toggle);
 		/**
 		 * Sets whether the entity can be targeted without being in line-of-sight.
 		 */
-		void SET_ENTITY_CAN_BE_TARGETED_WITHOUT_LOS(Entity entity, BOOL toggle);
-		void SET_ENTITY_COLLISION(Entity entity, BOOL toggle, BOOL keepPhysics);
-		BOOL GET_ENTITY_COLLISION_DISABLED(Entity entity);
-		void SET_ENTITY_COMPLETELY_DISABLE_COLLISION(Entity entity, BOOL toggle, BOOL keepPhysics);
+		void SET_ENTITY_CAN_BE_TARGETED_WITHOUT_LOS(Entity entity, bool toggle);
+		void SET_ENTITY_COLLISION(Entity entity, bool toggle, bool keepPhysics);
+		bool GET_ENTITY_COLLISION_DISABLED(Entity entity);
+		void SET_ENTITY_COMPLETELY_DISABLE_COLLISION(Entity entity, bool toggle, bool keepPhysics);
 		/**
 		 * p7 is always 1 in the scripts. Set to 1, an area around the destination coords for the moved entity is cleared from other entities.
 		 * 
@@ -2861,13 +2861,13 @@ namespace base::menu::natives {
 		 * 
 		 * Axis - Invert Axis Flags
 		 */
-		void SET_ENTITY_COORDS(Entity entity, float xPos, float yPos, float zPos, BOOL xAxis, BOOL yAxis, BOOL zAxis, BOOL clearArea);
-		void SET_ENTITY_COORDS_WITHOUT_PLANTS_RESET(Entity entity, float xPos, float yPos, float zPos, BOOL alive, BOOL deadFlag, BOOL ragdollFlag, BOOL clearArea);
+		void SET_ENTITY_COORDS(Entity entity, float xPos, float yPos, float zPos, bool xAxis, bool yAxis, bool zAxis, bool clearArea);
+		void SET_ENTITY_COORDS_WITHOUT_PLANTS_RESET(Entity entity, float xPos, float yPos, float zPos, bool alive, bool deadFlag, bool ragdollFlag, bool clearArea);
 		/**
 		 * Axis - Invert Axis Flags
 		 */
-		void SET_ENTITY_COORDS_NO_OFFSET(Entity entity, float xPos, float yPos, float zPos, BOOL xAxis, BOOL yAxis, BOOL zAxis);
-		void SET_ENTITY_DYNAMIC(Entity entity, BOOL toggle);
+		void SET_ENTITY_COORDS_NO_OFFSET(Entity entity, float xPos, float yPos, float zPos, bool xAxis, bool yAxis, bool zAxis);
+		void SET_ENTITY_DYNAMIC(Entity entity, bool toggle);
 		/**
 		 * Set the heading of an entity in degrees also known as "Yaw".
 		 */
@@ -2898,18 +2898,18 @@ namespace base::menu::natives {
 		 * return false;
 		 * }
 		 */
-		void SET_ENTITY_INVINCIBLE(Entity entity, BOOL toggle, BOOL dontResetOnCleanup);
-		void SET_ENTITY_IS_TARGET_PRIORITY(Entity entity, BOOL p1, float p2);
-		void SET_ENTITY_LIGHTS(Entity entity, BOOL toggle);
+		void SET_ENTITY_INVINCIBLE(Entity entity, bool toggle, bool dontResetOnCleanup);
+		void SET_ENTITY_IS_TARGET_PRIORITY(Entity entity, bool p1, float p2);
+		void SET_ENTITY_LIGHTS(Entity entity, bool toggle);
 		/**
 		 * Loads collision grid for an entity spawned outside of a player's loaded area. This allows peds to execute tasks rather than sit dormant because of a lack of a physics grid.
 		 * Certainly not the main usage of this native but when set to true for a Vehicle, it will prevent the vehicle to explode if it is spawned far away from the player.
 		 */
-		void SET_ENTITY_LOAD_COLLISION_FLAG(Entity entity, BOOL toggle, Any p2);
-		BOOL HAS_COLLISION_LOADED_AROUND_ENTITY(Entity entity);
+		void SET_ENTITY_LOAD_COLLISION_FLAG(Entity entity, bool toggle, Any p2);
+		bool HAS_COLLISION_LOADED_AROUND_ENTITY(Entity entity);
 		void SET_ENTITY_MAX_SPEED(Entity entity, float speed);
-		void SET_ENTITY_ONLY_DAMAGED_BY_PLAYER(Entity entity, BOOL toggle);
-		void SET_ENTITY_ONLY_DAMAGED_BY_RELATIONSHIP_GROUP(Entity entity, BOOL p1, Any p2);
+		void SET_ENTITY_ONLY_DAMAGED_BY_PLAYER(Entity entity, bool toggle);
+		void SET_ENTITY_ONLY_DAMAGED_BY_RELATIONSHIP_GROUP(Entity entity, bool p1, Any p2);
 		/**
 		 * Enable / disable each type of damage.
 		 * 
@@ -2918,13 +2918,13 @@ namespace base::menu::natives {
 		 * p7 is to to '1' in am_mp_property_ext/int: ENTITY::SET_ENTITY_PROOFS(uParam0->f_19, true, true, true, true, true, true, 1, true);
 		 * 
 		 */
-		void SET_ENTITY_PROOFS(Entity entity, BOOL bulletProof, BOOL fireProof, BOOL explosionProof, BOOL collisionProof, BOOL meleeProof, BOOL steamProof, BOOL dontResetOnCleanup, BOOL waterProof);
-		BOOL GET_ENTITY_PROOFS(Entity entity, BOOL* bulletProof, BOOL* fireProof, BOOL* explosionProof, BOOL* collisionProof, BOOL* meleeProof, BOOL* steamProof, BOOL* p7, BOOL* drownProof);
+		void SET_ENTITY_PROOFS(Entity entity, bool bulletProof, bool fireProof, bool explosionProof, bool collisionProof, bool meleeProof, bool steamProof, bool dontResetOnCleanup, bool waterProof);
+		bool GET_ENTITY_PROOFS(Entity entity, bool* bulletProof, bool* fireProof, bool* explosionProof, bool* collisionProof, bool* meleeProof, bool* steamProof, bool* p7, bool* drownProof);
 		/**
 		 * w is the correct parameter name!
 		 */
 		void SET_ENTITY_QUATERNION(Entity entity, float x, float y, float z, float w);
-		void SET_ENTITY_RECORDS_COLLISIONS(Entity entity, BOOL toggle);
+		void SET_ENTITY_RECORDS_COLLISIONS(Entity entity, bool toggle);
 		/**
 		 * rotationOrder refers to the order yaw pitch roll is applied
 		 * value ranges from 0 to 5. What you use for rotationOrder when setting must be the same as rotationOrder when getting the rotation.
@@ -2933,19 +2933,19 @@ namespace base::menu::natives {
 		 * p5 is usually set as true
 		 * 
 		 */
-		void SET_ENTITY_ROTATION(Entity entity, float pitch, float roll, float yaw, int rotationOrder, BOOL p5);
+		void SET_ENTITY_ROTATION(Entity entity, float pitch, float roll, float yaw, int rotationOrder, bool p5);
 		/**
 		 * p2 is always 0.
 		 */
-		void SET_ENTITY_VISIBLE(Entity entity, BOOL toggle, BOOL p2);
-		void SET_ENTITY_WATER_REFLECTION_FLAG(Entity entity, BOOL toggle);
-		void SET_ENTITY_MIRROR_REFLECTION_FLAG(Entity entity, BOOL p1);
+		void SET_ENTITY_VISIBLE(Entity entity, bool toggle, bool p2);
+		void SET_ENTITY_WATER_REFLECTION_FLAG(Entity entity, bool toggle);
+		void SET_ENTITY_MIRROR_REFLECTION_FLAG(Entity entity, bool p1);
 		/**
 		 * Note that the third parameter(denoted as z) is "up and down" with positive numbers encouraging upwards movement.
 		 */
 		void SET_ENTITY_VELOCITY(Entity entity, float x, float y, float z);
 		void SET_ENTITY_ANGULAR_VELOCITY(Entity entity, float x, float y, float z);
-		void SET_ENTITY_HAS_GRAVITY(Entity entity, BOOL toggle);
+		void SET_ENTITY_HAS_GRAVITY(Entity entity, bool toggle);
 		/**
 		 * LOD distance can be 0 to 0xFFFF (higher values will result in 0xFFFF) as it is actually stored as a 16-bit value (aka uint16_t).
 		 */
@@ -2958,7 +2958,7 @@ namespace base::menu::natives {
 		 * skin - everything alpha except skin
 		 * Set entity alpha level. Ranging from 0 to 255 but chnages occur after every 20 percent (after every 51).
 		 */
-		void SET_ENTITY_ALPHA(Entity entity, int alphaLevel, BOOL skin);
+		void SET_ENTITY_ALPHA(Entity entity, int alphaLevel, bool skin);
 		int GET_ENTITY_ALPHA(Entity entity);
 		void RESET_ENTITY_ALPHA(Entity entity);
 		/**
@@ -2973,8 +2973,8 @@ namespace base::menu::natives {
 		 * 
 		 */
 		void SET_ENTITY_SORT_BIAS(Entity entity, float p1);
-		void SET_ENTITY_ALWAYS_PRERENDER(Entity entity, BOOL toggle);
-		void SET_ENTITY_RENDER_SCORCHED(Entity entity, BOOL toggle);
+		void SET_ENTITY_ALWAYS_PRERENDER(Entity entity, bool toggle);
+		void SET_ENTITY_RENDER_SCORCHED(Entity entity, bool toggle);
 		/**
 		 * Example here: www.gtaforums.com/topic/830463-help-with-turning-lights-green-and-causing-peds-to-crash-into-each-other/#entry1068211340
 		 * 
@@ -2989,39 +2989,39 @@ namespace base::menu::natives {
 		/**
 		 * Only works with objects!
 		 */
-		void CREATE_MODEL_SWAP(float x, float y, float z, float radius, Hash originalModel, Hash newModel, BOOL p6);
-		void REMOVE_MODEL_SWAP(float x, float y, float z, float radius, Hash originalModel, Hash newModel, BOOL p6);
+		void CREATE_MODEL_SWAP(float x, float y, float z, float radius, Hash originalModel, Hash newModel, bool p6);
+		void REMOVE_MODEL_SWAP(float x, float y, float z, float radius, Hash originalModel, Hash newModel, bool p6);
 		/**
 		 * p5 = sets as true in scripts
 		 * Same as the comment for CREATE_MODEL_SWAP unless for some reason p5 affects it this only works with objects as well.
 		 * 
 		 * Network players do not see changes done with this.
 		 */
-		void CREATE_MODEL_HIDE(float x, float y, float z, float radius, Hash modelHash, BOOL p5);
-		void CREATE_MODEL_HIDE_EXCLUDING_SCRIPT_OBJECTS(float x, float y, float z, float radius, Hash modelHash, BOOL p5);
+		void CREATE_MODEL_HIDE(float x, float y, float z, float radius, Hash modelHash, bool p5);
+		void CREATE_MODEL_HIDE_EXCLUDING_SCRIPT_OBJECTS(float x, float y, float z, float radius, Hash modelHash, bool p5);
 		/**
 		 * This native makes entities visible that are hidden by the native CREATE_MODEL_HIDE.
 		 * p5 should be false, true does nothing
 		 */
-		void REMOVE_MODEL_HIDE(float x, float y, float z, float radius, Hash modelHash, BOOL p5);
-		void CREATE_FORCED_OBJECT(float x, float y, float z, Any p3, Hash modelHash, BOOL p5);
+		void REMOVE_MODEL_HIDE(float x, float y, float z, float radius, Hash modelHash, bool p5);
+		void CREATE_FORCED_OBJECT(float x, float y, float z, Any p3, Hash modelHash, bool p5);
 		void REMOVE_FORCED_OBJECT(float x, float y, float z, float p3, Hash modelHash);
 		/**
 		 * Calling this function disables collision between two entities.
 		 * The importance of the order for entity1 and entity2 is unclear.
 		 * The third parameter, `thisFrame`, decides whether the collision is to be disabled until it is turned back on, or if it's just this frame.
 		 */
-		void SET_ENTITY_NO_COLLISION_ENTITY(Entity entity1, Entity entity2, BOOL thisFrameOnly);
+		void SET_ENTITY_NO_COLLISION_ENTITY(Entity entity1, Entity entity2, bool thisFrameOnly);
 		void _SET_ENTITY_NO_COLLISION_WITH_NETWORKED_ENTITY(Entity entity1, Entity entity2);
-		void SET_ENTITY_MOTION_BLUR(Entity entity, BOOL toggle);
+		void SET_ENTITY_MOTION_BLUR(Entity entity, bool toggle);
 		/**
 		 * p1 always false.
 		 */
-		void SET_CAN_AUTO_VAULT_ON_ENTITY(Entity entity, BOOL toggle);
+		void SET_CAN_AUTO_VAULT_ON_ENTITY(Entity entity, bool toggle);
 		/**
 		 * p1 always false.
 		 */
-		void SET_CAN_CLIMB_ON_ENTITY(Entity entity, BOOL toggle);
+		void SET_CAN_CLIMB_ON_ENTITY(Entity entity, bool toggle);
 		/**
 		 * Only called within 1 script for x360. 'fm_mission_controller' and it used on an object.
 		 * 
@@ -3029,9 +3029,9 @@ namespace base::menu::natives {
 		 * set_object_targettable(uParam0, 0);
 		 * set_entity_invincible(uParam0, 1);
 		 */
-		void SET_WAIT_FOR_COLLISIONS_BEFORE_PROBE(Entity entity, BOOL toggle);
-		void SET_ENTITY_NOWEAPONDECALS(Entity entity, BOOL p1);
-		void SET_ENTITY_USE_MAX_DISTANCE_FOR_WATER_REFLECTION(Entity entity, BOOL p1);
+		void SET_WAIT_FOR_COLLISIONS_BEFORE_PROBE(Entity entity, bool toggle);
+		void SET_ENTITY_NOWEAPONDECALS(Entity entity, bool p1);
+		void SET_ENTITY_USE_MAX_DISTANCE_FOR_WATER_REFLECTION(Entity entity, bool p1);
 		/**
 		 * Gets the world rotation of the specified bone of the specified entity.
 		 */
@@ -3062,7 +3062,7 @@ namespace base::menu::natives {
 		 * iVar8 = ENTITY::GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY(bParam0->f_9, joaat("p_cs_clipboard"));
 		 */
 		Entity GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY(Entity entity, Hash modelHash);
-		void SET_PICK_UP_BY_CARGOBOB_DISABLED(Entity entity, BOOL toggle);
+		void SET_PICK_UP_BY_CARGOBOB_DISABLED(Entity entity, bool toggle);
 
 	} // namespace ENTITY
 
@@ -3094,9 +3094,9 @@ namespace base::menu::natives {
 		/**
 		 * eventType: https://alloc8or.re/gta5/doc/enums/eEventType.txt
 		 */
-		BOOL IS_SHOCKING_EVENT_IN_SPHERE(int eventType, float x, float y, float z, float radius);
-		BOOL REMOVE_SHOCKING_EVENT(ScrHandle event);
-		void REMOVE_ALL_SHOCKING_EVENTS(BOOL p0);
+		bool IS_SHOCKING_EVENT_IN_SPHERE(int eventType, float x, float y, float z, float radius);
+		bool REMOVE_SHOCKING_EVENT(ScrHandle event);
+		void REMOVE_ALL_SHOCKING_EVENTS(bool p0);
 		void REMOVE_SHOCKING_EVENT_SPAWN_BLOCKING_AREAS();
 		void SUPPRESS_SHOCKING_EVENTS_NEXT_FRAME();
 		/**
@@ -3152,7 +3152,7 @@ namespace base::menu::natives {
 		 * // maybe more, not sure exactly, decompiled scripts are very vague around this part.
 		 * }
 		 */
-		BOOL GET_TATTOO_SHOP_DLC_ITEM_DATA(int characterType, int decorationIndex, Any* outComponent);
+		bool GET_TATTOO_SHOP_DLC_ITEM_DATA(int characterType, int decorationIndex, Any* outComponent);
 		/**
 		 * Returns some sort of index/offset for overlays/decorations.
 		 * 
@@ -3182,7 +3182,7 @@ namespace base::menu::natives {
 		 * 
 		 * componentId is -1 when p3 is true in decompiled scripts.
 		 */
-		int SETUP_SHOP_PED_APPAREL_QUERY_TU(int character, int p1, int p2, BOOL p3, int p4, int componentId);
+		int SETUP_SHOP_PED_APPAREL_QUERY_TU(int character, int p1, int p2, bool p3, int p4, int componentId);
 		/**
 		 * See https://git.io/JtcRf for example and structs.
 		 */
@@ -3234,9 +3234,9 @@ namespace base::menu::natives {
 		 * 
 		 * componentId/last parameter seems to be unused.
 		 */
-		BOOL DOES_SHOP_PED_APPAREL_HAVE_RESTRICTION_TAG(Hash componentHash, Hash restrictionTagHash, int componentId);
-		BOOL DOES_CURRENT_PED_COMPONENT_HAVE_RESTRICTION_TAG(Ped ped, int componentId, Hash restrictionTagHash);
-		BOOL DOES_CURRENT_PED_PROP_HAVE_RESTRICTION_TAG(Ped ped, int componentId, Hash restrictionTagHash);
+		bool DOES_SHOP_PED_APPAREL_HAVE_RESTRICTION_TAG(Hash componentHash, Hash restrictionTagHash, int componentId);
+		bool DOES_CURRENT_PED_COMPONENT_HAVE_RESTRICTION_TAG(Ped ped, int componentId, Hash restrictionTagHash);
+		bool DOES_CURRENT_PED_PROP_HAVE_RESTRICTION_TAG(Ped ped, int componentId, Hash restrictionTagHash);
 		/**
 		 * characters
 		 * 
@@ -3246,7 +3246,7 @@ namespace base::menu::natives {
 		 * 3: MPMale
 		 * 4: MPFemale
 		 */
-		int SETUP_SHOP_PED_OUTFIT_QUERY(int character, BOOL p1);
+		int SETUP_SHOP_PED_OUTFIT_QUERY(int character, bool p1);
 		/**
 		 * outfitIndex: from 0 to SETUP_SHOP_PED_OUTFIT_QUERY(characterIndex, false) - 1.
 		 * See https://git.io/JtcB8 for example and outfit struct.
@@ -3257,11 +3257,11 @@ namespace base::menu::natives {
 		/**
 		 * See https://git.io/JtcBH for example and structs.
 		 */
-		BOOL GET_SHOP_PED_OUTFIT_PROP_VARIANT(Hash outfitHash, int variantIndex, Any* outPropVariant);
+		bool GET_SHOP_PED_OUTFIT_PROP_VARIANT(Hash outfitHash, int variantIndex, Any* outPropVariant);
 		/**
 		 * See https://git.io/JtcBH for example and structs.
 		 */
-		BOOL GET_SHOP_PED_OUTFIT_COMPONENT_VARIANT(Hash outfitHash, int variantIndex, Any* outComponentVariant);
+		bool GET_SHOP_PED_OUTFIT_COMPONENT_VARIANT(Hash outfitHash, int variantIndex, Any* outComponentVariant);
 		int GET_NUM_DLC_VEHICLES();
 		/**
 		 * dlcVehicleIndex is 0 to GET_NUM_DLC_VEHICLS() - 1
@@ -3272,7 +3272,7 @@ namespace base::menu::natives {
 		 * outData is a struct of 3 8-byte items.
 		 * The Second item in the struct *(Hash *)(outData + 1) is the vehicle hash.
 		 */
-		BOOL GET_DLC_VEHICLE_DATA(int dlcVehicleIndex, Any* outData);
+		bool GET_DLC_VEHICLE_DATA(int dlcVehicleIndex, Any* outData);
 		int GET_DLC_VEHICLE_FLAGS(int dlcVehicleIndex);
 		/**
 		 * Returns the total number of DLC weapons.
@@ -3307,11 +3307,11 @@ namespace base::menu::natives {
 		 * char upperCaseNameLabel[64];
 		 * };
 		 */
-		BOOL GET_DLC_WEAPON_DATA(int dlcWeaponIndex, Any* outData);
+		bool GET_DLC_WEAPON_DATA(int dlcWeaponIndex, Any* outData);
 		/**
 		 * Same as GET_DLC_WEAPON_DATA but only works for DLC weapons that are available in SP.
 		 */
-		BOOL GET_DLC_WEAPON_DATA_SP(int dlcWeaponIndex, Any* outData);
+		bool GET_DLC_WEAPON_DATA_SP(int dlcWeaponIndex, Any* outData);
 		/**
 		 * Returns the total number of DLC weapon components.
 		 */
@@ -3341,13 +3341,13 @@ namespace base::menu::natives {
 		 * };
 		 * 
 		 */
-		BOOL GET_DLC_WEAPON_COMPONENT_DATA(int dlcWeaponIndex, int dlcWeapCompIndex, Any* ComponentDataPtr);
+		bool GET_DLC_WEAPON_COMPONENT_DATA(int dlcWeaponIndex, int dlcWeapCompIndex, Any* ComponentDataPtr);
 		/**
 		 * Same as GET_DLC_WEAPON_COMPONENT_DATA but only works for DLC components that are available in SP.
 		 */
-		BOOL GET_DLC_WEAPON_COMPONENT_DATA_SP(int dlcWeaponIndex, int dlcWeapCompIndex, Any* ComponentDataPtr);
-		BOOL IS_CONTENT_ITEM_LOCKED(Hash itemHash);
-		BOOL IS_DLC_VEHICLE_MOD(Hash hash);
+		bool GET_DLC_WEAPON_COMPONENT_DATA_SP(int dlcWeaponIndex, int dlcWeapCompIndex, Any* ComponentDataPtr);
+		bool IS_CONTENT_ITEM_LOCKED(Hash itemHash);
+		bool IS_DLC_VEHICLE_MOD(Hash hash);
 		Hash GET_DLC_VEHICLE_MOD_LOCK_HASH(Hash hash);
 		/**
 		 * From fm_deathmatch_creator and fm_race_creator:
@@ -3375,49 +3375,49 @@ namespace base::menu::natives {
 		 * maxChildren: The max amount of times a fire can spread to other objects. Must be 25 or less, or the function will do nothing.
 		 * isGasFire: Whether or not the fire is powered by gasoline.
 		 */
-		FireId START_SCRIPT_FIRE(float X, float Y, float Z, int maxChildren, BOOL isGasFire);
+		FireId START_SCRIPT_FIRE(float X, float Y, float Z, int maxChildren, bool isGasFire);
 		void REMOVE_SCRIPT_FIRE(FireId fireHandle);
 		FireId START_ENTITY_FIRE(Entity entity);
 		void STOP_ENTITY_FIRE(Entity entity);
-		BOOL IS_ENTITY_ON_FIRE(Entity entity);
+		bool IS_ENTITY_ON_FIRE(Entity entity);
 		int GET_NUMBER_OF_FIRES_IN_RANGE(float x, float y, float z, float radius);
 		void SET_FLAMMABILITY_MULTIPLIER(float p0);
 		void STOP_FIRE_IN_RANGE(float x, float y, float z, float radius);
 		/**
 		 * Returns TRUE if it found something. FALSE if not.
 		 */
-		BOOL GET_CLOSEST_FIRE_POS(Vector3* outPosition, float x, float y, float z);
+		bool GET_CLOSEST_FIRE_POS(Vector3* outPosition, float x, float y, float z);
 		/**
 		 * BOOL isAudible = If explosion makes a sound.
 		 * BOOL isInvisible = If the explosion is invisible or not.
 		 * 
 		 * explosionType: https://alloc8or.re/gta5/doc/enums/eExplosionTag.txt
 		 */
-		void ADD_EXPLOSION(float x, float y, float z, int explosionType, float damageScale, BOOL isAudible, BOOL isInvisible, float cameraShake, BOOL noDamage);
+		void ADD_EXPLOSION(float x, float y, float z, int explosionType, float damageScale, bool isAudible, bool isInvisible, float cameraShake, bool noDamage);
 		/**
 		 * isAudible: If explosion makes a sound.
 		 * isInvisible: If the explosion is invisible or not.
 		 * explosionType: See ADD_EXPLOSION.
 		 */
-		void ADD_OWNED_EXPLOSION(Ped ped, float x, float y, float z, int explosionType, float damageScale, BOOL isAudible, BOOL isInvisible, float cameraShake);
+		void ADD_OWNED_EXPLOSION(Ped ped, float x, float y, float z, int explosionType, float damageScale, bool isAudible, bool isInvisible, float cameraShake);
 		/**
 		 * isAudible: If explosion makes a sound.
 		 * isInvisible: If the explosion is invisible or not.
 		 * explosionType: See ADD_EXPLOSION.
 		 */
-		void ADD_EXPLOSION_WITH_USER_VFX(float x, float y, float z, int explosionType, Hash explosionFx, float damageScale, BOOL isAudible, BOOL isInvisible, float cameraShake);
+		void ADD_EXPLOSION_WITH_USER_VFX(float x, float y, float z, int explosionType, Hash explosionFx, float damageScale, bool isAudible, bool isInvisible, float cameraShake);
 		/**
 		 * explosionType: See ADD_EXPLOSION.
 		 */
-		BOOL IS_EXPLOSION_IN_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2);
+		bool IS_EXPLOSION_IN_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2);
 		/**
 		 * explosionType: See ADD_EXPLOSION.
 		 */
-		BOOL IS_EXPLOSION_ACTIVE_IN_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2);
+		bool IS_EXPLOSION_ACTIVE_IN_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2);
 		/**
 		 * explosionType: See ADD_EXPLOSION.
 		 */
-		BOOL IS_EXPLOSION_IN_SPHERE(int explosionType, float x, float y, float z, float radius);
+		bool IS_EXPLOSION_IN_SPHERE(int explosionType, float x, float y, float z, float radius);
 		/**
 		 * explosionType: See ADD_EXPLOSION.
 		 */
@@ -3426,14 +3426,14 @@ namespace base::menu::natives {
 		 * explosionType: See ADD_EXPLOSION, -1 for any explosion type
 		 * 
 		 */
-		BOOL IS_EXPLOSION_IN_ANGLED_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float width);
+		bool IS_EXPLOSION_IN_ANGLED_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float width);
 		/**
 		 * Returns a handle to the first entity within the a circle spawned inside the 2 points from a radius.
 		 * 
 		 * explosionType: See ADD_EXPLOSION.
 		 */
 		Entity GET_OWNER_OF_EXPLOSION_IN_ANGLED_AREA(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float radius);
-		void _NETWORK_EXPECT_EXPLOSION_EVENTS_FOR_PLAYER(BOOL expect, Player player);
+		void _NETWORK_EXPECT_EXPLOSION_EVENTS_FOR_PLAYER(bool expect, Player player);
 		int _GET_MAXIMUM_NUMBER_OF_WATER_CANNONS();
 		Vector3 _GET_WATER_CANNON_COORDS(int index);
 
@@ -3444,7 +3444,7 @@ namespace base::menu::natives {
 		/**
 		 * NOTE: Debugging functions are not present in the retail version of the game.
 		 */
-		void SET_DEBUG_LINES_AND_SPHERES_DRAWING_ACTIVE(BOOL enabled);
+		void SET_DEBUG_LINES_AND_SPHERES_DRAWING_ACTIVE(bool enabled);
 		void DRAW_DEBUG_LINE(float x1, float y1, float z1, float x2, float y2, float z2, int r, int g, int b, int alpha);
 		/**
 		 * NOTE: Debugging functions are not present in the retail version of the game.
@@ -3544,32 +3544,32 @@ namespace base::menu::natives {
 		 * }
 		 */
 		void DRAW_BOX(float x1, float y1, float z1, float x2, float y2, float z2, int red, int green, int blue, int alpha);
-		void SET_BACKFACECULLING(BOOL toggle);
-		void SET_DEPTHWRITING(BOOL toggle);
-		BOOL BEGIN_TAKE_MISSION_CREATOR_PHOTO();
+		void SET_BACKFACECULLING(bool toggle);
+		void SET_DEPTHWRITING(bool toggle);
+		bool BEGIN_TAKE_MISSION_CREATOR_PHOTO();
 		int GET_STATUS_OF_TAKE_MISSION_CREATOR_PHOTO();
 		void FREE_MEMORY_FOR_MISSION_CREATOR_PHOTO();
-		BOOL LOAD_MISSION_CREATOR_PHOTO(Any* p0, Any p1, Any p2, Any p3);
+		bool LOAD_MISSION_CREATOR_PHOTO(Any* p0, Any p1, Any p2, Any p3);
 		int GET_STATUS_OF_LOAD_MISSION_CREATOR_PHOTO(Any* p0);
-		BOOL BEGIN_CREATE_MISSION_CREATOR_PHOTO_PREVIEW();
+		bool BEGIN_CREATE_MISSION_CREATOR_PHOTO_PREVIEW();
 		int GET_STATUS_OF_CREATE_MISSION_CREATOR_PHOTO_PREVIEW();
 		void FREE_MEMORY_FOR_MISSION_CREATOR_PHOTO_PREVIEW();
-		BOOL BEGIN_TAKE_HIGH_QUALITY_PHOTO();
+		bool BEGIN_TAKE_HIGH_QUALITY_PHOTO();
 		int GET_STATUS_OF_TAKE_HIGH_QUALITY_PHOTO();
 		void FREE_MEMORY_FOR_HIGH_QUALITY_PHOTO();
-		void SET_TAKEN_PHOTO_IS_MUGSHOT(BOOL toggle);
+		void SET_TAKEN_PHOTO_IS_MUGSHOT(bool toggle);
 		void SET_ARENA_THEME_AND_VARIATION_FOR_TAKEN_PHOTO(Any p0, int p1);
 		void SET_ON_ISLAND_X_FOR_TAKEN_PHOTO(Any p0);
 		/**
 		 * 1 match in 1 script. cellphone_controller.
 		 * p0 is -1 in scripts.
 		 */
-		BOOL SAVE_HIGH_QUALITY_PHOTO(int unused);
+		bool SAVE_HIGH_QUALITY_PHOTO(int unused);
 		int GET_STATUS_OF_SAVE_HIGH_QUALITY_PHOTO();
-		BOOL BEGIN_CREATE_LOW_QUALITY_COPY_OF_PHOTO(Any p0);
+		bool BEGIN_CREATE_LOW_QUALITY_COPY_OF_PHOTO(Any p0);
 		int GET_STATUS_OF_CREATE_LOW_QUALITY_COPY_OF_PHOTO(int p0);
 		void FREE_MEMORY_FOR_LOW_QUALITY_PHOTO();
-		void DRAW_LOW_QUALITY_PHOTO_TO_PHONE(BOOL p0, BOOL p1);
+		void DRAW_LOW_QUALITY_PHOTO_TO_PHONE(bool p0, bool p1);
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
@@ -3582,7 +3582,7 @@ namespace base::menu::natives {
 		/**
 		 * 2 matches across 2 scripts. Only showed in appcamera & appmedia. Both were 0.
 		 */
-		BOOL QUEUE_OPERATION_TO_CREATE_SORTED_LIST_OF_PHOTOS(Any p0);
+		bool QUEUE_OPERATION_TO_CREATE_SORTED_LIST_OF_PHOTOS(Any p0);
 		/**
 		 * 3 matches across 3 scripts. First 2 were 0, 3rd was 1. Possibly a bool.
 		 * appcamera, appmedia, and cellphone_controller.
@@ -3592,11 +3592,11 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL DOES_THIS_PHOTO_SLOT_CONTAIN_A_VALID_PHOTO(Any p0);
+		bool DOES_THIS_PHOTO_SLOT_CONTAIN_A_VALID_PHOTO(Any p0);
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL LOAD_HIGH_QUALITY_PHOTO(Any p0);
+		bool LOAD_HIGH_QUALITY_PHOTO(Any p0);
 		/**
 		 * Hardcoded to always return 2.
 		 */
@@ -3689,8 +3689,8 @@ namespace base::menu::natives {
 		 * 
 		 * 
 		 */
-		void DRAW_MARKER(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, BOOL bobUpAndDown, BOOL faceCamera, int p19, BOOL rotate, const char* textureDict, const char* textureName, BOOL drawOnEnts);
-		void DRAW_MARKER_EX(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, BOOL bobUpAndDown, BOOL faceCamera, Any p19, BOOL rotate, const char* textureDict, const char* textureName, BOOL drawOnEnts, BOOL p24, BOOL p25);
+		void DRAW_MARKER(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int p19, bool rotate, const char* textureDict, const char* textureName, bool drawOnEnts);
+		void DRAW_MARKER_EX(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, Any p19, bool rotate, const char* textureDict, const char* textureName, bool drawOnEnts, bool p24, bool p25);
 		/**
 		 * Draws a 3D sphere, typically seen in the GTA:O freemode event "Penned In".
 		 * Example https://imgur.com/nCbtS4H
@@ -3771,8 +3771,8 @@ namespace base::menu::natives {
 		void SET_CHECKPOINT_FORCE_DIRECTION(int checkpoint);
 		void SET_CHECKPOINT_DIRECTION(int checkpoint, float posX, float posY, float posZ);
 		void DELETE_CHECKPOINT(int checkpoint);
-		void DONT_RENDER_IN_GAME_UI(BOOL p0);
-		void FORCE_RENDER_IN_GAME_UI(BOOL toggle);
+		void DONT_RENDER_IN_GAME_UI(bool p0);
+		void FORCE_RENDER_IN_GAME_UI(bool toggle);
 		/**
 		 * This function can requests texture dictonaries from following RPFs:
 		 * scaleform_generic.rpf
@@ -3782,8 +3782,8 @@ namespace base::menu::natives {
 		 * 
 		 * last param isnt a toggle
 		 */
-		void REQUEST_STREAMED_TEXTURE_DICT(const char* textureDict, BOOL p1);
-		BOOL HAS_STREAMED_TEXTURE_DICT_LOADED(const char* textureDict);
+		void REQUEST_STREAMED_TEXTURE_DICT(const char* textureDict, bool p1);
+		bool HAS_STREAMED_TEXTURE_DICT_LOADED(const char* textureDict);
 		void SET_STREAMED_TEXTURE_DICT_AS_NO_LONGER_NEEDED(const char* textureDict);
 		/**
 		 * Draws a rectangle on the screen.
@@ -3807,11 +3807,11 @@ namespace base::menu::natives {
 		 * The total number of rectangles to be drawn in one frame is apparently limited to 399.
 		 * 
 		 */
-		void DRAW_RECT(float x, float y, float width, float height, int r, int g, int b, int a, BOOL p8);
+		void DRAW_RECT(float x, float y, float width, float height, int r, int g, int b, int a, bool p8);
 		/**
 		 * Sets a flag defining whether or not script draw commands should continue being drawn behind the pause menu. This is usually used for TV channels and other draw commands that are used with a world render target.
 		 */
-		void SET_SCRIPT_GFX_DRAW_BEHIND_PAUSEMENU(BOOL toggle);
+		void SET_SCRIPT_GFX_DRAW_BEHIND_PAUSEMENU(bool toggle);
 		/**
 		 * Sets the draw order for script draw commands.
 		 * 
@@ -3872,7 +3872,7 @@ namespace base::menu::natives {
 		 * 
 		 * alpha - opacity level
 		 */
-		void DRAW_SPRITE(const char* textureDict, const char* textureName, float screenX, float screenY, float width, float height, float heading, int red, int green, int blue, int alpha, BOOL p11, Any p12);
+		void DRAW_SPRITE(const char* textureDict, const char* textureName, float screenX, float screenY, float width, float height, float heading, int red, int green, int blue, int alpha, bool p11, Any p12);
 		/**
 		 * Used in arcade games and Beam hack minigame in Doomsday Heist. I will most certainly dive into this to try replicate arcade games.
 		 * x position must be between 0.0 and 1.0 (1.0 being the most right side of the screen)
@@ -3914,7 +3914,7 @@ namespace base::menu::natives {
 		 * I tried this and nothing happened...
 		 */
 		int ADD_ENTITY_ICON(Entity entity, const char* icon);
-		void SET_ENTITY_ICON_VISIBILITY(Entity entity, BOOL toggle);
+		void SET_ENTITY_ICON_VISIBILITY(Entity entity, bool toggle);
 		void SET_ENTITY_ICON_COLOR(Entity entity, int red, int green, int blue, int alpha);
 		/**
 		 * Sets the on-screen drawing origin for draw-functions (which is normally x=0,y=0 in the upper left corner of the screen) to a world coordinate.
@@ -3935,7 +3935,7 @@ namespace base::menu::natives {
 		 * This function also effects the drawing of texts and other UI-elements.
 		 * The effect can be reset by calling GRAPHICS::CLEAR_DRAW_ORIGIN().
 		 */
-		void SET_DRAW_ORIGIN(float x, float y, float z, BOOL p3);
+		void SET_DRAW_ORIGIN(float x, float y, float z, bool p3);
 		/**
 		 * Resets the screen's draw-origin which was changed by the function GRAPHICS::SET_DRAW_ORIGIN(...) back to x=0,y=0.
 		 * 
@@ -3960,12 +3960,12 @@ namespace base::menu::natives {
 		 */
 		void SET_BINK_MOVIE_VOLUME(int binkMovie, float value);
 		void ATTACH_TV_AUDIO_TO_ENTITY(Entity entity);
-		void SET_BINK_MOVIE_AUDIO_FRONTEND(int binkMovie, BOOL p1);
+		void SET_BINK_MOVIE_AUDIO_FRONTEND(int binkMovie, bool p1);
 		/**
 		 * Probably changes tvs from being a 3d audio to being "global" audio
 		 */
-		void SET_TV_AUDIO_FRONTEND(BOOL toggle);
-		void SET_BINK_SHOULD_SKIP(int binkMovie, BOOL bShouldSkip);
+		void SET_TV_AUDIO_FRONTEND(bool toggle);
+		void SET_BINK_SHOULD_SKIP(int binkMovie, bool bShouldSkip);
 		int LOAD_MOVIE_MESH_SET(const char* movieMeshSetName);
 		void RELEASE_MOVIE_MESH_SET(int movieMeshSet);
 		int QUERY_MOVIE_MESH_SET_STATE(Any p0);
@@ -3978,7 +3978,7 @@ namespace base::menu::natives {
 		 * Returns current screen resolution.
 		 */
 		void GET_ACTUAL_SCREEN_RESOLUTION(int* x, int* y);
-		float GET_ASPECT_RATIO(BOOL b);
+		float GET_ASPECT_RATIO(bool b);
 		float GET_SCREEN_ASPECT_RATIO();
 		/**
 		 * Setting Aspect Ratio Manually in game will return:
@@ -3988,14 +3988,14 @@ namespace base::menu::natives {
 		 * 
 		 * Setting Aspect Ratio to "Auto" in game will return "false" or "true" based on the actual set Resolution Ratio.
 		 */
-		BOOL GET_IS_WIDESCREEN();
+		bool GET_IS_WIDESCREEN();
 		/**
 		 * false = Any resolution < 1280x720
 		 * true = Any resolution >= 1280x720
 		 */
-		BOOL GET_IS_HIDEF();
+		bool GET_IS_HIDEF();
 		void ADJUST_NEXT_POS_SIZE_AS_NORMALIZED_16_9();
-		void DISPLAY_LOADING_SCREEN_NOW(BOOL onOff);
+		void DISPLAY_LOADING_SCREEN_NOW(bool onOff);
 		/**
 		 * Enables Night Vision.
 		 * 
@@ -4007,13 +4007,13 @@ namespace base::menu::natives {
 		 * true = turns night vision on for your player.
 		 * false = turns night vision off for your player.
 		 */
-		void SET_NIGHTVISION(BOOL toggle);
-		BOOL GET_REQUESTINGNIGHTVISION();
-		BOOL GET_USINGNIGHTVISION();
-		void SET_EXPOSURETWEAK(BOOL toggle);
-		void FORCE_EXPOSURE_READBACK(BOOL toggle);
+		void SET_NIGHTVISION(bool toggle);
+		bool GET_REQUESTINGNIGHTVISION();
+		bool GET_USINGNIGHTVISION();
+		void SET_EXPOSURETWEAK(bool toggle);
+		void FORCE_EXPOSURE_READBACK(bool toggle);
 		void OVERRIDE_NIGHTVISION_LIGHT_RANGE(float p0);
-		void SET_NOISEOVERIDE(BOOL toggle);
+		void SET_NOISEOVERIDE(bool toggle);
 		void SET_NOISINESSOVERIDE(float value);
 		/**
 		 * Convert a world coordinate into its relative screen coordinate.  (WorldToScreen)
@@ -4048,7 +4048,7 @@ namespace base::menu::natives {
 		 * 
 		 * I thought we lost you from the scene forever. It does seem however that calling SET_DRAW_ORIGIN then your natives, then ending it. Seems to work better for certain things such as keeping boxes around people for a predator missile e.g.
 		 */
-		BOOL GET_SCREEN_COORD_FROM_WORLD_COORD(float worldX, float worldY, float worldZ, float* screenX, float* screenY);
+		bool GET_SCREEN_COORD_FROM_WORLD_COORD(float worldX, float worldY, float worldZ, float* screenX, float* screenY);
 		/**
 		 * Returns the texture resolution of the passed texture dict+name.
 		 * 
@@ -4058,7 +4058,7 @@ namespace base::menu::natives {
 		/**
 		 * Overriding ped badge texture to a passed texture. It's synced between players (even custom textures!), don't forget to request used dict on *all* clients to make it sync properly. Can be removed by passing empty strings.
 		 */
-		BOOL OVERRIDE_PED_CREW_LOGO_TEXTURE(Ped ped, const char* txd, const char* txn);
+		bool OVERRIDE_PED_CREW_LOGO_TEXTURE(Ped ped, const char* txd, const char* txn);
 		void SET_DISTANCE_BLUR_STRENGTH_OVERRIDE(float p0);
 		/**
 		 * Purpose of p0 and p1 unknown.
@@ -4073,18 +4073,18 @@ namespace base::menu::natives {
 		 * 
 		 * state: True turns off all artificial light sources in the map: buildings, street lights, car lights, etc. False turns them back on.
 		 */
-		void SET_ARTIFICIAL_LIGHTS_STATE(BOOL state);
+		void SET_ARTIFICIAL_LIGHTS_STATE(bool state);
 		/**
 		 * If "blackout" is enabled, this native allows you to ignore "blackout" for vehicles.
 		 */
-		void SET_ARTIFICIAL_VEHICLE_LIGHTS_STATE(BOOL toggle);
+		void SET_ARTIFICIAL_VEHICLE_LIGHTS_STATE(bool toggle);
 		void DISABLE_HDTEX_THIS_FRAME();
 		/**
 		 * Creates a tracked point, useful for checking the visibility of a 3D point on screen.
 		 */
 		int CREATE_TRACKED_POINT();
 		void SET_TRACKED_POINT_INFO(int point, float x, float y, float z, float radius);
-		BOOL IS_TRACKED_POINT_VISIBLE(int point);
+		bool IS_TRACKED_POINT_VISIBLE(int point);
 		void DESTROY_TRACKED_POINT(int point);
 		/**
 		 * This function is hard-coded to always return 0.
@@ -4096,7 +4096,7 @@ namespace base::menu::natives {
 		void REMOVE_GRASS_CULL_SPHERE(int handle);
 		void PROCGRASS_ENABLE_CULLSPHERE(int handle, float x, float y, float z, float scale);
 		void PROCGRASS_DISABLE_CULLSPHERE(int handle);
-		BOOL PROCGRASS_IS_CULLSPHERE_ENABLED(int handle);
+		bool PROCGRASS_IS_CULLSPHERE_ENABLED(int handle);
 		void PROCGRASS_ENABLE_AMBSCALESCAN();
 		void PROCGRASS_DISABLE_AMBSCALESCAN();
 		void DISABLE_PROCOBJ_CREATION();
@@ -4108,7 +4108,7 @@ namespace base::menu::natives {
 		void GRASSBATCH_ENABLE_FLATTENING_IN_SPHERE(float x, float y, float z, float radius, float p4, float p5, float p6);
 		void GRASSBATCH_DISABLE_FLATTENING();
 		void CASCADE_SHADOWS_INIT_SESSION();
-		void CASCADE_SHADOWS_SET_CASCADE_BOUNDS(Any p0, BOOL p1, float p2, float p3, float p4, float p5, BOOL p6, float p7);
+		void CASCADE_SHADOWS_SET_CASCADE_BOUNDS(Any p0, bool p1, float p2, float p3, float p4, float p5, bool p6, float p7);
 		void CASCADE_SHADOWS_SET_CASCADE_BOUNDS_SCALE(float p0);
 		void CASCADE_SHADOWS_SET_ENTITY_TRACKER_SCALE(float p0);
 		void CASCADE_SHADOWS_SET_SPLIT_Z_EXP_WEIGHT(float p0);
@@ -4118,8 +4118,8 @@ namespace base::menu::natives {
 		 * 
 		 * When OFF, they draw from a further distance.
 		 */
-		void CASCADE_SHADOWS_ENABLE_ENTITY_TRACKER(BOOL toggle);
-		void CASCADE_SHADOWS_SET_SCREEN_SIZE_CHECK_ENABLED(BOOL p0);
+		void CASCADE_SHADOWS_ENABLE_ENTITY_TRACKER(bool toggle);
+		void CASCADE_SHADOWS_SET_SCREEN_SIZE_CHECK_ENABLED(bool p0);
 		/**
 		 * Possible values:
 		 * "CSM_ST_POINT"
@@ -4147,20 +4147,20 @@ namespace base::menu::natives {
 		 */
 		void CASCADE_SHADOWS_SET_SHADOW_SAMPLE_TYPE(const char* type);
 		void CASCADE_SHADOWS_CLEAR_SHADOW_SAMPLE_TYPE();
-		void CASCADE_SHADOWS_SET_AIRCRAFT_MODE(BOOL p0);
-		void CASCADE_SHADOWS_SET_DYNAMIC_DEPTH_MODE(BOOL p0);
+		void CASCADE_SHADOWS_SET_AIRCRAFT_MODE(bool p0);
+		void CASCADE_SHADOWS_SET_DYNAMIC_DEPTH_MODE(bool p0);
 		void CASCADE_SHADOWS_SET_DYNAMIC_DEPTH_VALUE(float p0);
-		void CASCADE_SHADOWS_ENABLE_FREEZER(BOOL p0);
+		void CASCADE_SHADOWS_ENABLE_FREEZER(bool p0);
 		void WATER_REFLECTION_SET_SCRIPT_OBJECT_VISIBILITY(Any p0);
-		void GOLF_TRAIL_SET_ENABLED(BOOL toggle);
+		void GOLF_TRAIL_SET_ENABLED(bool toggle);
 		/**
 		 * p8 seems to always be false.
 		 */
-		void GOLF_TRAIL_SET_PATH(float p0, float p1, float p2, float p3, float p4, float p5, float p6, float p7, BOOL p8);
+		void GOLF_TRAIL_SET_PATH(float p0, float p1, float p2, float p3, float p4, float p5, float p6, float p7, bool p8);
 		void GOLF_TRAIL_SET_RADIUS(float p0, float p1, float p2);
 		void GOLF_TRAIL_SET_COLOUR(int p0, int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9, int p10, int p11);
 		void GOLF_TRAIL_SET_TESSELLATION(int p0, int p1);
-		void GOLF_TRAIL_SET_FIXED_CONTROL_POINT_ENABLE(BOOL p0);
+		void GOLF_TRAIL_SET_FIXED_CONTROL_POINT_ENABLE(bool p0);
 		/**
 		 * 12 matches across 4 scripts. All 4 scripts were job creators.
 		 * 
@@ -4175,14 +4175,14 @@ namespace base::menu::natives {
 		 * Only appeared in Golf & Golf_mp. Parameters were all ptrs
 		 */
 		void GOLF_TRAIL_SET_SHADER_PARAMS(float p0, float p1, float p2, float p3, float p4);
-		void GOLF_TRAIL_SET_FACING(BOOL p0);
+		void GOLF_TRAIL_SET_FACING(bool p0);
 		float GOLF_TRAIL_GET_MAX_HEIGHT();
 		Vector3 GOLF_TRAIL_GET_VISUAL_CONTROL_POINT(int p0);
 		/**
 		 * Toggles Heatvision on/off.
 		 */
-		void SET_SEETHROUGH(BOOL toggle);
-		BOOL GET_USINGSEETHROUGH();
+		void SET_SEETHROUGH(bool toggle);
+		bool GET_USINGSEETHROUGH();
 		void SEETHROUGH_RESET();
 		void SEETHROUGH_SET_FADE_STARTDISTANCE(float distance);
 		void SEETHROUGH_SET_FADE_ENDDISTANCE(float distance);
@@ -4211,8 +4211,8 @@ namespace base::menu::natives {
 		 * Getter for SET_MOTIONBLUR_MAX_VEL_SCALER
 		 */
 		float GET_MOTIONBLUR_MAX_VEL_SCALER();
-		void SET_FORCE_MOTIONBLUR(BOOL toggle);
-		void TOGGLE_PLAYER_DAMAGE_OVERLAY(BOOL toggle);
+		void SET_FORCE_MOTIONBLUR(bool toggle);
+		void TOGGLE_PLAYER_DAMAGE_OVERLAY(bool toggle);
 		/**
 		 * Sets an value related to timecycles.
 		 */
@@ -4220,26 +4220,26 @@ namespace base::menu::natives {
 		/**
 		 * time in ms to transition to fully blurred screen
 		 */
-		BOOL TRIGGER_SCREENBLUR_FADE_IN(float transitionTime);
+		bool TRIGGER_SCREENBLUR_FADE_IN(float transitionTime);
 		/**
 		 * time in ms to transition from fully blurred to normal
 		 */
-		BOOL TRIGGER_SCREENBLUR_FADE_OUT(float transitionTime);
+		bool TRIGGER_SCREENBLUR_FADE_OUT(float transitionTime);
 		void DISABLE_SCREENBLUR_FADE();
 		float GET_SCREENBLUR_FADE_CURRENT_TIME();
 		/**
 		 * Returns whether screen transition to blur/from blur is running.
 		 */
-		BOOL IS_SCREENBLUR_FADE_RUNNING();
-		void TOGGLE_PAUSED_RENDERPHASES(BOOL toggle);
-		BOOL GET_TOGGLE_PAUSED_RENDERPHASES_STATUS();
+		bool IS_SCREENBLUR_FADE_RUNNING();
+		void TOGGLE_PAUSED_RENDERPHASES(bool toggle);
+		bool GET_TOGGLE_PAUSED_RENDERPHASES_STATUS();
 		void RESET_PAUSED_RENDERPHASES();
 		void GRAB_PAUSEMENU_OWNERSHIP();
-		void SET_HIDOF_OVERRIDE(BOOL p0, BOOL p1, float nearplaneOut, float nearplaneIn, float farplaneOut, float farplaneIn);
-		void SET_LOCK_ADAPTIVE_DOF_DISTANCE(BOOL p0);
-		BOOL PHONEPHOTOEDITOR_TOGGLE(BOOL p0);
-		BOOL PHONEPHOTOEDITOR_IS_ACTIVE();
-		BOOL PHONEPHOTOEDITOR_SET_FRAME_TXD(const char* textureDict, BOOL p1);
+		void SET_HIDOF_OVERRIDE(bool p0, bool p1, float nearplaneOut, float nearplaneIn, float farplaneOut, float farplaneIn);
+		void SET_LOCK_ADAPTIVE_DOF_DISTANCE(bool p0);
+		bool PHONEPHOTOEDITOR_TOGGLE(bool p0);
+		bool PHONEPHOTOEDITOR_IS_ACTIVE();
+		bool PHONEPHOTOEDITOR_SET_FRAME_TXD(const char* textureDict, bool p1);
 		/**
 		 * GRAPHICS::START_PARTICLE_FX_NON_LOOPED_AT_COORD("scr_paleto_roof_impact", -140.8576f, 6420.789f, 41.1391f, 0f, 0f, 267.3957f, 0x3F800000, 0, 0, 0);
 		 * 
@@ -4266,11 +4266,11 @@ namespace base::menu::natives {
 		 * example:
 		 * Function.Call<int>(Hash.START_PARTICLE_FX_NON_LOOPED_AT_COORD, "scr_fbi4_trucks_crash", GTA.Game.Player.Character.Position.X, GTA.Game.Player.Character.Position.Y, GTA.Game.Player.Character.Position.Z + 4f, 0, 0, 0, 5.5f, 0, 0, 0);
 		 */
-		BOOL START_PARTICLE_FX_NON_LOOPED_AT_COORD(const char* effectName, float xPos, float yPos, float zPos, float xRot, float yRot, float zRot, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis);
+		bool START_PARTICLE_FX_NON_LOOPED_AT_COORD(const char* effectName, float xPos, float yPos, float zPos, float xRot, float yRot, float zRot, float scale, bool xAxis, bool yAxis, bool zAxis);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		BOOL START_NETWORKED_PARTICLE_FX_NON_LOOPED_AT_COORD(const char* effectName, float xPos, float yPos, float zPos, float xRot, float yRot, float zRot, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis, BOOL p11);
+		bool START_NETWORKED_PARTICLE_FX_NON_LOOPED_AT_COORD(const char* effectName, float xPos, float yPos, float zPos, float xRot, float yRot, float zRot, float scale, bool xAxis, bool yAxis, bool zAxis, bool p11);
 		/**
 		 * GRAPHICS::START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE("scr_sh_bong_smoke", PLAYER::PLAYER_PED_ID(), -0.025f, 0.13f, 0f, 0f, 0f, 0f, 31086, 0x3F800000, 0, 0, 0);
 		 * 
@@ -4278,11 +4278,11 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		BOOL START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE(const char* effectName, Ped ped, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, int boneIndex, float scale, BOOL axisX, BOOL axisY, BOOL axisZ);
+		bool START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE(const char* effectName, Ped ped, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, int boneIndex, float scale, bool axisX, bool axisY, bool axisZ);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		BOOL START_NETWORKED_PARTICLE_FX_NON_LOOPED_ON_PED_BONE(const char* effectName, Ped ped, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, int boneIndex, float scale, BOOL axisX, BOOL axisY, BOOL axisZ);
+		bool START_NETWORKED_PARTICLE_FX_NON_LOOPED_ON_PED_BONE(const char* effectName, Ped ped, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, int boneIndex, float scale, bool axisX, bool axisY, bool axisZ);
 		/**
 		 * Starts a particle effect on an entity for example your player.
 		 * 
@@ -4297,15 +4297,15 @@ namespace base::menu::natives {
 		 * 
 		 * -can confirm START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE does NOT work on vehicle bones.
 		 */
-		BOOL START_PARTICLE_FX_NON_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, float scale, BOOL axisX, BOOL axisY, BOOL axisZ);
+		bool START_PARTICLE_FX_NON_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, float scale, bool axisX, bool axisY, bool axisZ);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		BOOL START_NETWORKED_PARTICLE_FX_NON_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, float scale, BOOL axisX, BOOL axisY, BOOL axisZ);
+		bool START_NETWORKED_PARTICLE_FX_NON_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, float scale, bool axisX, bool axisY, bool axisZ);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		BOOL START_PARTICLE_FX_NON_LOOPED_ON_ENTITY_BONE(const char* effectName, Entity entity, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, int boneIndex, float scale, BOOL axisX, BOOL axisY, BOOL axisZ);
+		bool START_PARTICLE_FX_NON_LOOPED_ON_ENTITY_BONE(const char* effectName, Entity entity, float offsetX, float offsetY, float offsetZ, float rotX, float rotY, float rotZ, int boneIndex, float scale, bool axisX, bool axisY, bool axisZ);
 		/**
 		 * only works on some fx's, not networked
 		 */
@@ -4323,7 +4323,7 @@ namespace base::menu::natives {
 		/**
 		 * Used only once in the scripts (taxi_clowncar)
 		 */
-		void SET_PARTICLE_FX_FORCE_VEHICLE_INTERIOR(BOOL toggle);
+		void SET_PARTICLE_FX_FORCE_VEHICLE_INTERIOR(bool toggle);
 		/**
 		 * GRAPHICS::START_PARTICLE_FX_LOOPED_AT_COORD("scr_fbi_falling_debris", 93.7743f, -749.4572f, 70.86904f, 0f, 0f, 0f, 0x3F800000, 0, 0, 0, 0)
 		 * 
@@ -4332,67 +4332,67 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		int START_PARTICLE_FX_LOOPED_AT_COORD(const char* effectName, float x, float y, float z, float xRot, float yRot, float zRot, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis, BOOL p11);
+		int START_PARTICLE_FX_LOOPED_AT_COORD(const char* effectName, float x, float y, float z, float xRot, float yRot, float zRot, float scale, bool xAxis, bool yAxis, bool zAxis, bool p11);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		int START_PARTICLE_FX_LOOPED_ON_PED_BONE(const char* effectName, Ped ped, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, int boneIndex, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis);
+		int START_PARTICLE_FX_LOOPED_ON_PED_BONE(const char* effectName, Ped ped, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, int boneIndex, float scale, bool xAxis, bool yAxis, bool zAxis);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		int START_PARTICLE_FX_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis);
+		int START_PARTICLE_FX_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, float scale, bool xAxis, bool yAxis, bool zAxis);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		int START_PARTICLE_FX_LOOPED_ON_ENTITY_BONE(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, int boneIndex, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis);
+		int START_PARTICLE_FX_LOOPED_ON_ENTITY_BONE(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, int boneIndex, float scale, bool xAxis, bool yAxis, bool zAxis);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		int START_NETWORKED_PARTICLE_FX_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis, float r, float g, float b, float a);
+		int START_NETWORKED_PARTICLE_FX_LOOPED_ON_ENTITY(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, float scale, bool xAxis, bool yAxis, bool zAxis, float r, float g, float b, float a);
 		/**
 		 * Full list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json
 		 */
-		int START_NETWORKED_PARTICLE_FX_LOOPED_ON_ENTITY_BONE(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, int boneIndex, float scale, BOOL xAxis, BOOL yAxis, BOOL zAxis, float r, float g, float b, float a);
+		int START_NETWORKED_PARTICLE_FX_LOOPED_ON_ENTITY_BONE(const char* effectName, Entity entity, float xOffset, float yOffset, float zOffset, float xRot, float yRot, float zRot, int boneIndex, float scale, bool xAxis, bool yAxis, bool zAxis, float r, float g, float b, float a);
 		/**
 		 * p1 is always 0 in the native scripts
 		 */
-		void STOP_PARTICLE_FX_LOOPED(int ptfxHandle, BOOL p1);
-		void REMOVE_PARTICLE_FX(int ptfxHandle, BOOL p1);
+		void STOP_PARTICLE_FX_LOOPED(int ptfxHandle, bool p1);
+		void REMOVE_PARTICLE_FX(int ptfxHandle, bool p1);
 		void REMOVE_PARTICLE_FX_FROM_ENTITY(Entity entity);
 		void REMOVE_PARTICLE_FX_IN_RANGE(float X, float Y, float Z, float radius);
 		void FORCE_PARTICLE_FX_IN_VEHICLE_INTERIOR(Any p0, Any p1);
-		BOOL DOES_PARTICLE_FX_LOOPED_EXIST(int ptfxHandle);
+		bool DOES_PARTICLE_FX_LOOPED_EXIST(int ptfxHandle);
 		void SET_PARTICLE_FX_LOOPED_OFFSETS(int ptfxHandle, float x, float y, float z, float rotX, float rotY, float rotZ);
-		void SET_PARTICLE_FX_LOOPED_EVOLUTION(int ptfxHandle, const char* propertyName, float amount, BOOL noNetwork);
+		void SET_PARTICLE_FX_LOOPED_EVOLUTION(int ptfxHandle, const char* propertyName, float amount, bool noNetwork);
 		/**
 		 * only works on some fx's
 		 * 
 		 * p4 = 0
 		 */
-		void SET_PARTICLE_FX_LOOPED_COLOUR(int ptfxHandle, float r, float g, float b, BOOL p4);
+		void SET_PARTICLE_FX_LOOPED_COLOUR(int ptfxHandle, float r, float g, float b, bool p4);
 		void SET_PARTICLE_FX_LOOPED_ALPHA(int ptfxHandle, float alpha);
 		void SET_PARTICLE_FX_LOOPED_SCALE(int ptfxHandle, float scale);
 		void SET_PARTICLE_FX_LOOPED_FAR_CLIP_DIST(int ptfxHandle, float range);
 		void _SET_PARTICLE_FX_LOOPED_CAMERA_BIAS(int ptfxHandle, float p1);
-		void SET_PARTICLE_FX_CAM_INSIDE_VEHICLE(BOOL p0);
-		void SET_PARTICLE_FX_CAM_INSIDE_NONPLAYER_VEHICLE(Vehicle vehicle, BOOL p1);
+		void SET_PARTICLE_FX_CAM_INSIDE_VEHICLE(bool p0);
+		void SET_PARTICLE_FX_CAM_INSIDE_NONPLAYER_VEHICLE(Vehicle vehicle, bool p1);
 		void SET_PARTICLE_FX_SHOOTOUT_BOAT(Any p0);
 		void CLEAR_PARTICLE_FX_SHOOTOUT_BOAT();
 		void SET_PARTICLE_FX_BLOOD_SCALE(Any p0);
-		void DISABLE_IN_WATER_PTFX(BOOL toggle);
-		void DISABLE_DOWNWASH_PTFX(BOOL toggle);
+		void DISABLE_IN_WATER_PTFX(bool toggle);
+		void DISABLE_DOWNWASH_PTFX(bool toggle);
 		void SET_PARTICLE_FX_SLIPSTREAM_LODRANGE_SCALE(float scale);
 		/**
 		 * Creates cartoon effect when Michel smokes the weed
 		 */
-		void ENABLE_CLOWN_BLOOD_VFX(BOOL toggle);
+		void ENABLE_CLOWN_BLOOD_VFX(bool toggle);
 		/**
 		 * Creates a motion-blur sort of effect, this native does not seem to work, however by using the `START_SCREEN_EFFECT` native with `DrugsMichaelAliensFight` as the effect parameter, you should be able to get the effect.
 		 */
-		void ENABLE_ALIEN_BLOOD_VFX(BOOL toggle);
+		void ENABLE_ALIEN_BLOOD_VFX(bool toggle);
 		void SET_PARTICLE_FX_BULLET_IMPACT_SCALE(float scale);
 		void SET_PARTICLE_FX_BULLET_IMPACT_LODRANGE_SCALE(float p0);
-		void SET_PARTICLE_FX_BULLET_TRACE_NO_ANGLE_REJECT(BOOL p0);
+		void SET_PARTICLE_FX_BULLET_TRACE_NO_ANGLE_REJECT(bool p0);
 		void SET_PARTICLE_FX_BANG_SCRAPE_LODRANGE_SCALE(float p0);
 		void SET_PARTICLE_FX_FOOT_LODRANGE_SCALE(float p0);
 		/**
@@ -4403,7 +4403,7 @@ namespace base::menu::natives {
 		void SET_PTFX_FORCE_VEHICLE_INTERIOR_FLAG(Any p0);
 		void _REGISTER_PTFX_FOG_VOLUME(float posX, float posY, float posZ, float range, float density);
 		void REGISTER_POSTFX_BULLET_IMPACT(float weaponWorldPosX, float weaponWorldPosY, float weaponWorldPosZ, float intensity);
-		void FORCE_POSTFX_BULLET_IMPACTS_AFTER_HUD(BOOL p0);
+		void FORCE_POSTFX_BULLET_IMPACTS_AFTER_HUD(bool p0);
 		/**
 		 * From the b678d decompiled scripts:
 		 * 
@@ -4432,8 +4432,8 @@ namespace base::menu::natives {
 		 * Returns ptfxHandle
 		 * effectName: scr_sv_drag_burnout
 		 */
-		int _START_VEHICLE_PARTICLE_FX_LOOPED(Vehicle vehicle, const char* effectName, BOOL frontBack, BOOL leftRight, BOOL localOnly);
-		void SET_WEATHER_PTFX_USE_OVERRIDE_SETTINGS(BOOL p0);
+		int _START_VEHICLE_PARTICLE_FX_LOOPED(Vehicle vehicle, const char* effectName, bool frontBack, bool leftRight, bool localOnly);
+		void SET_WEATHER_PTFX_USE_OVERRIDE_SETTINGS(bool p0);
 		void SET_WEATHER_PTFX_OVERRIDE_CURR_LEVEL(float p0);
 		void WASH_DECALS_IN_RANGE(float x, float y, float z, float range, float p4);
 		void WASH_DECALS_FROM_VEHICLE(Vehicle vehicle, float p1);
@@ -4507,32 +4507,32 @@ namespace base::menu::natives {
 		 * liquidTrail_water = 9050
 		 * }
 		 */
-		int ADD_DECAL(int decalType, float posX, float posY, float posZ, float p4, float p5, float p6, float p7, float p8, float p9, float width, float height, float rCoef, float gCoef, float bCoef, float opacity, float timeout, BOOL p17, BOOL p18, BOOL p19);
+		int ADD_DECAL(int decalType, float posX, float posY, float posZ, float p4, float p5, float p6, float p7, float p8, float p9, float width, float height, float rCoef, float gCoef, float bCoef, float opacity, float timeout, bool p17, bool p18, bool p19);
 		int ADD_PETROL_DECAL(float x, float y, float z, float groundLvl, float width, float transparency);
 		int ADD_OIL_DECAL(float x, float y, float z, float groundLvl, float width, float transparency);
 		void START_PETROL_TRAIL_DECALS(float p0);
 		void ADD_PETROL_TRAIL_DECAL_INFO(float x, float y, float z, float p3);
 		void END_PETROL_TRAIL_DECALS();
 		void REMOVE_DECAL(int decal);
-		BOOL IS_DECAL_ALIVE(int decal);
+		bool IS_DECAL_ALIVE(int decal);
 		float GET_DECAL_WASH_LEVEL(int decal);
 		void SET_DISABLE_PETROL_DECALS_IGNITING_THIS_FRAME();
 		void SET_DISABLE_PETROL_DECALS_RECYCLING_THIS_FRAME();
 		void SET_DISABLE_DECAL_RENDERING_THIS_FRAME();
-		BOOL GET_IS_PETROL_DECAL_IN_RANGE(float xCoord, float yCoord, float zCoord, float radius);
+		bool GET_IS_PETROL_DECAL_IN_RANGE(float xCoord, float yCoord, float zCoord, float radius);
 		void PATCH_DECAL_DIFFUSE_MAP(int decalType, const char* textureDict, const char* textureName);
 		void UNPATCH_DECAL_DIFFUSE_MAP(int decalType);
 		void MOVE_VEHICLE_DECALS(Any p0, Any p1);
 		/**
 		 * boneIndex is always chassis_dummy in the scripts. The x/y/z params are location relative to the chassis bone.
 		 */
-		BOOL ADD_VEHICLE_CREW_EMBLEM(Vehicle vehicle, Ped ped, int boneIndex, float x1, float x2, float x3, float y1, float y2, float y3, float z1, float z2, float z3, float scale, Any p13, int alpha);
-		BOOL ABORT_VEHICLE_CREW_EMBLEM_REQUEST(int* p0);
+		bool ADD_VEHICLE_CREW_EMBLEM(Vehicle vehicle, Ped ped, int boneIndex, float x1, float x2, float x3, float y1, float y2, float y3, float z1, float z2, float z3, float scale, Any p13, int alpha);
+		bool ABORT_VEHICLE_CREW_EMBLEM_REQUEST(int* p0);
 		void REMOVE_VEHICLE_CREW_EMBLEM(Vehicle vehicle, int p1);
 		int GET_VEHICLE_CREW_EMBLEM_REQUEST_STATE(Vehicle vehicle, int p1);
-		BOOL DOES_VEHICLE_HAVE_CREW_EMBLEM(Vehicle vehicle, int p1);
-		void DISABLE_COMPOSITE_SHOTGUN_DECALS(BOOL toggle);
-		void DISABLE_SCUFF_DECALS(BOOL toggle);
+		bool DOES_VEHICLE_HAVE_CREW_EMBLEM(Vehicle vehicle, int p1);
+		void DISABLE_COMPOSITE_SHOTGUN_DECALS(bool toggle);
+		void DISABLE_SCUFF_DECALS(bool toggle);
 		void SET_DECAL_BULLET_IMPACT_RANGE_SCALE(float p0);
 		void OVERRIDE_INTERIOR_SMOKE_NAME(const char* name);
 		void OVERRIDE_INTERIOR_SMOKE_LEVEL(float level);
@@ -4541,20 +4541,20 @@ namespace base::menu::natives {
 		 * Used with 'NG_filmnoir_BW{01,02}' timecycles and the "NOIR_FILTER_SOUNDS" audioref.
 		 */
 		void REGISTER_NOIR_LENS_EFFECT();
-		void DISABLE_VEHICLE_DISTANTLIGHTS(BOOL toggle);
-		void RENDER_SHADOWED_LIGHTS_WITH_NO_SHADOWS(BOOL p0);
+		void DISABLE_VEHICLE_DISTANTLIGHTS(bool toggle);
+		void RENDER_SHADOWED_LIGHTS_WITH_NO_SHADOWS(bool p0);
 		void REQUEST_EARLY_LIGHT_CHECK();
 		/**
 		 * Forces footstep tracks on all surfaces.
 		 */
-		void USE_SNOW_FOOT_VFX_WHEN_UNSHELTERED(BOOL toggle);
-		void _FORCE_ALLOW_SNOW_FOOT_VFX_ON_ICE(BOOL toggle);
+		void USE_SNOW_FOOT_VFX_WHEN_UNSHELTERED(bool toggle);
+		void _FORCE_ALLOW_SNOW_FOOT_VFX_ON_ICE(bool toggle);
 		/**
 		 * Forces vehicle trails on all surfaces.
 		 */
-		void USE_SNOW_WHEEL_VFX_WHEN_UNSHELTERED(BOOL toggle);
+		void USE_SNOW_WHEEL_VFX_WHEN_UNSHELTERED(bool toggle);
 		void DISABLE_REGION_VFX(Any p0);
-		void _FORCE_GROUND_SNOW_PASS(BOOL toggle);
+		void _FORCE_GROUND_SNOW_PASS(bool toggle);
 		/**
 		 * Only one match in the scripts:
 		 * 
@@ -4584,7 +4584,7 @@ namespace base::menu::natives {
 		 */
 		int GET_TIMECYCLE_MODIFIER_INDEX();
 		int GET_TIMECYCLE_TRANSITION_MODIFIER_INDEX();
-		BOOL GET_IS_TIMECYCLE_TRANSITIONING_OUT();
+		bool GET_IS_TIMECYCLE_TRANSITIONING_OUT();
 		void PUSH_TIMECYCLE_MODIFIER();
 		void POP_TIMECYCLE_MODIFIER();
 		void SET_CURRENT_PLAYER_TCMODIFIER(const char* modifierName);
@@ -4633,16 +4633,16 @@ namespace base::menu::natives {
 		 * 
 		 */
 		int REQUEST_SCALEFORM_MOVIE_SKIP_RENDER_WHILE_PAUSED(const char* scaleformName);
-		BOOL HAS_SCALEFORM_MOVIE_LOADED(int scaleformHandle);
-		BOOL _HAS_SCALEFORM_MOVIE_NAMED_LOADED(int* scaleformHandle, const char* scaleformName);
+		bool HAS_SCALEFORM_MOVIE_LOADED(int scaleformHandle);
+		bool _HAS_SCALEFORM_MOVIE_NAMED_LOADED(int* scaleformHandle, const char* scaleformName);
 		/**
 		 * val is 1-20 (0 will return false)
 		 */
-		BOOL IS_ACTIVE_SCALEFORM_MOVIE_DELETING(int val);
+		bool IS_ACTIVE_SCALEFORM_MOVIE_DELETING(int val);
 		/**
 		 * val is 1-20. Return is related to INSTRUCTIONAL_BUTTONS, COLOUR_SWITCHER_02, etc?
 		 */
-		BOOL IS_SCALEFORM_MOVIE_DELETING(int val);
+		bool IS_SCALEFORM_MOVIE_DELETING(int val);
 		/**
 		 * Only values used in the scripts are:
 		 * 
@@ -4651,16 +4651,16 @@ namespace base::menu::natives {
 		 * "instructional_buttons"
 		 * "heist_pre"
 		 */
-		BOOL HAS_SCALEFORM_MOVIE_FILENAME_LOADED(const char* scaleformName);
-		BOOL HAS_SCALEFORM_CONTAINER_MOVIE_LOADED_INTO_PARENT(int scaleformHandle);
+		bool HAS_SCALEFORM_MOVIE_FILENAME_LOADED(const char* scaleformName);
+		bool HAS_SCALEFORM_CONTAINER_MOVIE_LOADED_INTO_PARENT(int scaleformHandle);
 		void SET_SCALEFORM_MOVIE_AS_NO_LONGER_NEEDED(int* scaleformHandle);
 		void _SET_SCALEFORM_MOVIE_NAMED_AS_NO_LONGER_NEEDED(int scaleformHandle, const char* scaleformName);
-		void SET_SCALEFORM_MOVIE_TO_USE_SYSTEM_TIME(int scaleform, BOOL toggle);
-		void SET_SCALEFORM_MOVIE_TO_USE_LARGE_RT(int scaleformHandle, BOOL toggle);
+		void SET_SCALEFORM_MOVIE_TO_USE_SYSTEM_TIME(int scaleform, bool toggle);
+		void SET_SCALEFORM_MOVIE_TO_USE_LARGE_RT(int scaleformHandle, bool toggle);
 		/**
 		 * This native is used in some casino scripts to fit the scaleform in the rendertarget.
 		 */
-		void SET_SCALEFORM_MOVIE_TO_USE_SUPER_LARGE_RT(int scaleformHandle, BOOL toggle);
+		void SET_SCALEFORM_MOVIE_TO_USE_SUPER_LARGE_RT(int scaleformHandle, bool toggle);
 		void DRAW_SCALEFORM_MOVIE(int scaleformHandle, float x, float y, float width, float height, int red, int green, int blue, int alpha, int p9);
 		/**
 		 * unk is not used so no need
@@ -4709,23 +4709,23 @@ namespace base::menu::natives {
 		 * 
 		 * This native requires more research - all information can be found inside of 'hud.gfx'. Using a decompiler, the different components are located under "scripts\__Packages\com\rockstargames\gtav\hud\hudComponents" and "scripts\__Packages\com\rockstargames\gtav\Multiplayer".
 		 */
-		BOOL BEGIN_SCALEFORM_SCRIPT_HUD_MOVIE_METHOD(int hudComponent, const char* methodName);
+		bool BEGIN_SCALEFORM_SCRIPT_HUD_MOVIE_METHOD(int hudComponent, const char* methodName);
 		/**
 		 * Push a function from the Scaleform onto the stack
 		 * 
 		 */
-		BOOL BEGIN_SCALEFORM_MOVIE_METHOD(int scaleform, const char* methodName);
+		bool BEGIN_SCALEFORM_MOVIE_METHOD(int scaleform, const char* methodName);
 		/**
 		 * Starts frontend (pause menu) scaleform movie methods.
 		 * This can be used when you want to make custom frontend menus, and customize things like images or text in the menus etc.
 		 * Use `BEGIN_SCALEFORM_MOVIE_METHOD_ON_FRONTEND_HEADER` for header scaleform functions.
 		 */
-		BOOL BEGIN_SCALEFORM_MOVIE_METHOD_ON_FRONTEND(const char* methodName);
+		bool BEGIN_SCALEFORM_MOVIE_METHOD_ON_FRONTEND(const char* methodName);
 		/**
 		 * Starts frontend (pause menu) scaleform movie methods for header options.
 		 * Use `BEGIN_SCALEFORM_MOVIE_METHOD_ON_FRONTEND` to customize the content inside the frontend menus.
 		 */
-		BOOL BEGIN_SCALEFORM_MOVIE_METHOD_ON_FRONTEND_HEADER(const char* methodName);
+		bool BEGIN_SCALEFORM_MOVIE_METHOD_ON_FRONTEND_HEADER(const char* methodName);
 		/**
 		 * Pops and calls the Scaleform function on the stack
 		 */
@@ -4735,7 +4735,7 @@ namespace base::menu::natives {
 		 * methodReturn: The return value of this native: END_SCALEFORM_MOVIE_METHOD_RETURN_VALUE
 		 * Returns true if the return value of a scaleform function is ready to be collected (using GET_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_STRING or GET_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_INT).
 		 */
-		BOOL IS_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_READY(int methodReturn);
+		bool IS_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_READY(int methodReturn);
 		/**
 		 * methodReturn: The return value of this native: END_SCALEFORM_MOVIE_METHOD_RETURN_VALUE
 		 * Used to get a return value from a scaleform function. Returns an int in the same way GET_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_STRING returns a string.
@@ -4744,7 +4744,7 @@ namespace base::menu::natives {
 		/**
 		 * methodReturn: The return value of this native: END_SCALEFORM_MOVIE_METHOD_RETURN_VALUE
 		 */
-		BOOL GET_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_BOOL(int methodReturn);
+		bool GET_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_BOOL(int methodReturn);
 		/**
 		 * methodReturn: The return value of this native: END_SCALEFORM_MOVIE_METHOD_RETURN_VALUE
 		 * Used to get a return value from a scaleform function. Returns a string in the same way GET_SCALEFORM_MOVIE_METHOD_RETURN_VALUE_INT returns an int.
@@ -4761,7 +4761,7 @@ namespace base::menu::natives {
 		/**
 		 * Pushes a boolean for the Scaleform function onto the stack.
 		 */
-		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_BOOL(BOOL value);
+		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_BOOL(bool value);
 		/**
 		 * Called prior to adding a text component to the UI. After doing so, GRAPHICS::END_TEXT_COMMAND_SCALEFORM_STRING is called.
 		 * 
@@ -4796,12 +4796,12 @@ namespace base::menu::natives {
 		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_LITERAL_STRING(const char* string);
 		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_TEXTURE_NAME_STRING(const char* string);
 		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_PLAYER_NAME_STRING(const char* string);
-		BOOL DOES_LATEST_BRIEF_STRING_EXIST(int p0);
+		bool DOES_LATEST_BRIEF_STRING_EXIST(int p0);
 		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_LATEST_BRIEF_STRING(int value);
 		void REQUEST_SCALEFORM_SCRIPT_HUD_MOVIE(int hudComponent);
-		BOOL HAS_SCALEFORM_SCRIPT_HUD_MOVIE_LOADED(int hudComponent);
+		bool HAS_SCALEFORM_SCRIPT_HUD_MOVIE_LOADED(int hudComponent);
 		void REMOVE_SCALEFORM_SCRIPT_HUD_MOVIE(int hudComponent);
-		BOOL PASS_KEYBOARD_INPUT_TO_SCALEFORM(int scaleformHandle);
+		bool PASS_KEYBOARD_INPUT_TO_SCALEFORM(int scaleformHandle);
 		void SET_TV_CHANNEL(int channel);
 		int GET_TV_CHANNEL();
 		void SET_TV_VOLUME(float volume);
@@ -4866,38 +4866,38 @@ namespace base::menu::natives {
 		 * The above playlists work as intended, and are commonly used, but there are many more playlists, as seen in `tvplaylists.xml`. A pastebin below outlines all playlists, they will be surronded by the name tag I.E. (<Name>PL_STD_CNT</Name> = PL_STD_CNT).
 		 * https://pastebin.com/zUzGB6h7
 		 */
-		void SET_TV_CHANNEL_PLAYLIST(int tvChannel, const char* playlistName, BOOL restart);
+		void SET_TV_CHANNEL_PLAYLIST(int tvChannel, const char* playlistName, bool restart);
 		void SET_TV_CHANNEL_PLAYLIST_AT_HOUR(int tvChannel, const char* playlistName, int hour);
 		/**
 		 * Does not actually return anything.
 		 */
-		Any _SET_TV_CHANNEL_PLAYLIST_DIRTY(int tvChannel, BOOL p1);
+		Any _SET_TV_CHANNEL_PLAYLIST_DIRTY(int tvChannel, bool p1);
 		void CLEAR_TV_CHANNEL_PLAYLIST(int tvChannel);
-		BOOL IS_PLAYLIST_ON_CHANNEL(int tvChannel, Any p1);
-		BOOL IS_TVSHOW_CURRENTLY_PLAYING(Hash videoCliphash);
-		void ENABLE_MOVIE_KEYFRAME_WAIT(BOOL toggle);
+		bool IS_PLAYLIST_ON_CHANNEL(int tvChannel, Any p1);
+		bool IS_TVSHOW_CURRENTLY_PLAYING(Hash videoCliphash);
+		void ENABLE_MOVIE_KEYFRAME_WAIT(bool toggle);
 		void SET_TV_PLAYER_WATCHING_THIS_FRAME(Any p0);
 		Hash GET_CURRENT_TV_CLIP_NAMEHASH();
-		void ENABLE_MOVIE_SUBTITLES(BOOL toggle);
-		BOOL UI3DSCENE_IS_AVAILABLE();
+		void ENABLE_MOVIE_SUBTITLES(bool toggle);
+		bool UI3DSCENE_IS_AVAILABLE();
 		/**
 		 * All presets can be found in common\data\ui\uiscenes.meta
 		 */
-		BOOL UI3DSCENE_PUSH_PRESET(const char* presetName);
+		bool UI3DSCENE_PUSH_PRESET(const char* presetName);
 		/**
 		 * It's called after UI3DSCENE_IS_AVAILABLE and UI3DSCENE_PUSH_PRESET
 		 * 
 		 * presetName was always "CELEBRATION_WINNER"
 		 * All presets can be found in common\data\ui\uiscenes.meta
 		 */
-		BOOL UI3DSCENE_ASSIGN_PED_TO_SLOT(const char* presetName, Ped ped, int slot, float posX, float posY, float posZ);
+		bool UI3DSCENE_ASSIGN_PED_TO_SLOT(const char* presetName, Ped ped, int slot, float posX, float posY, float posZ);
 		void UI3DSCENE_CLEAR_PATCHED_DATA();
-		void UI3DSCENE_MAKE_PUSHED_PRESET_PERSISTENT(BOOL toggle);
+		void UI3DSCENE_MAKE_PUSHED_PRESET_PERSISTENT(bool toggle);
 		/**
 		 * This native enables/disables the gold putting grid display (https://i.imgur.com/TC6cku6.png).
 		 * This requires these two natives to be called as well to configure the grid: `TERRAINGRID_SET_PARAMS` and `TERRAINGRID_SET_COLOURS`.
 		 */
-		void TERRAINGRID_ACTIVATE(BOOL toggle);
+		void TERRAINGRID_ACTIVATE(bool toggle);
 		/**
 		 * This native is used along with these two natives: `TERRAINGRID_ACTIVATE` and `TERRAINGRID_SET_COLOURS`.
 		 * This native configures the location, size, rotation, normal height, and the difference ratio between min, normal and max.
@@ -4923,7 +4923,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of animpostFX / screen effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animPostFxNamesCompact.json
 		 */
-		void ANIMPOSTFX_PLAY(const char* effectName, int duration, BOOL looped);
+		void ANIMPOSTFX_PLAY(const char* effectName, int duration, bool looped);
 		/**
 		 * See ANIMPOSTFX_PLAY
 		 * 
@@ -4942,7 +4942,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of animpostFX / screen effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animPostFxNamesCompact.json
 		 */
-		BOOL ANIMPOSTFX_IS_RUNNING(const char* effectName);
+		bool ANIMPOSTFX_IS_RUNNING(const char* effectName);
 		/**
 		 * Stops ALL currently playing effects.
 		 */
@@ -5014,9 +5014,9 @@ namespace base::menu::natives {
 		 */
 		void BUSYSPINNER_OFF();
 		void PRELOAD_BUSYSPINNER();
-		BOOL BUSYSPINNER_IS_ON();
-		BOOL BUSYSPINNER_IS_DISPLAYING();
-		void DISABLE_PAUSEMENU_SPINNER(BOOL p0);
+		bool BUSYSPINNER_IS_ON();
+		bool BUSYSPINNER_IS_DISPLAYING();
+		void DISABLE_PAUSEMENU_SPINNER(bool p0);
 		/**
 		 * Shows the cursor on screen for one frame.
 		 */
@@ -5032,13 +5032,13 @@ namespace base::menu::natives {
 		 * Shows/hides the frontend cursor on the pause menu or similar menus.
 		 * Clicking off and then on the game window will show it again.
 		 */
-		void SET_MOUSE_CURSOR_VISIBLE(BOOL toggle);
+		void SET_MOUSE_CURSOR_VISIBLE(bool toggle);
 		/**
 		 * Returns TRUE if mouse is hovering above instructional buttons. Works with all buttons gfx, such as popup_warning, pause_menu_instructional_buttons, instructional_buttons, etc. Note: You have to call TOGGLE_MOUSE_BUTTONS on the scaleform if you want this native to work.
 		 */
-		BOOL IS_MOUSE_ROLLED_OVER_INSTRUCTIONAL_BUTTONS();
-		BOOL GET_MOUSE_EVENT(int scaleformHandle, Any* p1, Any* p2, Any* p3);
-		void THEFEED_ONLY_SHOW_TOOLTIPS(BOOL toggle);
+		bool IS_MOUSE_ROLLED_OVER_INSTRUCTIONAL_BUTTONS();
+		bool GET_MOUSE_EVENT(int scaleformHandle, Any* p1, Any* p2, Any* p3);
+		void THEFEED_ONLY_SHOW_TOOLTIPS(bool toggle);
 		void THEFEED_SET_SCRIPTED_MENU_HEIGHT(float pos);
 		/**
 		 * Stops loading screen tips shown by invoking `THEFEED_SHOW`
@@ -5064,7 +5064,7 @@ namespace base::menu::natives {
 		void THEFEED_FORCE_RENDER_OFF();
 		void THEFEED_PAUSE();
 		void THEFEED_RESUME();
-		BOOL THEFEED_IS_PAUSED();
+		bool THEFEED_IS_PAUSED();
 		void THEFEED_REPORT_LOGO_ON();
 		void THEFEED_REPORT_LOGO_OFF();
 		/**
@@ -5098,14 +5098,14 @@ namespace base::menu::natives {
 		 * Related to notification color flashing, setting count to 0 invalidates a `THEFEED_SET_RGBA_PARAMETER_FOR_NEXT_MESSAGE` call for the target notification.
 		 */
 		void THEFEED_SET_FLASH_DURATION_PARAMETER_FOR_NEXT_MESSAGE(int count);
-		void THEFEED_SET_VIBRATE_PARAMETER_FOR_NEXT_MESSAGE(BOOL toggle);
+		void THEFEED_SET_VIBRATE_PARAMETER_FOR_NEXT_MESSAGE(bool toggle);
 		void THEFEED_RESET_ALL_PARAMETERS();
 		/**
 		 * Requires manual management of game stream handles (i.e., 0xBE4390CB40B3E627).
 		 */
 		void THEFEED_FREEZE_NEXT_POST();
 		void THEFEED_CLEAR_FROZEN_POST();
-		void THEFEED_SET_SNAP_FEED_ITEM_POSITIONS(BOOL p0);
+		void THEFEED_SET_SNAP_FEED_ITEM_POSITIONS(bool p0);
 		/**
 		 * Used in the native scripts to reference "GET_PEDHEADSHOT_TXD_STRING" and "CHAR_DEFAULT".
 		 */
@@ -5125,7 +5125,7 @@ namespace base::menu::natives {
 		 * List of picture names: https://pastebin.com/XdpJVbHz
 		 * Example result: https://i.imgur.com/SdEZ22m.png
 		 */
-		int END_TEXT_COMMAND_THEFEED_POST_STATS(const char* statTitle, int iconEnum, BOOL stepVal, int barValue, BOOL isImportant, const char* pictureTextureDict, const char* pictureTextureName);
+		int END_TEXT_COMMAND_THEFEED_POST_STATS(const char* statTitle, int iconEnum, bool stepVal, int barValue, bool isImportant, const char* pictureTextureDict, const char* pictureTextureName);
 		/**
 		 * This function can show pictures of every texture that can be requested by REQUEST_STREAMED_TEXTURE_DICT.
 		 * 
@@ -5147,7 +5147,7 @@ namespace base::menu::natives {
 		 * "sender" is the very top header. This can be any old string.
 		 * "subject" is the header under the sender.
 		 */
-		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT(const char* txdName, const char* textureName, BOOL flash, int iconType, const char* sender, const char* subject);
+		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT(const char* txdName, const char* textureName, bool flash, int iconType, const char* sender, const char* subject);
 		/**
 		 * This function can show pictures of every texture that can be requested by REQUEST_STREAMED_TEXTURE_DICT.
 		 * 
@@ -5157,7 +5157,7 @@ namespace base::menu::natives {
 		 * 
 		 * HUD::END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_SUBTITLE_LABEL("CHAR_ACTING_UP", "CHAR_ACTING_UP", 0, 0, "DI_FEED_CHAR", a_0);
 		 */
-		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_SUBTITLE_LABEL(const char* txdName, const char* textureName, BOOL flash, int iconType, const char* sender, const char* subject);
+		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_SUBTITLE_LABEL(const char* txdName, const char* textureName, bool flash, int iconType, const char* sender, const char* subject);
 		/**
 		 * This function can show pictures of every texture that can be requested by REQUEST_STREAMED_TEXTURE_DICT.
 		 * 
@@ -5166,7 +5166,7 @@ namespace base::menu::natives {
 		 * Example, only occurrence in the scripts:
 		 * v_8 = HUD::END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_TU("CHAR_SOCIAL_CLUB", "CHAR_SOCIAL_CLUB", 0, 0, &v_9, "", a_5);
 		 */
-		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_TU(const char* txdName, const char* textureName, BOOL flash, int iconType, const char* sender, const char* subject, float duration);
+		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_TU(const char* txdName, const char* textureName, bool flash, int iconType, const char* sender, const char* subject, float duration);
 		/**
 		 * This function can show pictures of every texture that can be requested by REQUEST_STREAMED_TEXTURE_DICT.
 		 * 
@@ -5189,7 +5189,7 @@ namespace base::menu::natives {
 		 * "duration" is a multiplier, so 1.0 is normal, 2.0 is twice as long (very slow), and 0.5 is half as long.
 		 * "clanTag" shows a crew tag in the "sender" header, after the text. You need to use 3 underscores as padding. Maximum length of this field seems to be 7. (e.g. "MK" becomes "___MK", "ACE" becomes "___ACE", etc.)
 		 */
-		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_WITH_CREW_TAG(const char* txdName, const char* textureName, BOOL flash, int iconType, const char* sender, const char* subject, float duration, const char* clanTag);
+		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_WITH_CREW_TAG(const char* txdName, const char* textureName, bool flash, int iconType, const char* sender, const char* subject, float duration, const char* clanTag);
 		/**
 		 * This function can show pictures of every texture that can be requested by REQUEST_STREAMED_TEXTURE_DICT.
 		 * 
@@ -5222,10 +5222,10 @@ namespace base::menu::natives {
 		 * return END_TEXT_COMMAND_THEFEED_POST_TICKER(1, 1);
 		 * }
 		 */
-		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_WITH_CREW_TAG_AND_ADDITIONAL_ICON(const char* txdName, const char* textureName, BOOL flash, int iconType1, const char* sender, const char* subject, float duration, const char* clanTag, int iconType2, int p9);
-		int END_TEXT_COMMAND_THEFEED_POST_TICKER(BOOL blink, BOOL p1);
-		int END_TEXT_COMMAND_THEFEED_POST_TICKER_FORCED(BOOL blink, BOOL p1);
-		int END_TEXT_COMMAND_THEFEED_POST_TICKER_WITH_TOKENS(BOOL blink, BOOL p1);
+		int END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_WITH_CREW_TAG_AND_ADDITIONAL_ICON(const char* txdName, const char* textureName, bool flash, int iconType1, const char* sender, const char* subject, float duration, const char* clanTag, int iconType2, int p9);
+		int END_TEXT_COMMAND_THEFEED_POST_TICKER(bool blink, bool p1);
+		int END_TEXT_COMMAND_THEFEED_POST_TICKER_FORCED(bool blink, bool p1);
+		int END_TEXT_COMMAND_THEFEED_POST_TICKER_WITH_TOKENS(bool blink, bool p1);
 		/**
 		 * Shows an "award" notification above the minimap, example: https://i.imgur.com/e2DNaKX.png
 		 * Example:
@@ -5234,13 +5234,13 @@ namespace base::menu::natives {
 		 * HUD::END_TEXT_COMMAND_THEFEED_POST_AWARD("Hunting", "Hunting_Gold_128", 0, 109, "HUD_MED_UNLKED");
 		 */
 		int END_TEXT_COMMAND_THEFEED_POST_AWARD(const char* textureDict, const char* textureName, int rpBonus, int colorOverlay, const char* titleLabel);
-		int END_TEXT_COMMAND_THEFEED_POST_CREWTAG(BOOL p0, BOOL p1, int* p2, int p3, BOOL isLeader, BOOL unk0, int clanDesc, int R, int G, int B);
-		int END_TEXT_COMMAND_THEFEED_POST_CREWTAG_WITH_GAME_NAME(BOOL p0, BOOL p1, int* p2, int p3, BOOL isLeader, BOOL unk0, int clanDesc, const char* playerName, int R, int G, int B);
+		int END_TEXT_COMMAND_THEFEED_POST_CREWTAG(bool p0, bool p1, int* p2, int p3, bool isLeader, bool unk0, int clanDesc, int R, int G, int B);
+		int END_TEXT_COMMAND_THEFEED_POST_CREWTAG_WITH_GAME_NAME(bool p0, bool p1, int* p2, int p3, bool isLeader, bool unk0, int clanDesc, const char* playerName, int R, int G, int B);
 		int END_TEXT_COMMAND_THEFEED_POST_UNLOCK(const char* gxtLabel1, int p1, const char* gxtLabel2);
 		int END_TEXT_COMMAND_THEFEED_POST_UNLOCK_TU(const char* gxtLabel1, int p1, const char* gxtLabel2, int p3);
 		int END_TEXT_COMMAND_THEFEED_POST_UNLOCK_TU_WITH_COLOR(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5);
-		int END_TEXT_COMMAND_THEFEED_POST_MPTICKER(BOOL blink, BOOL p1);
-		int END_TEXT_COMMAND_THEFEED_POST_CREW_RANKUP_WITH_LITERAL_FLAG(const char* p0, const char* p1, const char* p2, BOOL p3, BOOL p4);
+		int END_TEXT_COMMAND_THEFEED_POST_MPTICKER(bool blink, bool p1);
+		int END_TEXT_COMMAND_THEFEED_POST_CREW_RANKUP_WITH_LITERAL_FLAG(const char* p0, const char* p1, const char* p2, bool p3, bool p4);
 		/**
 		 * This function can show pictures of every texture that can be requested by REQUEST_STREAMED_TEXTURE_DICT.
 		 * 
@@ -5296,7 +5296,7 @@ namespace base::menu::natives {
 		 * 
 		 * Used to be known as _DRAW_SUBTITLE_TIMED
 		 */
-		void END_TEXT_COMMAND_PRINT(int duration, BOOL drawImmediately);
+		void END_TEXT_COMMAND_PRINT(int duration, bool drawImmediately);
 		/**
 		 * nothin doin.
 		 * 
@@ -5308,7 +5308,7 @@ namespace base::menu::natives {
 		 * }
 		 */
 		void BEGIN_TEXT_COMMAND_IS_MESSAGE_DISPLAYED(const char* text);
-		BOOL END_TEXT_COMMAND_IS_MESSAGE_DISPLAYED();
+		bool END_TEXT_COMMAND_IS_MESSAGE_DISPLAYED();
 		/**
 		 * The following were found in the decompiled script files:
 		 * STRING, TWOSTRINGS, NUMBER, PERCENTAGE, FO_TWO_NUM, ESMINDOLLA, ESDOLLA, MTPHPER_XPNO, AHD_DIST, CMOD_STAT_0, CMOD_STAT_1, CMOD_STAT_2, CMOD_STAT_3, DFLT_MNU_OPT, F3A_TRAFDEST, ES_HELP_SOC3
@@ -5326,7 +5326,7 @@ namespace base::menu::natives {
 		 */
 		void END_TEXT_COMMAND_DISPLAY_TEXT(float x, float y, int p2);
 		void BEGIN_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT(const char* text);
-		float END_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT(BOOL p0);
+		float END_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT(bool p0);
 		/**
 		 * int GetLineCount(char *text, float x, float y)
 		 * {
@@ -5365,7 +5365,7 @@ namespace base::menu::natives {
 		 * 
 		 * Used to be known as _DISPLAY_HELP_TEXT_FROM_STRING_LABEL
 		 */
-		void END_TEXT_COMMAND_DISPLAY_HELP(int p0, BOOL loop, BOOL beep, int shape);
+		void END_TEXT_COMMAND_DISPLAY_HELP(int p0, bool loop, bool beep, int shape);
 		/**
 		 * BOOL IsContextActive(char *ctx)
 		 * {
@@ -5374,7 +5374,7 @@ namespace base::menu::natives {
 		 * }
 		 */
 		void BEGIN_TEXT_COMMAND_IS_THIS_HELP_MESSAGE_BEING_DISPLAYED(const char* labelName);
-		BOOL END_TEXT_COMMAND_IS_THIS_HELP_MESSAGE_BEING_DISPLAYED(int p0);
+		bool END_TEXT_COMMAND_IS_THIS_HELP_MESSAGE_BEING_DISPLAYED(int p0);
 		/**
 		 * Starts a text command to change the name of a blip displayed in the pause menu.
 		 * This should be paired with `END_TEXT_COMMAND_SET_BLIP_NAME`, once adding all required text components.
@@ -5390,7 +5390,7 @@ namespace base::menu::natives {
 		 */
 		void END_TEXT_COMMAND_SET_BLIP_NAME(Blip blip);
 		void BEGIN_TEXT_COMMAND_ADD_DIRECTLY_TO_PREVIOUS_BRIEFS(const char* p0);
-		void END_TEXT_COMMAND_ADD_DIRECTLY_TO_PREVIOUS_BRIEFS(BOOL p0);
+		void END_TEXT_COMMAND_ADD_DIRECTLY_TO_PREVIOUS_BRIEFS(bool p0);
 		/**
 		 * clears a print text command with this text
 		 */
@@ -5411,7 +5411,7 @@ namespace base::menu::natives {
 		 * Adds a timer (e.g. "00:00:00:000"). The appearance of the timer depends on the flags, which needs more research.
 		 */
 		void ADD_TEXT_COMPONENT_SUBSTRING_TIME(int timestamp, int flags);
-		void ADD_TEXT_COMPONENT_FORMATTED_INTEGER(int value, BOOL commaSeparated);
+		void ADD_TEXT_COMPONENT_FORMATTED_INTEGER(int value, bool commaSeparated);
 		/**
 		 * p1 was always -1
 		 */
@@ -5476,24 +5476,24 @@ namespace base::menu::natives {
 		 */
 		void CLEAR_THIS_PRINT(const char* p0);
 		void CLEAR_SMALL_PRINTS();
-		BOOL DOES_TEXT_BLOCK_EXIST(const char* gxt);
+		bool DOES_TEXT_BLOCK_EXIST(const char* gxt);
 		/**
 		 * Request a gxt into the passed slot.
 		 */
 		void REQUEST_ADDITIONAL_TEXT(const char* gxt, int slot);
 		void REQUEST_ADDITIONAL_TEXT_FOR_DLC(const char* gxt, int slot);
-		BOOL HAS_ADDITIONAL_TEXT_LOADED(int slot);
-		void CLEAR_ADDITIONAL_TEXT(int p0, BOOL p1);
-		BOOL IS_STREAMING_ADDITIONAL_TEXT(int p0);
+		bool HAS_ADDITIONAL_TEXT_LOADED(int slot);
+		void CLEAR_ADDITIONAL_TEXT(int p0, bool p1);
+		bool IS_STREAMING_ADDITIONAL_TEXT(int p0);
 		/**
 		 * Checks if the specified gxt has loaded into the passed slot.
 		 */
-		BOOL HAS_THIS_ADDITIONAL_TEXT_LOADED(const char* gxt, int slot);
-		BOOL IS_MESSAGE_BEING_DISPLAYED();
+		bool HAS_THIS_ADDITIONAL_TEXT_LOADED(const char* gxt, int slot);
+		bool IS_MESSAGE_BEING_DISPLAYED();
 		/**
 		 * Checks if the passed gxt name exists in the game files.
 		 */
-		BOOL DOES_TEXT_LABEL_EXIST(const char* gxt);
+		bool DOES_TEXT_LABEL_EXIST(const char* gxt);
 		const char* GET_FIRST_N_CHARACTERS_OF_LITERAL_STRING(const char* string, int length);
 		/**
 		 * Returns the string length of the string from the gxt string .
@@ -5510,13 +5510,13 @@ namespace base::menu::natives {
 		 * For how to get the hashes, see PATHFIND::GET_STREET_NAME_AT_COORD.
 		 */
 		const char* GET_STREET_NAME_FROM_HASH_KEY(Hash hash);
-		BOOL IS_HUD_PREFERENCE_SWITCHED_ON();
-		BOOL IS_RADAR_PREFERENCE_SWITCHED_ON();
-		BOOL IS_SUBTITLE_PREFERENCE_SWITCHED_ON();
+		bool IS_HUD_PREFERENCE_SWITCHED_ON();
+		bool IS_RADAR_PREFERENCE_SWITCHED_ON();
+		bool IS_SUBTITLE_PREFERENCE_SWITCHED_ON();
 		/**
 		 * If Hud should be displayed
 		 */
-		void DISPLAY_HUD(BOOL toggle);
+		void DISPLAY_HUD(bool toggle);
 		/**
 		 * Enables drawing some hud components, such as help labels, this frame, when the player is dead.
 		 */
@@ -5525,32 +5525,32 @@ namespace base::menu::natives {
 		/**
 		 * If Minimap / Radar should be displayed.
 		 */
-		void DISPLAY_RADAR(BOOL toggle);
+		void DISPLAY_RADAR(bool toggle);
 		/**
 		 * Setter for GET_FAKE_SPECTATOR_MODE
 		 */
-		void SET_FAKE_SPECTATOR_MODE(BOOL toggle);
+		void SET_FAKE_SPECTATOR_MODE(bool toggle);
 		/**
 		 * Getter for SET_FAKE_SPECTATOR_MODE
 		 */
-		BOOL GET_FAKE_SPECTATOR_MODE();
-		BOOL IS_HUD_HIDDEN();
-		BOOL IS_RADAR_HIDDEN();
-		BOOL IS_MINIMAP_RENDERING();
+		bool GET_FAKE_SPECTATOR_MODE();
+		bool IS_HUD_HIDDEN();
+		bool IS_RADAR_HIDDEN();
+		bool IS_MINIMAP_RENDERING();
 		void USE_VEHICLE_TARGETING_RETICULE(Any p0);
-		void _USE_VEHICLE_TARGETING_RETICULE_ON_VEHICLES(BOOL enable);
+		void _USE_VEHICLE_TARGETING_RETICULE_ON_VEHICLES(bool enable);
 		void ADD_VALID_VEHICLE_HIT_HASH(Any p0);
 		void CLEAR_VALID_VEHICLE_HIT_HASHES();
 		/**
 		 * Enable / disable showing route for the Blip-object.
 		 */
-		void SET_BLIP_ROUTE(Blip blip, BOOL enabled);
+		void SET_BLIP_ROUTE(Blip blip, bool enabled);
 		void CLEAR_ALL_BLIP_ROUTES();
 		void SET_BLIP_ROUTE_COLOUR(Blip blip, int colour);
-		void SET_FORCE_SHOW_GPS(BOOL toggle);
-		void SET_USE_SET_DESTINATION_IN_PAUSE_MAP(BOOL toggle);
-		void SET_BLOCK_WANTED_FLASH(BOOL disabled);
-		void ADD_NEXT_MESSAGE_TO_PREVIOUS_BRIEFS(BOOL p0);
+		void SET_FORCE_SHOW_GPS(bool toggle);
+		void SET_USE_SET_DESTINATION_IN_PAUSE_MAP(bool toggle);
+		void SET_BLOCK_WANTED_FLASH(bool disabled);
+		void ADD_NEXT_MESSAGE_TO_PREVIOUS_BRIEFS(bool p0);
 		void FORCE_NEXT_MESSAGE_TO_PREVIOUS_BRIEFS_LIST(int p0);
 		/**
 		 * zoom ranges from 0 to 90f in R* Scripts
@@ -5580,12 +5580,12 @@ namespace base::menu::natives {
 		 */
 		void REPLACE_HUD_COLOUR(int hudColorIndex, int hudColorIndex2);
 		void REPLACE_HUD_COLOUR_WITH_RGBA(int hudColorIndex, int r, int g, int b, int a);
-		void SET_ABILITY_BAR_VISIBILITY(BOOL visible);
-		void SET_ALLOW_ABILITY_BAR(BOOL toggle);
+		void SET_ABILITY_BAR_VISIBILITY(bool visible);
+		void SET_ALLOW_ABILITY_BAR(bool toggle);
 		void FLASH_ABILITY_BAR(int millisecondsToFlash);
 		void SET_ABILITY_BAR_VALUE(float p0, float p1);
-		void FLASH_WANTED_DISPLAY(BOOL p0);
-		void FORCE_OFF_WANTED_STAR_FLASH(BOOL toggle);
+		void FLASH_WANTED_DISPLAY(bool p0);
+		void FORCE_OFF_WANTED_STAR_FLASH(bool toggle);
 		void SET_CUSTOM_MP_HUD_COLOR(int hudColorId);
 		/**
 		 * This gets the height of the FONT and not the total text. You need to get the number of lines your text uses, and get the height of a newline (I'm using a smaller value) to get the total text height.
@@ -5601,8 +5601,8 @@ namespace base::menu::natives {
 		 * A: for some reason its R B G A
 		 */
 		void SET_TEXT_COLOUR(int red, int green, int blue, int alpha);
-		void SET_TEXT_CENTRE(BOOL align);
-		void SET_TEXT_RIGHT_JUSTIFY(BOOL toggle);
+		void SET_TEXT_CENTRE(bool align);
+		void SET_TEXT_RIGHT_JUSTIFY(bool toggle);
 		/**
 		 * Types -
 		 * 0: Center-Justify
@@ -5624,7 +5624,7 @@ namespace base::menu::natives {
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
-		void SET_TEXT_PROPORTIONAL(BOOL p0);
+		void SET_TEXT_PROPORTIONAL(bool p0);
 		/**
 		 * fonts that mess up your text where made for number values/misc stuff
 		 */
@@ -5645,17 +5645,17 @@ namespace base::menu::natives {
 		 * This function is hard-coded to always return 1.
 		 */
 		int GET_DEFAULT_SCRIPT_RENDERTARGET_RENDER_ID();
-		BOOL REGISTER_NAMED_RENDERTARGET(const char* name, BOOL p1);
-		BOOL IS_NAMED_RENDERTARGET_REGISTERED(const char* name);
-		BOOL RELEASE_NAMED_RENDERTARGET(const char* name);
+		bool REGISTER_NAMED_RENDERTARGET(const char* name, bool p1);
+		bool IS_NAMED_RENDERTARGET_REGISTERED(const char* name);
+		bool RELEASE_NAMED_RENDERTARGET(const char* name);
 		void LINK_NAMED_RENDERTARGET(Hash modelHash);
 		int GET_NAMED_RENDERTARGET_RENDER_ID(const char* name);
-		BOOL IS_NAMED_RENDERTARGET_LINKED(Hash modelHash);
-		void CLEAR_HELP(BOOL toggle);
-		BOOL IS_HELP_MESSAGE_ON_SCREEN();
-		BOOL HAS_SCRIPT_HIDDEN_HELP_THIS_FRAME();
-		BOOL IS_HELP_MESSAGE_BEING_DISPLAYED();
-		BOOL IS_HELP_MESSAGE_FADING_OUT();
+		bool IS_NAMED_RENDERTARGET_LINKED(Hash modelHash);
+		void CLEAR_HELP(bool toggle);
+		bool IS_HELP_MESSAGE_ON_SCREEN();
+		bool HAS_SCRIPT_HIDDEN_HELP_THIS_FRAME();
+		bool IS_HELP_MESSAGE_BEING_DISPLAYED();
+		bool IS_HELP_MESSAGE_FADING_OUT();
 		void SET_HELP_MESSAGE_STYLE(int style, int hudColor, int alpha, int p3, int p4);
 		int GET_STANDARD_BLIP_ENUM_ID();
 		int GET_WAYPOINT_BLIP_ENUM_ID();
@@ -5715,7 +5715,7 @@ namespace base::menu::natives {
 		 */
 		Blip ADD_BLIP_FOR_COORD(float x, float y, float z);
 		void TRIGGER_SONAR_BLIP(float posX, float posY, float posZ, float radius, int p4);
-		void ALLOW_SONAR_BLIPS(BOOL toggle);
+		void ALLOW_SONAR_BLIPS(bool toggle);
 		void SET_BLIP_COORDS(Blip blip, float posX, float posY, float posZ);
 		Vector3 GET_BLIP_COORDS(Blip blip);
 		/**
@@ -5781,27 +5781,27 @@ namespace base::menu::natives {
 		void SET_BLIP_SECONDARY_COLOUR(Blip blip, int r, int g, int b);
 		int GET_BLIP_COLOUR(Blip blip);
 		int GET_BLIP_HUD_COLOUR(Blip blip);
-		BOOL IS_BLIP_SHORT_RANGE(Blip blip);
-		BOOL IS_BLIP_ON_MINIMAP(Blip blip);
-		BOOL DOES_BLIP_HAVE_GPS_ROUTE(Blip blip);
-		void SET_BLIP_HIDDEN_ON_LEGEND(Blip blip, BOOL toggle);
-		void SET_BLIP_HIGH_DETAIL(Blip blip, BOOL toggle);
-		void SET_BLIP_AS_MISSION_CREATOR_BLIP(Blip blip, BOOL toggle);
-		BOOL IS_MISSION_CREATOR_BLIP(Blip blip);
+		bool IS_BLIP_SHORT_RANGE(Blip blip);
+		bool IS_BLIP_ON_MINIMAP(Blip blip);
+		bool DOES_BLIP_HAVE_GPS_ROUTE(Blip blip);
+		void SET_BLIP_HIDDEN_ON_LEGEND(Blip blip, bool toggle);
+		void SET_BLIP_HIGH_DETAIL(Blip blip, bool toggle);
+		void SET_BLIP_AS_MISSION_CREATOR_BLIP(Blip blip, bool toggle);
+		bool IS_MISSION_CREATOR_BLIP(Blip blip);
 		Blip GET_NEW_SELECTED_MISSION_CREATOR_BLIP();
-		BOOL IS_HOVERING_OVER_MISSION_CREATOR_BLIP();
-		void SHOW_START_MISSION_INSTRUCTIONAL_BUTTON(BOOL toggle);
-		void SHOW_CONTACT_INSTRUCTIONAL_BUTTON(BOOL toggle);
-		void _SHOW_PURCHASE_INSTRUCTIONAL_BUTTON(BOOL toggle);
+		bool IS_HOVERING_OVER_MISSION_CREATOR_BLIP();
+		void SHOW_START_MISSION_INSTRUCTIONAL_BUTTON(bool toggle);
+		void SHOW_CONTACT_INSTRUCTIONAL_BUTTON(bool toggle);
+		void _SHOW_PURCHASE_INSTRUCTIONAL_BUTTON(bool toggle);
 		void RELOAD_MAP_MENU();
 		void SET_BLIP_MARKER_LONG_DISTANCE(Any p0, Any p1);
-		void SET_BLIP_FLASHES(Blip blip, BOOL toggle);
-		void SET_BLIP_FLASHES_ALTERNATE(Blip blip, BOOL toggle);
-		BOOL IS_BLIP_FLASHING(Blip blip);
+		void SET_BLIP_FLASHES(Blip blip, bool toggle);
+		void SET_BLIP_FLASHES_ALTERNATE(Blip blip, bool toggle);
+		bool IS_BLIP_FLASHING(Blip blip);
 		/**
 		 * Sets whether or not the specified blip should only be displayed when nearby, or on the minimap.
 		 */
-		void SET_BLIP_AS_SHORT_RANGE(Blip blip, BOOL toggle);
+		void SET_BLIP_AS_SHORT_RANGE(Blip blip, bool toggle);
 		void SET_BLIP_SCALE(Blip blip, float scale);
 		/**
 		 * See https://imgur.com/a/lLkEsMN
@@ -5881,56 +5881,56 @@ namespace base::menu::natives {
 		 * false for enemy
 		 * true for friendly
 		 */
-		void SET_BLIP_AS_FRIENDLY(Blip blip, BOOL toggle);
+		void SET_BLIP_AS_FRIENDLY(Blip blip, bool toggle);
 		void PULSE_BLIP(Blip blip);
 		void SHOW_NUMBER_ON_BLIP(Blip blip, int number);
 		void HIDE_NUMBER_ON_BLIP(Blip blip);
-		void SHOW_HEIGHT_ON_BLIP(Blip blip, BOOL toggle);
+		void SHOW_HEIGHT_ON_BLIP(Blip blip, bool toggle);
 		/**
 		 * Adds a green checkmark on top of a blip.
 		 */
-		void SHOW_TICK_ON_BLIP(Blip blip, BOOL toggle);
+		void SHOW_TICK_ON_BLIP(Blip blip, bool toggle);
 		/**
 		 * Adds a orange checkmark on top of a given blip handle: https://imgur.com/a/aw5OTMF
 		 * _SHOW_FRIEND_INDICATOR_ON_BLIP* - _SHOW_HEADING_INDICATOR_ON_BLIP*
 		 */
-		void SHOW_GOLD_TICK_ON_BLIP(Blip blip, BOOL toggle);
-		void SHOW_FOR_SALE_ICON_ON_BLIP(Blip blip, BOOL toggle);
+		void SHOW_GOLD_TICK_ON_BLIP(Blip blip, bool toggle);
+		void SHOW_FOR_SALE_ICON_ON_BLIP(Blip blip, bool toggle);
 		/**
 		 * Adds the GTA: Online player heading indicator to a blip.
 		 */
-		void SHOW_HEADING_INDICATOR_ON_BLIP(Blip blip, BOOL toggle);
+		void SHOW_HEADING_INDICATOR_ON_BLIP(Blip blip, bool toggle);
 		/**
 		 * Highlights a blip by a cyan color circle.
 		 * 
 		 * Color can be changed with SET_BLIP_SECONDARY_COLOUR
 		 */
-		void SHOW_OUTLINE_INDICATOR_ON_BLIP(Blip blip, BOOL toggle);
+		void SHOW_OUTLINE_INDICATOR_ON_BLIP(Blip blip, bool toggle);
 		/**
 		 * Highlights a blip by a half cyan circle on the right side of the blip. https://i.imgur.com/FrV9M4e.png
 		 * .Indicating that that player is a friend (in GTA:O). This color can not be changed.
 		 * To toggle the left side (crew member indicator) of the half circle around the blip, use: `SHOW_CREW_INDICATOR_ON_BLIP`
 		 */
-		void SHOW_FRIEND_INDICATOR_ON_BLIP(Blip blip, BOOL toggle);
+		void SHOW_FRIEND_INDICATOR_ON_BLIP(Blip blip, bool toggle);
 		/**
 		 * Enables or disables the blue half circle https://i.imgur.com/iZes9Ec.png around the specified blip on the left side of the blip. This is used to indicate that the player is in your crew in GTA:O. Color is changeable by using `SET_BLIP_SECONDARY_COLOUR`.
 		 */
-		void SHOW_CREW_INDICATOR_ON_BLIP(Blip blip, BOOL toggle);
+		void SHOW_CREW_INDICATOR_ON_BLIP(Blip blip, bool toggle);
 		/**
 		 * Must be toggled before being queued for animation
 		 */
-		void SET_BLIP_EXTENDED_HEIGHT_THRESHOLD(Blip blip, BOOL toggle);
+		void SET_BLIP_EXTENDED_HEIGHT_THRESHOLD(Blip blip, bool toggle);
 		void SET_BLIP_SHORT_HEIGHT_THRESHOLD(Any p0, Any p1);
 		void SET_BLIP_USE_HEIGHT_INDICATOR_ON_EDGE(Blip blip, Any p1);
 		/**
 		 * Makes a blip go small when off the minimap.
 		 */
-		void SET_BLIP_AS_MINIMAL_ON_EDGE(Blip blip, BOOL toggle);
+		void SET_BLIP_AS_MINIMAL_ON_EDGE(Blip blip, bool toggle);
 		/**
 		 * Enabling this on a radius blip will make it outline only. See https://cdn.discordapp.com/attachments/553235301632573459/575132227935928330/unknown.png
 		 */
-		void SET_RADIUS_BLIP_EDGE(Blip blip, BOOL toggle);
-		BOOL DOES_BLIP_EXIST(Blip blip);
+		void SET_RADIUS_BLIP_EDGE(Blip blip, bool toggle);
+		bool DOES_BLIP_EXIST(Blip blip);
 		/**
 		 * This native removes the current waypoint from the map.
 		 * 
@@ -5944,15 +5944,15 @@ namespace base::menu::natives {
 		void SET_WAYPOINT_OFF();
 		void DELETE_WAYPOINTS_FROM_THIS_PLAYER();
 		void REFRESH_WAYPOINT();
-		BOOL IS_WAYPOINT_ACTIVE();
+		bool IS_WAYPOINT_ACTIVE();
 		void SET_NEW_WAYPOINT(float x, float y);
 		int GET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE();
 		void SET_WAYPOINT_CLEAR_ON_ARRIVAL_MODE(int mode);
-		void SET_BLIP_BRIGHT(Blip blip, BOOL toggle);
+		void SET_BLIP_BRIGHT(Blip blip, bool toggle);
 		/**
 		 * As of b2189, the third parameter sets the color of the cone (before b2189 it was ignored). Note that it uses HUD colors, not blip colors.
 		 */
-		void SET_BLIP_SHOW_CONE(Blip blip, BOOL toggle, int hudColorIndex);
+		void SET_BLIP_SHOW_CONE(Blip blip, bool toggle, int hudColorIndex);
 		/**
 		 * Interesting fact: A hash collision for this is RESET_JETPACK_MODEL_SETTINGS
 		 */
@@ -5963,24 +5963,24 @@ namespace base::menu::natives {
 		/**
 		 * Applies to new eBlipParams _BLIP_CHANGE_46* and _BLIP_CHANGE_47*
 		 */
-		void _SET_BLIP_GPS_ROUTE_DISPLAY_DISTANCE(Blip blip, int blipChangeParam46, BOOL blipChangeParam47);
+		void _SET_BLIP_GPS_ROUTE_DISPLAY_DISTANCE(Blip blip, int blipChangeParam46, bool blipChangeParam47);
 		/**
 		 * This native is used to colorize certain map components like the army base at the top of the map.
 		 * p2 appears to be always -1. If p2 is -1 then native wouldn't change the color. See https://gfycat.com/SkinnyPinkChupacabra
 		 */
-		BOOL SET_MINIMAP_COMPONENT(int componentId, BOOL toggle, int overrideColor);
-		void SET_MINIMAP_SONAR_SWEEP(BOOL toggle);
+		bool SET_MINIMAP_COMPONENT(int componentId, bool toggle, int overrideColor);
+		void SET_MINIMAP_SONAR_SWEEP(bool toggle);
 		void SHOW_ACCOUNT_PICKER();
 		Blip GET_MAIN_PLAYER_BLIP_ID();
-		void SET_PM_WARNINGSCREEN_ACTIVE(BOOL p0);
+		void SET_PM_WARNINGSCREEN_ACTIVE(bool p0);
 		void HIDE_LOADING_ON_FADE_THIS_FRAME();
 		/**
 		 * List of interior hashes: https://pastebin.com/1FUyXNqY
 		 * Not for every interior zoom > 0 available.
 		 */
 		void SET_RADAR_AS_INTERIOR_THIS_FRAME(Hash interior, float x, float y, int z, int zoom);
-		void SET_INSIDE_VERY_SMALL_INTERIOR(BOOL toggle);
-		void SET_INSIDE_VERY_LARGE_INTERIOR(BOOL toggle);
+		void SET_INSIDE_VERY_SMALL_INTERIOR(bool toggle);
+		void SET_INSIDE_VERY_LARGE_INTERIOR(bool toggle);
 		void SET_RADAR_AS_EXTERIOR_THIS_FRAME();
 		/**
 		 * Sets the position of the arrow icon representing the player on both the minimap and world map.
@@ -5989,13 +5989,13 @@ namespace base::menu::natives {
 		 */
 		void SET_FAKE_PAUSEMAP_PLAYER_POSITION_THIS_FRAME(float x, float y);
 		void SET_FAKE_GPS_PLAYER_POSITION_THIS_FRAME(float x, float y, float z);
-		BOOL IS_PAUSEMAP_IN_INTERIOR_MODE();
+		bool IS_PAUSEMAP_IN_INTERIOR_MODE();
 		void HIDE_MINIMAP_EXTERIOR_MAP_THIS_FRAME();
 		void HIDE_MINIMAP_INTERIOR_MAP_THIS_FRAME();
 		/**
 		 * Toggles the Cayo Perico map.
 		 */
-		void SET_USE_ISLAND_MAP(BOOL toggle);
+		void SET_USE_ISLAND_MAP(bool toggle);
 		void _SET_PAUSE_EXTERIOR_RENDERING_WHILE_IN_INTERIOR();
 		/**
 		 * When calling this, the current frame will have the players "arrow icon" be focused on the dead center of the radar.
@@ -6004,22 +6004,22 @@ namespace base::menu::natives {
 		void DONT_ZOOM_MINIMAP_WHEN_RUNNING_THIS_FRAME();
 		void DONT_ZOOM_MINIMAP_WHEN_SNIPING_THIS_FRAME();
 		void SET_WIDESCREEN_FORMAT(Any p0);
-		void DISPLAY_AREA_NAME(BOOL toggle);
+		void DISPLAY_AREA_NAME(bool toggle);
 		/**
 		 * "DISPLAY_CASH(false);" makes the cash amount render on the screen when appropriate
 		 * "DISPLAY_CASH(true);" disables cash amount rendering
 		 */
-		void DISPLAY_CASH(BOOL toggle);
+		void DISPLAY_CASH(bool toggle);
 		/**
 		 * Related to displaying cash on the HUD
 		 * Always called before HUD::CHANGE_FAKE_MP_CASH in decompiled scripts
 		 */
-		void USE_FAKE_MP_CASH(BOOL toggle);
+		void USE_FAKE_MP_CASH(bool toggle);
 		/**
 		 * Displays cash change notifications on HUD.
 		 */
 		void CHANGE_FAKE_MP_CASH(int cash, int bank);
-		void DISPLAY_AMMO_THIS_FRAME(BOOL display);
+		void DISPLAY_AMMO_THIS_FRAME(bool display);
 		/**
 		 * Displays the crosshair for this frame.
 		 */
@@ -6031,7 +6031,7 @@ namespace base::menu::natives {
 		/**
 		 * Controls whether to display 'Cash'/'Bank' next to the money balance HUD in Multiplayer (https://i.imgur.com/MiYUtNl.png)
 		 */
-		void ALLOW_DISPLAY_OF_MULTIPLAYER_CASH_TEXT(BOOL allow);
+		void ALLOW_DISPLAY_OF_MULTIPLAYER_CASH_TEXT(bool allow);
 		void SET_MULTIPLAYER_WALLET_CASH();
 		void REMOVE_MULTIPLAYER_WALLET_CASH();
 		void SET_MULTIPLAYER_BANK_CASH();
@@ -6039,13 +6039,13 @@ namespace base::menu::natives {
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
-		void SET_MULTIPLAYER_HUD_CASH(int p0, BOOL p1);
+		void SET_MULTIPLAYER_HUD_CASH(int p0, bool p1);
 		/**
 		 * Removes multiplayer cash hud each frame
 		 */
 		void REMOVE_MULTIPLAYER_HUD_CASH();
 		void HIDE_HELP_TEXT_THIS_FRAME();
-		BOOL IS_IME_IN_PROGRESS();
+		bool IS_IME_IN_PROGRESS();
 		/**
 		 * The messages are localized strings.
 		 * Examples:
@@ -6062,11 +6062,11 @@ namespace base::menu::natives {
 		 * 
 		 * picture of where on the screen this is displayed?
 		 */
-		void DISPLAY_HELP_TEXT_THIS_FRAME(const char* message, BOOL p1);
+		void DISPLAY_HELP_TEXT_THIS_FRAME(const char* message, bool p1);
 		/**
 		 * Forces the weapon wheel to show/hide.
 		 */
-		void HUD_FORCE_WEAPON_WHEEL(BOOL show);
+		void HUD_FORCE_WEAPON_WHEEL(bool show);
 		/**
 		 * Displays "blazer_wheels_up" and "blazer_wheels_down" "weapon" icons when switching between jetski and quadbike modes. Works only on vehicles using "VEHICLE_TYPE_AMPHIBIOUS_QUADBIKE" vehicle type. Needs to be called every time prior to switching modes, otherwise the icon will only appear when switching modes once.
 		 */
@@ -6090,7 +6090,7 @@ namespace base::menu::natives {
 		/**
 		 * Sets a global that disables many weapon input tasks (shooting, aiming, etc.). Does not work with vehicle weapons, only used in selector.ysc
 		 */
-		void HUD_SHOWING_CHARACTER_SWITCH_SELECTION(BOOL toggle);
+		void HUD_SHOWING_CHARACTER_SWITCH_SELECTION(bool toggle);
 		/**
 		 * Only the script that originally called SET_GPS_FLAGS can set them again. Another script cannot set the flags, until the first script that called it has called CLEAR_GPS_FLAGS.
 		 * 
@@ -6103,7 +6103,7 @@ namespace base::menu::natives {
 		 * Doesn't seem like the flags are actually read by the game at all.
 		 */
 		void CLEAR_GPS_FLAGS();
-		void SET_RACE_TRACK_RENDER(BOOL toggle);
+		void SET_RACE_TRACK_RENDER(bool toggle);
 		/**
 		 * Does the same as SET_RACE_TRACK_RENDER(false);
 		 */
@@ -6117,13 +6117,13 @@ namespace base::menu::natives {
 		 * displayOnFoot: Draws the path regardless if the player is in a vehicle or not.
 		 * followPlayer: Draw the path partially between the previous and next point based on the players position between them. When false, the GPS appears to not disappear after the last leg is completed.
 		 */
-		void START_GPS_CUSTOM_ROUTE(int hudColor, BOOL displayOnFoot, BOOL followPlayer);
+		void START_GPS_CUSTOM_ROUTE(int hudColor, bool displayOnFoot, bool followPlayer);
 		void ADD_POINT_TO_GPS_CUSTOM_ROUTE(float x, float y, float z);
 		/**
 		 * radarThickness: The width of the GPS route on the radar
 		 * mapThickness: The width of the GPS route on the map
 		 */
-		void SET_GPS_CUSTOM_ROUTE_RENDER(BOOL toggle, int radarThickness, int mapThickness);
+		void SET_GPS_CUSTOM_ROUTE_RENDER(bool toggle, int radarThickness, int mapThickness);
 		void CLEAR_GPS_CUSTOM_ROUTE();
 		/**
 		 * Starts a new GPS multi-route, allowing you to create custom GPS paths.
@@ -6136,15 +6136,15 @@ namespace base::menu::natives {
 		 * routeFromPlayer: Makes the GPS draw a path from the player to the next point, rather than the original path from the previous point.
 		 * displayOnFoot: Draws the GPS path regardless if the player is in a vehicle or not.
 		 */
-		void START_GPS_MULTI_ROUTE(int hudColor, BOOL routeFromPlayer, BOOL displayOnFoot);
+		void START_GPS_MULTI_ROUTE(int hudColor, bool routeFromPlayer, bool displayOnFoot);
 		void ADD_POINT_TO_GPS_MULTI_ROUTE(float x, float y, float z);
-		void SET_GPS_MULTI_ROUTE_RENDER(BOOL toggle);
+		void SET_GPS_MULTI_ROUTE_RENDER(bool toggle);
 		/**
 		 * Does the same as SET_GPS_MULTI_ROUTE_RENDER(false);
 		 */
 		void CLEAR_GPS_MULTI_ROUTE();
 		void CLEAR_GPS_PLAYER_WAYPOINT();
-		void SET_GPS_FLASHES(BOOL toggle);
+		void SET_GPS_FLASHES(bool toggle);
 		void SET_PLAYER_ICON_COLOUR(int color);
 		/**
 		 * adds a short flash to the Radar/Minimap
@@ -6152,29 +6152,29 @@ namespace base::menu::natives {
 		 */
 		void FLASH_MINIMAP_DISPLAY();
 		void FLASH_MINIMAP_DISPLAY_WITH_COLOR(int hudColorIndex);
-		void TOGGLE_STEALTH_RADAR(BOOL toggle);
-		void SET_MINIMAP_IN_SPECTATOR_MODE(BOOL toggle, Ped ped);
-		void SET_MISSION_NAME(BOOL p0, const char* name);
-		void SET_MISSION_NAME_FOR_UGC_MISSION(BOOL p0, const char* name);
-		void SET_DESCRIPTION_FOR_UGC_MISSION_EIGHT_STRINGS(BOOL p0, const char* p1, const char* p2, const char* p3, const char* p4, const char* p5, const char* p6, const char* p7, const char* p8);
-		void SET_MINIMAP_BLOCK_WAYPOINT(BOOL toggle);
+		void TOGGLE_STEALTH_RADAR(bool toggle);
+		void SET_MINIMAP_IN_SPECTATOR_MODE(bool toggle, Ped ped);
+		void SET_MISSION_NAME(bool p0, const char* name);
+		void SET_MISSION_NAME_FOR_UGC_MISSION(bool p0, const char* name);
+		void SET_DESCRIPTION_FOR_UGC_MISSION_EIGHT_STRINGS(bool p0, const char* p1, const char* p2, const char* p3, const char* p4, const char* p5, const char* p6, const char* p7, const char* p8);
+		void SET_MINIMAP_BLOCK_WAYPOINT(bool toggle);
 		/**
 		 * Toggles the North Yankton map
 		 */
-		void SET_MINIMAP_IN_PROLOGUE(BOOL toggle);
+		void SET_MINIMAP_IN_PROLOGUE(bool toggle);
 		/**
 		 * This native does absolutely nothing on PC master builds, just a nullsub.
 		 */
-		void SET_MINIMAP_BACKGROUND_HIDDEN(BOOL toggle);
+		void SET_MINIMAP_BACKGROUND_HIDDEN(bool toggle);
 		/**
 		 * If true, the entire map will be revealed.
 		 * 
 		 * FOW = Fog of War
 		 */
-		void SET_MINIMAP_HIDE_FOW(BOOL toggle);
+		void SET_MINIMAP_HIDE_FOW(bool toggle);
 		float GET_MINIMAP_FOW_DISCOVERY_RATIO();
-		BOOL GET_MINIMAP_FOW_COORDINATE_IS_REVEALED(float x, float y, float z);
-		void SET_MINIMAP_FOW_DO_NOT_UPDATE(BOOL p0);
+		bool GET_MINIMAP_FOW_COORDINATE_IS_REVEALED(float x, float y, float z);
+		void SET_MINIMAP_FOW_DO_NOT_UPDATE(bool p0);
 		/**
 		 * Up to eight coordinates may be revealed per frame
 		 */
@@ -6203,14 +6203,14 @@ namespace base::menu::natives {
 		/**
 		 * Argument must be 0.0f or above 38.0f, or it will be ignored.
 		 */
-		void SET_FAKE_MINIMAP_MAX_ALTIMETER_HEIGHT(float altitude, BOOL p1, Any p2);
-		void SET_HEALTH_HUD_DISPLAY_VALUES(int health, int capacity, BOOL wasAdded);
+		void SET_FAKE_MINIMAP_MAX_ALTIMETER_HEIGHT(float altitude, bool p1, Any p2);
+		void SET_HEALTH_HUD_DISPLAY_VALUES(int health, int capacity, bool wasAdded);
 		void SET_MAX_HEALTH_HUD_DISPLAY(int maximumValue);
 		void SET_MAX_ARMOUR_HUD_DISPLAY(int maximumValue);
 		/**
 		 * Toggles the big minimap state like in GTA:Online.
 		 */
-		void SET_BIGMAP_ACTIVE(BOOL toggleBigMap, BOOL showFullMap);
+		void SET_BIGMAP_ACTIVE(bool toggleBigMap, bool showFullMap);
 		/**
 		 * Full list of components below
 		 * 
@@ -6239,11 +6239,11 @@ namespace base::menu::natives {
 		 * MAX_HUD_WEAPONS = 22;
 		 * MAX_SCRIPTED_HUD_COMPONENTS = 141;
 		 */
-		BOOL IS_HUD_COMPONENT_ACTIVE(int id);
-		BOOL IS_SCRIPTED_HUD_COMPONENT_ACTIVE(int id);
+		bool IS_HUD_COMPONENT_ACTIVE(int id);
+		bool IS_SCRIPTED_HUD_COMPONENT_ACTIVE(int id);
 		void HIDE_SCRIPTED_HUD_COMPONENT_THIS_FRAME(int id);
 		void SHOW_SCRIPTED_HUD_COMPONENT_THIS_FRAME(int id);
-		BOOL IS_SCRIPTED_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id);
+		bool IS_SCRIPTED_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id);
 		/**
 		 * This function hides various HUD (Heads-up Display) components.
 		 * Listed below are the integers and the corresponding HUD component.
@@ -6273,7 +6273,7 @@ namespace base::menu::natives {
 		 * These integers also work for the `SHOW_HUD_COMPONENT_THIS_FRAME` native, but instead shows the HUD Component.
 		 */
 		void HIDE_HUD_COMPONENT_THIS_FRAME(int id);
-		BOOL IS_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id);
+		bool IS_HUD_COMPONENT_HIDDEN_THIS_FRAME(int id);
 		/**
 		 * This function hides various HUD (Heads-up Display) components.
 		 * Listed below are the integers and the corresponding HUD component.
@@ -6324,25 +6324,25 @@ namespace base::menu::natives {
 		 */
 		void OPEN_REPORTUGC_MENU();
 		void FORCE_CLOSE_REPORTUGC_MENU();
-		BOOL IS_REPORTUGC_MENU_OPEN();
-		BOOL IS_FLOATING_HELP_TEXT_ON_SCREEN(int hudIndex);
+		bool IS_REPORTUGC_MENU_OPEN();
+		bool IS_FLOATING_HELP_TEXT_ON_SCREEN(int hudIndex);
 		void SET_FLOATING_HELP_TEXT_SCREEN_POSITION(int hudIndex, float x, float y);
 		void SET_FLOATING_HELP_TEXT_WORLD_POSITION(int hudIndex, float x, float y, float z);
 		void SET_FLOATING_HELP_TEXT_TO_ENTITY(int hudIndex, Entity entity, float offsetX, float offsetY);
 		void SET_FLOATING_HELP_TEXT_STYLE(int hudIndex, int p1, int p2, int p3, int p4, int p5);
-		void CLEAR_FLOATING_HELP(int hudIndex, BOOL p1);
+		void CLEAR_FLOATING_HELP(int hudIndex, bool p1);
 		/**
 		 * clanFlag: takes a number 0-5
 		 */
-		void CREATE_MP_GAMER_TAG_WITH_CREW_COLOR(Player player, const char* username, BOOL pointedClanTag, BOOL isRockstarClan, const char* clanTag, int clanFlag, int r, int g, int b);
-		BOOL IS_MP_GAMER_TAG_MOVIE_ACTIVE();
+		void CREATE_MP_GAMER_TAG_WITH_CREW_COLOR(Player player, const char* username, bool pointedClanTag, bool isRockstarClan, const char* clanTag, int clanFlag, int r, int g, int b);
+		bool IS_MP_GAMER_TAG_MOVIE_ACTIVE();
 		/**
 		 * clanFlag: takes a number 0-5
 		 */
-		int CREATE_FAKE_MP_GAMER_TAG(Ped ped, const char* username, BOOL pointedClanTag, BOOL isRockstarClan, const char* clanTag, int clanFlag);
+		int CREATE_FAKE_MP_GAMER_TAG(Ped ped, const char* username, bool pointedClanTag, bool isRockstarClan, const char* clanTag, int clanFlag);
 		void REMOVE_MP_GAMER_TAG(int gamerTagId);
-		BOOL IS_MP_GAMER_TAG_ACTIVE(int gamerTagId);
-		BOOL IS_MP_GAMER_TAG_FREE(int gamerTagId);
+		bool IS_MP_GAMER_TAG_ACTIVE(int gamerTagId);
+		bool IS_MP_GAMER_TAG_FREE(int gamerTagId);
 		/**
 		 * enum eMpGamerTagComponent
 		 * {
@@ -6378,13 +6378,13 @@ namespace base::menu::natives {
 		 * MP_TAG_BOMB
 		 * };
 		 */
-		void SET_MP_GAMER_TAG_VISIBILITY(int gamerTagId, int component, BOOL toggle, Any p3);
-		void SET_ALL_MP_GAMER_TAGS_VISIBILITY(int gamerTagId, BOOL toggle);
+		void SET_MP_GAMER_TAG_VISIBILITY(int gamerTagId, int component, bool toggle, Any p3);
+		void SET_ALL_MP_GAMER_TAGS_VISIBILITY(int gamerTagId, bool toggle);
 		/**
 		 * Displays a bunch of icons above the players name, and level, and their name twice
 		 */
-		void SET_MP_GAMER_TAGS_SHOULD_USE_VEHICLE_HEALTH(int gamerTagId, BOOL toggle);
-		void SET_MP_GAMER_TAGS_SHOULD_USE_POINTS_HEALTH(int gamerTagId, BOOL toggle);
+		void SET_MP_GAMER_TAGS_SHOULD_USE_VEHICLE_HEALTH(int gamerTagId, bool toggle);
+		void SET_MP_GAMER_TAGS_SHOULD_USE_POINTS_HEALTH(int gamerTagId, bool toggle);
 		void SET_MP_GAMER_TAGS_POINT_HEALTH(int gamerTagId, int value, int maximumValue);
 		/**
 		 * Sets a gamer tag's component colour
@@ -6411,7 +6411,7 @@ namespace base::menu::natives {
 		void SET_MP_GAMER_TAG_WANTED_LEVEL(int gamerTagId, int wantedlvl);
 		void SET_MP_GAMER_TAG_NUM_PACKAGES(int gamerTagId, int p1);
 		void SET_MP_GAMER_TAG_NAME(int gamerTagId, const char* string);
-		BOOL IS_UPDATING_MP_GAMER_TAG_NAME_AND_CREW_DETAILS(int gamerTagId);
+		bool IS_UPDATING_MP_GAMER_TAG_NAME_AND_CREW_DETAILS(int gamerTagId);
 		void SET_MP_GAMER_TAG_BIG_TEXT(int gamerTagId, const char* string);
 		int GET_CURRENT_WEBPAGE_ID();
 		int GET_CURRENT_WEBSITE_ID();
@@ -6428,20 +6428,20 @@ namespace base::menu::natives {
 		 */
 		int GET_GLOBAL_ACTIONSCRIPT_FLAG(int flagIndex);
 		void RESET_GLOBAL_ACTIONSCRIPT_FLAG(int flagIndex);
-		BOOL IS_WARNING_MESSAGE_READY_FOR_CONTROL();
+		bool IS_WARNING_MESSAGE_READY_FOR_CONTROL();
 		/**
 		 * You can only use text entries. No custom text.
 		 * 
 		 * Example: SET_WARNING_MESSAGE("t20", 3, "adder", false, -1, 0, 0, true);
 		 * errorCode: shows an error code at the bottom left if nonzero
 		 */
-		void SET_WARNING_MESSAGE(const char* titleMsg, int flags, const char* promptMsg, BOOL p3, int p4, const char* p5, const char* p6, BOOL showBackground, int errorCode);
+		void SET_WARNING_MESSAGE(const char* titleMsg, int flags, const char* promptMsg, bool p3, int p4, const char* p5, const char* p6, bool showBackground, int errorCode);
 		/**
 		 * Shows a warning message on screen with a header.
 		 * Note: You can only use text entries. No custom text. You can recreate this easily with scaleforms.
 		 * Example: https://i.imgur.com/ITJt8bJ.png
 		 */
-		void SET_WARNING_MESSAGE_WITH_HEADER(const char* entryHeader, const char* entryLine1, int instructionalKey, const char* entryLine2, BOOL p4, Any p5, Any* showBackground, Any* p7, BOOL p8, Any p9);
+		void SET_WARNING_MESSAGE_WITH_HEADER(const char* entryHeader, const char* entryLine1, int instructionalKey, const char* entryLine2, bool p4, Any p5, Any* showBackground, Any* p7, bool p8, Any p9);
 		/**
 		 * You can use this native for custom input, without having to use any scaleform-related natives.
 		 * The native must be called on tick.
@@ -6458,8 +6458,8 @@ namespace base::menu::natives {
 		 * Screenshot:
 		 * https://imgur.com/a/IYA7vJ8
 		 */
-		void SET_WARNING_MESSAGE_WITH_HEADER_AND_SUBSTRING_FLAGS(const char* entryHeader, const char* entryLine1, int instructionalKey, const char* entryLine2, BOOL p4, Any p5, Any additionalIntInfo, const char* additionalTextInfoLine1, const char* additionalTextInfoLine2, BOOL showBackground, int errorCode);
-		void SET_WARNING_MESSAGE_WITH_HEADER_EXTENDED(const char* entryHeader, const char* entryLine1, int flags, const char* entryLine2, BOOL p4, Any p5, Any* p6, Any* p7, BOOL showBg, Any p9, Any p10);
+		void SET_WARNING_MESSAGE_WITH_HEADER_AND_SUBSTRING_FLAGS(const char* entryHeader, const char* entryLine1, int instructionalKey, const char* entryLine2, bool p4, Any p5, Any additionalIntInfo, const char* additionalTextInfoLine1, const char* additionalTextInfoLine2, bool showBackground, int errorCode);
+		void SET_WARNING_MESSAGE_WITH_HEADER_EXTENDED(const char* entryHeader, const char* entryLine1, int flags, const char* entryLine2, bool p4, Any p5, Any* p6, Any* p7, bool showBg, Any p9, Any p10);
 		/**
 		 * labelTitle: Label of the alert's title.
 		 * labelMsg: Label of the alert's message.
@@ -6520,7 +6520,7 @@ namespace base::menu::natives {
 		 * 
 		 * Example: https://i.imgur.com/TvmNF4k.png
 		 */
-		void SET_WARNING_MESSAGE_WITH_HEADER_AND_SUBSTRING_FLAGS_EXTENDED(const char* labelTitle, const char* labelMessage, int p2, int p3, const char* labelMessage2, BOOL p5, int p6, int p7, const char* p8, const char* p9, BOOL background, int errorCode);
+		void SET_WARNING_MESSAGE_WITH_HEADER_AND_SUBSTRING_FLAGS_EXTENDED(const char* labelTitle, const char* labelMessage, int p2, int p3, const char* labelMessage2, bool p5, int p6, int p7, const char* p8, const char* p9, bool background, int errorCode);
 		/**
 		 * Has to do with the confirmation overlay (E.g. confirm exit)
 		 */
@@ -6530,16 +6530,16 @@ namespace base::menu::natives {
 		 * Param names copied from the corresponding scaleform function "SET_LIST_ROW".
 		 * Example: https://i.imgur.com/arKvOYx.png
 		 */
-		BOOL SET_WARNING_MESSAGE_OPTION_ITEMS(int index, const char* name, int cash, int rp, int lvl, int colour);
-		BOOL SET_WARNING_MESSAGE_OPTION_HIGHLIGHT(Any p0);
+		bool SET_WARNING_MESSAGE_OPTION_ITEMS(int index, const char* name, int cash, int rp, int lvl, int colour);
+		bool SET_WARNING_MESSAGE_OPTION_HIGHLIGHT(Any p0);
 		void REMOVE_WARNING_MESSAGE_OPTION_ITEMS();
-		BOOL IS_WARNING_MESSAGE_ACTIVE();
+		bool IS_WARNING_MESSAGE_ACTIVE();
 		void CLEAR_DYNAMIC_PAUSE_MENU_ERROR_MESSAGE();
 		/**
 		 * If toggle is true, the map is shown in full screen
 		 * If toggle is false, the map is shown in normal mode
 		 */
-		void CUSTOM_MINIMAP_SET_ACTIVE(BOOL toggle);
+		void CUSTOM_MINIMAP_SET_ACTIVE(bool toggle);
 		/**
 		 * Sets the sprite of the next BLIP_GALLERY blip, values used in the native scripts: 143 (ObjectiveBlue), 144 (ObjectiveGreen), 145 (ObjectiveRed), 146 (ObjectiveYellow).
 		 */
@@ -6552,7 +6552,7 @@ namespace base::menu::natives {
 		/**
 		 * Doesn't actually return anything.
 		 */
-		BOOL FORCE_SONAR_BLIPS_THIS_FRAME();
+		bool FORCE_SONAR_BLIPS_THIS_FRAME();
 		Blip GET_NORTH_BLID_INDEX();
 		/**
 		 * Toggles whether or not name labels are shown on the expanded minimap next to player blips, like in GTA:O.
@@ -6561,7 +6561,7 @@ namespace base::menu::natives {
 		 * 
 		 * Make sure to call SET_BLIP_CATEGORY with index 7 for this to work on the desired blip.
 		 */
-		void DISPLAY_PLAYER_NAME_TAGS_ON_BLIPS(BOOL toggle);
+		void DISPLAY_PLAYER_NAME_TAGS_ON_BLIPS(bool toggle);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
@@ -6610,7 +6610,7 @@ namespace base::menu::natives {
 		 * - FE_MENU_VERSION_LANDING_MENU
 		 * - FE_MENU_VERSION_LANDING_KEYMAPPING_MENU
 		 */
-		void ACTIVATE_FRONTEND_MENU(Hash menuhash, BOOL togglePause, int component);
+		void ACTIVATE_FRONTEND_MENU(Hash menuhash, bool togglePause, int component);
 		/**
 		 * Before using this native click the native above and look at the decription.
 		 * 
@@ -6629,16 +6629,16 @@ namespace base::menu::natives {
 		 * if (HUD::GET_CURRENT_FRONTEND_MENU_VERSION() == joaat("fe_menu_version_empty_no_background"))
 		 */
 		Hash GET_CURRENT_FRONTEND_MENU_VERSION();
-		void SET_PAUSE_MENU_ACTIVE(BOOL toggle);
+		void SET_PAUSE_MENU_ACTIVE(bool toggle);
 		void DISABLE_FRONTEND_THIS_FRAME();
 		void SUPPRESS_FRONTEND_RENDERING_THIS_FRAME();
 		/**
 		 * Allows opening the pause menu this frame, when the player is dead.
 		 */
 		void ALLOW_PAUSE_WHEN_NOT_IN_STATE_OF_PLAY_THIS_FRAME();
-		void SET_FRONTEND_ACTIVE(BOOL active);
-		BOOL IS_PAUSE_MENU_ACTIVE();
-		BOOL IS_STORE_PENDING_NETWORK_SHUTDOWN_TO_OPEN();
+		void SET_FRONTEND_ACTIVE(bool active);
+		bool IS_PAUSE_MENU_ACTIVE();
+		bool IS_STORE_PENDING_NETWORK_SHUTDOWN_TO_OPEN();
 		/**
 		 * Returns:
 		 * 
@@ -6654,7 +6654,7 @@ namespace base::menu::natives {
 		 */
 		int GET_PAUSE_MENU_STATE();
 		Vector3 GET_PAUSE_MENU_POSITION();
-		BOOL IS_PAUSE_MENU_RESTARTING();
+		bool IS_PAUSE_MENU_RESTARTING();
 		/**
 		 * Not present in retail version of the game, actual definiton seems to be
 		 * _LOG_DEBUG_INFO(const char* category, const char* debugText);
@@ -6672,18 +6672,18 @@ namespace base::menu::natives {
 		 */
 		void PAUSE_MENU_ACTIVATE_CONTEXT(Hash contextHash);
 		void PAUSE_MENU_DEACTIVATE_CONTEXT(Hash contextHash);
-		BOOL PAUSE_MENU_IS_CONTEXT_ACTIVE(Hash contextHash);
-		BOOL PAUSE_MENU_IS_CONTEXT_MENU_ACTIVE();
+		bool PAUSE_MENU_IS_CONTEXT_ACTIVE(Hash contextHash);
+		bool PAUSE_MENU_IS_CONTEXT_MENU_ACTIVE();
 		int PAUSE_MENU_GET_HAIR_COLOUR_INDEX();
 		int PAUSE_MENU_GET_MOUSE_HOVER_INDEX();
 		int PAUSE_MENU_GET_MOUSE_HOVER_UNIQUE_ID();
-		BOOL PAUSE_MENU_GET_MOUSE_CLICK_EVENT(Any* p0, Any* p1, Any* p2);
+		bool PAUSE_MENU_GET_MOUSE_CLICK_EVENT(Any* p0, Any* p1, Any* p2);
 		void PAUSE_MENU_REDRAW_INSTRUCTIONAL_BUTTONS(int p0);
-		void PAUSE_MENU_SET_BUSY_SPINNER(BOOL p0, int position, int spinnerIndex);
-		void PAUSE_MENU_SET_WARN_ON_TAB_CHANGE(BOOL p0);
-		void PAUSE_MENU_SET_CLOUD_BUSY_SPINNER(const char* TextLabel, BOOL bNoMenu, BOOL bBlackBackground);
+		void PAUSE_MENU_SET_BUSY_SPINNER(bool p0, int position, int spinnerIndex);
+		void PAUSE_MENU_SET_WARN_ON_TAB_CHANGE(bool p0);
+		void PAUSE_MENU_SET_CLOUD_BUSY_SPINNER(const char* TextLabel, bool bNoMenu, bool bBlackBackground);
 		void PAUSE_MENU_CLEAR_CLOUD_BUSY_SPINNER();
-		BOOL IS_FRONTEND_READY_FOR_CONTROL();
+		bool IS_FRONTEND_READY_FOR_CONTROL();
 		/**
 		 * Disables frontend (works in custom frontends, not sure about regular pause menu) navigation keys on keyboard. Not sure about controller. Does not disable mouse controls. No need to call this every tick.
 		 * 
@@ -6695,11 +6695,11 @@ namespace base::menu::natives {
 		 * To disable the keys, use `0xEC9264727EEC0F28`
 		 */
 		void RELEASE_CONTROL_OF_FRONTEND();
-		BOOL CODE_WANTS_SCRIPT_TO_TAKE_CONTROL();
+		bool CODE_WANTS_SCRIPT_TO_TAKE_CONTROL();
 		int GET_SCREEN_CODE_WANTS_SCRIPT_TO_CONTROL();
-		BOOL IS_NAVIGATING_MENU_CONTENT();
-		BOOL HAS_MENU_TRIGGER_EVENT_OCCURRED();
-		BOOL HAS_MENU_LAYOUT_CHANGED_EVENT_OCCURRED();
+		bool IS_NAVIGATING_MENU_CONTENT();
+		bool HAS_MENU_TRIGGER_EVENT_OCCURRED();
+		bool HAS_MENU_LAYOUT_CHANGED_EVENT_OCCURRED();
 		void SET_SAVEGAME_LIST_UNIQUE_ID(Any p0);
 		void GET_MENU_TRIGGER_EVENT_DETAILS(int* lastItemMenuId, int* selectedItemUniqueId);
 		/**
@@ -6723,17 +6723,17 @@ namespace base::menu::natives {
 		 * selectedItemUniqueId updates as normal
 		 */
 		void GET_MENU_LAYOUT_CHANGED_EVENT_DETAILS(int* lastItemMenuId, int* selectedItemMenuId, int* selectedItemUniqueId);
-		BOOL GET_PM_PLAYER_CREW_COLOR(int* r, int* g, int* b);
-		BOOL GET_MENU_PED_INT_STAT(Any p0, Any* p1);
-		BOOL GET_CHARACTER_MENU_PED_INT_STAT(Any p0, Any* p1, Any p2);
-		BOOL GET_MENU_PED_MASKED_INT_STAT(Hash statHash, int* outValue, int mask, BOOL p3);
-		BOOL GET_CHARACTER_MENU_PED_MASKED_INT_STAT(Hash statHash, Any* outValue, int p2, int mask, BOOL p4);
-		BOOL GET_MENU_PED_FLOAT_STAT(Hash statHash, float* outValue);
-		BOOL GET_CHARACTER_MENU_PED_FLOAT_STAT(float statHash, float* outValue, BOOL p2);
+		bool GET_PM_PLAYER_CREW_COLOR(int* r, int* g, int* b);
+		bool GET_MENU_PED_INT_STAT(Any p0, Any* p1);
+		bool GET_CHARACTER_MENU_PED_INT_STAT(Any p0, Any* p1, Any p2);
+		bool GET_MENU_PED_MASKED_INT_STAT(Hash statHash, int* outValue, int mask, bool p3);
+		bool GET_CHARACTER_MENU_PED_MASKED_INT_STAT(Hash statHash, Any* outValue, int p2, int mask, bool p4);
+		bool GET_MENU_PED_FLOAT_STAT(Hash statHash, float* outValue);
+		bool GET_CHARACTER_MENU_PED_FLOAT_STAT(float statHash, float* outValue, bool p2);
 		/**
 		 * p0 was always 0xAE2602A3.
 		 */
-		BOOL GET_MENU_PED_BOOL_STAT(Hash statHash, BOOL* outValue);
+		bool GET_MENU_PED_BOOL_STAT(Hash statHash, bool* outValue);
 		void CLEAR_PED_IN_PAUSE_MENU();
 		/**
 		 * p1 is either 1 or 2 in the PC scripts.
@@ -6749,7 +6749,7 @@ namespace base::menu::natives {
 		 * Lights On: https://vespura.com/hi/i/2019-04-01_16-09_540ee_1015.png
 		 * Lights Off: https://vespura.com/hi/i/2019-04-01_16-10_8b5e7_1016.png
 		 */
-		void SET_PAUSE_MENU_PED_LIGHTING(BOOL state);
+		void SET_PAUSE_MENU_PED_LIGHTING(bool state);
 		/**
 		 * Toggles the pause menu ped sleep state for frontend menus.
 		 * 
@@ -6757,13 +6757,13 @@ namespace base::menu::natives {
 		 * 
 		 * `state` 0 will make the ped slowly fall asleep, 1 will slowly wake the ped up.
 		 */
-		void SET_PAUSE_MENU_PED_SLEEP_STATE(BOOL state);
+		void SET_PAUSE_MENU_PED_SLEEP_STATE(bool state);
 		void OPEN_ONLINE_POLICIES_MENU();
-		BOOL ARE_ONLINE_POLICIES_UP_TO_DATE();
+		bool ARE_ONLINE_POLICIES_UP_TO_DATE();
 		/**
 		 * Returns the same as IS_SOCIAL_CLUB_ACTIVE
 		 */
-		BOOL IS_ONLINE_POLICIES_MENU_ACTIVE();
+		bool IS_ONLINE_POLICIES_MENU_ACTIVE();
 		/**
 		 * Uses the `SOCIAL_CLUB2` scaleform.
 		 * menu: GALLERY, MISSIONS, CREWS, MIGRATE, PLAYLISTS, JOBS
@@ -6777,37 +6777,37 @@ namespace base::menu::natives {
 		 * HUD::SET_SOCIAL_CLUB_TOUR("Playlists");
 		 */
 		void SET_SOCIAL_CLUB_TOUR(const char* name);
-		BOOL IS_SOCIAL_CLUB_ACTIVE();
-		void SET_TEXT_INPUT_BOX_ENABLED(BOOL p0);
+		bool IS_SOCIAL_CLUB_ACTIVE();
+		void SET_TEXT_INPUT_BOX_ENABLED(bool p0);
 		void FORCE_CLOSE_TEXT_INPUT_BOX();
 		void SET_ALLOW_COMMA_ON_TEXT_INPUT(Any p0);
 		void OVERRIDE_MP_TEXT_CHAT_TEAM_STRING(Hash gxtEntryHash);
 		/**
 		 * Returns whether or not the text chat (MULTIPLAYER_CHAT Scaleform component) is active.
 		 */
-		BOOL IS_MP_TEXT_CHAT_TYPING();
+		bool IS_MP_TEXT_CHAT_TYPING();
 		void CLOSE_MP_TEXT_CHAT();
 		void MP_TEXT_CHAT_IS_TEAM_JOB(Any p0);
 		void OVERRIDE_MP_TEXT_CHAT_COLOR(int p0, int hudColor);
 		/**
 		 * Hides the chat history, closes the input box and makes it unable to be opened unless called again with FALSE.
 		 */
-		void MP_TEXT_CHAT_DISABLE(BOOL toggle);
-		void FLAG_PLAYER_CONTEXT_IN_TOURNAMENT(BOOL toggle);
+		void MP_TEXT_CHAT_DISABLE(bool toggle);
+		void FLAG_PLAYER_CONTEXT_IN_TOURNAMENT(bool toggle);
 		/**
 		 * This native turns on the AI blip on the specified ped. It also disappears automatically when the ped is too far or if the ped is dead. You don't need to control it with other natives.
 		 * 
 		 * See gtaforums.com/topic/884370-native-research-ai-blips for further information.
 		 */
-		void SET_PED_HAS_AI_BLIP(Ped ped, BOOL hasCone);
+		void SET_PED_HAS_AI_BLIP(Ped ped, bool hasCone);
 		/**
 		 * color: see SET_BLIP_COLOUR
 		 */
-		void SET_PED_HAS_AI_BLIP_WITH_COLOUR(Ped ped, BOOL hasCone, int color);
-		BOOL DOES_PED_HAVE_AI_BLIP(Ped ped);
+		void SET_PED_HAS_AI_BLIP_WITH_COLOUR(Ped ped, bool hasCone, int color);
+		bool DOES_PED_HAVE_AI_BLIP(Ped ped);
 		void SET_PED_AI_BLIP_GANG_ID(Ped ped, int gangId);
-		void SET_PED_AI_BLIP_HAS_CONE(Ped ped, BOOL toggle);
-		void SET_PED_AI_BLIP_FORCED_ON(Ped ped, BOOL toggle);
+		void SET_PED_AI_BLIP_HAS_CONE(Ped ped, bool toggle);
+		void SET_PED_AI_BLIP_FORCED_ON(Ped ped, bool toggle);
 		void SET_PED_AI_BLIP_NOTICE_RANGE(Ped ped, float range);
 		void SET_PED_AI_BLIP_SPRITE(Ped ped, int spriteId);
 		Blip GET_AI_PED_PED_BLIP_INDEX(Ped ped);
@@ -6815,14 +6815,14 @@ namespace base::menu::natives {
 		 * Returns the current AI BLIP for the specified ped
 		 */
 		Blip GET_AI_PED_VEHICLE_BLIP_INDEX(Ped ped);
-		BOOL HAS_DIRECTOR_MODE_BEEN_LAUNCHED_BY_CODE();
+		bool HAS_DIRECTOR_MODE_BEEN_LAUNCHED_BY_CODE();
 		void SET_DIRECTOR_MODE_LAUNCHED_BY_SCRIPT();
 		/**
 		 * If toggle is true, hides special ability bar / character name in the pause menu
 		 * If toggle is false, shows special ability bar / character name in the pause menu
 		 */
-		void SET_PLAYER_IS_IN_DIRECTOR_MODE(BOOL toggle);
-		void SET_DIRECTOR_MODE_AVAILABLE(BOOL toggle);
+		void SET_PLAYER_IS_IN_DIRECTOR_MODE(bool toggle);
+		void SET_DIRECTOR_MODE_AVAILABLE(bool toggle);
 		void HIDE_HUDMARKERS_THIS_FRAME();
 
 	} // namespace HUD
@@ -6859,8 +6859,8 @@ namespace base::menu::natives {
 		 */
 		int GET_INTERIOR_GROUP_ID(Interior interior);
 		Vector3 GET_OFFSET_FROM_INTERIOR_IN_WORLD_COORDS(Interior interior, float x, float y, float z);
-		BOOL IS_INTERIOR_SCENE();
-		BOOL IS_VALID_INTERIOR(Interior interior);
+		bool IS_INTERIOR_SCENE();
+		bool IS_VALID_INTERIOR(Interior interior);
 		void CLEAR_ROOM_FOR_ENTITY(Entity entity);
 		void FORCE_ROOM_FOR_ENTITY(Entity entity, Interior interior, Hash roomHashKey);
 		/**
@@ -6912,12 +6912,12 @@ namespace base::menu::natives {
 		 * You don't fall through the floor but everything is invisible inside and looks the same as when INTERIOR::DISABLE_INTERIOR is used. Peds behaves normally inside.
 		 */
 		void UNPIN_INTERIOR(Interior interior);
-		BOOL IS_INTERIOR_READY(Interior interior);
+		bool IS_INTERIOR_READY(Interior interior);
 		/**
 		 * Only used once in the entire game scripts.
 		 * Does not actually return anything.
 		 */
-		BOOL SET_INTERIOR_IN_USE(Interior interior);
+		bool SET_INTERIOR_IN_USE(Interior interior);
 		/**
 		 * Returns the interior ID representing the requested interior at that location (if found?). The supplied interior string is not the same as the one used to load the interior.
 		 * 
@@ -6936,9 +6936,9 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if the collision at the specified coords is marked as being outside (false if there's an interior)
 		 */
-		BOOL IS_COLLISION_MARKED_OUTSIDE(float x, float y, float z);
+		bool IS_COLLISION_MARKED_OUTSIDE(float x, float y, float z);
 		Interior GET_INTERIOR_FROM_COLLISION(float x, float y, float z);
-		void ENABLE_STADIUM_PROBES_THIS_FRAME(BOOL toggle);
+		void ENABLE_STADIUM_PROBES_THIS_FRAME(bool toggle);
 		/**
 		 * More info: http://gtaforums.com/topic/836367-adding-props-to-interiors/
 		 * 
@@ -6952,7 +6952,7 @@ namespace base::menu::natives {
 		/**
 		 * Full list of IPLs and interior entity sets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ipls.json
 		 */
-		BOOL IS_INTERIOR_ENTITY_SET_ACTIVE(Interior interior, const char* entitySetName);
+		bool IS_INTERIOR_ENTITY_SET_ACTIVE(Interior interior, const char* entitySetName);
 		/**
 		 * Full list of IPLs and interior entity sets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ipls.json
 		 */
@@ -6971,38 +6971,38 @@ namespace base::menu::natives {
 		 * 
 		 * INTERIOR::DISABLE_INTERIOR(118018, true);
 		 */
-		void DISABLE_INTERIOR(Interior interior, BOOL toggle);
-		BOOL IS_INTERIOR_DISABLED(Interior interior);
+		void DISABLE_INTERIOR(Interior interior, bool toggle);
+		bool IS_INTERIOR_DISABLED(Interior interior);
 		/**
 		 * Does something similar to INTERIOR::DISABLE_INTERIOR
 		 */
-		void CAP_INTERIOR(Interior interior, BOOL toggle);
-		BOOL IS_INTERIOR_CAPPED(Interior interior);
-		void DISABLE_METRO_SYSTEM(BOOL toggle);
+		void CAP_INTERIOR(Interior interior, bool toggle);
+		bool IS_INTERIOR_CAPPED(Interior interior);
+		void DISABLE_METRO_SYSTEM(bool toggle);
 		/**
 		 * Jenkins hash _might_ be 0xFC227584.
 		 */
-		void SET_IS_EXTERIOR_ONLY(Entity entity, BOOL toggle);
+		void SET_IS_EXTERIOR_ONLY(Entity entity, bool toggle);
 
 	} // namespace INTERIOR
 
 	namespace ITEMSET {
 
-		ScrHandle CREATE_ITEMSET(BOOL p0);
+		ScrHandle CREATE_ITEMSET(bool p0);
 		void DESTROY_ITEMSET(ScrHandle itemset);
-		BOOL IS_ITEMSET_VALID(ScrHandle itemset);
-		BOOL ADD_TO_ITEMSET(ScrHandle item, ScrHandle itemset);
+		bool IS_ITEMSET_VALID(ScrHandle itemset);
+		bool ADD_TO_ITEMSET(ScrHandle item, ScrHandle itemset);
 		void REMOVE_FROM_ITEMSET(ScrHandle item, ScrHandle itemset);
 		int GET_ITEMSET_SIZE(ScrHandle itemset);
 		ScrHandle GET_INDEXED_ITEM_IN_ITEMSET(int index, ScrHandle itemset);
-		BOOL IS_IN_ITEMSET(ScrHandle item, ScrHandle itemset);
+		bool IS_IN_ITEMSET(ScrHandle item, ScrHandle itemset);
 		void CLEAN_ITEMSET(ScrHandle itemset);
 
 	} // namespace ITEMSET
 
 	namespace LANDINGPAGE {
 
-		BOOL IS_LANDING_PAGE_ACTIVE();
+		bool IS_LANDING_PAGE_ACTIVE();
 		void SET_SHOULD_LAUNCH_LANDING_PAGE(int entrypointId);
 		void SET_SHOULD_DISMISS_LANDING_PAGE();
 		int GET_LANDING_PAGE_SELECTED_CHARACTER_SLOT();
@@ -7014,14 +7014,14 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL LOBBY_AUTO_MULTIPLAYER_MENU();
-		BOOL LOBBY_AUTO_MULTIPLAYER_FREEMODE();
-		void LOBBY_SET_AUTO_MULTIPLAYER(BOOL toggle);
-		BOOL LOBBY_AUTO_MULTIPLAYER_EVENT();
-		void LOBBY_SET_AUTO_MULTIPLAYER_EVENT(BOOL toggle);
-		BOOL LOBBY_AUTO_MULTIPLAYER_RANDOM_JOB();
-		void LOBBY_SET_AUTO_MP_RANDOM_JOB(BOOL toggle);
-		void SHUTDOWN_SESSION_CLEARS_AUTO_MULTIPLAYER(BOOL toggle);
+		bool LOBBY_AUTO_MULTIPLAYER_MENU();
+		bool LOBBY_AUTO_MULTIPLAYER_FREEMODE();
+		void LOBBY_SET_AUTO_MULTIPLAYER(bool toggle);
+		bool LOBBY_AUTO_MULTIPLAYER_EVENT();
+		void LOBBY_SET_AUTO_MULTIPLAYER_EVENT(bool toggle);
+		bool LOBBY_AUTO_MULTIPLAYER_RANDOM_JOB();
+		void LOBBY_SET_AUTO_MP_RANDOM_JOB(bool toggle);
+		void SHUTDOWN_SESSION_CLEARS_AUTO_MULTIPLAYER(bool toggle);
 
 	} // namespace LOBBY
 
@@ -7076,14 +7076,14 @@ namespace base::menu::natives {
 		 * 
 		 * ^ also, if the mission flag is already set, the function does nothing at all
 		 */
-		void SET_MISSION_FLAG(BOOL toggle);
-		BOOL GET_MISSION_FLAG();
+		void SET_MISSION_FLAG(bool toggle);
+		bool GET_MISSION_FLAG();
 		/**
 		 * If the parameter is true, sets the random event flag to true, if the parameter is false, the function does nothing at all.
 		 * Does nothing if the mission flag is set.
 		 */
-		void SET_RANDOM_EVENT_FLAG(BOOL toggle);
-		BOOL GET_RANDOM_EVENT_FLAG();
+		void SET_RANDOM_EVENT_FLAG(bool toggle);
+		bool GET_RANDOM_EVENT_FLAG();
 		/**
 		 * Returns pointer to an empty string.
 		 */
@@ -7129,17 +7129,17 @@ namespace base::menu::natives {
 		/**
 		 * Hardcoded to return false.
 		 */
-		BOOL HAS_RESUMED_FROM_SUSPEND();
+		bool HAS_RESUMED_FROM_SUSPEND();
 		/**
 		 * Sets GtaThread+0x14A
 		 */
-		void SET_SCRIPT_HIGH_PRIO(BOOL toggle);
+		void SET_SCRIPT_HIGH_PRIO(bool toggle);
 		/**
 		 * Sets bit 3 in GtaThread+0x150
 		 */
-		void SET_THIS_IS_A_TRIGGER_SCRIPT(BOOL toggle);
+		void SET_THIS_IS_A_TRIGGER_SCRIPT(bool toggle);
 		void INFORM_CODE_OF_CONTENT_ID_OF_CURRENT_UGC_MISSION(const char* p0);
-		BOOL GET_BASE_ELEMENT_LOCATION_FROM_METADATA_BLOCK(Any* p0, Any* p1, Any p2, BOOL p3);
+		bool GET_BASE_ELEMENT_LOCATION_FROM_METADATA_BLOCK(Any* p0, Any* p1, Any p2, bool p3);
 		/**
 		 * Returns current weather name hash
 		 */
@@ -7148,8 +7148,8 @@ namespace base::menu::natives {
 		 * Returns weather name hash
 		 */
 		Hash GET_NEXT_WEATHER_TYPE_HASH_NAME();
-		BOOL IS_PREV_WEATHER_TYPE(const char* weatherType);
-		BOOL IS_NEXT_WEATHER_TYPE(const char* weatherType);
+		bool IS_PREV_WEATHER_TYPE(const char* weatherType);
+		bool IS_NEXT_WEATHER_TYPE(const char* weatherType);
 		/**
 		 * The following weatherTypes are used in the scripts:
 		 * "CLEAR"
@@ -7253,7 +7253,7 @@ namespace base::menu::natives {
 		/**
 		 * Identical to SET_OVERRIDE_WEATHER but has an additional BOOL param that sets some weather var to 0 if true
 		 */
-		void SET_OVERRIDE_WEATHEREX(const char* weatherType, BOOL p1);
+		void SET_OVERRIDE_WEATHEREX(const char* weatherType, bool p1);
 		void CLEAR_OVERRIDE_WEATHER();
 		void WATER_OVERRIDE_SET_SHOREWAVEAMPLITUDE(float amplitude);
 		void WATER_OVERRIDE_SET_SHOREWAVEMINAMPLITUDE(float minAmplitude);
@@ -7353,9 +7353,9 @@ namespace base::menu::natives {
 		 * 
 		 * Bear in mind this native can only calculate the elevation when the coordinates are within the client's render distance.
 		 */
-		BOOL GET_GROUND_Z_FOR_3D_COORD(float x, float y, float z, float* groundZ, BOOL ignoreWater, BOOL p5);
-		BOOL GET_GROUND_Z_AND_NORMAL_FOR_3D_COORD(float x, float y, float z, float* groundZ, Vector3* normal);
-		BOOL GET_GROUND_Z_EXCLUDING_OBJECTS_FOR_3D_COORD(float x, float y, float z, float* groundZ, BOOL p4, BOOL p5);
+		bool GET_GROUND_Z_FOR_3D_COORD(float x, float y, float z, float* groundZ, bool ignoreWater, bool p5);
+		bool GET_GROUND_Z_AND_NORMAL_FOR_3D_COORD(float x, float y, float z, float* groundZ, Vector3* normal);
+		bool GET_GROUND_Z_EXCLUDING_OBJECTS_FOR_3D_COORD(float x, float y, float z, float* groundZ, bool p4, bool p5);
 		float ASIN(float p0);
 		float ACOS(float p0);
 		float TAN(float p0);
@@ -7367,7 +7367,7 @@ namespace base::menu::natives {
 		 * 
 		 * Consider using this faster native instead: SYSTEM::VDIST - DVIST always takes in consideration the 3D coordinates.
 		 */
-		float GET_DISTANCE_BETWEEN_COORDS(float x1, float y1, float z1, float x2, float y2, float z2, BOOL useZ);
+		float GET_DISTANCE_BETWEEN_COORDS(float x1, float y1, float z1, float x2, float y2, float z2, bool useZ);
 		float GET_ANGLE_BETWEEN_2D_VECTORS(float x1, float y1, float x2, float y2);
 		/**
 		 * dx = x1 - x2
@@ -7377,13 +7377,13 @@ namespace base::menu::natives {
 		/**
 		 * returns a float between 0.0 and 1.0, clamp: sets whether the product should be clamped between the given coordinates
 		 */
-		float GET_RATIO_OF_CLOSEST_POINT_ON_LINE(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, BOOL clamp);
+		float GET_RATIO_OF_CLOSEST_POINT_ON_LINE(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, bool clamp);
 		/**
 		 * clamp: sets whether the product should be clamped between the given coordinates
 		 */
-		Vector3 GET_CLOSEST_POINT_ON_LINE(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, BOOL clamp);
-		BOOL GET_LINE_PLANE_INTERSECTION(float p0, float p1, float p2, float p3, float p4, float p5, float p6, float p7, float p8, float p9, float p10, float p11, float* p12);
-		BOOL GET_POINT_AREA_OVERLAP(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7, Any p8, Any p9, Any p10, Any p11, Any p12, Any p13);
+		Vector3 GET_CLOSEST_POINT_ON_LINE(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, bool clamp);
+		bool GET_LINE_PLANE_INTERSECTION(float p0, float p1, float p2, float p3, float p4, float p5, float p6, float p7, float p8, float p9, float p10, float p11, float* p12);
+		bool GET_POINT_AREA_OVERLAP(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7, Any p8, Any p9, Any p10, Any p11, Any p12, Any p13);
 		/**
 		 * This sets bit [offset] of [address] to on.
 		 * 
@@ -7416,8 +7416,8 @@ namespace base::menu::natives {
 		 * This native always come right before SET_ENTITY_QUATERNION where its final 4 parameters are SLERP_NEAR_QUATERNION p9 to p12
 		 */
 		void SLERP_NEAR_QUATERNION(float t, float x, float y, float z, float w, float x1, float y1, float z1, float w1, float* outX, float* outY, float* outZ, float* outW);
-		BOOL IS_AREA_OCCUPIED(float p0, float p1, float p2, float p3, float p4, float p5, BOOL p6, BOOL p7, BOOL p8, BOOL p9, BOOL p10, Any p11, BOOL p12);
-		BOOL IS_AREA_OCCUPIED_SLOW(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7, Any p8, Any p9, Any p10, Any p11, Any p12);
+		bool IS_AREA_OCCUPIED(float p0, float p1, float p2, float p3, float p4, float p5, bool p6, bool p7, bool p8, bool p9, bool p10, Any p11, bool p12);
+		bool IS_AREA_OCCUPIED_SLOW(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7, Any p8, Any p9, Any p10, Any p11, Any p12);
 		/**
 		 * `range`: The range, seems to not be very accurate during testing.
 		 * `p4`: Unknown, when set to true it seems to always return true no matter what I try.
@@ -7428,22 +7428,22 @@ namespace base::menu::natives {
 		 * 
 		 * Returns true if there is anything in that location matching the provided parameters.
 		 */
-		BOOL IS_POSITION_OCCUPIED(float x, float y, float z, float range, BOOL p4, BOOL checkVehicles, BOOL checkPeds, BOOL p7, BOOL p8, Entity ignoreEntity, BOOL p10);
-		BOOL IS_POINT_OBSCURED_BY_A_MISSION_ENTITY(float p0, float p1, float p2, float p3, float p4, float p5, Any p6);
+		bool IS_POSITION_OCCUPIED(float x, float y, float z, float range, bool p4, bool checkVehicles, bool checkPeds, bool p7, bool p8, Entity ignoreEntity, bool p10);
+		bool IS_POINT_OBSCURED_BY_A_MISSION_ENTITY(float p0, float p1, float p2, float p3, float p4, float p5, Any p6);
 		/**
 		 * Example: CLEAR_AREA(0, 0, 0, 30, true, false, false, false);
 		 */
-		void CLEAR_AREA(float X, float Y, float Z, float radius, BOOL p4, BOOL ignoreCopCars, BOOL ignoreObjects, BOOL p7);
+		void CLEAR_AREA(float X, float Y, float Z, float radius, bool p4, bool ignoreCopCars, bool ignoreObjects, bool p7);
 		/**
 		 * MISC::CLEAR_AREA_LEAVE_VEHICLE_HEALTH(x, y, z, radius, false, false, false, false); seem to make all objects go away, peds, vehicles etc. All booleans set to true doesn't seem to change anything.
 		 */
-		void CLEAR_AREA_LEAVE_VEHICLE_HEALTH(float x, float y, float z, float radius, BOOL p4, BOOL p5, BOOL p6, BOOL p7);
+		void CLEAR_AREA_LEAVE_VEHICLE_HEALTH(float x, float y, float z, float radius, bool p4, bool p5, bool p6, bool p7);
 		/**
 		 * Example:
 		 * CLEAR_AREA_OF_VEHICLES(0.0f, 0.0f, 0.0f, 10000.0f, false, false, false, false, false, false);
 		 */
-		void CLEAR_AREA_OF_VEHICLES(float x, float y, float z, float radius, BOOL p4, BOOL p5, BOOL p6, BOOL p7, BOOL p8, BOOL p9, Any p10);
-		void CLEAR_ANGLED_AREA_OF_VEHICLES(float x1, float y1, float z1, float x2, float y2, float z2, float width, BOOL p7, BOOL p8, BOOL p9, BOOL p10, BOOL p11, Any p12, Any p13);
+		void CLEAR_AREA_OF_VEHICLES(float x, float y, float z, float radius, bool p4, bool p5, bool p6, bool p7, bool p8, bool p9, Any p10);
+		void CLEAR_ANGLED_AREA_OF_VEHICLES(float x1, float y1, float z1, float x2, float y2, float z2, float width, bool p7, bool p8, bool p9, bool p10, bool p11, Any p12, Any p13);
 		/**
 		 * I looked through the PC scripts that this site provides you with a link to find. It shows the last param mainly uses, (0, 2, 6, 16, and 17) so I am going to assume it is a type of flag.
 		 */
@@ -7467,12 +7467,12 @@ namespace base::menu::natives {
 		/**
 		 * ignoreVehicle - bypasses vehicle check of the local player (it will not open if you are in a vehicle and this is set to false)
 		 */
-		void SET_SAVE_MENU_ACTIVE(BOOL ignoreVehicle);
+		void SET_SAVE_MENU_ACTIVE(bool ignoreVehicle);
 		int GET_STATUS_OF_MANUAL_SAVE();
-		void SET_CREDITS_ACTIVE(BOOL toggle);
-		void SET_CREDITS_FADE_OUT_WITH_SCREEN(BOOL toggle);
-		BOOL HAVE_CREDITS_REACHED_END();
-		BOOL ARE_CREDITS_RUNNING();
+		void SET_CREDITS_ACTIVE(bool toggle);
+		void SET_CREDITS_FADE_OUT_WITH_SCREEN(bool toggle);
+		bool HAVE_CREDITS_REACHED_END();
+		bool ARE_CREDITS_RUNNING();
 		void TERMINATE_ALL_SCRIPTS_WITH_THIS_NAME(const char* scriptName);
 		void NETWORK_SET_SCRIPT_IS_SAFE_FOR_NETWORK_GAME();
 		/**
@@ -7484,7 +7484,7 @@ namespace base::menu::natives {
 		/**
 		 * The game by default has 5 hospital respawn points. Disabling them all will cause the player to respawn at the last position they were.
 		 */
-		void DISABLE_HOSPITAL_RESTART(int hospitalIndex, BOOL toggle);
+		void DISABLE_HOSPITAL_RESTART(int hospitalIndex, bool toggle);
 		int ADD_POLICE_RESTART(float p0, float p1, float p2, float p3, Any p4);
 		/**
 		 * Disables the spawn point at the police house on the specified index.
@@ -7494,67 +7494,67 @@ namespace base::menu::natives {
 		 * 
 		 * - Nacorpio
 		 */
-		void DISABLE_POLICE_RESTART(int policeIndex, BOOL toggle);
+		void DISABLE_POLICE_RESTART(int policeIndex, bool toggle);
 		void SET_RESTART_COORD_OVERRIDE(float x, float y, float z, float heading);
 		void CLEAR_RESTART_COORD_OVERRIDE();
-		void PAUSE_DEATH_ARREST_RESTART(BOOL toggle);
-		void IGNORE_NEXT_RESTART(BOOL toggle);
+		void PAUSE_DEATH_ARREST_RESTART(bool toggle);
+		void IGNORE_NEXT_RESTART(bool toggle);
 		/**
 		 * Sets whether the game should fade out after the player dies.
 		 */
-		void SET_FADE_OUT_AFTER_DEATH(BOOL toggle);
+		void SET_FADE_OUT_AFTER_DEATH(bool toggle);
 		/**
 		 * Sets whether the game should fade out after the player is arrested.
 		 */
-		void SET_FADE_OUT_AFTER_ARREST(BOOL toggle);
+		void SET_FADE_OUT_AFTER_ARREST(bool toggle);
 		/**
 		 * Sets whether the game should fade in after the player dies or is arrested.
 		 */
-		void SET_FADE_IN_AFTER_DEATH_ARREST(BOOL toggle);
-		void SET_FADE_IN_AFTER_LOAD(BOOL toggle);
+		void SET_FADE_IN_AFTER_DEATH_ARREST(bool toggle);
+		void SET_FADE_IN_AFTER_LOAD(bool toggle);
 		/**
 		 * returns savehouseHandle
 		 */
 		int REGISTER_SAVE_HOUSE(float x, float y, float z, float p3, const char* p4, Any p5, Any p6);
-		void SET_SAVE_HOUSE(int savehouseHandle, BOOL p1, BOOL p2);
-		BOOL OVERRIDE_SAVE_HOUSE(BOOL p0, float p1, float p2, float p3, float p4, BOOL p5, float p6, float p7);
-		BOOL GET_SAVE_HOUSE_DETAILS_AFTER_SUCCESSFUL_LOAD(Vector3* p0, float* p1, BOOL* fadeInAfterLoad, BOOL* p3);
+		void SET_SAVE_HOUSE(int savehouseHandle, bool p1, bool p2);
+		bool OVERRIDE_SAVE_HOUSE(bool p0, float p1, float p2, float p3, float p4, bool p5, float p6, float p7);
+		bool GET_SAVE_HOUSE_DETAILS_AFTER_SUCCESSFUL_LOAD(Vector3* p0, float* p1, bool* fadeInAfterLoad, bool* p3);
 		void DO_AUTO_SAVE();
 		/**
 		 * Returns true if profile setting 208 is equal to 0.
 		 */
-		BOOL GET_IS_AUTO_SAVE_OFF();
-		BOOL IS_AUTO_SAVE_IN_PROGRESS();
-		BOOL HAS_CODE_REQUESTED_AUTOSAVE();
+		bool GET_IS_AUTO_SAVE_OFF();
+		bool IS_AUTO_SAVE_IN_PROGRESS();
+		bool HAS_CODE_REQUESTED_AUTOSAVE();
 		void CLEAR_CODE_REQUESTED_AUTOSAVE();
 		void BEGIN_REPLAY_STATS(Any p0, Any p1);
 		void ADD_REPLAY_STAT_VALUE(Any value);
 		void END_REPLAY_STATS();
-		BOOL HAVE_REPLAY_STATS_BEEN_STORED();
+		bool HAVE_REPLAY_STATS_BEEN_STORED();
 		int GET_REPLAY_STAT_MISSION_ID();
 		int GET_REPLAY_STAT_MISSION_TYPE();
 		int GET_REPLAY_STAT_COUNT();
 		int GET_REPLAY_STAT_AT_INDEX(int index);
 		void CLEAR_REPLAY_STATS();
-		BOOL QUEUE_MISSION_REPEAT_LOAD();
+		bool QUEUE_MISSION_REPEAT_LOAD();
 		/**
 		 * Shows the screen which is visible before you redo a mission? The game will make a restoration point where you will cameback when the mission is over.
 		 * Returns 1 if the message isn't currently on screen
 		 */
-		BOOL QUEUE_MISSION_REPEAT_SAVE();
-		BOOL QUEUE_MISSION_REPEAT_SAVE_FOR_BENCHMARK_TEST();
+		bool QUEUE_MISSION_REPEAT_SAVE();
+		bool QUEUE_MISSION_REPEAT_SAVE_FOR_BENCHMARK_TEST();
 		int GET_STATUS_OF_MISSION_REPEAT_SAVE();
-		BOOL IS_MEMORY_CARD_IN_USE();
-		void SHOOT_SINGLE_BULLET_BETWEEN_COORDS(float x1, float y1, float z1, float x2, float y2, float z2, int damage, BOOL p7, Hash weaponHash, Ped ownerPed, BOOL isAudible, BOOL isInvisible, float speed);
+		bool IS_MEMORY_CARD_IN_USE();
+		void SHOOT_SINGLE_BULLET_BETWEEN_COORDS(float x1, float y1, float z1, float x2, float y2, float z2, int damage, bool p7, Hash weaponHash, Ped ownerPed, bool isAudible, bool isInvisible, float speed);
 		/**
 		 * entity - entity to ignore
 		 */
-		void SHOOT_SINGLE_BULLET_BETWEEN_COORDS_IGNORE_ENTITY(float x1, float y1, float z1, float x2, float y2, float z2, int damage, BOOL p7, Hash weaponHash, Ped ownerPed, BOOL isAudible, BOOL isInvisible, float speed, Entity entity, Any p14);
+		void SHOOT_SINGLE_BULLET_BETWEEN_COORDS_IGNORE_ENTITY(float x1, float y1, float z1, float x2, float y2, float z2, int damage, bool p7, Hash weaponHash, Ped ownerPed, bool isAudible, bool isInvisible, float speed, Entity entity, Any p14);
 		/**
 		 * entity - entity to ignore
 		 * targetEntity - entity to home in on, if the weapon hash provided supports homing
 		 */
-		void SHOOT_SINGLE_BULLET_BETWEEN_COORDS_IGNORE_ENTITY_NEW(float x1, float y1, float z1, float x2, float y2, float z2, int damage, BOOL p7, Hash weaponHash, Ped ownerPed, BOOL isAudible, BOOL isInvisible, float speed, Entity entity, BOOL p14, BOOL p15, Entity targetEntity, BOOL p17, Any p18, Any p19, Any p20);
+		void SHOOT_SINGLE_BULLET_BETWEEN_COORDS_IGNORE_ENTITY_NEW(float x1, float y1, float z1, float x2, float y2, float z2, int damage, bool p7, Hash weaponHash, Ped ownerPed, bool isAudible, bool isInvisible, float speed, Entity entity, bool p14, bool p15, Entity targetEntity, bool p17, Any p18, Any p19, Any p20);
 		/**
 		 * Gets the dimensions of a model.
 		 * 
@@ -7570,21 +7570,21 @@ namespace base::menu::natives {
 		 */
 		void SET_FAKE_WANTED_LEVEL(int fakeWantedLevel);
 		int GET_FAKE_WANTED_LEVEL();
-		void USING_MISSION_CREATOR(BOOL toggle);
-		void ALLOW_MISSION_CREATOR_WARP(BOOL toggle);
-		void SET_MINIGAME_IN_PROGRESS(BOOL toggle);
-		BOOL IS_MINIGAME_IN_PROGRESS();
-		BOOL IS_THIS_A_MINIGAME_SCRIPT();
+		void USING_MISSION_CREATOR(bool toggle);
+		void ALLOW_MISSION_CREATOR_WARP(bool toggle);
+		void SET_MINIGAME_IN_PROGRESS(bool toggle);
+		bool IS_MINIGAME_IN_PROGRESS();
+		bool IS_THIS_A_MINIGAME_SCRIPT();
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL IS_SNIPER_INVERTED();
+		bool IS_SNIPER_INVERTED();
 		/**
 		 * Returns true if the game is using the metric measurement system (profile setting 227), false if imperial is used.
 		 */
-		BOOL SHOULD_USE_METRIC_MEASUREMENTS();
+		bool SHOULD_USE_METRIC_MEASUREMENTS();
 		int GET_PROFILE_SETTING(int profileSetting);
-		BOOL ARE_STRINGS_EQUAL(const char* string1, const char* string2);
+		bool ARE_STRINGS_EQUAL(const char* string1, const char* string2);
 		/**
 		 * Compares two strings up to a specified number of characters.
 		 * 
@@ -7611,13 +7611,13 @@ namespace base::menu::natives {
 		 * MISC::COMPARE_STRINGS("A", "a", true, 1); // -1; 'A' < 'a'
 		 * MISC::COMPARE_STRINGS("a", "A", true, 1); // 1; 'a' > 'A'
 		 */
-		int COMPARE_STRINGS(const char* str1, const char* str2, BOOL matchCase, int maxLength);
+		int COMPARE_STRINGS(const char* str1, const char* str2, bool matchCase, int maxLength);
 		int ABSI(int value);
 		float ABSF(float value);
 		/**
 		 * Determines whether there is a sniper bullet within the specified coordinates. The coordinates form an axis-aligned bounding box.
 		 */
-		BOOL IS_SNIPER_BULLET_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
+		bool IS_SNIPER_BULLET_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
 		/**
 		 * Determines whether there is a projectile within the specified coordinates. The coordinates form a rectangle.
 		 * 
@@ -7626,69 +7626,69 @@ namespace base::menu::natives {
 		 * 
 		 * ownedByPlayer = only projectiles fired by the player will be detected.
 		 */
-		BOOL IS_PROJECTILE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL ownedByPlayer);
+		bool IS_PROJECTILE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool ownedByPlayer);
 		/**
 		 * Determines whether there is a projectile of a specific type within the specified coordinates. The coordinates form a axis-aligned bounding box.
 		 */
-		BOOL IS_PROJECTILE_TYPE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, int type, BOOL ownedByPlayer);
+		bool IS_PROJECTILE_TYPE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, int type, bool ownedByPlayer);
 		/**
 		 * See IS_POINT_IN_ANGLED_AREA for the definition of an angled area.
 		 */
-		BOOL IS_PROJECTILE_TYPE_IN_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width, Any p7, BOOL ownedByPlayer);
-		BOOL IS_PROJECTILE_TYPE_WITHIN_DISTANCE(float x, float y, float z, Hash projectileHash, float radius, BOOL ownedByPlayer);
-		BOOL GET_COORDS_OF_PROJECTILE_TYPE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, Hash projectileHash, Vector3* projectilePos, BOOL ownedByPlayer);
-		BOOL GET_COORDS_OF_PROJECTILE_TYPE_IN_ANGLED_AREA(float vecAngledAreaPoint1X, float vecAngledAreaPoint1Y, float vecAngledAreaPoint1Z, float vecAngledAreaPoint2X, float vecAngledAreaPoint2Y, float vecAngledAreaPoint2Z, float distanceOfOppositeFace, Hash weaponType, Vector3* positionOut, BOOL bIsPlayer);
-		BOOL GET_COORDS_OF_PROJECTILE_TYPE_WITHIN_DISTANCE(Ped ped, Hash weaponHash, float distance, Vector3* outCoords, BOOL p4);
-		BOOL GET_PROJECTILE_OF_PROJECTILE_TYPE_WITHIN_DISTANCE(Ped ped, Hash weaponHash, float distance, Vector3* outCoords, Object* outProjectile, BOOL p5);
+		bool IS_PROJECTILE_TYPE_IN_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width, Any p7, bool ownedByPlayer);
+		bool IS_PROJECTILE_TYPE_WITHIN_DISTANCE(float x, float y, float z, Hash projectileHash, float radius, bool ownedByPlayer);
+		bool GET_COORDS_OF_PROJECTILE_TYPE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, Hash projectileHash, Vector3* projectilePos, bool ownedByPlayer);
+		bool GET_COORDS_OF_PROJECTILE_TYPE_IN_ANGLED_AREA(float vecAngledAreaPoint1X, float vecAngledAreaPoint1Y, float vecAngledAreaPoint1Z, float vecAngledAreaPoint2X, float vecAngledAreaPoint2Y, float vecAngledAreaPoint2Z, float distanceOfOppositeFace, Hash weaponType, Vector3* positionOut, bool bIsPlayer);
+		bool GET_COORDS_OF_PROJECTILE_TYPE_WITHIN_DISTANCE(Ped ped, Hash weaponHash, float distance, Vector3* outCoords, bool p4);
+		bool GET_PROJECTILE_OF_PROJECTILE_TYPE_WITHIN_DISTANCE(Ped ped, Hash weaponHash, float distance, Vector3* outCoords, Object* outProjectile, bool p5);
 		/**
 		 * For projectiles, see: IS_PROJECTILE_TYPE_IN_ANGLED_AREA
 		 * See IS_POINT_IN_ANGLED_AREA for the definition of an angled area.
 		 * Returns True if a bullet, as maintained by a pool within CWeaponManager, has been fired into the defined angled area.
 		 */
-		BOOL IS_BULLET_IN_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width, BOOL ownedByPlayer);
-		BOOL IS_BULLET_IN_AREA(float x, float y, float z, float radius, BOOL ownedByPlayer);
-		BOOL IS_BULLET_IN_BOX(float x1, float y1, float z1, float x2, float y2, float z2, BOOL ownedByPlayer);
+		bool IS_BULLET_IN_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width, bool ownedByPlayer);
+		bool IS_BULLET_IN_AREA(float x, float y, float z, float radius, bool ownedByPlayer);
+		bool IS_BULLET_IN_BOX(float x1, float y1, float z1, float x2, float y2, float z2, bool ownedByPlayer);
 		/**
 		 * p3 - possibly radius?
 		 */
-		BOOL HAS_BULLET_IMPACTED_IN_AREA(float x, float y, float z, float p3, BOOL p4, BOOL p5);
-		BOOL HAS_BULLET_IMPACTED_IN_BOX(float p0, float p1, float p2, float p3, float p4, float p5, BOOL p6, BOOL p7);
+		bool HAS_BULLET_IMPACTED_IN_AREA(float x, float y, float z, float p3, bool p4, bool p5);
+		bool HAS_BULLET_IMPACTED_IN_BOX(float p0, float p1, float p2, float p3, float p4, float p5, bool p6, bool p7);
 		/**
 		 * PS4
 		 */
-		BOOL IS_ORBIS_VERSION();
+		bool IS_ORBIS_VERSION();
 		/**
 		 * XBOX ONE
 		 */
-		BOOL IS_DURANGO_VERSION();
-		BOOL IS_XBOX360_VERSION();
-		BOOL IS_PS3_VERSION();
-		BOOL IS_PC_VERSION();
-		BOOL IS_STEAM_VERSION();
-		BOOL _IS_XBOXPC_VERSION();
+		bool IS_DURANGO_VERSION();
+		bool IS_XBOX360_VERSION();
+		bool IS_PS3_VERSION();
+		bool IS_PC_VERSION();
+		bool IS_STEAM_VERSION();
+		bool _IS_XBOXPC_VERSION();
 		/**
 		 * Used to block some of the prostitute stuff due to laws in Australia.
 		 */
-		BOOL IS_AUSSIE_VERSION();
-		BOOL IS_JAPANESE_VERSION();
-		BOOL IS_XBOX_PLATFORM();
+		bool IS_AUSSIE_VERSION();
+		bool IS_JAPANESE_VERSION();
+		bool IS_XBOX_PLATFORM();
 		/**
 		 * Xbox Series (Scarlett) version...
 		 */
-		BOOL IS_SCARLETT_VERSION();
-		BOOL IS_SCE_PLATFORM();
+		bool IS_SCARLETT_VERSION();
+		bool IS_SCE_PLATFORM();
 		/**
 		 * PS5 (Prospero) version...
 		 */
-		BOOL IS_PROSPERO_VERSION();
-		BOOL IS_STRING_NULL(const char* string);
-		BOOL IS_STRING_NULL_OR_EMPTY(const char* string);
+		bool IS_PROSPERO_VERSION();
+		bool IS_STRING_NULL(const char* string);
+		bool IS_STRING_NULL_OR_EMPTY(const char* string);
 		/**
 		 * Returns false if it's a null or empty string or if the string is too long. outInteger will be set to -999 in that case.
 		 * 
 		 * If all checks have passed successfully, the return value will be set to whatever strtol(string, 0i64, 10); returns.
 		 */
-		BOOL STRING_TO_INT(const char* string, int* outInteger);
+		bool STRING_TO_INT(const char* string, int* outInteger);
 		void SET_BITS_IN_RANGE(int* var, int rangeStart, int rangeEnd, int p3);
 		int GET_BITS_IN_RANGE(int var, int rangeStart, int rangeEnd);
 		/**
@@ -7728,28 +7728,28 @@ namespace base::menu::natives {
 		/**
 		 * Toggles some stunt jump stuff.
 		 */
-		void TOGGLE_SHOW_OPTIONAL_STUNT_JUMP_CAMERA(BOOL toggle);
+		void TOGGLE_SHOW_OPTIONAL_STUNT_JUMP_CAMERA(bool toggle);
 		void DELETE_STUNT_JUMP(int p0);
 		void ENABLE_STUNT_JUMP_SET(int p0);
 		void DISABLE_STUNT_JUMP_SET(int p0);
-		void SET_STUNT_JUMPS_CAN_TRIGGER(BOOL toggle);
-		BOOL IS_STUNT_JUMP_IN_PROGRESS();
-		BOOL IS_STUNT_JUMP_MESSAGE_SHOWING();
+		void SET_STUNT_JUMPS_CAN_TRIGGER(bool toggle);
+		bool IS_STUNT_JUMP_IN_PROGRESS();
+		bool IS_STUNT_JUMP_MESSAGE_SHOWING();
 		int GET_NUM_SUCCESSFUL_STUNT_JUMPS();
 		int GET_TOTAL_SUCCESSFUL_STUNT_JUMPS();
 		void CANCEL_STUNT_JUMP();
 		/**
 		 * Make sure to call this from the correct thread if you're using multiple threads because all other threads except the one which is calling SET_GAME_PAUSED will be paused which means you will lose control and the game remains in paused mode until you exit GTA5.exe
 		 */
-		void SET_GAME_PAUSED(BOOL toggle);
-		void SET_THIS_SCRIPT_CAN_BE_PAUSED(BOOL toggle);
-		void SET_THIS_SCRIPT_CAN_REMOVE_BLIPS_CREATED_BY_ANY_SCRIPT(BOOL toggle);
+		void SET_GAME_PAUSED(bool toggle);
+		void SET_THIS_SCRIPT_CAN_BE_PAUSED(bool toggle);
+		void SET_THIS_SCRIPT_CAN_REMOVE_BLIPS_CREATED_BY_ANY_SCRIPT(bool toggle);
 		/**
 		 * This native appears on the cheat_controller script and tracks a combination of buttons, which may be used to toggle cheats in-game. Credits to ThreeSocks for the info. The hash contains the combination, while the "amount" represents the amount of buttons used in a combination. The following page can be used to make a button combination: gta5offset.com/ts/hash/
 		 * 
 		 * INT_SCORES_SCORTED was a hash collision
 		 */
-		BOOL HAS_CHEAT_WITH_HASH_BEEN_ACTIVATED(Hash hash, int amount);
+		bool HAS_CHEAT_WITH_HASH_BEEN_ACTIVATED(Hash hash, int amount);
 		/**
 		 * Get inputted "Cheat code", for example:
 		 * 
@@ -7765,8 +7765,8 @@ namespace base::menu::natives {
 		 * Calling this will also set the last saved string hash to zero.
 		 * 
 		 */
-		BOOL HAS_PC_CHEAT_WITH_HASH_BEEN_ACTIVATED(Hash hash);
-		void OVERRIDE_FREEZE_FLAGS(BOOL p0);
+		bool HAS_PC_CHEAT_WITH_HASH_BEEN_ACTIVATED(Hash hash);
+		void OVERRIDE_FREEZE_FLAGS(bool p0);
 		/**
 		 * Formerly known as _LOWER_MAP_PROP_DENSITY and wrongly due to idiots as _ENABLE_MP_DLC_MAPS.
 		 * Sets the maximum prop density and changes a loading screen flag from 'loading story mode' to 'loading GTA Online'. Does not touch DLC map data at all.
@@ -7781,7 +7781,7 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL IS_FRONTEND_FADING();
+		bool IS_FRONTEND_FADING();
 		/**
 		 * spawns a few distant/out-of-sight peds, vehicles, animals etc each time it is called
 		 */
@@ -7795,9 +7795,9 @@ namespace base::menu::natives {
 		 * 3: 0.0 - off
 		 */
 		void SET_GRAVITY_LEVEL(int level);
-		void START_SAVE_DATA(Any* p0, Any p1, BOOL p2);
+		void START_SAVE_DATA(Any* p0, Any p1, bool p2);
 		void STOP_SAVE_DATA();
-		int GET_SIZE_OF_SAVE_DATA(BOOL p0);
+		int GET_SIZE_OF_SAVE_DATA(bool p0);
 		void REGISTER_INT_TO_SAVE(Any* p0, const char* name);
 		void REGISTER_INT64_TO_SAVE(Any* p0, const char* name);
 		void REGISTER_ENUM_TO_SAVE(Any* p0, const char* name);
@@ -7846,8 +7846,8 @@ namespace base::menu::natives {
 		/**
 		 * https://alloc8or.re/gta5/doc/enums/DispatchType.txt
 		 */
-		void ENABLE_DISPATCH_SERVICE(int dispatchService, BOOL toggle);
-		void BLOCK_DISPATCH_SERVICE_RESOURCE_CREATION(int dispatchService, BOOL toggle);
+		void ENABLE_DISPATCH_SERVICE(int dispatchService, bool toggle);
+		void BLOCK_DISPATCH_SERVICE_RESOURCE_CREATION(int dispatchService, bool toggle);
 		int GET_NUMBER_RESOURCES_ALLOCATED_TO_WANTED_LEVEL(int dispatchService);
 		/**
 		 * As for the 'police' incident, it will call police cars to you, but unlike PedsInCavalcades & Merryweather they won't start shooting at you unless you shoot first or shoot at them. The top 2 however seem to cancel theirselves if there is noone dead around you or a fire. I only figured them out as I found out the 3rd param is definately the amountOfPeople and they called incident 3 in scripts with 4 people (which the firetruck has) and incident 5 with 2 people (which the ambulence has). The 4 param I cant say is radius, but for the pedsInCavalcades and Merryweather R* uses 0.0f and for the top 3 (Emergency Services) they use 3.0f.
@@ -7858,7 +7858,7 @@ namespace base::menu::natives {
 		 * if(CREATE_INCIDENT) etc it will return false if you do as I said above.
 		 * =====================================================
 		 */
-		BOOL CREATE_INCIDENT(int dispatchService, float x, float y, float z, int numUnits, float radius, int* outIncidentID, Any p7, Any p8);
+		bool CREATE_INCIDENT(int dispatchService, float x, float y, float z, int numUnits, float radius, int* outIncidentID, Any p7, Any p8);
 		/**
 		 * As for the 'police' incident, it will call police cars to you, but unlike PedsInCavalcades & Merryweather they won't start shooting at you unless you shoot first or shoot at them. The top 2 however seem to cancel theirselves if there is noone dead around you or a fire. I only figured them out as I found out the 3rd param is definately the amountOfPeople and they called incident 3 in scripts with 4 people (which the firetruck has) and incident 5 with 2 people (which the ambulence has). The 4 param I cant say is radius, but for the pedsInCavalcades and Merryweather R* uses 0.0f and for the top 3 (Emergency Services) they use 3.0f.
 		 * 
@@ -7868,7 +7868,7 @@ namespace base::menu::natives {
 		 * if(CREATE_INCIDENT) etc it will return false if you do as I said above.
 		 * =====================================================
 		 */
-		BOOL CREATE_INCIDENT_WITH_ENTITY(int dispatchService, Ped ped, int numUnits, float radius, int* outIncidentID, Any p5, Any p6);
+		bool CREATE_INCIDENT_WITH_ENTITY(int dispatchService, Ped ped, int numUnits, float radius, int* outIncidentID, Any p5, Any p6);
 		/**
 		 * Delete an incident with a given id.
 		 * 
@@ -7886,7 +7886,7 @@ namespace base::menu::natives {
 		 * If you try it you will crash (or) freeze.
 		 * =======================================================
 		 */
-		BOOL IS_INCIDENT_VALID(int incidentId);
+		bool IS_INCIDENT_VALID(int incidentId);
 		void SET_INCIDENT_REQUESTED_UNITS(int incidentId, int dispatchService, int numUnits);
 		void SET_IDEAL_SPAWN_DISTANCE_FOR_INCIDENT(int incidentId, float p1);
 		/**
@@ -7894,33 +7894,33 @@ namespace base::menu::natives {
 		 * The positions match path finding node positions.
 		 * When roads diverge, the position may rapidly change between two or more positions. This is due to the engine not being certain of which path the player will take.
 		 */
-		BOOL FIND_SPAWN_POINT_IN_DIRECTION(float posX, float posY, float posZ, float fwdVecX, float fwdVecY, float fwdVecZ, float distance, Vector3* spawnPoint);
-		int ADD_POP_MULTIPLIER_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float p6, float p7, BOOL p8, BOOL p9);
-		BOOL DOES_POP_MULTIPLIER_AREA_EXIST(int id);
-		void REMOVE_POP_MULTIPLIER_AREA(int id, BOOL p1);
-		BOOL IS_POP_MULTIPLIER_AREA_NETWORKED(int id);
+		bool FIND_SPAWN_POINT_IN_DIRECTION(float posX, float posY, float posZ, float fwdVecX, float fwdVecY, float fwdVecZ, float distance, Vector3* spawnPoint);
+		int ADD_POP_MULTIPLIER_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float p6, float p7, bool p8, bool p9);
+		bool DOES_POP_MULTIPLIER_AREA_EXIST(int id);
+		void REMOVE_POP_MULTIPLIER_AREA(int id, bool p1);
+		bool IS_POP_MULTIPLIER_AREA_NETWORKED(int id);
 		/**
 		 * This native is adding a zone, where you can change density settings. For example, you can add a zone on 0.0, 0.0, 0.0 with radius 900.0 and vehicleMultiplier 0.0, and you will not see any new population vehicle spawned in a radius of 900.0 from 0.0, 0.0, 0.0. Returns the id. You can have only 15 zones at the same time. You can remove zone using REMOVE_POP_MULTIPLIER_SPHERE
 		 */
-		int ADD_POP_MULTIPLIER_SPHERE(float x, float y, float z, float radius, float pedMultiplier, float vehicleMultiplier, BOOL p6, BOOL p7);
-		BOOL DOES_POP_MULTIPLIER_SPHERE_EXIST(int id);
+		int ADD_POP_MULTIPLIER_SPHERE(float x, float y, float z, float radius, float pedMultiplier, float vehicleMultiplier, bool p6, bool p7);
+		bool DOES_POP_MULTIPLIER_SPHERE_EXIST(int id);
 		/**
 		 * Removes population multiplier sphere
 		 */
-		void REMOVE_POP_MULTIPLIER_SPHERE(int id, BOOL p1);
+		void REMOVE_POP_MULTIPLIER_SPHERE(int id, bool p1);
 		/**
 		 * Makes the ped jump around like they're in a tennis match
 		 */
-		void ENABLE_TENNIS_MODE(Ped ped, BOOL toggle, BOOL p2);
-		BOOL IS_TENNIS_MODE(Ped ped);
+		void ENABLE_TENNIS_MODE(Ped ped, bool toggle, bool p2);
+		bool IS_TENNIS_MODE(Ped ped);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		void PLAY_TENNIS_SWING_ANIM(Ped ped, const char* animDict, const char* animName, float p3, float p4, BOOL p5);
-		BOOL GET_TENNIS_SWING_ANIM_COMPLETE(Ped ped);
-		BOOL GET_TENNIS_SWING_ANIM_CAN_BE_INTERRUPTED(Ped ped);
-		BOOL GET_TENNIS_SWING_ANIM_SWUNG(Ped ped);
-		void PLAY_TENNIS_DIVE_ANIM(Ped ped, int p1, float p2, float p3, float p4, BOOL p5);
+		void PLAY_TENNIS_SWING_ANIM(Ped ped, const char* animDict, const char* animName, float p3, float p4, bool p5);
+		bool GET_TENNIS_SWING_ANIM_COMPLETE(Ped ped);
+		bool GET_TENNIS_SWING_ANIM_CAN_BE_INTERRUPTED(Ped ped);
+		bool GET_TENNIS_SWING_ANIM_SWUNG(Ped ped);
+		void PLAY_TENNIS_DIVE_ANIM(Ped ped, int p1, float p2, float p3, float p4, bool p5);
 		/**
 		 * From the scripts:
 		 * 
@@ -7951,7 +7951,7 @@ namespace base::menu::natives {
 		/**
 		 * Activates (usused?) riot mode. All NPCs are being hostile to each other (including player). Also the game will give weapons (pistols, smgs) to random NPCs.
 		 */
-		void SET_RIOT_MODE_ENABLED(BOOL toggle);
+		void SET_RIOT_MODE_ENABLED(bool toggle);
 		void DISPLAY_ONSCREEN_KEYBOARD_WITH_LONGER_INITIAL_STRING(int p0, const char* windowTitle, Any* p2, const char* defaultText, const char* defaultConcat1, const char* defaultConcat2, const char* defaultConcat3, const char* defaultConcat4, const char* defaultConcat5, const char* defaultConcat6, const char* defaultConcat7, int maxInputLength);
 		/**
 		 * sfink: note, p0 is set to 6 for PC platform in at least 1 script, or to `unk::_get_ui_language_id() == 0` otherwise.
@@ -8016,21 +8016,21 @@ namespace base::menu::natives {
 		/**
 		 * Appears to remove stealth kill action from memory
 		 */
-		void ACTION_MANAGER_ENABLE_ACTION(Hash hash, BOOL enable);
+		void ACTION_MANAGER_ENABLE_ACTION(Hash hash, bool enable);
 		/**
 		 * GET_GAME_TIMER() / 1000
 		 */
 		int GET_REAL_WORLD_TIME();
-		void SUPRESS_RANDOM_EVENT_THIS_FRAME(int eventType, BOOL suppress);
+		void SUPRESS_RANDOM_EVENT_THIS_FRAME(int eventType, bool suppress);
 		void SET_EXPLOSIVE_AMMO_THIS_FRAME(Player player);
 		void SET_FIRE_AMMO_THIS_FRAME(Player player);
 		void SET_EXPLOSIVE_MELEE_THIS_FRAME(Player player);
 		void SET_SUPER_JUMP_THIS_FRAME(Player player);
 		void SET_BEAST_JUMP_THIS_FRAME(Player player);
 		void SET_FORCED_JUMP_THIS_FRAME(Player player);
-		BOOL HAS_GAME_INSTALLED_THIS_SESSION();
+		bool HAS_GAME_INSTALLED_THIS_SESSION();
 		void SET_TICKER_JOHNMARSTON_IS_DONE();
-		BOOL ARE_PROFILE_SETTINGS_VALID();
+		bool ARE_PROFILE_SETTINGS_VALID();
 		void PREVENT_ARREST_STATE_THIS_FRAME();
 		/**
 		 * Sets the localplayer playerinfo state back to playing (State 0)
@@ -8049,7 +8049,7 @@ namespace base::menu::natives {
 		void SCRIPT_RACE_INIT(int p0, int p1, Any p2, Any p3);
 		void SCRIPT_RACE_SHUTDOWN();
 		void SCRIPT_RACE_PLAYER_HIT_CHECKPOINT(Player player, Any p1, Any p2, Any p3);
-		BOOL SCRIPT_RACE_GET_PLAYER_SPLIT_TIME(Player player, int* p1, int* p2);
+		bool SCRIPT_RACE_GET_PLAYER_SPLIT_TIME(Player player, int* p1, int* p2);
 		void START_END_USER_BENCHMARK();
 		void STOP_END_USER_BENCHMARK();
 		void RESET_END_USER_BENCHMARK();
@@ -8060,15 +8060,15 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if the current frontend menu is FE_MENU_VERSION_SP_PAUSE
 		 */
-		BOOL UI_STARTED_END_USER_BENCHMARK();
+		bool UI_STARTED_END_USER_BENCHMARK();
 		/**
 		 * Returns true if the current frontend menu is FE_MENU_VERSION_LANDING_MENU
 		 */
-		BOOL LANDING_SCREEN_STARTED_END_USER_BENCHMARK();
+		bool LANDING_SCREEN_STARTED_END_USER_BENCHMARK();
 		/**
 		 * Returns true if command line option '-benchmark' is set.
 		 */
-		BOOL IS_COMMANDLINE_END_USER_BENCHMARK();
+		bool IS_COMMANDLINE_END_USER_BENCHMARK();
 		/**
 		 * Returns value of the '-benchmarkIterations' command line option.
 		 */
@@ -8088,12 +8088,12 @@ namespace base::menu::natives {
 		/**
 		 * Hardcoded to always return true.
 		 */
-		BOOL HAS_ASYNC_INSTALL_FINISHED();
+		bool HAS_ASYNC_INSTALL_FINISHED();
 		void CLEANUP_ASYNC_INSTALL();
 		/**
 		 * aka "constrained"
 		 */
-		BOOL PLM_IS_IN_CONSTRAINED_MODE();
+		bool PLM_IS_IN_CONSTRAINED_MODE();
 		/**
 		 * Returns duration of how long the game has been in power-saving mode (aka "constrained") in milliseconds.
 		 */
@@ -8102,21 +8102,21 @@ namespace base::menu::natives {
 		 * If toggle is true, the ped's head is shown in the pause menu
 		 * If toggle is false, the ped's head is not shown in the pause menu
 		 */
-		void SET_PLAYER_IS_IN_ANIMAL_FORM(BOOL toggle);
+		void SET_PLAYER_IS_IN_ANIMAL_FORM(bool toggle);
 		/**
 		 * Although we don't have a jenkins hash for this one, the name is 100% confirmed.
 		 */
-		BOOL GET_IS_PLAYER_IN_ANIMAL_FORM();
-		void SET_PLAYER_IS_REPEATING_A_MISSION(BOOL toggle);
+		bool GET_IS_PLAYER_IN_ANIMAL_FORM();
+		void SET_PLAYER_IS_REPEATING_A_MISSION(bool toggle);
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
 		void DISABLE_SCREEN_DIMMING_THIS_FRAME();
 		float GET_CITY_DENSITY();
 		void USE_ACTIVE_CAMERA_FOR_TIMESLICING_CENTRE();
-		BOOL GET_SCRIPT_ROUTER_CONTEXT(Any* contextData);
-		BOOL SET_SCRIPT_ROUTER_LINK(Any* contextData);
-		BOOL HAS_PENDING_SCRIPT_ROUTER_LINK();
+		bool GET_SCRIPT_ROUTER_CONTEXT(Any* contextData);
+		bool SET_SCRIPT_ROUTER_LINK(Any* contextData);
+		bool HAS_PENDING_SCRIPT_ROUTER_LINK();
 		void CLEAR_SCRIPT_ROUTER_LINK();
 		/**
 		 * Does nothing (it's a nullsub).
@@ -8125,10 +8125,10 @@ namespace base::menu::natives {
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
-		void SET_ACTIVITY_SCRIPT_ROUTING_ENABLED(BOOL enabled);
-		BOOL IS_SESSION_INITIALIZED();
+		void SET_ACTIVITY_SCRIPT_ROUTING_ENABLED(bool enabled);
+		bool IS_SESSION_INITIALIZED();
 		int GET_CHOSEN_CRIMINAL_CAREER();
-		BOOL HAS_FINALIZED_CHOSEN_CRIMINAL_CAREER();
+		bool HAS_FINALIZED_CHOSEN_CRIMINAL_CAREER();
 		int GET_CHOSEN_MP_CHARACTER_SLOT();
 		void RESET_CHOSEN_MP_CHARACTER_SLOT();
 		void SET_CONTENT_ID_INDEX(Hash contentId, int index);
@@ -8176,15 +8176,15 @@ namespace base::menu::natives {
 		 * If bool Toggle = true so the mobile is hide to screen.
 		 * If bool Toggle = false so the mobile is show to screen.
 		 */
-		void SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN(BOOL toggle);
+		void SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN(bool toggle);
 		/**
 		 * This one is weird and seems to return a TRUE state regardless of whether the phone is visible on screen or tucked away.
 		 * 
 		 * 
 		 * I can confirm the above. This function is hard-coded to always return 1.
 		 */
-		BOOL CAN_PHONE_BE_SEEN_ON_SCREEN();
-		void SET_MOBILE_PHONE_DOF_STATE(BOOL toggle);
+		bool CAN_PHONE_BE_SEEN_ON_SCREEN();
+		void SET_MOBILE_PHONE_DOF_STATE(bool toggle);
 		/**
 		 * For move the finger of player, the value of int goes 1 at 5.
 		 */
@@ -8193,10 +8193,10 @@ namespace base::menu::natives {
 		 * if the bool "Toggle" is "true" so the phone is lean.
 		 * if the bool "Toggle" is "false" so the phone is not lean.
 		 */
-		void CELL_HORIZONTAL_MODE_TOGGLE(BOOL toggle);
-		void CELL_CAM_ACTIVATE(BOOL p0, BOOL p1);
-		void CELL_CAM_ACTIVATE_SELFIE_MODE(BOOL toggle);
-		void CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE(BOOL toggle);
+		void CELL_HORIZONTAL_MODE_TOGGLE(bool toggle);
+		void CELL_CAM_ACTIVATE(bool p0, bool p1);
+		void CELL_CAM_ACTIVATE_SELFIE_MODE(bool toggle);
+		void CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE(bool toggle);
 		void CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING(float p0);
 		void CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET(float horizontalPan);
 		void CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET(float vertPan);
@@ -8205,7 +8205,7 @@ namespace base::menu::natives {
 		void CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET(float yaw);
 		void CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET(float roll);
 		void CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET(float pitch);
-		BOOL CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK(Entity entity);
+		bool CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK(Entity entity);
 		void GET_MOBILE_PHONE_RENDER_ID(int* renderId);
 
 	} // namespace MOBILE
@@ -8216,13 +8216,13 @@ namespace base::menu::natives {
 		/**
 		 * Note the 2nd parameters are always 1, 0. I have a feeling it deals with your money, wallet, bank. So when you delete the character it of course wipes the wallet cash at that time. So if that was the case, it would be eg, NETWORK_DELETE_CHARACTER(characterIndex, deleteWalletCash, deleteBankCash);
 		 */
-		void NETWORK_DELETE_CHARACTER(int characterSlot, BOOL p1, BOOL p2);
+		void NETWORK_DELETE_CHARACTER(int characterSlot, bool p1, bool p2);
 		void NETWORK_MANUAL_DELETE_CHARACTER(int characterSlot);
-		BOOL NETWORK_GET_PLAYER_IS_HIGH_EARNER();
+		bool NETWORK_GET_PLAYER_IS_HIGH_EARNER();
 		void NETWORK_CLEAR_CHARACTER_WALLET(int characterSlot);
 		void NETWORK_GIVE_PLAYER_JOBSHARE_CASH(int amount, Any* gamerHandle);
 		void NETWORK_RECEIVE_PLAYER_JOBSHARE_CASH(int value, Any* gamerHandle);
-		BOOL NETWORK_CAN_SHARE_JOB_CASH();
+		bool NETWORK_CAN_SHARE_JOB_CASH();
 		/**
 		 * index
 		 * -------
@@ -8262,10 +8262,10 @@ namespace base::menu::natives {
 		 * 
 		 * 
 		 */
-		void NETWORK_REFUND_CASH(int index, const char* context, const char* reason, BOOL p3);
-		void NETWORK_DEDUCT_CASH(int amount, const char* p1, const char* p2, BOOL p3, BOOL p4, BOOL p5);
-		BOOL NETWORK_MONEY_CAN_BET(int amount, BOOL p1, BOOL p2);
-		BOOL NETWORK_CAN_BET(int amount);
+		void NETWORK_REFUND_CASH(int index, const char* context, const char* reason, bool p3);
+		void NETWORK_DEDUCT_CASH(int amount, const char* p1, const char* p2, bool p3, bool p4, bool p5);
+		bool NETWORK_MONEY_CAN_BET(int amount, bool p1, bool p2);
+		bool NETWORK_CAN_BET(int amount);
 		/**
 		 * GTAO_CASINO_HOUSE
 		 * GTAO_CASINO_INSIDETRACK
@@ -8277,17 +8277,17 @@ namespace base::menu::natives {
 		 * 
 		 * NETWORK_C*
 		 */
-		BOOL NETWORK_CASINO_CAN_BET(Hash hash);
-		BOOL NETWORK_CASINO_CAN_BET_PVC();
-		BOOL NETWORK_CASINO_CAN_BET_AMOUNT(Any p0);
-		BOOL NETWORK_CASINO_CAN_BUY_CHIPS_PVC();
-		BOOL NETWORK_CASINO_BUY_CHIPS(int p0, int p1);
-		BOOL NETWORK_CASINO_SELL_CHIPS(int p0, int p1);
+		bool NETWORK_CASINO_CAN_BET(Hash hash);
+		bool NETWORK_CASINO_CAN_BET_PVC();
+		bool NETWORK_CASINO_CAN_BET_AMOUNT(Any p0);
+		bool NETWORK_CASINO_CAN_BUY_CHIPS_PVC();
+		bool NETWORK_CASINO_BUY_CHIPS(int p0, int p1);
+		bool NETWORK_CASINO_SELL_CHIPS(int p0, int p1);
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
 		void NETWORK_DEFER_CASH_TRANSACTIONS_UNTIL_SHOP_SAVE();
-		BOOL CAN_PAY_AMOUNT_TO_BOSS(int p0, int p1, int amount, int* p3);
+		bool CAN_PAY_AMOUNT_TO_BOSS(int p0, int p1, int amount, int* p3);
 		void NETWORK_EARN_FROM_PICKUP(int amount);
 		void NETWORK_EARN_FROM_CASHING_OUT(int amount);
 		void NETWORK_EARN_FROM_GANGATTACK_PICKUP(int amount);
@@ -8304,7 +8304,7 @@ namespace base::menu::natives {
 		void NETWORK_EARN_FROM_JOBX2(int amount, const char* p1);
 		void NETWORK_EARN_FROM_PREMIUM_JOB(int amount, const char* p1);
 		void NETWORK_EARN_FROM_BEND_JOB(int amount, const char* heistHash);
-		void NETWORK_EARN_FROM_CHALLENGE_WIN(Any p0, Any* p1, BOOL p2);
+		void NETWORK_EARN_FROM_CHALLENGE_WIN(Any p0, Any* p1, bool p2);
 		void NETWORK_EARN_FROM_BOUNTY(int amount, Any* gamerHandle, Any* p2, Any p3);
 		void NETWORK_EARN_FROM_IMPORT_EXPORT(int amount, Hash modelHash);
 		void NETWORK_EARN_FROM_HOLDUPS(int amount);
@@ -8347,57 +8347,57 @@ namespace base::menu::natives {
 		void NETWORK_EARN_FROM_BUSINESS_HUB_SELL(Any p0, Any p1, Any p2);
 		void NETWORK_EARN_FROM_FMBB_BOSS_WORK(Any p0);
 		void NETWORK_EARN_FMBB_WAGE_BONUS(Any p0);
-		BOOL NETWORK_CAN_SPEND_MONEY(Any p0, BOOL p1, BOOL p2, BOOL p3, Any p4, Any p5);
-		BOOL NETWORK_CAN_SPEND_MONEY2(Any p0, BOOL p1, BOOL p2, BOOL p3, Any* p4, Any p5, Any p6);
-		void NETWORK_BUY_ITEM(int amount, Hash item, Any p2, Any p3, BOOL p4, const char* item_name, Any p6, Any p7, Any p8, BOOL p9);
-		void NETWORK_SPENT_TAXI(int amount, BOOL p1, BOOL p2, Any p3, Any p4);
-		void NETWORK_PAY_EMPLOYEE_WAGE(Any p0, BOOL p1, BOOL p2);
-		void NETWORK_PAY_MATCH_ENTRY_FEE(int amount, const char* matchId, BOOL p2, BOOL p3);
-		void NETWORK_SPENT_BETTING(int amount, int p1, const char* matchId, BOOL p3, BOOL p4);
+		bool NETWORK_CAN_SPEND_MONEY(Any p0, bool p1, bool p2, bool p3, Any p4, Any p5);
+		bool NETWORK_CAN_SPEND_MONEY2(Any p0, bool p1, bool p2, bool p3, Any* p4, Any p5, Any p6);
+		void NETWORK_BUY_ITEM(int amount, Hash item, Any p2, Any p3, bool p4, const char* item_name, Any p6, Any p7, Any p8, bool p9);
+		void NETWORK_SPENT_TAXI(int amount, bool p1, bool p2, Any p3, Any p4);
+		void NETWORK_PAY_EMPLOYEE_WAGE(Any p0, bool p1, bool p2);
+		void NETWORK_PAY_MATCH_ENTRY_FEE(int amount, const char* matchId, bool p2, bool p3);
+		void NETWORK_SPENT_BETTING(int amount, int p1, const char* matchId, bool p3, bool p4);
 		void NETWORK_SPENT_WAGER(Any p0, Any p1, int amount);
-		void NETWORK_SPENT_IN_STRIPCLUB(Any p0, BOOL p1, Any p2, BOOL p3);
-		void NETWORK_BUY_HEALTHCARE(int cost, BOOL p1, BOOL p2);
+		void NETWORK_SPENT_IN_STRIPCLUB(Any p0, bool p1, Any p2, bool p3);
+		void NETWORK_BUY_HEALTHCARE(int cost, bool p1, bool p2);
 		/**
 		 * p1 = 0 (always)
 		 * p2 = 1 (always)
 		 */
-		void NETWORK_BUY_AIRSTRIKE(int cost, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_BUY_BACKUP_GANG(int p0, int p1, BOOL p2, BOOL p3, int npcProvider);
+		void NETWORK_BUY_AIRSTRIKE(int cost, bool p1, bool p2, Any p3);
+		void NETWORK_BUY_BACKUP_GANG(int p0, int p1, bool p2, bool p3, int npcProvider);
 		/**
 		 * p1 = 0 (always)
 		 * p2 = 1 (always)
 		 */
-		void NETWORK_BUY_HELI_STRIKE(int cost, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_AMMO_DROP(Any p0, BOOL p1, BOOL p2, Any p3);
+		void NETWORK_BUY_HELI_STRIKE(int cost, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_AMMO_DROP(Any p0, bool p1, bool p2, Any p3);
 		/**
 		 * p1 is just an assumption. p2 was false and p3 was true.
 		 */
-		void NETWORK_BUY_BOUNTY(int amount, Player victim, BOOL p2, BOOL p3, Any p4);
-		void NETWORK_BUY_PROPERTY(int cost, Hash propertyName, BOOL p2, BOOL p3);
-		void NETWORK_BUY_SMOKES(int p0, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_HELI_PICKUP(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_BOAT_PICKUP(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_BULL_SHARK(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_CASH_DROP(int amount, BOOL p1, BOOL p2);
+		void NETWORK_BUY_BOUNTY(int amount, Player victim, bool p2, bool p3, Any p4);
+		void NETWORK_BUY_PROPERTY(int cost, Hash propertyName, bool p2, bool p3);
+		void NETWORK_BUY_SMOKES(int p0, bool p1, bool p2);
+		void NETWORK_SPENT_HELI_PICKUP(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_BOAT_PICKUP(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_BULL_SHARK(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_CASH_DROP(int amount, bool p1, bool p2);
 		/**
 		 * Only used once in a script (am_contact_requests)
 		 * p1 = 0
 		 * p2 = 1
 		 */
-		void NETWORK_SPENT_HIRE_MUGGER(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_ROBBED_BY_MUGGER(int amount, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_HIRE_MERCENARY(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_BUY_WANTEDLEVEL(Any p0, Any* p1, BOOL p2, BOOL p3, Any p4);
-		void NETWORK_SPENT_BUY_OFFTHERADAR(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_BUY_REVEAL_PLAYERS(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_CARWASH(Any p0, Any p1, Any p2, BOOL p3, BOOL p4);
-		void NETWORK_SPENT_CINEMA(Any p0, Any p1, BOOL p2, BOOL p3);
-		void NETWORK_SPENT_TELESCOPE(Any p0, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_HOLDUPS(Any p0, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_BUY_PASSIVE_MODE(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_BANK_INTEREST(int p0, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_PROSTITUTES(Any p0, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_ARREST_BAIL(Any p0, BOOL p1, BOOL p2);
+		void NETWORK_SPENT_HIRE_MUGGER(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_ROBBED_BY_MUGGER(int amount, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_HIRE_MERCENARY(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_BUY_WANTEDLEVEL(Any p0, Any* p1, bool p2, bool p3, Any p4);
+		void NETWORK_SPENT_BUY_OFFTHERADAR(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_BUY_REVEAL_PLAYERS(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_CARWASH(Any p0, Any p1, Any p2, bool p3, bool p4);
+		void NETWORK_SPENT_CINEMA(Any p0, Any p1, bool p2, bool p3);
+		void NETWORK_SPENT_TELESCOPE(Any p0, bool p1, bool p2);
+		void NETWORK_SPENT_HOLDUPS(Any p0, bool p1, bool p2);
+		void NETWORK_SPENT_BUY_PASSIVE_MODE(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_BANK_INTEREST(int p0, bool p1, bool p2);
+		void NETWORK_SPENT_PROSTITUTES(Any p0, bool p1, bool p2);
+		void NETWORK_SPENT_ARREST_BAIL(Any p0, bool p1, bool p2);
 		/**
 		 * According to how I understood this in the freemode script alone,
 		 * The first parameter is determined by a function named, func_5749 within the freemode script which has a list of all the vehicles and a set price to return which some vehicles deals with globals as well. So the first parameter is basically the set in stone insurance cost it's gonna charge you for that specific vehicle model.
@@ -8411,10 +8411,10 @@ namespace base::menu::natives {
 		 * The fifth and last parameter is a bool that returns true/false depending on if you have the money for the car based on the cost returned by func_5749. In the freemode script eg,
 		 * bool hasTheMoney = MONEY::_GET_BANK_BALANCE() < carCost.
 		 */
-		void NETWORK_SPENT_PAY_VEHICLE_INSURANCE_PREMIUM(int amount, Hash vehicleModel, Any* gamerHandle, BOOL notBankrupt, BOOL hasTheMoney);
-		void NETWORK_SPENT_CALL_PLAYER(Any p0, Any* p1, BOOL p2, BOOL p3);
-		void NETWORK_SPENT_BOUNTY(Any p0, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_FROM_ROCKSTAR(int p0, BOOL p1, BOOL p2);
+		void NETWORK_SPENT_PAY_VEHICLE_INSURANCE_PREMIUM(int amount, Hash vehicleModel, Any* gamerHandle, bool notBankrupt, bool hasTheMoney);
+		void NETWORK_SPENT_CALL_PLAYER(Any p0, Any* p1, bool p2, bool p3);
+		void NETWORK_SPENT_BOUNTY(Any p0, bool p1, bool p2);
+		void NETWORK_SPENT_FROM_ROCKSTAR(int p0, bool p1, bool p2);
 		/**
 		 * Hardcoded to return 0.
 		 */
@@ -8424,11 +8424,11 @@ namespace base::menu::natives {
 		 */
 		const char* PROCESS_CASH_GIFT(int* p0, int* p1, const char* p2);
 		void NETWORK_SPENT_MOVE_SUBMARINE(Any p0, Any p1, Any p2);
-		void NETWORK_SPENT_PLAYER_HEALTHCARE(int p0, int p1, BOOL p2, BOOL p3);
-		void NETWORK_SPENT_NO_COPS(Any p0, BOOL p1, BOOL p2, Any p3);
+		void NETWORK_SPENT_PLAYER_HEALTHCARE(int p0, int p1, bool p2, bool p3);
+		void NETWORK_SPENT_NO_COPS(Any p0, bool p1, bool p2, Any p3);
 		void NETWORK_SPENT_CARGO_SOURCING(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6);
-		void NETWORK_SPENT_REQUEST_JOB(Any p0, BOOL p1, BOOL p2, Any p3);
-		void NETWORK_SPENT_REQUEST_HEIST(Any p0, BOOL p1, BOOL p2, Any p3);
+		void NETWORK_SPENT_REQUEST_JOB(Any p0, bool p1, bool p2, Any p3);
+		void NETWORK_SPENT_REQUEST_HEIST(Any p0, bool p1, bool p2, Any p3);
 		/**
 		 * The first parameter is the amount spent which is store in a global when this native is called. The global returns 10. Which is the price for both rides.
 		 * 
@@ -8437,15 +8437,15 @@ namespace base::menu::natives {
 		 * 1,0,1 in the am_rollercoaster.c
 		 * 
 		 */
-		void NETWORK_BUY_FAIRGROUND_RIDE(int amount, Any p1, BOOL p2, BOOL p3, Any p4);
-		BOOL NETWORK_ECONOMY_HAS_FIXED_CRAZY_NUMBERS();
-		void NETWORK_SPENT_JOB_SKIP(int amount, const char* matchId, BOOL p2, BOOL p3);
-		BOOL NETWORK_SPENT_BOSS_GOON(int amount, BOOL p1, BOOL p2);
+		void NETWORK_BUY_FAIRGROUND_RIDE(int amount, Any p1, bool p2, bool p3, Any p4);
+		bool NETWORK_ECONOMY_HAS_FIXED_CRAZY_NUMBERS();
+		void NETWORK_SPENT_JOB_SKIP(int amount, const char* matchId, bool p2, bool p3);
+		bool NETWORK_SPENT_BOSS_GOON(int amount, bool p1, bool p2);
 		void NETWORK_SPEND_GOON(int p0, int p1, int amount);
 		void NETWORK_SPEND_BOSS(Any p0, Any p1, Any p2);
-		void NETWORK_SPENT_MOVE_YACHT(int amount, BOOL p1, BOOL p2);
+		void NETWORK_SPENT_MOVE_YACHT(int amount, bool p1, bool p2);
 		void NETWORK_SPENT_RENAME_ORGANIZATION(Any p0, Any p1, Any p2, Any p3);
-		void NETWORK_BUY_CONTRABAND_MISSION(int p0, int p1, Hash p2, BOOL p3, BOOL p4);
+		void NETWORK_BUY_CONTRABAND_MISSION(int p0, int p1, Hash p2, bool p3, bool p4);
 		void NETWORK_SPENT_PA_SERVICE_HELI(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_PA_SERVICE_VEHICLE(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_PA_SERVICE_SNACK(Any p0, Any p1, Any p2, Any p3);
@@ -8456,7 +8456,7 @@ namespace base::menu::natives {
 		void NETWORK_SPENT_UPGRADE_OFFICE_PROPERTY(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void NETWORK_SPENT_PURCHASE_WAREHOUSE_PROPERTY(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_UPGRADE_WAREHOUSE_PROPERTY(Any p0, Any p1, Any p2, Any p3);
-		void NETWORK_SPENT_PURCHASE_IMPEXP_WAREHOUSE_PROPERTY(int amount, Any* data, BOOL p2, BOOL p3);
+		void NETWORK_SPENT_PURCHASE_IMPEXP_WAREHOUSE_PROPERTY(int amount, Any* data, bool p2, bool p3);
 		void NETWORK_SPENT_UPGRADE_IMPEXP_WAREHOUSE_PROPERTY(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_TRADE_IMPEXP_WAREHOUSE_PROPERTY(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_ORDER_WAREHOUSE_VEHICLE(Any p0, Any p1, Any p2, Any p3);
@@ -8476,14 +8476,14 @@ namespace base::menu::natives {
 		void NETWORK_SPENT_IMPORT_EXPORT_REPAIR(Any p0, Any p1, Any p2);
 		void NETWORK_SPENT_PURCHASE_HANGAR(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_UPGRADE_HANGAR(Any p0, Any p1, Any p2, Any p3);
-		void NETWORK_SPENT_HANGAR_UTILITY_CHARGES(int amount, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_HANGAR_STAFF_CHARGES(int amount, BOOL p1, BOOL p2);
+		void NETWORK_SPENT_HANGAR_UTILITY_CHARGES(int amount, bool p1, bool p2);
+		void NETWORK_SPENT_HANGAR_STAFF_CHARGES(int amount, bool p1, bool p2);
 		void NETWORK_SPENT_BUY_TRUCK(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_UPGRADE_TRUCK(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_BUY_BUNKER(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPENT_UPRADE_BUNKER(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_EARN_FROM_SELL_BUNKER(int amount, Hash bunkerHash);
-		void NETWORK_SPENT_BALLISTIC_EQUIPMENT(int amount, BOOL p1, BOOL p2);
+		void NETWORK_SPENT_BALLISTIC_EQUIPMENT(int amount, bool p1, bool p2);
 		void NETWORK_EARN_RDR_BONUS(int amount, Any p1);
 		void NETWORK_EARN_WAGE_PAYMENT(int amount, Any p1);
 		void NETWORK_EARN_WAGE_PAYMENT_BONUS(int amount);
@@ -8504,8 +8504,8 @@ namespace base::menu::natives {
 		void NETWORK_EARN_GANGOPS_AWARD(int amount, const char* p1, Any p2);
 		void NETWORK_EARN_GANGOPS_ELITE(int amount, const char* p1, int actIndex);
 		void NETWORK_SERVICE_EARN_GANGOPS_RIVAL_DELIVERY(int earnedMoney);
-		void NETWORK_SPEND_GANGOPS_START_STRAND(int type, int amount, BOOL p2, BOOL p3);
-		void NETWORK_SPEND_GANGOPS_TRIP_SKIP(int amount, BOOL p1, BOOL p2);
+		void NETWORK_SPEND_GANGOPS_START_STRAND(int type, int amount, bool p2, bool p3);
+		void NETWORK_SPEND_GANGOPS_TRIP_SKIP(int amount, bool p1, bool p2);
 		void NETWORK_EARN_GANGOPS_PREP_PARTICIPATION(int amount);
 		void NETWORK_EARN_GANGOPS_SETUP(int amount, const char* p1);
 		void NETWORK_EARN_GANGOPS_FINALE(int amount, const char* p1);
@@ -8520,32 +8520,32 @@ namespace base::menu::natives {
 		void NETWORK_SPENT_UPGRADE_NIGHTCLUB_AND_WAREHOUSE(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_EARN_NIGHTCLUB_AND_WAREHOUSE(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6);
 		void NETWORK_SPEND_NIGHTCLUB_AND_WAREHOUSE(Any p0, Any p1, Any p2, Any p3);
-		void NETWORK_SPENT_RDR_HATCHET_BONUS(int amount, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_NIGHTCLUB_ENTRY_FEE(Player player, int amount, Any p1, BOOL p2, BOOL p3);
-		void NETWORK_SPEND_NIGHTCLUB_BAR_DRINK(int amount, Any p1, BOOL p2, BOOL p3);
-		void NETWORK_SPEND_BOUNTY_HUNTER_MISSION(int amount, BOOL p1, BOOL p2);
-		void NETWORK_SPENT_REHIRE_DJ(int amount, Any p1, BOOL p2, BOOL p3);
-		void NETWORK_SPENT_ARENA_JOIN_SPECTATOR(int amount, Any p1, BOOL p2, BOOL p3);
+		void NETWORK_SPENT_RDR_HATCHET_BONUS(int amount, bool p1, bool p2);
+		void NETWORK_SPENT_NIGHTCLUB_ENTRY_FEE(Player player, int amount, Any p1, bool p2, bool p3);
+		void NETWORK_SPEND_NIGHTCLUB_BAR_DRINK(int amount, Any p1, bool p2, bool p3);
+		void NETWORK_SPEND_BOUNTY_HUNTER_MISSION(int amount, bool p1, bool p2);
+		void NETWORK_SPENT_REHIRE_DJ(int amount, Any p1, bool p2, bool p3);
+		void NETWORK_SPENT_ARENA_JOIN_SPECTATOR(int amount, Any p1, bool p2, bool p3);
 		void NETWORK_EARN_ARENA_SKILL_LEVEL_PROGRESSION(int amount, Any p1);
 		void NETWORK_EARN_ARENA_CAREER_PROGRESSION(int amount, Any p1);
-		void NETWORK_SPEND_MAKE_IT_RAIN(int amount, BOOL p1, BOOL p2);
-		void NETWORK_SPEND_BUY_ARENA(int amount, BOOL p1, BOOL p2, const char* p3);
-		void NETWORK_SPEND_UPGRADE_ARENA(int amount, BOOL p1, BOOL p2, const char* p3);
+		void NETWORK_SPEND_MAKE_IT_RAIN(int amount, bool p1, bool p2);
+		void NETWORK_SPEND_BUY_ARENA(int amount, bool p1, bool p2, const char* p3);
+		void NETWORK_SPEND_UPGRADE_ARENA(int amount, bool p1, bool p2, const char* p3);
 		/**
 		 * type either, 1 for cam spectate, 2 for drone
 		 */
-		void NETWORK_SPEND_ARENA_SPECTATOR_BOX(int amount, int type, BOOL p2, BOOL p3);
-		void NETWORK_SPEND_SPIN_THE_WHEEL_PAYMENT(int amount, Any p1, BOOL p2);
+		void NETWORK_SPEND_ARENA_SPECTATOR_BOX(int amount, int type, bool p2, bool p3);
+		void NETWORK_SPEND_SPIN_THE_WHEEL_PAYMENT(int amount, Any p1, bool p2);
 		void NETWORK_EARN_SPIN_THE_WHEEL_CASH(int amount);
-		void NETWORK_SPEND_ARENA_PREMIUM(int amount, BOOL p1, BOOL p2);
+		void NETWORK_SPEND_ARENA_PREMIUM(int amount, bool p1, bool p2);
 		void NETWORK_EARN_ARENA_WAR(int amount, Any p1, Any p2, Any p3);
 		void NETWORK_EARN_ARENA_WAR_ASSASSINATE_TARGET(int amount);
 		void NETWORK_EARN_ARENA_WAR_EVENT_CARGO(int amount);
 		void NETWORK_EARN_RC_TIME_TRIAL(int amount);
 		void NETWORK_EARN_DAILY_OBJECTIVE_EVENT(int amount);
-		void NETWORK_SPEND_CASINO_MEMBERSHIP(int amount, BOOL p1, BOOL p2, int p3);
-		void NETWORK_SPEND_BUY_CASINO(int amount, BOOL p1, BOOL p2, Any* data);
-		void NETWORK_SPEND_UPGRADE_CASINO(int amount, BOOL p1, BOOL p2, Any* data);
+		void NETWORK_SPEND_CASINO_MEMBERSHIP(int amount, bool p1, bool p2, int p3);
+		void NETWORK_SPEND_BUY_CASINO(int amount, bool p1, bool p2, Any* data);
+		void NETWORK_SPEND_UPGRADE_CASINO(int amount, bool p1, bool p2, Any* data);
 		void NETWORK_SPEND_CASINO_GENERIC(int amount, Any p1, Any p2, Any p3, Any p4);
 		void NETWORK_EARN_CASINO_TIME_TRIAL_WIN(int amount);
 		void NETWORK_EARN_COLLECTABLES_ACTION_FIGURES(int amount);
@@ -8573,7 +8573,7 @@ namespace base::menu::natives {
 		void NETWORK_EARN_DISPATCH_CALL(int amount, Any p1);
 		void NETWORK_SPEND_BEACH_PARTY(Any p0);
 		void NETWORK_SPEND_SUBMARINE(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5);
-		void NETWORK_SPEND_CASINO_CLUB(int amount1, Any p1, BOOL p2, Any p3, int p4, int p5, int p6, int amount2, Any p8);
+		void NETWORK_SPEND_CASINO_CLUB(int amount1, Any p1, bool p2, Any p3, int p4, int p5, int p6, int amount2, Any p8);
 		void NETWORK_SPEND_BUY_SUB(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_UPGRADE_SUB(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_ISLAND_HEIST(Any p0, Any p1, Any p2, Any p3);
@@ -8581,7 +8581,7 @@ namespace base::menu::natives {
 		void NETWORK_EARN_BEACH_PARTY_LOST_FOUND(Any p0, Any p1, Any p2);
 		void NETWORK_EARN_FROM_ISLAND_HEIST_DJ_MISSION(Any p0, Any p1);
 		void NETWORK_SPEND_CAR_CLUB_MEMBERSHIP(int amount1, Any p1, Any p2, int amount2, Any p4);
-		void NETWORK_SPEND_CAR_CLUB_BAR(Any p0, BOOL p1, BOOL p2, Any p3);
+		void NETWORK_SPEND_CAR_CLUB_BAR(Any p0, bool p1, bool p2, Any p3);
 		void NETWORK_SPEND_AUTOSHOP_MODIFY(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void NETWORK_SPEND_CAR_CLUB_TAKEOVER(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_BUY_AUTOSHOP(Any p0, Any p1, Any p2, Any p3);
@@ -8595,15 +8595,15 @@ namespace base::menu::natives {
 		void NETWORK_EARN_TUNER_ROBBERY(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void NETWORK_EARN_UPGRADE_AUTOSHOP(Any p0, Any p1);
 		void NETWORK_SPEND_INTERACTION_MENU_ABILITY(Any p0, Any p1, Any p2, Any p3);
-		void NETWORK_SPEND_SET_COMMON_FIELDS(Any p0, Any p1, Any p2, BOOL p3);
-		void NETWORK_SPEND_SET_DISCOUNT(BOOL p0);
+		void NETWORK_SPEND_SET_COMMON_FIELDS(Any p0, Any p1, Any p2, bool p3);
+		void NETWORK_SPEND_SET_DISCOUNT(bool p0);
 		void NETWORK_SPEND_BUY_AGENCY(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_UPGRADE_AGENCY(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_AGENCY(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void NETWORK_SPEND_HIDDEN(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_SOURCE_BIKE(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_COMP_SUV(Any p0, Any p1, Any p2, Any p3);
-		void NETWORK_SPEND_SUV_FST_TRVL(int p0, BOOL p1, BOOL p2, Any p3);
+		void NETWORK_SPEND_SUV_FST_TRVL(int p0, bool p1, bool p2, Any p3);
 		void NETWORK_SPEND_SUPPLY(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_BIKE_SHOP(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_SPEND_VEHICLE_REQUESTED(Any p0, Any p1, Any p2, Any p3, Any p4);
@@ -8620,7 +8620,7 @@ namespace base::menu::natives {
 		void NETWORK_EARN_AWARD_SHORT_TRIP(Any p0, Any p1);
 		void NETWORK_EARN_FIXER_RIVAL_DELIVERY(Any p0, Any p1);
 		void NETWORK_EARN_UPGRADE_AGENCY(Any p0, Any p1);
-		void NETWORK_SPEND_APARTMENT_UTILITIES(int amount, BOOL p1, BOOL p2, Any* data);
+		void NETWORK_SPEND_APARTMENT_UTILITIES(int amount, bool p1, bool p2, Any* data);
 		void NETWORK_SPEND_BUSINESS_PROPERTY_FEES(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_EARN_SIGHTSEEING_REWARD(Any p0, Any p1, Any p2, Any p3);
 		void NETWORK_EARN_BIKER_SHOP(Any p0, Any p1);
@@ -8628,12 +8628,12 @@ namespace base::menu::natives {
 		void NETWORK_YOHAN_SOURCE_GOODS(Any p0, Any p1, Any p2, Any p3);
 		void _NETWORK_SPEND_BUY_MFGARAGE(Any p0, Any p1, Any p2, Any p3);
 		void _NETWORK_SPEND_UPGRADE_MFGARAGE(Any p0, Any p1, Any p2, Any p3);
-		void _NETWORK_SPEND_BUY_SUPPLIES(int p0, BOOL p1, BOOL p2, int p3);
+		void _NETWORK_SPEND_BUY_SUPPLIES(int p0, bool p1, bool p2, int p3);
 		void _NETWORK_SPEND_BUY_ACID_LAB(Any p0, Any p1, Any p2, Any p3);
 		void _NETWORK_SPEND_UPGRADE_ACID_LAB_EQUIPMENT(Any p0, Any p1, Any p2, Any p3);
-		void _NETWORK_SPEND_UPGRADE_ACID_LAB_ARMOR(int p0, BOOL p1, BOOL p2, int p3);
-		void _NETWORK_SPEND_UPGRADE_ACID_LAB_SCOOP(int p0, BOOL p1, BOOL p2, int p3);
-		void _NETWORK_SPEND_UPGRADE_ACID_LAB_MINES(int p0, BOOL p1, BOOL p2, int p3);
+		void _NETWORK_SPEND_UPGRADE_ACID_LAB_ARMOR(int p0, bool p1, bool p2, int p3);
+		void _NETWORK_SPEND_UPGRADE_ACID_LAB_SCOOP(int p0, bool p1, bool p2, int p3);
+		void _NETWORK_SPEND_UPGRADE_ACID_LAB_MINES(int p0, bool p1, bool p2, int p3);
 		void _NETWORK_SPEND_RENAME_ACID_LAB(Any p0, Any p1, Any p2, Any p3);
 		void _NETWORK_SPEND_RENAME_ACID_PRODUCT(Any p0, Any p1, Any p2, Any p3);
 		void _NETWORK_EARN_AWARD_JUGGALO_MISSION(Any p0, Any p1);
@@ -8667,17 +8667,17 @@ namespace base::menu::natives {
 		void _NETWORK_EARN_SMUGGLER_OPS(Any p0, Any p1, Any p2);
 		void _NETWORK_EARN_BONUS_OBJECTIVE(int amount, Any p1, Any p2);
 		void _NETWORK_EARN_PROGRESS_HUB(Any p0, Any p1);
-		void _NETWORK_SPENT_AIR_FREIGHT(int hangarCargoSourcingPrice, BOOL fromBank, BOOL fromBankAndWallet, int cost, int warehouseId, int warehouseSlot, Any p6);
-		void _NETWORK_SPENT_SKIP_CARGO_SOURCE_SETUP(int amount, BOOL fromBank, BOOL fromBankAndWallet, int cost);
+		void _NETWORK_SPENT_AIR_FREIGHT(int hangarCargoSourcingPrice, bool fromBank, bool fromBankAndWallet, int cost, int warehouseId, int warehouseSlot, Any p6);
+		void _NETWORK_SPENT_SKIP_CARGO_SOURCE_SETUP(int amount, bool fromBank, bool fromBankAndWallet, int cost);
 		/**
 		 * Hash p3 = STEALTH_MODULE
 		 */
-		void _NETWORK_SPENT_STEALTH_MODULE(int amount, BOOL fromBank, BOOL fromBankAndWallet, Hash p3);
+		void _NETWORK_SPENT_STEALTH_MODULE(int amount, bool fromBank, bool fromBankAndWallet, Hash p3);
 		/**
 		 * Hash p3 = MISSILE_JAMMER
 		 */
-		void _NETWORK_SPENT_MISSILE_JAMMER(int amount, BOOL fromBank, BOOL fromBankAndWallet, Hash p3);
-		void _NETWORK_SPENT_GENERIC(int price, BOOL p1, BOOL p2, Hash stat, Hash spent, const char* p5, const char* p6, Any* data);
+		void _NETWORK_SPENT_MISSILE_JAMMER(int amount, bool fromBank, bool fromBankAndWallet, Hash p3);
+		void _NETWORK_SPENT_GENERIC(int price, bool p1, bool p2, Hash stat, Hash spent, const char* p5, const char* p6, Any* data);
 		/**
 		 * _NETWORK_EARN_G*
 		 */
@@ -8694,15 +8694,15 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if wallet balance >= amount.
 		 */
-		BOOL NETWORK_GET_CAN_SPEND_FROM_WALLET(int amount, int characterSlot);
+		bool NETWORK_GET_CAN_SPEND_FROM_WALLET(int amount, int characterSlot);
 		/**
 		 * Returns true if bank balance >= amount.
 		 */
-		BOOL NETWORK_GET_CAN_SPEND_FROM_BANK(int amount);
+		bool NETWORK_GET_CAN_SPEND_FROM_BANK(int amount);
 		/**
 		 * Returns true if bank balance + wallet balance >= amount.
 		 */
-		BOOL NETWORK_GET_CAN_SPEND_FROM_BANK_AND_WALLET(int amount, int characterSlot);
+		bool NETWORK_GET_CAN_SPEND_FROM_BANK_AND_WALLET(int amount, int characterSlot);
 		/**
 		 * Retturns the same value as NETWORK_GET_REMAINING_TRANSFER_BALANCE.
 		 */
@@ -8710,8 +8710,8 @@ namespace base::menu::natives {
 		/**
 		 * Returns false if amount > wallet balance or daily transfer limit has been hit.
 		 */
-		BOOL NETWORK_GET_CAN_TRANSFER_CASH(int amount);
-		BOOL NETWORK_CAN_RECEIVE_PLAYER_CASH(Any p0, Any p1, Any p2, Any p3);
+		bool NETWORK_GET_CAN_TRANSFER_CASH(int amount);
+		bool NETWORK_CAN_RECEIVE_PLAYER_CASH(Any p0, Any p1, Any p2, Any p3);
 		/**
 		 * Returns the same value as NETWORK_GET_PVC_TRANSFER_BALANCE.
 		 */
@@ -8723,70 +8723,70 @@ namespace base::menu::natives {
 		/**
 		 * Does nothing and always returns false.
 		 */
-		BOOL DEPOSIT_VC(int amount);
+		bool DEPOSIT_VC(int amount);
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL HAS_VC_WITHDRAWAL_COMPLETED(Any p0);
+		bool HAS_VC_WITHDRAWAL_COMPLETED(Any p0);
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL WAS_VC_WITHDRAWAL_SUCCESSFUL(Any p0);
-		BOOL NETWORK_GET_MP_WINDFALL_AVAILABLE();
+		bool WAS_VC_WITHDRAWAL_SUCCESSFUL(Any p0);
+		bool NETWORK_GET_MP_WINDFALL_AVAILABLE();
 
 	} // namespace MONEY
 
 	namespace NETSHOPPING {
 
-		BOOL NET_GAMESERVER_USE_SERVER_TRANSACTIONS();
-		BOOL NET_GAMESERVER_CATALOG_ITEM_IS_VALID(const char* name);
-		BOOL NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID(Hash hash);
+		bool NET_GAMESERVER_USE_SERVER_TRANSACTIONS();
+		bool NET_GAMESERVER_CATALOG_ITEM_IS_VALID(const char* name);
+		bool NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID(Hash hash);
 		/**
 		 * bool is always true in game scripts
 		 */
-		int NET_GAMESERVER_GET_PRICE(Hash itemHash, Hash categoryHash, BOOL p2);
-		BOOL NET_GAMESERVER_CATALOG_IS_VALID();
-		BOOL NET_GAMESERVER_IS_CATALOG_CURRENT();
+		int NET_GAMESERVER_GET_PRICE(Hash itemHash, Hash categoryHash, bool p2);
+		bool NET_GAMESERVER_CATALOG_IS_VALID();
+		bool NET_GAMESERVER_IS_CATALOG_CURRENT();
 		Hash NET_GAMESERVER_GET_CATALOG_CLOUD_CRC();
-		BOOL NET_GAMESERVER_REFRESH_SERVER_CATALOG();
-		BOOL NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(int* state);
-		BOOL NET_GAMESERVER_INIT_SESSION();
-		BOOL NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(int* p0);
-		BOOL NET_GAMESERVER_START_SESSION(int charSlot);
-		BOOL NET_GAMESERVER_START_SESSION_PENDING();
-		BOOL NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS(int* p0);
-		BOOL NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE(int* p0);
-		BOOL NET_GAMESERVER_IS_SESSION_VALID(int charSlot);
-		BOOL NET_GAMESERVER_CLEAR_SESSION(int p0);
-		BOOL NET_GAMESERVER_SESSION_APPLY_RECEIVED_DATA(int charSlot);
-		BOOL NET_GAMESERVER_IS_SESSION_REFRESH_PENDING();
+		bool NET_GAMESERVER_REFRESH_SERVER_CATALOG();
+		bool NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(int* state);
+		bool NET_GAMESERVER_INIT_SESSION();
+		bool NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(int* p0);
+		bool NET_GAMESERVER_START_SESSION(int charSlot);
+		bool NET_GAMESERVER_START_SESSION_PENDING();
+		bool NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS(int* p0);
+		bool NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE(int* p0);
+		bool NET_GAMESERVER_IS_SESSION_VALID(int charSlot);
+		bool NET_GAMESERVER_CLEAR_SESSION(int p0);
+		bool NET_GAMESERVER_SESSION_APPLY_RECEIVED_DATA(int charSlot);
+		bool NET_GAMESERVER_IS_SESSION_REFRESH_PENDING();
 		/**
 		 * Instructs the transaction session manager to perform a session restart as soon as possible.
 		 * This is different from NET_GAMESERVER_START_SESSION_RESTART which, despite its name, does not actually restart the session (it only requests fresh inventory and/or balance data from the server).
 		 * Returns true if it was possible to set the flag.
 		 */
-		BOOL _NET_GAMESERVER_FLAG_FOR_SESSION_RESTART();
+		bool _NET_GAMESERVER_FLAG_FOR_SESSION_RESTART();
 		/**
 		 * Note: only one of the arguments can be set to true at a time
 		 */
-		BOOL NET_GAMESERVER_START_SESSION_RESTART(BOOL inventory, BOOL playerbalance);
-		BOOL NET_GAMESERVER_TRANSACTION_IN_PROGRESS();
-		BOOL NET_GAMESERVER_GET_SESSION_STATE_AND_STATUS(int* p0, BOOL* p1);
-		BOOL NET_GAMESERVER_BASKET_START(int* transactionId, Hash categoryHash, Hash actionHash, int flags);
-		BOOL NET_GAMESERVER_BASKET_END();
-		BOOL NET_GAMESERVER_BASKET_IS_ACTIVE();
-		BOOL NET_GAMESERVER_BASKET_ADD_ITEM(Any* itemData, int quantity);
-		BOOL NET_GAMESERVER_BASKET_IS_FULL();
-		BOOL NET_GAMESERVER_BASKET_APPLY_SERVER_DATA(Any p0, Any* p1);
-		BOOL NET_GAMESERVER_CHECKOUT_START(int transactionId);
-		BOOL NET_GAMESERVER_CHECKOUT_PENDING(int transactionId);
-		BOOL NET_GAMESERVER_BEGIN_SERVICE(int* transactionId, Hash categoryHash, Hash itemHash, Hash actionTypeHash, int value, int flags);
-		BOOL NET_GAMESERVER_END_SERVICE(int transactionId);
-		BOOL NET_GAMESERVER_DELETE_CHARACTER(int slot, BOOL transfer, Hash reason);
+		bool NET_GAMESERVER_START_SESSION_RESTART(bool inventory, bool playerbalance);
+		bool NET_GAMESERVER_TRANSACTION_IN_PROGRESS();
+		bool NET_GAMESERVER_GET_SESSION_STATE_AND_STATUS(int* p0, bool* p1);
+		bool NET_GAMESERVER_BASKET_START(int* transactionId, Hash categoryHash, Hash actionHash, int flags);
+		bool NET_GAMESERVER_BASKET_END();
+		bool NET_GAMESERVER_BASKET_IS_ACTIVE();
+		bool NET_GAMESERVER_BASKET_ADD_ITEM(Any* itemData, int quantity);
+		bool NET_GAMESERVER_BASKET_IS_FULL();
+		bool NET_GAMESERVER_BASKET_APPLY_SERVER_DATA(Any p0, Any* p1);
+		bool NET_GAMESERVER_CHECKOUT_START(int transactionId);
+		bool NET_GAMESERVER_CHECKOUT_PENDING(int transactionId);
+		bool NET_GAMESERVER_BEGIN_SERVICE(int* transactionId, Hash categoryHash, Hash itemHash, Hash actionTypeHash, int value, int flags);
+		bool NET_GAMESERVER_END_SERVICE(int transactionId);
+		bool NET_GAMESERVER_DELETE_CHARACTER(int slot, bool transfer, Hash reason);
 		int NET_GAMESERVER_DELETE_CHARACTER_GET_STATUS();
-		BOOL NET_GAMESERVER_DELETE_SET_TELEMETRY_NONCE_SEED();
-		BOOL NET_GAMESERVER_TRANSFER_BANK_TO_WALLET(int charSlot, int amount);
-		BOOL NET_GAMESERVER_TRANSFER_WALLET_TO_BANK(int charSlot, int amount);
+		bool NET_GAMESERVER_DELETE_SET_TELEMETRY_NONCE_SEED();
+		bool NET_GAMESERVER_TRANSFER_BANK_TO_WALLET(int charSlot, int amount);
+		bool NET_GAMESERVER_TRANSFER_WALLET_TO_BANK(int charSlot, int amount);
 		/**
 		 * Same as 0x350AA5EBC03D3BD2
 		 */
@@ -8798,8 +8798,8 @@ namespace base::menu::natives {
 		/**
 		 * Used to be NETWORK_SHOP_CASH_TRANSFER_SET_TELEMETRY_NONCE_SEED
 		 */
-		BOOL NET_GAMESERVER_TRANSFER_CASH_SET_TELEMETRY_NONCE_SEED();
-		BOOL NET_GAMESERVER_SET_TELEMETRY_NONCE_SEED(int p0);
+		bool NET_GAMESERVER_TRANSFER_CASH_SET_TELEMETRY_NONCE_SEED();
+		bool NET_GAMESERVER_SET_TELEMETRY_NONCE_SEED(int p0);
 
 	} // namespace NETSHOPPING
 
@@ -8819,21 +8819,21 @@ namespace base::menu::natives {
 		/**
 		 * Returns whether the player is signed into Social Club.
 		 */
-		BOOL NETWORK_IS_SIGNED_IN();
+		bool NETWORK_IS_SIGNED_IN();
 		/**
 		 * Returns whether the game is not in offline mode.
 		 * 
 		 * seemed not to work for some ppl
 		 */
-		BOOL NETWORK_IS_SIGNED_ONLINE();
+		bool NETWORK_IS_SIGNED_ONLINE();
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL NETWORK_IS_NP_AVAILABLE();
+		bool NETWORK_IS_NP_AVAILABLE();
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL NETWORK_IS_NP_PENDING();
+		bool NETWORK_IS_NP_PENDING();
 		/**
 		 * Hardcoded to return zero.
 		 * 
@@ -8854,111 +8854,111 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL NETWORK_IS_CONNETED_TO_NP_PRESENCE();
+		bool NETWORK_IS_CONNETED_TO_NP_PRESENCE();
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL NETWORK_IS_LOGGED_IN_TO_PSN();
+		bool NETWORK_IS_LOGGED_IN_TO_PSN();
 		/**
 		 * Returns whether the signed-in user has valid Rockstar Online Services (ROS) credentials.
 		 */
-		BOOL NETWORK_HAS_VALID_ROS_CREDENTIALS();
-		BOOL NETWORK_IS_REFRESHING_ROS_CREDENTIALS();
-		BOOL NETWORK_IS_CLOUD_AVAILABLE();
-		BOOL NETWORK_HAS_SOCIAL_CLUB_ACCOUNT();
-		BOOL NETWORK_ARE_SOCIAL_CLUB_POLICIES_CURRENT();
+		bool NETWORK_HAS_VALID_ROS_CREDENTIALS();
+		bool NETWORK_IS_REFRESHING_ROS_CREDENTIALS();
+		bool NETWORK_IS_CLOUD_AVAILABLE();
+		bool NETWORK_HAS_SOCIAL_CLUB_ACCOUNT();
+		bool NETWORK_ARE_SOCIAL_CLUB_POLICIES_CURRENT();
 		/**
 		 * If you are host, returns true else returns false.
 		 */
-		BOOL NETWORK_IS_HOST();
+		bool NETWORK_IS_HOST();
 		Player NETWORK_GET_HOST_PLAYER_INDEX();
-		BOOL NETWORK_WAS_GAME_SUSPENDED();
-		BOOL NETWORK_HAVE_ONLINE_PRIVILEGES();
+		bool NETWORK_WAS_GAME_SUSPENDED();
+		bool NETWORK_HAVE_ONLINE_PRIVILEGES();
 		/**
 		 * For the XboxPC version this returns true if XPRIVILEGE_MULTIPLAYER_SESSIONS is granted but XPRIVILEGE_CROSS_PLAY is NOT granted.
 		 * For more information, see https://learn.microsoft.com/en-us/gaming/gdk/_content/gc/live/features/identity/privileges/concepts/live-user-privileges-client#privilege-ids-to-check
 		 * 
 		 * Always returns false for non-XboxPC versions.
 		 */
-		BOOL _NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED();
-		BOOL NETWORK_HAS_AGE_RESTRICTIONS();
-		BOOL NETWORK_HAVE_USER_CONTENT_PRIVILEGES(int p0);
-		BOOL NETWORK_HAVE_COMMUNICATION_PRIVILEGES(int p0, Player player);
+		bool _NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED();
+		bool NETWORK_HAS_AGE_RESTRICTIONS();
+		bool NETWORK_HAVE_USER_CONTENT_PRIVILEGES(int p0);
+		bool NETWORK_HAVE_COMMUNICATION_PRIVILEGES(int p0, Player player);
 		/**
 		 * Appears to be PlayStation-specific. Always returns true on other platforms if signed in with the primary user profile
 		 */
-		BOOL _NETWORK_HAVE_PLATFORM_COMMUNICATION_PRIVILEGES();
-		BOOL NETWORK_CHECK_ONLINE_PRIVILEGES(Any p0, BOOL p1);
-		BOOL NETWORK_CHECK_USER_CONTENT_PRIVILEGES(int p0, int p1, BOOL p2);
-		BOOL NETWORK_CHECK_COMMUNICATION_PRIVILEGES(int p0, int p1, BOOL p2);
-		BOOL NETWORK_CHECK_TEXT_COMMUNICATION_PRIVILEGES(Any p0, Any p1, Any p2);
-		BOOL NETWORK_IS_USING_ONLINE_PROMOTION();
-		BOOL NETWORK_SHOULD_SHOW_PROMOTION_ALERT_SCREEN();
-		BOOL NETWORK_HAS_SOCIAL_NETWORKING_SHARING_PRIV();
+		bool _NETWORK_HAVE_PLATFORM_COMMUNICATION_PRIVILEGES();
+		bool NETWORK_CHECK_ONLINE_PRIVILEGES(Any p0, bool p1);
+		bool NETWORK_CHECK_USER_CONTENT_PRIVILEGES(int p0, int p1, bool p2);
+		bool NETWORK_CHECK_COMMUNICATION_PRIVILEGES(int p0, int p1, bool p2);
+		bool NETWORK_CHECK_TEXT_COMMUNICATION_PRIVILEGES(Any p0, Any p1, Any p2);
+		bool NETWORK_IS_USING_ONLINE_PROMOTION();
+		bool NETWORK_SHOULD_SHOW_PROMOTION_ALERT_SCREEN();
+		bool NETWORK_HAS_SOCIAL_NETWORKING_SHARING_PRIV();
 		int NETWORK_GET_AGE_GROUP();
-		BOOL NETWORK_CHECK_PRIVILEGES(Any p0, Any p1, Any p2);
+		bool NETWORK_CHECK_PRIVILEGES(Any p0, Any p1, Any p2);
 		/**
 		 * Hardcoded to return false.
 		 */
-		BOOL NETWORK_IS_PRIVILEGE_CHECK_IN_PROGRESS();
+		bool NETWORK_IS_PRIVILEGE_CHECK_IN_PROGRESS();
 		void NETWORK_SET_PRIVILEGE_CHECK_RESULT_NOT_NEEDED();
 		/**
 		 * Hardcoded to return true.
 		 */
-		BOOL NETWORK_RESOLVE_PRIVILEGE_USER_CONTENT();
-		BOOL NETWORK_HAVE_PLATFORM_SUBSCRIPTION();
-		BOOL NETWORK_IS_PLATFORM_SUBSCRIPTION_CHECK_PENDING();
+		bool NETWORK_RESOLVE_PRIVILEGE_USER_CONTENT();
+		bool NETWORK_HAVE_PLATFORM_SUBSCRIPTION();
+		bool NETWORK_IS_PLATFORM_SUBSCRIPTION_CHECK_PENDING();
 		void NETWORK_SHOW_ACCOUNT_UPGRADE_UI();
-		BOOL NETWORK_IS_SHOWING_SYSTEM_UI_OR_RECENTLY_REQUESTED_UPSELL();
-		BOOL NETWORK_NEED_TO_START_NEW_GAME_BUT_BLOCKED();
-		BOOL NETWORK_CAN_BAIL();
+		bool NETWORK_IS_SHOWING_SYSTEM_UI_OR_RECENTLY_REQUESTED_UPSELL();
+		bool NETWORK_NEED_TO_START_NEW_GAME_BUT_BLOCKED();
+		bool NETWORK_CAN_BAIL();
 		void NETWORK_BAIL(int p0, int p1, int p2);
 		void NETWORK_ON_RETURN_TO_SINGLE_PLAYER();
-		BOOL NETWORK_TRANSITION_START(int p0, Any p1, Any p2, Any p3);
-		BOOL NETWORK_TRANSITION_ADD_STAGE(Hash hash, int p1, int p2, int state, int p4);
-		BOOL NETWORK_TRANSITION_FINISH(Any p0, Any p1, Any p2);
+		bool NETWORK_TRANSITION_START(int p0, Any p1, Any p2, Any p3);
+		bool NETWORK_TRANSITION_ADD_STAGE(Hash hash, int p1, int p2, int state, int p4);
+		bool NETWORK_TRANSITION_FINISH(Any p0, Any p1, Any p2);
 		/**
 		 * 11 - Need to download tunables.
 		 * 12 - Need to download background script.
 		 * 
 		 * Returns 1 if the multiplayer is loaded, otherwhise 0.
 		 */
-		BOOL NETWORK_CAN_ACCESS_MULTIPLAYER(int* loadingState);
-		BOOL NETWORK_CHECK_CAN_ACCESS_AND_ALERT();
+		bool NETWORK_CAN_ACCESS_MULTIPLAYER(int* loadingState);
+		bool NETWORK_CHECK_CAN_ACCESS_AND_ALERT();
 		const char* _NETWORK_GET_ACCESS_CODE_LABEL_HEADING(int accessCode);
 		const char* _NETWORK_GET_ACCESS_CODE_LABEL_BODY(int accessCode);
-		BOOL NETWORK_IS_MULTIPLAYER_DISABLED();
-		BOOL NETWORK_CAN_ENTER_MULTIPLAYER();
-		BOOL NETWORK_SESSION_DO_FREEROAM_QUICKMATCH(Any p0, Any p1, Any p2);
-		BOOL NETWORK_SESSION_DO_FRIEND_MATCHMAKING(int p0, int p1, int p2);
+		bool NETWORK_IS_MULTIPLAYER_DISABLED();
+		bool NETWORK_CAN_ENTER_MULTIPLAYER();
+		bool NETWORK_SESSION_DO_FREEROAM_QUICKMATCH(Any p0, Any p1, Any p2);
+		bool NETWORK_SESSION_DO_FRIEND_MATCHMAKING(int p0, int p1, int p2);
 		/**
 		 * p4 seems to be unused in 1.60/build 2628
 		 */
-		BOOL NETWORK_SESSION_DO_CREW_MATCHMAKING(int crewId, int p1, int p2, int maxPlayers);
-		BOOL NETWORK_SESSION_DO_ACTIVITY_QUICKMATCH(Any p0, Any p1, Any p2, Any p3, Any p4);
+		bool NETWORK_SESSION_DO_CREW_MATCHMAKING(int crewId, int p1, int p2, int maxPlayers);
+		bool NETWORK_SESSION_DO_ACTIVITY_QUICKMATCH(Any p0, Any p1, Any p2, Any p3, Any p4);
 		/**
 		 * Does nothing in online but in offline it will cause the screen to fade to black. Nothing happens past then, the screen will sit at black until you restart GTA. Other stuff must be needed to actually host a session.
 		 */
-		BOOL NETWORK_SESSION_HOST(int p0, int maxPlayers, BOOL p2);
-		BOOL NETWORK_SESSION_HOST_CLOSED(int p0, int maxPlayers);
+		bool NETWORK_SESSION_HOST(int p0, int maxPlayers, bool p2);
+		bool NETWORK_SESSION_HOST_CLOSED(int p0, int maxPlayers);
 		/**
 		 * Does nothing in online but in offline it will cause the screen to fade to black. Nothing happens past then, the screen will sit at black until you restart GTA. Other stuff must be needed to actually host a session.
 		 */
-		BOOL NETWORK_SESSION_HOST_FRIENDS_ONLY(int p0, int maxPlayers);
-		BOOL NETWORK_SESSION_IS_CLOSED_FRIENDS();
-		BOOL NETWORK_SESSION_IS_CLOSED_CREW();
-		BOOL NETWORK_SESSION_IS_SOLO();
-		BOOL NETWORK_SESSION_IS_PRIVATE();
-		BOOL _NETWORK_SESSION_LEAVE_INCLUDING_REASON(int leaveFlags, int leaveReason);
-		BOOL NETWORK_SESSION_LEAVE(Any p0);
+		bool NETWORK_SESSION_HOST_FRIENDS_ONLY(int p0, int maxPlayers);
+		bool NETWORK_SESSION_IS_CLOSED_FRIENDS();
+		bool NETWORK_SESSION_IS_CLOSED_CREW();
+		bool NETWORK_SESSION_IS_SOLO();
+		bool NETWORK_SESSION_IS_PRIVATE();
+		bool _NETWORK_SESSION_LEAVE_INCLUDING_REASON(int leaveFlags, int leaveReason);
+		bool NETWORK_SESSION_LEAVE(Any p0);
 		/**
 		 * Only works as host.
 		 */
 		void NETWORK_SESSION_KICK_PLAYER(Player player);
-		BOOL NETWORK_SESSION_GET_KICK_VOTE(Player player);
-		BOOL NETWORK_SESSION_RESERVE_SLOTS_TRANSITION(Any p0, Any p1, Any p2);
-		BOOL NETWORK_JOIN_PREVIOUSLY_FAILED_SESSION();
-		BOOL NETWORK_JOIN_PREVIOUSLY_FAILED_TRANSITION();
+		bool NETWORK_SESSION_GET_KICK_VOTE(Player player);
+		bool NETWORK_SESSION_RESERVE_SLOTS_TRANSITION(Any p0, Any p1, Any p2);
+		bool NETWORK_JOIN_PREVIOUSLY_FAILED_SESSION();
+		bool NETWORK_JOIN_PREVIOUSLY_FAILED_TRANSITION();
 		void NETWORK_SESSION_SET_MATCHMAKING_GROUP(int matchmakingGroup);
 		/**
 		 * playerType is an unsigned int from 0 to 4
@@ -8974,16 +8974,16 @@ namespace base::menu::natives {
 		void NETWORK_SESSION_SET_UNIQUE_CREW_LIMIT(Any p0);
 		int NETWORK_SESSION_GET_UNIQUE_CREW_LIMIT();
 		void NETWORK_SESSION_SET_UNIQUE_CREW_LIMIT_TRANSITION(Any p0);
-		void NETWORK_SESSION_SET_UNIQUE_CREW_ONLY_CREWS_TRANSITION(BOOL p0);
+		void NETWORK_SESSION_SET_UNIQUE_CREW_ONLY_CREWS_TRANSITION(bool p0);
 		void NETWORK_SESSION_SET_CREW_LIMIT_MAX_MEMBERS_TRANSITION(Any p0);
-		void NETWORK_SESSION_SET_MATCHMAKING_PROPERTY_ID(BOOL p0);
+		void NETWORK_SESSION_SET_MATCHMAKING_PROPERTY_ID(bool p0);
 		/**
 		 * p0 in the decompiled scripts is always the stat mesh_texblend * 0.07 to int
 		 */
 		void NETWORK_SESSION_SET_MATCHMAKING_MENTAL_STATE(int p0);
 		void NETWORK_SESSION_SET_NUM_BOSSES(int num);
 		void NETWORK_SESSION_SET_SCRIPT_VALIDATE_JOIN();
-		void NETWORK_SESSION_VALIDATE_JOIN(BOOL p0);
+		void NETWORK_SESSION_VALIDATE_JOIN(bool p0);
 		/**
 		 * ..
 		 */
@@ -8992,7 +8992,7 @@ namespace base::menu::natives {
 		void NETWORK_GET_GLOBAL_MULTIPLAYER_CLOCK(int* hours, int* minutes, int* seconds);
 		void NETWORK_SESSION_SET_GAMEMODE(Any p0);
 		int NETWORK_SESSION_GET_HOST_AIM_PREFERENCE();
-		BOOL NETWORK_FIND_GAMERS_IN_CREW(int crewId);
+		bool NETWORK_FIND_GAMERS_IN_CREW(int crewId);
 		/**
 		 * Uses attributes to find players with similar stats. Upper/Lower limit must be above zero or the fallback limit +/-0.1 is used.
 		 * There can be up to 15 attributes, they are as follows:
@@ -9008,42 +9008,42 @@ namespace base::menu::natives {
 		 * 8 = Deathmatch
 		 * 9 = MPPLY_MCMWIN/MPPLY_CRMISSION
 		 */
-		BOOL NETWORK_FIND_MATCHED_GAMERS(int attribute, float fallbackLimit, float lowerLimit, float upperLimit);
-		BOOL NETWORK_IS_FINDING_GAMERS();
-		BOOL NETWORK_DID_FIND_GAMERS_SUCCEED();
+		bool NETWORK_FIND_MATCHED_GAMERS(int attribute, float fallbackLimit, float lowerLimit, float upperLimit);
+		bool NETWORK_IS_FINDING_GAMERS();
+		bool NETWORK_DID_FIND_GAMERS_SUCCEED();
 		int NETWORK_GET_NUM_FOUND_GAMERS();
-		BOOL NETWORK_GET_FOUND_GAMER(Any* p0, Any p1);
+		bool NETWORK_GET_FOUND_GAMER(Any* p0, Any p1);
 		void NETWORK_CLEAR_FOUND_GAMERS();
-		BOOL NETWORK_QUEUE_GAMER_FOR_STATUS(Any* p0);
-		BOOL NETWORK_GET_GAMER_STATUS_FROM_QUEUE();
-		BOOL NETWORK_IS_GETTING_GAMER_STATUS();
-		BOOL NETWORK_DID_GET_GAMER_STATUS_SUCCEED();
-		BOOL NETWORK_GET_GAMER_STATUS_RESULT(Any* p0, Any p1);
+		bool NETWORK_QUEUE_GAMER_FOR_STATUS(Any* p0);
+		bool NETWORK_GET_GAMER_STATUS_FROM_QUEUE();
+		bool NETWORK_IS_GETTING_GAMER_STATUS();
+		bool NETWORK_DID_GET_GAMER_STATUS_SUCCEED();
+		bool NETWORK_GET_GAMER_STATUS_RESULT(Any* p0, Any p1);
 		void NETWORK_CLEAR_GET_GAMER_STATUS();
 		void NETWORK_SESSION_JOIN_INVITE();
 		void NETWORK_SESSION_CANCEL_INVITE();
 		void NETWORK_SESSION_FORCE_CANCEL_INVITE();
-		BOOL NETWORK_HAS_PENDING_INVITE();
-		BOOL NETWORK_HAS_CONFIRMED_INVITE();
+		bool NETWORK_HAS_PENDING_INVITE();
+		bool NETWORK_HAS_CONFIRMED_INVITE();
 		/**
 		 * Triggers a CEventNetworkInviteConfirmed event
 		 */
-		BOOL NETWORK_REQUEST_INVITE_CONFIRMED_EVENT();
-		BOOL NETWORK_SESSION_WAS_INVITED();
+		bool NETWORK_REQUEST_INVITE_CONFIRMED_EVENT();
+		bool NETWORK_SESSION_WAS_INVITED();
 		void NETWORK_SESSION_GET_INVITER(Any* gamerHandle);
 		/**
 		 * Seems to be true while "Getting GTA Online session details" shows up.
 		 */
-		BOOL NETWORK_SESSION_IS_AWAITING_INVITE_RESPONSE();
-		BOOL NETWORK_SESSION_IS_DISPLAYING_INVITE_CONFIRMATION();
-		void NETWORK_SUPPRESS_INVITE(BOOL toggle);
-		void NETWORK_BLOCK_INVITES(BOOL toggle);
-		void NETWORK_BLOCK_JOIN_QUEUE_INVITES(BOOL toggle);
-		void NETWORK_SET_CAN_RECEIVE_RS_INVITES(BOOL p0);
+		bool NETWORK_SESSION_IS_AWAITING_INVITE_RESPONSE();
+		bool NETWORK_SESSION_IS_DISPLAYING_INVITE_CONFIRMATION();
+		void NETWORK_SUPPRESS_INVITE(bool toggle);
+		void NETWORK_BLOCK_INVITES(bool toggle);
+		void NETWORK_BLOCK_JOIN_QUEUE_INVITES(bool toggle);
+		void NETWORK_SET_CAN_RECEIVE_RS_INVITES(bool p0);
 		void NETWORK_STORE_INVITE_THROUGH_RESTART();
-		void NETWORK_ALLOW_INVITE_PROCESS_IN_PLAYER_SWITCH(BOOL p0);
-		void NETWORK_SET_SCRIPT_READY_FOR_EVENTS(BOOL toggle);
-		BOOL NETWORK_IS_OFFLINE_INVITE_PENDING();
+		void NETWORK_ALLOW_INVITE_PROCESS_IN_PLAYER_SWITCH(bool p0);
+		void NETWORK_SET_SCRIPT_READY_FOR_EVENTS(bool toggle);
+		bool NETWORK_IS_OFFLINE_INVITE_PENDING();
 		void NETWORK_CLEAR_OFFLINE_INVITE_PENDING();
 		/**
 		 * Retrieves the failed invite join alert reason
@@ -9062,47 +9062,47 @@ namespace base::menu::natives {
 		 */
 		void NETWORK_SESSION_HOST_SINGLE_PLAYER(int p0);
 		void NETWORK_SESSION_LEAVE_SINGLE_PLAYER();
-		BOOL NETWORK_IS_GAME_IN_PROGRESS();
-		BOOL NETWORK_IS_SESSION_ACTIVE();
-		BOOL NETWORK_IS_IN_SESSION();
+		bool NETWORK_IS_GAME_IN_PROGRESS();
+		bool NETWORK_IS_SESSION_ACTIVE();
+		bool NETWORK_IS_IN_SESSION();
 		/**
 		 * Hardcoded to return 0.
 		 */
-		BOOL _NETWORK_IS_AMERICAS_VERSION();
+		bool _NETWORK_IS_AMERICAS_VERSION();
 		/**
 		 * This checks if player is playing on gta online or not.
 		 * Please add an if and block your mod if this is "true".
 		 */
-		BOOL NETWORK_IS_SESSION_STARTED();
-		BOOL NETWORK_IS_SESSION_BUSY();
-		BOOL NETWORK_CAN_SESSION_END();
+		bool NETWORK_IS_SESSION_STARTED();
+		bool NETWORK_IS_SESSION_BUSY();
+		bool NETWORK_CAN_SESSION_END();
 		int NETWORK_GET_GAME_MODE();
-		void NETWORK_SESSION_MARK_VISIBLE(BOOL toggle);
-		BOOL NETWORK_SESSION_IS_VISIBLE();
-		void NETWORK_SESSION_BLOCK_JOIN_REQUESTS(BOOL toggle);
+		void NETWORK_SESSION_MARK_VISIBLE(bool toggle);
+		bool NETWORK_SESSION_IS_VISIBLE();
+		void NETWORK_SESSION_BLOCK_JOIN_REQUESTS(bool toggle);
 		/**
 		 * num player slots allowed in session, seems to work? 32 max
 		 */
-		void NETWORK_SESSION_CHANGE_SLOTS(int slots, BOOL p1);
+		void NETWORK_SESSION_CHANGE_SLOTS(int slots, bool p1);
 		int NETWORK_SESSION_GET_PRIVATE_SLOTS();
-		BOOL NETWORK_SESSION_VOICE_HOST();
-		BOOL NETWORK_SESSION_VOICE_LEAVE();
+		bool NETWORK_SESSION_VOICE_HOST();
+		bool NETWORK_SESSION_VOICE_LEAVE();
 		void NETWORK_SESSION_VOICE_CONNECT_TO_PLAYER(Any* gamerHandle);
-		void NETWORK_SESSION_VOICE_RESPOND_TO_REQUEST(BOOL p0, int p1);
+		void NETWORK_SESSION_VOICE_RESPOND_TO_REQUEST(bool p0, int p1);
 		void NETWORK_SESSION_VOICE_SET_TIMEOUT(int timeout);
-		BOOL NETWORK_SESSION_IS_IN_VOICE_SESSION();
-		BOOL NETWORK_SESSION_IS_VOICE_SESSION_ACTIVE();
-		BOOL NETWORK_SESSION_IS_VOICE_SESSION_BUSY();
+		bool NETWORK_SESSION_IS_IN_VOICE_SESSION();
+		bool NETWORK_SESSION_IS_VOICE_SESSION_ACTIVE();
+		bool NETWORK_SESSION_IS_VOICE_SESSION_BUSY();
 		/**
 		 * Message is limited to 64 characters.
 		 */
-		BOOL NETWORK_SEND_TEXT_MESSAGE(const char* message, Any* gamerHandle);
-		void NETWORK_SET_ACTIVITY_SPECTATOR(BOOL toggle);
-		BOOL NETWORK_IS_ACTIVITY_SPECTATOR();
+		bool NETWORK_SEND_TEXT_MESSAGE(const char* message, Any* gamerHandle);
+		void NETWORK_SET_ACTIVITY_SPECTATOR(bool toggle);
+		bool NETWORK_IS_ACTIVITY_SPECTATOR();
 		void NETWORK_SET_ACTIVITY_PLAYER_MAX(Any p0);
 		void NETWORK_SET_ACTIVITY_SPECTATOR_MAX(int maxSpectators);
-		int NETWORK_GET_ACTIVITY_PLAYER_NUM(BOOL p0);
-		BOOL NETWORK_IS_ACTIVITY_SPECTATOR_FROM_HANDLE(Any* gamerHandle);
+		int NETWORK_GET_ACTIVITY_PLAYER_NUM(bool p0);
+		bool NETWORK_IS_ACTIVITY_SPECTATOR_FROM_HANDLE(Any* gamerHandle);
 		/**
 		 * p0: Unknown int
 		 * p1: Unknown int
@@ -9119,71 +9119,71 @@ namespace base::menu::natives {
 		 * Creates/hosts a new transition to another online session, using this in FiveM will result in other players being disconencted from the server/preventing them from joining. This is most likely because I entered the wrong session parameters since they're pretty much all unknown right now.
 		 * You also need to use `NetworkJoinTransition(Player player)` and `NetworkLaunchTransition()`.
 		 */
-		BOOL NETWORK_HOST_TRANSITION(int p0, int p1, int p2, int p3, Any p4, BOOL p5, BOOL p6, int p7, Any p8, int p9);
-		BOOL NETWORK_DO_TRANSITION_QUICKMATCH(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5);
-		BOOL NETWORK_DO_TRANSITION_QUICKMATCH_ASYNC(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5);
-		BOOL NETWORK_DO_TRANSITION_QUICKMATCH_WITH_GROUP(Any p0, Any p1, Any p2, Any p3, Any* p4, Any p5, Any p6, Any p7);
-		BOOL NETWORK_JOIN_GROUP_ACTIVITY();
+		bool NETWORK_HOST_TRANSITION(int p0, int p1, int p2, int p3, Any p4, bool p5, bool p6, int p7, Any p8, int p9);
+		bool NETWORK_DO_TRANSITION_QUICKMATCH(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5);
+		bool NETWORK_DO_TRANSITION_QUICKMATCH_ASYNC(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5);
+		bool NETWORK_DO_TRANSITION_QUICKMATCH_WITH_GROUP(Any p0, Any p1, Any p2, Any p3, Any* p4, Any p5, Any p6, Any p7);
+		bool NETWORK_JOIN_GROUP_ACTIVITY();
 		void NETWORK_CLEAR_GROUP_ACTIVITY();
 		void NETWORK_RETAIN_ACTIVITY_GROUP();
-		BOOL NETWORK_IS_TRANSITION_CLOSED_FRIENDS();
-		BOOL NETWORK_IS_TRANSITION_CLOSED_CREW();
-		BOOL NETWORK_IS_TRANSITION_SOLO();
-		BOOL NETWORK_IS_TRANSITION_PRIVATE();
+		bool NETWORK_IS_TRANSITION_CLOSED_FRIENDS();
+		bool NETWORK_IS_TRANSITION_CLOSED_CREW();
+		bool NETWORK_IS_TRANSITION_SOLO();
+		bool NETWORK_IS_TRANSITION_PRIVATE();
 		int NETWORK_GET_NUM_TRANSITION_NON_ASYNC_GAMERS();
-		void NETWORK_MARK_AS_PREFERRED_ACTIVITY(BOOL p0);
-		void NETWORK_MARK_AS_WAITING_ASYNC(BOOL p0);
+		void NETWORK_MARK_AS_PREFERRED_ACTIVITY(bool p0);
+		void NETWORK_MARK_AS_WAITING_ASYNC(bool p0);
 		void NETWORK_SET_IN_PROGRESS_FINISH_TIME(Any p0);
 		void NETWORK_SET_TRANSITION_CREATOR_HANDLE(Any* p0);
 		void NETWORK_CLEAR_TRANSITION_CREATOR_HANDLE();
-		BOOL NETWORK_INVITE_GAMERS_TO_TRANSITION(Any* p0, Any p1);
+		bool NETWORK_INVITE_GAMERS_TO_TRANSITION(Any* p0, Any p1);
 		void NETWORK_SET_GAMER_INVITED_TO_TRANSITION(Any* gamerHandle);
-		BOOL NETWORK_LEAVE_TRANSITION();
-		BOOL NETWORK_LAUNCH_TRANSITION();
+		bool NETWORK_LEAVE_TRANSITION();
+		bool NETWORK_LAUNCH_TRANSITION();
 		/**
 		 * Appears to set whether a transition should be started when the session is migrating.
 		 */
-		void NETWORK_SET_DO_NOT_LAUNCH_FROM_JOIN_AS_MIGRATED_HOST(BOOL toggle);
+		void NETWORK_SET_DO_NOT_LAUNCH_FROM_JOIN_AS_MIGRATED_HOST(bool toggle);
 		void NETWORK_CANCEL_TRANSITION_MATCHMAKING();
 		void NETWORK_BAIL_TRANSITION(int p0, int p1, int p2);
-		BOOL NETWORK_DO_TRANSITION_TO_GAME(BOOL p0, int maxPlayers);
-		BOOL NETWORK_DO_TRANSITION_TO_NEW_GAME(BOOL p0, int maxPlayers, BOOL p2);
+		bool NETWORK_DO_TRANSITION_TO_GAME(bool p0, int maxPlayers);
+		bool NETWORK_DO_TRANSITION_TO_NEW_GAME(bool p0, int maxPlayers, bool p2);
 		/**
 		 * p2 is true 3/4 of the occurrences I found.
 		 * 'players' is the number of players for a session. On PS3/360 it's always 18. On PC it's 32.
 		 */
-		BOOL NETWORK_DO_TRANSITION_TO_FREEMODE(Any* p0, Any p1, BOOL p2, int players, BOOL p4);
-		BOOL NETWORK_DO_TRANSITION_TO_NEW_FREEMODE(Any* p0, Any p1, int players, BOOL p3, BOOL p4, BOOL p5);
-		BOOL NETWORK_IS_TRANSITION_TO_GAME();
+		bool NETWORK_DO_TRANSITION_TO_FREEMODE(Any* p0, Any p1, bool p2, int players, bool p4);
+		bool NETWORK_DO_TRANSITION_TO_NEW_FREEMODE(Any* p0, Any p1, int players, bool p3, bool p4, bool p5);
+		bool NETWORK_IS_TRANSITION_TO_GAME();
 		/**
 		 * Returns count.
 		 */
 		int NETWORK_GET_TRANSITION_MEMBERS(Any* data, int dataCount);
 		void NETWORK_APPLY_TRANSITION_PARAMETER(int p0, int p1);
-		void NETWORK_APPLY_TRANSITION_PARAMETER_STRING(int p0, const char* string, BOOL p2);
-		BOOL NETWORK_SEND_TRANSITION_GAMER_INSTRUCTION(Any* gamerHandle, const char* p1, int p2, int p3, BOOL p4);
-		BOOL NETWORK_MARK_TRANSITION_GAMER_AS_FULLY_JOINED(Any* p0);
-		BOOL NETWORK_IS_TRANSITION_HOST();
-		BOOL NETWORK_IS_TRANSITION_HOST_FROM_HANDLE(Any* gamerHandle);
-		BOOL NETWORK_GET_TRANSITION_HOST(Any* gamerHandle);
-		BOOL NETWORK_IS_IN_TRANSITION();
-		BOOL NETWORK_IS_TRANSITION_STARTED();
-		BOOL NETWORK_IS_TRANSITION_BUSY();
-		BOOL NETWORK_IS_TRANSITION_MATCHMAKING();
-		BOOL NETWORK_IS_TRANSITION_LEAVE_POSTPONED();
+		void NETWORK_APPLY_TRANSITION_PARAMETER_STRING(int p0, const char* string, bool p2);
+		bool NETWORK_SEND_TRANSITION_GAMER_INSTRUCTION(Any* gamerHandle, const char* p1, int p2, int p3, bool p4);
+		bool NETWORK_MARK_TRANSITION_GAMER_AS_FULLY_JOINED(Any* p0);
+		bool NETWORK_IS_TRANSITION_HOST();
+		bool NETWORK_IS_TRANSITION_HOST_FROM_HANDLE(Any* gamerHandle);
+		bool NETWORK_GET_TRANSITION_HOST(Any* gamerHandle);
+		bool NETWORK_IS_IN_TRANSITION();
+		bool NETWORK_IS_TRANSITION_STARTED();
+		bool NETWORK_IS_TRANSITION_BUSY();
+		bool NETWORK_IS_TRANSITION_MATCHMAKING();
+		bool NETWORK_IS_TRANSITION_LEAVE_POSTPONED();
 		void NETWORK_TRANSITION_SET_IN_PROGRESS(Any p0);
 		void NETWORK_TRANSITION_SET_CONTENT_CREATOR(Any p0);
 		void NETWORK_TRANSITION_SET_ACTIVITY_ISLAND(Any p0);
 		void NETWORK_OPEN_TRANSITION_MATCHMAKING();
 		void NETWORK_CLOSE_TRANSITION_MATCHMAKING();
-		BOOL NETWORK_IS_TRANSITION_OPEN_TO_MATCHMAKING();
-		void NETWORK_SET_TRANSITION_VISIBILITY_LOCK(BOOL p0, BOOL p1);
-		BOOL NETWORK_IS_TRANSITION_VISIBILITY_LOCKED();
+		bool NETWORK_IS_TRANSITION_OPEN_TO_MATCHMAKING();
+		void NETWORK_SET_TRANSITION_VISIBILITY_LOCK(bool p0, bool p1);
+		bool NETWORK_IS_TRANSITION_VISIBILITY_LOCKED();
 		void NETWORK_SET_TRANSITION_ACTIVITY_ID(Any p0);
-		void NETWORK_CHANGE_TRANSITION_SLOTS(Any p0, BOOL p1);
-		void NETWORK_TRANSITION_BLOCK_JOIN_REQUESTS(BOOL p0);
-		BOOL NETWORK_HAS_PLAYER_STARTED_TRANSITION(Player player);
-		BOOL NETWORK_ARE_TRANSITION_DETAILS_VALID(Any p0);
+		void NETWORK_CHANGE_TRANSITION_SLOTS(Any p0, bool p1);
+		void NETWORK_TRANSITION_BLOCK_JOIN_REQUESTS(bool p0);
+		bool NETWORK_HAS_PLAYER_STARTED_TRANSITION(Player player);
+		bool NETWORK_ARE_TRANSITION_DETAILS_VALID(Any p0);
 		/**
 		 * int handle[76];
 		 * NETWORK_HANDLE_FROM_FRIEND(iSelectedPlayer, &handle[0], 13);
@@ -9191,75 +9191,75 @@ namespace base::menu::natives {
 		 * NETWORK_JOIN_TRANSITION(uVar2);
 		 * nothing doin.
 		 */
-		BOOL NETWORK_JOIN_TRANSITION(Player player);
-		BOOL NETWORK_HAS_INVITED_GAMER_TO_TRANSITION(Any* p0);
-		BOOL NETWORK_HAS_TRANSITION_INVITE_BEEN_ACKED(Any* p0);
-		BOOL NETWORK_IS_ACTIVITY_SESSION();
+		bool NETWORK_JOIN_TRANSITION(Player player);
+		bool NETWORK_HAS_INVITED_GAMER_TO_TRANSITION(Any* p0);
+		bool NETWORK_HAS_TRANSITION_INVITE_BEEN_ACKED(Any* p0);
+		bool NETWORK_IS_ACTIVITY_SESSION();
 		void NETWORK_DISABLE_REALTIME_MULTIPLAYER();
 		void NETWORK_OVERRIDE_REALTIME_MULTIPLAYER_CONTROL_DISABLE();
 		void NETWORK_DISABLE_REALTIME_MULTIPLAYER_SPECTATOR();
 		/**
 		 * Does nothing. It's just a nullsub.
 		 */
-		void NETWORK_SET_PRESENCE_SESSION_INVITES_BLOCKED(BOOL toggle);
-		BOOL NETWORK_SEND_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
-		BOOL NETWORK_SEND_TRANSITION_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
+		void NETWORK_SET_PRESENCE_SESSION_INVITES_BLOCKED(bool toggle);
+		bool NETWORK_SEND_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
+		bool NETWORK_SEND_TRANSITION_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
 		/**
 		 * Contains the string "NETWORK_SEND_PRESENCE_TRANSITION_INVITE" but so does 0xC116FF9B4D488291; seems to fit alphabetically here, tho.
 		 */
-		BOOL NETWORK_SEND_IMPORTANT_TRANSITION_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
+		bool NETWORK_SEND_IMPORTANT_TRANSITION_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
 		int NETWORK_GET_PRESENCE_INVITE_INDEX_BY_ID(int p0);
 		int NETWORK_GET_NUM_PRESENCE_INVITES();
-		BOOL NETWORK_ACCEPT_PRESENCE_INVITE(int p0);
-		BOOL NETWORK_REMOVE_PRESENCE_INVITE(int p0);
+		bool NETWORK_ACCEPT_PRESENCE_INVITE(int p0);
+		bool NETWORK_REMOVE_PRESENCE_INVITE(int p0);
 		int NETWORK_GET_PRESENCE_INVITE_ID(int p0);
 		const char* NETWORK_GET_PRESENCE_INVITE_INVITER(int p0);
-		BOOL NETWORK_GET_PRESENCE_INVITE_HANDLE(Any p0, Any* p1);
+		bool NETWORK_GET_PRESENCE_INVITE_HANDLE(Any p0, Any* p1);
 		int NETWORK_GET_PRESENCE_INVITE_SESSION_ID(Any p0);
 		const char* NETWORK_GET_PRESENCE_INVITE_CONTENT_ID(int p0);
 		int NETWORK_GET_PRESENCE_INVITE_PLAYLIST_LENGTH(int p0);
 		int NETWORK_GET_PRESENCE_INVITE_PLAYLIST_CURRENT(int p0);
-		BOOL NETWORK_GET_PRESENCE_INVITE_FROM_ADMIN(int p0);
-		BOOL NETWORK_GET_PRESENCE_INVITE_IS_TOURNAMENT(Any p0);
-		BOOL NETWORK_HAS_FOLLOW_INVITE();
-		BOOL NETWORK_ACTION_FOLLOW_INVITE();
-		BOOL NETWORK_CLEAR_FOLLOW_INVITE();
+		bool NETWORK_GET_PRESENCE_INVITE_FROM_ADMIN(int p0);
+		bool NETWORK_GET_PRESENCE_INVITE_IS_TOURNAMENT(Any p0);
+		bool NETWORK_HAS_FOLLOW_INVITE();
+		bool NETWORK_ACTION_FOLLOW_INVITE();
+		bool NETWORK_CLEAR_FOLLOW_INVITE();
 		void NETWORK_REMOVE_AND_CANCEL_ALL_INVITES();
 		void NETWORK_REMOVE_TRANSITION_INVITE(Any* p0);
 		void NETWORK_REMOVE_ALL_TRANSITION_INVITE();
 		void NETWORK_REMOVE_AND_CANCEL_ALL_TRANSITION_INVITES();
-		BOOL NETWORK_INVITE_GAMERS(Any* p0, Any p1, Any* p2, Any p3);
-		BOOL NETWORK_HAS_INVITED_GAMER(Any* p0);
-		BOOL NETWORK_HAS_MADE_INVITE_DECISION(Any* gamerHandle);
+		bool NETWORK_INVITE_GAMERS(Any* p0, Any p1, Any* p2, Any p3);
+		bool NETWORK_HAS_INVITED_GAMER(Any* p0);
+		bool NETWORK_HAS_MADE_INVITE_DECISION(Any* gamerHandle);
 		int NETWORK_GET_INVITE_REPLY_STATUS(Any p0);
-		BOOL NETWORK_GET_CURRENTLY_SELECTED_GAMER_HANDLE_FROM_INVITE_MENU(Any* p0);
-		BOOL NETWORK_SET_CURRENTLY_SELECTED_GAMER_HANDLE_FROM_INVITE_MENU(Any* p0);
+		bool NETWORK_GET_CURRENTLY_SELECTED_GAMER_HANDLE_FROM_INVITE_MENU(Any* p0);
+		bool NETWORK_SET_CURRENTLY_SELECTED_GAMER_HANDLE_FROM_INVITE_MENU(Any* p0);
 		void NETWORK_SET_INVITE_ON_CALL_FOR_INVITE_MENU(Any* p0);
-		BOOL NETWORK_CHECK_DATA_MANAGER_SUCCEEDED_FOR_HANDLE(int p0, Any* gamerHandle);
-		BOOL NETWORK_CHECK_DATA_MANAGER_FOR_HANDLE(Any p0, Any* gamerHandle);
+		bool NETWORK_CHECK_DATA_MANAGER_SUCCEEDED_FOR_HANDLE(int p0, Any* gamerHandle);
+		bool NETWORK_CHECK_DATA_MANAGER_FOR_HANDLE(Any p0, Any* gamerHandle);
 		void NETWORK_SET_INVITE_FAILED_MESSAGE_FOR_INVITE_MENU(Any* p0, Any* p1);
-		BOOL FILLOUT_PM_PLAYER_LIST(Any* gamerHandle, Any p1, Any p2);
-		BOOL FILLOUT_PM_PLAYER_LIST_WITH_NAMES(Any* p0, Any* p1, Any p2, Any p3);
-		BOOL REFRESH_PLAYER_LIST_STATS(int p0);
-		BOOL NETWORK_SET_CURRENT_DATA_MANAGER_HANDLE(Any* p0);
+		bool FILLOUT_PM_PLAYER_LIST(Any* gamerHandle, Any p1, Any p2);
+		bool FILLOUT_PM_PLAYER_LIST_WITH_NAMES(Any* p0, Any* p1, Any p2, Any p3);
+		bool REFRESH_PLAYER_LIST_STATS(int p0);
+		bool NETWORK_SET_CURRENT_DATA_MANAGER_HANDLE(Any* p0);
 		/**
 		 * Hardcoded to return false.
 		 */
-		BOOL NETWORK_IS_IN_PLATFORM_PARTY();
+		bool NETWORK_IS_IN_PLATFORM_PARTY();
 		int NETWORK_GET_PLATFORM_PARTY_MEMBER_COUNT();
 		int NETWORK_GET_PLATFORM_PARTY_MEMBERS(Any* data, int dataSize);
 		/**
 		 * Hardcoded to return false.
 		 */
-		BOOL NETWORK_IS_IN_PLATFORM_PARTY_CHAT();
+		bool NETWORK_IS_IN_PLATFORM_PARTY_CHAT();
 		/**
 		 * This would be nice to see if someone is in party chat, but 2 sad notes.
 		 * 1) It only becomes true if said person is speaking in that party at the time.
 		 * 2) It will never, become true unless you are in that party with said person.
 		 */
-		BOOL NETWORK_IS_CHATTING_IN_PLATFORM_PARTY(Any* gamerHandle);
-		BOOL NETWORK_CAN_QUEUE_FOR_PREVIOUS_SESSION_JOIN();
-		BOOL NETWORK_IS_QUEUING_FOR_SESSION_JOIN();
+		bool NETWORK_IS_CHATTING_IN_PLATFORM_PARTY(Any* gamerHandle);
+		bool NETWORK_CAN_QUEUE_FOR_PREVIOUS_SESSION_JOIN();
+		bool NETWORK_IS_QUEUING_FOR_SESSION_JOIN();
 		void NETWORK_CLEAR_QUEUED_JOIN_REQUEST();
 		void NETWORK_SEND_QUEUED_JOIN_REQUEST();
 		void NETWORK_REMOVE_ALL_QUEUED_JOIN_REQUESTS();
@@ -9270,18 +9270,18 @@ namespace base::menu::natives {
 		 */
 		int NETWORK_GET_RANDOM_INT_RANGED(int rangeStart, int rangeEnd);
 		float _NETWORK_GET_RANDOM_FLOAT_RANGED(float rangeStart, float rangeEnd);
-		BOOL NETWORK_PLAYER_IS_CHEATER();
+		bool NETWORK_PLAYER_IS_CHEATER();
 		int NETWORK_PLAYER_GET_CHEATER_REASON();
-		BOOL NETWORK_PLAYER_IS_BADSPORT();
-		BOOL REMOTE_CHEATER_PLAYER_DETECTED(Player player, int a, int b);
-		BOOL BAD_SPORT_PLAYER_LEFT_DETECTED(Any* gamerHandle, int event, int amountReceived);
+		bool NETWORK_PLAYER_IS_BADSPORT();
+		bool REMOTE_CHEATER_PLAYER_DETECTED(Player player, int a, int b);
+		bool BAD_SPORT_PLAYER_LEFT_DETECTED(Any* gamerHandle, int event, int amountReceived);
 		void NETWORK_ADD_INVALID_OBJECT_MODEL(Hash modelHash, Any p1);
 		void NETWORK_REMOVE_INVALID_OBJECT_MODEL(Hash modelHash);
 		void NETWORK_CLEAR_INVALID_OBJECT_MODELS();
 		void NETWORK_APPLY_PED_SCAR_DATA(Ped ped, int p1);
-		void NETWORK_SET_THIS_SCRIPT_IS_NETWORK_SCRIPT(int maxNumMissionParticipants, BOOL p1, int instanceId);
-		BOOL NETWORK_TRY_TO_SET_THIS_SCRIPT_IS_NETWORK_SCRIPT(Any p0, BOOL p1, Any p2);
-		BOOL NETWORK_GET_THIS_SCRIPT_IS_NETWORK_SCRIPT();
+		void NETWORK_SET_THIS_SCRIPT_IS_NETWORK_SCRIPT(int maxNumMissionParticipants, bool p1, int instanceId);
+		bool NETWORK_TRY_TO_SET_THIS_SCRIPT_IS_NETWORK_SCRIPT(Any p0, bool p1, Any p2);
+		bool NETWORK_GET_THIS_SCRIPT_IS_NETWORK_SCRIPT();
 		int NETWORK_GET_MAX_NUM_PARTICIPANTS();
 		int NETWORK_GET_NUM_PARTICIPANTS();
 		int NETWORK_GET_SCRIPT_STATUS();
@@ -9306,7 +9306,7 @@ namespace base::menu::natives {
 		 * Note: this native was added in build 889.19
 		 */
 		int _NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum);
-		BOOL NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA();
+		bool NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA();
 		Player NETWORK_GET_PLAYER_INDEX(Player player);
 		int NETWORK_GET_PARTICIPANT_INDEX(int index);
 		/**
@@ -9317,12 +9317,12 @@ namespace base::menu::natives {
 		 * Returns the amount of players connected in the current session. Only works when connected to a session/server.
 		 */
 		int NETWORK_GET_NUM_CONNECTED_PLAYERS();
-		BOOL NETWORK_IS_PLAYER_CONNECTED(Player player);
+		bool NETWORK_IS_PLAYER_CONNECTED(Player player);
 		int NETWORK_GET_TOTAL_NUM_PLAYERS();
-		BOOL NETWORK_IS_PARTICIPANT_ACTIVE(int p0);
-		BOOL NETWORK_IS_PLAYER_ACTIVE(Player player);
-		BOOL NETWORK_IS_PLAYER_A_PARTICIPANT(Player player);
-		BOOL NETWORK_IS_HOST_OF_THIS_SCRIPT();
+		bool NETWORK_IS_PARTICIPANT_ACTIVE(int p0);
+		bool NETWORK_IS_PLAYER_ACTIVE(Player player);
+		bool NETWORK_IS_PLAYER_A_PARTICIPANT(Player player);
+		bool NETWORK_IS_HOST_OF_THIS_SCRIPT();
 		Player NETWORK_GET_HOST_OF_THIS_SCRIPT();
 		/**
 		 * scriptName examples:
@@ -9335,13 +9335,13 @@ namespace base::menu::natives {
 		Player NETWORK_GET_HOST_OF_SCRIPT(const char* scriptName, int instance_id, int position_hash);
 		Player NETWORK_GET_HOST_OF_THREAD(int threadId);
 		void NETWORK_SET_MISSION_FINISHED();
-		BOOL NETWORK_IS_SCRIPT_ACTIVE(const char* scriptName, int instance_id, BOOL p2, int position_hash);
-		BOOL NETWORK_IS_SCRIPT_ACTIVE_BY_HASH(Hash scriptHash, int p1, BOOL p2, int p3);
-		BOOL NETWORK_IS_THREAD_A_NETWORK_SCRIPT(int threadId);
+		bool NETWORK_IS_SCRIPT_ACTIVE(const char* scriptName, int instance_id, bool p2, int position_hash);
+		bool NETWORK_IS_SCRIPT_ACTIVE_BY_HASH(Hash scriptHash, int p1, bool p2, int p3);
+		bool NETWORK_IS_THREAD_A_NETWORK_SCRIPT(int threadId);
 		int NETWORK_GET_NUM_SCRIPT_PARTICIPANTS(const char* scriptName, int instance_id, int position_hash);
 		int NETWORK_GET_INSTANCE_ID_OF_THIS_SCRIPT();
 		Hash NETWORK_GET_POSITION_HASH_OF_THIS_SCRIPT();
-		BOOL NETWORK_IS_PLAYER_A_PARTICIPANT_ON_SCRIPT(Player player, const char* script, int instance_id);
+		bool NETWORK_IS_PLAYER_A_PARTICIPANT_ON_SCRIPT(Player player, const char* script, int instance_id);
 		void NETWORK_PREVENT_SCRIPT_HOST_MIGRATION();
 		void NETWORK_REQUEST_TO_BE_HOST_OF_THIS_SCRIPT();
 		/**
@@ -9360,8 +9360,8 @@ namespace base::menu::natives {
 		/**
 		 * NETWORK_GET_ASSISTED_DAMAGE_OF_ENTITY that ensures the entity is dead (IS_ENTITY_DEAD)
 		 */
-		BOOL NETWORK_GET_ASSISTED_KILL_OF_ENTITY(Player player, Entity entity, int* p2);
-		BOOL NETWORK_GET_ASSISTED_DAMAGE_OF_ENTITY(Player player, Entity entity, int* p2);
+		bool NETWORK_GET_ASSISTED_KILL_OF_ENTITY(Player player, Entity entity, int* p2);
+		bool NETWORK_GET_ASSISTED_DAMAGE_OF_ENTITY(Player player, Entity entity, int* p2);
 		Entity NETWORK_GET_ENTITY_KILLER_OF_PLAYER(Player player, Hash* weaponHash);
 		void NETWORK_SET_CURRENT_PUBLIC_CONTENT_ID(const char* missionId);
 		void NETWORK_SET_CURRENT_CHAT_OPTION(int newChatOption);
@@ -9397,38 +9397,38 @@ namespace base::menu::natives {
 		/**
 		 * Used by MetricVEHICLE_DIST_DRIVEN
 		 */
-		void NETWORK_SET_VEHICLE_DRIVEN_IN_TEST_DRIVE(BOOL toggle);
+		void NETWORK_SET_VEHICLE_DRIVEN_IN_TEST_DRIVE(bool toggle);
 		/**
 		 * Sets 'loc' variable used in MetricVEHICLE_DIST_DRIVEN
 		 */
 		void NETWORK_SET_VEHICLE_DRIVEN_LOCATION(Hash location);
-		void NETWORK_RESURRECT_LOCAL_PLAYER(float x, float y, float z, float heading, BOOL p4, BOOL changetime, BOOL p6, int p7, int p8);
+		void NETWORK_RESURRECT_LOCAL_PLAYER(float x, float y, float z, float heading, bool p4, bool changetime, bool p6, int p7, int p8);
 		void NETWORK_SET_LOCAL_PLAYER_INVINCIBLE_TIME(int time);
-		BOOL NETWORK_IS_LOCAL_PLAYER_INVINCIBLE();
-		void NETWORK_DISABLE_INVINCIBLE_FLASHING(Player player, BOOL toggle);
+		bool NETWORK_IS_LOCAL_PLAYER_INVINCIBLE();
+		void NETWORK_DISABLE_INVINCIBLE_FLASHING(Player player, bool toggle);
 		void NETWORK_PATCH_POST_CUTSCENE_HS4F_TUN_ENT(Ped ped);
-		void NETWORK_SET_LOCAL_PLAYER_SYNC_LOOK_AT(BOOL toggle);
-		BOOL NETWORK_HAS_ENTITY_BEEN_REGISTERED_WITH_THIS_THREAD(Entity entity);
+		void NETWORK_SET_LOCAL_PLAYER_SYNC_LOOK_AT(bool toggle);
+		bool NETWORK_HAS_ENTITY_BEEN_REGISTERED_WITH_THIS_THREAD(Entity entity);
 		int NETWORK_GET_NETWORK_ID_FROM_ENTITY(Entity entity);
 		Entity NETWORK_GET_ENTITY_FROM_NETWORK_ID(int netId);
-		BOOL NETWORK_GET_ENTITY_IS_NETWORKED(Entity entity);
-		BOOL NETWORK_GET_ENTITY_IS_LOCAL(Entity entity);
+		bool NETWORK_GET_ENTITY_IS_NETWORKED(Entity entity);
+		bool NETWORK_GET_ENTITY_IS_LOCAL(Entity entity);
 		void NETWORK_REGISTER_ENTITY_AS_NETWORKED(Entity entity);
 		void NETWORK_UNREGISTER_NETWORKED_ENTITY(Entity entity);
-		BOOL NETWORK_DOES_NETWORK_ID_EXIST(int netId);
-		BOOL NETWORK_DOES_ENTITY_EXIST_WITH_NETWORK_ID(int netId);
-		BOOL NETWORK_REQUEST_CONTROL_OF_NETWORK_ID(int netId);
-		BOOL NETWORK_HAS_CONTROL_OF_NETWORK_ID(int netId);
+		bool NETWORK_DOES_NETWORK_ID_EXIST(int netId);
+		bool NETWORK_DOES_ENTITY_EXIST_WITH_NETWORK_ID(int netId);
+		bool NETWORK_REQUEST_CONTROL_OF_NETWORK_ID(int netId);
+		bool NETWORK_HAS_CONTROL_OF_NETWORK_ID(int netId);
 		/**
 		 * Returns true if the specified network id is controlled by someone else.
 		 */
-		BOOL NETWORK_IS_NETWORK_ID_REMOTELY_CONTROLLED(int netId);
-		BOOL NETWORK_REQUEST_CONTROL_OF_ENTITY(Entity entity);
-		BOOL NETWORK_REQUEST_CONTROL_OF_DOOR(int doorID);
-		BOOL NETWORK_HAS_CONTROL_OF_ENTITY(Entity entity);
-		BOOL NETWORK_HAS_CONTROL_OF_PICKUP(Pickup pickup);
-		BOOL NETWORK_HAS_CONTROL_OF_DOOR(Hash doorHash);
-		BOOL NETWORK_IS_DOOR_NETWORKED(Hash doorHash);
+		bool NETWORK_IS_NETWORK_ID_REMOTELY_CONTROLLED(int netId);
+		bool NETWORK_REQUEST_CONTROL_OF_ENTITY(Entity entity);
+		bool NETWORK_REQUEST_CONTROL_OF_DOOR(int doorID);
+		bool NETWORK_HAS_CONTROL_OF_ENTITY(Entity entity);
+		bool NETWORK_HAS_CONTROL_OF_PICKUP(Pickup pickup);
+		bool NETWORK_HAS_CONTROL_OF_DOOR(Hash doorHash);
+		bool NETWORK_IS_DOOR_NETWORKED(Hash doorHash);
 		/**
 		 * calls from vehicle to net.
 		 * 
@@ -9464,9 +9464,9 @@ namespace base::menu::natives {
 		Hash NETWORK_HASH_FROM_PLAYER_HANDLE(Player player);
 		Hash NETWORK_HASH_FROM_GAMER_HANDLE(Any* gamerHandle);
 		void NETWORK_HANDLE_FROM_FRIEND(int friendIndex, Any* gamerHandle, int gamerHandleSize);
-		BOOL NETWORK_GAMERTAG_FROM_HANDLE_START(Any* gamerHandle);
-		BOOL NETWORK_GAMERTAG_FROM_HANDLE_PENDING();
-		BOOL NETWORK_GAMERTAG_FROM_HANDLE_SUCCEEDED();
+		bool NETWORK_GAMERTAG_FROM_HANDLE_START(Any* gamerHandle);
+		bool NETWORK_GAMERTAG_FROM_HANDLE_PENDING();
+		bool NETWORK_GAMERTAG_FROM_HANDLE_SUCCEEDED();
 		const char* NETWORK_GET_GAMERTAG_FROM_HANDLE(Any* gamerHandle);
 		/**
 		 * Hardcoded to return -1.
@@ -9476,11 +9476,11 @@ namespace base::menu::natives {
 		 * This function is hard-coded to always return 0.
 		 */
 		int NETWORK_GET_DISPLAYNAMES_FROM_HANDLES(Any p0, Any p1, Any p2);
-		BOOL NETWORK_ARE_HANDLES_THE_SAME(Any* gamerHandle1, Any* gamerHandle2);
-		BOOL NETWORK_IS_HANDLE_VALID(Any* gamerHandle, int gamerHandleSize);
+		bool NETWORK_ARE_HANDLES_THE_SAME(Any* gamerHandle1, Any* gamerHandle2);
+		bool NETWORK_IS_HANDLE_VALID(Any* gamerHandle, int gamerHandleSize);
 		Player NETWORK_GET_PLAYER_FROM_GAMER_HANDLE(Any* gamerHandle);
 		const char* NETWORK_MEMBER_ID_FROM_GAMER_HANDLE(Any* gamerHandle);
-		BOOL NETWORK_IS_GAMER_IN_MY_SESSION(Any* gamerHandle);
+		bool NETWORK_IS_GAMER_IN_MY_SESSION(Any* gamerHandle);
 		void NETWORK_SHOW_PROFILE_UI(Any* gamerHandle);
 		/**
 		 * Returns the name of a given player. Returns "**Invalid**" if rlGamerInfo of the given player cannot be retrieved or the player doesn't exist.
@@ -9499,8 +9499,8 @@ namespace base::menu::natives {
 		 * R* now checks with the IS_DLC_PRESENT native for the dlc hash 2532323046,
 		 * if that is present it will unlock dev stuff.
 		 */
-		BOOL NETWORK_PLAYER_IS_ROCKSTAR_DEV(Player player);
-		BOOL NETWORK_PLAYER_INDEX_IS_CHEATER(Player player);
+		bool NETWORK_PLAYER_IS_ROCKSTAR_DEV(Player player);
+		bool NETWORK_PLAYER_INDEX_IS_CHEATER(Player player);
 		int NETWORK_ENTITY_GET_OBJECT_ID(Entity entity);
 		/**
 		 * I've had this return the player's ped handle sometimes, but also other random entities.
@@ -9511,7 +9511,7 @@ namespace base::menu::natives {
 		 * Returns an entity handle or -1, value changes based on p0's value.
 		 */
 		Entity NETWORK_GET_ENTITY_FROM_OBJECT_ID(Any p0);
-		BOOL NETWORK_IS_INACTIVE_PROFILE(Any* p0);
+		bool NETWORK_IS_INACTIVE_PROFILE(Any* p0);
 		/**
 		 * Returns the name from given friend gamer handle.
 		 */
@@ -9520,30 +9520,30 @@ namespace base::menu::natives {
 		int NETWORK_GET_FRIEND_COUNT();
 		const char* NETWORK_GET_FRIEND_NAME(int friendIndex);
 		const char* NETWORK_GET_FRIEND_DISPLAY_NAME(int friendIndex);
-		BOOL NETWORK_IS_FRIEND_ONLINE(const char* name);
-		BOOL NETWORK_IS_FRIEND_HANDLE_ONLINE(Any* gamerHandle);
+		bool NETWORK_IS_FRIEND_ONLINE(const char* name);
+		bool NETWORK_IS_FRIEND_HANDLE_ONLINE(Any* gamerHandle);
 		/**
 		 * In scripts R* calls 'NETWORK_GET_FRIEND_NAME' in this param.
 		 */
-		BOOL NETWORK_IS_FRIEND_IN_SAME_TITLE(const char* friendName);
-		BOOL NETWORK_IS_FRIEND_IN_MULTIPLAYER(const char* friendName);
-		BOOL NETWORK_IS_FRIEND(Any* gamerHandle);
+		bool NETWORK_IS_FRIEND_IN_SAME_TITLE(const char* friendName);
+		bool NETWORK_IS_FRIEND_IN_MULTIPLAYER(const char* friendName);
+		bool NETWORK_IS_FRIEND(Any* gamerHandle);
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL NETWORK_IS_PENDING_FRIEND(Any p0);
-		BOOL NETWORK_IS_ADDING_FRIEND();
-		BOOL NETWORK_ADD_FRIEND(Any* gamerHandle, const char* message);
-		BOOL NETWORK_IS_FRIEND_INDEX_ONLINE(int friendIndex);
-		void NETWORK_SET_PLAYER_IS_PASSIVE(BOOL toggle);
-		BOOL NETWORK_GET_PLAYER_OWNS_WAYPOINT(Player player);
-		BOOL NETWORK_CAN_SET_WAYPOINT();
+		bool NETWORK_IS_PENDING_FRIEND(Any p0);
+		bool NETWORK_IS_ADDING_FRIEND();
+		bool NETWORK_ADD_FRIEND(Any* gamerHandle, const char* message);
+		bool NETWORK_IS_FRIEND_INDEX_ONLINE(int friendIndex);
+		void NETWORK_SET_PLAYER_IS_PASSIVE(bool toggle);
+		bool NETWORK_GET_PLAYER_OWNS_WAYPOINT(Player player);
+		bool NETWORK_CAN_SET_WAYPOINT();
 		void NETWORK_IGNORE_REMOTE_WAYPOINTS();
 		/**
 		 * communicationType: 0 = VOICE; 1 = TEXT_CHAT; 2 = TEXT_MESSAGE; 3 = EMAIL; 4 = USER_CONTENT; 5 = USER_TEXT
 		 */
-		BOOL _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_PERMISSION(int communicationType);
-		BOOL _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED(int communicationType);
+		bool _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_PERMISSION(int communicationType);
+		bool _NETWORK_DOES_COMMUNICATION_GROUP_HAVE_SETTINGS_ENABLED(int communicationType);
 		/**
 		 * Returns communicationGroupFlag
 		 * communicationType: see 0xDBDF80673BBA3D65
@@ -9572,75 +9572,75 @@ namespace base::menu::natives {
 		 * _NETWORK_HAS_P*
 		 * checkType 3 is similar as using 0x9F633448E4C73207
 		 */
-		BOOL _NETWORK_HAS_PLAYER_PASSED_CHECK_TYPE(int checkType, Any* gamerHandle);
-		BOOL NETWORK_IS_PLAYER_ON_BLOCKLIST(Any* gamerHandle);
-		BOOL NETWORK_SET_SCRIPT_AUTOMUTED(Any p0);
-		BOOL NETWORK_HAS_AUTOMUTE_OVERRIDE();
-		BOOL NETWORK_HAS_HEADSET();
-		void NETWORK_SET_LOOK_AT_TALKERS(BOOL p0);
-		BOOL NETWORK_IS_PUSH_TO_TALK_ACTIVE();
-		BOOL NETWORK_GAMER_HAS_HEADSET(Any* gamerHandle);
-		BOOL NETWORK_IS_GAMER_TALKING(Any* gamerHandle);
-		BOOL NETWORK_PERMISSIONS_HAS_GAMER_RECORD(Any* gamerHandle);
-		BOOL NETWORK_CAN_COMMUNICATE_WITH_GAMER(Any* gamerHandle);
-		BOOL NETWORK_CAN_TEXT_CHAT_WITH_GAMER(Any* gamerHandle);
-		BOOL NETWORK_IS_GAMER_MUTED_BY_ME(Any* gamerHandle);
-		BOOL NETWORK_AM_I_MUTED_BY_GAMER(Any* gamerHandle);
-		BOOL NETWORK_IS_GAMER_BLOCKED_BY_ME(Any* gamerHandle);
-		BOOL NETWORK_AM_I_BLOCKED_BY_GAMER(Any* gamerHandle);
-		BOOL NETWORK_CAN_VIEW_GAMER_USER_CONTENT(Any* gamerHandle);
-		BOOL NETWORK_HAS_VIEW_GAMER_USER_CONTENT_RESULT(Any* gamerHandle);
+		bool _NETWORK_HAS_PLAYER_PASSED_CHECK_TYPE(int checkType, Any* gamerHandle);
+		bool NETWORK_IS_PLAYER_ON_BLOCKLIST(Any* gamerHandle);
+		bool NETWORK_SET_SCRIPT_AUTOMUTED(Any p0);
+		bool NETWORK_HAS_AUTOMUTE_OVERRIDE();
+		bool NETWORK_HAS_HEADSET();
+		void NETWORK_SET_LOOK_AT_TALKERS(bool p0);
+		bool NETWORK_IS_PUSH_TO_TALK_ACTIVE();
+		bool NETWORK_GAMER_HAS_HEADSET(Any* gamerHandle);
+		bool NETWORK_IS_GAMER_TALKING(Any* gamerHandle);
+		bool NETWORK_PERMISSIONS_HAS_GAMER_RECORD(Any* gamerHandle);
+		bool NETWORK_CAN_COMMUNICATE_WITH_GAMER(Any* gamerHandle);
+		void NETWORK_CAN_TEXT_CHAT_WITH_GAMER(Any* gamerHandle); // Missing in crossmap
+		bool NETWORK_IS_GAMER_MUTED_BY_ME(Any* gamerHandle);
+		bool NETWORK_AM_I_MUTED_BY_GAMER(Any* gamerHandle);
+		bool NETWORK_IS_GAMER_BLOCKED_BY_ME(Any* gamerHandle);
+		bool NETWORK_AM_I_BLOCKED_BY_GAMER(Any* gamerHandle);
+		bool NETWORK_CAN_VIEW_GAMER_USER_CONTENT(Any* gamerHandle);
+		bool NETWORK_HAS_VIEW_GAMER_USER_CONTENT_RESULT(Any* gamerHandle);
 		/**
 		 * NETWORK_CAN_*
 		 */
-		BOOL _NETWORK_CAN_TEXT_FROM_GAMER_BE_VIEWED(Any* gamerHandle);
-		BOOL NETWORK_CAN_PLAY_MULTIPLAYER_WITH_GAMER(Any* gamerHandle);
-		BOOL NETWORK_CAN_GAMER_PLAY_MULTIPLAYER_WITH_ME(Any* gamerHandle);
-		BOOL NETWORK_CAN_SEND_LOCAL_INVITE(Any* gamerHandle);
-		BOOL NETWORK_CAN_RECEIVE_LOCAL_INVITE(Any* gamerHandle);
+		bool _NETWORK_CAN_TEXT_FROM_GAMER_BE_VIEWED(Any* gamerHandle);
+		bool NETWORK_CAN_PLAY_MULTIPLAYER_WITH_GAMER(Any* gamerHandle);
+		bool NETWORK_CAN_GAMER_PLAY_MULTIPLAYER_WITH_ME(Any* gamerHandle);
+		bool NETWORK_CAN_SEND_LOCAL_INVITE(Any* gamerHandle);
+		bool NETWORK_CAN_RECEIVE_LOCAL_INVITE(Any* gamerHandle);
 		/**
 		 * returns true if someone is screaming or talking in a microphone
 		 */
-		BOOL NETWORK_IS_PLAYER_TALKING(Player player);
-		BOOL NETWORK_PLAYER_HAS_HEADSET(Player player);
-		BOOL NETWORK_IS_PLAYER_MUTED_BY_ME(Player player);
-		BOOL NETWORK_AM_I_MUTED_BY_PLAYER(Player player);
-		BOOL NETWORK_IS_PLAYER_BLOCKED_BY_ME(Player player);
-		BOOL NETWORK_AM_I_BLOCKED_BY_PLAYER(Player player);
+		bool NETWORK_IS_PLAYER_TALKING(Player player);
+		bool NETWORK_PLAYER_HAS_HEADSET(Player player);
+		bool NETWORK_IS_PLAYER_MUTED_BY_ME(Player player);
+		bool NETWORK_AM_I_MUTED_BY_PLAYER(Player player);
+		bool NETWORK_IS_PLAYER_BLOCKED_BY_ME(Player player);
+		bool NETWORK_AM_I_BLOCKED_BY_PLAYER(Player player);
 		float NETWORK_GET_PLAYER_LOUDNESS(Player player);
 		void NETWORK_SET_TALKER_PROXIMITY(float value);
 		float NETWORK_GET_TALKER_PROXIMITY();
-		void NETWORK_SET_VOICE_ACTIVE(BOOL toggle);
-		void NETWORK_REMAIN_IN_GAME_CHAT(BOOL p0);
-		void NETWORK_OVERRIDE_TRANSITION_CHAT(BOOL p0);
-		void NETWORK_SET_TEAM_ONLY_CHAT(BOOL toggle);
+		void NETWORK_SET_VOICE_ACTIVE(bool toggle);
+		void NETWORK_REMAIN_IN_GAME_CHAT(bool p0);
+		void NETWORK_OVERRIDE_TRANSITION_CHAT(bool p0);
+		void NETWORK_SET_TEAM_ONLY_CHAT(bool toggle);
 		void NETWORK_SET_SCRIPT_CONTROLLING_TEAMS(Any p0);
-		BOOL NETWORK_SET_SAME_TEAM_AS_LOCAL_PLAYER(Any p0, Any p1);
-		void NETWORK_OVERRIDE_TEAM_RESTRICTIONS(int team, BOOL toggle);
-		void NETWORK_SET_OVERRIDE_SPECTATOR_MODE(BOOL toggle);
-		void NETWORK_SET_OVERRIDE_TUTORIAL_SESSION_CHAT(BOOL toggle);
-		void NETWORK_SET_PROXIMITY_AFFECTS_TEAM(BOOL toggle);
-		void NETWORK_SET_NO_SPECTATOR_CHAT(BOOL toggle);
-		void NETWORK_SET_IGNORE_SPECTATOR_CHAT_LIMITS_SAME_TEAM(BOOL toggle);
+		bool NETWORK_SET_SAME_TEAM_AS_LOCAL_PLAYER(Any p0, Any p1);
+		void NETWORK_OVERRIDE_TEAM_RESTRICTIONS(int team, bool toggle);
+		void NETWORK_SET_OVERRIDE_SPECTATOR_MODE(bool toggle);
+		void NETWORK_SET_OVERRIDE_TUTORIAL_SESSION_CHAT(bool toggle);
+		void NETWORK_SET_PROXIMITY_AFFECTS_TEAM(bool toggle);
+		void NETWORK_SET_NO_SPECTATOR_CHAT(bool toggle);
+		void NETWORK_SET_IGNORE_SPECTATOR_CHAT_LIMITS_SAME_TEAM(bool toggle);
 		/**
 		 * Could possibly bypass being muted or automatically muted
 		 */
-		void NETWORK_OVERRIDE_CHAT_RESTRICTIONS(Player player, BOOL toggle);
+		void NETWORK_OVERRIDE_CHAT_RESTRICTIONS(Player player, bool toggle);
 		/**
 		 * This is used alongside the native,
 		 * 'NETWORK_OVERRIDE_RECEIVE_RESTRICTIONS'. Read its description for more info.
 		 */
-		void NETWORK_OVERRIDE_SEND_RESTRICTIONS(Player player, BOOL toggle);
-		void NETWORK_OVERRIDE_SEND_RESTRICTIONS_ALL(BOOL toggle);
+		void NETWORK_OVERRIDE_SEND_RESTRICTIONS(Player player, bool toggle);
+		void NETWORK_OVERRIDE_SEND_RESTRICTIONS_ALL(bool toggle);
 		/**
 		 * R* uses this to hear all player when spectating.
 		 * It allows you to hear other online players when their chat is on none, crew and or friends
 		 */
-		void NETWORK_OVERRIDE_RECEIVE_RESTRICTIONS(Player player, BOOL toggle);
+		void NETWORK_OVERRIDE_RECEIVE_RESTRICTIONS(Player player, bool toggle);
 		/**
 		 * p0 is always false in scripts.
 		 */
-		void NETWORK_OVERRIDE_RECEIVE_RESTRICTIONS_ALL(BOOL toggle);
+		void NETWORK_OVERRIDE_RECEIVE_RESTRICTIONS_ALL(bool toggle);
 		void NETWORK_SET_VOICE_CHANNEL(int channel);
 		void NETWORK_CLEAR_VOICE_CHANNEL();
 		void NETWORK_APPLY_VOICE_PROXIMITY_OVERRIDE(float x, float y, float z);
@@ -9651,11 +9651,11 @@ namespace base::menu::natives {
 		 * NETWORK_GET_M[A-U]
 		 */
 		void NETWORK_GET_MUTE_COUNT_FOR_PLAYER(Player p0, float* p1, float* p2);
-		void NETWORK_SET_SPECTATOR_TO_NON_SPECTATOR_TEXT_CHAT(BOOL toggle);
+		void NETWORK_SET_SPECTATOR_TO_NON_SPECTATOR_TEXT_CHAT(bool toggle);
 		/**
 		 * Same as _IS_TEXT_CHAT_ACTIVE, except it does not check if the text chat HUD component is initialized, and therefore may crash.
 		 */
-		BOOL NETWORK_TEXT_CHAT_IS_TYPING();
+		bool NETWORK_TEXT_CHAT_IS_TYPING();
 		/**
 		 * Starts a new singleplayer game (at the prologue).
 		 */
@@ -9669,8 +9669,8 @@ namespace base::menu::natives {
 		 * 
 		 * Somewhat related note: opening the pause menu after loading into this 'singleplayer' mode crashes the game.
 		 */
-		BOOL SHUTDOWN_AND_LOAD_MOST_RECENT_SAVE();
-		void NETWORK_SET_FRIENDLY_FIRE_OPTION(BOOL toggle);
+		bool SHUTDOWN_AND_LOAD_MOST_RECENT_SAVE();
+		void NETWORK_SET_FRIENDLY_FIRE_OPTION(bool toggle);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
@@ -9683,16 +9683,16 @@ namespace base::menu::natives {
 		/**
 		 * p4 and p5 are always 0 in scripts
 		 */
-		void NETWORK_LEAVE_PED_BEHIND_BEFORE_WARP(Player player, float x, float y, float z, BOOL p4, BOOL p5);
-		void NETWORK_LEAVE_PED_BEHIND_BEFORE_CUTSCENE(Player player, BOOL p1);
+		void NETWORK_LEAVE_PED_BEHIND_BEFORE_WARP(Player player, float x, float y, float z, bool p4, bool p5);
+		void NETWORK_LEAVE_PED_BEHIND_BEFORE_CUTSCENE(Player player, bool p1);
 		/**
 		 * entity must be a valid entity; ped can be NULL
 		 */
 		void REMOVE_ALL_STICKY_BOMBS_FROM_ENTITY(Entity entity, Ped ped);
 		void NETWORK_KEEP_ENTITY_COLLISION_DISABLED_AFTER_ANIM_SCENE(Any p0, Any p1);
-		BOOL NETWORK_IS_ANY_PLAYER_NEAR(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6);
-		BOOL NETWORK_CLAN_SERVICE_IS_VALID();
-		BOOL NETWORK_CLAN_PLAYER_IS_ACTIVE(Any* gamerHandle);
+		bool NETWORK_IS_ANY_PLAYER_NEAR(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6);
+		bool NETWORK_CLAN_SERVICE_IS_VALID();
+		bool NETWORK_CLAN_PLAYER_IS_ACTIVE(Any* gamerHandle);
 		/**
 		 * bufferSize is 35 in the scripts.
 		 * 
@@ -9702,55 +9702,55 @@ namespace base::menu::natives {
 		 * 
 		 * https://pastebin.com/cSZniHak
 		 */
-		BOOL NETWORK_CLAN_PLAYER_GET_DESC(Any* clanDesc, int bufferSize, Any* gamerHandle);
+		bool NETWORK_CLAN_PLAYER_GET_DESC(Any* clanDesc, int bufferSize, Any* gamerHandle);
 		/**
 		 * bufferSize is 35 in the scripts.
 		 */
-		BOOL NETWORK_CLAN_IS_ROCKSTAR_CLAN(Any* clanDesc, int bufferSize);
+		bool NETWORK_CLAN_IS_ROCKSTAR_CLAN(Any* clanDesc, int bufferSize);
 		/**
 		 * bufferSize is 35 in the scripts.
 		 */
 		void NETWORK_CLAN_GET_UI_FORMATTED_TAG(Any* clanDesc, int bufferSize, char* formattedTag);
 		int NETWORK_CLAN_GET_LOCAL_MEMBERSHIPS_COUNT();
-		BOOL NETWORK_CLAN_GET_MEMBERSHIP_DESC(Any* memberDesc, int p1);
-		BOOL NETWORK_CLAN_DOWNLOAD_MEMBERSHIP(Any* gamerHandle);
-		BOOL NETWORK_CLAN_DOWNLOAD_MEMBERSHIP_PENDING(Any* p0);
-		BOOL NETWORK_CLAN_ANY_DOWNLOAD_MEMBERSHIP_PENDING();
-		BOOL NETWORK_CLAN_REMOTE_MEMBERSHIPS_ARE_IN_CACHE(int* p0);
+		bool NETWORK_CLAN_GET_MEMBERSHIP_DESC(Any* memberDesc, int p1);
+		bool NETWORK_CLAN_DOWNLOAD_MEMBERSHIP(Any* gamerHandle);
+		bool NETWORK_CLAN_DOWNLOAD_MEMBERSHIP_PENDING(Any* p0);
+		bool NETWORK_CLAN_ANY_DOWNLOAD_MEMBERSHIP_PENDING();
+		bool NETWORK_CLAN_REMOTE_MEMBERSHIPS_ARE_IN_CACHE(int* p0);
 		int NETWORK_CLAN_GET_MEMBERSHIP_COUNT(int* p0);
-		BOOL NETWORK_CLAN_GET_MEMBERSHIP_VALID(int* p0, Any p1);
-		BOOL NETWORK_CLAN_GET_MEMBERSHIP(int* p0, Any* clanMembership, int p2);
-		BOOL NETWORK_CLAN_JOIN(int clanDesc);
+		bool NETWORK_CLAN_GET_MEMBERSHIP_VALID(int* p0, Any p1);
+		bool NETWORK_CLAN_GET_MEMBERSHIP(int* p0, Any* clanMembership, int p2);
+		bool NETWORK_CLAN_JOIN(int clanDesc);
 		/**
 		 * Only documented...
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL NETWORK_CLAN_CREWINFO_GET_STRING_VALUE(const char* animDict, const char* animName);
-		BOOL NETWORK_CLAN_CREWINFO_GET_CREWRANKTITLE(int p0, const char* p1);
-		BOOL NETWORK_CLAN_HAS_CREWINFO_METADATA_BEEN_RECEIVED();
-		BOOL NETWORK_CLAN_GET_EMBLEM_TXD_NAME(Any* netHandle, char* txdName);
-		BOOL NETWORK_CLAN_REQUEST_EMBLEM(Any p0);
-		BOOL NETWORK_CLAN_IS_EMBLEM_READY(Any p0, Any* p1);
+		bool NETWORK_CLAN_CREWINFO_GET_STRING_VALUE(const char* animDict, const char* animName);
+		bool NETWORK_CLAN_CREWINFO_GET_CREWRANKTITLE(int p0, const char* p1);
+		bool NETWORK_CLAN_HAS_CREWINFO_METADATA_BEEN_RECEIVED();
+		bool NETWORK_CLAN_GET_EMBLEM_TXD_NAME(Any* netHandle, char* txdName);
+		bool NETWORK_CLAN_REQUEST_EMBLEM(Any p0);
+		bool NETWORK_CLAN_IS_EMBLEM_READY(Any p0, Any* p1);
 		void NETWORK_CLAN_RELEASE_EMBLEM(Any p0);
-		BOOL NETWORK_GET_PRIMARY_CLAN_DATA_CLEAR();
+		bool NETWORK_GET_PRIMARY_CLAN_DATA_CLEAR();
 		void NETWORK_GET_PRIMARY_CLAN_DATA_CANCEL();
-		BOOL NETWORK_GET_PRIMARY_CLAN_DATA_START(Any* p0, Any p1);
-		BOOL NETWORK_GET_PRIMARY_CLAN_DATA_PENDING();
-		BOOL NETWORK_GET_PRIMARY_CLAN_DATA_SUCCESS();
-		BOOL NETWORK_GET_PRIMARY_CLAN_DATA_NEW(Any* p0, Any* p1);
+		bool NETWORK_GET_PRIMARY_CLAN_DATA_START(Any* p0, Any p1);
+		bool NETWORK_GET_PRIMARY_CLAN_DATA_PENDING();
+		bool NETWORK_GET_PRIMARY_CLAN_DATA_SUCCESS();
+		bool NETWORK_GET_PRIMARY_CLAN_DATA_NEW(Any* p0, Any* p1);
 		/**
 		 * Whether or not another player is allowed to take control of the entity
 		 */
-		void SET_NETWORK_ID_CAN_MIGRATE(int netId, BOOL toggle);
-		void SET_NETWORK_ID_EXISTS_ON_ALL_MACHINES(int netId, BOOL toggle);
-		void SET_NETWORK_ID_ALWAYS_EXISTS_FOR_PLAYER(int netId, Player player, BOOL toggle);
+		void SET_NETWORK_ID_CAN_MIGRATE(int netId, bool toggle);
+		void SET_NETWORK_ID_EXISTS_ON_ALL_MACHINES(int netId, bool toggle);
+		void SET_NETWORK_ID_ALWAYS_EXISTS_FOR_PLAYER(int netId, Player player, bool toggle);
 		/**
 		 * "No Reassign" in CPhysicalScriptGameStateDataNode
 		 */
-		void SET_NETWORK_ID_CAN_BE_REASSIGNED(int netId, BOOL toggle);
-		void NETWORK_SET_ENTITY_CAN_BLEND(Entity entity, BOOL toggle);
-		void NETWORK_SET_OBJECT_CAN_BLEND_WHEN_FIXED(Object object, BOOL toggle);
+		void SET_NETWORK_ID_CAN_BE_REASSIGNED(int netId, bool toggle);
+		void NETWORK_SET_ENTITY_CAN_BLEND(Entity entity, bool toggle);
+		void NETWORK_SET_OBJECT_CAN_BLEND_WHEN_FIXED(Object object, bool toggle);
 		/**
 		 * if set to true other network players can't see it
 		 * if set to false other network player can see it
@@ -9761,84 +9761,84 @@ namespace base::menu::natives {
 		 * 
 		 * ^^ last-gen
 		 */
-		void NETWORK_SET_ENTITY_ONLY_EXISTS_FOR_PARTICIPANTS(Entity entity, BOOL toggle);
-		void SET_NETWORK_ID_VISIBLE_IN_CUTSCENE(int netId, BOOL p1, BOOL p2);
-		void SET_NETWORK_ID_VISIBLE_IN_CUTSCENE_HACK(int netId, BOOL p1, BOOL p2);
+		void NETWORK_SET_ENTITY_ONLY_EXISTS_FOR_PARTICIPANTS(Entity entity, bool toggle);
+		void SET_NETWORK_ID_VISIBLE_IN_CUTSCENE(int netId, bool p1, bool p2);
+		void SET_NETWORK_ID_VISIBLE_IN_CUTSCENE_HACK(int netId, bool p1, bool p2);
 		void SET_NETWORK_ID_VISIBLE_IN_CUTSCENE_REMAIN_HACK(Any p0, Any p1, Any p2);
-		void SET_NETWORK_CUTSCENE_ENTITIES(BOOL toggle);
+		void SET_NETWORK_CUTSCENE_ENTITIES(bool toggle);
 		/**
 		 * Getter for SET_NETWORK_CUTSCENE_ENTITIES.
 		 */
-		BOOL ARE_CUTSCENE_ENTITIES_NETWORKED();
-		void SET_NETWORK_ID_PASS_CONTROL_IN_TUTORIAL(int netId, BOOL state);
-		void _NETWORK_SET_TUTORIAL_SPECIAL_SESSION(BOOL toggle);
-		BOOL _NETWORK_IS_SPECIAL_TUTORIAL_SESSION();
-		BOOL IS_NETWORK_ID_OWNED_BY_PARTICIPANT(int netId);
-		void SET_REMOTE_PLAYER_VISIBLE_IN_CUTSCENE(Player player, BOOL locallyVisible);
-		void SET_LOCAL_PLAYER_VISIBLE_IN_CUTSCENE(BOOL p0, BOOL p1);
-		void SET_LOCAL_PLAYER_INVISIBLE_LOCALLY(BOOL bIncludePlayersVehicle);
-		void SET_LOCAL_PLAYER_VISIBLE_LOCALLY(BOOL bIncludePlayersVehicle);
-		void SET_PLAYER_INVISIBLE_LOCALLY(Player player, BOOL bIncludePlayersVehicle);
-		void SET_PLAYER_VISIBLE_LOCALLY(Player player, BOOL bIncludePlayersVehicle);
+		bool ARE_CUTSCENE_ENTITIES_NETWORKED();
+		void SET_NETWORK_ID_PASS_CONTROL_IN_TUTORIAL(int netId, bool state);
+		void _NETWORK_SET_TUTORIAL_SPECIAL_SESSION(bool toggle);
+		bool _NETWORK_IS_SPECIAL_TUTORIAL_SESSION();
+		bool IS_NETWORK_ID_OWNED_BY_PARTICIPANT(int netId);
+		void SET_REMOTE_PLAYER_VISIBLE_IN_CUTSCENE(Player player, bool locallyVisible);
+		void SET_LOCAL_PLAYER_VISIBLE_IN_CUTSCENE(bool p0, bool p1);
+		void SET_LOCAL_PLAYER_INVISIBLE_LOCALLY(bool bIncludePlayersVehicle);
+		void SET_LOCAL_PLAYER_VISIBLE_LOCALLY(bool bIncludePlayersVehicle);
+		void SET_PLAYER_INVISIBLE_LOCALLY(Player player, bool bIncludePlayersVehicle);
+		void SET_PLAYER_VISIBLE_LOCALLY(Player player, bool bIncludePlayersVehicle);
 		/**
 		 * Hardcoded to not work in SP.
 		 */
-		void FADE_OUT_LOCAL_PLAYER(BOOL p0);
+		void FADE_OUT_LOCAL_PLAYER(bool p0);
 		/**
 		 * normal - transition like when your coming out of LSC
 		 * slow - transition like when you walk into a mission
 		 * 
 		 */
-		void NETWORK_FADE_OUT_ENTITY(Entity entity, BOOL normal, BOOL slow);
+		void NETWORK_FADE_OUT_ENTITY(Entity entity, bool normal, bool slow);
 		/**
 		 * state - 0 does 5 fades
 		 * state - 1 does 6 fades
 		 * 
 		 * p3: setting to 1 made vehicle fade in slower, probably "slow" as per NETWORK_FADE_OUT_ENTITY
 		 */
-		void NETWORK_FADE_IN_ENTITY(Entity entity, BOOL state, Any p2);
-		BOOL NETWORK_IS_PLAYER_FADING(Player player);
-		BOOL NETWORK_IS_ENTITY_FADING(Entity entity);
-		BOOL IS_PLAYER_IN_CUTSCENE(Player player);
-		void SET_ENTITY_VISIBLE_IN_CUTSCENE(Any p0, BOOL p1, BOOL p2);
+		void NETWORK_FADE_IN_ENTITY(Entity entity, bool state, Any p2);
+		bool NETWORK_IS_PLAYER_FADING(Player player);
+		bool NETWORK_IS_ENTITY_FADING(Entity entity);
+		bool IS_PLAYER_IN_CUTSCENE(Player player);
+		void SET_ENTITY_VISIBLE_IN_CUTSCENE(Any p0, bool p1, bool p2);
 		/**
 		 * Makes the provided entity visible for yourself for the current frame.
 		 */
 		void SET_ENTITY_LOCALLY_INVISIBLE(Entity entity);
 		void SET_ENTITY_LOCALLY_VISIBLE(Entity entity);
-		BOOL IS_DAMAGE_TRACKER_ACTIVE_ON_NETWORK_ID(int netID);
-		void ACTIVATE_DAMAGE_TRACKER_ON_NETWORK_ID(int netID, BOOL toggle);
-		BOOL IS_DAMAGE_TRACKER_ACTIVE_ON_PLAYER(Player player);
-		void ACTIVATE_DAMAGE_TRACKER_ON_PLAYER(Player player, BOOL toggle);
-		BOOL IS_SPHERE_VISIBLE_TO_ANOTHER_MACHINE(float p0, float p1, float p2, float p3);
-		BOOL IS_SPHERE_VISIBLE_TO_PLAYER(Any p0, float p1, float p2, float p3, float p4);
+		bool IS_DAMAGE_TRACKER_ACTIVE_ON_NETWORK_ID(int netID);
+		void ACTIVATE_DAMAGE_TRACKER_ON_NETWORK_ID(int netID, bool toggle);
+		bool IS_DAMAGE_TRACKER_ACTIVE_ON_PLAYER(Player player);
+		void ACTIVATE_DAMAGE_TRACKER_ON_PLAYER(Player player, bool toggle);
+		bool IS_SPHERE_VISIBLE_TO_ANOTHER_MACHINE(float p0, float p1, float p2, float p3);
+		bool IS_SPHERE_VISIBLE_TO_PLAYER(Any p0, float p1, float p2, float p3, float p4);
 		void RESERVE_NETWORK_MISSION_OBJECTS(int amount);
 		void RESERVE_NETWORK_MISSION_PEDS(int amount);
 		void RESERVE_NETWORK_MISSION_VEHICLES(int amount);
 		void RESERVE_LOCAL_NETWORK_MISSION_OBJECTS(int amount);
 		void RESERVE_LOCAL_NETWORK_MISSION_PEDS(int amount);
 		void RESERVE_LOCAL_NETWORK_MISSION_VEHICLES(int amount);
-		BOOL CAN_REGISTER_MISSION_OBJECTS(int amount);
-		BOOL CAN_REGISTER_MISSION_PEDS(int amount);
-		BOOL CAN_REGISTER_MISSION_VEHICLES(int amount);
-		BOOL CAN_REGISTER_MISSION_PICKUPS(int amount);
-		BOOL CAN_REGISTER_MISSION_DOORS(Any p0);
-		BOOL CAN_REGISTER_MISSION_ENTITIES(int ped_amt, int vehicle_amt, int object_amt, int pickup_amt);
+		bool CAN_REGISTER_MISSION_OBJECTS(int amount);
+		bool CAN_REGISTER_MISSION_PEDS(int amount);
+		bool CAN_REGISTER_MISSION_VEHICLES(int amount);
+		bool CAN_REGISTER_MISSION_PICKUPS(int amount);
+		bool CAN_REGISTER_MISSION_DOORS(Any p0);
+		bool CAN_REGISTER_MISSION_ENTITIES(int ped_amt, int vehicle_amt, int object_amt, int pickup_amt);
 		/**
 		 * p0 appears to be for MP
 		 */
-		int GET_NUM_RESERVED_MISSION_OBJECTS(BOOL p0, Any p1);
+		int GET_NUM_RESERVED_MISSION_OBJECTS(bool p0, Any p1);
 		/**
 		 * p0 appears to be for MP
 		 */
-		int GET_NUM_RESERVED_MISSION_PEDS(BOOL p0, Any p1);
+		int GET_NUM_RESERVED_MISSION_PEDS(bool p0, Any p1);
 		/**
 		 * p0 appears to be for MP
 		 */
-		int GET_NUM_RESERVED_MISSION_VEHICLES(BOOL p0, Any p1);
-		int GET_NUM_CREATED_MISSION_OBJECTS(BOOL p0);
-		int GET_NUM_CREATED_MISSION_PEDS(BOOL p0);
-		int GET_NUM_CREATED_MISSION_VEHICLES(BOOL p0);
+		int GET_NUM_RESERVED_MISSION_VEHICLES(bool p0, Any p1);
+		int GET_NUM_CREATED_MISSION_OBJECTS(bool p0);
+		int GET_NUM_CREATED_MISSION_PEDS(bool p0);
+		int GET_NUM_CREATED_MISSION_VEHICLES(bool p0);
 		void GET_RESERVED_MISSION_ENTITIES_IN_AREA(float x, float y, float z, Any p3, Any* out1, Any* out2, Any* out3);
 		int GET_MAX_NUM_NETWORK_OBJECTS();
 		int GET_MAX_NUM_NETWORK_PEDS();
@@ -9850,14 +9850,14 @@ namespace base::menu::natives {
 		 * A value between 1.0 and 5.0
 		 */
 		void NETWORK_SET_TASK_CUTSCENE_INSCOPE_MULTIPLER(float multiplier);
-		void _NETWORK_HIDE_ENTITY_IN_TUTORIAL_SESSION(int netHandle, BOOL hide);
+		void _NETWORK_HIDE_ENTITY_IN_TUTORIAL_SESSION(int netHandle, bool hide);
 		int GET_NETWORK_TIME();
 		/**
 		 * Returns the same value as GET_NETWORK_TIME in freemode, but as opposed to `GET_NETWORK_TIME` it always gets the most recent time, instead of once per tick.
 		 * Could be used for benchmarking since it can return times in ticks.
 		 */
 		int GET_NETWORK_TIME_ACCURATE();
-		BOOL HAS_NETWORK_TIME_STARTED();
+		bool HAS_NETWORK_TIME_STARTED();
 		/**
 		 * Adds the first argument to the second.
 		 */
@@ -9865,15 +9865,15 @@ namespace base::menu::natives {
 		/**
 		 * Subtracts the second argument from the first, then returns whether the result is negative.
 		 */
-		BOOL IS_TIME_LESS_THAN(int timeA, int timeB);
+		bool IS_TIME_LESS_THAN(int timeA, int timeB);
 		/**
 		 * Subtracts the first argument from the second, then returns whether the result is negative.
 		 */
-		BOOL IS_TIME_MORE_THAN(int timeA, int timeB);
+		bool IS_TIME_MORE_THAN(int timeA, int timeB);
 		/**
 		 * Returns true if the two times are equal; otherwise returns false.
 		 */
-		BOOL IS_TIME_EQUAL_TO(int timeA, int timeB);
+		bool IS_TIME_EQUAL_TO(int timeA, int timeB);
 		/**
 		 * Subtracts the second argument from the first.
 		 */
@@ -9907,18 +9907,18 @@ namespace base::menu::natives {
 		 * };
 		 */
 		void CONVERT_POSIX_TIME(int posixTime, Any* timeStructure);
-		void NETWORK_SET_IN_SPECTATOR_MODE(BOOL toggle, Ped playerPed);
-		void NETWORK_SET_IN_SPECTATOR_MODE_EXTENDED(BOOL toggle, Ped playerPed, BOOL p2);
-		void NETWORK_SET_IN_FREE_CAM_MODE(BOOL toggle);
-		void NETWORK_SET_ANTAGONISTIC_TO_PLAYER(BOOL toggle, Player player);
-		BOOL NETWORK_IS_IN_SPECTATOR_MODE();
-		void NETWORK_SET_IN_MP_CUTSCENE(BOOL p0, BOOL p1);
-		BOOL NETWORK_IS_IN_MP_CUTSCENE();
-		BOOL NETWORK_IS_PLAYER_IN_MP_CUTSCENE(Player player);
+		void NETWORK_SET_IN_SPECTATOR_MODE(bool toggle, Ped playerPed);
+		void NETWORK_SET_IN_SPECTATOR_MODE_EXTENDED(bool toggle, Ped playerPed, bool p2);
+		void NETWORK_SET_IN_FREE_CAM_MODE(bool toggle);
+		void NETWORK_SET_ANTAGONISTIC_TO_PLAYER(bool toggle, Player player);
+		bool NETWORK_IS_IN_SPECTATOR_MODE();
+		void NETWORK_SET_IN_MP_CUTSCENE(bool p0, bool p1);
+		bool NETWORK_IS_IN_MP_CUTSCENE();
+		bool NETWORK_IS_PLAYER_IN_MP_CUTSCENE(Player player);
 		void NETWORK_HIDE_PROJECTILE_IN_CUTSCENE();
 		void SET_NETWORK_VEHICLE_RESPOT_TIMER(int netId, int time, Any p2, Any p3);
-		BOOL IS_NETWORK_VEHICLE_RUNNING_RESPOT_TIMER(int networkID);
-		void SET_NETWORK_VEHICLE_AS_GHOST(Vehicle vehicle, BOOL toggle);
+		bool IS_NETWORK_VEHICLE_RUNNING_RESPOT_TIMER(int networkID);
+		void SET_NETWORK_VEHICLE_AS_GHOST(Vehicle vehicle, bool toggle);
 		/**
 		 * rage::netBlenderLinInterp::GetPositionMaxForUpdateLevel
 		 */
@@ -9926,14 +9926,14 @@ namespace base::menu::natives {
 		/**
 		 * Enables a periodic ShapeTest within the NetBlender and invokes rage::netBlenderLinInterp::GoStraightToTarget (or some functional wrapper).
 		 */
-		void SET_NETWORK_ENABLE_HIGH_SPEED_EDGE_FALL_DETECTION(Vehicle vehicle, BOOL toggle);
-		void SET_LOCAL_PLAYER_AS_GHOST(BOOL toggle, BOOL p1);
-		BOOL IS_ENTITY_A_GHOST(Entity entity);
-		void SET_NON_PARTICIPANTS_OF_THIS_SCRIPT_AS_GHOSTS(BOOL p0);
+		void SET_NETWORK_ENABLE_HIGH_SPEED_EDGE_FALL_DETECTION(Vehicle vehicle, bool toggle);
+		void SET_LOCAL_PLAYER_AS_GHOST(bool toggle, bool p1);
+		bool IS_ENTITY_A_GHOST(Entity entity);
+		void SET_NON_PARTICIPANTS_OF_THIS_SCRIPT_AS_GHOSTS(bool p0);
 		/**
 		 * Enables ghosting between specific players
 		 */
-		void SET_REMOTE_PLAYER_AS_GHOST(Player player, BOOL p1);
+		void SET_REMOTE_PLAYER_AS_GHOST(Player player, bool p1);
 		/**
 		 * Must be a value between 1 and 254
 		 */
@@ -9942,16 +9942,16 @@ namespace base::menu::natives {
 		 * Resets the entity ghost alpha to the default value (128)
 		 */
 		void RESET_GHOST_ALPHA();
-		void SET_ENTITY_GHOSTED_FOR_GHOST_PLAYERS(Entity entity, BOOL toggle);
-		void SET_INVERT_GHOSTING(BOOL p0);
-		BOOL IS_ENTITY_IN_GHOST_COLLISION(Entity entity);
+		void SET_ENTITY_GHOSTED_FOR_GHOST_PLAYERS(Entity entity, bool toggle);
+		void SET_INVERT_GHOSTING(bool p0);
+		bool IS_ENTITY_IN_GHOST_COLLISION(Entity entity);
 		/**
 		 * reportData includes mc, ceo, yacht and licenceplate names
 		 */
 		void _SET_FREEMODE_REPORT_DATA(Any* gamerHandle, Any* reportData);
-		BOOL IS_OBJECT_REASSIGNMENT_IN_PROGRESS();
-		void USE_PLAYER_COLOUR_INSTEAD_OF_TEAM_COLOUR(BOOL toggle);
-		int NETWORK_CREATE_SYNCHRONISED_SCENE(float x, float y, float z, float xRot, float yRot, float zRot, int rotationOrder, BOOL useOcclusionPortal, BOOL looped, float p9, float animTime, float p11);
+		bool IS_OBJECT_REASSIGNMENT_IN_PROGRESS();
+		void USE_PLAYER_COLOUR_INSTEAD_OF_TEAM_COLOUR(bool toggle);
+		int NETWORK_CREATE_SYNCHRONISED_SCENE(float x, float y, float z, float xRot, float yRot, float zRot, int rotationOrder, bool useOcclusionPortal, bool looped, float p9, float animTime, float p11);
 		void NETWORK_ADD_PED_TO_SYNCHRONISED_SCENE(Ped ped, int netScene, const char* animDict, const char* animnName, float speed, float speedMultiplier, int duration, int flag, float playbackRate, Any p9);
 		void NETWORK_ADD_PED_TO_SYNCHRONISED_SCENE_WITH_IK(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7, Any p8, Any p9);
 		void NETWORK_ADD_ENTITY_TO_SYNCHRONISED_SCENE(Entity entity, int netScene, const char* animDict, const char* animName, float speed, float speedMulitiplier, int flag);
@@ -9970,17 +9970,17 @@ namespace base::menu::natives {
 		/**
 		 * p0 is always 0. p1 is pointing to a global.
 		 */
-		BOOL NETWORK_FIND_LARGEST_BUNCH_OF_PLAYERS(int p0, Any p1);
+		bool NETWORK_FIND_LARGEST_BUNCH_OF_PLAYERS(int p0, Any p1);
 		/**
 		 * One of the first things it does is get the players ped.
 		 * Then it calls a function that is used in some tasks and ped based functions.
 		 * p5, p6, p7 is another coordinate (or zero), often related to `GET_BLIP_COORDS, in the decompiled scripts.
 		 */
-		BOOL NETWORK_START_RESPAWN_SEARCH_FOR_PLAYER(Player player, float x, float y, float z, float radius, float p5, float p6, float p7, int flags);
+		bool NETWORK_START_RESPAWN_SEARCH_FOR_PLAYER(Player player, float x, float y, float z, float radius, float p5, float p6, float p7, int flags);
 		/**
 		 * p8, p9, p10 is another coordinate, or zero, often related to `GET_BLIP_COORDS in the decompiled scripts.
 		 */
-		BOOL NETWORK_START_RESPAWN_SEARCH_IN_ANGLED_AREA_FOR_PLAYER(Player player, float x1, float y1, float z1, float x2, float y2, float z2, float width, float p8, float p9, float p10, int flags);
+		bool NETWORK_START_RESPAWN_SEARCH_IN_ANGLED_AREA_FOR_PLAYER(Player player, float x1, float y1, float z1, float x2, float y2, float z2, float width, float p8, float p9, float p10, int flags);
 		int NETWORK_QUERY_RESPAWN_RESULTS(Any* p0);
 		void NETWORK_CANCEL_RESPAWN_SEARCH();
 		/**
@@ -9994,19 +9994,19 @@ namespace base::menu::natives {
 		 */
 		void NETWORK_ALLOW_GANG_TO_JOIN_TUTORIAL_SESSION(int teamId, int instanceId);
 		void NETWORK_END_TUTORIAL_SESSION();
-		BOOL NETWORK_IS_IN_TUTORIAL_SESSION();
-		BOOL NETWORK_WAITING_POP_CLEAR_TUTORIAL_SESSION();
-		BOOL NETWORK_IS_TUTORIAL_SESSION_CHANGE_PENDING();
+		bool NETWORK_IS_IN_TUTORIAL_SESSION();
+		bool NETWORK_WAITING_POP_CLEAR_TUTORIAL_SESSION();
+		bool NETWORK_IS_TUTORIAL_SESSION_CHANGE_PENDING();
 		int NETWORK_GET_PLAYER_TUTORIAL_SESSION_INSTANCE(Player player);
-		BOOL NETWORK_ARE_PLAYERS_IN_SAME_TUTORIAL_SESSION(Player player, int index);
+		bool NETWORK_ARE_PLAYERS_IN_SAME_TUTORIAL_SESSION(Player player, int index);
 		void NETWORK_BLOCK_PROXY_MIGRATION_BETWEEN_TUTORIAL_SESSIONS(Any p0);
-		void NETWORK_CONCEAL_PLAYER(Player player, BOOL toggle, BOOL p2);
-		BOOL NETWORK_IS_PLAYER_CONCEALED(Player player);
-		void NETWORK_CONCEAL_ENTITY(Entity entity, BOOL toggle);
+		void NETWORK_CONCEAL_PLAYER(Player player, bool toggle, bool p2);
+		bool NETWORK_IS_PLAYER_CONCEALED(Player player);
+		void NETWORK_CONCEAL_ENTITY(Entity entity, bool toggle);
 		/**
 		 * Note: This only works for vehicles, which appears to be a bug (since the setter _does_ work for every entity type and the name is 99% correct).
 		 */
-		BOOL NETWORK_IS_ENTITY_CONCEALED(Entity entity);
+		bool NETWORK_IS_ENTITY_CONCEALED(Entity entity);
 		/**
 		 * Works in Singleplayer too.
 		 * Passing wrong data (e.g. hours above 23) will cause the game to crash.
@@ -10014,12 +10014,12 @@ namespace base::menu::natives {
 		void NETWORK_OVERRIDE_CLOCK_TIME(int hours, int minutes, int seconds);
 		void NETWORK_OVERRIDE_CLOCK_RATE(int ms);
 		void NETWORK_CLEAR_CLOCK_TIME_OVERRIDE();
-		void _NETWORK_CLEAR_CLOCK_SYNC_TIME_OVERRIDE(BOOL startGlobalTransition, int transitionTime);
+		void _NETWORK_CLEAR_CLOCK_SYNC_TIME_OVERRIDE(bool startGlobalTransition, int transitionTime);
 		/**
 		 * Does nothing in final builds.
 		 */
 		void NETWORK_SYNC_CLOCK_TIME_OVERRIDE();
-		BOOL NETWORK_IS_CLOCK_TIME_OVERRIDDEN();
+		bool NETWORK_IS_CLOCK_TIME_OVERRIDDEN();
 		int NETWORK_ADD_ENTITY_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
 		/**
 		 * To remove, see: NETWORK_REMOVE_ENTITY_AREA
@@ -10028,17 +10028,17 @@ namespace base::menu::natives {
 		int NETWORK_ADD_ENTITY_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width);
 		int NETWORK_ADD_CLIENT_ENTITY_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
 		int NETWORK_ADD_CLIENT_ENTITY_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float radius);
-		BOOL NETWORK_REMOVE_ENTITY_AREA(int areaHandle);
-		BOOL NETWORK_ENTITY_AREA_DOES_EXIST(int areaHandle);
-		BOOL NETWORK_ENTITY_AREA_HAVE_ALL_REPLIED(int areaHandle);
-		BOOL NETWORK_ENTITY_AREA_IS_OCCUPIED(int areaHandle);
-		void NETWORK_USE_HIGH_PRECISION_BLENDING(int netID, BOOL toggle);
+		bool NETWORK_REMOVE_ENTITY_AREA(int areaHandle);
+		bool NETWORK_ENTITY_AREA_DOES_EXIST(int areaHandle);
+		bool NETWORK_ENTITY_AREA_HAVE_ALL_REPLIED(int areaHandle);
+		bool NETWORK_ENTITY_AREA_IS_OCCUPIED(int areaHandle);
+		void NETWORK_USE_HIGH_PRECISION_BLENDING(int netID, bool toggle);
 		void NETWORK_SET_CUSTOM_ARENA_BALL_PARAMS(int netId);
-		void NETWORK_ENTITY_USE_HIGH_PRECISION_ROTATION(int netId, BOOL toggle);
-		BOOL NETWORK_REQUEST_CLOUD_BACKGROUND_SCRIPTS();
-		BOOL NETWORK_IS_CLOUD_BACKGROUND_SCRIPT_REQUEST_PENDING();
+		void NETWORK_ENTITY_USE_HIGH_PRECISION_ROTATION(int netId, bool toggle);
+		bool NETWORK_REQUEST_CLOUD_BACKGROUND_SCRIPTS();
+		bool NETWORK_IS_CLOUD_BACKGROUND_SCRIPT_REQUEST_PENDING();
 		void NETWORK_REQUEST_CLOUD_TUNABLES();
-		BOOL NETWORK_IS_TUNABLE_CLOUD_REQUEST_PENDING();
+		bool NETWORK_IS_TUNABLE_CLOUD_REQUEST_PENDING();
 		/**
 		 * Actually returns the version (TUNABLE_VERSION)
 		 */
@@ -10055,7 +10055,7 @@ namespace base::menu::natives {
 		 * Checks if the given tunable exists and returns its value. Otherwise returns defaultValue.
 		 * Possible tunable contexts must first be set up using _NETWORK_SET_TUNABLES_REGISTRATION_CONTEXTS.
 		 */
-		BOOL _NETWORK_GET_TUNABLES_REGISTRATION_BOOL(Hash tunableName, BOOL defaultValue);
+		bool _NETWORK_GET_TUNABLES_REGISTRATION_BOOL(Hash tunableName, bool defaultValue);
 		/**
 		 * Checks if the given tunable exists and returns its value. Otherwise returns defaultValue.
 		 * Possible tunable contexts must first be set up using _NETWORK_SET_TUNABLES_REGISTRATION_CONTEXTS.
@@ -10066,22 +10066,22 @@ namespace base::menu::natives {
 		 * Possible tunable contexts must first be set up using _NETWORK_SET_TUNABLES_REGISTRATION_CONTEXTS.
 		 */
 		float _NETWORK_GET_TUNABLES_REGISTRATION_FLOAT(Hash tunableName, float defaultValue);
-		BOOL NETWORK_DOES_TUNABLE_EXIST(const char* tunableContext, const char* tunableName);
-		BOOL NETWORK_ACCESS_TUNABLE_INT(const char* tunableContext, const char* tunableName, int* value);
-		BOOL NETWORK_ACCESS_TUNABLE_FLOAT(const char* tunableContext, const char* tunableName, float* value);
-		BOOL NETWORK_ACCESS_TUNABLE_BOOL(const char* tunableContext, const char* tunableName);
-		BOOL NETWORK_DOES_TUNABLE_EXIST_HASH(Hash tunableContext, Hash tunableName);
-		BOOL NETWORK_ACCESS_TUNABLE_MODIFICATION_DETECTION_CLEAR();
-		BOOL NETWORK_ACCESS_TUNABLE_INT_HASH(Hash tunableContext, Hash tunableName, int* value);
-		BOOL NETWORK_ACCESS_TUNABLE_INT_MODIFICATION_DETECTION_REGISTRATION_HASH(Hash contextHash, Hash nameHash, int* value);
-		BOOL NETWORK_ACCESS_TUNABLE_FLOAT_HASH(Hash tunableContext, Hash tunableName, float* value);
-		BOOL NETWORK_ACCESS_TUNABLE_FLOAT_MODIFICATION_DETECTION_REGISTRATION_HASH(Hash contextHash, Hash nameHash, float* value);
-		BOOL NETWORK_ACCESS_TUNABLE_BOOL_HASH(Hash tunableContext, Hash tunableName);
-		BOOL NETWORK_ACCESS_TUNABLE_BOOL_MODIFICATION_DETECTION_REGISTRATION_HASH(Hash contextHash, Hash nameHash, BOOL* value);
+		bool NETWORK_DOES_TUNABLE_EXIST(const char* tunableContext, const char* tunableName);
+		bool NETWORK_ACCESS_TUNABLE_INT(const char* tunableContext, const char* tunableName, int* value);
+		bool NETWORK_ACCESS_TUNABLE_FLOAT(const char* tunableContext, const char* tunableName, float* value);
+		bool NETWORK_ACCESS_TUNABLE_BOOL(const char* tunableContext, const char* tunableName);
+		bool NETWORK_DOES_TUNABLE_EXIST_HASH(Hash tunableContext, Hash tunableName);
+		bool NETWORK_ACCESS_TUNABLE_MODIFICATION_DETECTION_CLEAR();
+		bool NETWORK_ACCESS_TUNABLE_INT_HASH(Hash tunableContext, Hash tunableName, int* value);
+		bool NETWORK_ACCESS_TUNABLE_INT_MODIFICATION_DETECTION_REGISTRATION_HASH(Hash contextHash, Hash nameHash, int* value);
+		bool NETWORK_ACCESS_TUNABLE_FLOAT_HASH(Hash tunableContext, Hash tunableName, float* value);
+		bool NETWORK_ACCESS_TUNABLE_FLOAT_MODIFICATION_DETECTION_REGISTRATION_HASH(Hash contextHash, Hash nameHash, float* value);
+		bool NETWORK_ACCESS_TUNABLE_BOOL_HASH(Hash tunableContext, Hash tunableName);
+		bool NETWORK_ACCESS_TUNABLE_BOOL_MODIFICATION_DETECTION_REGISTRATION_HASH(Hash contextHash, Hash nameHash, bool* value);
 		/**
 		 * Returns defaultValue if the tunable doesn't exist.
 		 */
-		BOOL NETWORK_TRY_ACCESS_TUNABLE_BOOL_HASH(Hash tunableContext, Hash tunableName, BOOL defaultValue);
+		bool NETWORK_TRY_ACCESS_TUNABLE_BOOL_HASH(Hash tunableContext, Hash tunableName, bool defaultValue);
 		/**
 		 * Return the content modifier id (the tunables context if you want) of a specific content.
 		 * 
@@ -10096,15 +10096,15 @@ namespace base::menu::natives {
 		int NETWORK_GET_BONE_ID_OF_FATAL_HIT();
 		void NETWORK_RESET_BODY_TRACKER();
 		int NETWORK_GET_NUMBER_BODY_TRACKER_HITS();
-		BOOL NETWORK_HAS_BONE_BEEN_HIT_BY_KILLER(int boneIndex);
-		BOOL NETWORK_SET_ATTRIBUTE_DAMAGE_TO_PLAYER(Ped ped, Player player);
+		bool NETWORK_HAS_BONE_BEEN_HIT_BY_KILLER(int boneIndex);
+		bool NETWORK_SET_ATTRIBUTE_DAMAGE_TO_PLAYER(Ped ped, Player player);
 		/**
 		 * Allows vehicle wheels to be destructible even when the vehicle entity is invincible.
 		 */
-		void NETWORK_TRIGGER_DAMAGE_EVENT_FOR_ZERO_DAMAGE(Entity entity, BOOL toggle);
-		void _NETWORK_TRIGGER_DAMAGE_EVENT_FOR_ZERO_PED_DAMAGE(Entity entity, BOOL trigger);
-		void NETWORK_TRIGGER_DAMAGE_EVENT_FOR_ZERO_WEAPON_HASH(Entity entity, BOOL toggle);
-		void NETWORK_SET_NO_LONGER_NEEDED(Entity entity, BOOL toggle);
+		void NETWORK_TRIGGER_DAMAGE_EVENT_FOR_ZERO_DAMAGE(Entity entity, bool toggle);
+		void _NETWORK_TRIGGER_DAMAGE_EVENT_FOR_ZERO_PED_DAMAGE(Entity entity, bool trigger);
+		void NETWORK_TRIGGER_DAMAGE_EVENT_FOR_ZERO_WEAPON_HASH(Entity entity, bool toggle);
+		void NETWORK_SET_NO_LONGER_NEEDED(Entity entity, bool toggle);
 		/**
 		 * In the console script dumps, this is only referenced once.
 		 * NETWORK::NETWORK_EXPLODE_VEHICLE(vehicle, 1, 0, 0);
@@ -10128,28 +10128,28 @@ namespace base::menu::natives {
 		 * Seems it's like ADD_EXPLOSION, etc. the first 2 params. The 3rd atm no need to worry since it always seems to be 0.
 		 * 
 		 */
-		BOOL NETWORK_EXPLODE_VEHICLE(Vehicle vehicle, BOOL isAudible, BOOL isInvisible, int netId);
-		void NETWORK_EXPLODE_HELI(Vehicle vehicle, BOOL isAudible, BOOL isInvisible, int netId);
+		bool NETWORK_EXPLODE_VEHICLE(Vehicle vehicle, bool isAudible, bool isInvisible, int netId);
+		void NETWORK_EXPLODE_HELI(Vehicle vehicle, bool isAudible, bool isInvisible, int netId);
 		void NETWORK_USE_LOGARITHMIC_BLENDING_THIS_FRAME(Entity entity);
 		void NETWORK_OVERRIDE_COORDS_AND_HEADING(Entity entity, float x, float y, float z, float heading);
-		void NETWORK_ENABLE_EXTRA_VEHICLE_ORIENTATION_BLEND_CHECKS(int netId, BOOL toggle);
+		void NETWORK_ENABLE_EXTRA_VEHICLE_ORIENTATION_BLEND_CHECKS(int netId, bool toggle);
 		void NETWORK_DISABLE_PROXIMITY_MIGRATION(int netID);
 		/**
 		 * p0 in the decompiled scripts is always the stat mesh_texblend * 0.07 to int
 		 */
 		void NETWORK_SET_PLAYER_MENTAL_STATE(int p0);
-		void NETWORK_SET_MINIMUM_RANK_FOR_MISSION(BOOL p0);
+		void NETWORK_SET_MINIMUM_RANK_FOR_MISSION(bool p0);
 		void NETWORK_CACHE_LOCAL_PLAYER_HEAD_BLEND_DATA();
-		BOOL NETWORK_HAS_CACHED_PLAYER_HEAD_BLEND_DATA(Player player);
-		BOOL NETWORK_APPLY_CACHED_PLAYER_HEAD_BLEND_DATA(Ped ped, Player player);
-		void _NETWORK_SET_IGNORE_VEHICLE_RAMMED_BY_NON_VEHICLE(BOOL toggle);
+		bool NETWORK_HAS_CACHED_PLAYER_HEAD_BLEND_DATA(Player player);
+		bool NETWORK_APPLY_CACHED_PLAYER_HEAD_BLEND_DATA(Ped ped, Player player);
+		void _NETWORK_SET_IGNORE_VEHICLE_RAMMED_BY_NON_VEHICLE(bool toggle);
 		int GET_NUM_COMMERCE_ITEMS();
-		BOOL IS_COMMERCE_DATA_VALID();
+		bool IS_COMMERCE_DATA_VALID();
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
 		void TRIGGER_COMMERCE_DATA_FETCH(Any p0);
-		BOOL IS_COMMERCE_DATA_FETCH_IN_PROGRESS();
+		bool IS_COMMERCE_DATA_FETCH_IN_PROGRESS();
 		const char* GET_COMMERCE_ITEM_ID(int index);
 		const char* GET_COMMERCE_ITEM_NAME(int index);
 		const char* GET_COMMERCE_PRODUCT_PRICE(int index);
@@ -10159,20 +10159,20 @@ namespace base::menu::natives {
 		 */
 		const char* GET_COMMERCE_ITEM_CAT(int index, int index2);
 		void RESERVE_COMMERCE_STORE_PURCHASE_LOCATION(int location);
-		void OPEN_COMMERCE_STORE(const char* productID, const char* category, int location, BOOL launchLandingPageOnClose);
-		void CHECKOUT_COMMERCE_PRODUCT(const char* productID, int location, BOOL launchLandingPageOnClose);
-		BOOL IS_COMMERCE_STORE_OPEN();
+		void OPEN_COMMERCE_STORE(const char* productID, const char* category, int location, bool launchLandingPageOnClose);
+		void CHECKOUT_COMMERCE_PRODUCT(const char* productID, int location, bool launchLandingPageOnClose);
+		bool IS_COMMERCE_STORE_OPEN();
 		/**
 		 * Access to the store for shark cards etc...
 		 */
-		void SET_STORE_ENABLED(BOOL toggle);
-		BOOL REQUEST_COMMERCE_ITEM_IMAGE(int index);
+		void SET_STORE_ENABLED(bool toggle);
+		bool REQUEST_COMMERCE_ITEM_IMAGE(int index);
 		void RELEASE_ALL_COMMERCE_ITEM_IMAGES();
 		const char* GET_COMMERCE_ITEM_TEXTURENAME(int index);
-		BOOL IS_STORE_AVAILABLE_TO_USER();
+		bool IS_STORE_AVAILABLE_TO_USER();
 		void DELAY_MP_STORE_OPEN();
 		void RESET_STORE_NETWORK_GAME_TRACKING();
-		BOOL IS_USER_OLD_ENOUGH_TO_ACCESS_STORE();
+		bool IS_USER_OLD_ENOUGH_TO_ACCESS_STORE();
 		void SET_LAST_VIEWED_SHOP_ITEM(Hash p0, int p1, Hash p2);
 		/**
 		 * Checks some commerce stuff
@@ -10183,14 +10183,14 @@ namespace base::menu::natives {
 		 */
 		int GET_USER_STARTER_ACCESS();
 		int CLOUD_DELETE_MEMBER_FILE(const char* p0);
-		BOOL CLOUD_HAS_REQUEST_COMPLETED(int requestId);
-		BOOL CLOUD_DID_REQUEST_SUCCEED(int requestId);
+		bool CLOUD_HAS_REQUEST_COMPLETED(int requestId);
+		bool CLOUD_DID_REQUEST_SUCCEED(int requestId);
 		/**
 		 * Downloads prod.cloud.rockstargames.com/titles/gta5/[platform]/check.json
 		 */
 		void CLOUD_CHECK_AVAILABILITY();
-		BOOL CLOUD_IS_CHECKING_AVAILABILITY();
-		BOOL CLOUD_GET_AVAILABILITY_CHECK_RESULT();
+		bool CLOUD_IS_CHECKING_AVAILABILITY();
+		bool CLOUD_GET_AVAILABILITY_CHECK_RESULT();
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
@@ -10198,52 +10198,52 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL GET_IS_LAUNCH_FROM_LIVE_AREA();
+		bool GET_IS_LAUNCH_FROM_LIVE_AREA();
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL GET_IS_LIVE_AREA_LAUNCH_WITH_CONTENT();
+		bool GET_IS_LIVE_AREA_LAUNCH_WITH_CONTENT();
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
 		void CLEAR_SERVICE_EVENT_ARGUMENTS();
-		BOOL UGC_COPY_CONTENT(Any* p0, Any* p1);
-		BOOL UGC_IS_CREATING();
-		BOOL UGC_HAS_CREATE_FINISHED();
-		BOOL UGC_DID_CREATE_SUCCEED();
+		bool UGC_COPY_CONTENT(Any* p0, Any* p1);
+		bool UGC_IS_CREATING();
+		bool UGC_HAS_CREATE_FINISHED();
+		bool UGC_DID_CREATE_SUCCEED();
 		int UGC_GET_CREATE_RESULT();
 		const char* UGC_GET_CREATE_CONTENT_ID();
 		void UGC_CLEAR_CREATE_RESULT();
-		BOOL UGC_QUERY_MY_CONTENT(Any p0, Any p1, Any* p2, Any p3, Any p4, Any p5);
-		BOOL UGC_QUERY_BY_CATEGORY(Any p0, Any p1, Any p2, const char* p3, Any p4, BOOL p5);
-		BOOL UGC_QUERY_BY_CONTENT_ID(const char* contentId, BOOL latestVersion, const char* contentTypeName);
-		BOOL UGC_QUERY_BY_CONTENT_IDS(Any* data, int count, BOOL latestVersion, const char* contentTypeName);
-		BOOL UGC_QUERY_MOST_RECENTLY_CREATED_CONTENT(int offset, int count, const char* contentTypeName, int p3);
-		BOOL UGC_GET_BOOKMARKED_CONTENT(Any p0, Any p1, const char* p2, Any* p3);
-		BOOL UGC_GET_MY_CONTENT(Any p0, Any p1, const char* p2, Any* p3);
-		BOOL UGC_GET_FRIEND_CONTENT(Any p0, Any p1, const char* p2, Any* p3);
-		BOOL UGC_GET_CREW_CONTENT(Any p0, Any p1, Any p2, const char* p3, Any* p4);
-		BOOL UGC_GET_GET_BY_CATEGORY(Any p0, Any p1, Any p2, const char* p3, Any* p4);
-		BOOL UGC_GET_GET_BY_CONTENT_ID(const char* contentId, const char* contentTypeName);
-		BOOL UGC_GET_GET_BY_CONTENT_IDS(Any* data, int dataCount, const char* contentTypeName);
-		BOOL UGC_GET_MOST_RECENTLY_CREATED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
-		BOOL UGC_GET_MOST_RECENTLY_PLAYED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
-		BOOL UGC_GET_TOP_RATED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
+		bool UGC_QUERY_MY_CONTENT(Any p0, Any p1, Any* p2, Any p3, Any p4, Any p5);
+		bool UGC_QUERY_BY_CATEGORY(Any p0, Any p1, Any p2, const char* p3, Any p4, bool p5);
+		bool UGC_QUERY_BY_CONTENT_ID(const char* contentId, bool latestVersion, const char* contentTypeName);
+		bool UGC_QUERY_BY_CONTENT_IDS(Any* data, int count, bool latestVersion, const char* contentTypeName);
+		bool UGC_QUERY_MOST_RECENTLY_CREATED_CONTENT(int offset, int count, const char* contentTypeName, int p3);
+		bool UGC_GET_BOOKMARKED_CONTENT(Any p0, Any p1, const char* p2, Any* p3);
+		bool UGC_GET_MY_CONTENT(Any p0, Any p1, const char* p2, Any* p3);
+		bool UGC_GET_FRIEND_CONTENT(Any p0, Any p1, const char* p2, Any* p3);
+		bool UGC_GET_CREW_CONTENT(Any p0, Any p1, Any p2, const char* p3, Any* p4);
+		bool UGC_GET_GET_BY_CATEGORY(Any p0, Any p1, Any p2, const char* p3, Any* p4);
+		bool UGC_GET_GET_BY_CONTENT_ID(const char* contentId, const char* contentTypeName);
+		bool UGC_GET_GET_BY_CONTENT_IDS(Any* data, int dataCount, const char* contentTypeName);
+		bool UGC_GET_MOST_RECENTLY_CREATED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
+		bool UGC_GET_MOST_RECENTLY_PLAYED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
+		bool UGC_GET_TOP_RATED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
 		void UGC_CANCEL_QUERY();
-		BOOL UGC_IS_GETTING();
-		BOOL UGC_HAS_GET_FINISHED();
-		BOOL UGC_DID_GET_SUCCEED();
-		BOOL UGC_WAS_QUERY_FORCE_CANCELLED();
+		bool UGC_IS_GETTING();
+		bool UGC_HAS_GET_FINISHED();
+		bool UGC_DID_GET_SUCCEED();
+		bool UGC_WAS_QUERY_FORCE_CANCELLED();
 		int UGC_GET_QUERY_RESULT();
 		int UGC_GET_CONTENT_NUM();
 		int UGC_GET_CONTENT_TOTAL();
 		Hash UGC_GET_CONTENT_HASH();
 		void UGC_CLEAR_QUERY_RESULTS();
 		const char* UGC_GET_CONTENT_USER_ID(int p0);
-		BOOL UGC_GET_CONTENT_CREATOR_GAMER_HANDLE(int p0, Any* p1);
-		BOOL UGC_GET_CONTENT_CREATED_BY_LOCAL_PLAYER(Any p0);
+		bool UGC_GET_CONTENT_CREATOR_GAMER_HANDLE(int p0, Any* p1);
+		bool UGC_GET_CONTENT_CREATED_BY_LOCAL_PLAYER(Any p0);
 		const char* UGC_GET_CONTENT_USER_NAME(Any p0);
-		BOOL UGC_GET_CONTENT_IS_USING_SC_NICKNAME(Any p0);
+		bool UGC_GET_CONTENT_IS_USING_SC_NICKNAME(Any p0);
 		int UGC_GET_CONTENT_CATEGORY(int p0);
 		/**
 		 * Return the mission id of a job.
@@ -10259,55 +10259,55 @@ namespace base::menu::natives {
 		const char* UGC_GET_CONTENT_PATH(int p0, int p1);
 		void UGC_GET_CONTENT_UPDATED_DATE(Any p0, Any* p1);
 		int UGC_GET_CONTENT_FILE_VERSION(Any p0, Any p1);
-		BOOL UGC_GET_CONTENT_HAS_LO_RES_PHOTO(int p0);
-		BOOL UGC_GET_CONTENT_HAS_HI_RES_PHOTO(int p0);
+		bool UGC_GET_CONTENT_HAS_LO_RES_PHOTO(int p0);
+		bool UGC_GET_CONTENT_HAS_HI_RES_PHOTO(int p0);
 		int UGC_GET_CONTENT_LANGUAGE(Any p0);
-		BOOL UGC_GET_CONTENT_IS_PUBLISHED(Any p0);
-		BOOL UGC_GET_CONTENT_IS_VERIFIED(Any p0);
+		bool UGC_GET_CONTENT_IS_PUBLISHED(Any p0);
+		bool UGC_GET_CONTENT_IS_VERIFIED(Any p0);
 		float UGC_GET_CONTENT_RATING(Any p0, Any p1);
 		int UGC_GET_CONTENT_RATING_COUNT(Any p0, Any p1);
 		int UGC_GET_CONTENT_RATING_POSITIVE_COUNT(Any p0, Any p1);
 		int UGC_GET_CONTENT_RATING_NEGATIVE_COUNT(Any p0, Any p1);
-		BOOL UGC_GET_CONTENT_HAS_PLAYER_RECORD(Any p0);
-		BOOL UGC_GET_CONTENT_HAS_PLAYER_BOOKMARKED(Any p0);
+		bool UGC_GET_CONTENT_HAS_PLAYER_RECORD(Any p0);
+		bool UGC_GET_CONTENT_HAS_PLAYER_BOOKMARKED(Any p0);
 		int UGC_REQUEST_CONTENT_DATA_FROM_INDEX(int p0, int p1);
 		int UGC_REQUEST_CONTENT_DATA_FROM_PARAMS(const char* contentTypeName, const char* contentId, int p2, int p3, int p4);
 		int UGC_REQUEST_CACHED_DESCRIPTION(int p0);
-		BOOL UGC_IS_DESCRIPTION_REQUEST_IN_PROGRESS(Any p0);
-		BOOL UGC_HAS_DESCRIPTION_REQUEST_FINISHED(Any p0);
-		BOOL UGC_DID_DESCRIPTION_REQUEST_SUCCEED(Any p0);
+		bool UGC_IS_DESCRIPTION_REQUEST_IN_PROGRESS(Any p0);
+		bool UGC_HAS_DESCRIPTION_REQUEST_FINISHED(Any p0);
+		bool UGC_DID_DESCRIPTION_REQUEST_SUCCEED(Any p0);
 		const char* UGC_GET_CACHED_DESCRIPTION(Any p0, Any p1);
-		BOOL UGC_RELEASE_CACHED_DESCRIPTION(Any p0);
+		bool UGC_RELEASE_CACHED_DESCRIPTION(Any p0);
 		void UGC_RELEASE_ALL_CACHED_DESCRIPTIONS();
-		BOOL UGC_HAS_PERMISSION_TO_WRITE();
-		BOOL UGC_PUBLISH(const char* contentId, const char* baseContentId, const char* contentTypeName);
-		BOOL UGC_SET_BOOKMARKED(const char* contentId, BOOL bookmarked, const char* contentTypeName);
-		BOOL UGC_SET_DELETED(Any* p0, BOOL p1, const char* p2);
-		BOOL UGC_IS_MODIFYING();
-		BOOL UGC_HAS_MODIFY_FINISHED();
-		BOOL UGC_DID_MODIFY_SUCCEED();
+		bool UGC_HAS_PERMISSION_TO_WRITE();
+		bool UGC_PUBLISH(const char* contentId, const char* baseContentId, const char* contentTypeName);
+		bool UGC_SET_BOOKMARKED(const char* contentId, bool bookmarked, const char* contentTypeName);
+		bool UGC_SET_DELETED(Any* p0, bool p1, const char* p2);
+		bool UGC_IS_MODIFYING();
+		bool UGC_HAS_MODIFY_FINISHED();
+		bool UGC_DID_MODIFY_SUCCEED();
 		int UGC_GET_MODIFY_RESULT();
 		void UGC_CLEAR_MODIFY_RESULT();
-		BOOL UGC_GET_CREATORS_BY_USER_ID(Any* p0, Any* p1);
-		BOOL UGC_HAS_QUERY_CREATORS_FINISHED();
-		BOOL UGC_DID_QUERY_CREATORS_SUCCEED();
+		bool UGC_GET_CREATORS_BY_USER_ID(Any* p0, Any* p1);
+		bool UGC_HAS_QUERY_CREATORS_FINISHED();
+		bool UGC_DID_QUERY_CREATORS_SUCCEED();
 		int UGC_GET_CREATOR_NUM();
-		BOOL UGC_LOAD_OFFLINE_QUERY(Any p0);
+		bool UGC_LOAD_OFFLINE_QUERY(Any p0);
 		void UGC_CLEAR_OFFLINE_QUERY();
-		void UGC_SET_QUERY_DATA_FROM_OFFLINE(BOOL p0);
-		void UGC_SET_USING_OFFLINE_CONTENT(BOOL p0);
-		BOOL UGC_IS_LANGUAGE_SUPPORTED(Any p0);
-		BOOL FACEBOOK_POST_COMPLETED_HEIST(const char* heistName, int cashEarned, int xpEarned);
-		BOOL FACEBOOK_POST_CREATE_CHARACTER();
-		BOOL FACEBOOK_POST_COMPLETED_MILESTONE(int milestoneId);
-		BOOL FACEBOOK_HAS_POST_COMPLETED();
-		BOOL FACEBOOK_DID_POST_SUCCEED();
-		BOOL FACEBOOK_CAN_POST_TO_FACEBOOK();
-		int TEXTURE_DOWNLOAD_REQUEST(Any* gamerHandle, const char* filePath, const char* name, BOOL p3);
-		int TITLE_TEXTURE_DOWNLOAD_REQUEST(const char* filePath, const char* name, BOOL p2);
-		int UGC_TEXTURE_DOWNLOAD_REQUEST(const char* p0, int p1, int p2, int p3, const char* p4, BOOL p5);
+		void UGC_SET_QUERY_DATA_FROM_OFFLINE(bool p0);
+		void UGC_SET_USING_OFFLINE_CONTENT(bool p0);
+		bool UGC_IS_LANGUAGE_SUPPORTED(Any p0);
+		bool FACEBOOK_POST_COMPLETED_HEIST(const char* heistName, int cashEarned, int xpEarned);
+		bool FACEBOOK_POST_CREATE_CHARACTER();
+		bool FACEBOOK_POST_COMPLETED_MILESTONE(int milestoneId);
+		bool FACEBOOK_HAS_POST_COMPLETED();
+		bool FACEBOOK_DID_POST_SUCCEED();
+		bool FACEBOOK_CAN_POST_TO_FACEBOOK();
+		int TEXTURE_DOWNLOAD_REQUEST(Any* gamerHandle, const char* filePath, const char* name, bool p3);
+		int TITLE_TEXTURE_DOWNLOAD_REQUEST(const char* filePath, const char* name, bool p2);
+		int UGC_TEXTURE_DOWNLOAD_REQUEST(const char* p0, int p1, int p2, int p3, const char* p4, bool p5);
 		void TEXTURE_DOWNLOAD_RELEASE(int p0);
-		BOOL TEXTURE_DOWNLOAD_HAS_FAILED(int p0);
+		bool TEXTURE_DOWNLOAD_HAS_FAILED(int p0);
 		const char* TEXTURE_DOWNLOAD_GET_NAME(int p0);
 		/**
 		 * 0 = succeeded
@@ -10318,37 +10318,37 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if profile setting 901 is set to true and sets it to false.
 		 */
-		BOOL NETWORK_CHECK_ROS_LINK_WENTDOWN_NOT_NET();
+		bool NETWORK_CHECK_ROS_LINK_WENTDOWN_NOT_NET();
 		/**
 		 * Returns true if the NAT type is Strict (3) and a certain number of connections have failed.
 		 */
-		BOOL NETWORK_SHOULD_SHOW_STRICT_NAT_WARNING();
-		BOOL NETWORK_IS_CABLE_CONNECTED();
-		BOOL NETWORK_HAVE_SCS_PRIVATE_MSG_PRIV();
-		BOOL NETWORK_HAVE_ROS_SOCIAL_CLUB_PRIV();
-		BOOL NETWORK_HAVE_ROS_BANNED_PRIV();
-		BOOL NETWORK_HAVE_ROS_CREATE_TICKET_PRIV();
-		BOOL NETWORK_HAVE_ROS_MULTIPLAYER_PRIV();
-		BOOL NETWORK_HAVE_ROS_LEADERBOARD_WRITE_PRIV();
+		bool NETWORK_SHOULD_SHOW_STRICT_NAT_WARNING();
+		bool NETWORK_IS_CABLE_CONNECTED();
+		bool NETWORK_HAVE_SCS_PRIVATE_MSG_PRIV();
+		bool NETWORK_HAVE_ROS_SOCIAL_CLUB_PRIV();
+		bool NETWORK_HAVE_ROS_BANNED_PRIV();
+		bool NETWORK_HAVE_ROS_CREATE_TICKET_PRIV();
+		bool NETWORK_HAVE_ROS_MULTIPLAYER_PRIV();
+		bool NETWORK_HAVE_ROS_LEADERBOARD_WRITE_PRIV();
 		/**
 		 * index is always 18 in scripts
 		 */
-		BOOL NETWORK_HAS_ROS_PRIVILEGE(int index);
-		BOOL NETWORK_HAS_ROS_PRIVILEGE_END_DATE(int privilege, int* banType, Any* timeData);
-		BOOL NETWORK_HAS_ROS_PRIVILEGE_PLAYED_LAST_GEN();
-		BOOL NETWORK_HAS_ROS_PRIVILEGE_SPECIAL_EDITION_CONTENT();
+		bool NETWORK_HAS_ROS_PRIVILEGE(int index);
+		bool NETWORK_HAS_ROS_PRIVILEGE_END_DATE(int privilege, int* banType, Any* timeData);
+		bool NETWORK_HAS_ROS_PRIVILEGE_PLAYED_LAST_GEN();
+		bool NETWORK_HAS_ROS_PRIVILEGE_SPECIAL_EDITION_CONTENT();
 		/**
 		 * Checks for privilege 29
 		 */
-		BOOL _NETWORK_HAS_ROS_PRIVILEGE_MP_TEXT_COMMUNICATION();
+		bool _NETWORK_HAS_ROS_PRIVILEGE_MP_TEXT_COMMUNICATION();
 		/**
 		 * Checks for privilege 30
 		 */
-		BOOL _NETWORK_HAS_ROS_PRIVILEGE_MP_VOICE_COMMUNICATION();
+		bool _NETWORK_HAS_ROS_PRIVILEGE_MP_VOICE_COMMUNICATION();
 		/**
 		 * Checks for privilege 31
 		 */
-		BOOL _NETWORK_HAS_ROS_PRIVILEGE_REPORTING();
+		bool _NETWORK_HAS_ROS_PRIVILEGE_REPORTING();
 		/**
 		 * Always returns -1. Seems to be XB1 specific.
 		 */
@@ -10359,13 +10359,13 @@ namespace base::menu::natives {
 		 * Returns true if dinput8.dll is present in the game directory.
 		 * You will get following error message if that is true: "You are attempting to access GTA Online servers with an altered version of the game."
 		 */
-		BOOL NETWORK_SKIP_RADIO_WARNING();
+		bool NETWORK_SKIP_RADIO_WARNING();
 		/**
 		 * NETWORK_F[I-O]
 		 */
 		void NETWORK_FORCE_LOCAL_PLAYER_SCAR_SYNC();
-		void NETWORK_DISABLE_LEAVE_REMOTE_PED_BEHIND(BOOL toggle);
-		void NETWORK_ALLOW_REMOTE_ATTACHMENT_MODIFICATION(Entity entity, BOOL toggle);
+		void NETWORK_DISABLE_LEAVE_REMOTE_PED_BEHIND(bool toggle);
+		void NETWORK_ALLOW_REMOTE_ATTACHMENT_MODIFICATION(Entity entity, bool toggle);
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
@@ -10377,9 +10377,9 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL NETWORK_IS_TITLE_UPDATE_REQUIRED();
+		bool NETWORK_IS_TITLE_UPDATE_REQUIRED();
 		void NETWORK_QUIT_MP_TO_DESKTOP();
-		BOOL NETWORK_IS_CONNECTED_VIA_RELAY(Player player);
+		bool NETWORK_IS_CONNECTED_VIA_RELAY(Player player);
 		float NETWORK_GET_AVERAGE_LATENCY(Player player);
 		/**
 		 * Same as NETWORK_GET_AVERAGE_LATENCY
@@ -10424,8 +10424,8 @@ namespace base::menu::natives {
 		 * Does nothing.
 		 */
 		void NETWORK_POST_UDS_ACTIVITY_TERMINATE();
-		BOOL NETWORK_HAS_SC_MEMBERSHIP_INFO();
-		BOOL NETWORK_HAS_SC_MEMBERSHIP();
+		bool NETWORK_HAS_SC_MEMBERSHIP_INFO();
+		bool NETWORK_HAS_SC_MEMBERSHIP();
 		void NETWORK_GET_SC_MEMBERSHIP_INFO(Any* info);
 		void NETWORK_UGC_NAV(Any p0, Any p1);
 		/**
@@ -10472,18 +10472,18 @@ namespace base::menu::natives {
 		/**
 		 * List of object models that can be created without any additional effort like making sure ytyp is loaded etc: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ObjectList.ini
 		 */
-		Object CREATE_OBJECT(Hash modelHash, float x, float y, float z, BOOL isNetwork, BOOL bScriptHostObj, BOOL dynamic);
+		Object CREATE_OBJECT(Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic);
 		/**
 		 * List of object models that can be created without any additional effort like making sure ytyp is loaded etc: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ObjectList.ini
 		 */
-		Object CREATE_OBJECT_NO_OFFSET(Hash modelHash, float x, float y, float z, BOOL isNetwork, BOOL bScriptHostObj, BOOL dynamic, Any p7);
+		Object CREATE_OBJECT_NO_OFFSET(Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic, Any p7);
 		/**
 		 * Deletes the specified object, then sets the handle pointed to by the pointer to NULL.
 		 */
 		void DELETE_OBJECT(Object* object);
-		BOOL PLACE_OBJECT_ON_GROUND_PROPERLY(Object object);
-		BOOL PLACE_OBJECT_ON_GROUND_OR_OBJECT_PROPERLY(Object object);
-		BOOL ROTATE_OBJECT(Object object, float p1, float p2, BOOL p3);
+		bool PLACE_OBJECT_ON_GROUND_PROPERLY(Object object);
+		bool PLACE_OBJECT_ON_GROUND_OR_OBJECT_PROPERLY(Object object);
+		bool ROTATE_OBJECT(Object object, float p1, float p2, bool p3);
 		/**
 		 * Returns true if the object has finished moving.
 		 * 
@@ -10492,28 +10492,28 @@ namespace base::menu::natives {
 		 * See also: https://gtagmodding.com/opcode-database/opcode/034E/
 		 * Has to be looped until it returns true.
 		 */
-		BOOL SLIDE_OBJECT(Object object, float toX, float toY, float toZ, float speedX, float speedY, float speedZ, BOOL collision);
-		void SET_OBJECT_TARGETTABLE(Object object, BOOL targettable, Any p2);
+		bool SLIDE_OBJECT(Object object, float toX, float toY, float toZ, float speedX, float speedY, float speedZ, bool collision);
+		void SET_OBJECT_TARGETTABLE(Object object, bool targettable, Any p2);
 		/**
 		 * Sets the 34th and 35th object flags related to player peds.
 		 */
-		void _SET_OBJECT_TARGETTABLE_BY_PLAYER(Object object, BOOL setFlag34, BOOL setFlag35);
+		void _SET_OBJECT_TARGETTABLE_BY_PLAYER(Object object, bool setFlag34, bool setFlag35);
 		/**
 		 * Overrides a flag on the object which determines if the object should be avoided by a vehicle in task CTaskVehicleGoToPointWithAvoidanceAutomobile.
 		 */
-		void SET_OBJECT_FORCE_VEHICLES_TO_AVOID(Object object, BOOL toggle);
+		void SET_OBJECT_FORCE_VEHICLES_TO_AVOID(Object object, bool toggle);
 		/**
 		 * Has 8 params in the latest patches.
 		 * 
 		 * isMission - if true doesn't return mission objects
 		 */
-		Object GET_CLOSEST_OBJECT_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, BOOL isMission, BOOL p6, BOOL p7);
-		BOOL HAS_OBJECT_BEEN_BROKEN(Object object, Any p1);
-		BOOL HAS_CLOSEST_OBJECT_OF_TYPE_BEEN_BROKEN(float p0, float p1, float p2, float p3, Hash modelHash, Any p5);
-		BOOL HAS_CLOSEST_OBJECT_OF_TYPE_BEEN_COMPLETELY_DESTROYED(float x, float y, float z, float radius, Hash modelHash, BOOL p5);
-		BOOL GET_HAS_OBJECT_BEEN_COMPLETELY_DESTROYED(Any p0);
+		Object GET_CLOSEST_OBJECT_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, bool isMission, bool p6, bool p7);
+		bool HAS_OBJECT_BEEN_BROKEN(Object object, Any p1);
+		bool HAS_CLOSEST_OBJECT_OF_TYPE_BEEN_BROKEN(float p0, float p1, float p2, float p3, Hash modelHash, Any p5);
+		bool HAS_CLOSEST_OBJECT_OF_TYPE_BEEN_COMPLETELY_DESTROYED(float x, float y, float z, float radius, Hash modelHash, bool p5);
+		bool GET_HAS_OBJECT_BEEN_COMPLETELY_DESTROYED(Any p0);
 		Vector3 GET_OFFSET_FROM_COORD_AND_HEADING_IN_WORLD_COORDS(float xPos, float yPos, float zPos, float heading, float xOffset, float yOffset, float zOffset);
-		BOOL GET_COORDS_AND_ROTATION_OF_CLOSEST_OBJECT_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, Vector3* outPosition, Vector3* outRotation, int rotationOrder);
+		bool GET_COORDS_AND_ROTATION_OF_CLOSEST_OBJECT_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, Vector3* outPosition, Vector3* outRotation, int rotationOrder);
 		/**
 		 * Hardcoded to not work in multiplayer.
 		 * 
@@ -10533,7 +10533,7 @@ namespace base::menu::natives {
 		 * 
 		 * get door info: https://pastebin.com/i14rbekD
 		 */
-		void SET_STATE_OF_CLOSEST_DOOR_OF_TYPE(Hash type, float x, float y, float z, BOOL locked, float heading, BOOL p6);
+		void SET_STATE_OF_CLOSEST_DOOR_OF_TYPE(Hash type, float x, float y, float z, bool locked, float heading, bool p6);
 		/**
 		 * locked is 0 if no door is found
 		 * locked is 0 if door is unlocked
@@ -10542,7 +10542,7 @@ namespace base::menu::natives {
 		 * -------------
 		 * the locked bool is either 0(unlocked)(false) or 1(locked)(true)
 		 */
-		void GET_STATE_OF_CLOSEST_DOOR_OF_TYPE(Hash type, float x, float y, float z, BOOL* locked, float* heading);
+		void GET_STATE_OF_CLOSEST_DOOR_OF_TYPE(Hash type, float x, float y, float z, bool* locked, float* heading);
 		/**
 		 * Hardcoded not to work in multiplayer environments.
 		 * When you set locked to 0 the door open and to 1 the door close
@@ -10550,7 +10550,7 @@ namespace base::menu::natives {
 		 * 
 		 * OBJECT::SET_LOCKED_UNSTREAMED_IN_DOOR_OF_TYPE(${prop_gate_prison_01}, 1845.0, 2605.0, 45.0, 1, 0.0, 50.0, 0);  //door close
 		 */
-		void SET_LOCKED_UNSTREAMED_IN_DOOR_OF_TYPE(Hash modelHash, float x, float y, float z, BOOL locked, float xRotMult, float yRotMult, float zRotMult);
+		void SET_LOCKED_UNSTREAMED_IN_DOOR_OF_TYPE(Hash modelHash, float x, float y, float z, bool locked, float xRotMult, float yRotMult, float zRotMult);
 		void PLAY_OBJECT_AUTO_START_ANIM(Any p0);
 		/**
 		 * doorHash has to be unique. scriptDoor false; relies upon getNetworkGameScriptHandler. isLocal On true disables the creation CRequestDoorEvent's in DOOR_SYSTEM_SET_DOOR_STATE.
@@ -10562,7 +10562,7 @@ namespace base::menu::natives {
 		 * 
 		 * Example: AddDoorToSystem("PROP_43_DOOR_0", "hei_v_ilev_fh_heistdoor2", -1456.818, -520.5037, 69.67043, 0, 0, 0)
 		 */
-		void ADD_DOOR_TO_SYSTEM(Hash doorHash, Hash modelHash, float x, float y, float z, BOOL p5, BOOL scriptDoor, BOOL isLocal, Any p8);
+		void ADD_DOOR_TO_SYSTEM(Hash doorHash, Hash modelHash, float x, float y, float z, bool p5, bool scriptDoor, bool isLocal, Any p8);
 		/**
 		 * CDoor and CDoorSystemData still internally allocated (and their associations between doorHash, modelHash, and coordinates).
 		 * Only its NetObj removed and flag ``*(v2 + 192) |= 8u`` (1604 retail) toggled.
@@ -10581,84 +10581,84 @@ namespace base::menu::natives {
 		 * 5: DOORSTATE_FORCE_OPEN_THIS_FRAME
 		 * 6: DOORSTATE_FORCE_CLOSED_THIS_FRAME
 		 */
-		void DOOR_SYSTEM_SET_DOOR_STATE(Hash doorHash, int state, BOOL requestDoor, BOOL forceUpdate);
+		void DOOR_SYSTEM_SET_DOOR_STATE(Hash doorHash, int state, bool requestDoor, bool forceUpdate);
 		int DOOR_SYSTEM_GET_DOOR_STATE(Hash doorHash);
 		int DOOR_SYSTEM_GET_DOOR_PENDING_STATE(Hash doorHash);
 		/**
 		 * Includes networking check: ownership vs. or the door itself **isn't** networked.
 		 * `forceUpdate` on true invokes DOOR_SYSTEM_SET_DOOR_STATE otherwise requestDoor is unused.
 		 */
-		void DOOR_SYSTEM_SET_AUTOMATIC_RATE(Hash doorHash, float rate, BOOL requestDoor, BOOL forceUpdate);
+		void DOOR_SYSTEM_SET_AUTOMATIC_RATE(Hash doorHash, float rate, bool requestDoor, bool forceUpdate);
 		/**
 		 * `forceUpdate` on true invokes DOOR_SYSTEM_SET_DOOR_STATE otherwise requestDoor is unused.
 		 */
-		void DOOR_SYSTEM_SET_AUTOMATIC_DISTANCE(Hash doorHash, float distance, BOOL requestDoor, BOOL forceUpdate);
+		void DOOR_SYSTEM_SET_AUTOMATIC_DISTANCE(Hash doorHash, float distance, bool requestDoor, bool forceUpdate);
 		/**
 		 * Sets the ajar angle of a door.
 		 * Ranges from -1.0 to 1.0, and 0.0 is closed / default.
 		 * `forceUpdate` on true invokes DOOR_SYSTEM_SET_DOOR_STATE otherwise requestDoor is unused.
 		 */
-		void DOOR_SYSTEM_SET_OPEN_RATIO(Hash doorHash, float ajar, BOOL requestDoor, BOOL forceUpdate);
+		void DOOR_SYSTEM_SET_OPEN_RATIO(Hash doorHash, float ajar, bool requestDoor, bool forceUpdate);
 		float DOOR_SYSTEM_GET_AUTOMATIC_DISTANCE(Hash doorHash);
 		float DOOR_SYSTEM_GET_OPEN_RATIO(Hash doorHash);
-		BOOL DOOR_SYSTEM_GET_IS_SPRING_REMOVED(Hash doorHash);
+		bool DOOR_SYSTEM_GET_IS_SPRING_REMOVED(Hash doorHash);
 		/**
 		 * Includes networking check: ownership vs. or the door itself **isn't** networked.
 		 * `forceUpdate` on true invokes DOOR_SYSTEM_SET_DOOR_STATE otherwise requestDoor is unused.
 		 */
-		void DOOR_SYSTEM_SET_SPRING_REMOVED(Hash doorHash, BOOL removed, BOOL requestDoor, BOOL forceUpdate);
+		void DOOR_SYSTEM_SET_SPRING_REMOVED(Hash doorHash, bool removed, bool requestDoor, bool forceUpdate);
 		/**
 		 * Includes networking check: ownership vs. or the door itself **isn't** networked.
 		 */
-		void DOOR_SYSTEM_SET_HOLD_OPEN(Hash doorHash, BOOL toggle);
+		void DOOR_SYSTEM_SET_HOLD_OPEN(Hash doorHash, bool toggle);
 		/**
 		 * Some property related to gates. Native name between ``DOOR_SYSTEM_SET_AUTOMATIC_RATE`` and ``DOOR_SYSTEM_SET_DOOR_STATE``.
 		 */
-		void DOOR_SYSTEM_SET_DOOR_OPEN_FOR_RACES(Hash doorHash, BOOL p1);
+		void DOOR_SYSTEM_SET_DOOR_OPEN_FOR_RACES(Hash doorHash, bool p1);
 		/**
 		 * if (OBJECT::IS_DOOR_REGISTERED_WITH_SYSTEM(doorHash))
 		 * {
 		 * OBJECT::REMOVE_DOOR_FROM_SYSTEM(doorHash);
 		 * }
 		 */
-		BOOL IS_DOOR_REGISTERED_WITH_SYSTEM(Hash doorHash);
-		BOOL IS_DOOR_CLOSED(Hash doorHash);
-		void OPEN_ALL_BARRIERS_FOR_RACE(BOOL p0);
+		bool IS_DOOR_REGISTERED_WITH_SYSTEM(Hash doorHash);
+		bool IS_DOOR_CLOSED(Hash doorHash);
+		void OPEN_ALL_BARRIERS_FOR_RACE(bool p0);
 		/**
 		 * Clears the fields sets by 0xC7F29CA00F46350E (1604 retail: 0x1424A7A10, 0x1424A7A11) and iterates over the global CDoor's bucket-list.
 		 * Related to its "Pre-networked state"?
 		 */
 		void CLOSE_ALL_BARRIERS_FOR_RACE();
-		BOOL DOOR_SYSTEM_GET_IS_PHYSICS_LOADED(Any p0);
+		bool DOOR_SYSTEM_GET_IS_PHYSICS_LOADED(Any p0);
 		/**
 		 * Search radius: 0.5
 		 */
-		BOOL DOOR_SYSTEM_FIND_EXISTING_DOOR(float x, float y, float z, Hash modelHash, Hash* outDoorHash);
-		BOOL IS_GARAGE_EMPTY(Hash garageHash, BOOL p1, int p2);
-		BOOL IS_PLAYER_ENTIRELY_INSIDE_GARAGE(Hash garageHash, Player player, float p2, int p3);
-		BOOL IS_PLAYER_PARTIALLY_INSIDE_GARAGE(Hash garageHash, Player player, int p2);
-		BOOL ARE_ENTITIES_ENTIRELY_INSIDE_GARAGE(Hash garageHash, BOOL p1, BOOL p2, BOOL p3, Any p4);
-		BOOL IS_ANY_ENTITY_ENTIRELY_INSIDE_GARAGE(Hash garageHash, BOOL p1, BOOL p2, BOOL p3, Any p4);
+		bool DOOR_SYSTEM_FIND_EXISTING_DOOR(float x, float y, float z, Hash modelHash, Hash* outDoorHash);
+		bool IS_GARAGE_EMPTY(Hash garageHash, bool p1, int p2);
+		bool IS_PLAYER_ENTIRELY_INSIDE_GARAGE(Hash garageHash, Player player, float p2, int p3);
+		bool IS_PLAYER_PARTIALLY_INSIDE_GARAGE(Hash garageHash, Player player, int p2);
+		bool ARE_ENTITIES_ENTIRELY_INSIDE_GARAGE(Hash garageHash, bool p1, bool p2, bool p3, Any p4);
+		bool IS_ANY_ENTITY_ENTIRELY_INSIDE_GARAGE(Hash garageHash, bool p1, bool p2, bool p3, Any p4);
 		/**
 		 * Despite the name, it does work for any entity type.
 		 */
-		BOOL IS_OBJECT_ENTIRELY_INSIDE_GARAGE(Hash garageHash, Entity entity, float p2, int p3);
+		bool IS_OBJECT_ENTIRELY_INSIDE_GARAGE(Hash garageHash, Entity entity, float p2, int p3);
 		/**
 		 * Despite the name, it does work for any entity type.
 		 */
-		BOOL IS_OBJECT_PARTIALLY_INSIDE_GARAGE(Hash garageHash, Entity entity, int p2);
-		void CLEAR_GARAGE(Hash garageHash, BOOL isNetwork);
-		void CLEAR_OBJECTS_INSIDE_GARAGE(Hash garageHash, BOOL vehicles, BOOL peds, BOOL objects, BOOL isNetwork);
+		bool IS_OBJECT_PARTIALLY_INSIDE_GARAGE(Hash garageHash, Entity entity, int p2);
+		void CLEAR_GARAGE(Hash garageHash, bool isNetwork);
+		void CLEAR_OBJECTS_INSIDE_GARAGE(Hash garageHash, bool vehicles, bool peds, bool objects, bool isNetwork);
 		/**
 		 * Sets a flag. A valid id is 0x157DC10D
 		 */
-		void DISABLE_TIDYING_UP_IN_GARAGE(int id, BOOL toggle);
-		void ENABLE_SAVING_IN_GARAGE(Hash garageHash, BOOL toggle);
+		void DISABLE_TIDYING_UP_IN_GARAGE(int id, bool toggle);
+		void ENABLE_SAVING_IN_GARAGE(Hash garageHash, bool toggle);
 		void CLOSE_SAFEHOUSE_GARAGES();
 		/**
 		 * p5 is usually 0.
 		 */
-		BOOL DOES_OBJECT_OF_TYPE_EXIST_AT_COORDS(float x, float y, float z, float radius, Hash hash, BOOL p5);
+		bool DOES_OBJECT_OF_TYPE_EXIST_AT_COORDS(float x, float y, float z, float radius, Hash hash, bool p5);
 		/**
 		 * An angled area is an X-Z oriented rectangle with three parameters:
 		 * 1. origin: the mid-point along a base edge of the rectangle;
@@ -10669,11 +10669,11 @@ namespace base::menu::natives {
 		 * 1. golf_mp https://i.imgur.com/JhsQAK9.png
 		 * 2. am_taxi https://i.imgur.com/TJWCZaT.jpg
 		 */
-		BOOL IS_POINT_IN_ANGLED_AREA(float xPos, float yPos, float zPos, float x1, float y1, float z1, float x2, float y2, float z2, float width, BOOL debug, BOOL includeZ);
+		bool IS_POINT_IN_ANGLED_AREA(float xPos, float yPos, float zPos, float x1, float y1, float z1, float x2, float y2, float z2, float width, bool debug, bool includeZ);
 		/**
 		 * Overrides the climbing/blocking flags of the object, used in the native scripts mostly for "prop_dock_bouy_*"
 		 */
-		void SET_OBJECT_ALLOW_LOW_LOD_BUOYANCY(Object object, BOOL toggle);
+		void SET_OBJECT_ALLOW_LOW_LOD_BUOYANCY(Object object, bool toggle);
 		/**
 		 * Adjust the physics parameters of a prop, or otherwise known as "object". This is useful for simulated gravity.
 		 * 
@@ -10685,23 +10685,23 @@ namespace base::menu::natives {
 		 * p5: similar to p4
 		 */
 		void SET_OBJECT_PHYSICS_PARAMS(Object object, float weight, float p2, float p3, float p4, float p5, float gravity, float p7, float p8, float p9, float p10, float buoyancy);
-		float GET_OBJECT_FRAGMENT_DAMAGE_HEALTH(Any p0, BOOL p1);
-		void SET_ACTIVATE_OBJECT_PHYSICS_AS_SOON_AS_IT_IS_UNFROZEN(Object object, BOOL toggle);
-		BOOL IS_ANY_OBJECT_NEAR_POINT(float x, float y, float z, float range, BOOL p4);
-		BOOL IS_OBJECT_NEAR_POINT(Hash objectHash, float x, float y, float z, float range);
+		float GET_OBJECT_FRAGMENT_DAMAGE_HEALTH(Any p0, bool p1);
+		void SET_ACTIVATE_OBJECT_PHYSICS_AS_SOON_AS_IT_IS_UNFROZEN(Object object, bool toggle);
+		bool IS_ANY_OBJECT_NEAR_POINT(float x, float y, float z, float range, bool p4);
+		bool IS_OBJECT_NEAR_POINT(Hash objectHash, float x, float y, float z, float range);
 		void REMOVE_OBJECT_HIGH_DETAIL_MODEL(Object object);
-		void BREAK_OBJECT_FRAGMENT_CHILD(Object p0, Any p1, BOOL p2);
+		void BREAK_OBJECT_FRAGMENT_CHILD(Object p0, Any p1, bool p2);
 		void DAMAGE_OBJECT_FRAGMENT_CHILD(Any p0, Any p1, Any p2);
 		void FIX_OBJECT_FRAGMENT(Object object);
 		void TRACK_OBJECT_VISIBILITY(Object object);
-		BOOL IS_OBJECT_VISIBLE(Object object);
-		void SET_OBJECT_IS_SPECIAL_GOLFBALL(Object object, BOOL toggle);
-		void SET_OBJECT_TAKES_DAMAGE_FROM_COLLIDING_WITH_BUILDINGS(Any p0, BOOL p1);
-		void ALLOW_DAMAGE_EVENTS_FOR_NON_NETWORKED_OBJECTS(BOOL value);
+		bool IS_OBJECT_VISIBLE(Object object);
+		void SET_OBJECT_IS_SPECIAL_GOLFBALL(Object object, bool toggle);
+		void SET_OBJECT_TAKES_DAMAGE_FROM_COLLIDING_WITH_BUILDINGS(Any p0, bool p1);
+		void ALLOW_DAMAGE_EVENTS_FOR_NON_NETWORKED_OBJECTS(bool value);
 		/**
 		 * Requires a component_at_*_flsh to be attached to the weapon object
 		 */
-		void SET_CUTSCENES_WEAPON_FLASHLIGHT_ON_THIS_FRAME(Object object, BOOL toggle);
+		void SET_CUTSCENES_WEAPON_FLASHLIGHT_ON_THIS_FRAME(Object object, bool toggle);
 		/**
 		 * Example:
 		 * OBJECT::GET_RAYFIRE_MAP_OBJECT(-809.9619750976562, 170.919, 75.7406997680664, 3.0, "des_tvsmash");
@@ -10726,7 +10726,7 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if a destructible object with this handle exists, false otherwise.
 		 */
-		BOOL DOES_RAYFIRE_MAP_OBJECT_EXIST(Object object);
+		bool DOES_RAYFIRE_MAP_OBJECT_EXIST(Object object);
 		/**
 		 * `object`: The des-object handle to get the animation progress from.
 		 * Return value is a float between 0.0 and 1.0, 0.0 is the beginning of the animation, 1.0 is the end. Value resets to 0.0 instantly after reaching 1.0.
@@ -10735,7 +10735,7 @@ namespace base::menu::natives {
 		/**
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
-		Pickup CREATE_PICKUP(Hash pickupHash, float posX, float posY, float posZ, int p4, int value, BOOL p6, Hash modelHash);
+		Pickup CREATE_PICKUP(Hash pickupHash, float posX, float posY, float posZ, int p4, int value, bool p6, Hash modelHash);
 		/**
 		 * flags:
 		 * 8 (1 << 3): place on ground
@@ -10743,29 +10743,29 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
-		Pickup CREATE_PICKUP_ROTATE(Hash pickupHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, int flag, int amount, Any p9, BOOL p10, Hash modelHash);
+		Pickup CREATE_PICKUP_ROTATE(Hash pickupHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, int flag, int amount, Any p9, bool p10, Hash modelHash);
 		void FORCE_PICKUP_ROTATE_FACE_UP();
 		void SET_CUSTOM_PICKUP_WEAPON_HASH(Hash pickupHash, Pickup pickup);
 		/**
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
-		Object CREATE_AMBIENT_PICKUP(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, BOOL p7, BOOL p8);
-		Object CREATE_NON_NETWORKED_AMBIENT_PICKUP(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, BOOL p7, BOOL p8);
+		Object CREATE_AMBIENT_PICKUP(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, bool p7, bool p8);
+		Object CREATE_NON_NETWORKED_AMBIENT_PICKUP(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, bool p7, bool p8);
 		void BLOCK_PLAYERS_FOR_AMBIENT_PICKUP(Any p0, Any p1);
 		/**
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
-		Object CREATE_PORTABLE_PICKUP(Hash pickupHash, float x, float y, float z, BOOL placeOnGround, Hash modelHash);
+		Object CREATE_PORTABLE_PICKUP(Hash pickupHash, float x, float y, float z, bool placeOnGround, Hash modelHash);
 		/**
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
-		Object CREATE_NON_NETWORKED_PORTABLE_PICKUP(Hash pickupHash, float x, float y, float z, BOOL placeOnGround, Hash modelHash);
+		Object CREATE_NON_NETWORKED_PORTABLE_PICKUP(Hash pickupHash, float x, float y, float z, bool placeOnGround, Hash modelHash);
 		void ATTACH_PORTABLE_PICKUP_TO_PED(Object pickupObject, Ped ped);
 		void DETACH_PORTABLE_PICKUP_FROM_PED(Object pickupObject);
 		void FORCE_PORTABLE_PICKUP_LAST_ACCESSIBLE_POSITION_SETTING(Object object);
-		void HIDE_PORTABLE_PICKUP_WHEN_DETACHED(Object pickupObject, BOOL toggle);
+		void HIDE_PORTABLE_PICKUP_WHEN_DETACHED(Object pickupObject, bool toggle);
 		void SET_MAX_NUM_PORTABLE_PICKUPS_CARRIED_BY_PLAYER(Hash modelHash, int number);
-		void SET_LOCAL_PLAYER_CAN_COLLECT_PORTABLE_PICKUPS(BOOL toggle);
+		void SET_LOCAL_PLAYER_CAN_COLLECT_PORTABLE_PICKUPS(bool toggle);
 		Vector3 GET_SAFE_PICKUP_COORDS(float x, float y, float z, float p3, float p4);
 		/**
 		 * Adds an area that seems to be related to pickup physics behavior.
@@ -10782,7 +10782,7 @@ namespace base::menu::natives {
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
 		void REMOVE_ALL_PICKUPS_OF_TYPE(Hash pickupHash);
-		BOOL HAS_PICKUP_BEEN_COLLECTED(Pickup pickup);
+		bool HAS_PICKUP_BEEN_COLLECTED(Pickup pickup);
 		void REMOVE_PICKUP(Pickup pickup);
 		/**
 		 * Spawns one or more money pickups.
@@ -10804,15 +10804,15 @@ namespace base::menu::natives {
 		 * Max is 2000 in MP. So if you put the amount to 20, but the value to $400,000 eg. They will only be able to pickup 20 - $2,000 bags. So, $40,000
 		 */
 		void CREATE_MONEY_PICKUPS(float x, float y, float z, int value, int amount, Hash model);
-		BOOL DOES_PICKUP_EXIST(Pickup pickup);
-		BOOL DOES_PICKUP_OBJECT_EXIST(Object pickupObject);
+		bool DOES_PICKUP_EXIST(Pickup pickup);
+		bool DOES_PICKUP_OBJECT_EXIST(Object pickupObject);
 		Object GET_PICKUP_OBJECT(Pickup pickup);
-		BOOL IS_OBJECT_A_PICKUP(Object object);
-		BOOL IS_OBJECT_A_PORTABLE_PICKUP(Object object);
+		bool IS_OBJECT_A_PICKUP(Object object);
+		bool IS_OBJECT_A_PORTABLE_PICKUP(Object object);
 		/**
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
-		BOOL DOES_PICKUP_OF_TYPE_EXIST_IN_AREA(Hash pickupHash, float x, float y, float z, float radius);
+		bool DOES_PICKUP_OF_TYPE_EXIST_IN_AREA(Hash pickupHash, float x, float y, float z, float radius);
 		void SET_PICKUP_REGENERATION_TIME(Pickup pickup, int duration);
 		void FORCE_PICKUP_REGENERATE(Any p0);
 		/**
@@ -10827,19 +10827,19 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
-		void SET_PLAYER_PERMITTED_TO_COLLECT_PICKUPS_OF_TYPE(Player player, Hash pickupHash, BOOL toggle);
+		void SET_PLAYER_PERMITTED_TO_COLLECT_PICKUPS_OF_TYPE(Player player, Hash pickupHash, bool toggle);
 		/**
 		 * Maximum amount of pickup models that can be disallowed is 30.
 		 */
-		void SET_LOCAL_PLAYER_PERMITTED_TO_COLLECT_PICKUPS_WITH_MODEL(Hash modelHash, BOOL toggle);
+		void SET_LOCAL_PLAYER_PERMITTED_TO_COLLECT_PICKUPS_WITH_MODEL(Hash modelHash, bool toggle);
 		/**
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
 		void ALLOW_ALL_PLAYERS_TO_COLLECT_PICKUPS_OF_TYPE(Hash pickupHash);
-		void SET_TEAM_PICKUP_OBJECT(Object object, Any p1, BOOL p2);
-		void PREVENT_COLLECTION_OF_PORTABLE_PICKUP(Object object, BOOL p1, BOOL p2);
-		void SET_PICKUP_OBJECT_GLOW_WHEN_UNCOLLECTABLE(Pickup pickup, BOOL toggle);
-		void _SET_PICKUP_GLOW_DISABLED(Pickup pickup, BOOL toggle);
+		void SET_TEAM_PICKUP_OBJECT(Object object, Any p1, bool p2);
+		void PREVENT_COLLECTION_OF_PORTABLE_PICKUP(Object object, bool p1, bool p2);
+		void SET_PICKUP_OBJECT_GLOW_WHEN_UNCOLLECTABLE(Pickup pickup, bool toggle);
+		void _SET_PICKUP_GLOW_DISABLED(Pickup pickup, bool toggle);
 		/**
 		 * p1 is always 0.51. This native is called before SET_PICKUP_REGENERATION_TIME in all occurances.
 		 */
@@ -10847,26 +10847,26 @@ namespace base::menu::natives {
 		/**
 		 * p1 is always -0.2 in scripts and p2 is always true in scripts.
 		 */
-		void SET_PICKUP_OBJECT_GLOW_OFFSET(Pickup pickup, float p1, BOOL p2);
+		void SET_PICKUP_OBJECT_GLOW_OFFSET(Pickup pickup, float p1, bool p2);
 		void SET_OBJECT_GLOW_IN_SAME_TEAM(Pickup pickup);
-		void SET_PICKUP_OBJECT_ARROW_MARKER(Pickup pickup, BOOL toggle);
-		void ALLOW_PICKUP_ARROW_MARKER_WHEN_UNCOLLECTABLE(Pickup pickup, BOOL toggle);
+		void SET_PICKUP_OBJECT_ARROW_MARKER(Pickup pickup, bool toggle);
+		void ALLOW_PICKUP_ARROW_MARKER_WHEN_UNCOLLECTABLE(Pickup pickup, bool toggle);
 		int GET_DEFAULT_AMMO_FOR_WEAPON_PICKUP(Hash pickupHash);
 		void SET_PICKUP_GENERATION_RANGE_MULTIPLIER(float multiplier);
 		float GET_PICKUP_GENERATION_RANGE_MULTIPLIER();
-		void SET_ONLY_ALLOW_AMMO_COLLECTION_WHEN_LOW(BOOL p0);
-		void SET_PICKUP_UNCOLLECTABLE(Pickup pickup, BOOL toggle);
-		void SET_PICKUP_TRANSPARENT_WHEN_UNCOLLECTABLE(Pickup pickup, BOOL toggle);
-		void SET_PICKUP_HIDDEN_WHEN_UNCOLLECTABLE(Pickup pickup, BOOL toggle);
-		void SET_PICKUP_OBJECT_TRANSPARENT_WHEN_UNCOLLECTABLE(Pickup pickup, BOOL toggle);
+		void SET_ONLY_ALLOW_AMMO_COLLECTION_WHEN_LOW(bool p0);
+		void SET_PICKUP_UNCOLLECTABLE(Pickup pickup, bool toggle);
+		void SET_PICKUP_TRANSPARENT_WHEN_UNCOLLECTABLE(Pickup pickup, bool toggle);
+		void SET_PICKUP_HIDDEN_WHEN_UNCOLLECTABLE(Pickup pickup, bool toggle);
+		void SET_PICKUP_OBJECT_TRANSPARENT_WHEN_UNCOLLECTABLE(Pickup pickup, bool toggle);
 		/**
 		 * p0 is either 0 or 50 in scripts.
 		 */
 		void SET_PICKUP_OBJECT_ALPHA_WHEN_TRANSPARENT(int p0);
-		void SET_PORTABLE_PICKUP_PERSIST(Pickup pickup, BOOL toggle);
-		void ALLOW_PORTABLE_PICKUP_TO_MIGRATE_TO_NON_PARTICIPANTS(Pickup pickup, BOOL toggle);
-		void FORCE_ACTIVATE_PHYSICS_ON_UNFIXED_PICKUP(Pickup pickup, BOOL toggle);
-		void ALLOW_PICKUP_BY_NONE_PARTICIPANT(Pickup pickup, BOOL toggle);
+		void SET_PORTABLE_PICKUP_PERSIST(Pickup pickup, bool toggle);
+		void ALLOW_PORTABLE_PICKUP_TO_MIGRATE_TO_NON_PARTICIPANTS(Pickup pickup, bool toggle);
+		void FORCE_ACTIVATE_PHYSICS_ON_UNFIXED_PICKUP(Pickup pickup, bool toggle);
+		void ALLOW_PICKUP_BY_NONE_PARTICIPANT(Pickup pickup, bool toggle);
 		/**
 		 * enum ePickupRewardType
 		 * {
@@ -10886,7 +10886,7 @@ namespace base::menu::natives {
 		 * PICKUP_REWARD_TYPE_FIREWORK_MP = (1 << 10),
 		 * };
 		 */
-		void SUPPRESS_PICKUP_REWARD_TYPE(int rewardType, BOOL suppress);
+		void SUPPRESS_PICKUP_REWARD_TYPE(int rewardType, bool suppress);
 		void CLEAR_ALL_PICKUP_REWARD_TYPE_SUPPRESSION();
 		void CLEAR_PICKUP_REWARD_TYPE_SUPPRESSION(int rewardType);
 		/**
@@ -10901,12 +10901,12 @@ namespace base::menu::natives {
 		 */
 		void RENDER_FAKE_PICKUP_GLOW(float x, float y, float z, int colorIndex);
 		void SET_PICKUP_OBJECT_COLLECTABLE_IN_VEHICLE(Pickup pickup);
-		void SET_PICKUP_TRACK_DAMAGE_EVENTS(Pickup pickup, BOOL toggle);
+		void SET_PICKUP_TRACK_DAMAGE_EVENTS(Pickup pickup, bool toggle);
 		/**
 		 * Sets entity+38 to C (when false) or 0xFF3f (when true)
 		 */
-		void SET_ENTITY_FLAG_SUPPRESS_SHADOW(Entity entity, BOOL toggle);
-		void SET_ENTITY_FLAG_RENDER_SMALL_SHADOW(Object object, BOOL toggle);
+		void SET_ENTITY_FLAG_SUPPRESS_SHADOW(Entity entity, bool toggle);
+		void SET_ENTITY_FLAG_RENDER_SMALL_SHADOW(Object object, bool toggle);
 		/**
 		 * Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json
 		 */
@@ -10915,7 +10915,7 @@ namespace base::menu::natives {
 		 * Returns the pickup hash for the given weapon hash
 		 */
 		Hash GET_PICKUP_TYPE_FROM_WEAPON_HASH(Hash weaponHash);
-		BOOL IS_PICKUP_WEAPON_OBJECT_VALID(Object object);
+		bool IS_PICKUP_WEAPON_OBJECT_VALID(Object object);
 		int GET_OBJECT_TINT_INDEX(Object object);
 		/**
 		 * enum ObjectPaintVariants
@@ -10939,11 +10939,11 @@ namespace base::menu::natives {
 		 * };
 		 */
 		void SET_OBJECT_TINT_INDEX(Object object, int textureVariation);
-		BOOL SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, int textureVariation);
+		bool SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, int textureVariation);
 		void SET_PROP_TINT_INDEX(Any p0, Any p1);
-		BOOL SET_PROP_LIGHT_COLOR(Object object, BOOL p1, int r, int g, int b);
-		BOOL IS_PROP_LIGHT_OVERRIDEN(Object object);
-		void SET_OBJECT_IS_VISIBLE_IN_MIRRORS(Object object, BOOL toggle);
+		bool SET_PROP_LIGHT_COLOR(Object object, bool p1, int r, int g, int b);
+		bool IS_PROP_LIGHT_OVERRIDEN(Object object);
+		void SET_OBJECT_IS_VISIBLE_IN_MIRRORS(Object object, bool toggle);
 		void SET_OBJECT_SPEED_BOOST_AMOUNT(Object object, Any p1);
 		void SET_OBJECT_SPEED_BOOST_DURATION(Object object, float duration);
 		/**
@@ -10959,14 +10959,14 @@ namespace base::menu::natives {
 		/**
 		 * Activate the physics to: "xs_prop_arena_{flipper,wall,bollard,turntable,pit}"
 		 */
-		void SET_DRIVE_ARTICULATED_JOINT(Object object, BOOL toggle, int p2);
-		void SET_DRIVE_ARTICULATED_JOINT_WITH_INFLICTOR(Object object, BOOL toggle, int p2, Ped ped);
-		void SET_OBJECT_IS_A_PRESSURE_PLATE(Object object, BOOL toggle);
-		void SET_WEAPON_IMPACTS_APPLY_GREATER_FORCE(Object object, BOOL p1);
-		BOOL GET_IS_ARTICULATED_JOINT_AT_MIN_ANGLE(Object object, Any p1);
-		BOOL GET_IS_ARTICULATED_JOINT_AT_MAX_ANGLE(Any p0, Any p1);
-		void SET_IS_OBJECT_ARTICULATED(Object object, BOOL toggle);
-		void SET_IS_OBJECT_BALL(Object object, BOOL toggle);
+		void SET_DRIVE_ARTICULATED_JOINT(Object object, bool toggle, int p2);
+		void SET_DRIVE_ARTICULATED_JOINT_WITH_INFLICTOR(Object object, bool toggle, int p2, Ped ped);
+		void SET_OBJECT_IS_A_PRESSURE_PLATE(Object object, bool toggle);
+		void SET_WEAPON_IMPACTS_APPLY_GREATER_FORCE(Object object, bool p1);
+		bool GET_IS_ARTICULATED_JOINT_AT_MIN_ANGLE(Object object, Any p1);
+		bool GET_IS_ARTICULATED_JOINT_AT_MAX_ANGLE(Any p0, Any p1);
+		void SET_IS_OBJECT_ARTICULATED(Object object, bool toggle);
+		void SET_IS_OBJECT_BALL(Object object, bool toggle);
 
 	} // namespace OBJECT
 
@@ -10976,28 +10976,28 @@ namespace base::menu::natives {
 		 * control: 0: PLAYER_CONTROL, 1: CAMERA_CONTROL, 2: FRONTEND_CONTROL
 		 * For more info, see https://docs.fivem.net/docs/game-references/controls/
 		 */
-		BOOL IS_CONTROL_ENABLED(int control, int action);
+		bool IS_CONTROL_ENABLED(int control, int action);
 		/**
 		 * Returns whether a control is currently pressed.
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_CONTROL_PRESSED(int control, int action);
+		bool IS_CONTROL_PRESSED(int control, int action);
 		/**
 		 * Returns whether a control is currently _not_ pressed.
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_CONTROL_RELEASED(int control, int action);
+		bool IS_CONTROL_RELEASED(int control, int action);
 		/**
 		 * Returns whether a control was newly pressed since the last check.
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_CONTROL_JUST_PRESSED(int control, int action);
+		bool IS_CONTROL_JUST_PRESSED(int control, int action);
 		/**
 		 * Returns whether a control was newly released since the last check.
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_CONTROL_JUST_RELEASED(int control, int action);
-		BOOL _IS_CONTROL_HELD_DOWN(int control, int action, int duration);
+		bool IS_CONTROL_JUST_RELEASED(int control, int action);
+		bool _IS_CONTROL_HELD_DOWN(int control, int action, int duration);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
@@ -11008,7 +11008,7 @@ namespace base::menu::natives {
 		 * control: see IS_CONTROL_ENABLED
 		 */
 		float GET_CONTROL_NORMAL(int control, int action);
-		void SET_USE_ADJUSTED_MOUSE_COORDS(BOOL toggle);
+		void SET_USE_ADJUSTED_MOUSE_COORDS(bool toggle);
 		/**
 		 * Seems to return values between -1 and 1 for controls like gas and steering.
 		 * 
@@ -11021,23 +11021,23 @@ namespace base::menu::natives {
 		 * 
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL SET_CONTROL_VALUE_NEXT_FRAME(int control, int action, float value);
+		bool SET_CONTROL_VALUE_NEXT_FRAME(int control, int action, float value);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_DISABLED_CONTROL_PRESSED(int control, int action);
+		bool IS_DISABLED_CONTROL_PRESSED(int control, int action);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_DISABLED_CONTROL_RELEASED(int control, int action);
+		bool IS_DISABLED_CONTROL_RELEASED(int control, int action);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_DISABLED_CONTROL_JUST_PRESSED(int control, int action);
+		bool IS_DISABLED_CONTROL_JUST_PRESSED(int control, int action);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_DISABLED_CONTROL_JUST_RELEASED(int control, int action);
+		bool IS_DISABLED_CONTROL_JUST_RELEASED(int control, int action);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
@@ -11057,22 +11057,22 @@ namespace base::menu::natives {
 		/**
 		 * control: unused parameter
 		 */
-		BOOL IS_USING_KEYBOARD_AND_MOUSE(int control);
+		bool IS_USING_KEYBOARD_AND_MOUSE(int control);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		BOOL IS_USING_CURSOR(int control);
-		BOOL SET_CURSOR_POSITION(float x, float y);
+		bool IS_USING_CURSOR(int control);
+		bool SET_CURSOR_POSITION(float x, float y);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 * 
 		 * Hardcoded to return false.
 		 */
-		BOOL IS_USING_REMOTE_PLAY(int control);
+		bool IS_USING_REMOTE_PLAY(int control);
 		/**
 		 * control: unused parameter
 		 */
-		BOOL HAVE_CONTROLS_CHANGED(int control);
+		bool HAVE_CONTROLS_CHANGED(int control);
 		/**
 		 * allowXOSwap appears to always be true.
 		 * 
@@ -11085,11 +11085,11 @@ namespace base::menu::natives {
 		 * 
 		 * control: unused parameter
 		 */
-		const char* GET_CONTROL_INSTRUCTIONAL_BUTTONS_STRING(int control, int action, BOOL allowXOSwap);
+		const char* GET_CONTROL_INSTRUCTIONAL_BUTTONS_STRING(int control, int action, bool allowXOSwap);
 		/**
 		 * control: unused parameter
 		 */
-		const char* GET_CONTROL_GROUP_INSTRUCTIONAL_BUTTONS_STRING(int control, int controlGroup, BOOL allowXOSwap);
+		const char* GET_CONTROL_GROUP_INSTRUCTIONAL_BUTTONS_STRING(int control, int controlGroup, bool allowXOSwap);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
@@ -11123,7 +11123,7 @@ namespace base::menu::natives {
 		 * control: see IS_CONTROL_ENABLED
 		 */
 		void CLEAR_CONTROL_SHAKE_SUPPRESSED_ID(int control);
-		BOOL IS_LOOK_INVERTED();
+		bool IS_LOOK_INVERTED();
 		/**
 		 * Used with IS_LOOK_INVERTED() and negates its affect.
 		 * 
@@ -11142,7 +11142,7 @@ namespace base::menu::natives {
 		 * }
 		 * }
 		 */
-		BOOL IS_MOUSE_LOOK_INVERTED();
+		bool IS_MOUSE_LOOK_INVERTED();
 		/**
 		 * Hard-coded to return 3 if using KBM, otherwise same behavior as GET_LOCAL_PLAYER_GAMEPAD_AIM_STATE.
 		 */
@@ -11151,16 +11151,16 @@ namespace base::menu::natives {
 		 * Returns the local player's targeting mode. See PLAYER::SET_PLAYER_TARGETING_MODE.
 		 */
 		int GET_LOCAL_PLAYER_GAMEPAD_AIM_STATE();
-		BOOL GET_IS_USING_ALTERNATE_HANDBRAKE();
+		bool GET_IS_USING_ALTERNATE_HANDBRAKE();
 		/**
 		 * Returns profile setting 225.
 		 */
-		BOOL GET_IS_USING_ALTERNATE_DRIVEBY();
+		bool GET_IS_USING_ALTERNATE_DRIVEBY();
 		/**
 		 * Returns profile setting 17.
 		 */
-		BOOL GET_ALLOW_MOVEMENT_WHILE_ZOOMED();
-		void SET_PLAYERPAD_SHAKES_WHEN_CONTROLLER_DISABLED(BOOL toggle);
+		bool GET_ALLOW_MOVEMENT_WHILE_ZOOMED();
+		void SET_PLAYERPAD_SHAKES_WHEN_CONTROLLER_DISABLED(bool toggle);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
@@ -11168,11 +11168,11 @@ namespace base::menu::natives {
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		void DISABLE_CONTROL_ACTION(int control, int action, BOOL disableRelatedActions);
+		void DISABLE_CONTROL_ACTION(int control, int action, bool disableRelatedActions);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
-		void ENABLE_CONTROL_ACTION(int control, int action, BOOL enableRelatedActions);
+		void ENABLE_CONTROL_ACTION(int control, int action, bool enableRelatedActions);
 		/**
 		 * control: see IS_CONTROL_ENABLED
 		 */
@@ -11184,11 +11184,11 @@ namespace base::menu::natives {
 		/**
 		 * Used in carsteal3 script with schemeName = "Carsteal4_spycar".
 		 */
-		BOOL INIT_PC_SCRIPTED_CONTROLS(const char* schemeName);
+		bool INIT_PC_SCRIPTED_CONTROLS(const char* schemeName);
 		/**
 		 * Same as INIT_PC_SCRIPTED_CONTROLS
 		 */
-		BOOL SWITCH_PC_SCRIPTED_CONTROLS(const char* schemeName);
+		bool SWITCH_PC_SCRIPTED_CONTROLS(const char* schemeName);
 		void SHUTDOWN_PC_SCRIPTED_CONTROLS();
 		/**
 		 * control: see IS_CONTROL_ENABLED
@@ -11208,13 +11208,13 @@ namespace base::menu::natives {
 		 * `GET_VEHICLE_NODE_IS_SWITCHED_OFF` returns true afterwards.
 		 * If it's true, `GET_VEHICLE_NODE_IS_SWITCHED_OFF` returns false.
 		 */
-		void SET_ROADS_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL nodeEnabled, BOOL unknown2);
+		void SET_ROADS_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool nodeEnabled, bool unknown2);
 		/**
 		 * unknown3 is related to `SEND_SCRIPT_WORLD_STATE_EVENT > CNetworkRoadNodeWorldStateData` in networked environments.
 		 * See IS_POINT_IN_ANGLED_AREA for the definition of an angled area.
 		 */
-		void SET_ROADS_IN_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width, BOOL unknown1, BOOL unknown2, BOOL unknown3);
-		void SET_PED_PATHS_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL p6, Any p7);
+		void SET_ROADS_IN_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width, bool unknown1, bool unknown2, bool unknown3);
+		void SET_PED_PATHS_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool p6, Any p7);
 		/**
 		 * Flags are:
 		 * 1 = 1 = B02_IsFootpath
@@ -11230,15 +11230,15 @@ namespace base::menu::natives {
 		 * 
 		 * 16 works for me, 0 crashed the script.
 		 */
-		BOOL GET_SAFE_COORD_FOR_PED(float x, float y, float z, BOOL onGround, Vector3* outPosition, int flags);
+		bool GET_SAFE_COORD_FOR_PED(float x, float y, float z, bool onGround, Vector3* outPosition, int flags);
 		/**
 		 * https://gtaforums.com/topic/843561-pathfind-node-types
 		 */
-		BOOL GET_CLOSEST_VEHICLE_NODE(float x, float y, float z, Vector3* outPosition, int nodeFlags, float p5, float p6);
+		bool GET_CLOSEST_VEHICLE_NODE(float x, float y, float z, Vector3* outPosition, int nodeFlags, float p5, float p6);
 		/**
 		 * Get the closest vehicle node to a given position.
 		 */
-		BOOL GET_CLOSEST_MAJOR_VEHICLE_NODE(float x, float y, float z, Vector3* outPosition, float unknown1, float unknown2);
+		bool GET_CLOSEST_MAJOR_VEHICLE_NODE(float x, float y, float z, Vector3* outPosition, float unknown1, float unknown2);
 		/**
 		 * p5, p6 and p7 seems to be about the same as p4, p5 and p6 for GET_CLOSEST_VEHICLE_NODE. p6 and/or p7 has something to do with finding a node on the same path/road and same direction(at least for this native, something to do with the heading maybe). Edit this when you find out more.
 		 * 
@@ -11260,8 +11260,8 @@ namespace base::menu::natives {
 		 * ------------------------------------------------------------------
 		 * C# Example (ins1de) : https://pastebin.com/fxtMWAHD
 		 */
-		BOOL GET_CLOSEST_VEHICLE_NODE_WITH_HEADING(float x, float y, float z, Vector3* outPosition, float* outHeading, int nodeType, float p6, float p7);
-		BOOL GET_NTH_CLOSEST_VEHICLE_NODE(float x, float y, float z, int nthClosest, Vector3* outPosition, int nodeFlags, float unknown1, float unknown2);
+		bool GET_CLOSEST_VEHICLE_NODE_WITH_HEADING(float x, float y, float z, Vector3* outPosition, float* outHeading, int nodeType, float p6, float p7);
+		bool GET_NTH_CLOSEST_VEHICLE_NODE(float x, float y, float z, int nthClosest, Vector3* outPosition, int nodeFlags, float unknown1, float unknown2);
 		/**
 		 * Returns the id.
 		 */
@@ -11269,7 +11269,7 @@ namespace base::menu::natives {
 		/**
 		 * Get the nth closest vehicle node and its heading.
 		 */
-		BOOL GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING(float x, float y, float z, int nthClosest, Vector3* outPosition, float* outHeading, int* outNumLanes, int nodeFlags, float unknown3, float unknown4);
+		bool GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING(float x, float y, float z, int nthClosest, Vector3* outPosition, float* outHeading, int* outNumLanes, int nodeFlags, float unknown3, float unknown4);
 		int GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING(float x, float y, float z, int nthClosest, Vector3* outPosition, float* outHeading, int nodeFlags, float p7, float p8);
 		/**
 		 * See gtaforums.com/topic/843561-pathfind-node-types for node type info. 0 = paved road only, 1 = any road, 3 = water
@@ -11277,17 +11277,17 @@ namespace base::menu::natives {
 		 * p10 always equals 3.0
 		 * p11 always equals 0
 		 */
-		BOOL GET_NTH_CLOSEST_VEHICLE_NODE_FAVOUR_DIRECTION(float x, float y, float z, float desiredX, float desiredY, float desiredZ, int nthClosest, Vector3* outPosition, float* outHeading, int nodeFlags, float p10, float p11);
+		bool GET_NTH_CLOSEST_VEHICLE_NODE_FAVOUR_DIRECTION(float x, float y, float z, float desiredX, float desiredY, float desiredZ, int nthClosest, Vector3* outPosition, float* outHeading, int nodeFlags, float p10, float p11);
 		/**
 		 * Gets the density and flags of the closest node to the specified position.
 		 * Density is a value between 0 and 15, indicating how busy the road is.
 		 * Flags is a bit field.
 		 */
-		BOOL GET_VEHICLE_NODE_PROPERTIES(float x, float y, float z, int* density, int* flags);
+		bool GET_VEHICLE_NODE_PROPERTIES(float x, float y, float z, int* density, int* flags);
 		/**
 		 * Returns true if the id is non zero.
 		 */
-		BOOL IS_VEHICLE_NODE_ID_VALID(int vehicleNodeId);
+		bool IS_VEHICLE_NODE_ID_VALID(int vehicleNodeId);
 		/**
 		 * Calling this with an invalid node id, will crash the game.
 		 * Note that IS_VEHICLE_NODE_ID_VALID simply checks if nodeId is not zero. It does not actually ensure that the id is valid.
@@ -11299,27 +11299,27 @@ namespace base::menu::natives {
 		 * Example:
 		 * Nodes in Fort Zancudo and LSIA are false
 		 */
-		BOOL GET_VEHICLE_NODE_IS_GPS_ALLOWED(int nodeID);
+		bool GET_VEHICLE_NODE_IS_GPS_ALLOWED(int nodeID);
 		/**
 		 * Returns true when the node is Offroad. Alleys, some dirt roads, and carparks return true.
 		 * Normal roads where plenty of Peds spawn will return false
 		 */
-		BOOL GET_VEHICLE_NODE_IS_SWITCHED_OFF(int nodeID);
+		bool GET_VEHICLE_NODE_IS_SWITCHED_OFF(int nodeID);
 		/**
 		 * p1 seems to be always 1.0f in the scripts
 		 */
-		BOOL GET_CLOSEST_ROAD(float x, float y, float z, float p3, int p4, Vector3* p5, Vector3* p6, Any* p7, Any* p8, float* p9, BOOL p10);
-		BOOL LOAD_ALL_PATH_NODES(BOOL set);
-		void SET_ALLOW_STREAM_PROLOGUE_NODES(BOOL toggle);
+		bool GET_CLOSEST_ROAD(float x, float y, float z, float p3, int p4, Vector3* p5, Vector3* p6, Any* p7, Any* p8, float* p9, bool p10);
+		bool LOAD_ALL_PATH_NODES(bool set);
+		void SET_ALLOW_STREAM_PROLOGUE_NODES(bool toggle);
 		/**
 		 * Activates Cayo Perico path nodes if passed `1`. GPS navigation will start working, maybe more stuff will change, not sure. It seems if you try to unload (pass `0`) when close to the island, your game might crash.
 		 */
 		void SET_ALLOW_STREAM_HEIST_ISLAND_NODES(int type);
-		BOOL ARE_NODES_LOADED_FOR_AREA(float x1, float y1, float x2, float y2);
+		bool ARE_NODES_LOADED_FOR_AREA(float x1, float y1, float x2, float y2);
 		/**
 		 * Used internally for long range tasks
 		 */
-		BOOL REQUEST_PATH_NODES_IN_AREA_THIS_FRAME(float x1, float y1, float x2, float y2);
+		bool REQUEST_PATH_NODES_IN_AREA_THIS_FRAME(float x1, float y1, float x2, float y2);
 		void SET_ROADS_BACK_TO_ORIGINAL(float p0, float p1, float p2, float p3, float p4, float p5, Any p6);
 		/**
 		 * See IS_POINT_IN_ANGLED_AREA for the definition of an angled area.
@@ -11332,7 +11332,7 @@ namespace base::menu::natives {
 		 * p6 is always 0
 		 */
 		void SET_PED_PATHS_BACK_TO_ORIGINAL(float x1, float y1, float z1, float x2, float y2, float z2, Any p6);
-		BOOL GET_RANDOM_VEHICLE_NODE(float x, float y, float z, float radius, BOOL p4, BOOL p5, BOOL p6, Vector3* outPosition, int* nodeId);
+		bool GET_RANDOM_VEHICLE_NODE(float x, float y, float z, float radius, bool p4, bool p5, bool p6, Vector3* outPosition, int* nodeId);
 		void GET_SPAWN_COORDS_FOR_VEHICLE_NODE(int nodeAddress, float towardsCoorsX, float towardsCoorsY, float towardsCoorsZ, Vector3* centrePoint, float* heading);
 		/**
 		 * Determines the name of the street which is the closest to the given coordinates.
@@ -11362,26 +11362,26 @@ namespace base::menu::natives {
 		 * 
 		 * return value set to 0 always
 		 */
-		int GENERATE_DIRECTIONS_TO_COORD(float x, float y, float z, BOOL p3, int* direction, float* p5, float* distToNxJunction);
-		void SET_IGNORE_NO_GPS_FLAG(BOOL toggle);
+		int GENERATE_DIRECTIONS_TO_COORD(float x, float y, float z, bool p3, int* direction, float* p5, float* distToNxJunction);
+		void SET_IGNORE_NO_GPS_FLAG(bool toggle);
 		/**
 		 * See: SET_BLIP_ROUTE
 		 */
-		void SET_IGNORE_NO_GPS_FLAG_UNTIL_FIRST_NORMAL_NODE(BOOL toggle);
+		void SET_IGNORE_NO_GPS_FLAG_UNTIL_FIRST_NORMAL_NODE(bool toggle);
 		void SET_GPS_DISABLED_ZONE(float x1, float y1, float z1, float x2, float y2, float z3);
 		int GET_GPS_BLIP_ROUTE_LENGTH();
 		/**
 		 * p3 can be 0, 1 or 2.
 		 */
-		BOOL GET_POS_ALONG_GPS_TYPE_ROUTE(Vector3* result, BOOL p1, float p2, int p3);
-		BOOL GET_GPS_BLIP_ROUTE_FOUND();
-		BOOL GET_ROAD_BOUNDARY_USING_HEADING(float x, float y, float z, float heading, Vector3* outPosition);
-		BOOL GET_POSITION_BY_SIDE_OF_ROAD(float x, float y, float z, int p3, Vector3* outPosition);
+		bool GET_POS_ALONG_GPS_TYPE_ROUTE(Vector3* result, bool p1, float p2, int p3);
+		bool GET_GPS_BLIP_ROUTE_FOUND();
+		bool GET_ROAD_BOUNDARY_USING_HEADING(float x, float y, float z, float heading, Vector3* outPosition);
+		bool GET_POSITION_BY_SIDE_OF_ROAD(float x, float y, float z, int p3, Vector3* outPosition);
 		/**
 		 * Gets a value indicating whether the specified position is on a road.
 		 * The vehicle parameter is not implemented (ignored).
 		 */
-		BOOL IS_POINT_ON_ROAD(float x, float y, float z, Vehicle vehicle);
+		bool IS_POINT_ON_ROAD(float x, float y, float z, Vehicle vehicle);
 		/**
 		 * Gets the next zone that has been disabled using SET_GPS_DISABLED_ZONE_AT_INDEX.
 		 */
@@ -11401,24 +11401,24 @@ namespace base::menu::natives {
 		void CLEAR_GPS_DISABLED_ZONE_AT_INDEX(int index);
 		void ADD_NAVMESH_REQUIRED_REGION(float x, float y, float radius);
 		void REMOVE_NAVMESH_REQUIRED_REGIONS();
-		BOOL IS_NAVMESH_REQUIRED_REGION_IN_USE();
+		bool IS_NAVMESH_REQUIRED_REGION_IN_USE();
 		/**
 		 * Set toggle true to disable navmesh.
 		 * Set toggle false to enable navmesh.
 		 */
-		void DISABLE_NAVMESH_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL toggle);
-		BOOL ARE_ALL_NAVMESH_REGIONS_LOADED();
+		void DISABLE_NAVMESH_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool toggle);
+		bool ARE_ALL_NAVMESH_REGIONS_LOADED();
 		/**
 		 * Returns whether navmesh for the region is loaded. The region is a rectangular prism defined by it's top left deepest corner to it's bottom right shallowest corner.
 		 * 
 		 * If you can re-word this so it makes more sense, please do. I'm horrible with words sometimes...
 		 */
-		BOOL IS_NAVMESH_LOADED_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
+		bool IS_NAVMESH_LOADED_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
 		int GET_NUM_NAVMESHES_EXISTING_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2);
-		int ADD_NAVMESH_BLOCKING_OBJECT(float p0, float p1, float p2, float p3, float p4, float p5, float p6, BOOL p7, Any p8);
+		int ADD_NAVMESH_BLOCKING_OBJECT(float p0, float p1, float p2, float p3, float p4, float p5, float p6, bool p7, Any p8);
 		void UPDATE_NAVMESH_BLOCKING_OBJECT(Any p0, float p1, float p2, float p3, float p4, float p5, float p6, float p7, Any p8);
 		void REMOVE_NAVMESH_BLOCKING_OBJECT(Any p0);
-		BOOL DOES_NAVMESH_BLOCKING_OBJECT_EXIST(Any p0);
+		bool DOES_NAVMESH_BLOCKING_OBJECT_EXIST(Any p0);
 		/**
 		 * Returns CGameWorldHeightMap's maximum Z value at specified point (grid node).
 		 */
@@ -11452,50 +11452,50 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of peds by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/peds.json
 		 */
-		Ped CREATE_PED(int pedType, Hash modelHash, float x, float y, float z, float heading, BOOL isNetwork, BOOL bScriptHostPed);
+		Ped CREATE_PED(int pedType, Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostPed);
 		/**
 		 * Deletes the specified ped, then sets the handle pointed to by the pointer to NULL.
 		 */
 		void DELETE_PED(Ped* ped);
-		Ped CLONE_PED(Ped ped, BOOL isNetwork, BOOL bScriptHostPed, BOOL copyHeadBlendFlag);
-		Ped CLONE_PED_ALT(Ped ped, BOOL isNetwork, BOOL bScriptHostPed, BOOL copyHeadBlendFlag, BOOL p4);
+		Ped CLONE_PED(Ped ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag);
+		Ped CLONE_PED_ALT(Ped ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag, bool p4);
 		/**
 		 * Copies ped's components and props to targetPed.
 		 */
 		void CLONE_PED_TO_TARGET(Ped ped, Ped targetPed);
-		void CLONE_PED_TO_TARGET_ALT(Ped ped, Ped targetPed, BOOL p2);
+		void CLONE_PED_TO_TARGET_ALT(Ped ped, Ped targetPed, bool p2);
 		/**
 		 * Gets a value indicating whether the specified ped is in the specified vehicle.
 		 * 
 		 * If 'atGetIn' is false, the function will not return true until the ped is sitting in the vehicle and is about to close the door. If it's true, the function returns true the moment the ped starts to get onto the seat (after opening the door). Eg. if false, and the ped is getting into a submersible, the function will not return true until the ped has descended down into the submersible and gotten into the seat, while if it's true, it'll return true the moment the hatch has been opened and the ped is about to descend into the submersible.
 		 */
-		BOOL IS_PED_IN_VEHICLE(Ped ped, Vehicle vehicle, BOOL atGetIn);
-		BOOL IS_PED_IN_MODEL(Ped ped, Hash modelHash);
+		bool IS_PED_IN_VEHICLE(Ped ped, Vehicle vehicle, bool atGetIn);
+		bool IS_PED_IN_MODEL(Ped ped, Hash modelHash);
 		/**
 		 * Gets a value indicating whether the specified ped is in any vehicle.
 		 * 
 		 * If 'atGetIn' is false, the function will not return true until the ped is sitting in the vehicle and is about to close the door. If it's true, the function returns true the moment the ped starts to get onto the seat (after opening the door). Eg. if false, and the ped is getting into a submersible, the function will not return true until the ped has descended down into the submersible and gotten into the seat, while if it's true, it'll return true the moment the hatch has been opened and the ped is about to descend into the submersible.
 		 */
-		BOOL IS_PED_IN_ANY_VEHICLE(Ped ped, BOOL atGetIn);
+		bool IS_PED_IN_ANY_VEHICLE(Ped ped, bool atGetIn);
 		/**
 		 * xyz - relative to the world origin.
 		 */
-		BOOL IS_COP_PED_IN_AREA_3D(float x1, float y1, float z1, float x2, float y2, float z2);
+		bool IS_COP_PED_IN_AREA_3D(float x1, float y1, float z1, float x2, float y2, float z2);
 		/**
 		 * Gets a value indicating whether this ped's health is below its injured threshold.
 		 * 
 		 * The default threshold is 100.
 		 */
-		BOOL IS_PED_INJURED(Ped ped);
+		bool IS_PED_INJURED(Ped ped);
 		/**
 		 * Returns whether the specified ped is hurt.
 		 */
-		BOOL IS_PED_HURT(Ped ped);
+		bool IS_PED_HURT(Ped ped);
 		/**
 		 * Gets a value indicating whether this ped's health is below its fatally injured threshold. The default threshold is 100.
 		 * If the handle is invalid, the function returns true.
 		 */
-		BOOL IS_PED_FATALLY_INJURED(Ped ped);
+		bool IS_PED_FATALLY_INJURED(Ped ped);
 		/**
 		 * Seems to consistently return true if the ped is dead.
 		 * 
@@ -11507,29 +11507,29 @@ namespace base::menu::natives {
 		 * 
 		 * lol
 		 */
-		BOOL IS_PED_DEAD_OR_DYING(Ped ped, BOOL p1);
-		BOOL IS_CONVERSATION_PED_DEAD(Ped ped);
-		BOOL IS_PED_AIMING_FROM_COVER(Ped ped);
+		bool IS_PED_DEAD_OR_DYING(Ped ped, bool p1);
+		bool IS_CONVERSATION_PED_DEAD(Ped ped);
+		bool IS_PED_AIMING_FROM_COVER(Ped ped);
 		/**
 		 * Returns whether the specified ped is reloading.
 		 */
-		BOOL IS_PED_RELOADING(Ped ped);
+		bool IS_PED_RELOADING(Ped ped);
 		/**
 		 * Returns true if the given ped has a valid pointer to CPlayerInfo in its CPed class. That's all.
 		 */
-		BOOL IS_PED_A_PLAYER(Ped ped);
+		bool IS_PED_A_PLAYER(Ped ped);
 		/**
 		 * pedType: see CREATE_PED
 		 * 
 		 * Full list of peds by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/peds.json
 		 */
-		Ped CREATE_PED_INSIDE_VEHICLE(Vehicle vehicle, int pedType, Hash modelHash, int seat, BOOL isNetwork, BOOL bScriptHostPed);
+		Ped CREATE_PED_INSIDE_VEHICLE(Vehicle vehicle, int pedType, Hash modelHash, int seat, bool isNetwork, bool bScriptHostPed);
 		void SET_PED_DESIRED_HEADING(Ped ped, float heading);
 		void FORCE_ALL_HEADING_VALUES_TO_ALIGN(Ped ped);
 		/**
 		 * angle is ped's view cone
 		 */
-		BOOL IS_PED_FACING_PED(Ped ped, Ped otherPed, float angle);
+		bool IS_PED_FACING_PED(Ped ped, Ped otherPed, float angle);
 		/**
 		 * Notes: The function only returns true while the ped is:
 		 * A.) Swinging a random melee attack (including pistol-whipping)
@@ -11540,24 +11540,24 @@ namespace base::menu::natives {
 		 * 
 		 * You don't have to be holding the melee-targetting button to be in this stance; you stay in it by default for a few seconds after swinging at someone. If you do a sprinting punch, it returns true for the duration of the punch animation and then returns false again, even if you've punched and made-angry many peds
 		 */
-		BOOL IS_PED_IN_MELEE_COMBAT(Ped ped);
+		bool IS_PED_IN_MELEE_COMBAT(Ped ped);
 		/**
 		 * Returns true if the ped doesn't do any movement. If the ped is being pushed forwards by using APPLY_FORCE_TO_ENTITY for example, the function returns false.
 		 */
-		BOOL IS_PED_STOPPED(Ped ped);
-		BOOL IS_PED_SHOOTING_IN_AREA(Ped ped, float x1, float y1, float z1, float x2, float y2, float z2, BOOL p7, BOOL p8);
-		BOOL IS_ANY_PED_SHOOTING_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL p6, BOOL p7);
+		bool IS_PED_STOPPED(Ped ped);
+		bool IS_PED_SHOOTING_IN_AREA(Ped ped, float x1, float y1, float z1, float x2, float y2, float z2, bool p7, bool p8);
+		bool IS_ANY_PED_SHOOTING_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool p6, bool p7);
 		/**
 		 * Returns whether the specified ped is shooting.
 		 */
-		BOOL IS_PED_SHOOTING(Ped ped);
+		bool IS_PED_SHOOTING(Ped ped);
 		/**
 		 * accuracy = 0-100, 100 being perfectly accurate
 		 */
 		void SET_PED_ACCURACY(Ped ped, int accuracy);
 		int GET_PED_ACCURACY(Ped ped);
 		void SET_AMBIENT_LAW_PED_ACCURACY_MODIFIER(float multiplier);
-		BOOL IS_PED_MODEL(Ped ped, Hash modelHash);
+		bool IS_PED_MODEL(Ped ped, Hash modelHash);
 		/**
 		 * Forces the ped to fall back and kills it.
 		 * 
@@ -11591,8 +11591,8 @@ namespace base::menu::natives {
 		 * RightRear = 2
 		 */
 		void SET_PED_INTO_VEHICLE(Ped ped, Vehicle vehicle, int seatIndex);
-		void SET_PED_ALLOW_VEHICLES_OVERRIDE(Ped ped, BOOL toggle);
-		BOOL CAN_CREATE_RANDOM_PED(BOOL p0);
+		void SET_PED_ALLOW_VEHICLES_OVERRIDE(Ped ped, bool toggle);
+		bool CAN_CREATE_RANDOM_PED(bool p0);
 		/**
 		 * vb.net
 		 * Dim ped_handle As Integer
@@ -11605,29 +11605,29 @@ namespace base::menu::natives {
 		 * Ped will not act until SET_PED_AS_NO_LONGER_NEEDED is called.
 		 */
 		Ped CREATE_RANDOM_PED(float posX, float posY, float posZ);
-		Ped CREATE_RANDOM_PED_AS_DRIVER(Vehicle vehicle, BOOL returnHandle);
-		BOOL CAN_CREATE_RANDOM_DRIVER();
-		BOOL CAN_CREATE_RANDOM_BIKE_RIDER();
+		Ped CREATE_RANDOM_PED_AS_DRIVER(Vehicle vehicle, bool returnHandle);
+		bool CAN_CREATE_RANDOM_DRIVER();
+		bool CAN_CREATE_RANDOM_BIKE_RIDER();
 		void SET_PED_MOVE_ANIMS_BLEND_OUT(Ped ped);
-		void SET_PED_CAN_BE_DRAGGED_OUT(Ped ped, BOOL toggle);
+		void SET_PED_CAN_BE_DRAGGED_OUT(Ped ped, bool toggle);
 		/**
 		 * ntoggle was always false except in one instance (b678).
 		 * 
 		 * The one time this is set to true seems to do with when you fail the mission.
 		 */
-		void SET_PED_ALLOW_HURT_COMBAT_FOR_ALL_MISSION_PEDS(BOOL toggle);
+		void SET_PED_ALLOW_HURT_COMBAT_FOR_ALL_MISSION_PEDS(bool toggle);
 		/**
 		 * Returns true/false if the ped is/isn't male.
 		 */
-		BOOL IS_PED_MALE(Ped ped);
+		bool IS_PED_MALE(Ped ped);
 		/**
 		 * Returns true/false if the ped is/isn't humanoid.
 		 */
-		BOOL IS_PED_HUMAN(Ped ped);
+		bool IS_PED_HUMAN(Ped ped);
 		/**
 		 * Gets the vehicle the specified Ped is in. Returns 0 if the ped is/was not in a vehicle.
 		 */
-		Vehicle GET_VEHICLE_PED_IS_IN(Ped ped, BOOL includeEntering);
+		Vehicle GET_VEHICLE_PED_IS_IN(Ped ped, bool includeEntering);
 		/**
 		 * Resets the value for the last vehicle driven by the Ped.
 		 */
@@ -11645,7 +11645,7 @@ namespace base::menu::natives {
 		/**
 		 * Same function call as PED::GET_MOUNT, aka just returns 0
 		 */
-		BOOL IS_PED_ON_MOUNT(Ped ped);
+		bool IS_PED_ON_MOUNT(Ped ped);
 		/**
 		 * 
 		 * Function just returns 0
@@ -11666,8 +11666,8 @@ namespace base::menu::natives {
 		 * Return 0 when ped is not on a vehicle.
 		 * 
 		 */
-		BOOL IS_PED_ON_VEHICLE(Ped ped);
-		BOOL IS_PED_ON_SPECIFIC_VEHICLE(Ped ped, Vehicle vehicle);
+		bool IS_PED_ON_VEHICLE(Ped ped);
+		bool IS_PED_ON_SPECIFIC_VEHICLE(Ped ped, Vehicle vehicle);
 		/**
 		 * Maximum possible amount of money on MP is 2000. ~JX
 		 * 
@@ -11681,67 +11681,67 @@ namespace base::menu::natives {
 		 * Related to Peds dropping pickup_health_snack; p0 is a value between [0.0, 1.0] that corresponds to drop rate
 		 */
 		void SET_HEALTH_SNACKS_CARRIED_BY_ALL_NEW_PEDS(float p0, Any p1);
-		void SET_AMBIENT_PEDS_DROP_MONEY(BOOL p0);
+		void SET_AMBIENT_PEDS_DROP_MONEY(bool p0);
 		void _SET_BLOCK_AMBIENT_PEDS_FROM_DROPPING_WEAPONS_THIS_FRAME();
-		void SET_BLOCKING_OF_NON_TEMPORARY_EVENTS_FOR_AMBIENT_PEDS_THIS_FRAME(BOOL p0);
+		void SET_BLOCKING_OF_NON_TEMPORARY_EVENTS_FOR_AMBIENT_PEDS_THIS_FRAME(bool p0);
 		/**
 		 * Ped no longer takes critical damage modifiers if set to FALSE.
 		 * Example: Headshotting a player no longer one shots them. Instead they will take the same damage as a torso shot.
 		 */
-		void SET_PED_SUFFERS_CRITICAL_HITS(Ped ped, BOOL toggle);
-		void SET_PED_UPPER_BODY_DAMAGE_ONLY(Ped ped, BOOL toggle);
+		void SET_PED_SUFFERS_CRITICAL_HITS(Ped ped, bool toggle);
+		void SET_PED_UPPER_BODY_DAMAGE_ONLY(Ped ped, bool toggle);
 		/**
 		 * Detect if ped is sitting in the specified vehicle
 		 * [True/False]
 		 */
-		BOOL IS_PED_SITTING_IN_VEHICLE(Ped ped, Vehicle vehicle);
+		bool IS_PED_SITTING_IN_VEHICLE(Ped ped, Vehicle vehicle);
 		/**
 		 * Detect if ped is in any vehicle
 		 * [True/False]
 		 */
-		BOOL IS_PED_SITTING_IN_ANY_VEHICLE(Ped ped);
-		BOOL IS_PED_ON_FOOT(Ped ped);
-		BOOL IS_PED_ON_ANY_BIKE(Ped ped);
-		BOOL IS_PED_PLANTING_BOMB(Ped ped);
+		bool IS_PED_SITTING_IN_ANY_VEHICLE(Ped ped);
+		bool IS_PED_ON_FOOT(Ped ped);
+		bool IS_PED_ON_ANY_BIKE(Ped ped);
+		bool IS_PED_PLANTING_BOMB(Ped ped);
 		Vector3 GET_DEAD_PED_PICKUP_COORDS(Ped ped, float p1, float p2);
-		BOOL IS_PED_IN_ANY_BOAT(Ped ped);
-		BOOL IS_PED_IN_ANY_SUB(Ped ped);
-		BOOL IS_PED_IN_ANY_HELI(Ped ped);
-		BOOL IS_PED_IN_ANY_PLANE(Ped ped);
-		BOOL IS_PED_IN_FLYING_VEHICLE(Ped ped);
-		void SET_PED_DIES_IN_WATER(Ped ped, BOOL toggle);
-		BOOL GET_PED_DIES_IN_WATER(Ped ped);
-		void SET_PED_DIES_IN_SINKING_VEHICLE(Ped ped, BOOL toggle);
+		bool IS_PED_IN_ANY_BOAT(Ped ped);
+		bool IS_PED_IN_ANY_SUB(Ped ped);
+		bool IS_PED_IN_ANY_HELI(Ped ped);
+		bool IS_PED_IN_ANY_PLANE(Ped ped);
+		bool IS_PED_IN_FLYING_VEHICLE(Ped ped);
+		void SET_PED_DIES_IN_WATER(Ped ped, bool toggle);
+		bool GET_PED_DIES_IN_WATER(Ped ped);
+		void SET_PED_DIES_IN_SINKING_VEHICLE(Ped ped, bool toggle);
 		int GET_PED_ARMOUR(Ped ped);
-		void SET_PED_STAY_IN_VEHICLE_WHEN_JACKED(Ped ped, BOOL toggle);
-		void SET_PED_CAN_BE_SHOT_IN_VEHICLE(Ped ped, BOOL toggle);
-		BOOL GET_PED_LAST_DAMAGE_BONE(Ped ped, int* outBone);
+		void SET_PED_STAY_IN_VEHICLE_WHEN_JACKED(Ped ped, bool toggle);
+		void SET_PED_CAN_BE_SHOT_IN_VEHICLE(Ped ped, bool toggle);
+		bool GET_PED_LAST_DAMAGE_BONE(Ped ped, int* outBone);
 		void CLEAR_PED_LAST_DAMAGE_BONE(Ped ped);
 		void SET_AI_WEAPON_DAMAGE_MODIFIER(float value);
 		void RESET_AI_WEAPON_DAMAGE_MODIFIER();
 		void SET_AI_MELEE_WEAPON_DAMAGE_MODIFIER(float modifier);
 		void RESET_AI_MELEE_WEAPON_DAMAGE_MODIFIER();
-		void SET_TREAT_AS_AMBIENT_PED_FOR_DRIVER_LOCKON(Ped ped, BOOL p1);
-		void SET_PED_CAN_BE_TARGETTED(Ped ped, BOOL toggle);
-		void SET_PED_CAN_BE_TARGETTED_BY_TEAM(Ped ped, int team, BOOL toggle);
-		void SET_PED_CAN_BE_TARGETTED_BY_PLAYER(Ped ped, Player player, BOOL toggle);
-		void SET_ALLOW_LOCKON_TO_PED_IF_FRIENDLY(Ped ped, BOOL toggle);
-		void SET_USE_CAMERA_HEADING_FOR_DESIRED_DIRECTION_LOCK_ON_TEST(Ped ped, BOOL toggle);
-		BOOL IS_PED_IN_ANY_POLICE_VEHICLE(Ped ped);
+		void SET_TREAT_AS_AMBIENT_PED_FOR_DRIVER_LOCKON(Ped ped, bool p1);
+		void SET_PED_CAN_BE_TARGETTED(Ped ped, bool toggle);
+		void SET_PED_CAN_BE_TARGETTED_BY_TEAM(Ped ped, int team, bool toggle);
+		void SET_PED_CAN_BE_TARGETTED_BY_PLAYER(Ped ped, Player player, bool toggle);
+		void SET_ALLOW_LOCKON_TO_PED_IF_FRIENDLY(Ped ped, bool toggle);
+		void SET_USE_CAMERA_HEADING_FOR_DESIRED_DIRECTION_LOCK_ON_TEST(Ped ped, bool toggle);
+		bool IS_PED_IN_ANY_POLICE_VEHICLE(Ped ped);
 		void FORCE_PED_TO_OPEN_PARACHUTE(Ped ped);
-		BOOL IS_PED_IN_PARACHUTE_FREE_FALL(Ped ped);
-		BOOL IS_PED_FALLING(Ped ped);
-		BOOL IS_PED_JUMPING(Ped ped);
-		BOOL IS_PED_LANDING(Any p0);
-		BOOL IS_PED_DOING_A_BEAST_JUMP(Any p0);
-		BOOL IS_PED_CLIMBING(Ped ped);
-		BOOL IS_PED_VAULTING(Ped ped);
-		BOOL IS_PED_DIVING(Ped ped);
-		BOOL IS_PED_JUMPING_OUT_OF_VEHICLE(Ped ped);
+		bool IS_PED_IN_PARACHUTE_FREE_FALL(Ped ped);
+		bool IS_PED_FALLING(Ped ped);
+		bool IS_PED_JUMPING(Ped ped);
+		bool IS_PED_LANDING(Any p0);
+		bool IS_PED_DOING_A_BEAST_JUMP(Any p0);
+		bool IS_PED_CLIMBING(Ped ped);
+		bool IS_PED_VAULTING(Ped ped);
+		bool IS_PED_DIVING(Ped ped);
+		bool IS_PED_JUMPING_OUT_OF_VEHICLE(Ped ped);
 		/**
 		 * Returns true if the ped is currently opening a door (CTaskOpenDoor).
 		 */
-		BOOL IS_PED_OPENING_DOOR(Ped ped);
+		bool IS_PED_OPENING_DOOR(Ped ped);
 		/**
 		 * Returns:
 		 * 
@@ -11765,15 +11765,15 @@ namespace base::menu::natives {
 		void SET_PED_PARACHUTE_TINT_INDEX(Ped ped, int tintIndex);
 		void GET_PED_PARACHUTE_TINT_INDEX(Ped ped, int* outTintIndex);
 		void SET_PED_RESERVE_PARACHUTE_TINT_INDEX(Ped ped, Any p1);
-		Object CREATE_PARACHUTE_BAG_OBJECT(Ped ped, BOOL p1, BOOL p2);
+		Object CREATE_PARACHUTE_BAG_OBJECT(Ped ped, bool p1, bool p2);
 		/**
 		 * This is the SET_CHAR_DUCKING from GTA IV, that makes Peds duck. This function does nothing in GTA V. It cannot set the ped as ducking in vehicles, and IS_PED_DUCKING will always return false.
 		 */
-		void SET_PED_DUCKING(Ped ped, BOOL toggle);
-		BOOL IS_PED_DUCKING(Ped ped);
-		BOOL IS_PED_IN_ANY_TAXI(Ped ped);
+		void SET_PED_DUCKING(Ped ped, bool toggle);
+		bool IS_PED_DUCKING(Ped ped);
+		bool IS_PED_IN_ANY_TAXI(Ped ped);
 		void SET_PED_ID_RANGE(Ped ped, float value);
-		void SET_PED_HIGHLY_PERCEPTIVE(Ped ped, BOOL toggle);
+		void SET_PED_HIGHLY_PERCEPTIVE(Ped ped, bool toggle);
 		void SET_COP_PERCEPTION_OVERRIDES(float seeingRange, float seeingRangePeripheral, float hearingRange, float visualFieldMinAzimuthAngle, float visualFieldMaxAzimuthAngle, float fieldOfGazeMaxAngle, float p6);
 		void SET_PED_INJURED_ON_GROUND_BEHAVIOUR(Ped ped, float p1);
 		void DISABLE_PED_INJURED_ON_GROUND_BEHAVIOUR(Ped ped);
@@ -11796,11 +11796,11 @@ namespace base::menu::natives {
 		/**
 		 * p1 is usually 0 in the scripts. action is either 0 or a pointer to "DEFAULT_ACTION".
 		 */
-		void SET_PED_STEALTH_MOVEMENT(Ped ped, BOOL p1, const char* action);
+		void SET_PED_STEALTH_MOVEMENT(Ped ped, bool p1, const char* action);
 		/**
 		 * Returns whether the entity is in stealth mode
 		 */
-		BOOL GET_PED_STEALTH_MOVEMENT(Ped ped);
+		bool GET_PED_STEALTH_MOVEMENT(Ped ped);
 		/**
 		 * Creates a new ped group.
 		 * Groups can contain up to 8 peds.
@@ -11817,11 +11817,11 @@ namespace base::menu::natives {
 		 * 
 		 * Only works in singleplayer
 		 */
-		void SET_PED_CAN_TELEPORT_TO_GROUP_LEADER(Ped pedHandle, int groupHandle, BOOL toggle);
+		void SET_PED_CAN_TELEPORT_TO_GROUP_LEADER(Ped pedHandle, int groupHandle, bool toggle);
 		void REMOVE_GROUP(int groupId);
 		void REMOVE_PED_FROM_GROUP(Ped ped);
-		BOOL IS_PED_GROUP_MEMBER(Ped ped, int groupId);
-		BOOL IS_PED_HANGING_ON_TO_VEHICLE(Ped ped);
+		bool IS_PED_GROUP_MEMBER(Ped ped, int groupId);
+		bool IS_PED_HANGING_ON_TO_VEHICLE(Ped ped);
 		/**
 		 * Sets the range at which members will automatically leave the group.
 		 */
@@ -11830,37 +11830,37 @@ namespace base::menu::natives {
 		 * Ped will stay on the ground after being stunned for at lest ms time. (in milliseconds)
 		 */
 		void SET_PED_MIN_GROUND_TIME_FOR_STUNGUN(Ped ped, int ms);
-		BOOL IS_PED_PRONE(Ped ped);
+		bool IS_PED_PRONE(Ped ped);
 		/**
 		 * Checks to see if ped and target are in combat with eachother. Only goes one-way: if target is engaged in combat with ped but ped has not yet reacted, the function will return false until ped starts fighting back.
 		 * 
 		 * p1 is usually 0 in the scripts because it gets the ped id during the task sequence. For instance: PED::IS_PED_IN_COMBAT(l_42E[4/*14* /], PLAYER::PLAYER_PED_ID()) // armenian2.ct4: 43794
 		 */
-		BOOL IS_PED_IN_COMBAT(Ped ped, Ped target);
+		bool IS_PED_IN_COMBAT(Ped ped, Ped target);
 		Entity GET_PED_TARGET_FROM_COMBAT_PED(Ped ped, Any p1);
-		BOOL CAN_PED_IN_COMBAT_SEE_TARGET(Ped ped, Ped target);
-		BOOL IS_PED_DOING_DRIVEBY(Ped ped);
-		BOOL IS_PED_JACKING(Ped ped);
-		BOOL IS_PED_BEING_JACKED(Ped ped);
+		bool CAN_PED_IN_COMBAT_SEE_TARGET(Ped ped, Ped target);
+		bool IS_PED_DOING_DRIVEBY(Ped ped);
+		bool IS_PED_JACKING(Ped ped);
+		bool IS_PED_BEING_JACKED(Ped ped);
 		/**
 		 * p1 is always 0
 		 */
-		BOOL IS_PED_BEING_STUNNED(Ped ped, int p1);
+		bool IS_PED_BEING_STUNNED(Ped ped, int p1);
 		Ped GET_PEDS_JACKER(Ped ped);
 		Ped GET_JACK_TARGET(Ped ped);
-		BOOL IS_PED_FLEEING(Ped ped);
+		bool IS_PED_FLEEING(Ped ped);
 		/**
 		 * p1 is nearly always 0 in the scripts.
 		 */
-		BOOL IS_PED_IN_COVER(Ped ped, BOOL exceptUseWeapon);
-		BOOL IS_PED_IN_COVER_FACING_LEFT(Ped ped);
-		BOOL IS_PED_IN_HIGH_COVER(Ped ped);
-		BOOL IS_PED_GOING_INTO_COVER(Ped ped);
+		bool IS_PED_IN_COVER(Ped ped, bool exceptUseWeapon);
+		bool IS_PED_IN_COVER_FACING_LEFT(Ped ped);
+		bool IS_PED_IN_HIGH_COVER(Ped ped);
+		bool IS_PED_GOING_INTO_COVER(Ped ped);
 		/**
 		 * i could be time. Only example in the decompiled scripts uses it as -1.
 		 */
-		BOOL SET_PED_PINNED_DOWN(Ped ped, BOOL pinned, int i);
-		BOOL _HAS_PED_CLEAR_LOS_TO_ENTITY(Ped ped, Entity entity, float x, float y, float z, int p5, BOOL p6, BOOL p7);
+		bool SET_PED_PINNED_DOWN(Ped ped, bool pinned, int i);
+		bool _HAS_PED_CLEAR_LOS_TO_ENTITY(Ped ped, Entity entity, float x, float y, float z, int p5, bool p6, bool p7);
 		int GET_SEAT_PED_IS_TRYING_TO_ENTER(Ped ped);
 		Vehicle GET_VEHICLE_PED_IS_TRYING_TO_ENTER(Ped ped);
 		/**
@@ -11916,9 +11916,9 @@ namespace base::menu::natives {
 		/**
 		 * Can't select void. This function returns nothing. The hash of the created relationship group is output in the second parameter.
 		 */
-		BOOL ADD_RELATIONSHIP_GROUP(const char* name, Hash* groupHash);
+		bool ADD_RELATIONSHIP_GROUP(const char* name, Hash* groupHash);
 		void REMOVE_RELATIONSHIP_GROUP(Hash groupHash);
-		BOOL DOES_RELATIONSHIP_GROUP_EXIST(Hash groupHash);
+		bool DOES_RELATIONSHIP_GROUP_EXIST(Hash groupHash);
 		/**
 		 * Gets the relationship between two peds. This should be called twice (once for each ped).
 		 * 
@@ -11956,12 +11956,12 @@ namespace base::menu::natives {
 		 * PED::GET_RELATIONSHIP_BETWEEN_GROUPS(0xA49E591C, l_1017);
 		 */
 		int GET_RELATIONSHIP_BETWEEN_GROUPS(Hash group1, Hash group2);
-		void SET_RELATIONSHIP_GROUP_AFFECTS_WANTED_LEVEL(Hash group, BOOL p1);
+		void SET_RELATIONSHIP_GROUP_AFFECTS_WANTED_LEVEL(Hash group, bool p1);
 		void TELL_GROUP_PEDS_IN_AREA_TO_ATTACK(Ped ped, Any p1, float p2, Hash hash, Any p4, Any p5);
-		void SET_PED_CAN_BE_TARGETED_WITHOUT_LOS(Ped ped, BOOL toggle);
+		void SET_PED_CAN_BE_TARGETED_WITHOUT_LOS(Ped ped, bool toggle);
 		void SET_PED_TO_INFORM_RESPECTED_FRIENDS(Ped ped, float radius, int maxFriends);
-		BOOL IS_PED_RESPONDING_TO_EVENT(Ped ped, Any event);
-		BOOL GET_POS_FROM_FIRED_EVENT(Ped ped, int eventType, Any* outData);
+		bool IS_PED_RESPONDING_TO_EVENT(Ped ped, Any event);
+		bool GET_POS_FROM_FIRED_EVENT(Ped ped, int eventType, Any* outData);
 		/**
 		 * FIRING_PATTERN_BURST_FIRE = 0xD6FF6D61 ( 1073727030 )
 		 * FIRING_PATTERN_BURST_FIRE_IN_COVER = 0x026321F1 ( 40051185 )
@@ -12029,12 +12029,12 @@ namespace base::menu::natives {
 		 * p1 may be a BOOL representing whether or not the group even exists
 		 */
 		void GET_GROUP_SIZE(int groupID, Any* p1, int* sizeInMembers);
-		BOOL DOES_GROUP_EXIST(int groupId);
+		bool DOES_GROUP_EXIST(int groupId);
 		/**
 		 * Returns the group id of which the specified ped is a member of.
 		 */
 		int GET_PED_GROUP_INDEX(Ped ped);
-		BOOL IS_PED_IN_GROUP(Ped ped);
+		bool IS_PED_IN_GROUP(Ped ped);
 		Player GET_PLAYER_PED_IS_FOLLOWING(Ped ped);
 		/**
 		 * 0: Default
@@ -12057,15 +12057,15 @@ namespace base::menu::natives {
 		 * PED::SET_PED_GRAVITY(PLAYER::PLAYER_PED_ID(), 0x00000001);
 		 * PED::SET_PED_GRAVITY(Local_289[iVar0 /*20* /], 0x00000001);
 		 */
-		void SET_PED_GRAVITY(Ped ped, BOOL toggle);
-		BOOL _SET_PED_SURVIVES_BEING_OUT_OF_WATER(Ped ped, BOOL toggle);
+		void SET_PED_GRAVITY(Ped ped, bool toggle);
+		bool _SET_PED_SURVIVES_BEING_OUT_OF_WATER(Ped ped, bool toggle);
 		/**
 		 * damages a ped with the given amount
 		 */
-		void APPLY_DAMAGE_TO_PED(Ped ped, int damageAmount, BOOL p2, Any p3, Hash weaponType);
+		void APPLY_DAMAGE_TO_PED(Ped ped, int damageAmount, bool p2, Any p3, Hash weaponType);
 		int GET_TIME_PED_DAMAGED_BY_WEAPON(Ped ped, Hash weaponHash);
-		void SET_PED_ALLOWED_TO_DUCK(Ped ped, BOOL toggle);
-		void SET_PED_NEVER_LEAVES_GROUP(Ped ped, BOOL toggle);
+		void SET_PED_ALLOWED_TO_DUCK(Ped ped, bool toggle);
+		void SET_PED_NEVER_LEAVES_GROUP(Ped ped, bool toggle);
 		/**
 		 * https://alloc8or.re/gta5/doc/enums/ePedType.txt
 		 */
@@ -12073,8 +12073,8 @@ namespace base::menu::natives {
 		/**
 		 * Turns the desired ped into a cop. If you use this on the player ped, you will become almost invisible to cops dispatched for you. You will also report your own crimes, get a generic cop voice, get a cop-vision-cone on the radar, and you will be unable to shoot at other cops. SWAT and Army will still shoot at you. Toggling ped as "false" has no effect; you must change p0's ped model to disable the effect.
 		 */
-		void SET_PED_AS_COP(Ped ped, BOOL toggle);
-		void SET_PED_HEALTH_PENDING_LAST_DAMAGE_EVENT_OVERRIDE_FLAG(BOOL toggle);
+		void SET_PED_AS_COP(Ped ped, bool toggle);
+		void SET_PED_HEALTH_PENDING_LAST_DAMAGE_EVENT_OVERRIDE_FLAG(bool toggle);
 		/**
 		 * Sets the maximum health of a ped.
 		 */
@@ -12096,7 +12096,7 @@ namespace base::menu::natives {
 		 * state: https://alloc8or.re/gta5/doc/enums/eKnockOffVehicle.txt
 		 */
 		void SET_PED_CAN_BE_KNOCKED_OFF_VEHICLE(Ped ped, int state);
-		BOOL CAN_KNOCK_PED_OFF_VEHICLE(Ped ped);
+		bool CAN_KNOCK_PED_OFF_VEHICLE(Ped ped);
 		void KNOCK_PED_OFF_VEHICLE(Ped ped);
 		void SET_PED_COORDS_NO_GANG(Ped ped, float posX, float posY, float posZ);
 		/**
@@ -12111,36 +12111,36 @@ namespace base::menu::natives {
 		 */
 		Ped GET_PED_AS_GROUP_MEMBER(int groupID, int memberNumber);
 		Ped GET_PED_AS_GROUP_LEADER(int groupID);
-		void SET_PED_KEEP_TASK(Ped ped, BOOL toggle);
-		void SET_PED_ALLOW_MINOR_REACTIONS_AS_MISSION_PED(Ped ped, BOOL toggle);
-		BOOL IS_PED_SWIMMING(Ped ped);
-		BOOL IS_PED_SWIMMING_UNDER_WATER(Ped ped);
+		void SET_PED_KEEP_TASK(Ped ped, bool toggle);
+		void SET_PED_ALLOW_MINOR_REACTIONS_AS_MISSION_PED(Ped ped, bool toggle);
+		bool IS_PED_SWIMMING(Ped ped);
+		bool IS_PED_SWIMMING_UNDER_WATER(Ped ped);
 		/**
 		 * teleports ped to coords along with the vehicle ped is in
 		 */
 		void SET_PED_COORDS_KEEP_VEHICLE(Ped ped, float posX, float posY, float posZ);
-		void SET_PED_DIES_IN_VEHICLE(Ped ped, BOOL toggle);
-		void SET_CREATE_RANDOM_COPS(BOOL toggle);
-		void SET_CREATE_RANDOM_COPS_NOT_ON_SCENARIOS(BOOL toggle);
-		void SET_CREATE_RANDOM_COPS_ON_SCENARIOS(BOOL toggle);
-		BOOL CAN_CREATE_RANDOM_COPS();
-		void SET_PED_AS_ENEMY(Ped ped, BOOL toggle);
-		void SET_PED_CAN_SMASH_GLASS(Ped ped, BOOL p1, BOOL p2);
-		BOOL IS_PED_IN_ANY_TRAIN(Ped ped);
-		BOOL IS_PED_GETTING_INTO_A_VEHICLE(Ped ped);
-		BOOL IS_PED_TRYING_TO_ENTER_A_LOCKED_VEHICLE(Ped ped);
+		void SET_PED_DIES_IN_VEHICLE(Ped ped, bool toggle);
+		void SET_CREATE_RANDOM_COPS(bool toggle);
+		void SET_CREATE_RANDOM_COPS_NOT_ON_SCENARIOS(bool toggle);
+		void SET_CREATE_RANDOM_COPS_ON_SCENARIOS(bool toggle);
+		bool CAN_CREATE_RANDOM_COPS();
+		void SET_PED_AS_ENEMY(Ped ped, bool toggle);
+		void SET_PED_CAN_SMASH_GLASS(Ped ped, bool p1, bool p2);
+		bool IS_PED_IN_ANY_TRAIN(Ped ped);
+		bool IS_PED_GETTING_INTO_A_VEHICLE(Ped ped);
+		bool IS_PED_TRYING_TO_ENTER_A_LOCKED_VEHICLE(Ped ped);
 		/**
 		 * ped can not pull out a weapon when true
 		 */
-		void SET_ENABLE_HANDCUFFS(Ped ped, BOOL toggle);
+		void SET_ENABLE_HANDCUFFS(Ped ped, bool toggle);
 		/**
 		 * Used with SET_ENABLE_HANDCUFFS in decompiled scripts. From my observations, I have noticed that while being ragdolled you are not able to get up but you can still run. Your legs can also bend.
 		 */
-		void SET_ENABLE_BOUND_ANKLES(Ped ped, BOOL toggle);
+		void SET_ENABLE_BOUND_ANKLES(Ped ped, bool toggle);
 		/**
 		 * Enables diving motion when underwater.
 		 */
-		void SET_ENABLE_SCUBA(Ped ped, BOOL toggle);
+		void SET_ENABLE_SCUBA(Ped ped, bool toggle);
 		/**
 		 * Setting ped to true allows the ped to shoot "friendlies".
 		 * 
@@ -12149,7 +12149,7 @@ namespace base::menu::natives {
 		 * p1 = false & p2 = false for unable to aim at.
 		 * p1 = true & p2 = false for able to aim at.
 		 */
-		void SET_CAN_ATTACK_FRIENDLY(Ped ped, BOOL toggle, BOOL p2);
+		void SET_CAN_ATTACK_FRIENDLY(Ped ped, bool toggle, bool p2);
 		/**
 		 * Returns the ped's alertness (0-3).
 		 * 
@@ -12167,7 +12167,7 @@ namespace base::menu::natives {
 		 * value ranges from 0 to 3.
 		 */
 		void SET_PED_ALERTNESS(Ped ped, int value);
-		void SET_PED_GET_OUT_UPSIDE_DOWN_VEHICLE(Ped ped, BOOL toggle);
+		void SET_PED_GET_OUT_UPSIDE_DOWN_VEHICLE(Ped ped, bool toggle);
 		/**
 		 * transitionSpeed is the time in seconds it takes to transition from one movement clipset to another.	ransitionSpeed is usually 1.0f
 		 * 
@@ -12264,13 +12264,13 @@ namespace base::menu::natives {
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL IS_SCRIPTED_SCENARIO_PED_USING_CONDITIONAL_ANIM(Ped ped, const char* animDict, const char* anim);
+		bool IS_SCRIPTED_SCENARIO_PED_USING_CONDITIONAL_ANIM(Ped ped, const char* animDict, const char* anim);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 * 
 		 * Full list of movement clipsets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/movementClipsetsCompact.json
 		 */
-		void SET_PED_ALTERNATE_WALK_ANIM(Ped ped, const char* animDict, const char* animName, float p3, BOOL p4);
+		void SET_PED_ALTERNATE_WALK_ANIM(Ped ped, const char* animDict, const char* animName, float p3, bool p4);
 		void CLEAR_PED_ALTERNATE_WALK_ANIM(Ped ped, float p1);
 		/**
 		 * stance:
@@ -12284,7 +12284,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of movement clipsets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/movementClipsetsCompact.json
 		 */
-		void SET_PED_ALTERNATE_MOVEMENT_ANIM(Ped ped, int stance, const char* animDictionary, const char* animationName, float p4, BOOL p5);
+		void SET_PED_ALTERNATE_MOVEMENT_ANIM(Ped ped, int stance, const char* animDictionary, const char* animationName, float p4, bool p5);
 		void CLEAR_PED_ALTERNATE_MOVEMENT_ANIM(Ped ped, int stance, float p2);
 		/**
 		 * From the scripts:
@@ -12357,7 +12357,7 @@ namespace base::menu::natives {
 		 * gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html
 		 */
 		int GET_PED_PALETTE_VARIATION(Ped ped, int componentId);
-		BOOL GET_MP_OUTFIT_DATA_FROM_METADATA(Any* p0, Any* p1);
+		bool GET_MP_OUTFIT_DATA_FROM_METADATA(Any* p0, Any* p1);
 		int GET_FM_MALE_SHOP_PED_APPAREL_ITEM_INDEX(int p0);
 		int GET_FM_FEMALE_SHOP_PED_APPAREL_ITEM_INDEX(int p0);
 		/**
@@ -12368,7 +12368,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of ped components by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pedComponentVariations.json
 		 */
-		BOOL IS_PED_COMPONENT_VARIATION_VALID(Ped ped, int componentId, int drawableId, int textureId);
+		bool IS_PED_COMPONENT_VARIATION_VALID(Ped ped, int componentId, int drawableId, int textureId);
 		/**
 		 * paletteId: 0 to 3.
 		 * 
@@ -12431,7 +12431,7 @@ namespace base::menu::natives {
 		 * For more info please refer to this topic.
 		 * gtaforums.com/topic/858970-all-gtao-face-ids-pedset-ped-head-blend-data-explained
 		 */
-		void SET_PED_HEAD_BLEND_DATA(Ped ped, int shapeFirstID, int shapeSecondID, int shapeThirdID, int skinFirstID, int skinSecondID, int skinThirdID, float shapeMix, float skinMix, float thirdMix, BOOL isParent);
+		void SET_PED_HEAD_BLEND_DATA(Ped ped, int shapeFirstID, int shapeSecondID, int shapeThirdID, int skinFirstID, int skinSecondID, int skinThirdID, float shapeMix, float skinMix, float thirdMix, bool isParent);
 		/**
 		 * The pointer is to a padded struct that matches the arguments to SET_PED_HEAD_BLEND_DATA(...). There are 4 bytes of padding after each field.
 		 * pass this struct in the second parameter
@@ -12458,7 +12458,7 @@ namespace base::menu::natives {
 		 * bool isParent;
 		 * };
 		 */
-		BOOL GET_PED_HEAD_BLEND_DATA(Ped ped, Any* headBlendData);
+		bool GET_PED_HEAD_BLEND_DATA(Ped ped, Any* headBlendData);
 		/**
 		 * See SET_PED_HEAD_BLEND_DATA().
 		 */
@@ -12557,15 +12557,15 @@ namespace base::menu::natives {
 		 * Use `GET_PED_HAIR_TINT_COLOR` to get the hair colors.
 		 */
 		void GET_PED_MAKEUP_TINT_COLOR(int makeupColorIndex, int* outR, int* outG, int* outB);
-		BOOL IS_PED_HAIR_TINT_FOR_CREATOR(int colorId);
+		bool IS_PED_HAIR_TINT_FOR_CREATOR(int colorId);
 		int GET_DEFAULT_SECONDARY_TINT_FOR_CREATOR(int colorId);
-		BOOL IS_PED_LIPSTICK_TINT_FOR_CREATOR(int colorId);
-		BOOL IS_PED_BLUSH_TINT_FOR_CREATOR(int colorId);
-		BOOL IS_PED_HAIR_TINT_FOR_BARBER(int colorID);
+		bool IS_PED_LIPSTICK_TINT_FOR_CREATOR(int colorId);
+		bool IS_PED_BLUSH_TINT_FOR_CREATOR(int colorId);
+		bool IS_PED_HAIR_TINT_FOR_BARBER(int colorID);
 		int GET_DEFAULT_SECONDARY_TINT_FOR_BARBER(int colorID);
-		BOOL IS_PED_LIPSTICK_TINT_FOR_BARBER(int colorID);
-		BOOL IS_PED_BLUSH_TINT_FOR_BARBER(int colorID);
-		BOOL IS_PED_BLUSH_FACEPAINT_TINT_FOR_BARBER(int colorId);
+		bool IS_PED_LIPSTICK_TINT_FOR_BARBER(int colorID);
+		bool IS_PED_BLUSH_TINT_FOR_BARBER(int colorID);
+		bool IS_PED_BLUSH_FACEPAINT_TINT_FOR_BARBER(int colorId);
 		int GET_TINT_INDEX_FOR_LAST_GEN_HAIR_TEXTURE(Hash modelHash, int drawableId, int textureId);
 		/**
 		 * Sets the various freemode face features, e.g. nose length, chin shape. Scale ranges from -1.0 to 1.0.
@@ -12613,7 +12613,7 @@ namespace base::menu::natives {
 		 * 19 - Neck Thickness (Thin/Thick)
 		 */
 		void SET_PED_MICRO_MORPH(Ped ped, int index, float scale);
-		BOOL HAS_PED_HEAD_BLEND_FINISHED(Ped ped);
+		bool HAS_PED_HEAD_BLEND_FINISHED(Ped ped);
 		void FINALIZE_HEAD_BLEND(Ped ped);
 		/**
 		 * p4 seems to vary from 0 to 3.
@@ -12638,14 +12638,14 @@ namespace base::menu::natives {
 		 * p1 is probably componentId
 		 */
 		int SET_PED_PRELOAD_VARIATION_DATA(Ped ped, int slot, int drawableId, int textureId);
-		BOOL HAS_PED_PRELOAD_VARIATION_DATA_FINISHED(Ped ped);
+		bool HAS_PED_PRELOAD_VARIATION_DATA_FINISHED(Ped ped);
 		void RELEASE_PED_PRELOAD_VARIATION_DATA(Ped ped);
 		/**
 		 * List of component/props ID
 		 * gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html
 		 */
 		int SET_PED_PRELOAD_PROP_DATA(Ped ped, int componentId, int drawableId, int TextureId);
-		BOOL HAS_PED_PRELOAD_PROP_DATA_FINISHED(Ped ped);
+		bool HAS_PED_PRELOAD_PROP_DATA_FINISHED(Ped ped);
 		void RELEASE_PED_PRELOAD_PROP_DATA(Ped ped);
 		/**
 		 * List of component/props ID
@@ -12666,12 +12666,12 @@ namespace base::menu::natives {
 		 * List of component/props ID
 		 * gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html
 		 */
-		void SET_PED_PROP_INDEX(Ped ped, int componentId, int drawableId, int TextureId, BOOL attach, Any p5);
+		void SET_PED_PROP_INDEX(Ped ped, int componentId, int drawableId, int TextureId, bool attach, Any p5);
 		/**
 		 * List of component/props ID
 		 * gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html
 		 */
-		void KNOCK_OFF_PED_PROP(Ped ped, BOOL p1, BOOL p2, BOOL p3, BOOL p4);
+		void KNOCK_OFF_PED_PROP(Ped ped, bool p1, bool p2, bool p3, bool p4);
 		/**
 		 * List of component/props ID
 		 * gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html
@@ -12697,11 +12697,11 @@ namespace base::menu::natives {
 		 * Removes the scubagear (for mp male: component id: 8, drawableId: 123, textureId: any) from peds. Does not play the 'remove scuba gear' animation, but instantly removes it.
 		 */
 		void CLEAR_PED_SCUBA_GEAR_VARIATION(Ped ped);
-		BOOL IS_USING_PED_SCUBA_GEAR_VARIATION(Any p0);
+		bool IS_USING_PED_SCUBA_GEAR_VARIATION(Any p0);
 		/**
 		 * works with TASK::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS to make a ped completely oblivious to all events going on around him
 		 */
-		void SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Ped ped, BOOL toggle);
+		void SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Ped ped, bool toggle);
 		void SET_PED_BOUNDS_ORIENTATION(Ped ped, float p1, float p2, float x, float y, float z);
 		/**
 		 * PED::REGISTER_TARGET(l_216, PLAYER::PLAYER_PED_ID()); from re_prisonbreak.txt.
@@ -12764,12 +12764,12 @@ namespace base::menu::natives {
 		 * 
 		 * Note: PED::GET_PED_NEARBY_PEDS works for more peds.
 		 */
-		BOOL GET_CLOSEST_PED(float x, float y, float z, float radius, BOOL p4, BOOL p5, Ped* outPed, BOOL p7, BOOL p8, int pedType);
+		bool GET_CLOSEST_PED(float x, float y, float z, float radius, bool p4, bool p5, Ped* outPed, bool p7, bool p8, int pedType);
 		/**
 		 * Sets a value indicating whether scenario peds should be returned by the next call to a command that returns peds. Eg. GET_CLOSEST_PED.
 		 */
-		void SET_SCENARIO_PEDS_TO_BE_RETURNED_BY_NEXT_COMMAND(BOOL value);
-		BOOL GET_CAN_PED_BE_GRABBED_BY_SCRIPT(Ped ped, BOOL p1, BOOL p2, BOOL p3, BOOL p4, BOOL p5, BOOL p6, BOOL p7, Any p8);
+		void SET_SCENARIO_PEDS_TO_BE_RETURNED_BY_NEXT_COMMAND(bool value);
+		bool GET_CAN_PED_BE_GRABBED_BY_SCRIPT(Ped ped, bool p1, bool p2, bool p3, bool p4, bool p5, bool p6, bool p7, Any p8);
 		/**
 		 * Scripts use 0.2, 0.5 and 1.0. Value must be >= 0.0 && <= 1.0
 		 */
@@ -12787,7 +12787,7 @@ namespace base::menu::natives {
 		 * 
 		 * [Example: Can prevent peds from falling when standing on moving vehicles.]
 		 */
-		BOOL CAN_PED_RAGDOLL(Ped ped);
+		bool CAN_PED_RAGDOLL(Ped ped);
 		/**
 		 * p4/p5: Unused in TU27
 		 * Ragdoll Types:
@@ -12813,7 +12813,7 @@ namespace base::menu::natives {
 		 * 
 		 * Edit Mar 21, 2017: removed part about time2 being the microseconds version of time1. this just isn't correct. time2 is in milliseconds, and time1 and time2 don't seem to be connected in any way.
 		 */
-		BOOL SET_PED_TO_RAGDOLL(Ped ped, int time1, int time2, int ragdollType, BOOL p4, BOOL p5, BOOL p6);
+		bool SET_PED_TO_RAGDOLL(Ped ped, int time1, int time2, int ragdollType, bool p4, bool p5, bool p6);
 		/**
 		 * Return variable is never used in R*'s scripts.
 		 * 
@@ -12835,22 +12835,22 @@ namespace base::menu::natives {
 		 * ped::set_ped_to_ragdoll_with_fall(ped, 1500, 2000, 1, -entity::get_entity_forward_vector(ped), 1f, 0f, 0f, 0f, 0f, 0f, 0f);
 		 * 
 		 */
-		BOOL SET_PED_TO_RAGDOLL_WITH_FALL(Ped ped, int time, int p2, int ragdollType, float x, float y, float z, float velocity, float p8, float p9, float p10, float p11, float p12, float p13);
+		bool SET_PED_TO_RAGDOLL_WITH_FALL(Ped ped, int time, int p2, int ragdollType, float x, float y, float z, float velocity, float p8, float p9, float p10, float p11, float p12, float p13);
 		/**
 		 * Causes Ped to ragdoll on collision with any object (e.g Running into trashcan). If applied to player you will sometimes trip on the sidewalk.
 		 */
-		void SET_PED_RAGDOLL_ON_COLLISION(Ped ped, BOOL toggle);
+		void SET_PED_RAGDOLL_ON_COLLISION(Ped ped, bool toggle);
 		/**
 		 * If the ped handle passed through the parenthesis is in a ragdoll state this will return true.
 		 */
-		BOOL IS_PED_RAGDOLL(Ped ped);
-		BOOL IS_PED_RUNNING_RAGDOLL_TASK(Ped ped);
+		bool IS_PED_RAGDOLL(Ped ped);
+		bool IS_PED_RUNNING_RAGDOLL_TASK(Ped ped);
 		void SET_PED_RAGDOLL_FORCE_FALL(Ped ped);
 		void RESET_PED_RAGDOLL_TIMER(Ped ped);
-		void SET_PED_CAN_RAGDOLL(Ped ped, BOOL toggle);
-		BOOL IS_PED_RUNNING_MELEE_TASK(Ped ped);
-		BOOL IS_PED_RUNNING_MOBILE_PHONE_TASK(Ped ped);
-		BOOL IS_MOBILE_PHONE_TO_PED_EAR(Ped ped);
+		void SET_PED_CAN_RAGDOLL(Ped ped, bool toggle);
+		bool IS_PED_RUNNING_MELEE_TASK(Ped ped);
+		bool IS_PED_RUNNING_MOBILE_PHONE_TASK(Ped ped);
+		bool IS_MOBILE_PHONE_TO_PED_EAR(Ped ped);
 		/**
 		 * Works for both player and peds,
 		 * 
@@ -12883,18 +12883,18 @@ namespace base::menu::natives {
 		 * See SET_RAGDOLL_BLOCKING_FLAGS for flags
 		 */
 		void CLEAR_RAGDOLL_BLOCKING_FLAGS(Ped ped, int blockingFlag);
-		void SET_PED_ANGLED_DEFENSIVE_AREA(Ped ped, float p1, float p2, float p3, float p4, float p5, float p6, float p7, BOOL p8, BOOL p9);
-		void SET_PED_SPHERE_DEFENSIVE_AREA(Ped ped, float x, float y, float z, float radius, BOOL p5, BOOL p6);
-		void SET_PED_DEFENSIVE_SPHERE_ATTACHED_TO_PED(Ped ped, Ped target, float xOffset, float yOffset, float zOffset, float radius, BOOL p6);
-		void SET_PED_DEFENSIVE_SPHERE_ATTACHED_TO_VEHICLE(Ped ped, Vehicle target, float xOffset, float yOffset, float zOffset, float radius, BOOL p6);
-		void SET_PED_DEFENSIVE_AREA_ATTACHED_TO_PED(Ped ped, Ped attachPed, float p2, float p3, float p4, float p5, float p6, float p7, float p8, BOOL p9, BOOL p10);
-		void SET_PED_DEFENSIVE_AREA_DIRECTION(Ped ped, float p1, float p2, float p3, BOOL p4);
+		void SET_PED_ANGLED_DEFENSIVE_AREA(Ped ped, float p1, float p2, float p3, float p4, float p5, float p6, float p7, bool p8, bool p9);
+		void SET_PED_SPHERE_DEFENSIVE_AREA(Ped ped, float x, float y, float z, float radius, bool p5, bool p6);
+		void SET_PED_DEFENSIVE_SPHERE_ATTACHED_TO_PED(Ped ped, Ped target, float xOffset, float yOffset, float zOffset, float radius, bool p6);
+		void SET_PED_DEFENSIVE_SPHERE_ATTACHED_TO_VEHICLE(Ped ped, Vehicle target, float xOffset, float yOffset, float zOffset, float radius, bool p6);
+		void SET_PED_DEFENSIVE_AREA_ATTACHED_TO_PED(Ped ped, Ped attachPed, float p2, float p3, float p4, float p5, float p6, float p7, float p8, bool p9, bool p10);
+		void SET_PED_DEFENSIVE_AREA_DIRECTION(Ped ped, float p1, float p2, float p3, bool p4);
 		/**
 		 * Ped will no longer get angry when you stay near him.
 		 */
-		void REMOVE_PED_DEFENSIVE_AREA(Ped ped, BOOL toggle);
-		Vector3 GET_PED_DEFENSIVE_AREA_POSITION(Ped ped, BOOL p1);
-		BOOL IS_PED_DEFENSIVE_AREA_ACTIVE(Ped ped, BOOL p1);
+		void REMOVE_PED_DEFENSIVE_AREA(Ped ped, bool toggle);
+		Vector3 GET_PED_DEFENSIVE_AREA_POSITION(Ped ped, bool p1);
+		bool IS_PED_DEFENSIVE_AREA_ACTIVE(Ped ped, bool p1);
 		void SET_PED_PREFERRED_COVER_SET(Ped ped, Any itemSet);
 		void REMOVE_PED_PREFERRED_COVER_SET(Ped ped);
 		/**
@@ -12928,15 +12928,15 @@ namespace base::menu::natives {
 		 * 
 		 * If worldSpace is true, the returned offset is relative to the world. That is, if the ped has moved 1 meter on the X axis and 5 meters on the Y axis, it'll return 1,5,0.
 		 */
-		Vector3 GET_PED_EXTRACTED_DISPLACEMENT(Ped ped, BOOL worldSpace);
-		void SET_PED_DIES_WHEN_INJURED(Ped ped, BOOL toggle);
-		void SET_PED_ENABLE_WEAPON_BLOCKING(Ped ped, BOOL toggle);
+		Vector3 GET_PED_EXTRACTED_DISPLACEMENT(Ped ped, bool worldSpace);
+		void SET_PED_DIES_WHEN_INJURED(Ped ped, bool toggle);
+		void SET_PED_ENABLE_WEAPON_BLOCKING(Ped ped, bool toggle);
 		/**
 		 * p1 was always 1 (true).
 		 * 
 		 * Kicks the ped from the current vehicle and keeps the rendering-focus on this ped (also disables its collision). If doing this for your player ped, you'll still be able to drive the vehicle.
 		 */
-		void SPECIAL_FUNCTION_DO_NOT_USE(Ped ped, BOOL p1);
+		void SPECIAL_FUNCTION_DO_NOT_USE(Ped ped, bool p1);
 		void RESET_PED_VISIBLE_DAMAGE(Ped ped);
 		void APPLY_PED_BLOOD_DAMAGE_BY_ZONE(Ped ped, Any p1, float p2, float p3, Any p4);
 		/**
@@ -12984,7 +12984,7 @@ namespace base::menu::natives {
 		 * 
 		 * APPLY_PED_DAMAGE_DECAL(ped, 1, 0.5f, 0.513f, 0f, 1f, unk, 0, 0, "blushing");
 		 */
-		void APPLY_PED_DAMAGE_DECAL(Ped ped, int damageZone, float xOffset, float yOffset, float heading, float scale, float alpha, int variation, BOOL fadeIn, const char* decalName);
+		void APPLY_PED_DAMAGE_DECAL(Ped ped, int damageZone, float xOffset, float yOffset, float heading, float scale, float alpha, int variation, bool fadeIn, const char* decalName);
 		/**
 		 * Damage Packs:
 		 * 
@@ -13021,14 +13021,14 @@ namespace base::menu::natives {
 		 * Somehow related to changing ped's clothes.
 		 */
 		void CLEAR_PED_BLOOD_DAMAGE_BY_ZONE(Ped ped, int p1);
-		void HIDE_PED_BLOOD_DAMAGE_BY_ZONE(Ped ped, Any p1, BOOL p2);
+		void HIDE_PED_BLOOD_DAMAGE_BY_ZONE(Ped ped, Any p1, bool p2);
 		/**
 		 * p1: from 0 to 5 in the b617d scripts.
 		 * p2: "blushing" and "ALL" found in the b617d scripts.
 		 */
 		void CLEAR_PED_DAMAGE_DECAL_BY_ZONE(Ped ped, int p1, const char* p2);
 		int GET_PED_DECORATIONS_STATE(Ped ped);
-		void MARK_PED_DECORATIONS_AS_CLONED_FROM_LOCAL_PLAYER(Ped ped, BOOL p1);
+		void MARK_PED_DECORATIONS_AS_CLONED_FROM_LOCAL_PLAYER(Ped ped, bool p1);
 		/**
 		 * It clears the wetness of the selected Ped/Player. Clothes have to be wet to notice the difference.
 		 */
@@ -13105,7 +13105,7 @@ namespace base::menu::natives {
 		/**
 		 * Despite this function's name, it simply returns whether the specified handle is a Ped.
 		 */
-		BOOL WAS_PED_SKELETON_UPDATED(Ped ped);
+		bool WAS_PED_SKELETON_UPDATED(Ped ped);
 		/**
 		 * Gets the position of the specified bone of the specified ped.
 		 * 
@@ -13124,7 +13124,7 @@ namespace base::menu::natives {
 		 * 
 		 * If a message already exists, this function does nothing. A message exists until the point it has been successfully dispatched by GIVE_PED_NM_MESSAGE.
 		 */
-		void CREATE_NM_MESSAGE(BOOL startImmediately, int messageId);
+		void CREATE_NM_MESSAGE(bool startImmediately, int messageId);
 		/**
 		 * Sends the message that was created by a call to CREATE_NM_MESSAGE to the specified Ped.
 		 * 
@@ -13147,27 +13147,27 @@ namespace base::menu::natives {
 		 * GIVE_PED_NM_MESSAGE(ped); // Dispatch message to Ped.
 		 */
 		void GIVE_PED_NM_MESSAGE(Ped ped);
-		int ADD_SCENARIO_BLOCKING_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL p6, BOOL p7, BOOL p8, BOOL p9, Any p10);
+		int ADD_SCENARIO_BLOCKING_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool p6, bool p7, bool p8, bool p9, Any p10);
 		void REMOVE_SCENARIO_BLOCKING_AREAS();
-		void REMOVE_SCENARIO_BLOCKING_AREA(Any p0, BOOL p1);
+		void REMOVE_SCENARIO_BLOCKING_AREA(Any p0, bool p1);
 		void SET_SCENARIO_PEDS_SPAWN_IN_SPHERE_AREA(float x, float y, float z, float range, int p4);
-		BOOL DOES_SCENARIO_BLOCKING_AREA_EXISTS(float x1, float y1, float z1, float x2, float y2, float z2);
+		bool DOES_SCENARIO_BLOCKING_AREA_EXISTS(float x1, float y1, float z1, float x2, float y2, float z2);
 		/**
 		 * Full list of ped scenarios by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scenariosCompact.json
 		 */
-		BOOL IS_PED_USING_SCENARIO(Ped ped, const char* scenario);
-		BOOL IS_PED_USING_ANY_SCENARIO(Ped ped);
-		BOOL SET_PED_PANIC_EXIT_SCENARIO(Any p0, Any p1, Any p2, Any p3);
-		void TOGGLE_SCENARIO_PED_COWER_IN_PLACE(Ped ped, BOOL toggle);
-		BOOL TRIGGER_PED_SCENARIO_PANICEXITTOFLEE(Any p0, Any p1, Any p2, Any p3);
-		BOOL SET_PED_SHOULD_PLAY_DIRECTED_NORMAL_SCENARIO_EXIT(Any p0, Any p1, Any p2, Any p3);
+		bool IS_PED_USING_SCENARIO(Ped ped, const char* scenario);
+		bool IS_PED_USING_ANY_SCENARIO(Ped ped);
+		bool SET_PED_PANIC_EXIT_SCENARIO(Any p0, Any p1, Any p2, Any p3);
+		void TOGGLE_SCENARIO_PED_COWER_IN_PLACE(Ped ped, bool toggle);
+		bool TRIGGER_PED_SCENARIO_PANICEXITTOFLEE(Any p0, Any p1, Any p2, Any p3);
+		bool SET_PED_SHOULD_PLAY_DIRECTED_NORMAL_SCENARIO_EXIT(Any p0, Any p1, Any p2, Any p3);
 		void SET_PED_SHOULD_PLAY_NORMAL_SCENARIO_EXIT(Ped ped);
 		void SET_PED_SHOULD_PLAY_IMMEDIATE_SCENARIO_EXIT(Ped ped);
-		BOOL SET_PED_SHOULD_PLAY_FLEE_SCENARIO_EXIT(Ped ped, Any p1, Any p2, Any p3);
-		void SET_PED_SHOULD_IGNORE_SCENARIO_EXIT_COLLISION_CHECKS(Ped ped, BOOL p1);
-		void SET_PED_SHOULD_IGNORE_SCENARIO_NAV_CHECKS(Any p0, BOOL p1);
-		void SET_PED_SHOULD_PROBE_FOR_SCENARIO_EXITS_IN_ONE_FRAME(Any p0, BOOL p1);
-		BOOL IS_PED_GESTURING(Any p0);
+		bool SET_PED_SHOULD_PLAY_FLEE_SCENARIO_EXIT(Ped ped, Any p1, Any p2, Any p3);
+		void SET_PED_SHOULD_IGNORE_SCENARIO_EXIT_COLLISION_CHECKS(Ped ped, bool p1);
+		void SET_PED_SHOULD_IGNORE_SCENARIO_NAV_CHECKS(Any p0, bool p1);
+		void SET_PED_SHOULD_PROBE_FOR_SCENARIO_EXITS_IN_ONE_FRAME(Any p0, bool p1);
+		bool IS_PED_GESTURING(Any p0);
 		void RESET_FACIAL_IDLE_ANIM(Ped ped);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
@@ -13192,25 +13192,25 @@ namespace base::menu::natives {
 		 */
 		void SET_FACIAL_IDLE_ANIM_OVERRIDE(Ped ped, const char* animName, const char* animDict);
 		void CLEAR_FACIAL_IDLE_ANIM_OVERRIDE(Ped ped);
-		void SET_PED_CAN_PLAY_GESTURE_ANIMS(Ped ped, BOOL toggle);
+		void SET_PED_CAN_PLAY_GESTURE_ANIMS(Ped ped, bool toggle);
 		/**
 		 * p2 usually 0
 		 */
-		void SET_PED_CAN_PLAY_VISEME_ANIMS(Ped ped, BOOL toggle, BOOL p2);
-		void SET_PED_IS_IGNORED_BY_AUTO_OPEN_DOORS(Ped ped, BOOL p1);
-		void SET_PED_CAN_PLAY_AMBIENT_ANIMS(Ped ped, BOOL toggle);
-		void SET_PED_CAN_PLAY_AMBIENT_BASE_ANIMS(Ped ped, BOOL toggle);
+		void SET_PED_CAN_PLAY_VISEME_ANIMS(Ped ped, bool toggle, bool p2);
+		void SET_PED_IS_IGNORED_BY_AUTO_OPEN_DOORS(Ped ped, bool p1);
+		void SET_PED_CAN_PLAY_AMBIENT_ANIMS(Ped ped, bool toggle);
+		void SET_PED_CAN_PLAY_AMBIENT_BASE_ANIMS(Ped ped, bool toggle);
 		void TRIGGER_IDLE_ANIMATION_ON_PED(Ped ped);
-		void SET_PED_CAN_ARM_IK(Ped ped, BOOL toggle);
-		void SET_PED_CAN_BODY_RECOIL_IK(Ped ped, BOOL toggle);
-		void SET_PED_CAN_HEAD_IK(Ped ped, BOOL toggle);
-		void SET_PED_CAN_LEG_IK(Ped ped, BOOL toggle);
-		void SET_PED_CAN_TORSO_IK(Ped ped, BOOL toggle);
-		void SET_PED_CAN_TORSO_REACT_IK(Ped ped, BOOL p1);
-		void SET_PED_CAN_TORSO_VEHICLE_IK(Ped ped, BOOL p1);
-		void SET_PED_CAN_USE_AUTO_CONVERSATION_LOOKAT(Ped ped, BOOL toggle);
-		BOOL IS_PED_HEADTRACKING_PED(Ped ped1, Ped ped2);
-		BOOL IS_PED_HEADTRACKING_ENTITY(Ped ped, Entity entity);
+		void SET_PED_CAN_ARM_IK(Ped ped, bool toggle);
+		void SET_PED_CAN_BODY_RECOIL_IK(Ped ped, bool toggle);
+		void SET_PED_CAN_HEAD_IK(Ped ped, bool toggle);
+		void SET_PED_CAN_LEG_IK(Ped ped, bool toggle);
+		void SET_PED_CAN_TORSO_IK(Ped ped, bool toggle);
+		void SET_PED_CAN_TORSO_REACT_IK(Ped ped, bool p1);
+		void SET_PED_CAN_TORSO_VEHICLE_IK(Ped ped, bool p1);
+		void SET_PED_CAN_USE_AUTO_CONVERSATION_LOOKAT(Ped ped, bool toggle);
+		bool IS_PED_HEADTRACKING_PED(Ped ped1, Ped ped2);
+		bool IS_PED_HEADTRACKING_ENTITY(Ped ped, Entity entity);
 		/**
 		 * This is only called once in the scripts.
 		 * 
@@ -13221,7 +13221,7 @@ namespace base::menu::natives {
 		void SET_PED_PRIMARY_LOOKAT(Ped ped, Ped lookAt);
 		void SET_PED_CLOTH_PIN_FRAMES(Any p0, Any p1);
 		void SET_PED_CLOTH_PACKAGE_INDEX(Any p0, Any p1);
-		void SET_PED_CLOTH_PRONE(Any p0, BOOL p1);
+		void SET_PED_CLOTH_PRONE(Any p0, bool p1);
 		/**
 		 * enum ePedConfigFlags
 		 * {
@@ -13685,20 +13685,20 @@ namespace base::menu::natives {
 		 * CPED_CONFIG_FLAG_DontChangeTargetFromMelee = 458,
 		 * };
 		 */
-		void SET_PED_CONFIG_FLAG(Ped ped, int flagId, BOOL value);
+		void SET_PED_CONFIG_FLAG(Ped ped, int flagId, bool value);
 		/**
 		 * PED::SET_PED_RESET_FLAG(PLAYER::PLAYER_PED_ID(), 240, 1);
 		 * Known values:
 		 * PRF_PreventGoingIntoStillInVehicleState = 236 *(fanatic2.c)*
 		 */
-		void SET_PED_RESET_FLAG(Ped ped, int flagId, BOOL doReset);
+		void SET_PED_RESET_FLAG(Ped ped, int flagId, bool doReset);
 		/**
 		 * See SET_PED_CONFIG_FLAG
 		 */
-		BOOL GET_PED_CONFIG_FLAG(Ped ped, int flagId, BOOL p2);
-		BOOL GET_PED_RESET_FLAG(Ped ped, int flagId);
+		bool GET_PED_CONFIG_FLAG(Ped ped, int flagId, bool p2);
+		bool GET_PED_RESET_FLAG(Ped ped, int flagId);
 		void SET_PED_GROUP_MEMBER_PASSENGER_INDEX(Ped ped, int index);
-		void SET_PED_CAN_EVASIVE_DIVE(Ped ped, BOOL toggle);
+		void SET_PED_CAN_EVASIVE_DIVE(Ped ped, bool toggle);
 		/**
 		 * Presumably returns the Entity that the Ped is currently diving out of the way of.
 		 * 
@@ -13706,18 +13706,18 @@ namespace base::menu::natives {
 		 * if (PED::IS_PED_EVASIVE_DIVING(A_0, &num3) != 0)
 		 * if (ENTITY::IS_ENTITY_A_VEHICLE(num3) != 0)
 		 */
-		BOOL IS_PED_EVASIVE_DIVING(Ped ped, Entity* evadingEntity);
-		void SET_PED_SHOOTS_AT_COORD(Ped ped, float x, float y, float z, BOOL toggle);
+		bool IS_PED_EVASIVE_DIVING(Ped ped, Entity* evadingEntity);
+		void SET_PED_SHOOTS_AT_COORD(Ped ped, float x, float y, float z, bool toggle);
 		/**
 		 * Full list of peds by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/peds.json
 		 */
-		void SET_PED_MODEL_IS_SUPPRESSED(Hash modelHash, BOOL toggle);
+		void SET_PED_MODEL_IS_SUPPRESSED(Hash modelHash, bool toggle);
 		void STOP_ANY_PED_MODEL_BEING_SUPPRESSED();
-		void SET_PED_CAN_BE_TARGETED_WHEN_INJURED(Ped ped, BOOL toggle);
-		void SET_PED_GENERATES_DEAD_BODY_EVENTS(Ped ped, BOOL toggle);
-		void BLOCK_PED_FROM_GENERATING_DEAD_BODY_EVENTS_WHEN_DEAD(Ped ped, BOOL toggle);
+		void SET_PED_CAN_BE_TARGETED_WHEN_INJURED(Ped ped, bool toggle);
+		void SET_PED_GENERATES_DEAD_BODY_EVENTS(Ped ped, bool toggle);
+		void BLOCK_PED_FROM_GENERATING_DEAD_BODY_EVENTS_WHEN_DEAD(Ped ped, bool toggle);
 		void SET_PED_WILL_ONLY_ATTACK_WANTED_PLAYER(Any p0, Any p1);
-		void SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Ped ped, BOOL toggle);
+		void SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Ped ped, bool toggle);
 		/**
 		 * PoliceMotorcycleHelmet   1024
 		 * RegularMotorcycleHelmet   4096
@@ -13727,46 +13727,46 @@ namespace base::menu::natives {
 		 * --
 		 * p2 is generally 4096 or 16384 in the scripts. p1 varies between 1 and 0.
 		 */
-		void GIVE_PED_HELMET(Ped ped, BOOL cannotRemove, int helmetFlag, int textureIndex);
-		void REMOVE_PED_HELMET(Ped ped, BOOL instantly);
-		BOOL IS_PED_TAKING_OFF_HELMET(Ped ped);
-		void SET_PED_HELMET(Ped ped, BOOL canWearHelmet);
+		void GIVE_PED_HELMET(Ped ped, bool cannotRemove, int helmetFlag, int textureIndex);
+		void REMOVE_PED_HELMET(Ped ped, bool instantly);
+		bool IS_PED_TAKING_OFF_HELMET(Ped ped);
+		void SET_PED_HELMET(Ped ped, bool canWearHelmet);
 		void SET_PED_HELMET_FLAG(Ped ped, int helmetFlag);
 		/**
 		 * List of component/props ID
 		 * gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html
 		 */
-		void SET_PED_HELMET_PROP_INDEX(Ped ped, int propIndex, BOOL p2);
-		void SET_PED_HELMET_VISOR_PROP_INDICES(Ped ped, BOOL p1, int p2, int p3);
-		BOOL IS_PED_HELMET_VISOR_UP(Ped ped);
+		void SET_PED_HELMET_PROP_INDEX(Ped ped, int propIndex, bool p2);
+		void SET_PED_HELMET_VISOR_PROP_INDICES(Ped ped, bool p1, int p2, int p3);
+		bool IS_PED_HELMET_VISOR_UP(Ped ped);
 		void SET_PED_HELMET_TEXTURE_INDEX(Ped ped, int textureIndex);
 		/**
 		 * Returns true if the ped passed through the parenthesis is wearing a helmet.
 		 */
-		BOOL IS_PED_WEARING_HELMET(Ped ped);
+		bool IS_PED_WEARING_HELMET(Ped ped);
 		void CLEAR_PED_STORED_HAT_PROP(Ped ped);
 		int GET_PED_HELMET_STORED_HAT_PROP_INDEX(Ped ped);
 		int GET_PED_HELMET_STORED_HAT_TEX_INDEX(Ped ped);
-		BOOL IS_CURRENT_HEAD_PROP_A_HELMET(Any p0);
-		void SET_PED_TO_LOAD_COVER(Ped ped, BOOL toggle);
+		bool IS_CURRENT_HEAD_PROP_A_HELMET(Any p0);
+		void SET_PED_TO_LOAD_COVER(Ped ped, bool toggle);
 		/**
 		 * It simply makes the said ped to cower behind cover object(wall, desk, car)
 		 * 
 		 * Peds flee attributes must be set to not to flee, first. Else, most of the peds, will just flee from gunshot sounds or any other panic situations.
 		 */
-		void SET_PED_CAN_COWER_IN_COVER(Ped ped, BOOL toggle);
-		void SET_PED_CAN_PEEK_IN_COVER(Ped ped, BOOL toggle);
+		void SET_PED_CAN_COWER_IN_COVER(Ped ped, bool toggle);
+		void SET_PED_CAN_PEEK_IN_COVER(Ped ped, bool toggle);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
-		void SET_PED_PLAYS_HEAD_ON_HORN_ANIM_WHEN_DIES_IN_VEHICLE(Ped ped, BOOL toggle);
+		void SET_PED_PLAYS_HEAD_ON_HORN_ANIM_WHEN_DIES_IN_VEHICLE(Ped ped, bool toggle);
 		/**
 		 * "IK" stands for "Inverse kinematics." I assume this has something to do with how the ped uses his legs to balance. In the scripts, the second parameter is always an int with a value of 2, 0, or sometimes 1
 		 */
 		void SET_PED_LEG_IK_MODE(Ped ped, int mode);
-		void SET_PED_MOTION_BLUR(Ped ped, BOOL toggle);
-		void SET_PED_CAN_SWITCH_WEAPON(Ped ped, BOOL toggle);
-		void SET_PED_DIES_INSTANTLY_IN_WATER(Ped ped, BOOL toggle);
+		void SET_PED_MOTION_BLUR(Ped ped, bool toggle);
+		void SET_PED_CAN_SWITCH_WEAPON(Ped ped, bool toggle);
+		void SET_PED_DIES_INSTANTLY_IN_WATER(Ped ped, bool toggle);
 		/**
 		 * Only appears in lamar1 script.
 		 */
@@ -13909,7 +13909,7 @@ namespace base::menu::natives {
 		 * BF_0x053AEAD9 = 91
 		 * };
 		 */
-		void SET_PED_COMBAT_ATTRIBUTES(Ped ped, int attributeId, BOOL enabled);
+		void SET_PED_COMBAT_ATTRIBUTES(Ped ped, int attributeId, bool enabled);
 		/**
 		 * enum eTargetLossResponseType
 		 * {
@@ -13919,51 +13919,51 @@ namespace base::menu::natives {
 		 * };
 		 */
 		void SET_PED_TARGET_LOSS_RESPONSE(Ped ped, int responseType);
-		BOOL IS_PED_PERFORMING_MELEE_ACTION(Ped ped);
-		BOOL IS_PED_PERFORMING_STEALTH_KILL(Ped ped);
-		BOOL IS_PED_PERFORMING_A_COUNTER_ATTACK(Ped ped);
-		BOOL IS_PED_BEING_STEALTH_KILLED(Ped ped);
+		bool IS_PED_PERFORMING_MELEE_ACTION(Ped ped);
+		bool IS_PED_PERFORMING_STEALTH_KILL(Ped ped);
+		bool IS_PED_PERFORMING_A_COUNTER_ATTACK(Ped ped);
+		bool IS_PED_BEING_STEALTH_KILLED(Ped ped);
 		Ped GET_MELEE_TARGET_FOR_PED(Ped ped);
-		BOOL WAS_PED_KILLED_BY_STEALTH(Ped ped);
-		BOOL WAS_PED_KILLED_BY_TAKEDOWN(Ped ped);
-		BOOL WAS_PED_KNOCKED_OUT(Ped ped);
+		bool WAS_PED_KILLED_BY_STEALTH(Ped ped);
+		bool WAS_PED_KILLED_BY_TAKEDOWN(Ped ped);
+		bool WAS_PED_KNOCKED_OUT(Ped ped);
 		/**
 		 * bit 1 (0x2) = use vehicle
 		 * bit 15 (0x8000) = force cower
 		 */
-		void SET_PED_FLEE_ATTRIBUTES(Ped ped, int attributeFlags, BOOL enable);
+		void SET_PED_FLEE_ATTRIBUTES(Ped ped, int attributeFlags, bool enable);
 		/**
 		 * p1: Only "CODE_HUMAN_STAND_COWER" found in the b617d scripts.
 		 */
 		void SET_PED_COWER_HASH(Ped ped, const char* p1);
-		void SET_PED_STEERS_AROUND_DEAD_BODIES(Ped ped, BOOL toggle);
-		void SET_PED_STEERS_AROUND_PEDS(Ped ped, BOOL toggle);
-		void SET_PED_STEERS_AROUND_OBJECTS(Ped ped, BOOL toggle);
-		void SET_PED_STEERS_AROUND_VEHICLES(Ped ped, BOOL toggle);
-		void SET_PED_IS_AVOIDED_BY_OTHERS(Any p0, BOOL p1);
+		void SET_PED_STEERS_AROUND_DEAD_BODIES(Ped ped, bool toggle);
+		void SET_PED_STEERS_AROUND_PEDS(Ped ped, bool toggle);
+		void SET_PED_STEERS_AROUND_OBJECTS(Ped ped, bool toggle);
+		void SET_PED_STEERS_AROUND_VEHICLES(Ped ped, bool toggle);
+		void SET_PED_IS_AVOIDED_BY_OTHERS(Any p0, bool p1);
 		void SET_PED_INCREASED_AVOIDANCE_RADIUS(Ped ped);
-		void SET_PED_BLOCKS_PATHING_WHEN_DEAD(Ped ped, BOOL toggle);
+		void SET_PED_BLOCKS_PATHING_WHEN_DEAD(Ped ped, bool toggle);
 		void SET_PED_NO_TIME_DELAY_BEFORE_SHOT(Any p0);
-		BOOL IS_ANY_PED_NEAR_POINT(float x, float y, float z, float radius);
-		void FORCE_PED_AI_AND_ANIMATION_UPDATE(Ped ped, BOOL p1, BOOL p2);
-		BOOL IS_PED_HEADING_TOWARDS_POSITION(Ped ped, float x, float y, float z, float p4);
+		bool IS_ANY_PED_NEAR_POINT(float x, float y, float z, float radius);
+		void FORCE_PED_AI_AND_ANIMATION_UPDATE(Ped ped, bool p1, bool p2);
+		bool IS_PED_HEADING_TOWARDS_POSITION(Ped ped, float x, float y, float z, float p4);
 		void REQUEST_PED_VISIBILITY_TRACKING(Ped ped);
-		void REQUEST_PED_VEHICLE_VISIBILITY_TRACKING(Ped ped, BOOL p1);
-		void REQUEST_PED_RESTRICTED_VEHICLE_VISIBILITY_TRACKING(Ped ped, BOOL p1);
-		void REQUEST_PED_USE_SMALL_BBOX_VISIBILITY_TRACKING(Ped ped, BOOL p1);
+		void REQUEST_PED_VEHICLE_VISIBILITY_TRACKING(Ped ped, bool p1);
+		void REQUEST_PED_RESTRICTED_VEHICLE_VISIBILITY_TRACKING(Ped ped, bool p1);
+		void REQUEST_PED_USE_SMALL_BBOX_VISIBILITY_TRACKING(Ped ped, bool p1);
 		/**
 		 * returns whether or not a ped is visible within your FOV, not this check auto's to false after a certain distance.
 		 * 
 		 * 
 		 * Target needs to be tracked.. won't work otherwise.
 		 */
-		BOOL IS_TRACKED_PED_VISIBLE(Ped ped);
+		bool IS_TRACKED_PED_VISIBLE(Ped ped);
 		int GET_TRACKED_PED_PIXELCOUNT(Ped ped);
-		BOOL IS_PED_TRACKED(Ped ped);
-		BOOL HAS_PED_RECEIVED_EVENT(Ped ped, int eventId);
-		BOOL CAN_PED_SEE_HATED_PED(Ped ped1, Ped ped2);
-		BOOL CAN_PED_SHUFFLE_TO_OR_FROM_TURRET_SEAT(Ped ped, int* p1);
-		BOOL CAN_PED_SHUFFLE_TO_OR_FROM_EXTRA_SEAT(Ped ped, int* p1);
+		bool IS_PED_TRACKED(Ped ped);
+		bool HAS_PED_RECEIVED_EVENT(Ped ped, int eventId);
+		bool CAN_PED_SEE_HATED_PED(Ped ped1, Ped ped2);
+		bool CAN_PED_SHUFFLE_TO_OR_FROM_TURRET_SEAT(Ped ped, int* p1);
+		bool CAN_PED_SHUFFLE_TO_OR_FROM_EXTRA_SEAT(Ped ped, int* p1);
 		/**
 		 * no bone= -1
 		 * 
@@ -14077,7 +14077,7 @@ namespace base::menu::natives {
 		 */
 		void SET_PED_ENVEFF_SCALE(Ped ped, float value);
 		float GET_PED_ENVEFF_SCALE(Ped ped);
-		void SET_ENABLE_PED_ENVEFF_SCALE(Ped ped, BOOL toggle);
+		void SET_ENABLE_PED_ENVEFF_SCALE(Ped ped, bool toggle);
 		/**
 		 * In agency_heist3b.c4, its like this 90% of the time:
 		 * 
@@ -14110,8 +14110,8 @@ namespace base::menu::natives {
 		 * Returns a float between 0.0 and 1.0 representing the current illuminated clothing glow intensity.
 		 */
 		float GET_PED_EMISSIVE_SCALE(Ped ped);
-		BOOL IS_PED_SHADER_READY(Ped ped);
-		void SET_PED_ENABLE_CREW_EMBLEM(Ped ped, BOOL toggle);
+		bool IS_PED_SHADER_READY(Ped ped);
+		void SET_PED_ENABLE_CREW_EMBLEM(Ped ped, bool toggle);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
@@ -14119,8 +14119,8 @@ namespace base::menu::natives {
 		/**
 		 * Enable/disable ped shadow (ambient occlusion). https://gfycat.com/thankfulesteemedgecko
 		 */
-		void SET_PED_AO_BLOB_RENDERING(Ped ped, BOOL toggle);
-		BOOL IS_PED_SHELTERED(Ped ped);
+		void SET_PED_AO_BLOB_RENDERING(Ped ped, bool toggle);
+		bool IS_PED_SHELTERED(Ped ped);
 		/**
 		 * p6 always 2 (but it doesnt seem to matter...)
 		 * 
@@ -14132,16 +14132,16 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if a synchronized scene is running
 		 */
-		BOOL IS_SYNCHRONIZED_SCENE_RUNNING(int sceneId);
-		void SET_SYNCHRONIZED_SCENE_ORIGIN(int sceneID, float x, float y, float z, float roll, float pitch, float yaw, BOOL p7);
+		bool IS_SYNCHRONIZED_SCENE_RUNNING(int sceneId);
+		void SET_SYNCHRONIZED_SCENE_ORIGIN(int sceneID, float x, float y, float z, float roll, float pitch, float yaw, bool p7);
 		void SET_SYNCHRONIZED_SCENE_PHASE(int sceneID, float phase);
 		float GET_SYNCHRONIZED_SCENE_PHASE(int sceneID);
 		void SET_SYNCHRONIZED_SCENE_RATE(int sceneID, float rate);
 		float GET_SYNCHRONIZED_SCENE_RATE(int sceneID);
-		void SET_SYNCHRONIZED_SCENE_LOOPED(int sceneID, BOOL toggle);
-		BOOL IS_SYNCHRONIZED_SCENE_LOOPED(int sceneID);
-		void SET_SYNCHRONIZED_SCENE_HOLD_LAST_FRAME(int sceneID, BOOL toggle);
-		BOOL IS_SYNCHRONIZED_SCENE_HOLD_LAST_FRAME(int sceneID);
+		void SET_SYNCHRONIZED_SCENE_LOOPED(int sceneID, bool toggle);
+		bool IS_SYNCHRONIZED_SCENE_LOOPED(int sceneID);
+		void SET_SYNCHRONIZED_SCENE_HOLD_LAST_FRAME(int sceneID, bool toggle);
+		bool IS_SYNCHRONIZED_SCENE_HOLD_LAST_FRAME(int sceneID);
 		void ATTACH_SYNCHRONIZED_SCENE_TO_ENTITY(int sceneID, Entity entity, int boneIndex);
 		void DETACH_SYNCHRONIZED_SCENE(int sceneID);
 		void TAKE_OWNERSHIP_OF_SYNCHRONIZED_SCENE(int scene);
@@ -14176,8 +14176,8 @@ namespace base::menu::natives {
 		 * MotionState_Jetpack = 0x535E6A5E
 		 * };
 		 */
-		BOOL FORCE_PED_MOTION_STATE(Ped ped, Hash motionStateHash, BOOL p2, int p3, BOOL p4);
-		BOOL GET_PED_CURRENT_MOVE_BLEND_RATIO(Ped ped, float* speedX, float* speedY);
+		bool FORCE_PED_MOTION_STATE(Ped ped, Hash motionStateHash, bool p2, int p3, bool p4);
+		bool GET_PED_CURRENT_MOVE_BLEND_RATIO(Ped ped, float* speedX, float* speedY);
 		void SET_PED_MAX_MOVE_BLEND_RATIO(Ped ped, float value);
 		void SET_PED_MIN_MOVE_BLEND_RATIO(Ped ped, float value);
 		/**
@@ -14206,7 +14206,7 @@ namespace base::menu::natives {
 		 * SF_HOT_PERSON = 2,
 		 * };
 		 */
-		BOOL PED_HAS_SEXINESS_FLAG_SET(Ped ped, int sexinessFlag);
+		bool PED_HAS_SEXINESS_FLAG_SET(Ped ped, int sexinessFlag);
 		/**
 		 * Returns size of array, passed into the second variable.
 		 * 
@@ -14255,12 +14255,12 @@ namespace base::menu::natives {
 		 * Example: gtaforums.com/topic/789788-function-args-to-pedget-ped-nearby-peds/?p=1067386687
 		 */
 		int GET_PED_NEARBY_PEDS(Ped ped, Any* sizeAndPeds, int ignore);
-		BOOL HAVE_ALL_STREAMING_REQUESTS_COMPLETED(Ped ped);
-		BOOL IS_PED_USING_ACTION_MODE(Ped ped);
+		bool HAVE_ALL_STREAMING_REQUESTS_COMPLETED(Ped ped);
+		bool IS_PED_USING_ACTION_MODE(Ped ped);
 		/**
 		 * p2 is usually -1 in the scripts. action is either 0 or "DEFAULT_ACTION".
 		 */
-		void SET_PED_USING_ACTION_MODE(Ped ped, BOOL p1, int p2, const char* action);
+		void SET_PED_USING_ACTION_MODE(Ped ped, bool p1, int p2, const char* action);
 		/**
 		 * name: "MP_FEMALE_ACTION" found multiple times in the b617d scripts.
 		 */
@@ -14288,64 +14288,64 @@ namespace base::menu::natives {
 		/**
 		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
-		BOOL IS_PEDHEADSHOT_VALID(int id);
+		bool IS_PEDHEADSHOT_VALID(int id);
 		/**
 		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
-		BOOL IS_PEDHEADSHOT_READY(int id);
+		bool IS_PEDHEADSHOT_READY(int id);
 		/**
 		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
 		const char* GET_PEDHEADSHOT_TXD_STRING(int id);
-		BOOL REQUEST_PEDHEADSHOT_IMG_UPLOAD(int id);
+		bool REQUEST_PEDHEADSHOT_IMG_UPLOAD(int id);
 		void RELEASE_PEDHEADSHOT_IMG_UPLOAD(int id);
-		BOOL IS_PEDHEADSHOT_IMG_UPLOAD_AVAILABLE();
-		BOOL HAS_PEDHEADSHOT_IMG_UPLOAD_FAILED();
-		BOOL HAS_PEDHEADSHOT_IMG_UPLOAD_SUCCEEDED();
+		bool IS_PEDHEADSHOT_IMG_UPLOAD_AVAILABLE();
+		bool HAS_PEDHEADSHOT_IMG_UPLOAD_FAILED();
+		bool HAS_PEDHEADSHOT_IMG_UPLOAD_SUCCEEDED();
 		void SET_PED_HEATSCALE_OVERRIDE(Ped ped, float heatScale);
 		void DISABLE_PED_HEATSCALE_OVERRIDE(Ped ped);
 		void SPAWNPOINTS_START_SEARCH(float p0, float p1, float p2, float p3, float p4, int interiorFlags, float scale, int duration);
 		void SPAWNPOINTS_START_SEARCH_IN_ANGLED_AREA(float x1, float y1, float z1, float x2, float y2, float z2, float width, int interiorFlags, float scale, int duration);
 		void SPAWNPOINTS_CANCEL_SEARCH();
-		BOOL SPAWNPOINTS_IS_SEARCH_ACTIVE();
-		BOOL SPAWNPOINTS_IS_SEARCH_COMPLETE();
-		BOOL SPAWNPOINTS_IS_SEARCH_FAILED();
+		bool SPAWNPOINTS_IS_SEARCH_ACTIVE();
+		bool SPAWNPOINTS_IS_SEARCH_COMPLETE();
+		bool SPAWNPOINTS_IS_SEARCH_FAILED();
 		int SPAWNPOINTS_GET_NUM_SEARCH_RESULTS();
 		void SPAWNPOINTS_GET_SEARCH_RESULT(int randomInt, float* x, float* y, float* z);
 		void SPAWNPOINTS_GET_SEARCH_RESULT_FLAGS(int p0, int* p1);
 		void SET_IK_TARGET(Ped ped, int ikIndex, Entity entityLookAt, int boneLookAt, float offsetX, float offsetY, float offsetZ, Any p7, int blendInDuration, int blendOutDuration);
 		void FORCE_INSTANT_LEG_IK_SETUP(Ped ped);
 		void REQUEST_ACTION_MODE_ASSET(const char* asset);
-		BOOL HAS_ACTION_MODE_ASSET_LOADED(const char* asset);
+		bool HAS_ACTION_MODE_ASSET_LOADED(const char* asset);
 		void REMOVE_ACTION_MODE_ASSET(const char* asset);
 		void REQUEST_STEALTH_MODE_ASSET(const char* asset);
-		BOOL HAS_STEALTH_MODE_ASSET_LOADED(const char* asset);
+		bool HAS_STEALTH_MODE_ASSET_LOADED(const char* asset);
 		void REMOVE_STEALTH_MODE_ASSET(const char* asset);
 		void SET_PED_LOD_MULTIPLIER(Ped ped, float multiplier);
-		void SET_PED_CAN_LOSE_PROPS_ON_DAMAGE(Ped ped, BOOL toggle, int p2);
-		void SET_FORCE_FOOTSTEP_UPDATE(Ped ped, BOOL toggle);
-		void SET_FORCE_STEP_TYPE(Ped ped, BOOL p1, int type, int p3);
-		BOOL IS_ANY_HOSTILE_PED_NEAR_POINT(Ped ped, float x, float y, float z, float radius);
+		void SET_PED_CAN_LOSE_PROPS_ON_DAMAGE(Ped ped, bool toggle, int p2);
+		void SET_FORCE_FOOTSTEP_UPDATE(Ped ped, bool toggle);
+		void SET_FORCE_STEP_TYPE(Ped ped, bool p1, int type, int p3);
+		bool IS_ANY_HOSTILE_PED_NEAR_POINT(Ped ped, float x, float y, float z, float radius);
 		/**
 		 * Toggles config flag CPED_CONFIG_FLAG_CanPlayInCarIdles.
 		 */
-		void SET_PED_CAN_PLAY_IN_CAR_IDLES(Ped ped, BOOL toggle);
-		BOOL IS_TARGET_PED_IN_PERCEPTION_AREA(Ped ped, Ped targetPed, float p2, float p3, float p4, float p5);
+		void SET_PED_CAN_PLAY_IN_CAR_IDLES(Ped ped, bool toggle);
+		bool IS_TARGET_PED_IN_PERCEPTION_AREA(Ped ped, Ped targetPed, float p2, float p3, float p4, float p5);
 		/**
 		 * Min and max are usually 100.0 and 200.0
 		 */
 		void SET_POP_CONTROL_SPHERE_THIS_FRAME(float x, float y, float z, float min, float max);
 		void FORCE_ZERO_MASS_IN_COLLISIONS(Ped ped);
-		void SET_DISABLE_HIGH_FALL_DEATH(Ped ped, BOOL toggle);
+		void SET_DISABLE_HIGH_FALL_DEATH(Ped ped, bool toggle);
 		void SET_PED_PHONE_PALETTE_IDX(Any p0, Any p1);
 		void SET_PED_STEER_BIAS(Ped ped, float value);
-		BOOL IS_PED_SWITCHING_WEAPON(Ped Ped);
+		bool IS_PED_SWITCHING_WEAPON(Ped Ped);
 		void SET_PED_TREATED_AS_FRIENDLY(Any p0, Any p1, Any p2);
 		void SET_DISABLE_PED_MAP_COLLISION(Ped ped);
-		void ENABLE_MP_LIGHT(Ped ped, BOOL toggle);
-		BOOL GET_MP_LIGHT_ENABLED(Ped ped);
+		void ENABLE_MP_LIGHT(Ped ped, bool toggle);
+		bool GET_MP_LIGHT_ENABLED(Ped ped);
 		void CLEAR_COVER_POINT_FOR_PED(Ped ped);
-		void SET_ALLOW_STUNT_JUMP_CAMERA(Ped ped, BOOL toggle);
+		void SET_ALLOW_STUNT_JUMP_CAMERA(Ped ped, bool toggle);
 
 	} // namespace PED
 
@@ -14387,12 +14387,12 @@ namespace base::menu::natives {
 		 * 
 		 * Rope will sometimes contract and fall to the ground like you'd expect it to, but since it doesn't interact with the world the effect is just jaring.
 		 */
-		int ADD_ROPE(float x, float y, float z, float rotX, float rotY, float rotZ, float length, int ropeType, float maxLength, float minLength, float windingSpeed, BOOL p11, BOOL p12, BOOL rigid, float p14, BOOL breakWhenShot, Any* unkPtr);
+		int ADD_ROPE(float x, float y, float z, float rotX, float rotY, float rotZ, float length, int ropeType, float maxLength, float minLength, float windingSpeed, bool p11, bool p12, bool rigid, float p14, bool breakWhenShot, Any* unkPtr);
 		void DELETE_ROPE(int* ropeId);
 		void DELETE_CHILD_ROPE(int ropeId);
-		BOOL DOES_ROPE_EXIST(int* ropeId);
-		void ROPE_DRAW_ENABLED(int* ropeId, BOOL p1);
-		void ROPE_DRAW_SHADOW_ENABLED(int* ropeId, BOOL toggle);
+		bool DOES_ROPE_EXIST(int* ropeId);
+		void ROPE_DRAW_ENABLED(int* ropeId, bool p1);
+		void ROPE_DRAW_SHADOW_ENABLED(int* ropeId, bool toggle);
 		/**
 		 * Rope presets can be found in the gamefiles. One example is "ropeFamily3", it is NOT a hash but rather a string.
 		 */
@@ -14403,16 +14403,16 @@ namespace base::menu::natives {
 		/**
 		 * Attaches entity 1 to entity 2.
 		 */
-		void ATTACH_ENTITIES_TO_ROPE(int ropeId, Entity ent1, Entity ent2, float ent1_x, float ent1_y, float ent1_z, float ent2_x, float ent2_y, float ent2_z, float length, BOOL p10, BOOL p11, Any* p12, Any* p13);
+		void ATTACH_ENTITIES_TO_ROPE(int ropeId, Entity ent1, Entity ent2, float ent1_x, float ent1_y, float ent1_z, float ent2_x, float ent2_y, float ent2_z, float length, bool p10, bool p11, Any* p12, Any* p13);
 		/**
 		 * The position supplied can be anywhere, and the entity should anchor relative to that point from it's origin.
 		 */
-		void ATTACH_ROPE_TO_ENTITY(int ropeId, Entity entity, float x, float y, float z, BOOL p5);
+		void ATTACH_ROPE_TO_ENTITY(int ropeId, Entity entity, float x, float y, float z, bool p5);
 		void DETACH_ROPE_FROM_ENTITY(int ropeId, Entity entity);
 		void ROPE_SET_UPDATE_PINVERTS(int ropeId);
 		void ROPE_SET_UPDATE_ORDER(int ropeId, Any p1);
-		void ROPE_SET_SMOOTH_REELIN(int ropeId, BOOL p1);
-		BOOL IS_ROPE_ATTACHED_AT_BOTH_ENDS(int* ropeId);
+		void ROPE_SET_SMOOTH_REELIN(int ropeId, bool p1);
+		bool IS_ROPE_ATTACHED_AT_BOTH_ENDS(int* ropeId);
 		Vector3 GET_ROPE_LAST_VERTEX_COORD(int ropeId);
 		Vector3 GET_ROPE_VERTEX_COORD(int ropeId, int vertex);
 		void START_ROPE_WINDING(int ropeId);
@@ -14424,14 +14424,14 @@ namespace base::menu::natives {
 		 * Loads rope textures for all ropes in the current scene.
 		 */
 		void ROPE_LOAD_TEXTURES();
-		BOOL ROPE_ARE_TEXTURES_LOADED();
+		bool ROPE_ARE_TEXTURES_LOADED();
 		/**
 		 * Unloads rope textures for all ropes in the current scene.
 		 */
 		void ROPE_UNLOAD_TEXTURES();
-		BOOL DOES_SCRIPT_OWN_ROPE(int ropeId);
+		bool DOES_SCRIPT_OWN_ROPE(int ropeId);
 		void ROPE_ATTACH_VIRTUAL_BOUND_GEOM(int ropeId, int p1, float p2, float p3, float p4, float p5, float p6, float p7, float p8, float p9, float p10, float p11, float p12, float p13);
-		void ROPE_CHANGE_SCRIPT_OWNER(Any p0, BOOL p1, BOOL p2);
+		void ROPE_CHANGE_SCRIPT_OWNER(Any p0, bool p1, bool p2);
 		void ROPE_SET_REFFRAMEVELOCITY_COLLIDERORDER(int ropeId, int p1);
 		float ROPE_GET_DISTANCE_BETWEEN_ENDS(int ropeId);
 		/**
@@ -14449,17 +14449,17 @@ namespace base::menu::natives {
 		void SET_CGOFFSET(Entity entity, float x, float y, float z);
 		Vector3 GET_CGOFFSET(Entity entity);
 		void SET_CG_AT_BOUNDCENTER(Entity entity);
-		void BREAK_ENTITY_GLASS(Entity entity, float p1, float p2, float p3, float p4, float p5, float p6, float p7, float p8, Any p9, BOOL p10);
-		BOOL GET_IS_ENTITY_A_FRAG(Object object);
-		void SET_DISABLE_BREAKING(Object object, BOOL toggle);
+		void BREAK_ENTITY_GLASS(Entity entity, float p1, float p2, float p3, float p4, float p5, float p6, float p7, float p8, Any p9, bool p10);
+		bool GET_IS_ENTITY_A_FRAG(Object object);
+		void SET_DISABLE_BREAKING(Object object, bool toggle);
 		void RESET_DISABLE_BREAKING(Object object);
-		void SET_DISABLE_FRAG_DAMAGE(Object object, BOOL toggle);
-		void SET_USE_KINEMATIC_PHYSICS(Entity entity, BOOL toggle);
-		void SET_IN_STUNT_MODE(BOOL p0);
+		void SET_DISABLE_FRAG_DAMAGE(Object object, bool toggle);
+		void SET_USE_KINEMATIC_PHYSICS(Entity entity, bool toggle);
+		void SET_IN_STUNT_MODE(bool p0);
 		/**
 		 * Related to the lower-end of a vehicles fTractionCurve, e.g., from standing starts and acceleration from low/zero speeds.
 		 */
-		void SET_IN_ARENA_MODE(BOOL toggle);
+		void SET_IN_ARENA_MODE(bool toggle);
 
 	} // namespace PHYSICS
 
@@ -14478,7 +14478,7 @@ namespace base::menu::natives {
 		 * Make sure to request the model first and wait until it has loaded.
 		 */
 		void SET_PLAYER_MODEL(Player player, Hash model);
-		void CHANGE_PLAYER_PED(Player player, Ped ped, BOOL p2, BOOL resetDamage);
+		void CHANGE_PLAYER_PED(Player player, Ped ped, bool p2, bool resetDamage);
 		void GET_PLAYER_RGB_COLOUR(Player player, int* r, int* g, int* b);
 		/**
 		 * Gets the number of players in the current session.
@@ -14510,7 +14510,7 @@ namespace base::menu::natives {
 		 * P1: ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 1)
 		 * P2: Not set by any call
 		 */
-		void SET_PLAYER_WANTED_CENTRE_POSITION(Player player, Vector3* position, BOOL p2, BOOL p3);
+		void SET_PLAYER_WANTED_CENTRE_POSITION(Player player, Vector3* position, bool p2, bool p3);
 		/**
 		 * Drft
 		 */
@@ -14523,11 +14523,11 @@ namespace base::menu::natives {
 		 * disableNoMission-  Disables When Off Mission- appears to always be false
 		 * 
 		 */
-		void SET_PLAYER_WANTED_LEVEL(Player player, int wantedLevel, BOOL disableNoMission);
+		void SET_PLAYER_WANTED_LEVEL(Player player, int wantedLevel, bool disableNoMission);
 		/**
 		 * p2 is always false in R* scripts
 		 */
-		void SET_PLAYER_WANTED_LEVEL_NO_DROP(Player player, int wantedLevel, BOOL p2);
+		void SET_PLAYER_WANTED_LEVEL_NO_DROP(Player player, int wantedLevel, bool p2);
 		/**
 		 * Forces any pending wanted level to be applied to the specified player immediately.
 		 * 
@@ -14535,20 +14535,20 @@ namespace base::menu::natives {
 		 * 
 		 * Second parameter is unknown (always false).
 		 */
-		void SET_PLAYER_WANTED_LEVEL_NOW(Player player, BOOL p1);
-		BOOL ARE_PLAYER_FLASHING_STARS_ABOUT_TO_DROP(Player player);
-		BOOL ARE_PLAYER_STARS_GREYED_OUT(Player player);
-		BOOL IS_WANTED_AND_HAS_BEEN_SEEN_BY_COPS(Player player);
-		void SET_DISPATCH_COPS_FOR_PLAYER(Player player, BOOL toggle);
-		BOOL IS_PLAYER_WANTED_LEVEL_GREATER(Player player, int wantedLevel);
+		void SET_PLAYER_WANTED_LEVEL_NOW(Player player, bool p1);
+		bool ARE_PLAYER_FLASHING_STARS_ABOUT_TO_DROP(Player player);
+		bool ARE_PLAYER_STARS_GREYED_OUT(Player player);
+		bool IS_WANTED_AND_HAS_BEEN_SEEN_BY_COPS(Player player);
+		void SET_DISPATCH_COPS_FOR_PLAYER(Player player, bool toggle);
+		bool IS_PLAYER_WANTED_LEVEL_GREATER(Player player, int wantedLevel);
 		/**
 		 * This executes at the same as speed as PLAYER::SET_PLAYER_WANTED_LEVEL(player, 0, false);
 		 * 
 		 * PLAYER::GET_PLAYER_WANTED_LEVEL(player); executes in less than half the time. Which means that it's worth first checking if the wanted level needs to be cleared before clearing. However, this is mostly about good code practice and can important in other situations. The difference in time in this example is negligible.
 		 */
 		void CLEAR_PLAYER_WANTED_LEVEL(Player player);
-		BOOL IS_PLAYER_DEAD(Player player);
-		BOOL IS_PLAYER_PRESSING_HORN(Player player);
+		bool IS_PLAYER_DEAD(Player player);
+		bool IS_PLAYER_PRESSING_HORN(Player player);
 		/**
 		 * Flags:
 		 * SPC_AMBIENT_SCRIPT = (1 << 1),
@@ -14566,7 +14566,7 @@ namespace base::menu::natives {
 		 * 
 		 * See: https://alloc8or.re/gta5/doc/enums/eSetPlayerControlFlag.txt
 		 */
-		void SET_PLAYER_CONTROL(Player player, BOOL bHasControl, int flags);
+		void SET_PLAYER_CONTROL(Player player, bool bHasControl, int flags);
 		int GET_PLAYER_WANTED_LEVEL(Player player);
 		void SET_MAX_WANTED_LEVEL(int maxWantedLevel);
 		/**
@@ -14576,26 +14576,26 @@ namespace base::menu::natives {
 		 * If toggle is set to true:
 		 * The police will be shown on the (mini)map
 		 */
-		void SET_POLICE_RADAR_BLIPS(BOOL toggle);
+		void SET_POLICE_RADAR_BLIPS(bool toggle);
 		/**
 		 * The player will be ignored by the police if toggle is set to true
 		 */
-		void SET_POLICE_IGNORE_PLAYER(Player player, BOOL toggle);
+		void SET_POLICE_IGNORE_PLAYER(Player player, bool toggle);
 		/**
 		 * Checks whether the specified player has a Ped, the Ped is not dead, is not injured and is not arrested.
 		 */
-		BOOL IS_PLAYER_PLAYING(Player player);
-		void SET_EVERYONE_IGNORE_PLAYER(Player player, BOOL toggle);
-		void SET_ALL_RANDOM_PEDS_FLEE(Player player, BOOL toggle);
+		bool IS_PLAYER_PLAYING(Player player);
+		void SET_EVERYONE_IGNORE_PLAYER(Player player, bool toggle);
+		void SET_ALL_RANDOM_PEDS_FLEE(Player player, bool toggle);
 		void SET_ALL_RANDOM_PEDS_FLEE_THIS_FRAME(Player player);
-		void SET_ALL_NEUTRAL_RANDOM_PEDS_FLEE(Player player, BOOL toggle);
+		void SET_ALL_NEUTRAL_RANDOM_PEDS_FLEE(Player player, bool toggle);
 		/**
 		 * - This is called after SET_ALL_RANDOM_PEDS_FLEE_THIS_FRAME
 		 * 
 		 */
 		void SET_ALL_NEUTRAL_RANDOM_PEDS_FLEE_THIS_FRAME(Player player);
 		void SET_LAW_PEDS_CAN_ATTACK_NON_WANTED_PLAYER_THIS_FRAME(Player player);
-		void SET_IGNORE_LOW_PRIORITY_SHOCKING_EVENTS(Player player, BOOL toggle);
+		void SET_IGNORE_LOW_PRIORITY_SHOCKING_EVENTS(Player player, bool toggle);
 		void SET_WANTED_LEVEL_MULTIPLIER(float multiplier);
 		/**
 		 * Max value is 1.0
@@ -14701,27 +14701,27 @@ namespace base::menu::natives {
 		 */
 		void SET_LAW_RESPONSE_DELAY_OVERRIDE(float p0);
 		void RESET_LAW_RESPONSE_DELAY_OVERRIDE();
-		BOOL CAN_PLAYER_START_MISSION(Player player);
-		BOOL IS_PLAYER_READY_FOR_CUTSCENE(Player player);
-		BOOL IS_PLAYER_TARGETTING_ENTITY(Player player, Entity entity);
+		bool CAN_PLAYER_START_MISSION(Player player);
+		bool IS_PLAYER_READY_FOR_CUTSCENE(Player player);
+		bool IS_PLAYER_TARGETTING_ENTITY(Player player, Entity entity);
 		/**
 		 * Assigns the handle of locked-on melee target to *entity that you pass it.
 		 * Returns false if no entity found.
 		 */
-		BOOL GET_PLAYER_TARGET_ENTITY(Player player, Entity* entity);
+		bool GET_PLAYER_TARGET_ENTITY(Player player, Entity* entity);
 		/**
 		 * Gets a value indicating whether the specified player is currently aiming freely.
 		 */
-		BOOL IS_PLAYER_FREE_AIMING(Player player);
+		bool IS_PLAYER_FREE_AIMING(Player player);
 		/**
 		 * Gets a value indicating whether the specified player is currently aiming freely at the specified entity.
 		 */
-		BOOL IS_PLAYER_FREE_AIMING_AT_ENTITY(Player player, Entity entity);
+		bool IS_PLAYER_FREE_AIMING_AT_ENTITY(Player player, Entity entity);
 		/**
 		 * Returns TRUE if it found an entity in your crosshair within range of your weapon. Assigns the handle of the target to the *entity that you pass it.
 		 * Returns false if no entity found.
 		 */
-		BOOL GET_ENTITY_PLAYER_IS_FREE_AIMING_AT(Player player, Entity* entity);
+		bool GET_ENTITY_PLAYER_IS_FREE_AIMING_AT(Player player, Entity* entity);
 		/**
 		 * Affects the range of auto aim target.
 		 */
@@ -14732,22 +14732,22 @@ namespace base::menu::natives {
 		 * "A drive-by is when a ped is aiming/shooting from vehicle. This includes middle finger taunts. By setting this value to false I confirm the player is unable to do all that. Tested on tick."
 		 * 
 		 */
-		void SET_PLAYER_CAN_DO_DRIVE_BY(Player player, BOOL toggle);
+		void SET_PLAYER_CAN_DO_DRIVE_BY(Player player, bool toggle);
 		/**
 		 * Sets whether this player can be hassled by gangs.
 		 */
-		void SET_PLAYER_CAN_BE_HASSLED_BY_GANGS(Player player, BOOL toggle);
+		void SET_PLAYER_CAN_BE_HASSLED_BY_GANGS(Player player, bool toggle);
 		/**
 		 * Sets whether this player can take cover.
 		 */
-		void SET_PLAYER_CAN_USE_COVER(Player player, BOOL toggle);
+		void SET_PLAYER_CAN_USE_COVER(Player player, bool toggle);
 		/**
 		 * Gets the maximum wanted level the player can get.
 		 * Ranges from 0 to 5.
 		 */
 		int GET_MAX_WANTED_LEVEL();
-		BOOL IS_PLAYER_TARGETTING_ANYTHING(Player player);
-		void SET_PLAYER_SPRINT(Player player, BOOL toggle);
+		bool IS_PLAYER_TARGETTING_ANYTHING(Player player);
+		void SET_PLAYER_SPRINT(Player player, bool toggle);
 		void RESET_PLAYER_STAMINA(Player player);
 		void RESTORE_PLAYER_STAMINA(Player player, float p1);
 		float GET_PLAYER_SPRINT_STAMINA_REMAINING(Player player);
@@ -14766,18 +14766,18 @@ namespace base::menu::natives {
 		 * 
 		 * You can't disable controls with this, use SET_PLAYER_CONTROL(...) for this.
 		 */
-		BOOL IS_PLAYER_CONTROL_ON(Player player);
+		bool IS_PLAYER_CONTROL_ON(Player player);
 		/**
 		 * Returns true when the player is not able to control the cam i.e. when running a benchmark test, switching the player or viewing a cutscene.
 		 * 
 		 * Note: I am not 100% sure if the native actually checks if the cam control is disabled but it seems promising.
 		 */
-		BOOL GET_ARE_CAMERA_CONTROLS_DISABLED();
-		BOOL IS_PLAYER_SCRIPT_CONTROL_ON(Player player);
+		bool GET_ARE_CAMERA_CONTROLS_DISABLED();
+		bool IS_PLAYER_SCRIPT_CONTROL_ON(Player player);
 		/**
 		 * Returns TRUE if the player ('s ped) is climbing at the moment.
 		 */
-		BOOL IS_PLAYER_CLIMBING(Player player);
+		bool IS_PLAYER_CLIMBING(Player player);
 		/**
 		 * Return true while player is being arrested / busted.
 		 * 
@@ -14785,7 +14785,7 @@ namespace base::menu::natives {
 		 * 
 		 * If atArresting is set to 0, this function will return 1 only when the busted screen is shown.
 		 */
-		BOOL IS_PLAYER_BEING_ARRESTED(Player player, BOOL atArresting);
+		bool IS_PLAYER_BEING_ARRESTED(Player player, bool atArresting);
 		void RESET_PLAYER_ARREST_STATE(Player player);
 		/**
 		 * Alternative: GET_VEHICLE_PED_IS_IN(PLAYER_PED_ID(), 1);
@@ -14810,7 +14810,7 @@ namespace base::menu::natives {
 		int GET_TIME_SINCE_PLAYER_HIT_PED(Player player);
 		int GET_TIME_SINCE_PLAYER_DROVE_ON_PAVEMENT(Player player);
 		int GET_TIME_SINCE_PLAYER_DROVE_AGAINST_TRAFFIC(Player player);
-		BOOL IS_PLAYER_FREE_FOR_AMBIENT_TASK(Player player);
+		bool IS_PLAYER_FREE_FOR_AMBIENT_TASK(Player player);
 		/**
 		 * This returns YOUR 'identity' as a Player type.
 		 * 
@@ -14825,7 +14825,7 @@ namespace base::menu::natives {
 		 * Does exactly the same thing as PLAYER_ID()
 		 */
 		int NETWORK_PLAYER_ID_TO_INT();
-		BOOL HAS_FORCE_CLEANUP_OCCURRED(int cleanupFlags);
+		bool HAS_FORCE_CLEANUP_OCCURRED(int cleanupFlags);
 		/**
 		 * used with 1,2,8,64,128 in the scripts
 		 */
@@ -14917,12 +14917,12 @@ namespace base::menu::natives {
 		 * 76 - Elitist
 		 * 77 - Masterminds
 		 */
-		BOOL GIVE_ACHIEVEMENT_TO_PLAYER(int achievementId);
+		bool GIVE_ACHIEVEMENT_TO_PLAYER(int achievementId);
 		/**
 		 * For Steam.
 		 * Does nothing and always returns false in the retail version of the game.
 		 */
-		BOOL SET_ACHIEVEMENT_PROGRESS(int achievementId, int progress);
+		bool SET_ACHIEVEMENT_PROGRESS(int achievementId, int progress);
 		/**
 		 * For Steam.
 		 * Always returns 0 in retail version of the game.
@@ -14931,30 +14931,30 @@ namespace base::menu::natives {
 		/**
 		 * See GIVE_ACHIEVEMENT_TO_PLAYER
 		 */
-		BOOL HAS_ACHIEVEMENT_BEEN_PASSED(int achievementId);
+		bool HAS_ACHIEVEMENT_BEEN_PASSED(int achievementId);
 		/**
 		 * Returns TRUE if the game is in online mode and FALSE if in offline mode.
 		 * 
 		 * This is an alias for NETWORK_IS_SIGNED_ONLINE.
 		 */
-		BOOL IS_PLAYER_ONLINE();
+		bool IS_PLAYER_ONLINE();
 		/**
 		 * this function is hard-coded to always return 0.
 		 */
-		BOOL IS_PLAYER_LOGGING_IN_NP();
+		bool IS_PLAYER_LOGGING_IN_NP();
 		/**
 		 * Purpose of the BOOL currently unknown.
 		 * Both, true and false, work
 		 */
-		void DISPLAY_SYSTEM_SIGNIN_UI(BOOL p0);
-		BOOL IS_SYSTEM_UI_BEING_DISPLAYED();
+		void DISPLAY_SYSTEM_SIGNIN_UI(bool p0);
+		bool IS_SYSTEM_UI_BEING_DISPLAYED();
 		/**
 		 * Simply sets you as invincible (Health will not deplete).
 		 * 
 		 * Use 0x733A643B5B0C53C1 instead if you want Ragdoll enabled, which is equal to:
 		 * *(DWORD *)(playerPedAddress + 0x188) |= (1 << 9);
 		 */
-		void SET_PLAYER_INVINCIBLE(Player player, BOOL toggle);
+		void SET_PLAYER_INVINCIBLE(Player player, bool toggle);
 		/**
 		 * Returns the Player's Invincible status.
 		 * 
@@ -14975,15 +14975,15 @@ namespace base::menu::natives {
 		 * 
 		 * 
 		 */
-		BOOL GET_PLAYER_INVINCIBLE(Player player);
+		bool GET_PLAYER_INVINCIBLE(Player player);
 		/**
 		 * Always returns false.
 		 */
-		BOOL GET_PLAYER_DEBUG_INVINCIBLE(Player player);
-		void SET_PLAYER_INVINCIBLE_BUT_HAS_REACTIONS(Player player, BOOL toggle);
-		void SET_PLAYER_CAN_COLLECT_DROPPED_MONEY(Player player, BOOL p1);
-		void REMOVE_PLAYER_HELMET(Player player, BOOL p2);
-		void GIVE_PLAYER_RAGDOLL_CONTROL(Player player, BOOL toggle);
+		bool GET_PLAYER_DEBUG_INVINCIBLE(Player player);
+		void SET_PLAYER_INVINCIBLE_BUT_HAS_REACTIONS(Player player, bool toggle);
+		void SET_PLAYER_CAN_COLLECT_DROPPED_MONEY(Player player, bool p1);
+		void REMOVE_PLAYER_HELMET(Player player, bool p2);
+		void GIVE_PLAYER_RAGDOLL_CONTROL(Player player, bool toggle);
 		/**
 		 * Example from fm_mission_controler.ysc.c4:
 		 * 
@@ -14993,7 +14993,7 @@ namespace base::menu::natives {
 		 * 
 		 * No need to confirm it says PLAYER_ID() so it uses PLAYER_ID() lol.
 		 */
-		void SET_PLAYER_LOCKON(Player player, BOOL toggle);
+		void SET_PLAYER_LOCKON(Player player, bool toggle);
 		/**
 		 * Sets your targeting mode.
 		 * 0 = Assisted Aim - Full
@@ -15007,15 +15007,15 @@ namespace base::menu::natives {
 		/**
 		 * Returns profile setting 237.
 		 */
-		BOOL GET_IS_USING_FPS_THIRD_PERSON_COVER();
+		bool GET_IS_USING_FPS_THIRD_PERSON_COVER();
 		/**
 		 * Returns profile setting 243.
 		 */
-		BOOL GET_IS_USING_HOOD_CAMERA();
+		bool GET_IS_USING_HOOD_CAMERA();
 		void CLEAR_PLAYER_HAS_DAMAGED_AT_LEAST_ONE_PED(Player player);
-		BOOL HAS_PLAYER_DAMAGED_AT_LEAST_ONE_PED(Player player);
+		bool HAS_PLAYER_DAMAGED_AT_LEAST_ONE_PED(Player player);
 		void CLEAR_PLAYER_HAS_DAMAGED_AT_LEAST_ONE_NON_ANIMAL_PED(Player player);
-		BOOL HAS_PLAYER_DAMAGED_AT_LEAST_ONE_NON_ANIMAL_PED(Player player);
+		bool HAS_PLAYER_DAMAGED_AT_LEAST_ONE_NON_ANIMAL_PED(Player player);
 		/**
 		 * This can be between 1.0f - 14.9f
 		 * 
@@ -15067,20 +15067,20 @@ namespace base::menu::natives {
 		int GET_TIME_SINCE_LAST_DEATH();
 		void ASSISTED_MOVEMENT_CLOSE_ROUTE();
 		void ASSISTED_MOVEMENT_FLUSH_ROUTE();
-		void SET_PLAYER_FORCED_AIM(Player player, BOOL toggle);
-		void SET_PLAYER_FORCED_ZOOM(Player player, BOOL toggle);
-		void SET_PLAYER_FORCE_SKIP_AIM_INTRO(Player player, BOOL toggle);
+		void SET_PLAYER_FORCED_AIM(Player player, bool toggle);
+		void SET_PLAYER_FORCED_ZOOM(Player player, bool toggle);
+		void SET_PLAYER_FORCE_SKIP_AIM_INTRO(Player player, bool toggle);
 		/**
 		 * Inhibits the player from using any method of combat including melee and firearms.
 		 * 
 		 * NOTE: Only disables the firing for one frame
 		 */
-		void DISABLE_PLAYER_FIRING(Player player, BOOL toggle);
+		void DISABLE_PLAYER_FIRING(Player player, bool toggle);
 		/**
 		 * Used only once in R* scripts (freemode.ysc).
 		 */
 		void DISABLE_PLAYER_THROW_GRENADE_WHILE_USING_GUN();
-		void SET_DISABLE_AMBIENT_MELEE_MOVE(Player player, BOOL toggle);
+		void SET_DISABLE_AMBIENT_MELEE_MOVE(Player player, bool toggle);
 		/**
 		 * Default is 100. Use player id and not ped id. For instance: PLAYER::SET_PLAYER_MAX_ARMOUR(PLAYER::PLAYER_ID(), 100); // main_persistent.ct4
 		 */
@@ -15101,15 +15101,15 @@ namespace base::menu::natives {
 		/**
 		 * Every occurrence of p1 & p2 were both true.
 		 */
-		void SPECIAL_ABILITY_CHARGE_SMALL(Player player, BOOL p1, BOOL p2, Any p3);
+		void SPECIAL_ABILITY_CHARGE_SMALL(Player player, bool p1, bool p2, Any p3);
 		/**
 		 * Only 1 match. Both p1 & p2 were true.
 		 */
-		void SPECIAL_ABILITY_CHARGE_MEDIUM(Player player, BOOL p1, BOOL p2, Any p3);
+		void SPECIAL_ABILITY_CHARGE_MEDIUM(Player player, bool p1, bool p2, Any p3);
 		/**
 		 * 2 matches. p1 was always true.
 		 */
-		void SPECIAL_ABILITY_CHARGE_LARGE(Player player, BOOL p1, BOOL p2, Any p3);
+		void SPECIAL_ABILITY_CHARGE_LARGE(Player player, bool p1, bool p2, Any p3);
 		/**
 		 * p1 appears to always be 1 (only comes up twice)
 		 */
@@ -15117,52 +15117,52 @@ namespace base::menu::natives {
 		/**
 		 * p1 appears as 5, 10, 15, 25, or 30. p2 is always true.
 		 */
-		void SPECIAL_ABILITY_CHARGE_ABSOLUTE(Player player, int p1, BOOL p2, Any p3);
+		void SPECIAL_ABILITY_CHARGE_ABSOLUTE(Player player, int p1, bool p2, Any p3);
 		/**
 		 * 
 		 * normalizedValue is from 0.0 - 1.0
 		 * p2 is always 1
 		 */
-		void SPECIAL_ABILITY_CHARGE_NORMALIZED(Player player, float normalizedValue, BOOL p2, Any p3);
+		void SPECIAL_ABILITY_CHARGE_NORMALIZED(Player player, float normalizedValue, bool p2, Any p3);
 		/**
 		 * Also known as _RECHARGE_SPECIAL_ABILITY
 		 */
-		void SPECIAL_ABILITY_FILL_METER(Player player, BOOL p1, Any p2);
+		void SPECIAL_ABILITY_FILL_METER(Player player, bool p1, Any p2);
 		/**
 		 * p1 was always true.
 		 */
-		void SPECIAL_ABILITY_DEPLETE_METER(Player player, BOOL p1, Any p2);
+		void SPECIAL_ABILITY_DEPLETE_METER(Player player, bool p1, Any p2);
 		void SPECIAL_ABILITY_LOCK(Hash playerModel, Any p1);
 		void SPECIAL_ABILITY_UNLOCK(Hash playerModel, Any p1);
-		BOOL IS_SPECIAL_ABILITY_UNLOCKED(Hash playerModel);
-		BOOL IS_SPECIAL_ABILITY_ACTIVE(Player player, Any p1);
-		BOOL IS_SPECIAL_ABILITY_METER_FULL(Player player, Any p1);
-		void ENABLE_SPECIAL_ABILITY(Player player, BOOL toggle, Any p2);
-		BOOL IS_SPECIAL_ABILITY_ENABLED(Player player, Any p1);
+		bool IS_SPECIAL_ABILITY_UNLOCKED(Hash playerModel);
+		bool IS_SPECIAL_ABILITY_ACTIVE(Player player, Any p1);
+		bool IS_SPECIAL_ABILITY_METER_FULL(Player player, Any p1);
+		void ENABLE_SPECIAL_ABILITY(Player player, bool toggle, Any p2);
+		bool IS_SPECIAL_ABILITY_ENABLED(Player player, Any p1);
 		void SET_SPECIAL_ABILITY_MULTIPLIER(float multiplier);
 		void UPDATE_SPECIAL_ABILITY_FROM_STAT(Player player, Any p1);
 		/**
 		 * Appears once in "re_dealgonewrong"
 		 */
-		BOOL GET_IS_PLAYER_DRIVING_ON_HIGHWAY(Player player);
+		bool GET_IS_PLAYER_DRIVING_ON_HIGHWAY(Player player);
 		/**
 		 * Only 1 occurrence. p1 was 2.
 		 */
-		BOOL GET_IS_PLAYER_DRIVING_WRECKLESS(Player player, int p1);
+		bool GET_IS_PLAYER_DRIVING_WRECKLESS(Player player, int p1);
 		/**
 		 * 2 occurrences in agency_heist3a. p1 was 0.7f then 0.4f.
 		 */
-		BOOL GET_IS_MOPPING_AREA_FREE_IN_FRONT_OF_PLAYER(Player player, float p1);
+		bool GET_IS_MOPPING_AREA_FREE_IN_FRONT_OF_PLAYER(Player player, float p1);
 		/**
 		 * `findCollisionLand`: This teleports the player to land when set to true and will not consider the Z coordinate parameter provided by you. It will automatically put the Z coordinate so that you don't fall from sky.
 		 */
-		void START_PLAYER_TELEPORT(Player player, float x, float y, float z, float heading, BOOL p5, BOOL findCollisionLand, BOOL p7);
-		BOOL UPDATE_PLAYER_TELEPORT(Player player);
+		void START_PLAYER_TELEPORT(Player player, float x, float y, float z, float heading, bool p5, bool findCollisionLand, bool p7);
+		bool UPDATE_PLAYER_TELEPORT(Player player);
 		/**
 		 * Disables the player's teleportation
 		 */
 		void STOP_PLAYER_TELEPORT();
-		BOOL IS_PLAYER_TELEPORT_ACTIVE();
+		bool IS_PLAYER_TELEPORT_ACTIVE();
 		float GET_PLAYER_CURRENT_STEALTH_NOISE(Player player);
 		/**
 		 * `regenRate`: The recharge multiplier, a value between 0.0 and 1.0.
@@ -15195,7 +15195,7 @@ namespace base::menu::natives {
 		/**
 		 * modifier's min value is 0.1
 		 */
-		void SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER(Player player, float modifier, BOOL p2);
+		void SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER(Player player, float modifier, bool p2);
 		/**
 		 * modifier's min value is 0.1
 		 */
@@ -15299,8 +15299,8 @@ namespace base::menu::natives {
 		void SET_PLAYER_PARACHUTE_PACK_TINT_INDEX(Player player, int tintIndex);
 		void GET_PLAYER_PARACHUTE_PACK_TINT_INDEX(Player player, int* tintIndex);
 		void SET_PLAYER_HAS_RESERVE_PARACHUTE(Player player);
-		BOOL GET_PLAYER_HAS_RESERVE_PARACHUTE(Player player);
-		void SET_PLAYER_CAN_LEAVE_PARACHUTE_SMOKE_TRAIL(Player player, BOOL enabled);
+		bool GET_PLAYER_HAS_RESERVE_PARACHUTE(Player player);
+		void SET_PLAYER_CAN_LEAVE_PARACHUTE_SMOKE_TRAIL(Player player, bool enabled);
 		void SET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR(Player player, int r, int g, int b);
 		void GET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR(Player player, int* r, int* g, int* b);
 		void SET_PLAYER_PHONE_PALETTE_IDX(Player player, int idx);
@@ -15309,7 +15309,7 @@ namespace base::menu::natives {
 		 * Values around 1.0f to 2.0f used in game scripts.
 		 */
 		void SET_PLAYER_SNEAKING_NOISE_MULTIPLIER(Player player, float multiplier);
-		BOOL CAN_PED_HEAR_PLAYER(Player player, Ped ped);
+		bool CAN_PED_HEAR_PLAYER(Player player, Ped ped);
 		/**
 		 * This is to make the player walk without accepting input from INPUT.
 		 * 
@@ -15321,14 +15321,14 @@ namespace base::menu::natives {
 		 * 
 		 * Function.Call(Hash.SIMULATE_PLAYER_INPUT_GAIT, Game.Player, 1.0f, 100, 1.0f, 1, 0); //Player will go forward for 100ms
 		 */
-		void SIMULATE_PLAYER_INPUT_GAIT(Player player, float amount, int gaitType, float speed, BOOL p4, BOOL p5, Any p6);
+		void SIMULATE_PLAYER_INPUT_GAIT(Player player, float amount, int gaitType, float speed, bool p4, bool p5, Any p6);
 		void RESET_PLAYER_INPUT_GAIT(Player player);
-		void SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(Player player, BOOL toggle);
-		void SET_AUTO_GIVE_SCUBA_GEAR_WHEN_EXIT_VEHICLE(Player player, BOOL toggle);
+		void SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(Player player, bool toggle);
+		void SET_AUTO_GIVE_SCUBA_GEAR_WHEN_EXIT_VEHICLE(Player player, bool toggle);
 		void SET_PLAYER_STEALTH_PERCEPTION_MODIFIER(Player player, float value);
-		BOOL IS_REMOTE_PLAYER_IN_NON_CLONED_VEHICLE(Player player);
+		bool IS_REMOTE_PLAYER_IN_NON_CLONED_VEHICLE(Player player);
 		void INCREASE_PLAYER_JUMP_SUPPRESSION_RANGE(Player player);
-		void SET_PLAYER_SIMULATE_AIMING(Player player, BOOL toggle);
+		void SET_PLAYER_SIMULATE_AIMING(Player player, bool toggle);
 		void SET_PLAYER_CLOTH_PIN_FRAMES(Player player, int p1);
 		/**
 		 * Every occurrence was either 0 or 2.
@@ -15348,12 +15348,12 @@ namespace base::menu::natives {
 		 * 1.0.335.2, 1.0.350.1/2, 1.0.372.2, 1.0.393.2, 1.0.393.4, 1.0.463.1;
 		 */
 		void PLAYER_DETACH_VIRTUAL_BOUND();
-		BOOL HAS_PLAYER_BEEN_SPOTTED_IN_STOLEN_VEHICLE(Player player);
+		bool HAS_PLAYER_BEEN_SPOTTED_IN_STOLEN_VEHICLE(Player player);
 		/**
 		 * Returns true if an unk value is greater than 0.0f
 		 */
-		BOOL IS_PLAYER_BATTLE_AWARE(Player player);
-		BOOL GET_PLAYER_RECEIVED_BATTLE_EVENT_RECENTLY(Player player, int p1, BOOL p2);
+		bool IS_PLAYER_BATTLE_AWARE(Player player);
+		bool GET_PLAYER_RECEIVED_BATTLE_EVENT_RECENTLY(Player player, int p1, bool p2);
 		/**
 		 * Appears only 3 times in the scripts, more specifically in michael1.ysc
 		 * 
@@ -15365,14 +15365,14 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if the player is riding a train.
 		 */
-		BOOL IS_PLAYER_RIDING_TRAIN(Player player);
-		BOOL HAS_PLAYER_LEFT_THE_WORLD(Player player);
-		void SET_PLAYER_LEAVE_PED_BEHIND(Player player, BOOL toggle);
+		bool IS_PLAYER_RIDING_TRAIN(Player player);
+		bool HAS_PLAYER_LEFT_THE_WORLD(Player player);
+		void SET_PLAYER_LEAVE_PED_BEHIND(Player player, bool toggle);
 		/**
 		 * p1 was always 5.
 		 * p4 was always false.
 		 */
-		void SET_PLAYER_PARACHUTE_VARIATION_OVERRIDE(Player player, int p1, Any p2, Any p3, BOOL p4);
+		void SET_PLAYER_PARACHUTE_VARIATION_OVERRIDE(Player player, int p1, Any p2, Any p3, bool p4);
 		void CLEAR_PLAYER_PARACHUTE_VARIATION_OVERRIDE(Player player);
 		void SET_PLAYER_PARACHUTE_MODEL_OVERRIDE(Player player, Hash model);
 		void SET_PLAYER_RESERVE_PARACHUTE_MODEL_OVERRIDE(Player player, Hash model);
@@ -15383,14 +15383,14 @@ namespace base::menu::natives {
 		void SET_PLAYER_PARACHUTE_PACK_MODEL_OVERRIDE(Player player, Hash model);
 		void CLEAR_PLAYER_PARACHUTE_PACK_MODEL_OVERRIDE(Player player);
 		void DISABLE_PLAYER_VEHICLE_REWARDS(Player player);
-		void SET_PLAYER_SPECTATED_VEHICLE_RADIO_OVERRIDE(BOOL p0);
-		void SET_PLAYER_BLUETOOTH_STATE(Player player, BOOL state);
-		BOOL IS_PLAYER_BLUETOOTH_ENABLE(Player player);
+		void SET_PLAYER_SPECTATED_VEHICLE_RADIO_OVERRIDE(bool p0);
+		void SET_PLAYER_BLUETOOTH_STATE(Player player, bool state);
+		bool IS_PLAYER_BLUETOOTH_ENABLE(Player player);
 		void DISABLE_CAMERA_VIEW_MODE_CYCLE(Player player);
 		int GET_PLAYER_FAKE_WANTED_LEVEL(Player player);
-		void SET_PLAYER_CAN_DAMAGE_PLAYER(Player player1, Player player2, BOOL toggle);
+		void SET_PLAYER_CAN_DAMAGE_PLAYER(Player player1, Player player2, bool toggle);
 		void SET_APPLY_WAYPOINT_OF_PLAYER(Player player, int hudColor);
-		BOOL IS_PLAYER_VEHICLE_WEAPON_TOGGLED_TO_NON_HOMING(Any p0);
+		bool IS_PLAYER_VEHICLE_WEAPON_TOGGLED_TO_NON_HOMING(Any p0);
 		/**
 		 * Unsets playerPed+330 if the current weapon has certain flags.
 		 */
@@ -15450,17 +15450,17 @@ namespace base::menu::natives {
 		 * Stops recording and discards the recorded clip.
 		 */
 		void CANCEL_REPLAY_RECORDING();
-		BOOL SAVE_REPLAY_RECORDING();
+		bool SAVE_REPLAY_RECORDING();
 		/**
 		 * Checks if you're recording, returns TRUE when you start recording (F1) or turn on action replay (F2)
 		 * 
 		 * mov al, cs:g_bIsRecordingGameplay // byte_141DD0CD0 in b944
 		 * retn
 		 */
-		BOOL IS_REPLAY_RECORDING();
-		BOOL IS_REPLAY_INITIALIZED();
-		BOOL IS_REPLAY_AVAILABLE();
-		BOOL IS_REPLAY_RECORD_SPACE_AVAILABLE(BOOL p0);
+		bool IS_REPLAY_RECORDING();
+		bool IS_REPLAY_INITIALIZED();
+		bool IS_REPLAY_AVAILABLE();
+		bool IS_REPLAY_RECORD_SPACE_AVAILABLE(bool p0);
 
 	} // namespace RECORDING
 
@@ -15469,16 +15469,16 @@ namespace base::menu::natives {
 		/**
 		 * Does nothing (it's a nullsub).
 		 */
-		void REGISTER_EFFECT_FOR_REPLAY_EDITOR(const char* p0, BOOL p1);
+		void REGISTER_EFFECT_FOR_REPLAY_EDITOR(const char* p0, bool p1);
 		/**
 		 * Returns a bool if interior rendering is disabled, if yes, all "normal" rendered interiors are invisible
 		 */
-		BOOL REPLAY_SYSTEM_HAS_REQUESTED_A_SCRIPT_CLEANUP();
+		bool REPLAY_SYSTEM_HAS_REQUESTED_A_SCRIPT_CLEANUP();
 		/**
 		 * Disables some other rendering (internal)
 		 */
 		void SET_SCRIPTS_HAVE_CLEANED_UP_FOR_REPLAY_SYSTEM();
-		void SET_REPLAY_SYSTEM_PAUSED_FOR_SAVE(BOOL p0);
+		void SET_REPLAY_SYSTEM_PAUSED_FOR_SAVE(bool p0);
 		/**
 		 * Sets (almost, not sure) all Rockstar Editor values (bIsRecording etc) to 0.
 		 */
@@ -15492,14 +15492,14 @@ namespace base::menu::natives {
 
 	namespace SAVEMIGRATION {
 
-		BOOL SAVEMIGRATION_IS_MP_ENABLED();
-		BOOL SAVEMIGRATION_MP_REQUEST_ACCOUNTS();
+		bool SAVEMIGRATION_IS_MP_ENABLED();
+		bool SAVEMIGRATION_MP_REQUEST_ACCOUNTS();
 		int SAVEMIGRATION_MP_GET_ACCOUNTS_STATUS();
 		int SAVEMIGRATION_MP_NUM_ACCOUNTS();
-		BOOL SAVEMIGRATION_MP_GET_ACCOUNT(int p0, Any* p1);
-		BOOL SAVEMIGRATION_MP_REQUEST_STATUS();
+		bool SAVEMIGRATION_MP_GET_ACCOUNT(int p0, Any* p1);
+		bool SAVEMIGRATION_MP_REQUEST_STATUS();
 		int SAVEMIGRATION_MP_GET_STATUS();
-		BOOL SAVEMIGRATION_MP_IS_PLATFORM_GENERATION(int generation);
+		bool SAVEMIGRATION_MP_IS_PLATFORM_GENERATION(int generation);
 
 	} // namespace SAVEMIGRATION
 
@@ -15510,17 +15510,17 @@ namespace base::menu::natives {
 		/**
 		 * Returns if a script has been loaded into the game. Used to see if a script was loaded after requesting.
 		 */
-		BOOL HAS_SCRIPT_LOADED(const char* scriptName);
-		BOOL DOES_SCRIPT_EXIST(const char* scriptName);
+		bool HAS_SCRIPT_LOADED(const char* scriptName);
+		bool DOES_SCRIPT_EXIST(const char* scriptName);
 		/**
 		 * formerly _REQUEST_STREAMED_SCRIPT
 		 */
 		void REQUEST_SCRIPT_WITH_NAME_HASH(Hash scriptHash);
 		void SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED(Hash scriptHash);
-		BOOL HAS_SCRIPT_WITH_NAME_HASH_LOADED(Hash scriptHash);
-		BOOL DOES_SCRIPT_WITH_NAME_HASH_EXIST(Hash scriptHash);
+		bool HAS_SCRIPT_WITH_NAME_HASH_LOADED(Hash scriptHash);
+		bool DOES_SCRIPT_WITH_NAME_HASH_EXIST(Hash scriptHash);
 		void TERMINATE_THREAD(int threadId);
-		BOOL IS_THREAD_ACTIVE(int threadId);
+		bool IS_THREAD_ACTIVE(int threadId);
 		const char* GET_NAME_OF_SCRIPT_WITH_THIS_ID(int threadId);
 		/**
 		 * Starts a new iteration of the current threads.
@@ -15551,7 +15551,7 @@ namespace base::menu::natives {
 		/**
 		 * eventGroup: 0 = SCRIPT_EVENT_QUEUE_AI (CEventGroupScriptAI), 1 = SCRIPT_EVENT_QUEUE_NETWORK (CEventGroupScriptNetwork)
 		 */
-		BOOL GET_EVENT_EXISTS(int eventGroup, int eventIndex);
+		bool GET_EVENT_EXISTS(int eventGroup, int eventIndex);
 		/**
 		 * eventGroup: 0 = SCRIPT_EVENT_QUEUE_AI (CEventGroupScriptAI), 1 = SCRIPT_EVENT_QUEUE_NETWORK (CEventGroupScriptNetwork)
 		 */
@@ -15561,7 +15561,7 @@ namespace base::menu::natives {
 		 * 
 		 * Note: eventDataSize is NOT the size in bytes, it is the size determined by the SIZE_OF operator (RAGE Script operator, not C/C++ sizeof). That is, the size in bytes divided by 8 (script variables are always 8-byte aligned!).
 		 */
-		BOOL GET_EVENT_DATA(int eventGroup, int eventIndex, Any* eventData, int eventDataSize);
+		bool GET_EVENT_DATA(int eventGroup, int eventIndex, Any* eventData, int eventDataSize);
 		/**
 		 * eventGroup: 0 = SCRIPT_EVENT_QUEUE_AI (CEventGroupScriptAI), 1 = SCRIPT_EVENT_QUEUE_NETWORK (CEventGroupScriptNetwork)
 		 * 
@@ -15571,14 +15571,14 @@ namespace base::menu::natives {
 		 */
 		void TRIGGER_SCRIPT_EVENT(int eventGroup, Any* eventData, int eventDataSize, int playerBits);
 		void SHUTDOWN_LOADING_SCREEN();
-		void SET_NO_LOADING_SCREEN(BOOL toggle);
-		BOOL GET_NO_LOADING_SCREEN();
-		BOOL SET_LOADING_SCREEN_BLANK();
+		void SET_NO_LOADING_SCREEN(bool toggle);
+		bool GET_NO_LOADING_SCREEN();
+		bool SET_LOADING_SCREEN_BLANK();
 		void COMMIT_TO_LOADINGSCREEN_SELCTION();
 		/**
 		 * Returns true if bit 0 in GtaThread+0x154 is set.
 		 */
-		BOOL BG_IS_EXITFLAG_SET();
+		bool BG_IS_EXITFLAG_SET();
 		/**
 		 * Sets bit 1 in GtaThread+0x154
 		 */
@@ -15599,7 +15599,7 @@ namespace base::menu::natives {
 		 * Deletes the given context from the background scripts context map.
 		 */
 		void BG_END_CONTEXT(const char* contextName);
-		BOOL BG_DOES_LAUNCH_PARAM_EXIST(int scriptIndex, const char* p1);
+		bool BG_DOES_LAUNCH_PARAM_EXIST(int scriptIndex, const char* p1);
 		int BG_GET_LAUNCH_PARAM_VALUE(int scriptIndex, const char* p1);
 		int BG_GET_SCRIPT_ID_FROM_NAME_HASH(Hash p0);
 		/**
@@ -15664,7 +15664,7 @@ namespace base::menu::natives {
 		 * 
 		 * When used with an asynchronous shape test, this native should be looped until returning 0 or 2, after which the handle is invalidated.
 		 */
-		int GET_SHAPE_TEST_RESULT(int shapeTestHandle, BOOL* hit, Vector3* endCoords, Vector3* surfaceNormal, Entity* entityHit);
+		int GET_SHAPE_TEST_RESULT(int shapeTestHandle, bool* hit, Vector3* endCoords, Vector3* surfaceNormal, Entity* entityHit);
 		/**
 		 * Returns the result of a shape test, also returning the material of any touched surface.
 		 * 
@@ -15672,7 +15672,7 @@ namespace base::menu::natives {
 		 * 
 		 * Unless the return value is 2, the other return values are undefined.
 		 */
-		int GET_SHAPE_TEST_RESULT_INCLUDING_MATERIAL(int shapeTestHandle, BOOL* hit, Vector3* endCoords, Vector3* surfaceNormal, Hash* materialHash, Entity* entityHit);
+		int GET_SHAPE_TEST_RESULT_INCLUDING_MATERIAL(int shapeTestHandle, bool* hit, Vector3* endCoords, Vector3* surfaceNormal, Hash* materialHash, Entity* entityHit);
 		/**
 		 * Invalidates the entity handle passed by removing the fwScriptGuid from the entity. This should be used when receiving an ambient entity from shape testing natives, but can also be used for other natives returning an 'irrelevant' entity handle.
 		 */
@@ -15684,106 +15684,106 @@ namespace base::menu::natives {
 
 		int SC_INBOX_GET_TOTAL_NUM_MESSAGES();
 		Hash SC_INBOX_GET_MESSAGE_TYPE_AT_INDEX(int msgIndex);
-		BOOL SC_INBOX_GET_MESSAGE_IS_READ_AT_INDEX(int msgIndex);
-		BOOL SC_INBOX_SET_MESSAGE_AS_READ_AT_INDEX(int msgIndex);
-		BOOL SC_INBOX_MESSAGE_GET_DATA_INT(int p0, const char* context, int* out);
-		BOOL SC_INBOX_MESSAGE_GET_DATA_BOOL(int p0, const char* p1);
-		BOOL SC_INBOX_MESSAGE_GET_DATA_STRING(int p0, const char* context, char* out);
-		BOOL SC_INBOX_MESSAGE_DO_APPLY(int p0);
+		bool SC_INBOX_GET_MESSAGE_IS_READ_AT_INDEX(int msgIndex);
+		bool SC_INBOX_SET_MESSAGE_AS_READ_AT_INDEX(int msgIndex);
+		bool SC_INBOX_MESSAGE_GET_DATA_INT(int p0, const char* context, int* out);
+		bool SC_INBOX_MESSAGE_GET_DATA_BOOL(int p0, const char* p1);
+		bool SC_INBOX_MESSAGE_GET_DATA_STRING(int p0, const char* context, char* out);
+		bool SC_INBOX_MESSAGE_DO_APPLY(int p0);
 		const char* SC_INBOX_MESSAGE_GET_RAW_TYPE_AT_INDEX(int p0);
 		void SC_INBOX_MESSAGE_PUSH_GAMER_T0_RECIP_LIST(Any* gamerHandle);
 		void SC_INBOX_SEND_UGCSTATUPDATE_TO_RECIP_LIST(Any* data);
-		BOOL SC_INBOX_MESSAGE_GET_UGCDATA(int p0, Any* p1);
-		BOOL SC_INBOX_GET_BOUNTY_DATA_AT_INDEX(int index, Any* outData);
+		bool SC_INBOX_MESSAGE_GET_UGCDATA(int p0, Any* p1);
+		bool SC_INBOX_GET_BOUNTY_DATA_AT_INDEX(int index, Any* outData);
 		void SC_EMAIL_RETRIEVE_EMAILS(int offset, int limit);
 		int SC_EMAIL_GET_RETRIEVAL_STATUS();
 		int SC_EMAIL_GET_NUM_RETRIEVED_EMAILS();
-		BOOL SC_EMAIL_GET_EMAIL_AT_INDEX(int p0, Any* p1);
+		bool SC_EMAIL_GET_EMAIL_AT_INDEX(int p0, Any* p1);
 		void _SC_EMAIL_MARKETING_EMAIL_OPENED(int index, Hash type);
 		void SC_EMAIL_DELETE_EMAILS(Any* p0, Any p1);
 		void SC_EMAIL_MESSAGE_PUSH_GAMER_TO_RECIP_LIST(Any* gamerHandle);
 		void SC_EMAIL_MESSAGE_CLEAR_RECIP_LIST();
 		void SC_EMAIL_SEND_EMAIL(const char* p0);
-		BOOL SC_EMAIL_SET_CURRENT_EMAIL_TAG(Any p0);
-		void SC_CACHE_NEW_ROCKSTAR_MSGS(BOOL toggle);
-		BOOL SC_HAS_NEW_ROCKSTAR_MSG();
+		bool SC_EMAIL_SET_CURRENT_EMAIL_TAG(Any p0);
+		void SC_CACHE_NEW_ROCKSTAR_MSGS(bool toggle);
+		bool SC_HAS_NEW_ROCKSTAR_MSG();
 		const char* SC_GET_NEW_ROCKSTAR_MSG();
-		BOOL SC_PRESENCE_ATTR_SET_INT(Hash attrHash, int value);
-		BOOL SC_PRESENCE_ATTR_SET_FLOAT(Hash attrHash, float value);
-		BOOL SC_PRESENCE_ATTR_SET_STRING(Hash attrHash, const char* value);
-		BOOL SC_PRESENCE_SET_ACTIVITY_RATING(Any p0, float p1);
-		BOOL SC_GAMERDATA_GET_INT(const char* name, int* value);
-		BOOL SC_GAMERDATA_GET_FLOAT(const char* name, float* value);
-		BOOL SC_GAMERDATA_GET_BOOL(const char* name);
-		BOOL SC_GAMERDATA_GET_STRING(const char* name, char* value);
-		BOOL SC_GAMERDATA_GET_ACTIVE_XP_BONUS(float* value);
+		bool SC_PRESENCE_ATTR_SET_INT(Hash attrHash, int value);
+		bool SC_PRESENCE_ATTR_SET_FLOAT(Hash attrHash, float value);
+		bool SC_PRESENCE_ATTR_SET_STRING(Hash attrHash, const char* value);
+		bool SC_PRESENCE_SET_ACTIVITY_RATING(Any p0, float p1);
+		bool SC_GAMERDATA_GET_INT(const char* name, int* value);
+		bool SC_GAMERDATA_GET_FLOAT(const char* name, float* value);
+		bool SC_GAMERDATA_GET_BOOL(const char* name);
+		bool SC_GAMERDATA_GET_STRING(const char* name, char* value);
+		bool SC_GAMERDATA_GET_ACTIVE_XP_BONUS(float* value);
 		/**
 		 * Starts a task to check an entered string for profanity on the ROS/Social Club services.
 		 * 
 		 * See also: 1753344C770358AE, 82E4A58BABC15AE7.
 		 */
-		BOOL SC_PROFANITY_CHECK_STRING(const char* string, int* token);
-		BOOL SC_PROFANITY_CHECK_STRING_UGC(const char* string, int* token);
-		BOOL SC_PROFANITY_GET_CHECK_IS_VALID(int token);
-		BOOL SC_PROFANITY_GET_CHECK_IS_PENDING(int token);
-		BOOL SC_PROFANITY_GET_STRING_PASSED(int token);
+		bool SC_PROFANITY_CHECK_STRING(const char* string, int* token);
+		bool SC_PROFANITY_CHECK_STRING_UGC(const char* string, int* token);
+		bool SC_PROFANITY_GET_CHECK_IS_VALID(int token);
+		bool SC_PROFANITY_GET_CHECK_IS_PENDING(int token);
+		bool SC_PROFANITY_GET_STRING_PASSED(int token);
 		int SC_PROFANITY_GET_STRING_STATUS(int token);
 		/**
 		 * Retrieves the profane part of the string with max size of 128.
 		 * Returns true if profane term was retrieved.
 		 */
-		BOOL SC_PROFANITY_GET_PROFANE_WORD(int token, char* outProfaneWord);
-		BOOL SC_LICENSEPLATE_CHECK_STRING(const char* p0, int* p1);
-		BOOL SC_LICENSEPLATE_GET_CHECK_IS_VALID(Any p0);
-		BOOL SC_LICENSEPLATE_GET_CHECK_IS_PENDING(Any p0);
+		bool SC_PROFANITY_GET_PROFANE_WORD(int token, char* outProfaneWord);
+		bool SC_LICENSEPLATE_CHECK_STRING(const char* p0, int* p1);
+		bool SC_LICENSEPLATE_GET_CHECK_IS_VALID(Any p0);
+		bool SC_LICENSEPLATE_GET_CHECK_IS_PENDING(Any p0);
 		int SC_LICENSEPLATE_GET_COUNT(int token);
 		const char* SC_LICENSEPLATE_GET_PLATE(int token, int plateIndex);
 		const char* SC_LICENSEPLATE_GET_PLATE_DATA(int token, int plateIndex);
-		BOOL SC_LICENSEPLATE_SET_PLATE_DATA(const char* oldPlateText, const char* newPlateText, Any* plateData);
-		BOOL SC_LICENSEPLATE_ADD(const char* plateText, Any* plateData, int* token);
-		BOOL SC_LICENSEPLATE_GET_ADD_IS_PENDING(int token);
+		bool SC_LICENSEPLATE_SET_PLATE_DATA(const char* oldPlateText, const char* newPlateText, Any* plateData);
+		bool SC_LICENSEPLATE_ADD(const char* plateText, Any* plateData, int* token);
+		bool SC_LICENSEPLATE_GET_ADD_IS_PENDING(int token);
 		int SC_LICENSEPLATE_GET_ADD_STATUS(int token);
-		BOOL SC_LICENSEPLATE_ISVALID(const char* plateText, int* token);
-		BOOL SC_LICENSEPLATE_GET_ISVALID_IS_PENDING(int token);
+		bool SC_LICENSEPLATE_ISVALID(const char* plateText, int* token);
+		bool SC_LICENSEPLATE_GET_ISVALID_IS_PENDING(int token);
 		int SC_LICENSEPLATE_GET_ISVALID_STATUS(int token);
-		BOOL SC_COMMUNITY_EVENT_IS_ACTIVE();
+		bool SC_COMMUNITY_EVENT_IS_ACTIVE();
 		int SC_COMMUNITY_EVENT_GET_EVENT_ID();
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_INT(const char* p0, int* p1);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_FLOAT(const char* p0, float* p1);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_STRING(const char* p0, char* p1);
-		BOOL SC_COMMUNITY_EVENT_GET_DISPLAY_NAME(char* p0);
-		BOOL SC_COMMUNITY_EVENT_IS_ACTIVE_FOR_TYPE(const char* p0);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_INT(const char* p0, int* p1);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_FLOAT(const char* p0, float* p1);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_STRING(const char* p0, char* p1);
+		bool SC_COMMUNITY_EVENT_GET_DISPLAY_NAME(char* p0);
+		bool SC_COMMUNITY_EVENT_IS_ACTIVE_FOR_TYPE(const char* p0);
 		int SC_COMMUNITY_EVENT_GET_EVENT_ID_FOR_TYPE(const char* p0);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_INT_FOR_TYPE(const char* p0, int* p1, const char* p2);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_FLOAT_FOR_TYPE(const char* p0, float* p1, const char* p2);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_STRING_FOR_TYPE(const char* p0, char* p1, const char* p2);
-		BOOL SC_COMMUNITY_EVENT_GET_DISPLAY_NAME_FOR_TYPE(char* p0, const char* p1);
-		BOOL SC_COMMUNITY_EVENT_IS_ACTIVE_BY_ID(int p0);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_INT_BY_ID(int p0, const char* p1, int* p2);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_FLOAT_BY_ID(int p0, const char* p1, float* p2);
-		BOOL SC_COMMUNITY_EVENT_GET_EXTRA_DATA_STRING_BY_ID(int p0, const char* p1, char* p2);
-		BOOL SC_COMMUNITY_EVENT_GET_DISPLAY_NAME_BY_ID(int p0, char* p1);
-		BOOL SC_TRANSITION_NEWS_SHOW(Any p0);
-		BOOL SC_TRANSITION_NEWS_SHOW_TIMED(Any p0, Any p1);
-		BOOL SC_TRANSITION_NEWS_SHOW_NEXT_ITEM();
-		BOOL SC_TRANSITION_NEWS_HAS_EXTRA_DATA_TU();
-		BOOL SC_TRANSITION_NEWS_GET_EXTRA_DATA_INT_TU(const char* p0, int* p1);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_INT_FOR_TYPE(const char* p0, int* p1, const char* p2);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_FLOAT_FOR_TYPE(const char* p0, float* p1, const char* p2);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_STRING_FOR_TYPE(const char* p0, char* p1, const char* p2);
+		bool SC_COMMUNITY_EVENT_GET_DISPLAY_NAME_FOR_TYPE(char* p0, const char* p1);
+		bool SC_COMMUNITY_EVENT_IS_ACTIVE_BY_ID(int p0);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_INT_BY_ID(int p0, const char* p1, int* p2);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_FLOAT_BY_ID(int p0, const char* p1, float* p2);
+		bool SC_COMMUNITY_EVENT_GET_EXTRA_DATA_STRING_BY_ID(int p0, const char* p1, char* p2);
+		bool SC_COMMUNITY_EVENT_GET_DISPLAY_NAME_BY_ID(int p0, char* p1);
+		bool SC_TRANSITION_NEWS_SHOW(Any p0);
+		bool SC_TRANSITION_NEWS_SHOW_TIMED(Any p0, Any p1);
+		bool SC_TRANSITION_NEWS_SHOW_NEXT_ITEM();
+		bool SC_TRANSITION_NEWS_HAS_EXTRA_DATA_TU();
+		bool SC_TRANSITION_NEWS_GET_EXTRA_DATA_INT_TU(const char* p0, int* p1);
 		void SC_TRANSITION_NEWS_END();
-		BOOL SC_PAUSE_NEWS_INIT_STORY_TYPE(int storyType, BOOL textOnly);
+		bool SC_PAUSE_NEWS_INIT_STORY_TYPE(int storyType, bool textOnly);
 		/**
 		 * Fills some 0x30 sized struct
 		 */
-		BOOL SC_PAUSE_NEWS_GET_PENDING_STORY(Any p0);
+		bool SC_PAUSE_NEWS_GET_PENDING_STORY(Any p0);
 		void SC_PAUSE_NEWS_SHUTDOWN();
 		/**
 		 * Returns the nickname of the logged-in Rockstar Social Club account.
 		 */
 		const char* SC_ACCOUNT_INFO_GET_NICKNAME();
-		BOOL SC_ACHIEVEMENT_INFO_STATUS(int* p0);
+		bool SC_ACHIEVEMENT_INFO_STATUS(int* p0);
 		/**
 		 * Same as HAS_ACHIEVEMENT_BEEN_PASSED
 		 */
-		BOOL SC_HAS_ACHIEVEMENT_BEEN_PASSED(int achievementId);
+		bool SC_HAS_ACHIEVEMENT_BEEN_PASSED(int achievementId);
 
 	} // namespace SOCIALCLUB
 
@@ -15796,27 +15796,27 @@ namespace base::menu::natives {
 		 * STATS::STAT_CLEAR_SLOT_FOR_RELOAD(v_2);
 		 * }
 		 */
-		BOOL STAT_CLEAR_SLOT_FOR_RELOAD(int statSlot);
-		BOOL STAT_LOAD(int statSlot);
-		BOOL STAT_SAVE(int p0, BOOL p1, int p2, BOOL p3);
+		bool STAT_CLEAR_SLOT_FOR_RELOAD(int statSlot);
+		bool STAT_LOAD(int statSlot);
+		bool STAT_SAVE(int p0, bool p1, int p2, bool p3);
 		void STAT_SET_OPEN_SAVETYPE_IN_JOB(int p0);
-		BOOL STAT_LOAD_PENDING(int statSlot);
-		BOOL STAT_SAVE_PENDING();
-		BOOL STAT_SAVE_PENDING_OR_REQUESTED();
+		bool STAT_LOAD_PENDING(int statSlot);
+		bool STAT_SAVE_PENDING();
+		bool STAT_SAVE_PENDING_OR_REQUESTED();
 		/**
 		 * p0 is characterSlot? seems range from 0 to 2
 		 */
-		BOOL STAT_DELETE_SLOT(int p0);
-		BOOL STAT_SLOT_IS_LOADED(int statSlot);
-		BOOL STAT_CLOUD_SLOT_LOAD_FAILED(int p0);
+		bool STAT_DELETE_SLOT(int p0);
+		bool STAT_SLOT_IS_LOADED(int statSlot);
+		bool STAT_CLOUD_SLOT_LOAD_FAILED(int p0);
 		int STAT_CLOUD_SLOT_LOAD_FAILED_CODE(Any p0);
-		void STAT_SET_BLOCK_SAVES(BOOL toggle);
-		BOOL STAT_GET_BLOCK_SAVES();
-		BOOL STAT_CLOUD_SLOT_SAVE_FAILED(Any p0);
+		void STAT_SET_BLOCK_SAVES(bool toggle);
+		bool STAT_GET_BLOCK_SAVES();
+		bool STAT_CLOUD_SLOT_SAVE_FAILED(Any p0);
 		void STAT_CLEAR_PENDING_SAVES(Any p0);
-		BOOL STAT_LOAD_DIRTY_READ_DETECTED();
+		bool STAT_LOAD_DIRTY_READ_DETECTED();
 		void STAT_CLEAR_DIRTY_READ_DETECTED();
-		BOOL STAT_GET_LOAD_SAFE_TO_PROGRESS_TO_MP_FROM_SP();
+		bool STAT_GET_LOAD_SAFE_TO_PROGRESS_TO_MP_FROM_SP();
 		/**
 		 * Returns stat hash based on dataType, statIndex/statId and characterSlot. Related to CStatsMpCharacterMappingData
 		 */
@@ -15825,17 +15825,17 @@ namespace base::menu::natives {
 		 * Example:
 		 * STATS::STAT_SET_INT(MISC::GET_HASH_KEY("MPPLY_KILLS_PLAYERS"), 1337, true);
 		 */
-		BOOL STAT_SET_INT(Hash statName, int value, BOOL save);
+		bool STAT_SET_INT(Hash statName, int value, bool save);
 		/**
 		 * Example:
 		 * STATS::STAT_SET_FLOAT(MISC::GET_HASH_KEY("MP0_WEAPON_ACCURACY"), 66.6f, true);
 		 */
-		BOOL STAT_SET_FLOAT(Hash statName, float value, BOOL save);
+		bool STAT_SET_FLOAT(Hash statName, float value, bool save);
 		/**
 		 * Example:
 		 * STATS::STAT_SET_BOOL(MISC::GET_HASH_KEY("MPPLY_MELEECHLENGECOMPLETED"), trur, true);
 		 */
-		BOOL STAT_SET_BOOL(Hash statName, BOOL value, BOOL save);
+		bool STAT_SET_BOOL(Hash statName, bool value, bool save);
 		/**
 		 * The following values have been found in the decompiled scripts:
 		 * "RC_ABI1"
@@ -15902,7 +15902,7 @@ namespace base::menu::natives {
 		 * "RC_TON4"
 		 * "RC_TON5"
 		 */
-		BOOL STAT_SET_GXT_LABEL(Hash statName, const char* value, BOOL save);
+		bool STAT_SET_GXT_LABEL(Hash statName, const char* value, bool save);
 		/**
 		 * 'value' is a structure to a structure, 'numFields' is how many fields there are in said structure (usually 7).
 		 * 
@@ -15918,26 +15918,26 @@ namespace base::menu::natives {
 		 * 
 		 * The decompiled scripts use TIME::GET_POSIX_TIME to fill this structure.
 		 */
-		BOOL STAT_SET_DATE(Hash statName, Any* value, int numFields, BOOL save);
-		BOOL STAT_SET_STRING(Hash statName, const char* value, BOOL save);
-		BOOL STAT_SET_POS(Hash statName, float x, float y, float z, BOOL save);
-		BOOL STAT_SET_MASKED_INT(Hash statName, int p1, int p2, int p3, BOOL save);
-		BOOL STAT_SET_USER_ID(Hash statName, const char* value, BOOL save);
+		bool STAT_SET_DATE(Hash statName, Any* value, int numFields, bool save);
+		bool STAT_SET_STRING(Hash statName, const char* value, bool save);
+		bool STAT_SET_POS(Hash statName, float x, float y, float z, bool save);
+		bool STAT_SET_MASKED_INT(Hash statName, int p1, int p2, int p3, bool save);
+		bool STAT_SET_USER_ID(Hash statName, const char* value, bool save);
 		/**
 		 * p1 always true.
 		 */
-		BOOL STAT_SET_CURRENT_POSIX_TIME(Hash statName, BOOL p1);
+		bool STAT_SET_CURRENT_POSIX_TIME(Hash statName, bool p1);
 		/**
 		 * p2 appears to always be -1
 		 * 
 		 */
-		BOOL STAT_GET_INT(Hash statHash, int* outValue, int p2);
-		BOOL STAT_GET_FLOAT(Hash statHash, float* outValue, Any p2);
-		BOOL STAT_GET_BOOL(Hash statHash, BOOL* outValue, Any p2);
+		bool STAT_GET_INT(Hash statHash, int* outValue, int p2);
+		bool STAT_GET_FLOAT(Hash statHash, float* outValue, Any p2);
+		bool STAT_GET_BOOL(Hash statHash, bool* outValue, Any p2);
 		/**
 		 * p3 is probably characterSlot or BOOL save, always -1
 		 */
-		BOOL STAT_GET_DATE(Hash statHash, Any* outValue, int numFields, Any p3);
+		bool STAT_GET_DATE(Hash statHash, Any* outValue, int numFields, Any p3);
 		/**
 		 * p1 is always -1 in the script files
 		 */
@@ -15945,21 +15945,21 @@ namespace base::menu::natives {
 		/**
 		 * p3 is probably characterSlot or BOOL save, always -1
 		 */
-		BOOL STAT_GET_POS(Hash statName, float* outX, float* outY, float* outZ, Any p4);
+		bool STAT_GET_POS(Hash statName, float* outX, float* outY, float* outZ, Any p4);
 		/**
 		 * p4 is probably characterSlot or BOOL save
 		 */
-		BOOL STAT_GET_MASKED_INT(Hash statHash, int* outValue, int p2, int p3, Any p4);
+		bool STAT_GET_MASKED_INT(Hash statHash, int* outValue, int p2, int p3, Any p4);
 		/**
 		 * Returns the rockstar ID (user id) value of a given stat. Returns "STAT_UNKNOWN" if the statHash is invalid or the stat has no userId
 		 */
 		const char* STAT_GET_USER_ID(Hash statHash);
 		const char* STAT_GET_LICENSE_PLATE(Hash statName);
-		BOOL STAT_SET_LICENSE_PLATE(Hash statName, const char* str);
+		bool STAT_SET_LICENSE_PLATE(Hash statName, const char* str);
 		void STAT_INCREMENT(Hash statName, float value);
-		BOOL STAT_COMMUNITY_START_SYNCH();
-		BOOL STAT_COMMUNITY_SYNCH_IS_PENDING();
-		BOOL STAT_COMMUNITY_GET_HISTORY(Hash statName, int p1, float* outValue);
+		bool STAT_COMMUNITY_START_SYNCH();
+		bool STAT_COMMUNITY_SYNCH_IS_PENDING();
+		bool STAT_COMMUNITY_GET_HISTORY(Hash statName, int p1, float* outValue);
 		/**
 		 * p0 seems to range from 0 to 7
 		 */
@@ -15987,8 +15987,8 @@ namespace base::menu::natives {
 		 * Needs more research. Possibly used to calculate the "mask" when calling "STAT_SET_MASKED_INT"?
 		 */
 		int PACKED_STAT_GET_INT_STAT_INDEX(int p0);
-		Hash GET_PACKED_INT_STAT_KEY(int index, BOOL spStat, BOOL charStat, int character);
-		Hash GET_PACKED_TU_INT_STAT_KEY(int index, BOOL spStat, BOOL charStat, int character);
+		Hash GET_PACKED_INT_STAT_KEY(int index, bool spStat, bool charStat, int character);
+		Hash GET_PACKED_TU_INT_STAT_KEY(int index, bool spStat, bool charStat, int character);
 		/**
 		 * Needs more research. Gets the stat name of a masked int?
 		 * 
@@ -16010,28 +16010,28 @@ namespace base::menu::natives {
 		 * "_CASINOPSTAT_INT"
 		 * "_CASINOHSTPSTAT_INT"
 		 */
-		Hash GET_PACKED_NG_INT_STAT_KEY(int index, BOOL spStat, BOOL charStat, int character, const char* section);
-		BOOL GET_PACKED_STAT_BOOL_CODE(int index, int characterSlot);
+		Hash GET_PACKED_NG_INT_STAT_KEY(int index, bool spStat, bool charStat, int character, const char* section);
+		bool GET_PACKED_STAT_BOOL_CODE(int index, int characterSlot);
 		int GET_PACKED_STAT_INT_CODE(int index, int characterSlot);
-		void SET_PACKED_STAT_BOOL_CODE(int index, BOOL value, int characterSlot);
+		void SET_PACKED_STAT_BOOL_CODE(int index, bool value, int characterSlot);
 		void SET_PACKED_STAT_INT_CODE(int index, int value, int characterSlot);
 		void PLAYSTATS_BACKGROUND_SCRIPT_ACTION(const char* action, int value);
-		void _PLAYSTATS_FLOW_LOW(float posX, float posY, float posZ, const char* action, BOOL p4, int p5);
-		void _PLAYSTATS_FLOW_MEDIUM(float posX, float posY, float posZ, const char* action, BOOL p4, int p5);
-		void _PLAYSTATS_FLOW_HIGH(float posX, float posY, float posZ, const char* action, BOOL p4, int p5);
+		void _PLAYSTATS_FLOW_LOW(float posX, float posY, float posZ, const char* action, bool p4, int p5);
+		void _PLAYSTATS_FLOW_MEDIUM(float posX, float posY, float posZ, const char* action, bool p4, int p5);
+		void _PLAYSTATS_FLOW_HIGH(float posX, float posY, float posZ, const char* action, bool p4, int p5);
 		void PLAYSTATS_NPC_INVITE(const char* p0);
 		void PLAYSTATS_AWARD_XP(int amount, Hash type, Hash category);
 		void PLAYSTATS_RANK_UP(int rank);
 		void PLAYSTATS_STARTED_SESSION_IN_OFFLINEMODE();
 		void PLAYSTATS_ACTIVITY_DONE(int p0, int activityId, Any p2);
 		void PLAYSTATS_LEAVE_JOB_CHAIN(Any p0, Any p1, Any p2, Any p3, Any p4);
-		void PLAYSTATS_MISSION_STARTED(const char* p0, Any p1, Any p2, BOOL p3);
-		void PLAYSTATS_MISSION_OVER(const char* p0, Any p1, Any p2, BOOL p3, BOOL p4, BOOL p5);
+		void PLAYSTATS_MISSION_STARTED(const char* p0, Any p1, Any p2, bool p3);
+		void PLAYSTATS_MISSION_OVER(const char* p0, Any p1, Any p2, bool p3, bool p4, bool p5);
 		void PLAYSTATS_MISSION_CHECKPOINT(const char* p0, Any p1, Any p2, Any p3);
 		void PLAYSTATS_RANDOM_MISSION_DONE(const char* name, Any p1, Any p2, Any p3);
 		void PLAYSTATS_ROS_BET(int amount, int act, Player player, float cm);
 		void PLAYSTATS_RACE_CHECKPOINT(Vehicle p0, Any p1, int p2, int p3, Any p4);
-		BOOL PLAYSTATS_CREATE_MATCH_HISTORY_ID_2(int* playerAccountId, int* posixTime);
+		bool PLAYSTATS_CREATE_MATCH_HISTORY_ID_2(int* playerAccountId, int* posixTime);
 		void PLAYSTATS_MATCH_STARTED(Any p0, Any p1, Any p2);
 		void PLAYSTATS_SHOP_ITEM(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void PLAYSTATS_CRATE_DROP_MISSION_DONE(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5, Any p6, Any p7);
@@ -16041,11 +16041,11 @@ namespace base::menu::natives {
 		void PLAYSTATS_RACE_TO_POINT_MISSION_DONE(int p0, Any p1, Any p2, Any p3);
 		void PLAYSTATS_ACQUIRED_HIDDEN_PACKAGE(Any p0);
 		void PLAYSTATS_WEBSITE_VISITED(Hash scaleformHash, int p1);
-		void PLAYSTATS_FRIEND_ACTIVITY(int p0, BOOL p1);
+		void PLAYSTATS_FRIEND_ACTIVITY(int p0, bool p1);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
-		void PLAYSTATS_ODDJOB_DONE(int totalTimeMs, int p1, BOOL p2);
+		void PLAYSTATS_ODDJOB_DONE(int totalTimeMs, int p1, bool p2);
 		void PLAYSTATS_PROP_CHANGE(Ped p0, int p1, int p2, int p3);
 		void PLAYSTATS_CLOTH_CHANGE(Ped p0, Any p1, Any p2, Any p3, Any p4);
 		/**
@@ -16082,42 +16082,42 @@ namespace base::menu::natives {
 		/**
 		 * Known text types: NAME_YACHT, NAME_ORG_OFFICE
 		 */
-		void _PLAYSTATS_NAMED_USER_CONTENT(BOOL isBoss, int bossType, int bossId1, int bossId2, int textType, const char* textString, int textSource);
+		void _PLAYSTATS_NAMED_USER_CONTENT(bool isBoss, int bossType, int bossId1, int bossId2, int textType, const char* textString, int textSource);
 		int LEADERBOARDS_GET_NUMBER_OF_COLUMNS(int p0, Any p1);
 		int LEADERBOARDS_GET_COLUMN_ID(int p0, int p1, int p2);
 		int LEADERBOARDS_GET_COLUMN_TYPE(int p0, Any p1, Any p2);
 		int LEADERBOARDS_READ_CLEAR_ALL();
 		int LEADERBOARDS_READ_CLEAR(Any p0, Any p1, Any p2);
-		BOOL LEADERBOARDS_READ_PENDING(Any p0, Any p1, Any p2);
-		BOOL LEADERBOARDS_READ_ANY_PENDING();
-		BOOL LEADERBOARDS_READ_SUCCESSFUL(Any p0, Any p1, Any p2);
-		BOOL LEADERBOARDS2_READ_FRIENDS_BY_ROW(Any* p0, Any* p1, Any p2, BOOL p3, Any p4, Any p5);
-		BOOL LEADERBOARDS2_READ_BY_HANDLE(Any* p0, Any* p1);
-		BOOL LEADERBOARDS2_READ_BY_RANK(Any* p0, Any p1, Any p2);
-		BOOL LEADERBOARDS2_READ_BY_RADIUS(Any* p0, Any p1, Any* p2);
-		BOOL LEADERBOARDS2_READ_BY_SCORE_INT(Any* p0, Any p1, Any p2);
-		BOOL LEADERBOARDS2_READ_BY_SCORE_FLOAT(Any* p0, float p1, Any p2);
-		BOOL LEADERBOARDS2_READ_RANK_PREDICTION(Any* p0, Any* p1, Any* p2);
-		BOOL LEADERBOARDS2_READ_BY_PLAFORM(Any* p0, const char* gamerHandleCsv, const char* platformName);
-		BOOL LEADERBOARDS2_READ_GET_ROW_DATA_START(Any* p0);
+		bool LEADERBOARDS_READ_PENDING(Any p0, Any p1, Any p2);
+		bool LEADERBOARDS_READ_ANY_PENDING();
+		bool LEADERBOARDS_READ_SUCCESSFUL(Any p0, Any p1, Any p2);
+		bool LEADERBOARDS2_READ_FRIENDS_BY_ROW(Any* p0, Any* p1, Any p2, bool p3, Any p4, Any p5);
+		bool LEADERBOARDS2_READ_BY_HANDLE(Any* p0, Any* p1);
+		bool LEADERBOARDS2_READ_BY_RANK(Any* p0, Any p1, Any p2);
+		bool LEADERBOARDS2_READ_BY_RADIUS(Any* p0, Any p1, Any* p2);
+		bool LEADERBOARDS2_READ_BY_SCORE_INT(Any* p0, Any p1, Any p2);
+		bool LEADERBOARDS2_READ_BY_SCORE_FLOAT(Any* p0, float p1, Any p2);
+		bool LEADERBOARDS2_READ_RANK_PREDICTION(Any* p0, Any* p1, Any* p2);
+		bool LEADERBOARDS2_READ_BY_PLAFORM(Any* p0, const char* gamerHandleCsv, const char* platformName);
+		bool LEADERBOARDS2_READ_GET_ROW_DATA_START(Any* p0);
 		void LEADERBOARDS2_READ_GET_ROW_DATA_END();
-		BOOL LEADERBOARDS2_READ_GET_ROW_DATA_INFO(Any p0, Any* p1);
+		bool LEADERBOARDS2_READ_GET_ROW_DATA_INFO(Any p0, Any* p1);
 		int LEADERBOARDS2_READ_GET_ROW_DATA_INT(Any p0, Any p1);
 		float LEADERBOARDS2_READ_GET_ROW_DATA_FLOAT(Any p0, Any p1);
-		BOOL LEADERBOARDS2_WRITE_DATA(Any* p0);
+		bool LEADERBOARDS2_WRITE_DATA(Any* p0);
 		void LEADERBOARDS_WRITE_ADD_COLUMN(Any p0, Any p1, float p2);
 		void LEADERBOARDS_WRITE_ADD_COLUMN_LONG(Any p0, Any p1, Any p2);
-		BOOL LEADERBOARDS_CACHE_DATA_ROW(Any* p0);
+		bool LEADERBOARDS_CACHE_DATA_ROW(Any* p0);
 		void LEADERBOARDS_CLEAR_CACHE_DATA();
 		void LEADERBOARDS_CLEAR_CACHE_DATA_ID(Any p0);
-		BOOL LEADERBOARDS_GET_CACHE_EXISTS(Any p0);
+		bool LEADERBOARDS_GET_CACHE_EXISTS(Any p0);
 		int LEADERBOARDS_GET_CACHE_TIME(Any p0);
 		int LEADERBOARDS_GET_CACHE_NUMBER_OF_ROWS(Any p0);
-		BOOL LEADERBOARDS_GET_CACHE_DATA_ROW(Any p0, Any p1, Any* p2);
+		bool LEADERBOARDS_GET_CACHE_DATA_ROW(Any p0, Any p1, Any* p2);
 		void PRESENCE_EVENT_UPDATESTAT_INT(Hash statHash, int value, int p2);
 		void PRESENCE_EVENT_UPDATESTAT_FLOAT(Hash statHash, float value, int p2);
 		void PRESENCE_EVENT_UPDATESTAT_INT_WITH_STRING(Hash statHash, int value, int p2, const char* string);
-		BOOL GET_PLAYER_HAS_DRIVEN_ALL_VEHICLES();
+		bool GET_PLAYER_HAS_DRIVEN_ALL_VEHICLES();
 		void SET_HAS_POSTED_ALL_VEHICLES_DRIVEN();
 		void SET_PROFILE_SETTING_PROLOGUE_COMPLETE();
 		/**
@@ -16144,29 +16144,29 @@ namespace base::menu::natives {
 		void SET_FREEMODE_STRAND_PROGRESSION_STATUS(int profileSetting, int settingValue);
 		void STAT_NETWORK_INCREMENT_ON_SUICIDE(Any p0, float p1);
 		void STAT_SET_CHEAT_IS_ACTIVE();
-		BOOL LEADERBOARDS2_WRITE_DATA_FOR_EVENT_TYPE(Any* p0, Any* p1);
+		bool LEADERBOARDS2_WRITE_DATA_FOR_EVENT_TYPE(Any* p0, Any* p1);
 		void FORCE_CLOUD_MP_STATS_DOWNLOAD_AND_OVERWRITE_LOCAL_SAVE();
 		void STAT_MIGRATE_CLEAR_FOR_RESTART();
 		/**
 		 * platformName must be one of the following: ps3, xbox360, ps4, xboxone
 		 */
-		BOOL STAT_MIGRATE_SAVEGAME_START(const char* platformName);
+		bool STAT_MIGRATE_SAVEGAME_START(const char* platformName);
 		int STAT_MIGRATE_SAVEGAME_GET_STATUS();
-		BOOL STAT_MIGRATE_CHECK_ALREADY_DONE();
-		BOOL STAT_MIGRATE_CHECK_START();
+		bool STAT_MIGRATE_CHECK_ALREADY_DONE();
+		bool STAT_MIGRATE_CHECK_START();
 		int STAT_MIGRATE_CHECK_GET_IS_PLATFORM_AVAILABLE(int p0);
 		int STAT_MIGRATE_CHECK_GET_PLATFORM_STATUS(int p0, Any* p1);
 		int STAT_GET_SAVE_MIGRATION_STATUS(Any* data);
-		BOOL STAT_SAVE_MIGRATION_CANCEL_PENDING_OPERATION();
+		bool STAT_SAVE_MIGRATION_CANCEL_PENDING_OPERATION();
 		int STAT_GET_CANCEL_SAVE_MIGRATION_STATUS();
-		BOOL STAT_SAVE_MIGRATION_CONSUME_CONTENT(Hash contentId, const char* srcPlatform, const char* srcGamerHandle);
+		bool STAT_SAVE_MIGRATION_CONSUME_CONTENT(Hash contentId, const char* srcPlatform, const char* srcGamerHandle);
 		int STAT_GET_SAVE_MIGRATION_CONSUME_CONTENT_STATUS(int* p0);
 		void STAT_ENABLE_STATS_TRACKING();
 		/**
 		 * Prevents updates to CStatsMgr (e.g., STAT_SET_* natives)
 		 */
 		void STAT_DISABLE_STATS_TRACKING();
-		BOOL STAT_IS_STATS_TRACKING_ENABLED();
+		bool STAT_IS_STATS_TRACKING_ENABLED();
 		/**
 		 * enum StatTrackingType
 		 * {
@@ -16210,10 +16210,10 @@ namespace base::menu::natives {
 		 * Min
 		 * }
 		 */
-		BOOL STAT_START_RECORD_STAT(int statType, int valueType);
-		BOOL STAT_STOP_RECORD_STAT();
-		BOOL STAT_GET_RECORDED_VALUE(float* value);
-		BOOL STAT_IS_RECORDING_STAT();
+		bool STAT_START_RECORD_STAT(int statType, int valueType);
+		bool STAT_STOP_RECORD_STAT();
+		bool STAT_GET_RECORDED_VALUE(float* value);
+		bool STAT_IS_RECORDING_STAT();
 		/**
 		 * Perform the most near misses with other vehicles in a land vehicle without crashing
 		 */
@@ -16250,11 +16250,11 @@ namespace base::menu::natives {
 		 * Fly low to the ground for the longest distance
 		 */
 		float STAT_GET_CHALLENGE_FLYING_DIST();
-		BOOL STAT_GET_FLYING_ALTITUDE(float* outValue);
+		bool STAT_GET_FLYING_ALTITUDE(float* outValue);
 		/**
 		 * Or non-flyable area
 		 */
-		BOOL STAT_IS_PLAYER_VEHICLE_ABOVE_OCEAN();
+		bool STAT_IS_PLAYER_VEHICLE_ABOVE_OCEAN();
 		/**
 		 * Travel the furthest distance when bailing from a vehicle
 		 */
@@ -16262,7 +16262,7 @@ namespace base::menu::natives {
 		/**
 		 * This function is hard-coded to always return 1.
 		 */
-		BOOL STAT_ROLLBACK_SAVE_MIGRATION();
+		bool STAT_ROLLBACK_SAVE_MIGRATION();
 		/**
 		 * Sets profile setting 866
 		 */
@@ -16346,7 +16346,7 @@ namespace base::menu::natives {
 		void PLAYSTATS_SPIN_WHEEL(int p0, int p1, int p2, int p3);
 		void PLAYSTATS_ARENA_WARS_SPECTATOR(int p0, int p1, int p2, int p3, int p4);
 		void PLAYSTATS_ARENA_WARS_ENDED(Any* data);
-		void PLAYSTATS_SWITCH_PASSIVE_MODE(BOOL p0, int p1, int p2, int p3);
+		void PLAYSTATS_SWITCH_PASSIVE_MODE(bool p0, int p1, int p2, int p3);
 		void PLAYSTATS_COLLECTIBLE_PICKED_UP(int p0, Hash objectHash, Any p2, Any p3, int moneyAmount, int rpAmount, int chipsAmount, Any p7, int p8, Any p9, Any p10);
 		void PLAYSTATS_CASINO_STORY_MISSION_ENDED(Any p0, Any p1);
 		void PLAYSTATS_CASINO_CHIP(Any p0);
@@ -16374,7 +16374,7 @@ namespace base::menu::natives {
 		void PLAYSTATS_QUIT_MODE(Any p0, Any p1, Any p2, Any p3, Any p4);
 		void PLAYSTATS_MISSION_VOTE(Any p0);
 		void PLAYSTATS_NJVS_VOTE(Any p0);
-		void _PLAYSTATS_DEATH_INFO(Ped victimPed, Ped killerPed, int mentalState, BOOL revengeKill, int victimKvK, int killerKvK);
+		void _PLAYSTATS_DEATH_INFO(Ped victimPed, Ped killerPed, int mentalState, bool revengeKill, int victimKvK, int killerKvK);
 		void PLAYSTATS_FM_MISSION_END(Any p0, Any p1, Any p2, Any p3);
 		void PLAYSTATS_HEIST4_PREP(Any p0);
 		void PLAYSTATS_HEIST4_FINALE(Any p0);
@@ -16427,9 +16427,9 @@ namespace base::menu::natives {
 
 		void LOAD_ALL_OBJECTS_NOW();
 		void LOAD_SCENE(float x, float y, float z);
-		BOOL NETWORK_UPDATE_LOAD_SCENE();
-		BOOL IS_NETWORK_LOADING_SCENE();
-		void SET_INTERIOR_ACTIVE(int interiorID, BOOL toggle);
+		bool NETWORK_UPDATE_LOAD_SCENE();
+		bool IS_NETWORK_LOADING_SCENE();
+		void SET_INTERIOR_ACTIVE(int interiorID, bool toggle);
 		/**
 		 * Request a model to be loaded into memory.
 		 * 
@@ -16439,7 +16439,7 @@ namespace base::menu::natives {
 		/**
 		 * Checks if the specified model has loaded into memory.
 		 */
-		BOOL HAS_MODEL_LOADED(Hash model);
+		bool HAS_MODEL_LOADED(Hash model);
 		/**
 		 * STREAMING::REQUEST_MODELS_IN_ROOM(l_13BC, "V_FIB01_cur_elev");
 		 * STREAMING::REQUEST_MODELS_IN_ROOM(l_13BC, "limbo");
@@ -16456,19 +16456,19 @@ namespace base::menu::natives {
 		/**
 		 * Check if model is in cdimage(rpf)
 		 */
-		BOOL IS_MODEL_IN_CDIMAGE(Hash model);
+		bool IS_MODEL_IN_CDIMAGE(Hash model);
 		/**
 		 * Returns whether the specified model exists in the game.
 		 */
-		BOOL IS_MODEL_VALID(Hash model);
-		BOOL IS_MODEL_A_PED(Hash model);
+		bool IS_MODEL_VALID(Hash model);
+		bool IS_MODEL_A_PED(Hash model);
 		/**
 		 * Returns whether the specified model represents a vehicle.
 		 */
-		BOOL IS_MODEL_A_VEHICLE(Hash model);
+		bool IS_MODEL_A_VEHICLE(Hash model);
 		void REQUEST_COLLISION_AT_COORD(float x, float y, float z);
 		void REQUEST_COLLISION_FOR_MODEL(Hash model);
-		BOOL HAS_COLLISION_FOR_MODEL_LOADED(Hash model);
+		bool HAS_COLLISION_FOR_MODEL_LOADED(Hash model);
 		/**
 		 * Alias of REQUEST_COLLISION_AT_COORD.
 		 */
@@ -16476,7 +16476,7 @@ namespace base::menu::natives {
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL DOES_ANIM_DICT_EXIST(const char* animDict);
+		bool DOES_ANIM_DICT_EXIST(const char* animDict);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
@@ -16484,7 +16484,7 @@ namespace base::menu::natives {
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		BOOL HAS_ANIM_DICT_LOADED(const char* animDict);
+		bool HAS_ANIM_DICT_LOADED(const char* animDict);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
@@ -16506,7 +16506,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of movement clipsets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/movementClipsetsCompact.json
 		 */
-		BOOL HAS_ANIM_SET_LOADED(const char* animSet);
+		bool HAS_ANIM_SET_LOADED(const char* animSet);
 		/**
 		 * Unloads the specified animation set. An animation set provides movement animations for a ped. See SET_PED_MOVEMENT_CLIPSET.
 		 * 
@@ -16530,7 +16530,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of movement clipsets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/movementClipsetsCompact.json
 		 */
-		BOOL HAS_CLIP_SET_LOADED(const char* clipSet);
+		bool HAS_CLIP_SET_LOADED(const char* clipSet);
 		/**
 		 * Alias for REMOVE_ANIM_SET.
 		 * 
@@ -16563,27 +16563,27 @@ namespace base::menu::natives {
 		/**
 		 * Full list of IPLs and interior entity sets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ipls.json
 		 */
-		BOOL IS_IPL_ACTIVE(const char* iplName);
-		void SET_STREAMING(BOOL toggle);
+		bool IS_IPL_ACTIVE(const char* iplName);
+		void SET_STREAMING(bool toggle);
 		/**
 		 * 0 - default
 		 * 1 - HeistIsland
 		 */
 		void LOAD_GLOBAL_WATER_FILE(int waterType);
 		int GET_GLOBAL_WATER_FILE();
-		void SET_GAME_PAUSES_FOR_STREAMING(BOOL toggle);
-		void SET_REDUCE_PED_MODEL_BUDGET(BOOL toggle);
-		void SET_REDUCE_VEHICLE_MODEL_BUDGET(BOOL toggle);
+		void SET_GAME_PAUSES_FOR_STREAMING(bool toggle);
+		void SET_REDUCE_PED_MODEL_BUDGET(bool toggle);
+		void SET_REDUCE_VEHICLE_MODEL_BUDGET(bool toggle);
 		/**
 		 * This is a NOP function. It does nothing at all.
 		 */
-		void SET_DITCH_POLICE_MODELS(BOOL toggle);
+		void SET_DITCH_POLICE_MODELS(bool toggle);
 		int GET_NUMBER_OF_STREAMING_REQUESTS();
 		/**
 		 * maps script name (thread + 0xD0) by lookup via scriptfx.dat - does nothing when script name is empty
 		 */
 		void REQUEST_PTFX_ASSET();
-		BOOL HAS_PTFX_ASSET_LOADED();
+		bool HAS_PTFX_ASSET_LOADED();
 		void REMOVE_PTFX_ASSET();
 		/**
 		 * From the b678d decompiled scripts:
@@ -16603,7 +16603,7 @@ namespace base::menu::natives {
 		 * STREAMING::REQUEST_NAMED_PTFX_ASSET("scr_prison_break_heist_station");
 		 */
 		void REQUEST_NAMED_PTFX_ASSET(const char* fxName);
-		BOOL HAS_NAMED_PTFX_ASSET_LOADED(const char* fxName);
+		bool HAS_NAMED_PTFX_ASSET_LOADED(const char* fxName);
 		void REMOVE_NAMED_PTFX_ASSET(const char* fxName);
 		void SET_VEHICLE_POPULATION_BUDGET(int p0);
 		/**
@@ -16622,7 +16622,7 @@ namespace base::menu::natives {
 		 * It seems to make the entity's coords mark the point from which LOD-distances are measured. In my testing, setting a vehicle as the focus entity and moving that vehicle more than 300 distance units away from the player will make the level of detail around the player go down drastically (shadows disappear, textures go extremely low res, etc). The player seems to be the default focus entity.
 		 */
 		void SET_FOCUS_ENTITY(Entity entity);
-		BOOL IS_ENTITY_FOCUS(Entity entity);
+		bool IS_ENTITY_FOCUS(Entity entity);
 		void SET_RESTORE_FOCUS_ENTITY(Entity p0);
 		/**
 		 * Possible p0 values:
@@ -16630,7 +16630,7 @@ namespace base::menu::natives {
 		 * "prologue"
 		 * "Prologue_Main"
 		 */
-		void SET_MAPDATACULLBOX_ENABLED(const char* name, BOOL toggle);
+		void SET_MAPDATACULLBOX_ENABLED(const char* name, bool toggle);
 		/**
 		 * This native does absolutely nothing, just a nullsub
 		 */
@@ -16648,20 +16648,20 @@ namespace base::menu::natives {
 		 */
 		int STREAMVOL_CREATE_LINE(float p0, float p1, float p2, float p3, float p4, float p5, Any p6);
 		void STREAMVOL_DELETE(Any unused);
-		BOOL STREAMVOL_HAS_LOADED(Any unused);
-		BOOL STREAMVOL_IS_VALID(Any unused);
-		BOOL IS_STREAMVOL_ACTIVE();
+		bool STREAMVOL_HAS_LOADED(Any unused);
+		bool STREAMVOL_IS_VALID(Any unused);
+		bool IS_STREAMVOL_ACTIVE();
 		/**
 		 * `radius` value is usually between `3f` and `7000f` in original 1868 scripts.
 		 * `p7` is 0, 1, 2, 3 or 4 used in decompiled scripts, 0 is by far the most common.
 		 * Returns True if success, used only 7 times in decompiled scripts of 1868
 		 */
-		BOOL NEW_LOAD_SCENE_START(float posX, float posY, float posZ, float offsetX, float offsetY, float offsetZ, float radius, int p7);
-		BOOL NEW_LOAD_SCENE_START_SPHERE(float x, float y, float z, float radius, Any p4);
+		bool NEW_LOAD_SCENE_START(float posX, float posY, float posZ, float offsetX, float offsetY, float offsetZ, float radius, int p7);
+		bool NEW_LOAD_SCENE_START_SPHERE(float x, float y, float z, float radius, Any p4);
 		void NEW_LOAD_SCENE_STOP();
-		BOOL IS_NEW_LOAD_SCENE_ACTIVE();
-		BOOL IS_NEW_LOAD_SCENE_LOADED();
-		BOOL IS_SAFE_TO_START_PLAYER_SWITCH();
+		bool IS_NEW_LOAD_SCENE_ACTIVE();
+		bool IS_NEW_LOAD_SCENE_LOADED();
+		bool IS_SAFE_TO_START_PLAYER_SWITCH();
 		/**
 		 * // this enum comes directly from R* so don't edit this
 		 * enum ePlayerSwitchTypes
@@ -16694,7 +16694,7 @@ namespace base::menu::natives {
 		 * Returns true if the player is currently switching, false otherwise.
 		 * (When the camera is in the sky moving from Trevor to Franklin for example)
 		 */
-		BOOL IS_PLAYER_SWITCH_IN_PROGRESS();
+		bool IS_PLAYER_SWITCH_IN_PROGRESS();
 		int GET_PLAYER_SWITCH_TYPE();
 		/**
 		 * x1, y1, z1 -- Coords of your ped model
@@ -16714,7 +16714,7 @@ namespace base::menu::natives {
 		void ALLOW_PLAYER_SWITCH_OUTRO();
 		void ALLOW_PLAYER_SWITCH_ASCENT();
 		void ALLOW_PLAYER_SWITCH_DESCENT();
-		BOOL IS_SWITCH_READY_FOR_DESCENT();
+		bool IS_SWITCH_READY_FOR_DESCENT();
 		void ENABLE_SWITCH_PAUSE_BEFORE_DESCENT();
 		void DISABLE_SWITCH_OUTRO_FX();
 		/**
@@ -16734,10 +16734,10 @@ namespace base::menu::natives {
 		 */
 		void SWITCH_TO_MULTI_FIRSTPART(Ped ped, int flags, int switchType);
 		void SWITCH_TO_MULTI_SECONDPART(Ped ped);
-		BOOL IS_SWITCH_TO_MULTI_FIRSTPART_FINISHED();
+		bool IS_SWITCH_TO_MULTI_FIRSTPART_FINISHED();
 		int GET_PLAYER_SWITCH_INTERP_OUT_DURATION();
 		int GET_PLAYER_SWITCH_INTERP_OUT_CURRENT_TIME();
-		BOOL IS_SWITCH_SKIPPING_DESCENT();
+		bool IS_SWITCH_SKIPPING_DESCENT();
 		void SET_SCENE_STREAMING_TRACKS_CAM_POS_THIS_FRAME();
 		float GET_LODSCALE();
 		/**
@@ -16748,13 +16748,13 @@ namespace base::menu::natives {
 		void OVERRIDE_LODSCALE_THIS_FRAME(float scaling);
 		void REMAP_LODSCALE_RANGE_THIS_FRAME(float p0, float p1, float p2, float p3);
 		void SUPPRESS_HD_MAP_STREAMING_THIS_FRAME();
-		void SET_RENDER_HD_ONLY(BOOL toggle);
+		void SET_RENDER_HD_ONLY(bool toggle);
 		void FORCE_ALLOW_TIME_BASED_FADING_THIS_FRAME();
 		void IPL_GROUP_SWAP_START(const char* iplName1, const char* iplName2);
 		void IPL_GROUP_SWAP_CANCEL();
-		BOOL IPL_GROUP_SWAP_IS_READY();
+		bool IPL_GROUP_SWAP_IS_READY();
 		void IPL_GROUP_SWAP_FINISH();
-		BOOL IPL_GROUP_SWAP_IS_ACTIVE();
+		bool IPL_GROUP_SWAP_IS_ACTIVE();
 		/**
 		 * This native is used to attribute the SRL that BEGIN_SRL is going to load. This is usually used for 'in-game' cinematics (not cutscenes but camera stuff) instead of SET_FOCUS_POS_AND_VEL because it loads a specific area of the map which is pretty useful when the camera moves from distant areas.
 		 * For instance, GTA:O opening cutscene.
@@ -16765,7 +16765,7 @@ namespace base::menu::natives {
 		/**
 		 * Returns true when the srl from BEGIN_SRL is loaded.
 		 */
-		BOOL IS_SRL_LOADED();
+		bool IS_SRL_LOADED();
 		void BEGIN_SRL();
 		/**
 		 * Clear the current srl and stop rendering the area selected by PREFETCH_SRL and started with BEGIN_SRL.
@@ -16774,13 +16774,13 @@ namespace base::menu::natives {
 		void SET_SRL_TIME(float p0);
 		void SET_SRL_POST_CUTSCENE_CAMERA(Any p0, Any p1, Any p2, Any p3, Any p4, Any p5);
 		void SET_SRL_READAHEAD_TIMES(Any p0, Any p1, Any p2, Any p3);
-		void SET_SRL_LONG_JUMP_MODE(BOOL p0);
+		void SET_SRL_LONG_JUMP_MODE(bool p0);
 		void SET_SRL_FORCE_PRESTREAM(Any p0);
 		void SET_HD_AREA(float x, float y, float z, float radius);
 		void CLEAR_HD_AREA();
 		void INIT_CREATOR_BUDGET();
 		void SHUTDOWN_CREATOR_BUDGET();
-		BOOL ADD_MODEL_TO_CREATOR_BUDGET(Hash modelHash);
+		bool ADD_MODEL_TO_CREATOR_BUDGET(Hash modelHash);
 		void REMOVE_MODEL_FROM_CREATOR_BUDGET(Hash modelHash);
 		/**
 		 * 0.0 = no memory used
@@ -16794,9 +16794,9 @@ namespace base::menu::natives {
 		/**
 		 * Enables the specified island. For more information, see islandhopper.meta
 		 */
-		void SET_ISLAND_ENABLED(const char* name, BOOL toggle);
+		void SET_ISLAND_ENABLED(const char* name, bool toggle);
 		void _SET_SPHERICAL_STREAM_DISTANT_HILODS_THIS_FRAME();
-		BOOL IS_GAME_INSTALLED();
+		bool IS_GAME_INSTALLED();
 
 	} // namespace STREAMING
 
@@ -16818,7 +16818,7 @@ namespace base::menu::natives {
 		 * 
 		 * flag1 = super jump, flag2 = do nothing if flag1 is false and doubles super jump height if flag1 is true.
 		 */
-		void TASK_JUMP(Ped ped, BOOL usePlayerLaunchForce, BOOL doSuperJump, BOOL useFullSuperJumpForce);
+		void TASK_JUMP(Ped ped, bool usePlayerLaunchForce, bool doSuperJump, bool useFullSuperJumpForce);
 		void TASK_COWER(Ped ped, int duration);
 		/**
 		 * In the scripts, p3 was always -1.
@@ -16861,13 +16861,13 @@ namespace base::menu::natives {
 		 */
 		void TASK_LEAVE_VEHICLE(Ped ped, Vehicle vehicle, int flags);
 		void TASK_GET_OFF_BOAT(Ped ped, Vehicle boat);
-		void TASK_SKY_DIVE(Ped ped, BOOL instant);
+		void TASK_SKY_DIVE(Ped ped, bool instant);
 		/**
 		 * Second parameter is unused.
 		 * 
 		 * second parameter was for jetpack in the early stages of gta and the hard coded code is now removed
 		 */
-		void TASK_PARACHUTE(Ped ped, BOOL giveParachuteItem, BOOL instant);
+		void TASK_PARACHUTE(Ped ped, bool giveParachuteItem, bool instant);
 		/**
 		 * makes ped parachute to coords x y z. Works well with PATHFIND::GET_SAFE_COORD_FOR_PED
 		 */
@@ -16894,7 +16894,7 @@ namespace base::menu::natives {
 		 * p7 always 10.0
 		 * p8 always 1
 		 */
-		void TASK_FOLLOW_TO_OFFSET_OF_ENTITY(Ped ped, Entity entity, float offsetX, float offsetY, float offsetZ, float movementSpeed, int timeout, float stoppingRange, BOOL persistFollowing);
+		void TASK_FOLLOW_TO_OFFSET_OF_ENTITY(Ped ped, Entity entity, float offsetX, float offsetY, float offsetZ, float movementSpeed, int timeout, float stoppingRange, bool persistFollowing);
 		void TASK_GO_STRAIGHT_TO_COORD(Ped ped, float x, float y, float z, float speed, int timeout, float targetHeading, float distanceToSlide);
 		void TASK_GO_STRAIGHT_TO_COORD_RELATIVE_TO_ENTITY(Ped ped, Entity entity, float x, float y, float z, float moveBlendRatio, int time);
 		/**
@@ -16948,14 +16948,14 @@ namespace base::menu::natives {
 		/**
 		 * Makes the specified ped flee the specified distance from the specified position.
 		 */
-		void TASK_SMART_FLEE_COORD(Ped ped, float x, float y, float z, float distance, int time, BOOL preferPavements, BOOL quitIfOutOfRange);
+		void TASK_SMART_FLEE_COORD(Ped ped, float x, float y, float z, float distance, int time, bool preferPavements, bool quitIfOutOfRange);
 		/**
 		 * Makes a ped run away from another ped (fleeTarget).
 		 * 
 		 * distance = ped will flee this distance.
 		 * fleeTime = ped will flee for this amount of time, set to "-1" to flee forever
 		 */
-		void TASK_SMART_FLEE_PED(Ped ped, Ped fleeTarget, float safeDistance, int fleeTime, BOOL preferPavements, BOOL updateToNearestHatedPed);
+		void TASK_SMART_FLEE_PED(Ped ped, Ped fleeTarget, float safeDistance, int fleeTime, bool preferPavements, bool updateToNearestHatedPed);
 		void TASK_REACT_AND_FLEE_PED(Ped ped, Ped fleeTarget);
 		void TASK_SHOCKING_EVENT_REACT(Ped ped, int eventHandle);
 		void TASK_WANDER_IN_AREA(Ped ped, float x, float y, float z, float radius, float minimalLength, float timeBetweenWalks);
@@ -16976,7 +16976,7 @@ namespace base::menu::natives {
 		 * 
 		 * Radius seems to define how close the vehicle has to be -after parking- to the position for this task considered completed. If the value is too small, the vehicle will try to park again until it's exactly where it should be. 20.0 Works well but lower values don't, like the radius is measured in centimeters or something.
 		 */
-		void TASK_VEHICLE_PARK(Ped ped, Vehicle vehicle, float x, float y, float z, float heading, int mode, float radius, BOOL keepEngineOn);
+		void TASK_VEHICLE_PARK(Ped ped, Vehicle vehicle, float x, float y, float z, float heading, int mode, float radius, bool keepEngineOn);
 		/**
 		 * known "killTypes" are: "AR_stealth_kill_knife" and "AR_stealth_kill_a".
 		 */
@@ -16988,16 +16988,16 @@ namespace base::menu::natives {
 		 */
 		void TASK_FOLLOW_NAV_MESH_TO_COORD(Ped ped, float x, float y, float z, float moveBlendRatio, int time, float targetRadius, int flags, float targetHeading);
 		void TASK_FOLLOW_NAV_MESH_TO_COORD_ADVANCED(Ped ped, float x, float y, float z, float moveBlendRatio, int time, float targetRadius, int flags, float slideToCoordHeading, float maxSlopeNavigable, float clampMaxSearchDistance, float targetHeading);
-		void SET_PED_PATH_CAN_USE_CLIMBOVERS(Ped ped, BOOL Toggle);
-		void SET_PED_PATH_CAN_USE_LADDERS(Ped ped, BOOL Toggle);
-		void SET_PED_PATH_CAN_DROP_FROM_HEIGHT(Ped ped, BOOL Toggle);
+		void SET_PED_PATH_CAN_USE_CLIMBOVERS(Ped ped, bool Toggle);
+		void SET_PED_PATH_CAN_USE_LADDERS(Ped ped, bool Toggle);
+		void SET_PED_PATH_CAN_DROP_FROM_HEIGHT(Ped ped, bool Toggle);
 		/**
 		 * Default modifier is 1.0, minimum is 0.0 and maximum is 10.0.
 		 */
 		void SET_PED_PATH_CLIMB_COST_MODIFIER(Ped ped, float modifier);
-		void SET_PED_PATH_MAY_ENTER_WATER(Ped ped, BOOL mayEnterWater);
-		void SET_PED_PATH_PREFER_TO_AVOID_WATER(Ped ped, BOOL avoidWater);
-		void SET_PED_PATH_AVOID_FIRE(Ped ped, BOOL avoidFire);
+		void SET_PED_PATH_MAY_ENTER_WATER(Ped ped, bool mayEnterWater);
+		void SET_PED_PATH_PREFER_TO_AVOID_WATER(Ped ped, bool avoidWater);
+		void SET_PED_PATH_AVOID_FIRE(Ped ped, bool avoidFire);
 		/**
 		 * Needs to be looped! And yes, it does work and is not a hash collision.
 		 * Birds will try to reach the given height.
@@ -17011,21 +17011,21 @@ namespace base::menu::natives {
 		 * 2 - ???
 		 * 3 - Finished Generating
 		 */
-		int GET_NAVMESH_ROUTE_DISTANCE_REMAINING(Ped ped, float* distanceRemaining, BOOL* isPathReady);
+		int GET_NAVMESH_ROUTE_DISTANCE_REMAINING(Ped ped, float* distanceRemaining, bool* isPathReady);
 		/**
 		 * See GET_NAVMESH_ROUTE_DISTANCE_REMAINING for more details.
 		 */
 		int GET_NAVMESH_ROUTE_RESULT(Ped ped);
-		BOOL IS_CONTROLLED_VEHICLE_UNABLE_TO_GET_TO_ROAD(Ped ped);
+		bool IS_CONTROLLED_VEHICLE_UNABLE_TO_GET_TO_ROAD(Ped ped);
 		/**
 		 * example from fm_mission_controller
 		 * 
 		 * TASK::TASK_GO_TO_COORD_ANY_MEANS(l_649, sub_f7e86(-1, 0), 1.0, 0, 0, 786603, 0xbf800000);
 		 * 
 		 */
-		void TASK_GO_TO_COORD_ANY_MEANS(Ped ped, float x, float y, float z, float moveBlendRatio, Vehicle vehicle, BOOL useLongRangeVehiclePathing, int drivingFlags, float maxRangeToShootTargets);
-		void TASK_GO_TO_COORD_ANY_MEANS_EXTRA_PARAMS(Ped ped, float x, float y, float z, float moveBlendRatio, Vehicle vehicle, BOOL useLongRangeVehiclePathing, int drivingFlags, float maxRangeToShootTargets, float extraVehToTargetDistToPreferVehicle, float driveStraightLineDistance, int extraFlags, float warpTimerMS);
-		void TASK_GO_TO_COORD_ANY_MEANS_EXTRA_PARAMS_WITH_CRUISE_SPEED(Ped ped, float x, float y, float z, float moveBlendRatio, Vehicle vehicle, BOOL useLongRangeVehiclePathing, int drivingFlags, float maxRangeToShootTargets, float extraVehToTargetDistToPreferVehicle, float driveStraightLineDistance, int extraFlags, float cruiseSpeed, float targetArriveDist);
+		void TASK_GO_TO_COORD_ANY_MEANS(Ped ped, float x, float y, float z, float moveBlendRatio, Vehicle vehicle, bool useLongRangeVehiclePathing, int drivingFlags, float maxRangeToShootTargets);
+		void TASK_GO_TO_COORD_ANY_MEANS_EXTRA_PARAMS(Ped ped, float x, float y, float z, float moveBlendRatio, Vehicle vehicle, bool useLongRangeVehiclePathing, int drivingFlags, float maxRangeToShootTargets, float extraVehToTargetDistToPreferVehicle, float driveStraightLineDistance, int extraFlags, float warpTimerMS);
+		void TASK_GO_TO_COORD_ANY_MEANS_EXTRA_PARAMS_WITH_CRUISE_SPEED(Ped ped, float x, float y, float z, float moveBlendRatio, Vehicle vehicle, bool useLongRangeVehiclePathing, int drivingFlags, float maxRangeToShootTargets, float extraVehToTargetDistToPreferVehicle, float driveStraightLineDistance, int extraFlags, float cruiseSpeed, float targetArriveDist);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 * 
@@ -17090,7 +17090,7 @@ namespace base::menu::natives {
 		 * 0 for single player
 		 * Can be 1 but only for MP
 		 */
-		void TASK_PLAY_ANIM(Ped ped, const char* animDictionary, const char* animationName, float blendInSpeed, float blendOutSpeed, int duration, int flag, float playbackRate, BOOL lockX, BOOL lockY, BOOL lockZ);
+		void TASK_PLAY_ANIM(Ped ped, const char* animDictionary, const char* animationName, float blendInSpeed, float blendOutSpeed, int duration, int flag, float playbackRate, bool lockX, bool lockY, bool lockZ);
 		/**
 		 * It's similar to TASK_PLAY_ANIM, except the first 6 floats let you specify the initial position and rotation of the task. (Ped gets teleported to the position).
 		 * 
@@ -17142,11 +17142,11 @@ namespace base::menu::natives {
 		/**
 		 * Looks like p1 may be a flag, still need to do some research, though.
 		 */
-		void STOP_ANIM_PLAYBACK(Entity entity, int priority, BOOL secondary);
-		void SET_ANIM_WEIGHT(Entity entity, float weight, int priority, int index, BOOL secondary);
-		void SET_ANIM_PHASE(Entity entity, float phase, int priority, BOOL secondary);
-		void SET_ANIM_RATE(Entity entity, float rate, int priority, BOOL secondary);
-		void SET_ANIM_LOOPED(Entity entity, BOOL looped, int priority, BOOL secondary);
+		void STOP_ANIM_PLAYBACK(Entity entity, int priority, bool secondary);
+		void SET_ANIM_WEIGHT(Entity entity, float weight, int priority, int index, bool secondary);
+		void SET_ANIM_PHASE(Entity entity, float phase, int priority, bool secondary);
+		void SET_ANIM_RATE(Entity entity, float rate, int priority, bool secondary);
+		void SET_ANIM_LOOPED(Entity entity, bool looped, int priority, bool secondary);
 		/**
 		 * Example from the scripts:
 		 * TASK::TASK_PLAY_PHONE_GESTURE_ANIMATION(PLAYER::PLAYER_PED_ID(), v_3, v_2, v_4, 0.25, 0.25, 0, 0);
@@ -17172,9 +17172,9 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
-		void TASK_PLAY_PHONE_GESTURE_ANIMATION(Ped ped, const char* animDict, const char* animation, const char* boneMaskType, float blendInDuration, float blendOutDuration, BOOL isLooping, BOOL holdLastFrame);
+		void TASK_PLAY_PHONE_GESTURE_ANIMATION(Ped ped, const char* animDict, const char* animation, const char* boneMaskType, float blendInDuration, float blendOutDuration, bool isLooping, bool holdLastFrame);
 		void TASK_STOP_PHONE_GESTURE_ANIMATION(Ped ped, float blendOutOverride);
-		BOOL IS_PLAYING_PHONE_GESTURE_ANIM(Ped ped);
+		bool IS_PLAYING_PHONE_GESTURE_ANIM(Ped ped);
 		float GET_PHONE_GESTURE_ANIM_CURRENT_TIME(Ped ped);
 		float GET_PHONE_GESTURE_ANIM_TOTAL_TIME(Ped ped);
 		/**
@@ -17222,7 +17222,7 @@ namespace base::menu::natives {
 		void TASK_PERFORM_SEQUENCE(Ped ped, int taskSequenceId);
 		void TASK_PERFORM_SEQUENCE_LOCALLY(Ped ped, int taskSequenceId);
 		void CLEAR_SEQUENCE_TASK(int* taskSequenceId);
-		void SET_SEQUENCE_TO_REPEAT(int taskSequenceId, BOOL repeat);
+		void SET_SEQUENCE_TO_REPEAT(int taskSequenceId, bool repeat);
 		void SET_SEQUENCE_PREVENT_MIGRATION(int taskSequenceId);
 		/**
 		 * returned values:
@@ -17233,7 +17233,7 @@ namespace base::menu::natives {
 		/**
 		 * Task index enum: https://alloc8or.re/gta5/doc/enums/eTaskTypeIndex.txt
 		 */
-		BOOL GET_IS_TASK_ACTIVE(Ped ped, int taskIndex);
+		bool GET_IS_TASK_ACTIVE(Ped ped, int taskIndex);
 		/**
 		 * Gets the status of a script-assigned task.
 		 * taskHash: https://alloc8or.re/gta5/doc/enums/eScriptTaskHash.txt
@@ -17247,19 +17247,19 @@ namespace base::menu::natives {
 		 * Flags are the same flags used in TASK_LEAVE_VEHICLE
 		 */
 		void TASK_LEAVE_ANY_VEHICLE(Ped ped, int delayTime, int flags);
-		void TASK_AIM_GUN_SCRIPTED(Ped ped, Hash scriptTask, BOOL disableBlockingClip, BOOL instantBlendToAim);
-		void TASK_AIM_GUN_SCRIPTED_WITH_TARGET(Ped ped, Ped target, float x, float y, float z, int gunTaskType, BOOL disableBlockingClip, BOOL forceAim);
-		void UPDATE_TASK_AIM_GUN_SCRIPTED_TARGET(Ped ped, Ped target, float x, float y, float z, BOOL disableBlockingClip);
+		void TASK_AIM_GUN_SCRIPTED(Ped ped, Hash scriptTask, bool disableBlockingClip, bool instantBlendToAim);
+		void TASK_AIM_GUN_SCRIPTED_WITH_TARGET(Ped ped, Ped target, float x, float y, float z, int gunTaskType, bool disableBlockingClip, bool forceAim);
+		void UPDATE_TASK_AIM_GUN_SCRIPTED_TARGET(Ped ped, Ped target, float x, float y, float z, bool disableBlockingClip);
 		const char* GET_CLIP_SET_FOR_SCRIPTED_GUN_TASK(int gunTaskType);
 		/**
 		 * duration: the amount of time in milliseconds to do the task.  -1 will keep the task going until either another task is applied, or CLEAR_ALL_TASKS() is called with the ped
 		 */
-		void TASK_AIM_GUN_AT_ENTITY(Ped ped, Entity entity, int duration, BOOL instantBlendToAim);
+		void TASK_AIM_GUN_AT_ENTITY(Ped ped, Entity entity, int duration, bool instantBlendToAim);
 		/**
 		 * duration: the amount of time in milliseconds to do the task. -1 will keep the task going until either another task is applied, or CLEAR_ALL_TASKS() is called with the ped
 		 */
 		void TASK_TURN_PED_TO_FACE_ENTITY(Ped ped, Entity entity, int duration);
-		void TASK_AIM_GUN_AT_COORD(Ped ped, float x, float y, float z, int time, BOOL instantBlendToAim, BOOL playAnimIntro);
+		void TASK_AIM_GUN_AT_COORD(Ped ped, float x, float y, float z, int time, bool instantBlendToAim, bool playAnimIntro);
 		/**
 		 * Firing Pattern Hash Information: https://pastebin.com/Px036isB
 		 */
@@ -17268,7 +17268,7 @@ namespace base::menu::natives {
 		 * Makes the specified ped shuffle to the next vehicle seat.
 		 * The ped MUST be in a vehicle and the vehicle parameter MUST be the ped's current vehicle.
 		 */
-		void TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT(Ped ped, Vehicle vehicle, BOOL useAlternateShuffle);
+		void TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT(Ped ped, Vehicle vehicle, bool useAlternateShuffle);
 		void CLEAR_PED_TASKS(Ped ped);
 		void CLEAR_PED_SCRIPT_TASK_IF_RUNNING_THREAT_RESPONSE_NON_TEMP_TASK(Ped ped);
 		void CLEAR_PED_SECONDARY_TASK(Ped ped);
@@ -17323,15 +17323,15 @@ namespace base::menu::natives {
 		/**
 		 * missionType: https://alloc8or.re/gta5/doc/enums/eVehicleMissionType.txt
 		 */
-		void TASK_VEHICLE_MISSION(Ped driver, Vehicle vehicle, Vehicle vehicleTarget, int missionType, float cruiseSpeed, int drivingStyle, float targetReached, float straightLineDistance, BOOL DriveAgainstTraffic);
+		void TASK_VEHICLE_MISSION(Ped driver, Vehicle vehicle, Vehicle vehicleTarget, int missionType, float cruiseSpeed, int drivingStyle, float targetReached, float straightLineDistance, bool DriveAgainstTraffic);
 		/**
 		 * See TASK_VEHICLE_MISSION
 		 */
-		void TASK_VEHICLE_MISSION_PED_TARGET(Ped ped, Vehicle vehicle, Ped pedTarget, int missionType, float maxSpeed, int drivingStyle, float minDistance, float straightLineDistance, BOOL DriveAgainstTraffic);
+		void TASK_VEHICLE_MISSION_PED_TARGET(Ped ped, Vehicle vehicle, Ped pedTarget, int missionType, float maxSpeed, int drivingStyle, float minDistance, float straightLineDistance, bool DriveAgainstTraffic);
 		/**
 		 * See TASK_VEHICLE_MISSION
 		 */
-		void TASK_VEHICLE_MISSION_COORS_TARGET(Ped ped, Vehicle vehicle, float x, float y, float z, int mission, float cruiseSpeed, int drivingStyle, float targetReached, float straightLineDistance, BOOL DriveAgainstTraffic);
+		void TASK_VEHICLE_MISSION_COORS_TARGET(Ped ped, Vehicle vehicle, float x, float y, float z, int mission, float cruiseSpeed, int drivingStyle, float targetReached, float straightLineDistance, bool DriveAgainstTraffic);
 		/**
 		 * Makes a ped follow the targetVehicle with <minDistance> in between.
 		 * 
@@ -17385,7 +17385,7 @@ namespace base::menu::natives {
 		 * Flag 32: Stay back from suspect, no tactical contact. Convoy-like.
 		 * Flag 16: Ramming, seems to be slightly less aggressive than 1-2.
 		 */
-		void SET_TASK_VEHICLE_CHASE_BEHAVIOR_FLAG(Ped ped, int flag, BOOL set);
+		void SET_TASK_VEHICLE_CHASE_BEHAVIOR_FLAG(Ped ped, int flag, bool set);
 		void SET_TASK_VEHICLE_CHASE_IDEAL_PURSUIT_DISTANCE(Ped ped, float distance);
 		/**
 		 * Ped pilot should be in a heli.
@@ -17406,7 +17406,7 @@ namespace base::menu::natives {
 		 */
 		void CLEAR_PRIMARY_VEHICLE_TASK(Vehicle vehicle);
 		void CLEAR_VEHICLE_CRASH_TASK(Vehicle vehicle);
-		void TASK_PLANE_GOTO_PRECISE_VTOL(Ped ped, Vehicle vehicle, float x, float y, float z, int flightHeight, int minHeightAboveTerrain, BOOL useDesiredOrientation, float desiredOrientation, BOOL autopilot);
+		void TASK_PLANE_GOTO_PRECISE_VTOL(Ped ped, Vehicle vehicle, float x, float y, float z, int flightHeight, int minHeightAboveTerrain, bool useDesiredOrientation, float desiredOrientation, bool autopilot);
 		/**
 		 * Used in am_vehicle_spawn.ysc and am_mp_submarine.ysc.
 		 * 
@@ -17416,7 +17416,7 @@ namespace base::menu::natives {
 		 * 
 		 * Speed can be set by calling SET_DRIVE_TASK_CRUISE_SPEED after
 		 */
-		void TASK_SUBMARINE_GOTO_AND_STOP(Ped ped, Vehicle submarine, float x, float y, float z, BOOL autopilot);
+		void TASK_SUBMARINE_GOTO_AND_STOP(Ped ped, Vehicle submarine, float x, float y, float z, bool autopilot);
 		/**
 		 * Must have targetVehicle, targetPed, OR destination X/Y/Z set
 		 * Will follow targeted vehicle/ped, or fly to destination
@@ -17516,7 +17516,7 @@ namespace base::menu::natives {
 		 * 16 = CTaskVehiclePoliceBehaviour
 		 * 17 = CTaskVehicleCrash
 		 */
-		void TASK_PLANE_MISSION(Ped pilot, Vehicle aircraft, Vehicle targetVehicle, Ped targetPed, float destinationX, float destinationY, float destinationZ, int missionFlag, float angularDrag, float targetReached, float targetHeading, float maxZ, float minZ, BOOL precise);
+		void TASK_PLANE_MISSION(Ped pilot, Vehicle aircraft, Vehicle targetVehicle, Ped targetPed, float destinationX, float destinationY, float destinationZ, int missionFlag, float angularDrag, float targetReached, float targetHeading, float maxZ, float minZ, bool precise);
 		void TASK_PLANE_TAXI(Ped pilot, Vehicle aircraft, float x, float y, float z, float cruiseSpeed, float targetReached);
 		/**
 		 * You need to call PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS after TASK_BOAT_MISSION in order for the task to execute.
@@ -17543,23 +17543,23 @@ namespace base::menu::natives {
 		 * I marked p6 as distanceToShoot as if you think of GTA's Logic with the native SET_VEHICLE_SHOOT natives, it won't shoot till it gets within a certain distance of the target.
 		 * I marked p7 as pedAccuracy as it seems it's mostly 100 (Completely Accurate), 75, 90, etc. Although this could be the ammo count within the gun, but I highly doubt it. I will change this comment once I find out if it's ammo count or not.
 		 */
-		void TASK_DRIVE_BY(Ped driverPed, Ped targetPed, Vehicle targetVehicle, float targetX, float targetY, float targetZ, float distanceToShoot, int pedAccuracy, BOOL pushUnderneathDrivingTaskIfDriving, Hash firingPattern);
+		void TASK_DRIVE_BY(Ped driverPed, Ped targetPed, Vehicle targetVehicle, float targetX, float targetY, float targetZ, float distanceToShoot, int pedAccuracy, bool pushUnderneathDrivingTaskIfDriving, Hash firingPattern);
 		/**
 		 * For p1 & p2 (Ped, Vehicle). I could be wrong, as the only time this native is called in scripts is once and both are 0, but I assume this native will work like SET_MOUNTED_WEAPON_TARGET in which has the same exact amount of parameters and the 1st and last 3 parameters are right and the same for both natives.
 		 */
 		void SET_DRIVEBY_TASK_TARGET(Ped shootingPed, Ped targetPed, Vehicle targetVehicle, float x, float y, float z);
 		void CLEAR_DRIVEBY_TASK_UNDERNEATH_DRIVING_TASK(Ped ped);
-		BOOL IS_DRIVEBY_TASK_UNDERNEATH_DRIVING_TASK(Ped ped);
+		bool IS_DRIVEBY_TASK_UNDERNEATH_DRIVING_TASK(Ped ped);
 		/**
 		 * Forces the ped to use the mounted weapon.
 		 * Returns false if task is not possible.
 		 */
-		BOOL CONTROL_MOUNTED_WEAPON(Ped ped);
+		bool CONTROL_MOUNTED_WEAPON(Ped ped);
 		/**
 		 * Note: Look in decompiled scripts and the times that p1 and p2 aren't 0. They are filled with vars. If you look through out that script what other natives those vars are used in, you can tell p1 is a ped and p2 is a vehicle. Which most likely means if you want the mounted weapon to target a ped set targetVehicle to 0 or vice-versa.
 		 */
-		void SET_MOUNTED_WEAPON_TARGET(Ped shootingPed, Ped targetPed, Vehicle targetVehicle, float x, float y, float z, int taskMode, BOOL ignoreTargetVehDeadCheck);
-		BOOL IS_MOUNTED_WEAPON_TASK_UNDERNEATH_DRIVING_TASK(Ped ped);
+		void SET_MOUNTED_WEAPON_TARGET(Ped shootingPed, Ped targetPed, Vehicle targetVehicle, float x, float y, float z, int taskMode, bool ignoreTargetVehDeadCheck);
+		bool IS_MOUNTED_WEAPON_TASK_UNDERNEATH_DRIVING_TASK(Ped ped);
 		/**
 		 * Actually has 3 params, not 2.
 		 * 
@@ -17567,7 +17567,7 @@ namespace base::menu::natives {
 		 * p1: int (or bool?)
 		 * p2: int
 		 */
-		void TASK_USE_MOBILE_PHONE(Ped ped, BOOL usePhone, int desiredPhoneMode);
+		void TASK_USE_MOBILE_PHONE(Ped ped, bool usePhone, int desiredPhoneMode);
 		void TASK_USE_MOBILE_PHONE_TIMED(Ped ped, int duration);
 		/**
 		 * p2 tend to be 16, 17 or 1
@@ -17603,8 +17603,8 @@ namespace base::menu::natives {
 		 * Climbs or vaults the nearest thing.
 		 * usePlayerLaunchForce is unused.
 		 */
-		void TASK_CLIMB(Ped ped, BOOL usePlayerLaunchForce);
-		void TASK_CLIMB_LADDER(Ped ped, BOOL fast);
+		void TASK_CLIMB(Ped ped, bool usePlayerLaunchForce);
+		void TASK_CLIMB_LADDER(Ped ped, bool fast);
 		/**
 		 * Attaches a ped to a rope and allows player control to rappel down a wall. Disables all collisions while on the rope.
 		 * p10: Usually 1 in the scripts, clipSet: Clipset to use for the task, minZ: Minimum Z that the player can descend to, ropeHandle: Rope to attach this task to created with ADD_ROPE
@@ -17644,12 +17644,12 @@ namespace base::menu::natives {
 		void TASK_CLEAR_DEFENSIVE_AREA(Ped ped);
 		void TASK_PED_SLIDE_TO_COORD(Ped ped, float x, float y, float z, float heading, float speed);
 		void TASK_PED_SLIDE_TO_COORD_HDG_RATE(Ped ped, float x, float y, float z, float heading, float speed, float headingChangeRate);
-		ScrHandle ADD_COVER_POINT(float x, float y, float z, float direction, int usage, int height, int arc, BOOL isPriority);
+		ScrHandle ADD_COVER_POINT(float x, float y, float z, float direction, int usage, int height, int arc, bool isPriority);
 		void REMOVE_COVER_POINT(ScrHandle coverpoint);
 		/**
 		 * Checks if there is a cover point at position
 		 */
-		BOOL DOES_SCRIPTED_COVER_POINT_EXIST_AT_COORDS(float x, float y, float z);
+		bool DOES_SCRIPTED_COVER_POINT_EXIST_AT_COORDS(float x, float y, float z);
 		Vector3 GET_SCRIPTED_COVER_POINT_COORDS(ScrHandle coverpoint);
 		void ADD_SCRIPTED_COVER_AREA(float x, float y, float z, float radius);
 		/**
@@ -17659,12 +17659,12 @@ namespace base::menu::natives {
 		 */
 		void TASK_COMBAT_PED(Ped ped, Ped targetPed, int combatFlags, int threatResponseFlags);
 		void TASK_COMBAT_PED_TIMED(Ped ped, Ped target, int time, int flags);
-		void TASK_SEEK_COVER_FROM_POS(Ped ped, float x, float y, float z, int duration, BOOL allowPeekingAndFiring);
-		void TASK_SEEK_COVER_FROM_PED(Ped ped, Ped target, int duration, BOOL allowPeekingAndFiring);
+		void TASK_SEEK_COVER_FROM_POS(Ped ped, float x, float y, float z, int duration, bool allowPeekingAndFiring);
+		void TASK_SEEK_COVER_FROM_PED(Ped ped, Ped target, int duration, bool allowPeekingAndFiring);
 		/**
 		 * p5 is always -1
 		 */
-		void TASK_SEEK_COVER_TO_COVER_POINT(Ped ped, ScrHandle coverpoint, float x, float y, float z, int time, BOOL allowPeekingAndFiring);
+		void TASK_SEEK_COVER_TO_COVER_POINT(Ped ped, ScrHandle coverpoint, float x, float y, float z, int time, bool allowPeekingAndFiring);
 		/**
 		 * p8 causes the ped to take the shortest route to the cover position. It may have something to do with navmesh or pathfinding mechanics.
 		 * 
@@ -17676,9 +17676,9 @@ namespace base::menu::natives {
 		 * from michael3:
 		 * TASK::TASK_SEEK_COVER_TO_COORDS(ped, -2231.011474609375, 263.6326599121094, 173.60195922851562, -1, 0);
 		 */
-		void TASK_SEEK_COVER_TO_COORDS(Ped ped, float x1, float y1, float z1, float x2, float y2, float z2, int timeout, BOOL shortRoute);
-		void TASK_PUT_PED_DIRECTLY_INTO_COVER(Ped ped, float x, float y, float z, int time, BOOL allowPeekingAndFiring, float blendInDuration, BOOL forceInitialFacingDirection, BOOL forceFaceLeft, int identifier, BOOL doEntry);
-		void TASK_WARP_PED_DIRECTLY_INTO_COVER(Ped ped, int time, BOOL allowPeekingAndFiring, BOOL forceInitialFacingDirection, BOOL forceFaceLeft, int identifier);
+		void TASK_SEEK_COVER_TO_COORDS(Ped ped, float x1, float y1, float z1, float x2, float y2, float z2, int timeout, bool shortRoute);
+		void TASK_PUT_PED_DIRECTLY_INTO_COVER(Ped ped, float x, float y, float z, int time, bool allowPeekingAndFiring, float blendInDuration, bool forceInitialFacingDirection, bool forceFaceLeft, int identifier, bool doEntry);
+		void TASK_WARP_PED_DIRECTLY_INTO_COVER(Ped ped, int time, bool allowPeekingAndFiring, bool forceInitialFacingDirection, bool forceFaceLeft, int identifier);
 		/**
 		 * p1 is 1, 2, or 3 in scripts
 		 */
@@ -17701,7 +17701,7 @@ namespace base::menu::natives {
 		 * 
 		 * TASK::TASK_GUARD_CURRENT_POSITION(l_DD, 35.0, 35.0, 1);
 		 */
-		void TASK_GUARD_CURRENT_POSITION(Ped ped, float maxPatrolProximity, float defensiveAreaRadius, BOOL setDefensiveArea);
+		void TASK_GUARD_CURRENT_POSITION(Ped ped, float maxPatrolProximity, float defensiveAreaRadius, bool setDefensiveArea);
 		void TASK_GUARD_ASSIGNED_DEFENSIVE_AREA(Ped ped, float x, float y, float z, float heading, float maxPatrolProximity, int timer);
 		void TASK_GUARD_SPHERE_DEFENSIVE_AREA(Ped ped, float defendPositionX, float defendPositionY, float defendPositionZ, float heading, float maxPatrolProximity, int time, float x, float y, float z, float defensiveAreaRadius);
 		/**
@@ -17709,7 +17709,7 @@ namespace base::menu::natives {
 		 */
 		void TASK_STAND_GUARD(Ped ped, float x, float y, float z, float heading, const char* scenarioName);
 		void SET_DRIVE_TASK_CRUISE_SPEED(Ped driver, float cruiseSpeed);
-		void SET_DRIVE_TASK_MAX_CRUISE_SPEED(Ped ped, float speed, BOOL updateBaseTask);
+		void SET_DRIVE_TASK_MAX_CRUISE_SPEED(Ped ped, float speed, bool updateBaseTask);
 		/**
 		 * This native is used to set the driving style for specific ped.
 		 * 
@@ -17721,10 +17721,10 @@ namespace base::menu::natives {
 		 * http://gtaforums.com/topic/822314-guide-driving-styles/
 		 */
 		void SET_DRIVE_TASK_DRIVING_STYLE(Ped ped, int drivingStyle);
-		void ADD_COVER_BLOCKING_AREA(float startX, float startY, float startZ, float endX, float endY, float endZ, BOOL blockObjects, BOOL blockVehicles, BOOL blockMap, BOOL blockPlayer);
+		void ADD_COVER_BLOCKING_AREA(float startX, float startY, float startZ, float endX, float endY, float endZ, bool blockObjects, bool blockVehicles, bool blockMap, bool blockPlayer);
 		void REMOVE_ALL_COVER_BLOCKING_AREAS();
 		void REMOVE_COVER_BLOCKING_AREAS_AT_POSITION(float x, float y, float z);
-		void REMOVE_SPECIFIC_COVER_BLOCKING_AREAS(float startX, float startY, float startZ, float endX, float endY, float endZ, BOOL blockObjects, BOOL blockVehicles, BOOL blockMap, BOOL blockPlayer);
+		void REMOVE_SPECIFIC_COVER_BLOCKING_AREAS(float startX, float startY, float startZ, float endX, float endY, float endZ, bool blockObjects, bool blockVehicles, bool blockMap, bool blockPlayer);
 		/**
 		 * Plays a scenario on a Ped at their current location.
 		 * 
@@ -17770,7 +17770,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of ped scenarios by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scenariosCompact.json
 		 */
-		void TASK_START_SCENARIO_IN_PLACE(Ped ped, const char* scenarioName, int unkDelay, BOOL playEnterAnim);
+		void TASK_START_SCENARIO_IN_PLACE(Ped ped, const char* scenarioName, int unkDelay, bool playEnterAnim);
 		/**
 		 * Full list of ped scenarios by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scenariosCompact.json
 		 * 
@@ -17792,7 +17792,7 @@ namespace base::menu::natives {
 		 * 
 		 * p8 teleports ped to position
 		 */
-		void TASK_START_SCENARIO_AT_POSITION(Ped ped, const char* scenarioName, float x, float y, float z, float heading, int duration, BOOL sittingScenario, BOOL teleport);
+		void TASK_START_SCENARIO_AT_POSITION(Ped ped, const char* scenarioName, float x, float y, float z, float heading, int duration, bool sittingScenario, bool teleport);
 		/**
 		 * Updated variables
 		 * 
@@ -17808,10 +17808,10 @@ namespace base::menu::natives {
 		 * p5 is always -1 or 0 in scripts
 		 */
 		void TASK_USE_NEAREST_SCENARIO_CHAIN_TO_COORD_WARP(Ped ped, float x, float y, float z, float radius, int timeToLeave);
-		BOOL DOES_SCENARIO_EXIST_IN_AREA(float x, float y, float z, float radius, BOOL mustBeFree);
-		BOOL DOES_SCENARIO_OF_TYPE_EXIST_IN_AREA(float x, float y, float z, const char* scenarioName, float radius, BOOL mustBeFree);
-		BOOL IS_SCENARIO_OCCUPIED(float x, float y, float z, float maxRange, BOOL onlyUsersActuallyAtScenario);
-		BOOL PED_HAS_USE_SCENARIO_TASK(Ped ped);
+		bool DOES_SCENARIO_EXIST_IN_AREA(float x, float y, float z, float radius, bool mustBeFree);
+		bool DOES_SCENARIO_OF_TYPE_EXIST_IN_AREA(float x, float y, float z, const char* scenarioName, float radius, bool mustBeFree);
+		bool IS_SCENARIO_OCCUPIED(float x, float y, float z, float maxRange, bool onlyUsersActuallyAtScenario);
+		bool PED_HAS_USE_SCENARIO_TASK(Ped ped);
 		/**
 		 * Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json
 		 */
@@ -17854,7 +17854,7 @@ namespace base::menu::natives {
 		 * else if (TASK::IS_SCENARIO_GROUP_ENABLED("BLIMP")) {
 		 * 
 		 */
-		BOOL DOES_SCENARIO_GROUP_EXIST(const char* scenarioGroup);
+		bool DOES_SCENARIO_GROUP_EXIST(const char* scenarioGroup);
 		/**
 		 * Full list of scenario groups used in scripts by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scenarioGroupNames.json
 		 * Occurrences in the b617d scripts:
@@ -17887,12 +17887,12 @@ namespace base::menu::natives {
 		 * if (TASK::DOES_SCENARIO_GROUP_EXIST("Observatory_Bikers") &&   (!TASK::IS_SCENARIO_GROUP_ENABLED("Observatory_Bikers"))) {
 		 * else if (TASK::IS_SCENARIO_GROUP_ENABLED("BLIMP")) {
 		 */
-		BOOL IS_SCENARIO_GROUP_ENABLED(const char* scenarioGroup);
+		bool IS_SCENARIO_GROUP_ENABLED(const char* scenarioGroup);
 		/**
 		 * Full list of scenario groups used in scripts by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scenarioGroupNames.json
 		 * Occurrences in the b617d scripts: https://pastebin.com/Tvg2PRHU
 		 */
-		void SET_SCENARIO_GROUP_ENABLED(const char* scenarioGroup, BOOL enabled);
+		void SET_SCENARIO_GROUP_ENABLED(const char* scenarioGroup, bool enabled);
 		void RESET_SCENARIO_GROUPS_ENABLED();
 		/**
 		 * Full list of scenario groups used in scripts by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scenarioGroupNames.json
@@ -17921,7 +17921,7 @@ namespace base::menu::natives {
 		 * scenarioType could be the same as scenarioName, used in for example TASK::TASK_START_SCENARIO_AT_POSITION.
 		 * 
 		 */
-		BOOL IS_SCENARIO_TYPE_ENABLED(const char* scenarioType);
+		bool IS_SCENARIO_TYPE_ENABLED(const char* scenarioType);
 		/**
 		 * Full list of scenario types used in scripts by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scenariosCompact.json
 		 * seems to enable/disable specific scenario-types from happening in the game world.
@@ -17958,9 +17958,9 @@ namespace base::menu::natives {
 		 * 
 		 * scenarioType could be the same as scenarioName, used in for example TASK::TASK_START_SCENARIO_AT_POSITION.
 		 */
-		void SET_SCENARIO_TYPE_ENABLED(const char* scenarioType, BOOL toggle);
+		void SET_SCENARIO_TYPE_ENABLED(const char* scenarioType, bool toggle);
 		void RESET_SCENARIO_TYPES_ENABLED();
-		BOOL IS_PED_ACTIVE_IN_SCENARIO(Ped ped);
+		bool IS_PED_ACTIVE_IN_SCENARIO(Ped ped);
 		/**
 		 * Used only once (am_mp_property_int)
 		 * 
@@ -17968,7 +17968,7 @@ namespace base::menu::natives {
 		 * 
 		 * Related to CTaskAmbientClips.
 		 */
-		BOOL IS_PED_PLAYING_BASE_CLIP_IN_SCENARIO(Ped ped);
+		bool IS_PED_PLAYING_BASE_CLIP_IN_SCENARIO(Ped ped);
 		/**
 		 * Appears only in fm_mission_controller and used only 3 times.
 		 * 
@@ -17976,7 +17976,7 @@ namespace base::menu::natives {
 		 * p1 was always true
 		 * p2 was always true
 		 */
-		void SET_PED_CAN_PLAY_AMBIENT_IDLES(Ped ped, BOOL blockIdleClips, BOOL removeIdleClipIfPlaying);
+		void SET_PED_CAN_PLAY_AMBIENT_IDLES(Ped ped, bool blockIdleClips, bool removeIdleClipIfPlaying);
 		/**
 		 * Despite its name, it only attacks ONE hated target. The one closest to the specified position.
 		 */
@@ -17998,8 +17998,8 @@ namespace base::menu::natives {
 		 * ----------------------------------------------------
 		 * The first comment is right it definately is the ped as if you look in script finale_heist2b.c line 59628 in Xbox Scripts atleast you will see task_throw_projectile and the first param is Local_559[2 <14>] if you look above it a little bit line 59622 give_weapon_to_ped uses the same exact param Local_559[2 <14>] and we all know the first param of that native is ped. So it guaranteed has to be ped. 0 just may mean to use your ped by default for some reason.
 		 */
-		void TASK_THROW_PROJECTILE(Ped ped, float x, float y, float z, int ignoreCollisionEntityIndex, BOOL createInvincibleProjectile);
-		void TASK_SWAP_WEAPON(Ped ped, BOOL drawWeapon);
+		void TASK_THROW_PROJECTILE(Ped ped, float x, float y, float z, int ignoreCollisionEntityIndex, bool createInvincibleProjectile);
+		void TASK_SWAP_WEAPON(Ped ped, bool drawWeapon);
 		/**
 		 * The 2nd param (drawWeapon) is not implemented.
 		 * 
@@ -18011,8 +18011,8 @@ namespace base::menu::natives {
 		 * TASK::TASK_RELOAD_WEAPON(PLAYER::PLAYER_PED_ID(), 1);
 		 * }
 		 */
-		void TASK_RELOAD_WEAPON(Ped ped, BOOL drawWeapon);
-		BOOL IS_PED_GETTING_UP(Ped ped);
+		void TASK_RELOAD_WEAPON(Ped ped, bool drawWeapon);
+		bool IS_PED_GETTING_UP(Ped ped);
 		/**
 		 * EX: Function.Call(Ped1, Ped2, Time, 0);
 		 * 
@@ -18022,12 +18022,12 @@ namespace base::menu::natives {
 		 * 
 		 * Third parameter does not appear to be time. The last parameter is not implemented (It's not used, regardless of value).
 		 */
-		void TASK_WRITHE(Ped ped, Ped target, int minFireLoops, int startState, BOOL forceShootOnGround, int shootFromGroundTimer);
+		void TASK_WRITHE(Ped ped, Ped target, int minFireLoops, int startState, bool forceShootOnGround, int shootFromGroundTimer);
 		/**
 		 * This native checks if a ped is on the ground, in pain from a (gunshot) wound.
 		 * Returns `true` if the ped is in writhe, `false` otherwise.
 		 */
-		BOOL IS_PED_IN_WRITHE(Ped ped);
+		bool IS_PED_IN_WRITHE(Ped ped);
 		/**
 		 * patrolRoutes found in the b617d scripts:
 		 * "miss_Ass0",
@@ -18083,7 +18083,7 @@ namespace base::menu::natives {
 		 * TASK::DELETE_PATROL_ROUTE("miss_dock");
 		 */
 		void DELETE_PATROL_ROUTE(const char* patrolRoute);
-		BOOL GET_PATROL_TASK_INFO(Ped ped, int* timeLeftAtNode, int* nodeId);
+		bool GET_PATROL_TASK_INFO(Ped ped, int* timeLeftAtNode, int* nodeId);
 		/**
 		 * After looking at some scripts the second parameter seems to be an id of some kind. Here are some I found from some R* scripts:
 		 * 
@@ -18109,7 +18109,7 @@ namespace base::menu::natives {
 		 * 
 		 * 
 		 */
-		void TASK_PATROL(Ped ped, const char* patrolRouteName, int alertState, BOOL canChatToPeds, BOOL useHeadLookAt);
+		void TASK_PATROL(Ped ped, const char* patrolRouteName, int alertState, bool canChatToPeds, bool useHeadLookAt);
 		/**
 		 * Makes the ped run to take cover
 		 */
@@ -18151,8 +18151,8 @@ namespace base::menu::natives {
 		 * p13: 0
 		 * firing_pattern: ${firing_pattern_full_auto}, 0xC6EE6B4C
 		 */
-		void TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD(Ped ped, float x, float y, float z, float aimAtX, float aimAtY, float aimAtZ, float moveBlendRatio, BOOL shoot, float targetRadius, float slowDistance, BOOL useNavMesh, int navFlags, BOOL instantBlendToAim, Hash firingPattern);
-		void TASK_GO_TO_COORD_WHILE_AIMING_AT_ENTITY(Ped ped, float x, float y, float z, Entity aimAtID, float moveBlendRatio, BOOL shoot, float targetRadius, float slowDistance, BOOL useNavMesh, int navFlags, BOOL instantBlendToAim, Hash firingPattern, int time);
+		void TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD(Ped ped, float x, float y, float z, float aimAtX, float aimAtY, float aimAtZ, float moveBlendRatio, bool shoot, float targetRadius, float slowDistance, bool useNavMesh, int navFlags, bool instantBlendToAim, Hash firingPattern);
+		void TASK_GO_TO_COORD_WHILE_AIMING_AT_ENTITY(Ped ped, float x, float y, float z, Entity aimAtID, float moveBlendRatio, bool shoot, float targetRadius, float slowDistance, bool useNavMesh, int navFlags, bool instantBlendToAim, Hash firingPattern, int time);
 		/**
 		 * The ped will walk or run towards goToLocation, aiming towards goToLocation or focusLocation (depending on the aimingFlag) and shooting if shootAtEnemies = true to any enemy in his path.
 		 * 
@@ -18195,14 +18195,14 @@ namespace base::menu::natives {
 		 * 
 		 * 2nd example: The ped will walk towards goToLocation2. This time, while walking towards goToLocation2 and aiming at focusLocation, the ped will point his weapon on sight to any enemy in his path without shooting. The ped will stop once he is closer than distanceToStopAt to goToLocation2.
 		 */
-		void TASK_GO_TO_COORD_AND_AIM_AT_HATED_ENTITIES_NEAR_COORD(Ped pedHandle, float goToLocationX, float goToLocationY, float goToLocationZ, float focusLocationX, float focusLocationY, float focusLocationZ, float speed, BOOL shootAtEnemies, float distanceToStopAt, float noRoadsDistance, BOOL useNavMesh, int navFlags, int taskFlags, Hash firingPattern);
-		void TASK_GO_TO_ENTITY_WHILE_AIMING_AT_COORD(Ped ped, Entity entity, float aimX, float aimY, float aimZ, float moveBlendRatio, BOOL shoot, float targetRadius, float slowDistance, BOOL useNavMesh, BOOL instantBlendToAim, Hash firingPattern);
+		void TASK_GO_TO_COORD_AND_AIM_AT_HATED_ENTITIES_NEAR_COORD(Ped pedHandle, float goToLocationX, float goToLocationY, float goToLocationZ, float focusLocationX, float focusLocationY, float focusLocationZ, float speed, bool shootAtEnemies, float distanceToStopAt, float noRoadsDistance, bool useNavMesh, int navFlags, int taskFlags, Hash firingPattern);
+		void TASK_GO_TO_ENTITY_WHILE_AIMING_AT_COORD(Ped ped, Entity entity, float aimX, float aimY, float aimZ, float moveBlendRatio, bool shoot, float targetRadius, float slowDistance, bool useNavMesh, bool instantBlendToAim, Hash firingPattern);
 		/**
 		 * shootatEntity:
 		 * If true, peds will shoot at Entity till it is dead.
 		 * If false, peds will just walk till they reach the entity and will cease shooting.
 		 */
-		void TASK_GO_TO_ENTITY_WHILE_AIMING_AT_ENTITY(Ped ped, Entity entityToWalkTo, Entity entityToAimAt, float speed, BOOL shootatEntity, float targetRadius, float slowDistance, BOOL useNavMesh, BOOL instantBlendToAim, Hash firingPattern);
+		void TASK_GO_TO_ENTITY_WHILE_AIMING_AT_ENTITY(Ped ped, Entity entityToWalkTo, Entity entityToAimAt, float speed, bool shootatEntity, float targetRadius, float slowDistance, bool useNavMesh, bool instantBlendToAim, Hash firingPattern);
 		/**
 		 * Makes the ped ragdoll like when falling from a great height
 		 */
@@ -18217,7 +18217,7 @@ namespace base::menu::natives {
 		/**
 		 * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
 		 */
-		BOOL GET_IS_WAYPOINT_RECORDING_LOADED(const char* name);
+		bool GET_IS_WAYPOINT_RECORDING_LOADED(const char* name);
 		/**
 		 * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
 		 */
@@ -18226,12 +18226,12 @@ namespace base::menu::natives {
 		 * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
 		 * For a full list of the points, see here: goo.gl/wIH0vn
 		 */
-		BOOL WAYPOINT_RECORDING_GET_NUM_POINTS(const char* name, int* points);
+		bool WAYPOINT_RECORDING_GET_NUM_POINTS(const char* name, int* points);
 		/**
 		 * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
 		 * For a full list of the points, see here: goo.gl/wIH0vn
 		 */
-		BOOL WAYPOINT_RECORDING_GET_COORD(const char* name, int point, Vector3* coord);
+		bool WAYPOINT_RECORDING_GET_COORD(const char* name, int point, Vector3* coord);
 		/**
 		 * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
 		 */
@@ -18240,31 +18240,31 @@ namespace base::menu::natives {
 		 * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
 		 * For a full list of the points, see here: goo.gl/wIH0vn
 		 */
-		BOOL WAYPOINT_RECORDING_GET_CLOSEST_WAYPOINT(const char* name, float x, float y, float z, int* point);
+		bool WAYPOINT_RECORDING_GET_CLOSEST_WAYPOINT(const char* name, float x, float y, float z, int* point);
 		void TASK_FOLLOW_WAYPOINT_RECORDING(Ped ped, const char* name, int p2, int p3, int p4);
-		BOOL IS_WAYPOINT_PLAYBACK_GOING_ON_FOR_PED(Ped ped);
+		bool IS_WAYPOINT_PLAYBACK_GOING_ON_FOR_PED(Ped ped);
 		int GET_PED_WAYPOINT_PROGRESS(Ped ped);
 		void SET_PED_WAYPOINT_PROGRESS(Ped ped, int progress);
 		float GET_PED_WAYPOINT_DISTANCE(Any p0);
-		BOOL SET_PED_WAYPOINT_ROUTE_OFFSET(Ped ped, float x, float y, float z);
+		bool SET_PED_WAYPOINT_ROUTE_OFFSET(Ped ped, float x, float y, float z);
 		float GET_WAYPOINT_DISTANCE_ALONG_ROUTE(const char* name, int point);
-		BOOL WAYPOINT_PLAYBACK_GET_IS_PAUSED(Any p0);
-		void WAYPOINT_PLAYBACK_PAUSE(Any p0, BOOL p1, BOOL p2);
-		void WAYPOINT_PLAYBACK_RESUME(Any p0, BOOL p1, Any p2, Any p3);
-		void WAYPOINT_PLAYBACK_OVERRIDE_SPEED(Any p0, float p1, BOOL p2);
+		bool WAYPOINT_PLAYBACK_GET_IS_PAUSED(Any p0);
+		void WAYPOINT_PLAYBACK_PAUSE(Any p0, bool p1, bool p2);
+		void WAYPOINT_PLAYBACK_RESUME(Any p0, bool p1, Any p2, Any p3);
+		void WAYPOINT_PLAYBACK_OVERRIDE_SPEED(Any p0, float p1, bool p2);
 		void WAYPOINT_PLAYBACK_USE_DEFAULT_SPEED(Any p0);
-		void USE_WAYPOINT_RECORDING_AS_ASSISTED_MOVEMENT_ROUTE(const char* name, BOOL p1, float p2, float p3);
-		void WAYPOINT_PLAYBACK_START_AIMING_AT_PED(Ped ped, Ped target, BOOL p2);
-		void WAYPOINT_PLAYBACK_START_AIMING_AT_COORD(Ped ped, float x, float y, float z, BOOL p4);
-		void WAYPOINT_PLAYBACK_START_SHOOTING_AT_PED(Ped ped, Ped ped2, BOOL p2, BOOL p3);
-		void WAYPOINT_PLAYBACK_START_SHOOTING_AT_COORD(Ped ped, float x, float y, float z, BOOL p4, Hash firingPattern);
+		void USE_WAYPOINT_RECORDING_AS_ASSISTED_MOVEMENT_ROUTE(const char* name, bool p1, float p2, float p3);
+		void WAYPOINT_PLAYBACK_START_AIMING_AT_PED(Ped ped, Ped target, bool p2);
+		void WAYPOINT_PLAYBACK_START_AIMING_AT_COORD(Ped ped, float x, float y, float z, bool p4);
+		void WAYPOINT_PLAYBACK_START_SHOOTING_AT_PED(Ped ped, Ped ped2, bool p2, bool p3);
+		void WAYPOINT_PLAYBACK_START_SHOOTING_AT_COORD(Ped ped, float x, float y, float z, bool p4, Hash firingPattern);
 		void WAYPOINT_PLAYBACK_STOP_AIMING_OR_SHOOTING(Ped ped);
 		/**
 		 * Routes: "1_FIBStairs", "2_FIBStairs", "3_FIBStairs", "4_FIBStairs", "5_FIBStairs", "5_TowardsFire", "6a_FIBStairs", "7_FIBStairs", "8_FIBStairs", "Aprtmnt_1", "AssAfterLift", "ATM_1", "coroner2", "coroner_stairs", "f5_jimmy1", "fame1", "family5b", "family5c", "Family5d", "family5d", "FIB_Glass1", "FIB_Glass2", "FIB_Glass3", "finaBroute1A", "finalb1st", "finalB1sta", "finalbround", "finalbroute2", "Hairdresser1", "jan_foyet_ft_door", "Jo_3", "Lemar1", "Lemar2", "mansion_1", "Mansion_1", "pols_1", "pols_2", "pols_3", "pols_4", "pols_5", "pols_6", "pols_7", "pols_8", "Pro_S1", "Pro_S1a", "Pro_S2", "Towards_case", "trev_steps", "tunrs1", "tunrs2", "tunrs3", "Wave01457s"
 		 */
 		void ASSISTED_MOVEMENT_REQUEST_ROUTE(const char* route);
 		void ASSISTED_MOVEMENT_REMOVE_ROUTE(const char* route);
-		BOOL ASSISTED_MOVEMENT_IS_ROUTE_LOADED(const char* route);
+		bool ASSISTED_MOVEMENT_IS_ROUTE_LOADED(const char* route);
 		void ASSISTED_MOVEMENT_SET_ROUTE_PROPERTIES(const char* route, int props);
 		void ASSISTED_MOVEMENT_OVERRIDE_LOAD_DISTANCE_THIS_FRAME(float dist);
 		/**
@@ -18281,12 +18281,12 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json
 		 */
-		void TASK_VEHICLE_FOLLOW_WAYPOINT_RECORDING(Ped ped, Vehicle vehicle, const char* WPRecording, int p3, int p4, int p5, int p6, float p7, BOOL p8, float p9);
-		BOOL IS_WAYPOINT_PLAYBACK_GOING_ON_FOR_VEHICLE(Vehicle vehicle);
+		void TASK_VEHICLE_FOLLOW_WAYPOINT_RECORDING(Ped ped, Vehicle vehicle, const char* WPRecording, int p3, int p4, int p5, int p6, float p7, bool p8, float p9);
+		bool IS_WAYPOINT_PLAYBACK_GOING_ON_FOR_VEHICLE(Vehicle vehicle);
 		int GET_VEHICLE_WAYPOINT_PROGRESS(Vehicle vehicle);
 		int GET_VEHICLE_WAYPOINT_TARGET_POINT(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_PAUSE(Vehicle vehicle);
-		BOOL VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED(Vehicle vehicle);
+		bool VEHICLE_WAYPOINT_PLAYBACK_GET_IS_PAUSED(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_RESUME(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_USE_DEFAULT_SPEED(Vehicle vehicle);
 		void VEHICLE_WAYPOINT_PLAYBACK_OVERRIDE_SPEED(Vehicle vehicle, float speed);
@@ -18297,7 +18297,7 @@ namespace base::menu::natives {
 		 * 
 		 * Since it is a task, every time the native is called the ped will stop for a moment.
 		 */
-		void TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Ped ped, BOOL toggle);
+		void TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Ped ped, bool toggle);
 		/**
 		 * p2 always false
 		 * 
@@ -18305,31 +18305,31 @@ namespace base::menu::natives {
 		 * 
 		 * See FORCE_PED_MOTION_STATE
 		 */
-		void TASK_FORCE_MOTION_STATE(Ped ped, Hash state, BOOL forceRestart);
+		void TASK_FORCE_MOTION_STATE(Ped ped, Hash state, bool forceRestart);
 		/**
 		 * Example:
 		 * TASK::TASK_MOVE_NETWORK_BY_NAME(PLAYER::PLAYER_PED_ID(), "arm_wrestling_sweep_paired_a_rev3", 0.0f, true, "mini@arm_wrestling", 0);
 		 */
-		void TASK_MOVE_NETWORK_BY_NAME(Ped ped, const char* task, float multiplier, BOOL allowOverrideCloneUpdate, const char* animDict, int flags);
+		void TASK_MOVE_NETWORK_BY_NAME(Ped ped, const char* task, float multiplier, bool allowOverrideCloneUpdate, const char* animDict, int flags);
 		/**
 		 * Example:
 		 * TASK::TASK_MOVE_NETWORK_ADVANCED_BY_NAME(PLAYER::PLAYER_PED_ID(), "minigame_tattoo_michael_parts", 324.13f, 181.29f, 102.6f, 0.0f, 0.0f, 22.32f, 2, 0, false, 0, 0);
 		 */
-		void TASK_MOVE_NETWORK_ADVANCED_BY_NAME(Ped ped, const char* network, float x, float y, float z, float rotX, float rotY, float rotZ, int rotOrder, float blendDuration, BOOL allowOverrideCloneUpdate, const char* animDict, int flags);
+		void TASK_MOVE_NETWORK_ADVANCED_BY_NAME(Ped ped, const char* network, float x, float y, float z, float rotX, float rotY, float rotZ, int rotOrder, float blendDuration, bool allowOverrideCloneUpdate, const char* animDict, int flags);
 		/**
 		 * Used only once in the scripts (am_mp_nightclub)
 		 */
-		void TASK_MOVE_NETWORK_BY_NAME_WITH_INIT_PARAMS(Ped ped, const char* network, int* initialParameters, float blendDuration, BOOL allowOverrideCloneUpdate, const char* animDict, int flags);
-		void TASK_MOVE_NETWORK_ADVANCED_BY_NAME_WITH_INIT_PARAMS(Ped ped, const char* network, int* initialParameters, float x, float y, float z, float rotX, float rotY, float rotZ, int rotOrder, float blendDuration, BOOL allowOverrideCloneUpdate, const char* dictionary, int flags);
-		BOOL IS_TASK_MOVE_NETWORK_ACTIVE(Ped ped);
-		BOOL IS_TASK_MOVE_NETWORK_READY_FOR_TRANSITION(Ped ped);
-		BOOL REQUEST_TASK_MOVE_NETWORK_STATE_TRANSITION(Ped ped, const char* name);
+		void TASK_MOVE_NETWORK_BY_NAME_WITH_INIT_PARAMS(Ped ped, const char* network, int* initialParameters, float blendDuration, bool allowOverrideCloneUpdate, const char* animDict, int flags);
+		void TASK_MOVE_NETWORK_ADVANCED_BY_NAME_WITH_INIT_PARAMS(Ped ped, const char* network, int* initialParameters, float x, float y, float z, float rotX, float rotY, float rotZ, int rotOrder, float blendDuration, bool allowOverrideCloneUpdate, const char* dictionary, int flags);
+		bool IS_TASK_MOVE_NETWORK_ACTIVE(Ped ped);
+		bool IS_TASK_MOVE_NETWORK_READY_FOR_TRANSITION(Ped ped);
+		bool REQUEST_TASK_MOVE_NETWORK_STATE_TRANSITION(Ped ped, const char* name);
 		/**
 		 * Used only once in the scripts (fm_mission_controller) like so:
 		 * 
 		 * TASK::SET_EXPECTED_CLONE_NEXT_TASK_MOVE_NETWORK_STATE(iLocal_3160, "Cutting");
 		 */
-		BOOL SET_EXPECTED_CLONE_NEXT_TASK_MOVE_NETWORK_STATE(Ped ped, const char* state);
+		bool SET_EXPECTED_CLONE_NEXT_TASK_MOVE_NETWORK_STATE(Ped ped, const char* state);
 		const char* GET_TASK_MOVE_NETWORK_STATE(Ped ped);
 		void SET_TASK_MOVE_NETWORK_ANIM_SET(Ped ped, Hash clipSet, Hash variableClipSet);
 		/**
@@ -18341,25 +18341,25 @@ namespace base::menu::natives {
 		void SET_TASK_MOVE_NETWORK_SIGNAL_FLOAT(Ped ped, const char* signalName, float value);
 		void SET_TASK_MOVE_NETWORK_SIGNAL_LOCAL_FLOAT(Ped ped, const char* signalName, float value);
 		void SET_TASK_MOVE_NETWORK_SIGNAL_FLOAT_LERP_RATE(Ped ped, const char* signalName, float value);
-		void SET_TASK_MOVE_NETWORK_SIGNAL_BOOL(Ped ped, const char* signalName, BOOL value);
+		void SET_TASK_MOVE_NETWORK_SIGNAL_BOOL(Ped ped, const char* signalName, bool value);
 		float GET_TASK_MOVE_NETWORK_SIGNAL_FLOAT(Ped ped, const char* signalName);
-		BOOL GET_TASK_MOVE_NETWORK_SIGNAL_BOOL(Ped ped, const char* signalName);
-		BOOL GET_TASK_MOVE_NETWORK_EVENT(Ped ped, const char* eventName);
+		bool GET_TASK_MOVE_NETWORK_SIGNAL_BOOL(Ped ped, const char* signalName);
+		bool GET_TASK_MOVE_NETWORK_EVENT(Ped ped, const char* eventName);
 		/**
 		 * Doesn't actually return anything.
 		 */
-		BOOL SET_TASK_MOVE_NETWORK_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable);
-		void _SET_SCRIPT_TASK_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable);
-		void _SET_AMBIENT_PED_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, BOOL enable);
-		BOOL IS_MOVE_BLEND_RATIO_STILL(Ped ped);
-		BOOL IS_MOVE_BLEND_RATIO_WALKING(Ped ped);
-		BOOL IS_MOVE_BLEND_RATIO_RUNNING(Ped ped);
-		BOOL IS_MOVE_BLEND_RATIO_SPRINTING(Ped ped);
-		BOOL IS_PED_STILL(Ped ped);
-		BOOL IS_PED_WALKING(Ped ped);
-		BOOL IS_PED_RUNNING(Ped ped);
-		BOOL IS_PED_SPRINTING(Ped ped);
-		BOOL IS_PED_STRAFING(Ped ped);
+		bool SET_TASK_MOVE_NETWORK_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, bool enable);
+		void _SET_SCRIPT_TASK_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, bool enable);
+		void _SET_AMBIENT_PED_ENABLE_COLLISION_ON_NETWORK_CLONE_WHEN_FIXED(Ped ped, bool enable);
+		bool IS_MOVE_BLEND_RATIO_STILL(Ped ped);
+		bool IS_MOVE_BLEND_RATIO_WALKING(Ped ped);
+		bool IS_MOVE_BLEND_RATIO_RUNNING(Ped ped);
+		bool IS_MOVE_BLEND_RATIO_SPRINTING(Ped ped);
+		bool IS_PED_STILL(Ped ped);
+		bool IS_PED_WALKING(Ped ped);
+		bool IS_PED_RUNNING(Ped ped);
+		bool IS_PED_SPRINTING(Ped ped);
+		bool IS_PED_STRAFING(Ped ped);
 		/**
 		 * TASK::TASK_SYNCHRONIZED_SCENE(ped, scene, "creatures@rottweiler@in_vehicle@std_car", "get_in", 1000.0, -8.0, 4, 0, 0x447a0000, 0);
 		 * 
@@ -18393,13 +18393,13 @@ namespace base::menu::natives {
 		 * Looks like only the player can be arrested this way. Peds react and try to arrest you if you task them, but the player charater doesn't do anything if tasked to arrest another ped.
 		 */
 		void TASK_ARREST_PED(Ped ped, Ped target);
-		BOOL IS_PED_RUNNING_ARREST_TASK(Ped ped);
+		bool IS_PED_RUNNING_ARREST_TASK(Ped ped);
 		/**
 		 * This function is hard-coded to always return 0.
 		 */
-		BOOL IS_PED_BEING_ARRESTED(Ped ped);
+		bool IS_PED_BEING_ARRESTED(Ped ped);
 		void UNCUFF_PED(Ped ped);
-		BOOL IS_PED_CUFFED(Ped ped);
+		bool IS_PED_CUFFED(Ped ped);
 
 	} // namespace TASK
 
@@ -18409,7 +18409,7 @@ namespace base::menu::natives {
 		 * p7 when set to true allows you to spawn vehicles under -100 z.
 		 * Full list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json
 		 */
-		Vehicle CREATE_VEHICLE(Hash modelHash, float x, float y, float z, float heading, BOOL isNetwork, BOOL bScriptHostVeh, BOOL p7);
+		Vehicle CREATE_VEHICLE(Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostVeh, bool p7);
 		/**
 		 * Deletes a vehicle.
 		 * The vehicle must be a mission entity to delete, so call this before deleting: SET_ENTITY_AS_MISSION_ENTITY(vehicle, true, true);
@@ -18421,13 +18421,13 @@ namespace base::menu::natives {
 		 * Deletes the specified vehicle, then sets the handle pointed to by the pointer to NULL.
 		 */
 		void DELETE_VEHICLE(Vehicle* vehicle);
-		void SET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON(Vehicle vehicle, BOOL toggle, BOOL p2);
-		BOOL _GET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle);
-		void SET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle, BOOL canBeLockedOn, BOOL p2);
+		void SET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON(Vehicle vehicle, bool toggle, bool p2);
+		bool _GET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle);
+		void SET_VEHICLE_ALLOW_HOMING_MISSLE_LOCKON_SYNCED(Vehicle vehicle, bool canBeLockedOn, bool p2);
 		/**
 		 * Makes the vehicle accept no passengers.
 		 */
-		void SET_VEHICLE_ALLOW_NO_PASSENGERS_LOCKON(Vehicle veh, BOOL toggle);
+		void SET_VEHICLE_ALLOW_NO_PASSENGERS_LOCKON(Vehicle veh, bool toggle);
 		/**
 		 * Returns a value depending on the lock-on state of vehicle weapons.
 		 * 0: not locked on
@@ -18437,8 +18437,8 @@ namespace base::menu::natives {
 		int GET_VEHICLE_HOMING_LOCKON_STATE(Vehicle vehicle);
 		int GET_VEHICLE_HOMING_LOCKEDONTO_STATE(Any p0);
 		void SET_VEHICLE_HOMING_LOCKEDONTO_STATE(Any p0, Any p1);
-		BOOL IS_VEHICLE_MODEL(Vehicle vehicle, Hash model);
-		BOOL DOES_SCRIPT_VEHICLE_GENERATOR_EXIST(int vehicleGenerator);
+		bool IS_VEHICLE_MODEL(Vehicle vehicle, Hash model);
+		bool DOES_SCRIPT_VEHICLE_GENERATOR_EXIST(int vehicleGenerator);
 		/**
 		 * Creates a script vehicle generator at the given coordinates. Most parameters after the model hash are unknown.
 		 * 
@@ -18457,19 +18457,19 @@ namespace base::menu::natives {
 		 * 
 		 * Vector3 coords = GET_ENTITY_COORDS(PLAYER_PED_ID(), 0);    CREATE_SCRIPT_VEHICLE_GENERATOR(coords.x, coords.y, coords.z, 1.0f, 5.0f, 3.0f, GET_HASH_KEY("adder"), -1. -1, -1, -1, -1, true, false, false, false, true, -1);
 		 */
-		int CREATE_SCRIPT_VEHICLE_GENERATOR(float x, float y, float z, float heading, float p4, float p5, Hash modelHash, int p7, int p8, int p9, int p10, BOOL p11, BOOL p12, BOOL p13, BOOL p14, BOOL p15, int p16);
+		int CREATE_SCRIPT_VEHICLE_GENERATOR(float x, float y, float z, float heading, float p4, float p5, Hash modelHash, int p7, int p8, int p9, int p10, bool p11, bool p12, bool p13, bool p14, bool p15, int p16);
 		void DELETE_SCRIPT_VEHICLE_GENERATOR(int vehicleGenerator);
 		/**
 		 * Only called once in the decompiled scripts. Presumably activates the specified generator.
 		 */
-		void SET_SCRIPT_VEHICLE_GENERATOR(int vehicleGenerator, BOOL enabled);
+		void SET_SCRIPT_VEHICLE_GENERATOR(int vehicleGenerator, bool enabled);
 		/**
 		 * When p6 is true, vehicle generators are active.
 		 * p7 seems to always be true in story mode scripts, but it's sometimes false in online scripts.
 		 */
-		void SET_ALL_VEHICLE_GENERATORS_ACTIVE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, BOOL toggle, BOOL p7);
+		void SET_ALL_VEHICLE_GENERATORS_ACTIVE_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool toggle, bool p7);
 		void SET_ALL_VEHICLE_GENERATORS_ACTIVE();
-		void SET_ALL_LOW_PRIORITY_VEHICLE_GENERATORS_ACTIVE(BOOL active);
+		void SET_ALL_LOW_PRIORITY_VEHICLE_GENERATORS_ACTIVE(bool active);
 		/**
 		 * Related to car generators & CPlayerSwitchMgrLong
 		 */
@@ -18480,9 +18480,9 @@ namespace base::menu::natives {
 		 * 
 		 * sfink: This has an additional param(Vehicle vehicle, float p1) which is always set to 5.0f in the b944 scripts.
 		 */
-		BOOL SET_VEHICLE_ON_GROUND_PROPERLY(Vehicle vehicle, float p1);
-		BOOL SET_VEHICLE_USE_CUTSCENE_WHEEL_COMPRESSION(Vehicle p0, BOOL p1, BOOL p2, BOOL p3);
-		BOOL IS_VEHICLE_STUCK_ON_ROOF(Vehicle vehicle);
+		bool SET_VEHICLE_ON_GROUND_PROPERLY(Vehicle vehicle, float p1);
+		bool SET_VEHICLE_USE_CUTSCENE_WHEEL_COMPRESSION(Vehicle p0, bool p1, bool p2, bool p3);
+		bool IS_VEHICLE_STUCK_ON_ROOF(Vehicle vehicle);
 		void ADD_VEHICLE_UPSIDEDOWN_CHECK(Vehicle vehicle);
 		void REMOVE_VEHICLE_UPSIDEDOWN_CHECK(Vehicle vehicle);
 		/**
@@ -18490,7 +18490,7 @@ namespace base::menu::natives {
 		 * 
 		 * For some vehicles it returns true if the current speed is <= 0.00039999999.
 		 */
-		BOOL IS_VEHICLE_STOPPED(Vehicle vehicle);
+		bool IS_VEHICLE_STOPPED(Vehicle vehicle);
 		/**
 		 * Gets the number of passengers.
 		 * 
@@ -18498,7 +18498,7 @@ namespace base::menu::natives {
 		 * 
 		 * To keep it working like before b2545, set includeDriver to false and includeDeadOccupants to true.
 		 */
-		int GET_VEHICLE_NUMBER_OF_PASSENGERS(Vehicle vehicle, BOOL includeDriver, BOOL includeDeadOccupants);
+		int GET_VEHICLE_NUMBER_OF_PASSENGERS(Vehicle vehicle, bool includeDriver, bool includeDeadOccupants);
 		int GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(Vehicle vehicle);
 		/**
 		 * Returns max number of passengers (including the driver) for the specified vehicle model.
@@ -18506,12 +18506,12 @@ namespace base::menu::natives {
 		 * Full list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json
 		 */
 		int GET_VEHICLE_MODEL_NUMBER_OF_SEATS(Hash modelHash);
-		BOOL IS_SEAT_WARP_ONLY(Vehicle vehicle, int seatIndex);
-		BOOL IS_TURRET_SEAT(Vehicle vehicle, int seatIndex);
+		bool IS_SEAT_WARP_ONLY(Vehicle vehicle, int seatIndex);
+		bool IS_TURRET_SEAT(Vehicle vehicle, int seatIndex);
 		/**
 		 * Returns true if the vehicle has the FLAG_ALLOWS_RAPPEL flag set.
 		 */
-		BOOL DOES_VEHICLE_ALLOW_RAPPEL(Vehicle vehicle);
+		bool DOES_VEHICLE_ALLOW_RAPPEL(Vehicle vehicle);
 		/**
 		 * Use this native inside a looped function.
 		 * Values:
@@ -18521,9 +18521,9 @@ namespace base::menu::natives {
 		void SET_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME(float multiplier);
 		void SET_RANDOM_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME(float multiplier);
 		void SET_PARKED_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME(float multiplier);
-		void SET_DISABLE_RANDOM_TRAINS_THIS_FRAME(BOOL toggle);
+		void SET_DISABLE_RANDOM_TRAINS_THIS_FRAME(bool toggle);
 		void SET_AMBIENT_VEHICLE_RANGE_MULTIPLIER_THIS_FRAME(float value);
-		void SET_FAR_DRAW_VEHICLES(BOOL toggle);
+		void SET_FAR_DRAW_VEHICLES(bool toggle);
 		void SET_NUMBER_OF_PARKED_VEHICLES(int value);
 		/**
 		 * enum eVehicleLockState
@@ -18549,9 +18549,9 @@ namespace base::menu::natives {
 		/**
 		 * If set to true, prevents vehicle sirens from having sound, leaving only the lights.
 		 */
-		void SET_VEHICLE_HAS_MUTED_SIRENS(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_DOORS_LOCKED_FOR_PLAYER(Vehicle vehicle, Player player, BOOL toggle);
-		BOOL GET_VEHICLE_DOORS_LOCKED_FOR_PLAYER(Vehicle vehicle, Player player);
+		void SET_VEHICLE_HAS_MUTED_SIRENS(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_DOORS_LOCKED_FOR_PLAYER(Vehicle vehicle, Player player, bool toggle);
+		bool GET_VEHICLE_DOORS_LOCKED_FOR_PLAYER(Vehicle vehicle, Player player);
 		/**
 		 * After some analysis, I've decided that these are what the parameters are.
 		 * 
@@ -18560,10 +18560,10 @@ namespace base::menu::natives {
 		 * ...
 		 * VEHICLE::SET_VEHICLE_DOORS_LOCKED_FOR_ALL_PLAYERS(l_11A1, 1);
 		 */
-		void SET_VEHICLE_DOORS_LOCKED_FOR_ALL_PLAYERS(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_DOORS_LOCKED_FOR_NON_SCRIPT_PLAYERS(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_DOORS_LOCKED_FOR_TEAM(Vehicle vehicle, int team, BOOL toggle);
-		void SET_VEHICLE_DOORS_LOCKED_FOR_ALL_TEAMS(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_DOORS_LOCKED_FOR_ALL_PLAYERS(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_DOORS_LOCKED_FOR_NON_SCRIPT_PLAYERS(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_DOORS_LOCKED_FOR_TEAM(Vehicle vehicle, int team, bool toggle);
+		void SET_VEHICLE_DOORS_LOCKED_FOR_ALL_TEAMS(Vehicle vehicle, bool toggle);
 		void SET_VEHICLE_DONT_TERMINATE_TASK_WHEN_ACHIEVED(Vehicle vehicle);
 		/**
 		 * 0.0f = engine rev minimum
@@ -18580,17 +18580,17 @@ namespace base::menu::natives {
 		 * 
 		 * First BOOL does not give any visual explosion, the vehicle just falls apart completely but slowly and starts to burn.
 		 */
-		void EXPLODE_VEHICLE(Vehicle vehicle, BOOL isAudible, BOOL isInvisible);
+		void EXPLODE_VEHICLE(Vehicle vehicle, bool isAudible, bool isInvisible);
 		/**
 		 * Tested on the player's current vehicle. Unless you kill the driver, the vehicle doesn't loose control, however, if enabled, explodeOnImpact is still active. The moment you crash, boom.
 		 */
-		void SET_VEHICLE_OUT_OF_CONTROL(Vehicle vehicle, BOOL killDriver, BOOL explodeOnImpact);
-		void SET_VEHICLE_TIMED_EXPLOSION(Vehicle vehicle, Ped ped, BOOL toggle);
+		void SET_VEHICLE_OUT_OF_CONTROL(Vehicle vehicle, bool killDriver, bool explodeOnImpact);
+		void SET_VEHICLE_TIMED_EXPLOSION(Vehicle vehicle, Ped ped, bool toggle);
 		void ADD_VEHICLE_PHONE_EXPLOSIVE_DEVICE(Vehicle vehicle);
 		void CLEAR_VEHICLE_PHONE_EXPLOSIVE_DEVICE();
-		BOOL HAS_VEHICLE_PHONE_EXPLOSIVE_DEVICE();
+		bool HAS_VEHICLE_PHONE_EXPLOSIVE_DEVICE();
 		void DETONATE_VEHICLE_PHONE_EXPLOSIVE_DEVICE();
-		BOOL HAVE_VEHICLE_REAR_DOORS_BEEN_BLOWN_OPEN_BY_STICKYBOMB(Vehicle vehicle);
+		bool HAVE_VEHICLE_REAR_DOORS_BEEN_BLOWN_OPEN_BY_STICKYBOMB(Vehicle vehicle);
 		/**
 		 * This is not tested - it's just an assumption.
 		 * - Nac
@@ -18603,14 +18603,14 @@ namespace base::menu::natives {
 		 * VEHICLE::SET_TAXI_LIGHTS(l_115, 1);
 		 * }
 		 */
-		void SET_TAXI_LIGHTS(Vehicle vehicle, BOOL state);
-		BOOL IS_TAXI_LIGHT_ON(Vehicle vehicle);
+		void SET_TAXI_LIGHTS(Vehicle vehicle, bool state);
+		bool IS_TAXI_LIGHT_ON(Vehicle vehicle);
 		/**
 		 * garageName example "Michael - Beverly Hills"
 		 * 
 		 * Full list of garages by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/garages.json
 		 */
-		BOOL IS_VEHICLE_IN_GARAGE_AREA(const char* garageName, Vehicle vehicle);
+		bool IS_VEHICLE_IN_GARAGE_AREA(const char* garageName, Vehicle vehicle);
 		/**
 		 * colorPrimary & colorSecondary are the paint index for the vehicle.
 		 * For a list of valid paint indexes, view: https://pastebin.com/pwHci0xK
@@ -18623,18 +18623,18 @@ namespace base::menu::natives {
 		/**
 		 * It switch to highbeam when p1 is set to true.
 		 */
-		void SET_VEHICLE_FULLBEAM(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_FULLBEAM(Vehicle vehicle, bool toggle);
 		/**
 		 * p1 (toggle) was always 1 (true) except in one case in the b678 scripts.
 		 */
-		void SET_VEHICLE_IS_RACING(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_IS_RACING(Vehicle vehicle, bool toggle);
 		/**
 		 * p1, p2, p3 are RGB values for color (255,0,0 for Red, ect)
 		 */
 		void SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(Vehicle vehicle, int r, int g, int b);
 		void GET_VEHICLE_CUSTOM_PRIMARY_COLOUR(Vehicle vehicle, int* r, int* g, int* b);
 		void CLEAR_VEHICLE_CUSTOM_PRIMARY_COLOUR(Vehicle vehicle);
-		BOOL GET_IS_VEHICLE_PRIMARY_COLOUR_CUSTOM(Vehicle vehicle);
+		bool GET_IS_VEHICLE_PRIMARY_COLOUR_CUSTOM(Vehicle vehicle);
 		/**
 		 * p1, p2, p3 are RGB values for color (255,0,0 for Red, ect)
 		 */
@@ -18644,7 +18644,7 @@ namespace base::menu::natives {
 		/**
 		 * Check if Vehicle Secondary is avaliable for customize
 		 */
-		BOOL GET_IS_VEHICLE_SECONDARY_COLOUR_CUSTOM(Vehicle vehicle);
+		bool GET_IS_VEHICLE_SECONDARY_COLOUR_CUSTOM(Vehicle vehicle);
 		/**
 		 * The parameter fade is a value from 0-1, where 0 is fresh paint.
 		 */
@@ -18656,44 +18656,44 @@ namespace base::menu::natives {
 		/**
 		 * Hardcoded to not work in multiplayer.
 		 */
-		void SET_CAN_RESPRAY_VEHICLE(Vehicle vehicle, BOOL state);
+		void SET_CAN_RESPRAY_VEHICLE(Vehicle vehicle, bool state);
 		/**
 		 * Used for GTAO CEO/Associate spawned vehicles.
 		 */
-		void SET_GOON_BOSS_VEHICLE(Vehicle vehicle, BOOL toggle);
-		void SET_OPEN_REAR_DOORS_ON_EXPLOSION(Vehicle vehicle, BOOL toggle);
-		void FORCE_SUBMARINE_SURFACE_MODE(Vehicle vehicle, BOOL toggle);
+		void SET_GOON_BOSS_VEHICLE(Vehicle vehicle, bool toggle);
+		void SET_OPEN_REAR_DOORS_ON_EXPLOSION(Vehicle vehicle, bool toggle);
+		void FORCE_SUBMARINE_SURFACE_MODE(Vehicle vehicle, bool toggle);
 		void FORCE_SUBMARINE_NEURTAL_BUOYANCY(Any p0, Any p1);
-		void SET_SUBMARINE_CRUSH_DEPTHS(Vehicle vehicle, BOOL p1, float depth1, float depth2, float depth3);
-		BOOL GET_SUBMARINE_IS_UNDER_DESIGN_DEPTH(Vehicle submarine);
+		void SET_SUBMARINE_CRUSH_DEPTHS(Vehicle vehicle, bool p1, float depth1, float depth2, float depth3);
+		bool GET_SUBMARINE_IS_UNDER_DESIGN_DEPTH(Vehicle submarine);
 		int GET_SUBMARINE_NUMBER_OF_AIR_LEAKS(Vehicle submarine);
 		void SET_BOAT_IGNORE_LAND_PROBES(Any p0, Any p1);
 		/**
 		 * Use the vehicle bounds (instead of viewport) when deciding if a vehicle is sufficiently above the water (waterheight.dat), bypassing wave simulation checks
 		 */
-		void _SET_BOUNDS_AFFECT_WATER_PROBES(Vehicle vehicle, BOOL toggle);
-		void SET_BOAT_ANCHOR(Vehicle vehicle, BOOL toggle);
-		BOOL CAN_ANCHOR_BOAT_HERE(Vehicle vehicle);
-		BOOL CAN_ANCHOR_BOAT_HERE_IGNORE_PLAYERS(Vehicle vehicle);
-		void SET_BOAT_REMAINS_ANCHORED_WHILE_PLAYER_IS_DRIVER(Vehicle vehicle, BOOL toggle);
+		void _SET_BOUNDS_AFFECT_WATER_PROBES(Vehicle vehicle, bool toggle);
+		void SET_BOAT_ANCHOR(Vehicle vehicle, bool toggle);
+		bool CAN_ANCHOR_BOAT_HERE(Vehicle vehicle);
+		bool CAN_ANCHOR_BOAT_HERE_IGNORE_PLAYERS(Vehicle vehicle);
+		void SET_BOAT_REMAINS_ANCHORED_WHILE_PLAYER_IS_DRIVER(Vehicle vehicle, bool toggle);
 		/**
 		 * No observed effect.
 		 */
-		void SET_FORCE_LOW_LOD_ANCHOR_MODE(Vehicle vehicle, BOOL p1);
+		void SET_FORCE_LOW_LOD_ANCHOR_MODE(Vehicle vehicle, bool p1);
 		void SET_BOAT_LOW_LOD_ANCHOR_DISTANCE(Vehicle vehicle, float value);
-		BOOL IS_BOAT_ANCHORED(Vehicle vehicle);
-		void SET_BOAT_SINKS_WHEN_WRECKED(Vehicle vehicle, BOOL toggle);
+		bool IS_BOAT_ANCHORED(Vehicle vehicle);
+		void SET_BOAT_SINKS_WHEN_WRECKED(Vehicle vehicle, bool toggle);
 		void SET_BOAT_WRECKED(Vehicle vehicle);
 		/**
 		 * Activate siren on vehicle (Only works if the vehicle has a siren).
 		 */
-		void SET_VEHICLE_SIREN(Vehicle vehicle, BOOL toggle);
-		BOOL IS_VEHICLE_SIREN_ON(Vehicle vehicle);
-		BOOL IS_VEHICLE_SIREN_AUDIO_ON(Vehicle vehicle);
+		void SET_VEHICLE_SIREN(Vehicle vehicle, bool toggle);
+		bool IS_VEHICLE_SIREN_ON(Vehicle vehicle);
+		bool IS_VEHICLE_SIREN_AUDIO_ON(Vehicle vehicle);
 		/**
 		 * If set to true, vehicle will not take crash damage, but is still susceptible to damage from bullets and explosives
 		 */
-		void SET_VEHICLE_STRONG(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_STRONG(Vehicle vehicle, bool toggle);
 		void REMOVE_VEHICLE_STUCK_CHECK(Vehicle vehicle);
 		void GET_VEHICLE_COLOURS(Vehicle vehicle, int* colorPrimary, int* colorSecondary);
 		/**
@@ -18703,7 +18703,7 @@ namespace base::menu::natives {
 		 * Use GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle) - 1 for last seat index.
 		 * isTaskRunning = on true the function returns already false while a task on the target seat is running (TASK_ENTER_VEHICLE/TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT) - on false only when a ped is finally sitting in the seat.
 		 */
-		BOOL IS_VEHICLE_SEAT_FREE(Vehicle vehicle, int seatIndex, BOOL isTaskRunning);
+		bool IS_VEHICLE_SEAT_FREE(Vehicle vehicle, int seatIndex, bool isTaskRunning);
 		/**
 		 * If there is no ped in the seat, and the game considers the vehicle as ambient population, this will create a random occupant ped in the seat, which may be cleaned up by the game fairly soon if not marked as script-owned mission entity.
 		 * 
@@ -18718,9 +18718,9 @@ namespace base::menu::natives {
 		 * 
 		 * If p2 is true it uses a different GetOccupant function.
 		 */
-		Ped GET_PED_IN_VEHICLE_SEAT(Vehicle vehicle, int seatIndex, BOOL p2);
+		Ped GET_PED_IN_VEHICLE_SEAT(Vehicle vehicle, int seatIndex, bool p2);
 		Ped GET_LAST_PED_IN_VEHICLE_SEAT(Vehicle vehicle, int seatIndex);
-		BOOL GET_VEHICLE_LIGHTS_STATE(Vehicle vehicle, BOOL* lightsOn, BOOL* highbeamsOn);
+		bool GET_VEHICLE_LIGHTS_STATE(Vehicle vehicle, bool* lightsOn, bool* highbeamsOn);
 		/**
 		 * wheelID used for 4 wheelers seem to be (0, 1, 4, 5)
 		 * completely - is to check if tire completely gone from rim.
@@ -18734,7 +18734,7 @@ namespace base::menu::natives {
 		 * '45 = 6 wheels trailer mid wheel left
 		 * '47 = 6 wheels trailer mid wheel right
 		 */
-		BOOL IS_VEHICLE_TYRE_BURST(Vehicle vehicle, int wheelID, BOOL completely);
+		bool IS_VEHICLE_TYRE_BURST(Vehicle vehicle, int wheelID, bool completely);
 		/**
 		 * SCALE: Setting the speed to 30 would result in a speed of roughly 60mph, according to speedometer.
 		 * 
@@ -18754,9 +18754,9 @@ namespace base::menu::natives {
 		 * 
 		 * . If killEngine is set to 1, you cannot resume driving the vehicle once it stops. This looks like is a bitmapped integer.
 		 */
-		void BRING_VEHICLE_TO_HALT(Vehicle vehicle, float distance, int duration, BOOL p3);
+		void BRING_VEHICLE_TO_HALT(Vehicle vehicle, float distance, int duration, bool p3);
 		void SET_VEHICLE_STEER_FOR_BUILDINGS(Vehicle vehicle, Any p1);
-		void SET_VEHICLE_CAUSES_SWERVING(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_CAUSES_SWERVING(Vehicle vehicle, bool toggle);
 		void SET_IGNORE_PLANES_SMALL_PITCH_CHANGE(Any p0, Any p1);
 		/**
 		 * Stops CTaskBringVehicleToHalt
@@ -18765,26 +18765,26 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if vehicle is halted by BRING_VEHICLE_TO_HALT
 		 */
-		BOOL IS_VEHICLE_BEING_BROUGHT_TO_HALT(Vehicle vehicle);
+		bool IS_VEHICLE_BEING_BROUGHT_TO_HALT(Vehicle vehicle);
 		void LOWER_FORKLIFT_FORKS(Vehicle forklift);
 		/**
 		 * 0.0 = Lowest 1.0 = Highest. This is best to be used if you wanna pick-up a car since un-realistically on GTA V forklifts can't pick up much of anything due to vehicle mass. If you put this under a car then set it above 0.0 to a 'lifted-value' it will raise the car with no issue lol
 		 */
 		void SET_FORKLIFT_FORK_HEIGHT(Vehicle vehicle, float height);
-		BOOL IS_ENTITY_ATTACHED_TO_HANDLER_FRAME(Vehicle vehicle, Entity entity);
-		BOOL IS_ANY_ENTITY_ATTACHED_TO_HANDLER_FRAME(Vehicle vehicle);
+		bool IS_ENTITY_ATTACHED_TO_HANDLER_FRAME(Vehicle vehicle, Entity entity);
+		bool IS_ANY_ENTITY_ATTACHED_TO_HANDLER_FRAME(Vehicle vehicle);
 		/**
 		 * Finds the vehicle that is carrying this entity with a handler frame.
 		 * The model of the entity must be prop_contr_03b_ld or the function will return 0.
 		 */
 		Vehicle FIND_HANDLER_VEHICLE_CONTAINER_IS_ATTACHED_TO(Entity entity);
-		BOOL IS_HANDLER_FRAME_LINED_UP_WITH_CONTAINER(Vehicle vehicle, Entity entity);
+		bool IS_HANDLER_FRAME_LINED_UP_WITH_CONTAINER(Vehicle vehicle, Entity entity);
 		void ATTACH_CONTAINER_TO_HANDLER_FRAME_WHEN_LINED_UP(Vehicle vehicle, Entity entity);
 		void DETACH_CONTAINER_FROM_HANDLER_FRAME(Vehicle vehicle);
-		void SET_VEHICLE_DISABLE_HEIGHT_MAP_AVOIDANCE(Vehicle vehicle, BOOL p1);
-		void _SET_PLANE_AVOIDS_OTHERS(Vehicle vehicle, BOOL toggle);
-		void SET_BOAT_DISABLE_AVOIDANCE(Vehicle vehicle, BOOL p1);
-		BOOL IS_HELI_LANDING_AREA_BLOCKED(Vehicle vehicle);
+		void SET_VEHICLE_DISABLE_HEIGHT_MAP_AVOIDANCE(Vehicle vehicle, bool p1);
+		void _SET_PLANE_AVOIDS_OTHERS(Vehicle vehicle, bool toggle);
+		void SET_BOAT_DISABLE_AVOIDANCE(Vehicle vehicle, bool p1);
+		bool IS_HELI_LANDING_AREA_BLOCKED(Vehicle vehicle);
 		/**
 		 * Used on helicopters and blimps during the CTaskVehicleLand task. Sets a value on the task to 10f
 		 */
@@ -18809,27 +18809,27 @@ namespace base::menu::natives {
 		 * '45 = 6 wheels trailer mid wheel left
 		 * '47 = 6 wheels trailer mid wheel right
 		 */
-		void SET_VEHICLE_TYRE_BURST(Vehicle vehicle, int index, BOOL onRim, float p3);
+		void SET_VEHICLE_TYRE_BURST(Vehicle vehicle, int index, bool onRim, float p3);
 		/**
 		 * Closes all doors of a vehicle:
 		 */
-		void SET_VEHICLE_DOORS_SHUT(Vehicle vehicle, BOOL closeInstantly);
+		void SET_VEHICLE_DOORS_SHUT(Vehicle vehicle, bool closeInstantly);
 		/**
 		 * Allows you to toggle bulletproof tires.
 		 */
-		void SET_VEHICLE_TYRES_CAN_BURST(Vehicle vehicle, BOOL toggle);
-		BOOL GET_VEHICLE_TYRES_CAN_BURST(Vehicle vehicle);
-		void SET_VEHICLE_WHEELS_CAN_BREAK(Vehicle vehicle, BOOL enabled);
+		void SET_VEHICLE_TYRES_CAN_BURST(Vehicle vehicle, bool toggle);
+		bool GET_VEHICLE_TYRES_CAN_BURST(Vehicle vehicle);
+		void SET_VEHICLE_WHEELS_CAN_BREAK(Vehicle vehicle, bool enabled);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
-		void SET_VEHICLE_DOOR_OPEN(Vehicle vehicle, int doorId, BOOL loose, BOOL openInstantly);
+		void SET_VEHICLE_DOOR_OPEN(Vehicle vehicle, int doorId, bool loose, bool openInstantly);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 * 
 		 * Usually used alongside other vehicle door natives.
 		 */
-		void SET_VEHICLE_DOOR_AUTO_LOCK(Vehicle vehicle, int doorId, BOOL toggle);
+		void SET_VEHICLE_DOOR_AUTO_LOCK(Vehicle vehicle, int doorId, bool toggle);
 		void SET_FLEEING_VEHICLES_USE_SWITCHED_OFF_NODES(Any p0);
 		/**
 		 * windowIndex:
@@ -18924,7 +18924,7 @@ namespace base::menu::natives {
 		 * note2: when using =0 it's affected by day or night for highbeams don't exist in daytime.
 		 */
 		void SET_VEHICLE_LIGHTS(Vehicle vehicle, int state);
-		void SET_VEHICLE_USE_PLAYER_LIGHT_SETTINGS(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_USE_PLAYER_LIGHT_SETTINGS(Vehicle vehicle, bool toggle);
 		/**
 		 * p1 can be either 0, 1 or 2.
 		 * 
@@ -18935,14 +18935,14 @@ namespace base::menu::natives {
 		 * 2 = Always On (Lights can be toggled between normal and high beams)
 		 */
 		void SET_VEHICLE_HEADLIGHT_SHADOWS(Vehicle vehicle, int p1);
-		void SET_VEHICLE_ALARM(Vehicle vehicle, BOOL state);
+		void SET_VEHICLE_ALARM(Vehicle vehicle, bool state);
 		void START_VEHICLE_ALARM(Vehicle vehicle);
-		BOOL IS_VEHICLE_ALARM_ACTIVATED(Vehicle vehicle);
-		void SET_VEHICLE_INTERIORLIGHT(Vehicle vehicle, BOOL toggle);
+		bool IS_VEHICLE_ALARM_ACTIVATED(Vehicle vehicle);
+		void SET_VEHICLE_INTERIORLIGHT(Vehicle vehicle, bool toggle);
 		/**
 		 * Sets some bit of vehicle
 		 */
-		void SET_VEHICLE_FORCE_INTERIORLIGHT(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_FORCE_INTERIORLIGHT(Vehicle vehicle, bool toggle);
 		/**
 		 * multiplier = brightness of head lights.
 		 * this value isn't capped afaik.
@@ -18959,7 +18959,7 @@ namespace base::menu::natives {
 		void ATTACH_VEHICLE_ON_TO_TRAILER(Vehicle vehicle, Vehicle trailer, float offsetX, float offsetY, float offsetZ, float coordsX, float coordsY, float coordsZ, float rotationX, float rotationY, float rotationZ, float disableCollisions);
 		void STABILISE_ENTITY_ATTACHED_TO_HELI(Vehicle vehicle, Entity entity, float p2);
 		void DETACH_VEHICLE_FROM_TRAILER(Vehicle vehicle);
-		BOOL IS_VEHICLE_ATTACHED_TO_TRAILER(Vehicle vehicle);
+		bool IS_VEHICLE_ATTACHED_TO_TRAILER(Vehicle vehicle);
 		void SET_TRAILER_INVERSE_MASS_SCALE(Vehicle vehicle, float p1);
 		/**
 		 * in the decompiled scripts, seems to be always called on the vehicle right after being attached to a trailer.
@@ -19017,7 +19017,7 @@ namespace base::menu::natives {
 		 * North_Yankton = 5,
 		 */
 		int GET_VEHICLE_NUMBER_PLATE_TEXT_INDEX(Vehicle vehicle);
-		void SET_RANDOM_TRAINS(BOOL toggle);
+		void SET_RANDOM_TRAINS(bool toggle);
 		/**
 		 * Train models HAVE TO be loaded (requested) before you use this.
 		 * For variation 15 - request:
@@ -19031,7 +19031,7 @@ namespace base::menu::natives {
 		 * 
 		 * 
 		 */
-		Vehicle CREATE_MISSION_TRAIN(int variation, float x, float y, float z, BOOL direction, Any p5, Any p6);
+		Vehicle CREATE_MISSION_TRAIN(int variation, float x, float y, float z, bool direction, Any p5, Any p6);
 		/**
 		 * Toggles whether ambient trains can spawn on the specified track or not
 		 * 
@@ -19053,7 +19053,7 @@ namespace base::menu::natives {
 		 * 11 (`trains12.dat`) Yankton prologue mission train
 		 * Full list of all train tracks + track nodes by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/traintracks.json
 		 */
-		void SWITCH_TRAIN_TRACK(int trackId, BOOL state);
+		void SWITCH_TRAIN_TRACK(int trackId, bool state);
 		/**
 		 * Only called once inside main_persitant with the parameters p0 = 0, p1 = 120000
 		 * 
@@ -19065,13 +19065,13 @@ namespace base::menu::natives {
 		void DELETE_ALL_TRAINS();
 		void SET_TRAIN_SPEED(Vehicle train, float speed);
 		void SET_TRAIN_CRUISE_SPEED(Vehicle train, float speed);
-		void SET_RANDOM_BOATS(BOOL toggle);
-		void SET_RANDOM_BOATS_MP(BOOL toggle);
-		void SET_GARBAGE_TRUCKS(BOOL toggle);
+		void SET_RANDOM_BOATS(bool toggle);
+		void SET_RANDOM_BOATS_MP(bool toggle);
+		void SET_GARBAGE_TRUCKS(bool toggle);
 		/**
 		 * Maximum amount of vehicles with vehicle stuck check appears to be 16.
 		 */
-		BOOL DOES_VEHICLE_HAVE_STUCK_VEHICLE_CHECK(Vehicle vehicle);
+		bool DOES_VEHICLE_HAVE_STUCK_VEHICLE_CHECK(Vehicle vehicle);
 		/**
 		 * See REQUEST_VEHICLE_RECORDING
 		 */
@@ -19085,7 +19085,7 @@ namespace base::menu::natives {
 		/**
 		 * See REQUEST_VEHICLE_RECORDING
 		 */
-		BOOL HAS_VEHICLE_RECORDING_BEEN_LOADED(int recording, const char* script);
+		bool HAS_VEHICLE_RECORDING_BEEN_LOADED(int recording, const char* script);
 		/**
 		 * See REQUEST_VEHICLE_RECORDING
 		 */
@@ -19122,7 +19122,7 @@ namespace base::menu::natives {
 		 * 
 		 * See REQUEST_VEHICLE_RECORDING
 		 */
-		void START_PLAYBACK_RECORDED_VEHICLE(Vehicle vehicle, int recording, const char* script, BOOL p3);
+		void START_PLAYBACK_RECORDED_VEHICLE(Vehicle vehicle, int recording, const char* script, bool p3);
 		/**
 		 * flags requires further research, e.g., 0x4/0x8 are related to the AI driving task and 0x20 is internally set and interacts with dynamic entity components.
 		 * 
@@ -19132,12 +19132,12 @@ namespace base::menu::natives {
 		/**
 		 * Often called after START_PLAYBACK_RECORDED_VEHICLE and SKIP_TIME_IN_PLAYBACK_RECORDED_VEHICLE; similar in use to FORCE_ENTITY_AI_AND_ANIMATION_UPDATE.
 		 */
-		void FORCE_PLAYBACK_RECORDED_VEHICLE_UPDATE(Vehicle vehicle, BOOL p1);
+		void FORCE_PLAYBACK_RECORDED_VEHICLE_UPDATE(Vehicle vehicle, bool p1);
 		void STOP_PLAYBACK_RECORDED_VEHICLE(Vehicle vehicle);
 		void PAUSE_PLAYBACK_RECORDED_VEHICLE(Vehicle vehicle);
 		void UNPAUSE_PLAYBACK_RECORDED_VEHICLE(Vehicle vehicle);
-		BOOL IS_PLAYBACK_GOING_ON_FOR_VEHICLE(Vehicle vehicle);
-		BOOL IS_PLAYBACK_USING_AI_GOING_ON_FOR_VEHICLE(Vehicle vehicle);
+		bool IS_PLAYBACK_GOING_ON_FOR_VEHICLE(Vehicle vehicle);
+		bool IS_PLAYBACK_USING_AI_GOING_ON_FOR_VEHICLE(Vehicle vehicle);
 		int GET_CURRENT_PLAYBACK_FOR_VEHICLE(Vehicle vehicle);
 		void SKIP_TO_END_AND_STOP_PLAYBACK_RECORDED_VEHICLE(Vehicle vehicle);
 		void SET_PLAYBACK_SPEED(Vehicle vehicle, float speed);
@@ -19158,16 +19158,16 @@ namespace base::menu::natives {
 		/**
 		 * Time is number of milliseconds before reverting, zero for indefinitely.
 		 */
-		void SET_PLAYBACK_TO_USE_AI_TRY_TO_REVERT_BACK_LATER(Vehicle vehicle, int time, int drivingStyle, BOOL p3);
+		void SET_PLAYBACK_TO_USE_AI_TRY_TO_REVERT_BACK_LATER(Vehicle vehicle, int time, int drivingStyle, bool p3);
 		void SET_ADDITIONAL_ROTATION_FOR_RECORDED_VEHICLE_PLAYBACK(Vehicle vehicle, float x, float y, float z, Any p4);
 		void SET_POSITION_OFFSET_FOR_RECORDED_VEHICLE_PLAYBACK(Vehicle vehicle, float x, float y, float z);
 		void SET_GLOBAL_POSITION_OFFSET_FOR_RECORDED_VEHICLE_PLAYBACK(Vehicle vehicle, float x, float y, float z);
 		/**
 		 * A vehicle recording playback flag only used in jewelry_heist
 		 */
-		void SET_SHOULD_LERP_FROM_AI_TO_FULL_RECORDING(Vehicle vehicle, BOOL p1);
-		void EXPLODE_VEHICLE_IN_CUTSCENE(Vehicle vehicle, BOOL p1);
-		void ADD_VEHICLE_STUCK_CHECK_WITH_WARP(Any p0, float p1, Any p2, BOOL p3, BOOL p4, BOOL p5, Any p6);
+		void SET_SHOULD_LERP_FROM_AI_TO_FULL_RECORDING(Vehicle vehicle, bool p1);
+		void EXPLODE_VEHICLE_IN_CUTSCENE(Vehicle vehicle, bool p1);
+		void ADD_VEHICLE_STUCK_CHECK_WITH_WARP(Any p0, float p1, Any p2, bool p3, bool p4, bool p5, Any p6);
 		/**
 		 * Makes the vehicle stop spawning naturally in traffic. Here's an essential example:
 		 * 
@@ -19175,7 +19175,7 @@ namespace base::menu::natives {
 		 * 
 		 * Full list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json
 		 */
-		void SET_VEHICLE_MODEL_IS_SUPPRESSED(Hash model, BOOL suppressed);
+		void SET_VEHICLE_MODEL_IS_SUPPRESSED(Hash model, bool suppressed);
 		/**
 		 * Gets a random vehicle in a sphere at the specified position, of the specified radius.
 		 * 
@@ -19226,32 +19226,32 @@ namespace base::menu::natives {
 		 * Corrected p1. it's basically the 'carriage/trailer number'. So if the train has 3 trailers you'd call the native once with a var or 3 times with 1, 2, 3.
 		 */
 		Vehicle GET_TRAIN_CARRIAGE(Vehicle train, int trailerNumber);
-		void _SET_MAKE_TRAIN_SCAN_FOR_BLOCKING_ENTITIES(Vehicle train, BOOL toggle);
+		void _SET_MAKE_TRAIN_SCAN_FOR_BLOCKING_ENTITIES(Vehicle train, bool toggle);
 		int _GET_MISSION_TRAIN_CONFIG_INDEX_BY_NAME(const char* name);
-		BOOL IS_MISSION_TRAIN(Vehicle train);
+		bool IS_MISSION_TRAIN(Vehicle train);
 		void DELETE_MISSION_TRAIN(Vehicle* train);
 		/**
 		 * p1 is always 0
 		 */
-		void SET_MISSION_TRAIN_AS_NO_LONGER_NEEDED(Vehicle* train, BOOL p1);
+		void SET_MISSION_TRAIN_AS_NO_LONGER_NEEDED(Vehicle* train, bool p1);
 		void SET_MISSION_TRAIN_COORDS(Vehicle train, float x, float y, float z);
-		BOOL IS_THIS_MODEL_A_BOAT(Hash model);
+		bool IS_THIS_MODEL_A_BOAT(Hash model);
 		/**
 		 * Checks if model is a boat, then checks for FLAG_IS_JETSKI.
 		 */
-		BOOL IS_THIS_MODEL_A_JETSKI(Hash model);
-		BOOL IS_THIS_MODEL_A_PLANE(Hash model);
-		BOOL IS_THIS_MODEL_A_HELI(Hash model);
+		bool IS_THIS_MODEL_A_JETSKI(Hash model);
+		bool IS_THIS_MODEL_A_PLANE(Hash model);
+		bool IS_THIS_MODEL_A_HELI(Hash model);
 		/**
 		 * To check if the model is an amphibious car, use IS_THIS_MODEL_AN_AMPHIBIOUS_CAR.
 		 */
-		BOOL IS_THIS_MODEL_A_CAR(Hash model);
-		BOOL IS_THIS_MODEL_A_TRAIN(Hash model);
-		BOOL IS_THIS_MODEL_A_BIKE(Hash model);
-		BOOL IS_THIS_MODEL_A_BICYCLE(Hash model);
-		BOOL IS_THIS_MODEL_A_QUADBIKE(Hash model);
-		BOOL IS_THIS_MODEL_AN_AMPHIBIOUS_CAR(Hash model);
-		BOOL IS_THIS_MODEL_AN_AMPHIBIOUS_QUADBIKE(Hash model);
+		bool IS_THIS_MODEL_A_CAR(Hash model);
+		bool IS_THIS_MODEL_A_TRAIN(Hash model);
+		bool IS_THIS_MODEL_A_BIKE(Hash model);
+		bool IS_THIS_MODEL_A_BICYCLE(Hash model);
+		bool IS_THIS_MODEL_A_QUADBIKE(Hash model);
+		bool IS_THIS_MODEL_AN_AMPHIBIOUS_CAR(Hash model);
+		bool IS_THIS_MODEL_AN_AMPHIBIOUS_QUADBIKE(Hash model);
 		/**
 		 * Equivalent of SET_HELI_BLADES_SPEED(vehicleHandle, 1.0f);
 		 */
@@ -19267,11 +19267,11 @@ namespace base::menu::natives {
 		/**
 		 * This has not yet been tested - it's just an assumption of what the types could be.
 		 */
-		void SET_VEHICLE_CAN_BE_TARGETTED(Vehicle vehicle, BOOL state);
-		void SET_DONT_ALLOW_PLAYER_TO_ENTER_VEHICLE_IF_LOCKED_FOR_PLAYER(Vehicle vehicle, BOOL p1);
-		void SET_VEHICLE_CAN_BE_VISIBLY_DAMAGED(Vehicle vehicle, BOOL state);
-		void SET_VEHICLE_HAS_UNBREAKABLE_LIGHTS(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_RESPECTS_LOCKS_WHEN_HAS_DRIVER(Vehicle vehicle, BOOL p1);
+		void SET_VEHICLE_CAN_BE_TARGETTED(Vehicle vehicle, bool state);
+		void SET_DONT_ALLOW_PLAYER_TO_ENTER_VEHICLE_IF_LOCKED_FOR_PLAYER(Vehicle vehicle, bool p1);
+		void SET_VEHICLE_CAN_BE_VISIBLY_DAMAGED(Vehicle vehicle, bool state);
+		void SET_VEHICLE_HAS_UNBREAKABLE_LIGHTS(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_RESPECTS_LOCKS_WHEN_HAS_DRIVER(Vehicle vehicle, bool p1);
 		void SET_VEHICLE_CAN_EJECT_PASSENGERS_IF_LOCKED(Any p0, Any p1);
 		/**
 		 * Dirt level does not become greater than 15.0
@@ -19285,11 +19285,11 @@ namespace base::menu::natives {
 		/**
 		 * Appears to return true if the vehicle has any damage, including cosmetically.
 		 */
-		BOOL GET_DOES_VEHICLE_HAVE_DAMAGE_DECALS(Vehicle vehicle);
+		bool GET_DOES_VEHICLE_HAVE_DAMAGE_DECALS(Vehicle vehicle);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
-		BOOL IS_VEHICLE_DOOR_FULLY_OPEN(Vehicle vehicle, int doorId);
+		bool IS_VEHICLE_DOOR_FULLY_OPEN(Vehicle vehicle, int doorId);
 		/**
 		 * Starts or stops the engine on the specified vehicle.
 		 * 
@@ -19298,9 +19298,9 @@ namespace base::menu::natives {
 		 * instantly: if true, the vehicle will be set to the state immediately; otherwise, the current driver will physically turn on or off the engine.
 		 * disableAutoStart: If true, the system will prevent the engine from starting when the player got into it.
 		 */
-		void SET_VEHICLE_ENGINE_ON(Vehicle vehicle, BOOL value, BOOL instantly, BOOL disableAutoStart);
-		void SET_VEHICLE_UNDRIVEABLE(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_PROVIDES_COVER(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_ENGINE_ON(Vehicle vehicle, bool value, bool instantly, bool disableAutoStart);
+		void SET_VEHICLE_UNDRIVEABLE(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_PROVIDES_COVER(Vehicle vehicle, bool toggle);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
@@ -19308,7 +19308,7 @@ namespace base::menu::natives {
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
-		void SET_VEHICLE_DOOR_LATCHED(Vehicle vehicle, int doorId, BOOL p2, BOOL p3, BOOL p4);
+		void SET_VEHICLE_DOOR_LATCHED(Vehicle vehicle, int doorId, bool p2, bool p3, bool p4);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
@@ -19329,20 +19329,20 @@ namespace base::menu::natives {
 		 * VEH_EXT_BOOT
 		 * };
 		 */
-		void SET_VEHICLE_DOOR_SHUT(Vehicle vehicle, int doorId, BOOL closeInstantly);
+		void SET_VEHICLE_DOOR_SHUT(Vehicle vehicle, int doorId, bool closeInstantly);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
-		void SET_VEHICLE_DOOR_BROKEN(Vehicle vehicle, int doorId, BOOL deleteDoor);
-		void SET_VEHICLE_CAN_BREAK(Vehicle vehicle, BOOL toggle);
-		BOOL DOES_VEHICLE_HAVE_ROOF(Vehicle vehicle);
+		void SET_VEHICLE_DOOR_BROKEN(Vehicle vehicle, int doorId, bool deleteDoor);
+		void SET_VEHICLE_CAN_BREAK(Vehicle vehicle, bool toggle);
+		bool DOES_VEHICLE_HAVE_ROOF(Vehicle vehicle);
 		void SET_VEHICLE_REMOVE_AGGRESSIVE_CARJACK_MISSION(Any p0);
 		void SET_VEHICLE_AVOID_PLAYER_VEHICLE_RIOT_VAN_MISSION(Any p0);
 		void SET_CARJACK_MISSION_REMOVAL_PARAMETERS(Any p0, Any p1);
 		/**
 		 * Returns true if MF_IS_BIG (strModelFlags 0x8) handling model flag is set.
 		 */
-		BOOL IS_BIG_VEHICLE(Vehicle vehicle);
+		bool IS_BIG_VEHICLE(Vehicle vehicle);
 		/**
 		 * Returns the total amount of color combinations found in the vehicle's carvariations.meta entry.
 		 */
@@ -19373,18 +19373,18 @@ namespace base::menu::natives {
 		/**
 		 * Setting this to false, makes the specified vehicle to where if you press Y your character doesn't even attempt the animation to enter the vehicle. Hence it's not considered aka ignored.
 		 */
-		void SET_VEHICLE_IS_CONSIDERED_BY_PLAYER(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_WILL_FORCE_OTHER_VEHICLES_TO_STOP(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_ACT_AS_IF_HAS_SIREN_ON(Vehicle vehicle, BOOL p1);
-		void SET_VEHICLE_USE_MORE_RESTRICTIVE_SPAWN_CHECKS(Vehicle vehicle, BOOL p1);
-		void SET_VEHICLE_MAY_BE_USED_BY_GOTO_POINT_ANY_MEANS(Vehicle vehicle, BOOL p1);
+		void SET_VEHICLE_IS_CONSIDERED_BY_PLAYER(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_WILL_FORCE_OTHER_VEHICLES_TO_STOP(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_ACT_AS_IF_HAS_SIREN_ON(Vehicle vehicle, bool p1);
+		void SET_VEHICLE_USE_MORE_RESTRICTIVE_SPAWN_CHECKS(Vehicle vehicle, bool p1);
+		void SET_VEHICLE_MAY_BE_USED_BY_GOTO_POINT_ANY_MEANS(Vehicle vehicle, bool p1);
 		/**
 		 * Not present in the retail version! It's just a nullsub.
 		 * 
 		 * p0 always true (except in one case)
 		 * successIndicator: 0 if success, -1 if failed
 		 */
-		void GET_RANDOM_VEHICLE_MODEL_IN_MEMORY(BOOL p0, Hash* modelHash, int* successIndicator);
+		void GET_RANDOM_VEHICLE_MODEL_IN_MEMORY(bool p0, Hash* modelHash, int* successIndicator);
 		/**
 		 * enum VehicleLockStatus = {
 		 * None = 0,
@@ -19405,13 +19405,13 @@ namespace base::menu::natives {
 		/**
 		 * doorID starts at 0, not seeming to skip any numbers. Four door vehicles intuitively range from 0 to 3.
 		 */
-		BOOL IS_VEHICLE_DOOR_DAMAGED(Vehicle veh, int doorID);
+		bool IS_VEHICLE_DOOR_DAMAGED(Vehicle veh, int doorID);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
-		void SET_DOOR_ALLOWED_TO_BE_BROKEN_OFF(Vehicle vehicle, int doorId, BOOL isBreakable);
-		BOOL IS_VEHICLE_BUMPER_BOUNCING(Vehicle vehicle, BOOL frontBumper);
-		BOOL IS_VEHICLE_BUMPER_BROKEN_OFF(Vehicle vehicle, BOOL frontBumper);
+		void SET_DOOR_ALLOWED_TO_BE_BROKEN_OFF(Vehicle vehicle, int doorId, bool isBreakable);
+		bool IS_VEHICLE_BUMPER_BOUNCING(Vehicle vehicle, bool frontBumper);
+		bool IS_VEHICLE_BUMPER_BROKEN_OFF(Vehicle vehicle, bool frontBumper);
 		/**
 		 * Usage:
 		 * 
@@ -19420,14 +19420,14 @@ namespace base::menu::natives {
 		 * return Function.Call<bool>(Hash.IS_COP_PED_IN_AREA_3D, Location.X - Range, Location.Y - Range, Location.Z - Range, Location.X + Range, Location.Y + Range, Location.Z + Range);
 		 * }
 		 */
-		BOOL IS_COP_VEHICLE_IN_AREA_3D(float x1, float x2, float y1, float y2, float z1, float z2);
+		bool IS_COP_VEHICLE_IN_AREA_3D(float x1, float x2, float y1, float y2, float z1, float z2);
 		/**
 		 * Public Function isVehicleOnAllWheels(vh As Vehicle) As Boolean
 		 * Return Native.Function.Call(Of Boolean)(Hash.IS_VEHICLE_ON_ALL_WHEELS, vh)
 		 * End Function
 		 * 
 		 */
-		BOOL IS_VEHICLE_ON_ALL_WHEELS(Vehicle vehicle);
+		bool IS_VEHICLE_ON_ALL_WHEELS(Vehicle vehicle);
 		/**
 		 * Returns `nMonetaryValue` from handling.meta for specific model.
 		 */
@@ -19440,7 +19440,7 @@ namespace base::menu::natives {
 		/**
 		 * Makes the train all jumbled up and derailed as it moves on the tracks (though that wont stop it from its normal operations)
 		 */
-		void SET_RENDER_TRAIN_AS_DERAILED(Vehicle train, BOOL toggle);
+		void SET_RENDER_TRAIN_AS_DERAILED(Vehicle train, bool toggle);
 		/**
 		 * They use the same color indexs as SET_VEHICLE_COLOURS.
 		 */
@@ -19460,13 +19460,13 @@ namespace base::menu::natives {
 		 * This fixes the deformation of a vehicle but the vehicle health doesn't improve
 		 */
 		void SET_VEHICLE_DEFORMATION_FIXED(Vehicle vehicle);
-		void SET_VEHICLE_CAN_ENGINE_MISSFIRE(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_CAN_LEAK_OIL(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_CAN_LEAK_PETROL(Vehicle vehicle, BOOL toggle);
-		void SET_DISABLE_VEHICLE_PETROL_TANK_FIRES(Vehicle vehicle, BOOL toggle);
-		void SET_DISABLE_VEHICLE_PETROL_TANK_DAMAGE(Vehicle vehicle, BOOL toggle);
-		void SET_DISABLE_VEHICLE_ENGINE_FIRES(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_LIMIT_SPEED_WHEN_PLAYER_INACTIVE(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_CAN_ENGINE_MISSFIRE(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_CAN_LEAK_OIL(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_CAN_LEAK_PETROL(Vehicle vehicle, bool toggle);
+		void SET_DISABLE_VEHICLE_PETROL_TANK_FIRES(Vehicle vehicle, bool toggle);
+		void SET_DISABLE_VEHICLE_PETROL_TANK_DAMAGE(Vehicle vehicle, bool toggle);
+		void SET_DISABLE_VEHICLE_ENGINE_FIRES(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_LIMIT_SPEED_WHEN_PLAYER_INACTIVE(Vehicle vehicle, bool toggle);
 		/**
 		 * sfink: sets bit in vehicle's structure, used by maintransition, fm_mission_controller, mission_race and a couple of other scripts. see dissassembly:
 		 * CVehicle *__fastcall sub_140CDAA10(signed int a1, char a2)
@@ -19482,8 +19482,8 @@ namespace base::menu::natives {
 		 * return result;
 		 * }
 		 */
-		void SET_VEHICLE_STOP_INSTANTLY_WHEN_PLAYER_INACTIVE(Vehicle vehicle, BOOL toggle);
-		void SET_DISABLE_PRETEND_OCCUPANTS(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_STOP_INSTANTLY_WHEN_PLAYER_INACTIVE(Vehicle vehicle, bool toggle);
+		void SET_DISABLE_PRETEND_OCCUPANTS(Vehicle vehicle, bool toggle);
 		void REMOVE_VEHICLES_FROM_GENERATORS_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, Any p6);
 		/**
 		 * Locks the vehicle's steering to the desired angle, explained below.
@@ -19496,22 +19496,22 @@ namespace base::menu::natives {
 		 * 1.0 = full left
 		 */
 		void SET_VEHICLE_STEER_BIAS(Vehicle vehicle, float value);
-		BOOL IS_VEHICLE_EXTRA_TURNED_ON(Vehicle vehicle, int extraId);
+		bool IS_VEHICLE_EXTRA_TURNED_ON(Vehicle vehicle, int extraId);
 		/**
 		 * Available extraIds are 1-14, however none of the vehicles have extras above 12.
 		 */
-		void SET_VEHICLE_EXTRA(Vehicle vehicle, int extraId, BOOL disable);
+		void SET_VEHICLE_EXTRA(Vehicle vehicle, int extraId, bool disable);
 		/**
 		 * Checks via CVehicleModelInfo
 		 */
-		BOOL DOES_EXTRA_EXIST(Vehicle vehicle, int extraId);
+		bool DOES_EXTRA_EXIST(Vehicle vehicle, int extraId);
 		/**
 		 * Returns true if specified extra part is broken off. It only works for extras that can break off during collisions, non-breakable extras always return false. Also returns true if the breakable extra is toggled off through script.
 		 */
-		BOOL IS_EXTRA_BROKEN_OFF(Vehicle vehicle, int extraId);
-		void SET_CONVERTIBLE_ROOF(Vehicle vehicle, BOOL p1);
-		void LOWER_CONVERTIBLE_ROOF(Vehicle vehicle, BOOL instantlyLower);
-		void RAISE_CONVERTIBLE_ROOF(Vehicle vehicle, BOOL instantlyRaise);
+		bool IS_EXTRA_BROKEN_OFF(Vehicle vehicle, int extraId);
+		void SET_CONVERTIBLE_ROOF(Vehicle vehicle, bool p1);
+		void LOWER_CONVERTIBLE_ROOF(Vehicle vehicle, bool instantlyLower);
+		void RAISE_CONVERTIBLE_ROOF(Vehicle vehicle, bool instantlyRaise);
 		/**
 		 * 0 -> up
 		 * 1 -> lowering down
@@ -19524,25 +19524,25 @@ namespace base::menu::natives {
 		 * 
 		 * p1 is false almost always. However, in launcher_carwash/carwash1/carwash2 scripts, p1 is true and is accompanied by DOES_VEHICLE_HAVE_ROOF. If p1 is true, it seems that every single vehicle will return true irrespective of being a convertible.
 		 */
-		BOOL IS_VEHICLE_A_CONVERTIBLE(Vehicle vehicle, BOOL p1);
+		bool IS_VEHICLE_A_CONVERTIBLE(Vehicle vehicle, bool p1);
 		/**
 		 * Transforms the `stormberg`/`toreador` to its "submarine" variant. If the vehicle is already in that state then the vehicle transformation audio will still play, but the vehicle won't change at all.
 		 */
-		BOOL TRANSFORM_TO_SUBMARINE(Vehicle vehicle, BOOL noAnimation);
+		bool TRANSFORM_TO_SUBMARINE(Vehicle vehicle, bool noAnimation);
 		/**
 		 * Transforms the `stormberg`/`toreador` to its "road vehicle" variant. If the vehicle is already in that state then the vehicle transformation audio will still play, but the vehicle won't change at all.
 		 */
-		void TRANSFORM_TO_CAR(Vehicle vehicle, BOOL noAnimation);
-		BOOL IS_VEHICLE_IN_SUBMARINE_MODE(Vehicle vehicle);
-		BOOL IS_VEHICLE_STOPPED_AT_TRAFFIC_LIGHTS(Vehicle vehicle);
+		void TRANSFORM_TO_CAR(Vehicle vehicle, bool noAnimation);
+		bool IS_VEHICLE_IN_SUBMARINE_MODE(Vehicle vehicle);
+		bool IS_VEHICLE_STOPPED_AT_TRAFFIC_LIGHTS(Vehicle vehicle);
 		/**
 		 * Apply damage to vehicle at a location. Location is relative to vehicle model (not world).
 		 * 
 		 * Radius of effect damage applied in a sphere at impact location
 		 * When `focusOnModel` set to `true`, the damage sphere will travel towards the vehicle from the given point, thus guaranteeing an impact
 		 */
-		void SET_VEHICLE_DAMAGE(Vehicle vehicle, float xOffset, float yOffset, float zOffset, float damage, float radius, BOOL focusOnModel);
-		void SET_VEHICLE_OCCUPANTS_TAKE_EXPLOSIVE_DAMAGE(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_DAMAGE(Vehicle vehicle, float xOffset, float yOffset, float zOffset, float damage, float radius, bool focusOnModel);
+		void SET_VEHICLE_OCCUPANTS_TAKE_EXPLOSIVE_DAMAGE(Vehicle vehicle, bool toggle);
 		/**
 		 * Returns 1000.0 if the function is unable to get the address of the specified vehicle or if it's not a vehicle.
 		 * 
@@ -19587,7 +19587,7 @@ namespace base::menu::natives {
 		 * p1 can be anywhere from 0 to 3 in the scripts.
 		 * p2 being how long in milliseconds the vehicle has been stuck
 		 */
-		BOOL IS_VEHICLE_STUCK_TIMER_UP(Vehicle vehicle, int p1, int ms);
+		bool IS_VEHICLE_STUCK_TIMER_UP(Vehicle vehicle, int p1, int ms);
 		/**
 		 * The inner function has a switch on the second parameter. It's the stuck timer index.
 		 * 
@@ -19619,11 +19619,11 @@ namespace base::menu::natives {
 		 * 
 		 * p1 = check if vehicle is on fire
 		 */
-		BOOL IS_VEHICLE_DRIVEABLE(Vehicle vehicle, BOOL isOnFireCheck);
-		void SET_VEHICLE_HAS_BEEN_OWNED_BY_PLAYER(Vehicle vehicle, BOOL owned);
-		void SET_VEHICLE_NEEDS_TO_BE_HOTWIRED(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_BLIP_THROTTLE_RANDOMLY(Vehicle vehicle, BOOL p1);
-		void SET_POLICE_FOCUS_WILL_TRACK_VEHICLE(Vehicle vehicle, BOOL toggle);
+		bool IS_VEHICLE_DRIVEABLE(Vehicle vehicle, bool isOnFireCheck);
+		void SET_VEHICLE_HAS_BEEN_OWNED_BY_PLAYER(Vehicle vehicle, bool owned);
+		void SET_VEHICLE_NEEDS_TO_BE_HOTWIRED(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_BLIP_THROTTLE_RANDOMLY(Vehicle vehicle, bool p1);
+		void SET_POLICE_FOCUS_WILL_TRACK_VEHICLE(Vehicle vehicle, bool toggle);
 		/**
 		 * Sounds the horn for the specified vehicle.
 		 * 
@@ -19633,15 +19633,15 @@ namespace base::menu::natives {
 		 * 
 		 * Note: If a player is in the vehicle, it will only sound briefly.
 		 */
-		void START_VEHICLE_HORN(Vehicle vehicle, int duration, Hash mode, BOOL forever);
+		void START_VEHICLE_HORN(Vehicle vehicle, int duration, Hash mode, bool forever);
 		/**
 		 * If set to TRUE, it seems to suppress door noises and doesn't allow the horn to be continuous.
 		 */
-		void SET_VEHICLE_IN_CAR_MOD_SHOP(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_IN_CAR_MOD_SHOP(Vehicle vehicle, bool toggle);
 		/**
 		 * if true, axles won't bend.
 		 */
-		void SET_VEHICLE_HAS_STRONG_AXLES(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_HAS_STRONG_AXLES(Vehicle vehicle, bool toggle);
 		/**
 		 * Returns model name of vehicle in all caps. Needs to be displayed through localizing text natives to get proper display name.
 		 * -----------------------------------------------------------------------------------------------------------------------------------------
@@ -19707,17 +19707,17 @@ namespace base::menu::natives {
 		 * 
 		 * Those numbers go on for vehicles that have more than 4 doors with windows.
 		 */
-		BOOL IS_VEHICLE_WINDOW_INTACT(Vehicle vehicle, int windowIndex);
+		bool IS_VEHICLE_WINDOW_INTACT(Vehicle vehicle, int windowIndex);
 		/**
 		 * Appears to return false if any window is broken.
 		 */
-		BOOL ARE_ALL_VEHICLE_WINDOWS_INTACT(Vehicle vehicle);
+		bool ARE_ALL_VEHICLE_WINDOWS_INTACT(Vehicle vehicle);
 		/**
 		 * Returns false if every seat is occupied.
 		 */
-		BOOL ARE_ANY_VEHICLE_SEATS_FREE(Vehicle vehicle);
-		void RESET_VEHICLE_WHEELS(Vehicle vehicle, BOOL toggle);
-		BOOL IS_HELI_PART_BROKEN(Vehicle vehicle, BOOL p1, BOOL p2, BOOL p3);
+		bool ARE_ANY_VEHICLE_SEATS_FREE(Vehicle vehicle);
+		void RESET_VEHICLE_WHEELS(Vehicle vehicle, bool toggle);
+		bool IS_HELI_PART_BROKEN(Vehicle vehicle, bool p1, bool p2, bool p3);
 		/**
 		 * Max 1000.
 		 * At 0 the main rotor will stall.
@@ -19735,7 +19735,7 @@ namespace base::menu::natives {
 		float GET_HELI_TAIL_BOOM_HEALTH(Vehicle vehicle);
 		void SET_HELI_MAIN_ROTOR_HEALTH(Vehicle vehicle, float health);
 		void SET_HELI_TAIL_ROTOR_HEALTH(Vehicle vehicle, float health);
-		BOOL SET_HELI_TAIL_BOOM_CAN_BREAK_OFF(Vehicle vehicle, BOOL toggle);
+		bool SET_HELI_TAIL_BOOM_CAN_BREAK_OFF(Vehicle vehicle, bool toggle);
 		/**
 		 * NOTE: Debugging functions are not present in the retail version of the game.
 		 */
@@ -19743,11 +19743,11 @@ namespace base::menu::natives {
 		/**
 		 * Sets a vehicle to be strongly resistant to explosions. p0 is the vehicle; set p1 to false to toggle the effect on/off.
 		 */
-		void SET_VEHICLE_EXPLODES_ON_HIGH_EXPLOSION_DAMAGE(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_EXPLODES_ON_EXPLOSION_DAMAGE_AT_ZERO_BODY_HEALTH(Vehicle vehicle, BOOL toggle);
-		void SET_ALLOW_VEHICLE_EXPLODES_ON_CONTACT(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_DISABLE_TOWING(Vehicle vehicle, BOOL toggle);
-		BOOL GET_VEHICLE_HAS_LANDING_GEAR(Vehicle vehicle);
+		void SET_VEHICLE_EXPLODES_ON_HIGH_EXPLOSION_DAMAGE(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_EXPLODES_ON_EXPLOSION_DAMAGE_AT_ZERO_BODY_HEALTH(Vehicle vehicle, bool toggle);
+		void SET_ALLOW_VEHICLE_EXPLODES_ON_CONTACT(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_DISABLE_TOWING(Vehicle vehicle, bool toggle);
+		bool GET_VEHICLE_HAS_LANDING_GEAR(Vehicle vehicle);
 		/**
 		 * Works for vehicles with a retractable landing gear
 		 * 
@@ -19771,11 +19771,11 @@ namespace base::menu::natives {
 		 * Returns the current state of the vehicles landing gear.
 		 */
 		int GET_LANDING_GEAR_STATE(Vehicle vehicle);
-		BOOL IS_ANY_VEHICLE_NEAR_POINT(float x, float y, float z, float radius);
+		bool IS_ANY_VEHICLE_NEAR_POINT(float x, float y, float z, float radius);
 		void REQUEST_VEHICLE_HIGH_DETAIL_MODEL(Vehicle vehicle);
 		int _GET_VEHICLE_MODEL_NUM_DRIVE_GEARS(Hash vehicleModel);
 		int _GET_VEHICLE_MAX_DRIVE_GEAR_COUNT(Vehicle vehicle);
-		BOOL _GET_IS_VEHICLE_ELECTRIC(Hash vehicleModel);
+		bool _GET_IS_VEHICLE_ELECTRIC(Hash vehicleModel);
 		/**
 		 * Returns the vehicle's drivetrain type.
 		 * 
@@ -19793,7 +19793,7 @@ namespace base::menu::natives {
 		int _GET_VEHICLE_CURRENT_DRIVE_GEAR(Vehicle vehicle);
 		float _GET_VEHICLE_CURRENT_REV_RATIO(Vehicle vehicle);
 		void REMOVE_VEHICLE_HIGH_DETAIL_MODEL(Vehicle vehicle);
-		BOOL IS_VEHICLE_HIGH_DETAIL(Vehicle vehicle);
+		bool IS_VEHICLE_HIGH_DETAIL(Vehicle vehicle);
 		/**
 		 * REQUEST_VEHICLE_ASSET(GET_HASH_KEY(cargobob3), 3);
 		 * 
@@ -19803,7 +19803,7 @@ namespace base::menu::natives {
 		 * blazer
 		 */
 		void REQUEST_VEHICLE_ASSET(Hash vehicleHash, int vehicleAsset);
-		BOOL HAS_VEHICLE_ASSET_LOADED(int vehicleAsset);
+		bool HAS_VEHICLE_ASSET_LOADED(int vehicleAsset);
 		void REMOVE_VEHICLE_ASSET(int vehicleAsset);
 		/**
 		 * Sets how much the crane on the tow truck is raised, where 0.0 is fully lowered and 1.0 is fully raised.
@@ -19813,25 +19813,25 @@ namespace base::menu::natives {
 		/**
 		 * HookOffset defines where the hook is attached. leave at 0 for default attachment.
 		 */
-		void ATTACH_VEHICLE_TO_TOW_TRUCK(Vehicle towTruck, Vehicle vehicle, BOOL rear, float hookOffsetX, float hookOffsetY, float hookOffsetZ);
+		void ATTACH_VEHICLE_TO_TOW_TRUCK(Vehicle towTruck, Vehicle vehicle, bool rear, float hookOffsetX, float hookOffsetY, float hookOffsetZ);
 		/**
 		 * First two parameters swapped. Scripts verify that towTruck is the first parameter, not the second.
 		 */
 		void DETACH_VEHICLE_FROM_TOW_TRUCK(Vehicle towTruck, Vehicle vehicle);
-		BOOL DETACH_VEHICLE_FROM_ANY_TOW_TRUCK(Vehicle vehicle);
+		bool DETACH_VEHICLE_FROM_ANY_TOW_TRUCK(Vehicle vehicle);
 		/**
 		 * Scripts verify that towTruck is the first parameter, not the second.
 		 */
-		BOOL IS_VEHICLE_ATTACHED_TO_TOW_TRUCK(Vehicle towTruck, Vehicle vehicle);
+		bool IS_VEHICLE_ATTACHED_TO_TOW_TRUCK(Vehicle towTruck, Vehicle vehicle);
 		Entity GET_ENTITY_ATTACHED_TO_TOW_TRUCK(Vehicle towTruck);
-		Entity SET_VEHICLE_AUTOMATICALLY_ATTACHES(Vehicle vehicle, BOOL p1, Any p2);
+		Entity SET_VEHICLE_AUTOMATICALLY_ATTACHES(Vehicle vehicle, bool p1, Any p2);
 		/**
 		 * Sets the arm position of a bulldozer. Position must be a value between 0.0 and 1.0. Ignored when `p2` is set to false, instead incrementing arm position by 0.1 (or 10%).
 		 */
-		void SET_VEHICLE_BULLDOZER_ARM_POSITION(Vehicle vehicle, float position, BOOL p2);
-		void SET_VEHICLE_TANK_TURRET_POSITION(Vehicle vehicle, float position, BOOL p2);
-		void SET_VEHICLE_TURRET_TARGET(Vehicle vehicle, BOOL p1, float x, float y, float z, BOOL p5);
-		void SET_VEHICLE_TANK_STATIONARY(Vehicle vehicle, BOOL p1);
+		void SET_VEHICLE_BULLDOZER_ARM_POSITION(Vehicle vehicle, float position, bool p2);
+		void SET_VEHICLE_TANK_TURRET_POSITION(Vehicle vehicle, float position, bool p2);
+		void SET_VEHICLE_TURRET_TARGET(Vehicle vehicle, bool p1, float x, float y, float z, bool p5);
+		void SET_VEHICLE_TANK_STATIONARY(Vehicle vehicle, bool p1);
 		void SET_VEHICLE_TURRET_SPEED_THIS_FRAME(Vehicle vehicle, float speed);
 		void DISABLE_VEHICLE_TURRET_MOVEMENT_THIS_FRAME(Vehicle vehicle);
 		void SET_VEHICLE_FLIGHT_NOZZLE_POSITION(Vehicle vehicle, float angleRatio);
@@ -19840,12 +19840,12 @@ namespace base::menu::natives {
 		/**
 		 * True stops vtols from switching modes. Doesn't stop the sound though.
 		 */
-		void SET_DISABLE_VERTICAL_FLIGHT_MODE_TRANSITION(Vehicle vehicle, BOOL toggle);
-		BOOL GENERATE_VEHICLE_CREATION_POS_FROM_PATHS(Vector3* outVec, Any p1, Vector3* outVec1, Any p3, Any p4, Any p5, Any p6, Any p7, Any p8);
+		void SET_DISABLE_VERTICAL_FLIGHT_MODE_TRANSITION(Vehicle vehicle, bool toggle);
+		bool GENERATE_VEHICLE_CREATION_POS_FROM_PATHS(Vector3* outVec, Any p1, Vector3* outVec1, Any p3, Any p4, Any p5, Any p6, Any p7, Any p8);
 		/**
 		 * On accelerating, spins the driven wheels with the others braked, so you don't go anywhere.
 		 */
-		void SET_VEHICLE_BURNOUT(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_BURNOUT(Vehicle vehicle, bool toggle);
 		/**
 		 * Returns whether the specified vehicle is currently in a burnout.
 		 * 
@@ -19855,11 +19855,11 @@ namespace base::menu::natives {
 		 * Return Native.Function.Call(Of Boolean)(Hash.IS_VEHICLE_IN_BURNOUT, vh)
 		 * End Function
 		 */
-		BOOL IS_VEHICLE_IN_BURNOUT(Vehicle vehicle);
+		bool IS_VEHICLE_IN_BURNOUT(Vehicle vehicle);
 		/**
 		 * Reduces grip significantly so it's hard to go anywhere.
 		 */
-		void SET_VEHICLE_REDUCE_GRIP(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_REDUCE_GRIP(Vehicle vehicle, bool toggle);
 		/**
 		 * val is 0-3
 		 * Often used in conjunction with: SET_VEHICLE_REDUCE_GRIP
@@ -19869,14 +19869,14 @@ namespace base::menu::natives {
 		 * Sets the turn signal enabled for a vehicle.
 		 * Set turnSignal to 1 for left light, 0 for right light.
 		 */
-		void SET_VEHICLE_INDICATOR_LIGHTS(Vehicle vehicle, int turnSignal, BOOL toggle);
-		void SET_VEHICLE_BRAKE_LIGHTS(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_TAIL_LIGHTS(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_HANDBRAKE(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_BRAKE(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_INDICATOR_LIGHTS(Vehicle vehicle, int turnSignal, bool toggle);
+		void SET_VEHICLE_BRAKE_LIGHTS(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_TAIL_LIGHTS(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_HANDBRAKE(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_BRAKE(Vehicle vehicle, bool toggle);
 		void INSTANTLY_FILL_VEHICLE_POPULATION();
-		BOOL HAS_INSTANT_FILL_VEHICLE_POPULATION_FINISHED();
-		void NETWORK_ENABLE_EMPTY_CROWDING_VEHICLES_REMOVAL(BOOL toggle);
+		bool HAS_INSTANT_FILL_VEHICLE_POPULATION_FINISHED();
+		void NETWORK_ENABLE_EMPTY_CROWDING_VEHICLES_REMOVAL(bool toggle);
 		/**
 		 * Default:1000||This sets a value which is used when NETWORK_ENABLE_EMPTY_CROWDING_VEHICLES_REMOVAL(true) is called each frame.
 		 */
@@ -19884,15 +19884,15 @@ namespace base::menu::natives {
 		/**
 		 * Gets the trailer of a vehicle and puts it into the trailer parameter.
 		 */
-		BOOL GET_VEHICLE_TRAILER_VEHICLE(Vehicle vehicle, Vehicle* trailer);
+		bool GET_VEHICLE_TRAILER_VEHICLE(Vehicle vehicle, Vehicle* trailer);
 		Vehicle _GET_VEHICLE_TRAILER_PARENT_VEHICLE(Vehicle trailer);
 		/**
 		 * vehicle must be a plane
 		 */
-		void SET_VEHICLE_USES_LARGE_REAR_RAMP(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_RUDDER_BROKEN(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_TAIL_BROKEN(Vehicle vehicle, BOOL toggle);
-		void SET_CONVERTIBLE_ROOF_LATCH_STATE(Vehicle vehicle, BOOL state);
+		void SET_VEHICLE_USES_LARGE_REAR_RAMP(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_RUDDER_BROKEN(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_TAIL_BROKEN(Vehicle vehicle, bool toggle);
+		void SET_CONVERTIBLE_ROOF_LATCH_STATE(Vehicle vehicle, bool state);
 		float GET_VEHICLE_ESTIMATED_MAX_SPEED(Vehicle vehicle);
 		float GET_VEHICLE_MAX_BRAKING(Vehicle vehicle);
 		float GET_VEHICLE_MAX_TRACTION(Vehicle vehicle);
@@ -19947,25 +19947,25 @@ namespace base::menu::natives {
 		float GET_VEHICLE_CLASS_MAX_AGILITY(int vehicleClass);
 		float GET_VEHICLE_CLASS_MAX_ACCELERATION(int vehicleClass);
 		float GET_VEHICLE_CLASS_MAX_BRAKING(int vehicleClass);
-		int ADD_ROAD_NODE_SPEED_ZONE(float x, float y, float z, float radius, float speed, BOOL p5);
-		BOOL REMOVE_ROAD_NODE_SPEED_ZONE(int speedzone);
+		int ADD_ROAD_NODE_SPEED_ZONE(float x, float y, float z, float radius, float speed, bool p5);
+		bool REMOVE_ROAD_NODE_SPEED_ZONE(int speedzone);
 		void OPEN_BOMB_BAY_DOORS(Vehicle vehicle);
 		void CLOSE_BOMB_BAY_DOORS(Vehicle vehicle);
 		/**
 		 * Returns true when the bomb bay doors of this plane are open. False if they're closed.
 		 */
-		BOOL GET_ARE_BOMB_BAY_DOORS_OPEN(Vehicle aircraft);
+		bool GET_ARE_BOMB_BAY_DOORS_OPEN(Vehicle aircraft);
 		/**
 		 * Possibly: Returns whether the searchlight (found on police vehicles) is toggled on.
 		 * 
 		 * @Author Nac
 		 */
-		BOOL IS_VEHICLE_SEARCHLIGHT_ON(Vehicle vehicle);
+		bool IS_VEHICLE_SEARCHLIGHT_ON(Vehicle vehicle);
 		/**
 		 * Only works during nighttime.
 		 */
-		void SET_VEHICLE_SEARCHLIGHT(Vehicle heli, BOOL toggle, BOOL canBeUsedByAI);
-		BOOL DOES_VEHICLE_HAVE_SEARCHLIGHT(Vehicle vehicle);
+		void SET_VEHICLE_SEARCHLIGHT(Vehicle heli, bool toggle, bool canBeUsedByAI);
+		bool DOES_VEHICLE_HAVE_SEARCHLIGHT(Vehicle vehicle);
 		/**
 		 * Check if a vehicle seat is accessible. If you park your vehicle near a wall and the ped cannot enter/exit this side, the return value toggles from true (not blocked) to false (blocked).
 		 * 
@@ -19974,12 +19974,12 @@ namespace base::menu::natives {
 		 * side = only relevant for bikes/motorcycles to check if the left (false)/right (true) side is blocked.
 		 * onEnter = check if you can enter (true) or exit (false) a vehicle.
 		 */
-		BOOL IS_ENTRY_POINT_FOR_SEAT_CLEAR(Ped ped, Vehicle vehicle, int seatIndex, BOOL side, BOOL onEnter);
+		bool IS_ENTRY_POINT_FOR_SEAT_CLEAR(Ped ped, Vehicle vehicle, int seatIndex, bool side, bool onEnter);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
 		Vector3 GET_ENTRY_POINT_POSITION(Vehicle vehicle, int doorId);
-		BOOL CAN_SHUFFLE_SEAT(Vehicle vehicle, int seatIndex);
+		bool CAN_SHUFFLE_SEAT(Vehicle vehicle, int seatIndex);
 		int GET_NUM_MOD_KITS(Vehicle vehicle);
 		/**
 		 * Set modKit to 0 if you plan to call SET_VEHICLE_MOD. That's what the game does. Most body modifications through SET_VEHICLE_MOD will not take effect until this is set to 0.
@@ -20036,7 +20036,7 @@ namespace base::menu::natives {
 		 * 5: Chrome
 		 * 6: Chameleon
 		 */
-		int GET_NUM_MOD_COLORS(int paintType, BOOL p1);
+		int GET_NUM_MOD_COLORS(int paintType, bool p1);
 		/**
 		 * paintType:
 		 * 0: Normal
@@ -20077,16 +20077,16 @@ namespace base::menu::natives {
 		 * 
 		 * p1 is always 0
 		 */
-		const char* GET_VEHICLE_MOD_COLOR_1_NAME(Vehicle vehicle, BOOL p1);
+		const char* GET_VEHICLE_MOD_COLOR_1_NAME(Vehicle vehicle, bool p1);
 		/**
 		 * Returns a string which is the codename of the vehicle's currently selected secondary color
 		 */
 		const char* GET_VEHICLE_MOD_COLOR_2_NAME(Vehicle vehicle);
-		BOOL HAVE_VEHICLE_MODS_STREAMED_IN(Vehicle vehicle);
+		bool HAVE_VEHICLE_MODS_STREAMED_IN(Vehicle vehicle);
 		/**
 		 * Returns true for any mod part listed in GEN9_EXCLUSIVE_ASSETS_VEHICLES_FILE.
 		 */
-		BOOL IS_VEHICLE_MOD_GEN9_EXCLUSIVE(Vehicle vehicle, int modType, int modIndex);
+		bool IS_VEHICLE_MOD_GEN9_EXCLUSIVE(Vehicle vehicle, int modType, int modIndex);
 		/**
 		 * In b944, there are 50 (0 - 49) mod types.
 		 * 
@@ -20127,7 +20127,7 @@ namespace base::menu::natives {
 		 * 
 		 * ENUMS: https://pastebin.com/QzEAn02v
 		 */
-		void SET_VEHICLE_MOD(Vehicle vehicle, int modType, int modIndex, BOOL customTires);
+		void SET_VEHICLE_MOD(Vehicle vehicle, int modType, int modIndex, bool customTires);
 		/**
 		 * In b944, there are 50 (0 - 49) mod types. See SET_VEHICLE_MOD for the list.
 		 * 
@@ -20152,8 +20152,8 @@ namespace base::menu::natives {
 		 * UNK21 - 21
 		 * Xenon Headlights - 22
 		 */
-		void TOGGLE_VEHICLE_MOD(Vehicle vehicle, int modType, BOOL toggle);
-		BOOL IS_TOGGLE_MOD_ON(Vehicle vehicle, int modType);
+		void TOGGLE_VEHICLE_MOD(Vehicle vehicle, int modType, bool toggle);
+		bool IS_TOGGLE_MOD_ON(Vehicle vehicle, int modType);
 		/**
 		 * Returns the text label of a mod type for a given vehicle
 		 * 
@@ -20198,7 +20198,7 @@ namespace base::menu::natives {
 		 */
 		Hash GET_VEHICLE_MOD_IDENTIFIER_HASH(Vehicle vehicle, int modType, int modIndex);
 		void PRELOAD_VEHICLE_MOD(Vehicle vehicle, int modType, int modIndex);
-		BOOL HAS_PRELOAD_MODS_FINISHED(Vehicle vehicle);
+		bool HAS_PRELOAD_MODS_FINISHED(Vehicle vehicle);
 		void RELEASE_PRELOAD_MODS(Vehicle vehicle);
 		/**
 		 * Sets the tire smoke's color of this vehicle.
@@ -20249,20 +20249,20 @@ namespace base::menu::natives {
 		 * Used for helis.
 		 */
 		void OVERRIDE_PLANE_DAMAGE_THREHSOLD(Vehicle vehicle, float health);
-		void _SET_TRANSMISSION_REDUCED_GEAR_RATIO(Vehicle vehicle, BOOL toggle);
+		void _SET_TRANSMISSION_REDUCED_GEAR_RATIO(Vehicle vehicle, bool toggle);
 		int _GET_VEHICLE_DESIRED_DRIVE_GEAR(Vehicle vehicle);
 		/**
 		 * From the driver's perspective, is the left headlight broken.
 		 */
-		BOOL GET_IS_LEFT_VEHICLE_HEADLIGHT_DAMAGED(Vehicle vehicle);
+		bool GET_IS_LEFT_VEHICLE_HEADLIGHT_DAMAGED(Vehicle vehicle);
 		/**
 		 * From the driver's perspective, is the right headlight broken.
 		 */
-		BOOL GET_IS_RIGHT_VEHICLE_HEADLIGHT_DAMAGED(Vehicle vehicle);
+		bool GET_IS_RIGHT_VEHICLE_HEADLIGHT_DAMAGED(Vehicle vehicle);
 		/**
 		 * Returns true when both headlights are broken. This does not include extralights.
 		 */
-		BOOL GET_BOTH_VEHICLE_HEADLIGHTS_DAMAGED(Vehicle vehicle);
+		bool GET_BOTH_VEHICLE_HEADLIGHTS_DAMAGED(Vehicle vehicle);
 		void MODIFY_VEHICLE_TOP_SPEED(Vehicle vehicle, float value);
 		/**
 		 * To reset the max speed, set the `speed` value to `0.0` or lower.
@@ -20272,15 +20272,15 @@ namespace base::menu::natives {
 		 * Has something to do with trains. Always precedes SET_MISSION_TRAIN_AS_NO_LONGER_NEEDED.
 		 * May be true that it can be used with trains not sure, but not specifically for trains. Go find Xbox360 decompiled scripts and search for 'func_1333' in freemode.c it isn't used just for trains. Thanks for the info tho.
 		 */
-		void SET_VEHICLE_STAYS_FROZEN_WHEN_CLEANED_UP(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_ACT_AS_IF_HIGH_SPEED_FOR_FRAG_SMASHING(Vehicle vehicle, BOOL p1);
+		void SET_VEHICLE_STAYS_FROZEN_WHEN_CLEANED_UP(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_ACT_AS_IF_HIGH_SPEED_FOR_FRAG_SMASHING(Vehicle vehicle, bool p1);
 		/**
 		 * Sets some bit and float of vehicle. float is >= 0
 		 */
-		void SET_PEDS_CAN_FALL_OFF_THIS_VEHICLE_FROM_LARGE_FALL_DAMAGE(Vehicle vehicle, BOOL toggle, float p2);
+		void SET_PEDS_CAN_FALL_OFF_THIS_VEHICLE_FROM_LARGE_FALL_DAMAGE(Vehicle vehicle, bool toggle, float p2);
 		int ADD_VEHICLE_COMBAT_ANGLED_AVOIDANCE_AREA(float p0, float p1, float p2, float p3, float p4, float p5, float p6);
 		void REMOVE_VEHICLE_COMBAT_AVOIDANCE_AREA(int p0);
-		BOOL IS_ANY_PED_RAPPELLING_FROM_HELI(Vehicle vehicle);
+		bool IS_ANY_PED_RAPPELLING_FROM_HELI(Vehicle vehicle);
 		/**
 		 * <1.0 - Decreased torque
 		 * =1.0 - Default torque
@@ -20293,11 +20293,11 @@ namespace base::menu::natives {
 		 * This needs to be called every frame to take effect.
 		 */
 		void SET_VEHICLE_CHEAT_POWER_INCREASE(Vehicle vehicle, float value);
-		void SET_VEHICLE_INFLUENCES_WANTED_LEVEL(Any p0, BOOL p1);
+		void SET_VEHICLE_INFLUENCES_WANTED_LEVEL(Any p0, bool p1);
 		/**
 		 * Sets the wanted state of this vehicle.
 		 */
-		void SET_VEHICLE_IS_WANTED(Vehicle vehicle, BOOL state);
+		void SET_VEHICLE_IS_WANTED(Vehicle vehicle, bool state);
 		/**
 		 * Sets the boat boom position for the `TR3` trailer.
 		 * Ratio value is between `0.0` and `1.0`, where `0.0` is 90 degrees to the left of the boat, and `1.0` is just slightly to the right/back of the boat.
@@ -20307,15 +20307,15 @@ namespace base::menu::natives {
 		/**
 		 * Same call as ALLOW_BOAT_BOOM_TO_ANIMATE
 		 */
-		void SWING_BOAT_BOOM_FREELY(Vehicle vehicle, BOOL toggle);
-		void ALLOW_BOAT_BOOM_TO_ANIMATE(Vehicle vehicle, BOOL toggle);
+		void SWING_BOAT_BOOM_FREELY(Vehicle vehicle, bool toggle);
+		void ALLOW_BOAT_BOOM_TO_ANIMATE(Vehicle vehicle, bool toggle);
 		float GET_BOAT_BOOM_POSITION_RATIO(Vehicle vehicle);
-		void DISABLE_PLANE_AILERON(Vehicle vehicle, BOOL p1, BOOL p2);
+		void DISABLE_PLANE_AILERON(Vehicle vehicle, bool p1, bool p2);
 		/**
 		 * Returns true when in a vehicle, false whilst entering/exiting.
 		 */
-		BOOL GET_IS_VEHICLE_ENGINE_RUNNING(Vehicle vehicle);
-		void SET_VEHICLE_USE_ALTERNATE_HANDLING(Vehicle vehicle, BOOL toggle);
+		bool GET_IS_VEHICLE_ENGINE_RUNNING(Vehicle vehicle);
+		void SET_VEHICLE_USE_ALTERNATE_HANDLING(Vehicle vehicle, bool toggle);
 		/**
 		 * Only works on bikes, both X and Y work in the -1 - 1 range.
 		 * 
@@ -20326,25 +20326,25 @@ namespace base::menu::natives {
 		 * http://i.imgur.com/TgIuAPJ.jpg
 		 */
 		void SET_BIKE_ON_STAND(Vehicle vehicle, float x, float y);
-		void SET_VEHICLE_NOT_STEALABLE_AMBIENTLY(Vehicle vehicle, BOOL p1);
+		void SET_VEHICLE_NOT_STEALABLE_AMBIENTLY(Vehicle vehicle, bool p1);
 		void LOCK_DOORS_WHEN_NO_LONGER_NEEDED(Vehicle vehicle);
 		void SET_LAST_DRIVEN_VEHICLE(Vehicle vehicle);
 		Vehicle GET_LAST_DRIVEN_VEHICLE();
 		void CLEAR_LAST_DRIVEN_VEHICLE();
-		void SET_VEHICLE_HAS_BEEN_DRIVEN_FLAG(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_HAS_BEEN_DRIVEN_FLAG(Vehicle vehicle, bool toggle);
 		void SET_TASK_VEHICLE_GOTO_PLANE_MIN_HEIGHT_ABOVE_TERRAIN(Vehicle plane, int height);
 		void SET_VEHICLE_LOD_MULTIPLIER(Vehicle vehicle, float multiplier);
-		void SET_VEHICLE_CAN_SAVE_IN_GARAGE(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_CAN_SAVE_IN_GARAGE(Vehicle vehicle, bool toggle);
 		/**
 		 * Also includes some "turnOffBones" when vehicle mods are installed.
 		 */
 		int GET_VEHICLE_NUM_OF_BROKEN_OFF_PARTS(Vehicle vehicle);
 		int GET_VEHICLE_NUM_OF_BROKEN_LOOSEN_PARTS(Vehicle vehicle);
-		void SET_FORCE_VEHICLE_ENGINE_DAMAGE_BY_BULLET(Any p0, BOOL p1);
+		void SET_FORCE_VEHICLE_ENGINE_DAMAGE_BY_BULLET(Any p0, bool p1);
 		/**
 		 * Allows creation of CEventShockingPlaneFlyby, CEventShockingHelicopterOverhead, and other(?) Shocking events
 		 */
-		void SET_VEHICLE_GENERATES_ENGINE_SHOCKING_EVENTS(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_GENERATES_ENGINE_SHOCKING_EVENTS(Vehicle vehicle, bool toggle);
 		/**
 		 * Copies sourceVehicle's damage (broken bumpers, broken lights, etc.) to targetVehicle.
 		 */
@@ -20357,8 +20357,8 @@ namespace base::menu::natives {
 		 * WEAPON::SET_CURRENT_PED_VEHICLE_WEAPON(pilot,MISC::GET_HASH_KEY("VEHICLE_WEAPON_PLANE_ROCKET"));                        VEHICLE::SET_VEHICLE_SHOOT_AT_TARGET(pilot, target, targPos.x, targPos.y, targPos.z);
 		 */
 		void SET_VEHICLE_SHOOT_AT_TARGET(Ped driver, Entity entity, float xTarget, float yTarget, float zTarget);
-		BOOL GET_VEHICLE_LOCK_ON_TARGET(Vehicle vehicle, Entity* entity);
-		void SET_FORCE_HD_VEHICLE(Vehicle vehicle, BOOL toggle);
+		bool GET_VEHICLE_LOCK_ON_TARGET(Vehicle vehicle, Entity* entity);
+		void SET_FORCE_HD_VEHICLE(Vehicle vehicle, bool toggle);
 		void SET_VEHICLE_CUSTOM_PATH_NODE_STREAMING_RADIUS(Vehicle vehicle, float p1);
 		int GET_VEHICLE_PLATE_TYPE(Vehicle vehicle);
 		/**
@@ -20373,13 +20373,13 @@ namespace base::menu::natives {
 		 * 
 		 * it's not instant so probabilly must pass an 'update' to see correct result.
 		 */
-		BOOL IS_VEHICLE_VISIBLE(Vehicle vehicle);
-		void SET_VEHICLE_GRAVITY(Vehicle vehicle, BOOL toggle);
+		bool IS_VEHICLE_VISIBLE(Vehicle vehicle);
+		void SET_VEHICLE_GRAVITY(Vehicle vehicle, bool toggle);
 		/**
 		 * Enable/Disables global slipstream physics
 		 */
-		void SET_ENABLE_VEHICLE_SLIPSTREAMING(BOOL toggle);
-		void SET_VEHICLE_SLIPSTREAMING_SHOULD_TIME_OUT(BOOL toggle);
+		void SET_ENABLE_VEHICLE_SLIPSTREAMING(bool toggle);
+		void SET_VEHICLE_SLIPSTREAMING_SHOULD_TIME_OUT(bool toggle);
 		/**
 		 * Returns a float value between 0.0 and 3.0 related to its slipstream draft (boost/speedup).
 		 */
@@ -20387,14 +20387,14 @@ namespace base::menu::natives {
 		/**
 		 * Returns true if the vehicle is being slipstreamed by another vehicle
 		 */
-		BOOL IS_VEHICLE_PRODUCING_SLIP_STREAM(Vehicle vehicle);
-		void SET_VEHICLE_INACTIVE_DURING_PLAYBACK(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_ACTIVE_DURING_PLAYBACK(Vehicle vehicle, BOOL toggle);
+		bool IS_VEHICLE_PRODUCING_SLIP_STREAM(Vehicle vehicle);
+		void SET_VEHICLE_INACTIVE_DURING_PLAYBACK(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_ACTIVE_DURING_PLAYBACK(Vehicle vehicle, bool toggle);
 		/**
 		 * Returns false if the vehicle has the FLAG_NO_RESPRAY flag set.
 		 */
-		BOOL IS_VEHICLE_SPRAYABLE(Vehicle vehicle);
-		void SET_VEHICLE_ENGINE_CAN_DEGRADE(Vehicle vehicle, BOOL toggle);
+		bool IS_VEHICLE_SPRAYABLE(Vehicle vehicle);
+		void SET_VEHICLE_ENGINE_CAN_DEGRADE(Vehicle vehicle, bool toggle);
 		/**
 		 * Adds some kind of shadow to the vehicle.
 		 * 
@@ -20405,15 +20405,15 @@ namespace base::menu::natives {
 		 * Remove the weird shadow applied by DISABLE_VEHCILE_DYNAMIC_AMBIENT_SCALES.
 		 */
 		void ENABLE_VEHICLE_DYNAMIC_AMBIENT_SCALES(Vehicle vehicle);
-		BOOL IS_PLANE_LANDING_GEAR_INTACT(Vehicle plane);
-		BOOL ARE_PLANE_PROPELLERS_INTACT(Vehicle plane);
-		BOOL SET_PLANE_PROPELLER_HEALTH(Vehicle plane, float health);
-		void SET_VEHICLE_CAN_DEFORM_WHEELS(Vehicle vehicle, BOOL toggle);
+		bool IS_PLANE_LANDING_GEAR_INTACT(Vehicle plane);
+		bool ARE_PLANE_PROPELLERS_INTACT(Vehicle plane);
+		bool SET_PLANE_PROPELLER_HEALTH(Vehicle plane, float health);
+		void SET_VEHICLE_CAN_DEFORM_WHEELS(Vehicle vehicle, bool toggle);
 		/**
 		 * Only returns true if the vehicle was marked as stolen with SET_VEHICLE_IS_STOLEN.
 		 */
-		BOOL IS_VEHICLE_STOLEN(Vehicle vehicle);
-		void SET_VEHICLE_IS_STOLEN(Vehicle vehicle, BOOL isStolen);
+		bool IS_VEHICLE_STOLEN(Vehicle vehicle);
+		void SET_VEHICLE_IS_STOLEN(Vehicle vehicle, bool isStolen);
 		/**
 		 * This native sets the turbulence multiplier. It only works for planes.
 		 * 0.0 = no turbulence at all.
@@ -20421,7 +20421,7 @@ namespace base::menu::natives {
 		 * Works by just calling it once, does not need to be called every tick.
 		 */
 		void SET_PLANE_TURBULENCE_MULTIPLIER(Vehicle vehicle, float multiplier);
-		BOOL ARE_WINGS_OF_PLANE_INTACT(Vehicle plane);
+		bool ARE_WINGS_OF_PLANE_INTACT(Vehicle plane);
 		/**
 		 * This native doesn't seem to do anything, might be a debug-only native.
 		 * 
@@ -20429,9 +20429,9 @@ namespace base::menu::natives {
 		 */
 		void ALLOW_AMBIENT_VEHICLES_TO_AVOID_ADVERSE_CONDITIONS(Vehicle vehicle);
 		void DETACH_VEHICLE_FROM_CARGOBOB(Vehicle vehicle, Vehicle cargobob);
-		BOOL DETACH_VEHICLE_FROM_ANY_CARGOBOB(Vehicle vehicle);
-		BOOL DETACH_ENTITY_FROM_CARGOBOB(Vehicle cargobob, Entity entity);
-		BOOL IS_VEHICLE_ATTACHED_TO_CARGOBOB(Vehicle cargobob, Vehicle vehicleAttached);
+		bool DETACH_VEHICLE_FROM_ANY_CARGOBOB(Vehicle vehicle);
+		bool DETACH_ENTITY_FROM_CARGOBOB(Vehicle cargobob, Entity entity);
+		bool IS_VEHICLE_ATTACHED_TO_CARGOBOB(Vehicle cargobob, Vehicle vehicleAttached);
 		/**
 		 * Returns attached vehicle (Vehicle in parameter must be cargobob)
 		 */
@@ -20442,9 +20442,9 @@ namespace base::menu::natives {
 		/**
 		 * Stops cargobob from being able to detach the attached vehicle.
 		 */
-		void SET_CARGOBOB_FORCE_DONT_DETACH_VEHICLE(Vehicle cargobob, BOOL toggle);
+		void SET_CARGOBOB_FORCE_DONT_DETACH_VEHICLE(Vehicle cargobob, bool toggle);
 		void SET_CARGOBOB_EXCLUDE_FROM_PICKUP_ENTITY(Any p0, Any p1);
-		BOOL CAN_CARGOBOB_PICK_UP_ENTITY(Any p0, Any p1);
+		bool CAN_CARGOBOB_PICK_UP_ENTITY(Any p0, Any p1);
 		/**
 		 * Gets the position of the cargobob hook, in world coords.
 		 */
@@ -20452,7 +20452,7 @@ namespace base::menu::natives {
 		/**
 		 * Returns true only when the hook is active, will return false if the magnet is active
 		 */
-		BOOL DOES_CARGOBOB_HAVE_PICK_UP_ROPE(Vehicle cargobob);
+		bool DOES_CARGOBOB_HAVE_PICK_UP_ROPE(Vehicle cargobob);
 		/**
 		 * Drops the Hook/Magnet on a cargobob
 		 * 
@@ -20473,18 +20473,18 @@ namespace base::menu::natives {
 		/**
 		 * min: 1.9f, max: 100.0f
 		 */
-		void SET_PICKUP_ROPE_LENGTH_FOR_CARGOBOB(Vehicle cargobob, float length1, float length2, BOOL p3);
+		void SET_PICKUP_ROPE_LENGTH_FOR_CARGOBOB(Vehicle cargobob, float length1, float length2, bool p3);
 		void SET_PICKUP_ROPE_LENGTH_WITHOUT_CREATING_ROPE_FOR_CARGOBOB(Any p0, Any p1, Any p2);
 		void SET_CARGOBOB_PICKUP_ROPE_DAMPING_MULTIPLIER(Any p0, Any p1);
 		void SET_CARGOBOB_PICKUP_ROPE_TYPE(Any p0, Any p1);
 		/**
 		 * Returns true only when the magnet is active, will return false if the hook is active
 		 */
-		BOOL DOES_CARGOBOB_HAVE_PICKUP_MAGNET(Vehicle cargobob);
+		bool DOES_CARGOBOB_HAVE_PICKUP_MAGNET(Vehicle cargobob);
 		/**
 		 * Won't attract or magnetize to any helicopters or planes of course, but that's common sense.
 		 */
-		void SET_CARGOBOB_PICKUP_MAGNET_ACTIVE(Vehicle cargobob, BOOL isActive);
+		void SET_CARGOBOB_PICKUP_MAGNET_ACTIVE(Vehicle cargobob, bool isActive);
 		void SET_CARGOBOB_PICKUP_MAGNET_STRENGTH(Vehicle cargobob, float strength);
 		void SET_CARGOBOB_PICKUP_MAGNET_FALLOFF(Vehicle cargobob, float p1);
 		void SET_CARGOBOB_PICKUP_MAGNET_REDUCED_STRENGTH(Vehicle cargobob, float p1);
@@ -20492,20 +20492,20 @@ namespace base::menu::natives {
 		void SET_CARGOBOB_PICKUP_MAGNET_PULL_STRENGTH(Vehicle cargobob, float p1);
 		void SET_CARGOBOB_PICKUP_MAGNET_PULL_ROPE_LENGTH(Vehicle vehicle, float p1);
 		void SET_CARGOBOB_PICKUP_MAGNET_SET_TARGETED_MODE(Vehicle vehicle, Vehicle cargobob);
-		void SET_CARGOBOB_PICKUP_MAGNET_SET_AMBIENT_MODE(Vehicle vehicle, BOOL p1, BOOL p2);
-		void SET_CARGOBOB_PICKUP_MAGNET_ENSURE_PICKUP_ENTITY_UPRIGHT(Vehicle vehicle, BOOL p1);
-		BOOL DOES_VEHICLE_HAVE_WEAPONS(Vehicle vehicle);
-		void SET_VEHICLE_WILL_TELL_OTHERS_TO_HURRY(Vehicle vehicle, BOOL p1);
+		void SET_CARGOBOB_PICKUP_MAGNET_SET_AMBIENT_MODE(Vehicle vehicle, bool p1, bool p2);
+		void SET_CARGOBOB_PICKUP_MAGNET_ENSURE_PICKUP_ENTITY_UPRIGHT(Vehicle vehicle, bool p1);
+		bool DOES_VEHICLE_HAVE_WEAPONS(Vehicle vehicle);
+		void SET_VEHICLE_WILL_TELL_OTHERS_TO_HURRY(Vehicle vehicle, bool p1);
 		/**
 		 * Full list of weapons by DurtyFree (Search for VEHICLE_*): https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		void DISABLE_VEHICLE_WEAPON(BOOL disabled, Hash weaponHash, Vehicle vehicle, Ped owner);
+		void DISABLE_VEHICLE_WEAPON(bool disabled, Hash weaponHash, Vehicle vehicle, Ped owner);
 		/**
 		 * Full list of weapons by DurtyFree (Search for VEHICLE_*): https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL IS_VEHICLE_WEAPON_DISABLED(Hash weaponHash, Vehicle vehicle, Ped owner);
-		void SET_VEHICLE_USED_FOR_PILOT_SCHOOL(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_ACTIVE_FOR_PED_NAVIGATION(Vehicle vehicle, BOOL toggle);
+		bool IS_VEHICLE_WEAPON_DISABLED(Hash weaponHash, Vehicle vehicle, Ped owner);
+		void SET_VEHICLE_USED_FOR_PILOT_SCHOOL(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_ACTIVE_FOR_PED_NAVIGATION(Vehicle vehicle, bool toggle);
 		/**
 		 * Returns an int
 		 * 
@@ -20549,7 +20549,7 @@ namespace base::menu::natives {
 		 */
 		int GET_VEHICLE_CLASS_FROM_NAME(Hash modelHash);
 		void SET_PLAYERS_LAST_VEHICLE(Vehicle vehicle);
-		void SET_VEHICLE_CAN_BE_USED_BY_FLEEING_PEDS(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_CAN_BE_USED_BY_FLEEING_PEDS(Vehicle vehicle, bool toggle);
 		void SET_AIRCRAFT_PILOT_SKILL_NOISE_SCALAR(Vehicle vehicle, float p1);
 		/**
 		 * Money pickups are created around cars when they explode. Only works when the vehicle model is a car. A single pickup is between 1 and 18 dollars in size. All car models seem to give the same amount of money.
@@ -20557,8 +20557,8 @@ namespace base::menu::natives {
 		 * youtu.be/3arlUxzHl5Y
 		 * i.imgur.com/WrNpYFs.jpg
 		 */
-		void SET_VEHICLE_DROPS_MONEY_WHEN_BLOWN_UP(Vehicle vehicle, BOOL toggle);
-		void SET_VEHICLE_KEEP_ENGINE_ON_WHEN_ABANDONED(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_DROPS_MONEY_WHEN_BLOWN_UP(Vehicle vehicle, bool toggle);
+		void SET_VEHICLE_KEEP_ENGINE_ON_WHEN_ABANDONED(Vehicle vehicle, bool toggle);
 		/**
 		 * Seems to copy some values in vehicle
 		 */
@@ -20580,39 +20580,39 @@ namespace base::menu::natives {
 		 * Seems to be related to the metal parts, not tyres (like i was expecting lol)
 		 */
 		void SET_VEHICLE_FRICTION_OVERRIDE(Vehicle vehicle, float friction);
-		void SET_VEHICLE_WHEELS_CAN_BREAK_OFF_WHEN_BLOW_UP(Vehicle vehicle, BOOL toggle);
-		BOOL ARE_PLANE_CONTROL_PANELS_INTACT(Vehicle vehicle, BOOL p1);
+		void SET_VEHICLE_WHEELS_CAN_BREAK_OFF_WHEN_BLOW_UP(Vehicle vehicle, bool toggle);
+		bool ARE_PLANE_CONTROL_PANELS_INTACT(Vehicle vehicle, bool p1);
 		void SET_VEHICLE_CEILING_HEIGHT(Vehicle vehicle, float height);
-		void SET_VEHICLE_NO_EXPLOSION_DAMAGE_FROM_DRIVER(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_NO_EXPLOSION_DAMAGE_FROM_DRIVER(Vehicle vehicle, bool toggle);
 		void CLEAR_VEHICLE_ROUTE_HISTORY(Vehicle vehicle);
 		Vehicle DOES_VEHICLE_EXIST_WITH_DECORATOR(const char* decorator);
 		/**
 		 * Used to be incorrectly named SET_VEHICLE_EXCLUSIVE_DRIVER
 		 * Toggles a flag related to SET_VEHICLE_EXCLUSIVE_DRIVER, however, doesn't enable that feature (or trigger script events related to it).
 		 */
-		void SET_VEHICLE_AI_CAN_USE_EXCLUSIVE_SEATS(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_AI_CAN_USE_EXCLUSIVE_SEATS(Vehicle vehicle, bool toggle);
 		/**
 		 * index: 0 - 1
 		 * 
 		 * Used to be incorrectly named _SET_VEHICLE_EXCLUSIVE_DRIVER_2
 		 */
 		void SET_VEHICLE_EXCLUSIVE_DRIVER(Vehicle vehicle, Ped ped, int index);
-		BOOL IS_PED_EXCLUSIVE_DRIVER_OF_VEHICLE(Ped ped, Vehicle vehicle, int* outIndex);
+		bool IS_PED_EXCLUSIVE_DRIVER_OF_VEHICLE(Ped ped, Vehicle vehicle, int* outIndex);
 		void DISABLE_INDIVIDUAL_PLANE_PROPELLER(Vehicle vehicle, int propeller);
 		void _ENABLE_INDIVIDUAL_PLANE_PROPELLER(Vehicle vehicle, int propeller);
-		void SET_VEHICLE_FORCE_AFTERBURNER(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_FORCE_AFTERBURNER(Vehicle vehicle, bool toggle);
 		/**
 		 * R* used it to "remove" vehicle windows when "nightshark" had some mod, which adding some kind of armored windows. When enabled, you can't break vehicles glass. All your bullets wiil shoot through glass. You also will not able to break the glass with any other way (hitting and etc)
 		 */
-		void SET_DONT_PROCESS_VEHICLE_GLASS(Vehicle vehicle, BOOL toggle);
-		void SET_DISABLE_WANTED_CONES_RESPONSE(Vehicle vehicle, BOOL toggle);
-		void SET_USE_DESIRED_Z_CRUISE_SPEED_FOR_LANDING(Vehicle vehicle, BOOL toggle);
+		void SET_DONT_PROCESS_VEHICLE_GLASS(Vehicle vehicle, bool toggle);
+		void SET_DISABLE_WANTED_CONES_RESPONSE(Vehicle vehicle, bool toggle);
+		void SET_USE_DESIRED_Z_CRUISE_SPEED_FOR_LANDING(Vehicle vehicle, bool toggle);
 		void SET_ARRIVE_DISTANCE_OVERRIDE_FOR_VEHICLE_PERSUIT_ATTACK(Vehicle vehicle, float p1);
 		void SET_VEHICLE_READY_FOR_CLEANUP(Any p0);
 		/**
 		 * Toggles to render distant vehicles. They may not be vehicles but images to look like vehicles.
 		 */
-		void SET_DISTANT_CARS_ENABLED(BOOL toggle);
+		void SET_DISTANT_CARS_ENABLED(bool toggle);
 		/**
 		 * Sets the color of the neon lights of the specified vehicle.
 		 */
@@ -20636,7 +20636,7 @@ namespace base::menu::natives {
 		 * 2 = Front
 		 * 3 = Back
 		 */
-		void SET_VEHICLE_NEON_ENABLED(Vehicle vehicle, int index, BOOL toggle);
+		void SET_VEHICLE_NEON_ENABLED(Vehicle vehicle, int index, bool toggle);
 		/**
 		 * indices:
 		 * 0 = Left
@@ -20644,10 +20644,10 @@ namespace base::menu::natives {
 		 * 2 = Front
 		 * 3 = Back
 		 */
-		BOOL GET_VEHICLE_NEON_ENABLED(Vehicle vehicle, int index);
-		void SET_AMBIENT_VEHICLE_NEON_ENABLED(BOOL p0);
-		void SUPPRESS_NEONS_ON_VEHICLE(Vehicle vehicle, BOOL toggle);
-		void SET_DISABLE_SUPERDUMMY(Vehicle vehicle, BOOL p1);
+		bool GET_VEHICLE_NEON_ENABLED(Vehicle vehicle, int index);
+		void SET_AMBIENT_VEHICLE_NEON_ENABLED(bool p0);
+		void SUPPRESS_NEONS_ON_VEHICLE(Vehicle vehicle, bool toggle);
+		void SET_DISABLE_SUPERDUMMY(Vehicle vehicle, bool p1);
 		void REQUEST_VEHICLE_DIAL(Vehicle vehicle);
 		/**
 		 * Seems related to vehicle health, like the one in IV.
@@ -20679,8 +20679,8 @@ namespace base::menu::natives {
 		 * 
 		 * Only used once in each carmod script, on a car that does not have hydraulics to begin with.
 		 */
-		void SET_HYDRAULICS_CONTROL(Vehicle vehicle, BOOL toggle);
-		void SET_CAN_ADJUST_GROUND_CLEARANCE(Vehicle vehicle, BOOL p1);
+		void SET_HYDRAULICS_CONTROL(Vehicle vehicle, bool toggle);
+		void SET_CAN_ADJUST_GROUND_CLEARANCE(Vehicle vehicle, bool p1);
 		/**
 		 * 0 min 100 max
 		 * starts at 100
@@ -20704,22 +20704,22 @@ namespace base::menu::natives {
 		 * }
 		 */
 		float GET_VEHICLE_HEALTH_PERCENTAGE(Vehicle vehicle, float maxEngineHealth, float maxPetrolTankHealth, float maxBodyHealth, float maxMainRotorHealth, float maxTailRotorHealth, float maxUnkHealth);
-		BOOL GET_VEHICLE_IS_MERCENARY(Vehicle vehicle);
-		void SET_VEHICLE_BROKEN_PARTS_DONT_AFFECT_AI_HANDLING(Vehicle vehicle, BOOL p1);
-		void SET_VEHICLE_KERS_ALLOWED(Vehicle vehicle, BOOL toggle);
+		bool GET_VEHICLE_IS_MERCENARY(Vehicle vehicle);
+		void SET_VEHICLE_BROKEN_PARTS_DONT_AFFECT_AI_HANDLING(Vehicle vehicle, bool p1);
+		void SET_VEHICLE_KERS_ALLOWED(Vehicle vehicle, bool toggle);
 		/**
 		 * Returns true if the vehicle has a HF_HAS_KERS (strHandlingFlags 0x4) handing flag set, for instance the lectro/vindicator bikes or the open wheelers.
 		 */
-		BOOL GET_VEHICLE_HAS_KERS(Vehicle vehicle);
-		void SET_PLANE_RESIST_TO_EXPLOSION(Vehicle vehicle, BOOL toggle);
-		void SET_HELI_RESIST_TO_EXPLOSION(Vehicle vehicle, BOOL toggle);
+		bool GET_VEHICLE_HAS_KERS(Vehicle vehicle);
+		void SET_PLANE_RESIST_TO_EXPLOSION(Vehicle vehicle, bool toggle);
+		void SET_HELI_RESIST_TO_EXPLOSION(Vehicle vehicle, bool toggle);
 		void SET_DISABLE_BMX_EXTRA_TRICK_FORCES(Any p0);
 		/**
 		 * Works only on vehicles that support hydraulics.
 		 */
 		void SET_HYDRAULIC_SUSPENSION_RAISE_FACTOR(Vehicle vehicle, int wheelId, float value);
 		float GET_HYDRAULIC_SUSPENSION_RAISE_FACTOR(Vehicle vehicle, int wheelId);
-		void SET_CAN_USE_HYDRAULICS(Vehicle vehicle, BOOL toggle);
+		void SET_CAN_USE_HYDRAULICS(Vehicle vehicle, bool toggle);
 		/**
 		 * States:
 		 * 4 = raise
@@ -20734,7 +20734,7 @@ namespace base::menu::natives {
 		 * 2 - jump using wheel
 		 */
 		void SET_HYDRAULIC_WHEEL_STATE(Vehicle vehicle, int wheelId, int state, float value, Any p4);
-		BOOL HAS_VEHICLE_PETROLTANK_SET_ON_FIRE_BY_ENTITY(Any p0, Any p1);
+		bool HAS_VEHICLE_PETROLTANK_SET_ON_FIRE_BY_ENTITY(Any p0, Any p1);
 		void CLEAR_VEHICLE_PETROLTANK_FIRE_CULPRIT(Vehicle vehicle);
 		/**
 		 * Controls how fast bobbleheads and tsurikawas move on each axis.
@@ -20742,61 +20742,61 @@ namespace base::menu::natives {
 		 * p2 is probably z, but changing that value didn't seem to have a noticeable effect.
 		 */
 		void SET_VEHICLE_BOBBLEHEAD_VELOCITY(float x, float y, float p2);
-		BOOL GET_VEHICLE_IS_DUMMY(Any p0);
-		BOOL SET_VEHICLE_DAMAGE_SCALE(Vehicle vehicle, float p1);
+		bool GET_VEHICLE_IS_DUMMY(Any p0);
+		bool SET_VEHICLE_DAMAGE_SCALE(Vehicle vehicle, float p1);
 		/**
 		 * Does not actually return anything.
 		 */
 		Any _SET_VEHICLE_EXPLOSIVE_DAMAGE_SCALE(Vehicle vehicle, float scale);
-		BOOL SET_VEHICLE_WEAPON_DAMAGE_SCALE(Vehicle vehicle, float multiplier);
-		BOOL SET_DISABLE_DAMAGE_WITH_PICKED_UP_ENTITY(Any p0, Any p1);
+		bool SET_VEHICLE_WEAPON_DAMAGE_SCALE(Vehicle vehicle, float multiplier);
+		bool SET_DISABLE_DAMAGE_WITH_PICKED_UP_ENTITY(Any p0, Any p1);
 		void SET_VEHICLE_USES_MP_PLAYER_DAMAGE_MULTIPLIER(Any p0, Any p1);
 		/**
 		 * When enabled, the player won't fall off the bike when landing from large heights.
 		 */
-		void SET_BIKE_EASY_TO_LAND(Vehicle vehicle, BOOL toggle);
+		void SET_BIKE_EASY_TO_LAND(Vehicle vehicle, bool toggle);
 		/**
 		 * Inverts vehicle's controls. So INPUT_VEH_ACCELERATE will be INPUT_VEH_BRAKE and vise versa (same for A/D controls)
 		 * Doesn't work for planes/helis.
 		 */
-		void SET_INVERT_VEHICLE_CONTROLS(Vehicle vehicle, BOOL state);
+		void SET_INVERT_VEHICLE_CONTROLS(Vehicle vehicle, bool state);
 		/**
 		 * Disables the screen effects and sound effects when driving over a speed boost pad.
 		 */
-		void SET_SPEED_BOOST_EFFECT_DISABLED(BOOL disabled);
+		void SET_SPEED_BOOST_EFFECT_DISABLED(bool disabled);
 		/**
 		 * Disables the screen effects and sound effects when driving over a slowdown pad.
 		 */
-		void SET_SLOW_DOWN_EFFECT_DISABLED(BOOL disabled);
+		void SET_SLOW_DOWN_EFFECT_DISABLED(bool disabled);
 		void SET_FORMATION_LEADER(Vehicle vehicle, float x, float y, float z, float p4);
 		/**
 		 * Resets the effect of SET_FORMATION_LEADER
 		 */
 		void RESET_FORMATION_LEADER();
-		BOOL GET_IS_BOAT_CAPSIZED(Vehicle vehicle);
+		bool GET_IS_BOAT_CAPSIZED(Vehicle vehicle);
 		void SET_ALLOW_RAMMING_SOOP_OR_RAMP(Any p0, Any p1);
 		void SET_SCRIPT_RAMP_IMPULSE_SCALE(Vehicle vehicle, float impulseScale);
 		/**
 		 * doorId: see SET_VEHICLE_DOOR_SHUT
 		 */
-		BOOL GET_IS_DOOR_VALID(Vehicle vehicle, int doorId);
+		bool GET_IS_DOOR_VALID(Vehicle vehicle, int doorId);
 		void SET_SCRIPT_ROCKET_BOOST_RECHARGE_TIME(Vehicle vehicle, float seconds);
-		BOOL GET_HAS_ROCKET_BOOST(Vehicle vehicle);
-		BOOL IS_ROCKET_BOOST_ACTIVE(Vehicle vehicle);
-		void SET_ROCKET_BOOST_ACTIVE(Vehicle vehicle, BOOL active);
-		BOOL GET_HAS_RETRACTABLE_WHEELS(Vehicle vehicle);
-		BOOL GET_IS_WHEELS_RETRACTED(Vehicle vehicle);
+		bool GET_HAS_ROCKET_BOOST(Vehicle vehicle);
+		bool IS_ROCKET_BOOST_ACTIVE(Vehicle vehicle);
+		void SET_ROCKET_BOOST_ACTIVE(Vehicle vehicle, bool active);
+		bool GET_HAS_RETRACTABLE_WHEELS(Vehicle vehicle);
+		bool GET_IS_WHEELS_RETRACTED(Vehicle vehicle);
 		void SET_WHEELS_EXTENDED_INSTANTLY(Vehicle vehicle);
 		void SET_WHEELS_RETRACTED_INSTANTLY(Vehicle vehicle);
 		/**
 		 * Returns true if the vehicle has the FLAG_JUMPING_CAR flag set.
 		 */
-		BOOL GET_CAR_HAS_JUMP(Vehicle vehicle);
+		bool GET_CAR_HAS_JUMP(Vehicle vehicle);
 		/**
 		 * Allows vehicles with the FLAG_JUMPING_CAR flag to jump higher (i.e. Ruiner 2000).
 		 */
-		void SET_USE_HIGHER_CAR_JUMP(Vehicle vehicle, BOOL toggle);
-		void SET_CLEAR_FREEZE_WAITING_ON_COLLISION_ONCE_PLAYER_ENTERS(Vehicle vehicle, BOOL toggle);
+		void SET_USE_HIGHER_CAR_JUMP(Vehicle vehicle, bool toggle);
+		void SET_CLEAR_FREEZE_WAITING_ON_COLLISION_ONCE_PLAYER_ENTERS(Vehicle vehicle, bool toggle);
 		/**
 		 * Set vehicle's primary mounted weapon 2 ammo. For example, use it on APC.
 		 * For example, you can "remove" any vehicle weapon from any vehicle.
@@ -20804,20 +20804,20 @@ namespace base::menu::natives {
 		 */
 		void SET_VEHICLE_WEAPON_RESTRICTED_AMMO(Vehicle vehicle, int weaponIndex, int capacity);
 		int GET_VEHICLE_WEAPON_RESTRICTED_AMMO(Vehicle vehicle, int weaponIndex);
-		BOOL GET_VEHICLE_HAS_PARACHUTE(Vehicle vehicle);
-		BOOL GET_VEHICLE_CAN_DEPLOY_PARACHUTE(Vehicle vehicle);
-		void VEHICLE_START_PARACHUTING(Vehicle vehicle, BOOL active);
-		BOOL IS_VEHICLE_PARACHUTE_DEPLOYED(Vehicle vehicle);
-		void VEHICLE_SET_RAMP_AND_RAMMING_CARS_TAKE_DAMAGE(Vehicle vehicle, BOOL toggle);
+		bool GET_VEHICLE_HAS_PARACHUTE(Vehicle vehicle);
+		bool GET_VEHICLE_CAN_DEPLOY_PARACHUTE(Vehicle vehicle);
+		void VEHICLE_START_PARACHUTING(Vehicle vehicle, bool active);
+		bool IS_VEHICLE_PARACHUTE_DEPLOYED(Vehicle vehicle);
+		void VEHICLE_SET_RAMP_AND_RAMMING_CARS_TAKE_DAMAGE(Vehicle vehicle, bool toggle);
 		void VEHICLE_SET_ENABLE_RAMP_CAR_SIDE_IMPULSE(Any p0, Any p1);
 		void VEHICLE_SET_ENABLE_NORMALISE_RAMP_CAR_VERTICAL_VELOCTIY(Any p0, Any p1);
 		void VEHICLE_SET_JET_WASH_FORCE_ENABLED(Any p0);
-		void SET_VEHICLE_WEAPON_CAN_TARGET_OBJECTS(Vehicle vehicle, BOOL toggle);
+		void SET_VEHICLE_WEAPON_CAN_TARGET_OBJECTS(Vehicle vehicle, bool toggle);
 		/**
 		 * Used for blazer5. Changes the quadbike-jetski transformation input from raise/lower convertible roof (hold H by default) to horn (press E by default.)
 		 */
-		void SET_VEHICLE_USE_BOOST_BUTTON_FOR_WHEEL_RETRACT(BOOL toggle);
-		void _SET_VEHICLE_USE_HORN_BUTTON_FOR_NITROUS(BOOL toggle);
+		void SET_VEHICLE_USE_BOOST_BUTTON_FOR_WHEEL_RETRACT(bool toggle);
+		void _SET_VEHICLE_USE_HORN_BUTTON_FOR_NITROUS(bool toggle);
 		/**
 		 * Parachute models:
 		 * - sr_prop_specraces_para_s_01
@@ -20846,31 +20846,31 @@ namespace base::menu::natives {
 		/**
 		 * Enables/disables the ability to wheelie on motorcycles.
 		 */
-		void SET_WHEELIE_ENABLED(Vehicle vehicle, BOOL enabled);
+		void SET_WHEELIE_ENABLED(Vehicle vehicle, bool enabled);
 		/**
 		 * Prevents the vehicle from exploding when taking body damage. Only works for helis and planes.
 		 */
-		void SET_DISABLE_HELI_EXPLODE_FROM_BODY_DAMAGE(Vehicle vehicle, BOOL disable);
+		void SET_DISABLE_HELI_EXPLODE_FROM_BODY_DAMAGE(Vehicle vehicle, bool disable);
 		/**
 		 * Prevents the vehicle from exploding when taking body damage if it was caused by a collision. Only works for planes.
 		 */
-		void SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_ON_COLLISION(Vehicle vehicle, BOOL disable);
+		void SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_ON_COLLISION(Vehicle vehicle, bool disable);
 		/**
 		 * Prevents the vehicle from exploding when taking body damage if the inflictor is an AI-controlled vehicle. Only works for planes.
 		 */
-		void _SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_RECEIVED_BY_AI_VEHICLE(Vehicle vehicle, BOOL disable);
+		void _SET_DISABLE_EXPLODE_FROM_BODY_DAMAGE_RECEIVED_BY_AI_VEHICLE(Vehicle vehicle, bool disable);
 		void SET_TRAILER_ATTACHMENT_ENABLED(Any p0, Any p1);
 		void SET_ROCKET_BOOST_FILL(Vehicle vehicle, float percentage);
 		/**
 		 * Set state to true to extend the wings, false to retract them.
 		 */
-		void SET_GLIDER_ACTIVE(Vehicle vehicle, BOOL state);
+		void SET_GLIDER_ACTIVE(Vehicle vehicle, bool state);
 		/**
 		 * Resets the vehicle's turret to its default position in scripted cameras. Doesn't seem to affect turrets that are occupied by a ped.
 		 */
-		void SET_SHOULD_RESET_TURRET_IN_SCRIPTED_CAMERAS(Vehicle vehicle, BOOL shouldReset);
-		void SET_VEHICLE_DISABLE_COLLISION_UPON_CREATION(Vehicle vehicle, BOOL disable);
-		void SET_GROUND_EFFECT_REDUCES_DRAG(BOOL toggle);
+		void SET_SHOULD_RESET_TURRET_IN_SCRIPTED_CAMERAS(Vehicle vehicle, bool shouldReset);
+		void SET_VEHICLE_DISABLE_COLLISION_UPON_CREATION(Vehicle vehicle, bool disable);
+		void SET_GROUND_EFFECT_REDUCES_DRAG(bool toggle);
 		/**
 		 * Disables collision for this vehicle (maybe it also supports other entities, not sure).
 		 * Only world/building/fixed world objects will have their collisions disabled, props, peds, or any other entity still collides with the vehicle.
@@ -20878,14 +20878,14 @@ namespace base::menu::natives {
 		 * Not sure if there is a native (and if so, which one) that resets the collisions.
 		 */
 		void SET_DISABLE_MAP_COLLISION(Vehicle vehicle);
-		void SET_DISABLE_PED_STAND_ON_TOP(Vehicle vehicle, BOOL toggle);
+		void SET_DISABLE_PED_STAND_ON_TOP(Vehicle vehicle, bool toggle);
 		void SET_VEHICLE_DAMAGE_SCALES(Vehicle vehicle, Any p1, Any p2, Any p3, Any p4);
 		void SET_PLANE_SECTION_DAMAGE_SCALE(Vehicle vehicle, Any p1, Any p2);
-		void SET_PLANE_CONTROL_SECTIONS_SHOULD_BREAK_OFF_FROM_EXPLOSIONS(Vehicle vehicle, BOOL toggle);
+		void SET_PLANE_CONTROL_SECTIONS_SHOULD_BREAK_OFF_FROM_EXPLOSIONS(Vehicle vehicle, bool toggle);
 		/**
 		 * Stops the cargobob from being able to attach any vehicle
 		 */
-		void SET_HELI_CAN_PICKUP_ENTITY_THAT_HAS_PICK_UP_DISABLED(Vehicle vehicle, BOOL toggle);
+		void SET_HELI_CAN_PICKUP_ENTITY_THAT_HAS_PICK_UP_DISABLED(Vehicle vehicle, bool toggle);
 		/**
 		 * Sets the amount of bombs that this vehicle has. As far as I know, this does _not_ impact vehicle weapons or the ammo of those weapons in any way, it is just a way to keep track of the amount of bombs in a specific plane.
 		 */
@@ -20910,11 +20910,11 @@ namespace base::menu::natives {
 		 * p7 is usually 2
 		 * p8 is usually 1
 		 */
-		BOOL GET_CAN_VEHICLE_BE_PLACED_HERE(Vehicle vehicle, float x, float y, float z, float rotX, float rotY, float rotZ, int p7, Any p8);
+		bool GET_CAN_VEHICLE_BE_PLACED_HERE(Vehicle vehicle, float x, float y, float z, float rotX, float rotY, float rotZ, int p7, Any p8);
 		/**
 		 * Sets a flag on heli and another vehicle type.
 		 */
-		void SET_DISABLE_AUTOMATIC_CRASH_TASK(Vehicle vehicle, BOOL toggle);
+		void SET_DISABLE_AUTOMATIC_CRASH_TASK(Vehicle vehicle, bool toggle);
 		/**
 		 * Used in conjunction with SET_SPECIAL_FLIGHT_MODE_TARGET_RATIO, in Rockstar's scripts. Using this will instantly transform the vehicle into hover mode starting from the given ratio (ranging from 0.0 to 1.0, values greater than 1.0 will put the vehicle into a glitched state.) If this is not used alongside SET_SPECIAL_FLIGHT_MODE_TARGET_RATIO, the vehicle will automatically transform back into car mode.
 		 * 
@@ -20944,20 +20944,20 @@ namespace base::menu::natives {
 		/**
 		 * It will override the ability to transform deluxo. For oppressor it will work just like SET_DISABLE_HOVER_MODE_FLIGHT
 		 */
-		void SET_SPECIAL_FLIGHT_MODE_ALLOWED(Vehicle vehicle, BOOL toggle);
+		void SET_SPECIAL_FLIGHT_MODE_ALLOWED(Vehicle vehicle, bool toggle);
 		/**
 		 * Disables "wings" for some flying vehicles. Works only for oppressor _2_ and deluxo.
 		 * For deluxo it just immediately removes vehicle's "wings" and you will be not able to fly up.
 		 * For oppressor 2 it will remove wings right after you land. And you will not able to fly up anymore too.
 		 * But for opressor 2 you still can fly if you somehow get back in the air.
 		 */
-		void SET_DISABLE_HOVER_MODE_FLIGHT(Vehicle vehicle, BOOL toggle);
+		void SET_DISABLE_HOVER_MODE_FLIGHT(Vehicle vehicle, bool toggle);
 		/**
 		 * Checks if Chernobog's stabilizers are deployed or not.
 		 * These are the metal supports that allow it to fire.
 		 * This native only applies to the Chernobog.
 		 */
-		BOOL GET_OUTRIGGERS_DEPLOYED(Vehicle vehicle);
+		bool GET_OUTRIGGERS_DEPLOYED(Vehicle vehicle);
 		/**
 		 * Native is significantly more complicated than simply generating a random vector & length.
 		 * The 'point' is either 400.0 or 250.0 units away from the Ped's current coordinates; and paths into functions like rage::grcViewport___IsSphereVisible
@@ -20966,18 +20966,18 @@ namespace base::menu::natives {
 		/**
 		 * Only used with the "akula" and "annihilator2" in the decompiled native scripts.
 		 */
-		void SET_DEPLOY_FOLDING_WINGS(Vehicle vehicle, BOOL deploy, BOOL p2);
+		void SET_DEPLOY_FOLDING_WINGS(Vehicle vehicle, bool deploy, bool p2);
 		/**
 		 * Only used with the "akula" and "annihilator2" in the decompiled native scripts.
 		 */
-		BOOL ARE_FOLDING_WINGS_DEPLOYED(Vehicle vehicle);
-		void _SET_DEPLOY_MISSILE_BAYS(Vehicle vehicle, BOOL deploy);
-		BOOL _ARE_MISSILE_BAYS_DEPLOYED(Vehicle vehicle);
-		void SET_DIP_STRAIGHT_DOWN_WHEN_CRASHING_PLANE(Vehicle vehicle, BOOL toggle);
+		bool ARE_FOLDING_WINGS_DEPLOYED(Vehicle vehicle);
+		void _SET_DEPLOY_MISSILE_BAYS(Vehicle vehicle, bool deploy);
+		bool _ARE_MISSILE_BAYS_DEPLOYED(Vehicle vehicle);
+		void SET_DIP_STRAIGHT_DOWN_WHEN_CRASHING_PLANE(Vehicle vehicle, bool toggle);
 		/**
 		 * Toggles specific flag on turret
 		 */
-		void SET_TURRET_HIDDEN(Vehicle vehicle, int index, BOOL toggle);
+		void SET_TURRET_HIDDEN(Vehicle vehicle, int index, bool toggle);
 		void SET_HOVER_MODE_WING_RATIO(Vehicle vehicle, float ratio);
 		/**
 		 * Disables turret movement when called in a loop. You can still fire and aim. You cannot shoot backwards though.
@@ -20991,29 +20991,29 @@ namespace base::menu::natives {
 		/**
 		 * When set to true, the key to transform a car to submarine mode changes from raise/lower convertible roof (hold H by default) to special vehicle transform (press X by default.)
 		 */
-		void SET_TRANSFORM_TO_SUBMARINE_USES_ALTERNATE_INPUT(Vehicle vehicle, BOOL toggle);
+		void SET_TRANSFORM_TO_SUBMARINE_USES_ALTERNATE_INPUT(Vehicle vehicle, bool toggle);
 		/**
 		 * Does nothing. It's a nullsub.
 		 */
-		void SET_VEHICLE_COMBAT_MODE(BOOL toggle);
+		void SET_VEHICLE_COMBAT_MODE(bool toggle);
 		/**
 		 * Does nothing. It's a nullsub.
 		 */
-		void SET_VEHICLE_DETONATION_MODE(BOOL toggle);
+		void SET_VEHICLE_DETONATION_MODE(bool toggle);
 		/**
 		 * Does nothing. It's a nullsub.
 		 */
-		void SET_VEHICLE_SHUNT_ON_STICK(BOOL toggle);
-		BOOL _IS_VEHICLE_ON_BOOST_PAD(Vehicle vehicle);
-		BOOL GET_IS_VEHICLE_SHUNTING(Vehicle vehicle);
-		BOOL GET_HAS_VEHICLE_BEEN_HIT_BY_SHUNT(Vehicle vehicle);
+		void SET_VEHICLE_SHUNT_ON_STICK(bool toggle);
+		bool _IS_VEHICLE_ON_BOOST_PAD(Vehicle vehicle);
+		bool GET_IS_VEHICLE_SHUNTING(Vehicle vehicle);
+		bool GET_HAS_VEHICLE_BEEN_HIT_BY_SHUNT(Vehicle vehicle);
 		/**
 		 * Returns last vehicle that was rammed by the given vehicle using the shunt boost.
 		 */
 		Vehicle GET_LAST_SHUNT_VEHICLE(Vehicle vehicle);
-		void SET_DISABLE_VEHICLE_EXPLOSIONS_DAMAGE(BOOL toggle);
-		void SET_OVERRIDE_NITROUS_LEVEL(Vehicle vehicle, BOOL toggle, float level, float power, float rechargeTime, BOOL disableSound);
-		void _SET_NITROUS_IS_VISIBLE(Vehicle vehicle, BOOL enabled);
+		void SET_DISABLE_VEHICLE_EXPLOSIONS_DAMAGE(bool toggle);
+		void SET_OVERRIDE_NITROUS_LEVEL(Vehicle vehicle, bool toggle, float level, float power, float rechargeTime, bool disableSound);
+		void _SET_NITROUS_IS_VISIBLE(Vehicle vehicle, bool enabled);
 		void _SET_OVERRIDE_TRACTION_LOSS_MULTIPLIER(Vehicle vehicle, float modifier);
 		/**
 		 * First two floats relate to rumble, the last is a threshold
@@ -21023,32 +21023,32 @@ namespace base::menu::natives {
 		void FULLY_CHARGE_NITROUS(Vehicle vehicle);
 		void _SET_REMAINING_NITROUS_DURATION(Vehicle vehicle, float duration);
 		float _GET_REMAINING_NITROUS_DURATION(Vehicle vehicle);
-		BOOL IS_NITROUS_ACTIVE(Vehicle vehicle);
+		bool IS_NITROUS_ACTIVE(Vehicle vehicle);
 		void CLEAR_NITROUS(Vehicle vehicle);
-		void SET_NITROUS_IS_ACTIVE(Vehicle vehicle, BOOL toggle);
-		void SET_INCREASE_WHEEL_CRUSH_DAMAGE(Vehicle vehicle, BOOL toggle);
+		void SET_NITROUS_IS_ACTIVE(Vehicle vehicle, bool toggle);
+		void SET_INCREASE_WHEEL_CRUSH_DAMAGE(Vehicle vehicle, bool toggle);
 		/**
 		 * Sets some global vehicle related bool
 		 */
-		void SET_DISABLE_WEAPON_BLADE_FORCES(BOOL toggle);
+		void SET_DISABLE_WEAPON_BLADE_FORCES(bool toggle);
 		/**
 		 * Changes the car jump control to require a double-tap to activate.
 		 */
-		void SET_USE_DOUBLE_CLICK_FOR_CAR_JUMP(BOOL toggle);
+		void SET_USE_DOUBLE_CLICK_FOR_CAR_JUMP(bool toggle);
 		/**
 		 * Returns true only if the "tombstone" bone is attached to the vehicle, irrespective of "FLAG_HAS_TOMBSTONE" being present or not. Detaching the tombstone will return false.
 		 */
-		BOOL GET_DOES_VEHICLE_HAVE_TOMBSTONE(Vehicle vehicle);
+		bool GET_DOES_VEHICLE_HAVE_TOMBSTONE(Vehicle vehicle);
 		/**
 		 * Disables detachable bumber from domnator4, dominator5, dominator6, see https://gfycat.com/SecondUnluckyGosling
 		 */
-		void HIDE_TOMBSTONE(Vehicle vehicle, BOOL toggle);
+		void HIDE_TOMBSTONE(Vehicle vehicle, bool toggle);
 		void APPLY_EMP_EFFECT(Vehicle vehicle);
 		/**
 		 * Returns whether this vehicle is currently disabled by an EMP mine.
 		 */
-		BOOL GET_IS_VEHICLE_DISABLED_BY_EMP(Vehicle vehicle);
-		void SET_DISABLE_RETRACTING_WEAPON_BLADES(BOOL toggle);
+		bool GET_IS_VEHICLE_DISABLED_BY_EMP(Vehicle vehicle);
+		void SET_DISABLE_RETRACTING_WEAPON_BLADES(bool toggle);
 		/**
 		 * Usable wheels:
 		 * 0: wheel_lf
@@ -21134,23 +21134,23 @@ namespace base::menu::natives {
 		/**
 		 * Lowers the vehicle's stance. Only works for vehicles that have strAdvancedFlags 0x8000 and 0x4000000 set.
 		 */
-		void SET_REDUCED_SUSPENSION_FORCE(Vehicle vehicle, BOOL enable);
-		void SET_DRIFT_TYRES(Vehicle vehicle, BOOL toggle);
-		BOOL GET_DRIFT_TYRES_SET(Vehicle vehicle);
+		void SET_REDUCED_SUSPENSION_FORCE(Vehicle vehicle, bool enable);
+		void SET_DRIFT_TYRES(Vehicle vehicle, bool toggle);
+		bool GET_DRIFT_TYRES_SET(Vehicle vehicle);
 		/**
 		 * Implemented only for trains.
 		 */
-		void NETWORK_USE_HIGH_PRECISION_TRAIN_BLENDING(Vehicle vehicle, BOOL toggle);
+		void NETWORK_USE_HIGH_PRECISION_TRAIN_BLENDING(Vehicle vehicle, bool toggle);
 		/**
 		 * Only used in R* Script fm_content_cargo
 		 */
-		void SET_CHECK_FOR_ENOUGH_ROOM_FOR_PED(Vehicle vehicle, BOOL p1);
+		void SET_CHECK_FOR_ENOUGH_ROOM_FOR_PED(Vehicle vehicle, bool p1);
 		/**
 		 * _SET_ALLOW_R* - _SET_ALLOW_V*
 		 */
-		void _SET_ALLOW_COLLISION_WHEN_IN_VEHICLE(Vehicle vehicle, BOOL toggle);
+		void _SET_ALLOW_COLLISION_WHEN_IN_VEHICLE(Vehicle vehicle, bool toggle);
 		int _GET_VEHICLE_MAX_EXHAUST_BONE_COUNT();
-		BOOL _GET_VEHICLE_EXHAUST_BONE(Vehicle vehicle, int index, int* boneIndex, BOOL* axisX);
+		bool _GET_VEHICLE_EXHAUST_BONE(Vehicle vehicle, int index, int* boneIndex, bool* axisX);
 
 	} // namespace VEHICLE
 
@@ -21163,9 +21163,9 @@ namespace base::menu::natives {
 		 * 
 		 * note: seems to return true when you are in water
 		 */
-		BOOL GET_WATER_HEIGHT(float x, float y, float z, float* height);
-		BOOL GET_WATER_HEIGHT_NO_WAVES(float x, float y, float z, float* height);
-		BOOL TEST_PROBE_AGAINST_WATER(float x1, float y1, float z1, float x2, float y2, float z2, Vector3* result);
+		bool GET_WATER_HEIGHT(float x, float y, float z, float* height);
+		bool GET_WATER_HEIGHT_NO_WAVES(float x, float y, float z, float* height);
+		bool TEST_PROBE_AGAINST_WATER(float x1, float y1, float z1, float x2, float y2, float z2, Vector3* result);
 		/**
 		 * enum eScriptWaterTestResult
 		 * {
@@ -21214,7 +21214,7 @@ namespace base::menu::natives {
 		 * 
 		 * It doesn't work. Neither on tick nor OnKeyDown
 		 */
-		void ENABLE_LASER_SIGHT_RENDERING(BOOL toggle);
+		void ENABLE_LASER_SIGHT_RENDERING(bool toggle);
 		Hash GET_WEAPON_COMPONENT_TYPE_MODEL(Hash componentHash);
 		/**
 		 * Returns the model of any weapon.
@@ -21237,7 +21237,7 @@ namespace base::menu::natives {
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		void SET_CURRENT_PED_WEAPON(Ped ped, Hash weaponHash, BOOL bForceInHand);
+		void SET_CURRENT_PED_WEAPON(Ped ped, Hash weaponHash, bool bForceInHand);
 		/**
 		 * The return value seems to indicate returns true if the hash of the weapon object weapon equals the weapon hash.
 		 * p2 seems to be 1 most of the time.
@@ -21251,16 +21251,16 @@ namespace base::menu::natives {
 		 * disassembly said that?
 		 * 
 		 */
-		BOOL GET_CURRENT_PED_WEAPON(Ped ped, Hash* weaponHash, BOOL p2);
+		bool GET_CURRENT_PED_WEAPON(Ped ped, Hash* weaponHash, bool p2);
 		Entity GET_CURRENT_PED_WEAPON_ENTITY_INDEX(Ped ped, Any p1);
 		/**
 		 * p1 is always 0 in the scripts.
 		 */
-		Hash GET_BEST_PED_WEAPON(Ped ped, BOOL p1);
+		Hash GET_BEST_PED_WEAPON(Ped ped, bool p1);
 		/**
 		 * Full list of weapons by DurtyFree (Search for VEHICLE_*): https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL SET_CURRENT_PED_VEHICLE_WEAPON(Ped ped, Hash weaponHash);
+		bool SET_CURRENT_PED_VEHICLE_WEAPON(Ped ped, Hash weaponHash);
 		/**
 		 * Example in VB
 		 * 
@@ -21274,7 +21274,7 @@ namespace base::menu::natives {
 		 * If GetVehicleCurrentWeapon(Game.Player.Character) = -821520672 Then ...Do something
 		 * Note: -821520672 = VEHICLE_WEAPON_PLANE_ROCKET
 		 */
-		BOOL GET_CURRENT_PED_VEHICLE_WEAPON(Ped ped, Hash* weaponHash);
+		bool GET_CURRENT_PED_VEHICLE_WEAPON(Ped ped, Hash* weaponHash);
 		void SET_PED_CYCLE_VEHICLE_WEAPONS_ONLY(Ped ped);
 		/**
 		 * Checks if the ped is currently equipped with a weapon matching a bit specified using a bitwise-or in typeFlags.
@@ -21296,19 +21296,19 @@ namespace base::menu::natives {
 		 * 
 		 * Note: When I say "Explosives weapon group", it does not include the Jerry can and Fire Extinguisher.
 		 */
-		BOOL IS_PED_ARMED(Ped ped, int typeFlags);
+		bool IS_PED_ARMED(Ped ped, int typeFlags);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL IS_WEAPON_VALID(Hash weaponHash);
+		bool IS_WEAPON_VALID(Hash weaponHash);
 		/**
 		 * p2 should be FALSE, otherwise it seems to always return FALSE
 		 * 
 		 * Bool does not check if the weapon is current equipped, unfortunately.
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL HAS_PED_GOT_WEAPON(Ped ped, Hash weaponHash, BOOL p2);
-		BOOL IS_PED_WEAPON_READY_TO_SHOOT(Ped ped);
+		bool HAS_PED_GOT_WEAPON(Ped ped, Hash weaponHash, bool p2);
+		bool IS_PED_WEAPON_READY_TO_SHOOT(Ped ped);
 		Hash GET_PED_WEAPONTYPE_IN_SLOT(Ped ped, Hash weaponSlot);
 		/**
 		 * WEAPON::GET_AMMO_IN_PED_WEAPON(PLAYER::PLAYER_PED_ID(), a_0)
@@ -21328,28 +21328,28 @@ namespace base::menu::natives {
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		void SET_PED_AMMO(Ped ped, Hash weaponHash, int ammo, BOOL p3);
+		void SET_PED_AMMO(Ped ped, Hash weaponHash, int ammo, bool p3);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		void SET_PED_INFINITE_AMMO(Ped ped, BOOL toggle, Hash weaponHash);
-		void SET_PED_INFINITE_AMMO_CLIP(Ped ped, BOOL toggle);
+		void SET_PED_INFINITE_AMMO(Ped ped, bool toggle, Hash weaponHash);
+		void SET_PED_INFINITE_AMMO_CLIP(Ped ped, bool toggle);
 		void SET_PED_STUN_GUN_FINITE_AMMO(Any p0, Any p1);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		void GIVE_WEAPON_TO_PED(Ped ped, Hash weaponHash, int ammoCount, BOOL isHidden, BOOL bForceInHand);
+		void GIVE_WEAPON_TO_PED(Ped ped, Hash weaponHash, int ammoCount, bool isHidden, bool bForceInHand);
 		/**
 		 * Gives a weapon to PED with a delay, example:
 		 * 
 		 * WEAPON::GIVE_DELAYED_WEAPON_TO_PED(PED::PLAYER_PED_ID(), MISC::GET_HASH_KEY("WEAPON_PISTOL"), 1000, false)
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		void GIVE_DELAYED_WEAPON_TO_PED(Ped ped, Hash weaponHash, int ammoCount, BOOL bForceInHand);
+		void GIVE_DELAYED_WEAPON_TO_PED(Ped ped, Hash weaponHash, int ammoCount, bool bForceInHand);
 		/**
 		 * setting the last params to false it does that same so I would suggest its not a toggle
 		 */
-		void REMOVE_ALL_PED_WEAPONS(Ped ped, BOOL p1);
+		void REMOVE_ALL_PED_WEAPONS(Ped ped, bool p1);
 		/**
 		 * This native removes a specified weapon from your selected ped.
 		 * 
@@ -21367,12 +21367,12 @@ namespace base::menu::natives {
 		/**
 		 * Hides the players weapon during a cutscene.
 		 */
-		void HIDE_PED_WEAPON_FOR_SCRIPTED_CUTSCENE(Ped ped, BOOL toggle);
+		void HIDE_PED_WEAPON_FOR_SCRIPTED_CUTSCENE(Ped ped, bool toggle);
 		/**
 		 * Has 5 parameters since latest patches.
 		 */
-		void SET_PED_CURRENT_WEAPON_VISIBLE(Ped ped, BOOL visible, BOOL deselectWeapon, BOOL p3, BOOL p4);
-		void SET_PED_DROPS_WEAPONS_WHEN_DEAD(Ped ped, BOOL toggle);
+		void SET_PED_CURRENT_WEAPON_VISIBLE(Ped ped, bool visible, bool deselectWeapon, bool p3, bool p4);
+		void SET_PED_DROPS_WEAPONS_WHEN_DEAD(Ped ped, bool toggle);
 		/**
 		 * It determines what weapons caused damage:
 		 * 
@@ -21381,7 +21381,7 @@ namespace base::menu::natives {
 		 * If you want to identify any weapon (firearms, melee, rockets, etc.), second parameter=0, third parameter=2.
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL HAS_PED_BEEN_DAMAGED_BY_WEAPON(Ped ped, Hash weaponHash, int weaponType);
+		bool HAS_PED_BEEN_DAMAGED_BY_WEAPON(Ped ped, Hash weaponHash, int weaponType);
 		/**
 		 * Does NOT seem to work with HAS_PED_BEEN_DAMAGED_BY_WEAPON. Use CLEAR_ENTITY_LAST_WEAPON_DAMAGE and HAS_ENTITY_BEEN_DAMAGED_BY_WEAPON instead.
 		 */
@@ -21394,7 +21394,7 @@ namespace base::menu::natives {
 		 * If you want to identify any weapon (firearms, melee, rockets, etc.), second parameter=0, third parameter=2.
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL HAS_ENTITY_BEEN_DAMAGED_BY_WEAPON(Entity entity, Hash weaponHash, int weaponType);
+		bool HAS_ENTITY_BEEN_DAMAGED_BY_WEAPON(Entity entity, Hash weaponHash, int weaponType);
 		void CLEAR_ENTITY_LAST_WEAPON_DAMAGE(Entity entity);
 		void SET_PED_DROPS_WEAPON(Ped ped);
 		/**
@@ -21405,28 +21405,28 @@ namespace base::menu::natives {
 		 * p2 is mostly 1 in the scripts.
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		int GET_MAX_AMMO_IN_CLIP(Ped ped, Hash weaponHash, BOOL p2);
+		int GET_MAX_AMMO_IN_CLIP(Ped ped, Hash weaponHash, bool p2);
 		int _GET_TIME_BEFORE_VEHICLE_WEAPON_RELOAD_FINISHES(Vehicle vehicle, int seat);
-		BOOL _HAS_WEAPON_RELOADING_IN_VEHICLE(Vehicle vehicle, int seat);
+		bool _HAS_WEAPON_RELOADING_IN_VEHICLE(Vehicle vehicle, int seat);
 		float _GET_VEHICLE_WEAPON_RELOAD_TIME(Vehicle vehicle, int seat);
-		BOOL _GET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int* ammo);
+		bool _GET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int* ammo);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL GET_AMMO_IN_CLIP(Ped ped, Hash weaponHash, int* ammo);
-		BOOL _SET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int ammo);
+		bool GET_AMMO_IN_CLIP(Ped ped, Hash weaponHash, int* ammo);
+		bool _SET_AMMO_IN_VEHICLE_WEAPON_CLIP(Vehicle vehicle, int seat, int ammo);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL SET_AMMO_IN_CLIP(Ped ped, Hash weaponHash, int ammo);
+		bool SET_AMMO_IN_CLIP(Ped ped, Hash weaponHash, int ammo);
 		/**
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL GET_MAX_AMMO(Ped ped, Hash weaponHash, int* ammo);
+		bool GET_MAX_AMMO(Ped ped, Hash weaponHash, int* ammo);
 		/**
 		 * Returns the max ammo for an ammo type. Ammo types: https://gist.github.com/root-cause/faf41f59f7a6d818b7db0b839bd147c1
 		 */
-		BOOL GET_MAX_AMMO_BY_TYPE(Ped ped, Hash ammoTypeHash, int* ammo);
+		bool GET_MAX_AMMO_BY_TYPE(Ped ped, Hash ammoTypeHash, int* ammo);
 		/**
 		 * Ammo types: https://gist.github.com/root-cause/faf41f59f7a6d818b7db0b839bd147c1
 		 */
@@ -21456,16 +21456,16 @@ namespace base::menu::natives {
 		 * The coord will be put into the Vector3.
 		 * The return will determine whether there was a coord found or not.
 		 */
-		BOOL GET_PED_LAST_WEAPON_IMPACT_COORD(Ped ped, Vector3* coords);
+		bool GET_PED_LAST_WEAPON_IMPACT_COORD(Ped ped, Vector3* coords);
 		/**
 		 * p1/gadgetHash was always 0xFBAB5776 ("GADGET_PARACHUTE").
 		 * p2 is always true.
 		 */
-		void SET_PED_GADGET(Ped ped, Hash gadgetHash, BOOL p2);
+		void SET_PED_GADGET(Ped ped, Hash gadgetHash, bool p2);
 		/**
 		 * gadgetHash - was always 0xFBAB5776 ("GADGET_PARACHUTE").
 		 */
-		BOOL GET_IS_PED_GADGET_EQUIPPED(Ped ped, Hash gadgetHash);
+		bool GET_IS_PED_GADGET_EQUIPPED(Ped ped, Hash gadgetHash);
 		/**
 		 * Returns the hash of the weapon.
 		 * 
@@ -21486,17 +21486,17 @@ namespace base::menu::natives {
 		/**
 		 * WEAPON::EXPLODE_PROJECTILES(PLAYER::PLAYER_PED_ID(), func_221(0x00000003), 0x00000001);
 		 */
-		void EXPLODE_PROJECTILES(Ped ped, Hash weaponHash, BOOL p2);
+		void EXPLODE_PROJECTILES(Ped ped, Hash weaponHash, bool p2);
 		/**
 		 * If `explode` true, then removal is done through exploding the projectile. Basically the same as EXPLODE_PROJECTILES but without defining the owner ped.
 		 */
-		void REMOVE_ALL_PROJECTILES_OF_TYPE(Hash weaponHash, BOOL explode);
+		void REMOVE_ALL_PROJECTILES_OF_TYPE(Hash weaponHash, bool explode);
 		float GET_LOCKON_DISTANCE_OF_CURRENT_PED_WEAPON(Ped ped);
 		float GET_MAX_RANGE_OF_CURRENT_PED_WEAPON(Ped ped);
 		/**
 		 * Fourth Parameter = unsure, almost always -1
 		 */
-		BOOL HAS_VEHICLE_GOT_PROJECTILE_ATTACHED(Ped driver, Vehicle vehicle, Hash weaponHash, Any p3);
+		bool HAS_VEHICLE_GOT_PROJECTILE_ATTACHED(Ped driver, Vehicle vehicle, Hash weaponHash, Any p3);
 		/**
 		 * Full list of weapons & components by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
@@ -21508,29 +21508,29 @@ namespace base::menu::natives {
 		/**
 		 * Full list of weapons & components by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL HAS_PED_GOT_WEAPON_COMPONENT(Ped ped, Hash weaponHash, Hash componentHash);
+		bool HAS_PED_GOT_WEAPON_COMPONENT(Ped ped, Hash weaponHash, Hash componentHash);
 		/**
 		 * Full list of weapons & components by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL IS_PED_WEAPON_COMPONENT_ACTIVE(Ped ped, Hash weaponHash, Hash componentHash);
-		BOOL REFILL_AMMO_INSTANTLY(Ped ped);
+		bool IS_PED_WEAPON_COMPONENT_ACTIVE(Ped ped, Hash weaponHash, Hash componentHash);
+		bool REFILL_AMMO_INSTANTLY(Ped ped);
 		/**
 		 * Forces a ped to reload only if they are able to; if they have a full magazine, they will not reload.
 		 */
-		BOOL MAKE_PED_RELOAD(Ped ped);
-		BOOL _TRIGGER_VEHICLE_WEAPON_RELOAD(Vehicle vehicle, int seat, Ped ped);
+		bool MAKE_PED_RELOAD(Ped ped);
+		bool _TRIGGER_VEHICLE_WEAPON_RELOAD(Vehicle vehicle, int seat, Ped ped);
 		/**
 		 * Nearly every instance of p1 I found was 31. Nearly every instance of p2 I found was 0.
 		 * 
 		 * REQUEST_WEAPON_ASSET(iLocal_1888, 31, 26);
 		 */
 		void REQUEST_WEAPON_ASSET(Hash weaponHash, int p1, int p2);
-		BOOL HAS_WEAPON_ASSET_LOADED(Hash weaponHash);
+		bool HAS_WEAPON_ASSET_LOADED(Hash weaponHash);
 		void REMOVE_WEAPON_ASSET(Hash weaponHash);
 		/**
 		 * Now has 8 params.
 		 */
-		Object CREATE_WEAPON_OBJECT(Hash weaponHash, int ammoCount, float x, float y, float z, BOOL showWorldModel, float scale, Any p7, Any p8, Any p9);
+		Object CREATE_WEAPON_OBJECT(Hash weaponHash, int ammoCount, float x, float y, float z, bool showWorldModel, float scale, Any p7, Any p8, Any p9);
 		/**
 		 * componentHash:
 		 * (use WEAPON::GET_WEAPON_COMPONENT_TYPE_MODEL() to get hash value)
@@ -21544,18 +21544,18 @@ namespace base::menu::natives {
 		/**
 		 * see DOES_WEAPON_TAKE_WEAPON_COMPONENT for full list of weapons & components
 		 */
-		BOOL HAS_WEAPON_GOT_WEAPON_COMPONENT(Object weapon, Hash componentHash);
+		bool HAS_WEAPON_GOT_WEAPON_COMPONENT(Object weapon, Hash componentHash);
 		void GIVE_WEAPON_OBJECT_TO_PED(Object weaponObject, Ped ped);
 		/**
 		 * Full list of weapons & components by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL DOES_WEAPON_TAKE_WEAPON_COMPONENT(Hash weaponHash, Hash componentHash);
+		bool DOES_WEAPON_TAKE_WEAPON_COMPONENT(Hash weaponHash, Hash componentHash);
 		/**
 		 * Drops the current weapon and returns the object
 		 * 
 		 * Unknown behavior when unarmed.
 		 */
-		Object GET_WEAPON_OBJECT_FROM_PED(Ped ped, BOOL p1);
+		Object GET_WEAPON_OBJECT_FROM_PED(Ped ped, bool p1);
 		/**
 		 * Gives the specified loadout to the specified ped.
 		 * Loadouts are defined in common.rpf\data\ai\loadouts.meta
@@ -21697,8 +21697,8 @@ namespace base::menu::natives {
 		 * }
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL GET_WEAPON_HUD_STATS(Hash weaponHash, Any* outData);
-		BOOL GET_WEAPON_COMPONENT_HUD_STATS(Hash componentHash, Any* outData);
+		bool GET_WEAPON_HUD_STATS(Hash weaponHash, Any* outData);
+		bool GET_WEAPON_COMPONENT_HUD_STATS(Hash componentHash, Any* outData);
 		/**
 		 * This native does not return damages of weapons from the melee and explosive group.
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
@@ -21749,13 +21749,13 @@ namespace base::menu::natives {
 		 * 
 		 * Ped ped = The ped whose weapon you want to check.
 		 */
-		BOOL IS_PED_CURRENT_WEAPON_SILENCED(Ped ped);
-		BOOL IS_FLASH_LIGHT_ON(Ped ped);
-		BOOL SET_FLASH_LIGHT_FADE_DISTANCE(float distance);
+		bool IS_PED_CURRENT_WEAPON_SILENCED(Ped ped);
+		bool IS_FLASH_LIGHT_ON(Ped ped);
+		bool SET_FLASH_LIGHT_FADE_DISTANCE(float distance);
 		/**
 		 * Enables/disables flashlight on ped's weapon.
 		 */
-		void SET_FLASH_LIGHT_ACTIVE_HISTORY(Ped ped, BOOL toggle);
+		void SET_FLASH_LIGHT_ACTIVE_HISTORY(Ped ped, bool toggle);
 		/**
 		 * Changes the selected ped aiming animation style.
 		 * Note : You must use GET_HASH_KEY!
@@ -21823,7 +21823,7 @@ namespace base::menu::natives {
 		 * this returns if you can use the weapon while using a parachute
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		BOOL CAN_USE_WEAPON_ON_PARACHUTE(Hash weaponHash);
+		bool CAN_USE_WEAPON_ON_PARACHUTE(Hash weaponHash);
 		/**
 		 * Both coordinates are from objects in the decompiled scripts. Native related to 0xECDC202B25E5CF48 p1 value. The only weapon hash used in the decompiled scripts is weapon_air_defence_gun. These two natives are used by the yacht script, decompiled scripts suggest it and the weapon hash used (valkyrie's rockets) are also used by yachts.
 		 */
@@ -21832,21 +21832,21 @@ namespace base::menu::natives {
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
 		int CREATE_AIR_DEFENCE_ANGLED_AREA(float p0, float p1, float p2, float p3, float p4, float p5, float p6, float p7, float p8, float radius, Hash weaponHash);
-		BOOL REMOVE_AIR_DEFENCE_SPHERE(int zoneId);
+		bool REMOVE_AIR_DEFENCE_SPHERE(int zoneId);
 		void REMOVE_ALL_AIR_DEFENCE_SPHERES();
-		void SET_PLAYER_TARGETTABLE_FOR_AIR_DEFENCE_SPHERE(Player player, int zoneId, BOOL enable);
-		BOOL IS_AIR_DEFENCE_SPHERE_IN_AREA(float x, float y, float z, float radius, int* outZoneId);
+		void SET_PLAYER_TARGETTABLE_FOR_AIR_DEFENCE_SPHERE(Player player, int zoneId, bool enable);
+		bool IS_AIR_DEFENCE_SPHERE_IN_AREA(float x, float y, float z, float radius, int* outZoneId);
 		void FIRE_AIR_DEFENCE_SPHERE_WEAPON_AT_POSITION(int zoneId, float x, float y, float z);
-		BOOL DOES_AIR_DEFENCE_SPHERE_EXIST(int zoneId);
+		bool DOES_AIR_DEFENCE_SPHERE_EXIST(int zoneId);
 		/**
 		 * Disables selecting the given weapon. Ped isn't forced to put the gun away. However you can't reselect the weapon if you holster then unholster. Weapon is also grayed out on the weapon wheel.
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
-		void SET_CAN_PED_SELECT_INVENTORY_WEAPON(Ped ped, Hash weaponHash, BOOL toggle);
+		void SET_CAN_PED_SELECT_INVENTORY_WEAPON(Ped ped, Hash weaponHash, bool toggle);
 		/**
 		 * Disable all weapons. Does the same as 0xB4771B9AAF4E68E4 except for all weapons.
 		 */
-		void SET_CAN_PED_SELECT_ALL_WEAPONS(Ped ped, BOOL toggle);
+		void SET_CAN_PED_SELECT_ALL_WEAPONS(Ped ped, bool toggle);
 
 	} // namespace WEAPON
 
@@ -22044,7 +22044,7 @@ namespace base::menu::natives {
 		 * Full list of zones by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/zones.json
 		 */
 		const char* GET_NAME_OF_ZONE(float x, float y, float z);
-		void SET_ZONE_ENABLED(int zoneId, BOOL toggle);
+		void SET_ZONE_ENABLED(int zoneId, bool toggle);
 		/**
 		 * cellphone range 1- 5 used for signal bar in iFruit phone
 		 */

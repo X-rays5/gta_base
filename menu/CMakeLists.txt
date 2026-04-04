@@ -146,6 +146,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/layout/lua/lua.hpp
         src/lua/lib/lua_coroutine.cpp
         src/lua/lib/lua_coroutine.hpp
+        src/natives/natives_sol2.cpp
+        src/natives/natives_sol2.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
