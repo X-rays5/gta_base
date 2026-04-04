@@ -555,8 +555,13 @@ namespace base::menu::ui {
     const std::float_t info_box_height = text_size.y + ui_props_.theme->text_props.y_margin * 2;
 
     // Draw the background box with border
-    draw_queue->AddCommand(render::Rect({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, info_box_height}, ApplyAlphaToColor(ui_props_.theme->background_color)));
-    draw_queue->AddCommand(render::RectBorder({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, info_box_height}, ApplyAlphaToColor(ui_props_.theme->background_color), ApplyAlphaToColor(ui_props_.theme->seperator_color), true, true, true, true, ui_props_.seperator_height));
+    //draw_queue->AddCommand(render::Rect({ui_props_.theme->x_position, y_offset}, {ui_props_.menu_width, info_box_height}, ApplyAlphaToColor(ui_props_.theme->background_color)));
+    draw_queue->AddCommand(render::RectBorder(
+      {ui_props_.theme->x_position - render::draw_helpers::ScaleSquare(ui_props_.seperator_height).x, y_offset},
+      {ui_props_.menu_width + render::draw_helpers::ScaleSquare(ui_props_.seperator_height).x * 2, info_box_height},
+      ApplyAlphaToColor(ui_props_.theme->background_color), ApplyAlphaToColor(ui_props_.theme->seperator_color),
+      true, true, true, true,
+      ui_props_.seperator_height));
 
     // Draw the info text as a single call
     const std::float_t text_x_pos = ui_props_.theme->x_position + ui_props_.theme->text_props.x_margin;
