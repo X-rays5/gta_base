@@ -10,6 +10,11 @@
 #include "components/label_component.hpp"
 #include "layout/home.hpp"
 
+#pragma warning(push)
+#pragma warning(disable:5321)
+#include <sol/sol.hpp>
+#pragma warning(pop)
+
 namespace base::menu::ui {
   MenuRenderer::MenuRenderer() {
     fallback_option_ = std::make_shared<components::LabelComponent>("label/invalid_submenu");

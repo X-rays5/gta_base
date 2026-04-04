@@ -6,9 +6,10 @@
 
 #include "../menu_renderer.hpp"
 #include "../components/components.hpp"
+#include "lua/lua.hpp"
 #include "self/self.hpp"
-#include "vehicle/vehicle.hpp"
 #include "settings/settings.hpp"
+#include "vehicle/vehicle.hpp"
 
 namespace base::menu::ui::layout {
   void InitHomeLayout() {
@@ -18,12 +19,14 @@ namespace base::menu::ui::layout {
       }));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSELF));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kVEHICLE));
+      sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kLUA));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSETTINGS));
     });
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kMAIN_MENU, std::move(home_submenu));
 
     InitSelfLayout();
     InitVehicleLayout();
+    InitLuaLayout();
     InitSettingsLayout();
   }
 }

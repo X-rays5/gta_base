@@ -55,6 +55,12 @@ namespace base::menu::ui::components {
     }
 
     virtual std::string GetDescription() const {
+      if (description_.empty()) {
+        const auto tmp_key = left_text_ + "/desc";
+        const auto locale =  localization::kMANAGER->Localize(tmp_key);
+        return locale != tmp_key ? locale : "";
+      }
+
       return localization::kMANAGER->Localize(description_);
     }
 

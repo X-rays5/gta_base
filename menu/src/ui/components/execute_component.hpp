@@ -21,13 +21,8 @@ namespace base::menu::ui::components {
 
     virtual void HandleButtonPress(const PressedButton button) override {
       if (button == PressedButton::kSUBMIT) {
-        // Call with nullptr if the handler accepts GameTask*, otherwise call without arguments
         util::kTHREAD_POOL->emplace_back([handler = exec_handler_] {
-          if constexpr (std::is_invocable_v<Func, script::GameTaskExecutor::GameTask*>) {
-            handler(nullptr);
-          } else {
             handler();
-          }
         });
       }
     }

@@ -164,11 +164,16 @@ namespace base::menu::ui {
       return components_[cur_opt_idx_].component;
     }
 
+    void SetName(const std::string& name) {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      sub_name_ = name;
+    }
+
     /**
      * Get the name of this submenu.
      * @return The name of this submenu.
      */
-    [[nodiscard]] std::string GetName() {
+    [[nodiscard]] std::string GetName() const {
       common::concurrency::ScopedSpinlock lock(spinlock_);
       return localization::kMANAGER->Localize(sub_name_);
     }
@@ -375,6 +380,8 @@ namespace base::menu::ui {
     kLOAD_FEATURE_SETTINGS,
     kUNLOAD_CONFIRM,
     kTHEME_SETTINGS,
+    kLUA,
+    kLUA_SCRIPT
   };
 }
 
