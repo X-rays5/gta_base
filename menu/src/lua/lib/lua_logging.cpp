@@ -39,11 +39,7 @@ namespace base::menu::lua {
     });
 
     table.set_function("debug", [](const std::string& msg, const sol::variadic_args& va) {
-#ifndef NDEBUG
       LOG_DEBUG(FormatLuaVariadicArgs(msg, va));
-#elif
-        msg;va;
-#endif
     });
 
     table.set_function("format", [](const std::string& msg, const sol::variadic_args& va) {
