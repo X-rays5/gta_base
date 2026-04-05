@@ -148,6 +148,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/lua/lib/lua_coroutine.hpp
         src/natives/natives_sol2.cpp
         src/natives/natives_sol2.hpp
+        src/natives/native_dumper.hpp
+        src/natives/native_lookup.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

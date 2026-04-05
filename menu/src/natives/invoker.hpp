@@ -54,6 +54,11 @@ namespace base::menu::natives {
       }
     }
 
+    // Getter for native handlers (used for dumping)
+    const auto& GetNativeHandlers() const {
+      return native_handlers_;
+    }
+
   private:
     std::array<rage::script::NativeHandler, NATIVE_CROSSMAP_SIZE> native_handlers_{};
   };
