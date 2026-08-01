@@ -241,6 +241,15 @@ namespace base::menu::ui {
     }
 
     /**
+     * Check if the submenu has no components.
+     * @return True if the submenu has no components, false otherwise.
+     */
+    [[nodiscard]] bool IsEmpty() {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      return components_.empty();
+    }
+
+    /**
      * Get the total number of selectable options in the submenu for display purposes.
      * @return The number of selectable options in the submenu.
      */
@@ -381,7 +390,9 @@ namespace base::menu::ui {
     kUNLOAD_CONFIRM,
     kTHEME_SETTINGS,
     kLUA,
-    kLUA_SCRIPT
+    kLUA_SCRIPT,
+    kHOTKEYS,
+    kHOTKEY_REMOVE_CONFIRM
   };
 }
 

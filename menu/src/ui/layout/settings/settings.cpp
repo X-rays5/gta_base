@@ -4,8 +4,14 @@
 
 #include "settings.hpp"
 #include "../../menu_renderer.hpp"
+#include "../../../hotkey/hotkey_manager.hpp"
 #include "../../components/components.hpp"
 #include "../../../options/option_registry.hpp"
+
+namespace {
+  base::menu::hotkey::Hotkey cur_hotkey_remove;
+  std::string cur_hotkey_remove_name;
+}
 
 namespace base::menu::ui::layout {
   void ThemeSub() {
@@ -42,6 +48,51 @@ namespace base::menu::ui::layout {
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kLOAD_FEATURE_SETTINGS, std::move(feature_submenu));
   }
 
+  void RemoveHotkeyConfirmSub() {
+    Submenu remove_hotkey_sub("ui/sub/remove_hotkey_confirm", [](Submenu* sub) {
+      const std::string desc = fmt::format(fmt::runtime(localization::kMANAGER->Localize("ui/option/remove_hotkey_confirm_desc")), cur_hotkey_remove_name);
+      sub->AddComponent(components::ExecuteComponent("label/confirm", desc, [] {
+        if (hotkey::kHOTKEY_MANAGER) {
+          LOG_DEBUG("Removing hotkey: {} - {}", cur_hotkey_remove.combined, cur_hotkey_remove.AsString());
+          hotkey::kHOTKEY_MANAGER->RemoveHotkey(cur_hotkey_remove);
+          kMENU_RENDERER->PopSubmenu();
+        }
+      }));
+      sub->AddComponent(components::ExecuteComponent("label/cancel", "", [] {
+        if (kMENU_RENDERER) {
+          kMENU_RENDERER->PopSubmenu();
+        }
+      }));
+    });
+    kMENU_RENDERER->AddSubmenu(SubmenuIDs::kHOTKEY_REMOVE_CONFIRM, std::move(remove_hotkey_sub));
+  }
+
+  void HotkeysSub() {
+    Submenu hotkeys_submenu("ui/sub/hotkeys", [](Submenu* sub) {
+      if (hotkey::kHOTKEY_MANAGER) {
+        const auto hotkeys = hotkey::kHOTKEY_MANAGER->GetAllHotkeys();
+        for (const auto& [hotkey, option] : hotkeys) {
+          auto comp = components::SubLinkComponent(SubmenuIDs::kHOTKEY_REMOVE_CONFIRM, [hotkey, option] {
+            cur_hotkey_remove = hotkey;
+            cur_hotkey_remove_name = option->GetName();
+          });
+          comp.SetName(option->GetName());
+          comp.SetDescription(hotkey.AsString());
+
+          sub->AddComponent(std::move(comp));
+        }
+      }
+
+      if (sub->IsEmpty()) {
+        sub->AddComponent(components::LabelComponent("ui/option/no_hotkeys"));
+      }
+    });
+
+    kMENU_RENDERER->AddSubmenu(SubmenuIDs::kHOTKEYS, std::move(hotkeys_submenu));
+
+    RemoveHotkeyConfirmSub();
+  }
+
   void UnloadConfirmSub() {
     Submenu unload_sub("ui/sub/unload", [](Submenu* sub) {
       sub->AddComponent(components::ExecuteComponent("label/confirm", "", [] {
@@ -60,6 +111,7 @@ namespace base::menu::ui::layout {
     Submenu settings_submenu("ui/sub/settings", [](Submenu* sub) {
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kTHEME_SETTINGS));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kLOAD_FEATURE_SETTINGS));
+      sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kHOTKEYS));
 #ifndef NDEBUG
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kUNLOAD_CONFIRM));
 #endif
@@ -68,6 +120,7 @@ namespace base::menu::ui::layout {
 
     ThemeSub();
     FeatureSettingsSub();
+    HotkeysSub();
 
 #ifndef NDEBUG
     UnloadConfirmSub();

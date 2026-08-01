@@ -51,6 +51,10 @@ namespace base::menu::hotkey {
     ~HotkeyManager();
 
     void AddNewHotkey(std::shared_ptr<options::BaseOption> option);
+    void RemoveHotkey(const Hotkey& hotkey);
+
+    std::vector<std::pair<Hotkey, std::shared_ptr<options::BaseOption>>> GetAllHotkeys() const;
+
     virtual void KeyDown(std::uint32_t vk_key, ModifierKey modifier) override;
     virtual void KeyUp(std::uint32_t vk_key, ModifierKey modifier) override;
 
@@ -58,7 +62,7 @@ namespace base::menu::hotkey {
     const std::size_t key_event_listener_id_;
     ankerl::unordered_dense::map<Hotkey, std::shared_ptr<options::BaseOption>> key_opt_map_;
     std::atomic<bool> is_adding_hotkey_ = false;
-    common::concurrency::RecursiveSpinlock add_hotkey_lock_;
+    mutable common::concurrency::RecursiveSpinlock add_hotkey_lock_;
     win32::Signal new_hotkey_signal_;
     Hotkey new_hotkey_{};
 

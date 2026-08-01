@@ -73,6 +73,30 @@ namespace base::menu::hotkey {
     Save();
   }
 
+  void HotkeyManager::RemoveHotkey(const Hotkey& hotkey) {
+    common::concurrency::ScopedSpinlock lock(add_hotkey_lock_);
+
+    const auto it = key_opt_map_.find(hotkey);
+    if (it != key_opt_map_.end()) {
+      NOTIFY_INFO("ui/hotkey", "ui/hotkey/remove_success", it->second->GetName(), hotkey.AsString());
+      key_opt_map_.erase(it);
+      Save();
+    } else {
+      NOTIFY_WARN("ui/hotkey", "ui/hotkey/remove_not_found", hotkey.AsString());
+    }
+  }
+
+  std::vector<std::pair<Hotkey, std::shared_ptr<options::BaseOption>>> HotkeyManager::GetAllHotkeys() const {
+    common::concurrency::ScopedSpinlock lock(add_hotkey_lock_);
+
+    std::vector<std::pair<Hotkey, std::shared_ptr<options::BaseOption>>> hotkeys;
+    hotkeys.reserve(key_opt_map_.size());
+    for (const auto& [hotkey, option] : key_opt_map_) {
+      hotkeys.emplace_back(hotkey, option);
+    }
+    return hotkeys;
+  }
+
   void HotkeyManager::KeyDown(const std::uint32_t vk_key, const ModifierKey modifier) {
     if (ShouldIgnoreKey(vk_key)) {
       return;

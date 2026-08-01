@@ -58,6 +58,10 @@ namespace base::menu::ui::components {
       left_text_ = name;
     }
 
+    void SetDescription(const std::string& description) {
+      description_ = description;
+    }
+
   private:
     const std::string navigation_link_;
     Func handler_;

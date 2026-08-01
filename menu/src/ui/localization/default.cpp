@@ -45,7 +45,7 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/sub/self_health", "Health")
     ADD_TRANSLATION("ui/option/self_godmode", "God Mode")
     ADD_TRANSLATION("ui/option/self_semigodmode", "Semi-God Mode")
-    ADD_TRANSLATION("ui/option/self_semigodmode/desc", "Automatically heal completely evedry game tick")
+    ADD_TRANSLATION("ui/option/self_semigodmode/desc", "Automatically heal completely every game tick")
     ADD_TRANSLATION("ui/action/self_heal", "Heal")
     ADD_TRANSLATION("ui/action/suicide", "Suicide")
     ADD_TRANSLATION("ui/action/self_max_armour", "Max Armour")
@@ -60,6 +60,11 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/sub/lua", "Lua Scripts")
 
     ADD_TRANSLATION("ui/sub/settings", "Settings")
+    ADD_TRANSLATION("ui/sub/hotkeys", "Hotkeys")
+    ADD_TRANSLATION("ui/sub/remove_hotkey_confirm", "Confirm removal of hotkey")
+    ADD_TRANSLATION("ui/option/no_hotkeys", "No hotkeys configured")
+    ADD_TRANSLATION("ui/option/remove_hotkey_confirm_desc", "Remove hotkey for '{}'")
+
     ADD_TRANSLATION("ui/sub/unload", "Unload")
     ADD_TRANSLATION("ui/sub/theme", "Theme")
     ADD_TRANSLATION("ui/option/ui_x_pos", "UI X Position")
