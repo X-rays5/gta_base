@@ -133,7 +133,7 @@ namespace base::menu::ui {
     const auto option_count_x = ui_props_.theme->x_position + ui_props_.menu_width - ui_props_.theme->text_props.x_margin;
     const auto text_y_pos = y_offset + ui_props_.menu_item_height / 2;
 
-    const std::string opt_idx = fmt::format("{}/{}", cur_item_idx, item_count);
+    const std::string opt_idx = fmt::format("{}/{}", cur_item_idx > item_count ? item_count : cur_item_idx, item_count);
 
     const float max_name_width = ui_props_.menu_width - (2 * ui_props_.theme->text_props.x_margin) - render::draw_helpers::CalcTextSize(nullptr, ui_props_.theme->text_props.font_size, ui_props_.theme->text_props.font_bold).y;
 
