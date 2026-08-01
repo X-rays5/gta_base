@@ -124,4 +124,43 @@ namespace base::win32 {
     LocalFree(lpMsgBuf);
     return msg;
   }
+
+  std::string VkIdToString(std::uint32_t vk_id) {
+    if (vk_id >= VK_F13 && vk_id <= VK_F24)
+      return fmt::format("F{}", vk_id - VK_F1 + 1);
+
+    std::uint32_t scanCode = MapVirtualKeyA(vk_id, MAPVK_VK_TO_VSC);
+
+    char szName[128];
+    std::int32_t result{};
+    switch (vk_id) {
+    case VK_LEFT:
+    case VK_UP:
+    case VK_RIGHT:
+    case VK_DOWN:
+    case VK_RCONTROL:
+    case VK_RMENU:
+    case VK_LWIN:
+    case VK_RWIN:
+    case VK_APPS:
+    case VK_PRIOR:
+    case VK_NEXT:
+    case VK_END:
+    case VK_HOME:
+    case VK_INSERT:
+    case VK_DELETE:
+    case VK_DIVIDE:
+    case VK_NUMLOCK:
+      scanCode |= KF_EXTENDED;
+    default:
+      result = GetKeyNameTextA(scanCode << 16, szName, 128);
+    }
+
+    if (result == 0) {
+      LOG_ERROR("Failed to convert vk key: {} to char. win32 err code: {}", vk_id, GetLastError());
+      return "unk";
+    }
+
+    return szName;
+  }
 }

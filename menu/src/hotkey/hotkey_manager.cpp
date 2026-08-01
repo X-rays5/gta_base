@@ -47,7 +47,7 @@ namespace base::menu::hotkey {
       return;
     }
 
-    NOTIFY_INFO("ui/hotkey", "ui/hotkey/add_success", option->GetName(), static_cast<std::uint32_t>(new_hotkey_.modifier), new_hotkey_.vk_key);
+    NOTIFY_INFO("ui/hotkey", "ui/hotkey/add_success", option->GetName(), new_hotkey_.AsString());
     key_opt_map_.emplace(new_hotkey_, option);
 
     Save();

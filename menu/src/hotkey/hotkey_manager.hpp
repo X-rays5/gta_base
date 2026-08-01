@@ -23,6 +23,14 @@ namespace base::menu::hotkey {
     explicit Hotkey(const std::uint32_t vk) : vk_key(vk), modifier(util::KeyEventListener::ModifierKey::kNONE) {}
     explicit Hotkey(const std::uint64_t combined) : combined(combined) {}
 
+    std::string AsString() const noexcept {
+      const std::string key_str = win32::VkIdToString(vk_key);
+      const std::string mod = modifier == util::KeyEventListener::ModifierKey::kSHIFT ? "Shift + " :
+                        modifier == util::KeyEventListener::ModifierKey::kCTRL ? "Ctrl + " : "";
+
+      return mod + key_str;
+    }
+
     bool operator==(const Hotkey& that) const {
       return combined == that.combined;
     }

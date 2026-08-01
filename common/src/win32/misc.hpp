@@ -80,5 +80,7 @@ namespace base::win32 {
   * \return std::string
   */
  std::string GetLastErrorStr();
+
+ std::string VkIdToString(std::uint32_t vk_id);
 }
 #endif //GTA_BASE_MISC_B86A3FB180F14F93A1ACF015A6B7E4C6_HPP
