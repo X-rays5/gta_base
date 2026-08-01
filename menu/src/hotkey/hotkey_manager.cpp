@@ -13,6 +13,26 @@ namespace base::menu::hotkey {
     std::filesystem::path GetHotkeySavePath() {
       return common::fs::vfs::GetSettingsDir() / "hotkeys.json";
     }
+
+    bool ShouldIgnoreKey(const std::uint32_t vk_key) {
+      switch (vk_key) {
+        case VK_LWIN:
+        case VK_RWIN:
+        case VK_APPS:
+        case VK_LSHIFT:
+        case VK_RSHIFT:
+        case VK_LCONTROL:
+        case VK_RCONTROL:
+        case VK_LMENU:
+        case VK_RMENU:
+        case VK_SHIFT:
+        case VK_CONTROL:
+        case VK_MENU:
+          return true;
+        default:
+          return false;
+      }
+    }
   }
 
   HotkeyManager::HotkeyManager() : key_event_listener_id_(util::kKEY_EVENT_WATCHER->AddKeyEventListener(this)) {
@@ -54,6 +74,10 @@ namespace base::menu::hotkey {
   }
 
   void HotkeyManager::KeyDown(const std::uint32_t vk_key, const ModifierKey modifier) {
+    if (ShouldIgnoreKey(vk_key)) {
+      return;
+    }
+
     if (is_adding_hotkey_) {
       KeyForRegistration(vk_key, modifier);
       return;
