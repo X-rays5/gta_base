@@ -25,7 +25,7 @@ namespace base::menu::ui::components {
       right_text_ = ICON_FA_ARROW_RIGHT;
     }
 
-    explicit SubLinkComponent(const SubmenuIDs navigate_to) : SubLinkComponent(std::string(magic_enum::enum_name(navigate_to)), Func()) {}
+    explicit SubLinkComponent(const SubmenuIDs navigate_to) : SubLinkComponent(std::string(enchantum::to_string(navigate_to)), Func()) {}
 
     SubLinkComponent(const std::string& navigate_to, const Func handler) : navigation_link_(navigate_to), handler_(handler) {
       const auto sub = kMENU_RENDERER->GetSubmenu(navigate_to);
@@ -38,7 +38,7 @@ namespace base::menu::ui::components {
       right_text_ = ICON_FA_ARROW_RIGHT;
     }
 
-    explicit SubLinkComponent(const SubmenuIDs navigate_to, const Func handler) : SubLinkComponent(std::string(magic_enum::enum_name(navigate_to)), handler) {}
+    explicit SubLinkComponent(const SubmenuIDs navigate_to, const Func handler) : SubLinkComponent(std::string(enchantum::to_string(navigate_to)), handler) {}
 
     virtual void HandleButtonPress(const PressedButton button) override {
       if (button == PressedButton::kSUBMIT) {

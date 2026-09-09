@@ -5,7 +5,7 @@
 #ifndef RESULT_HPP_01224051
 #define RESULT_HPP_01224051
 #include <fmt/format.h>
-#include <magic_enum/magic_enum.hpp>
+#include <enchantum/enchantum.hpp>
 #include <result/result.hpp>
 
 namespace base::common::util::result {
@@ -48,7 +48,7 @@ namespace base::common::util::result {
      * \return The result code as a string
      */
     [[nodiscard]] std::string GetResultString() const {
-      return std::string(magic_enum::enum_name(result_code_));
+      return std::string(enchantum::to_string(result_code_));
     }
 
     /**

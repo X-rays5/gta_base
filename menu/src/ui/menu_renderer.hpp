@@ -7,7 +7,7 @@
 #include <atomic>
 #include <stack>
 #include <ankerl/unordered_dense.h>
-#include <magic_enum/magic_enum.hpp>
+#include <enchantum/enchantum.hpp>
 #include "submenu.hpp"
 #include "theme.hpp"
 #include "../render/animate.hpp"
@@ -36,7 +36,7 @@ namespace base::menu::ui {
     }
 
     void AddSubmenu(const SubmenuIDs id, Submenu&& submenu) {
-      AddSubmenu(std::string(magic_enum::enum_name(id)), std::move(submenu));
+      AddSubmenu(std::string(enchantum::to_string(id)), std::move(submenu));
     }
 
     std::shared_ptr<Submenu> GetCurrentSubmenu() {

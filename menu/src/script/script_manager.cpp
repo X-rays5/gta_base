@@ -3,14 +3,14 @@
 //
 
 #include "script_manager.hpp"
-#include <magic_enum/magic_enum.hpp>
+#include <enchantum/enchantum.hpp>
 
 #include "game_task_executor.hpp"
 #include "../feature/feature_loop.hpp"
 
 namespace base::menu::script {
   ScriptManager::ScriptManager() {
-    for (const auto type : magic_enum::enum_values<ScriptBase::Type>()) {
+    for (const auto type : enchantum::values_generator<ScriptBase::Type>) {
       scripts.emplace(type, script_list_t{});
     }
 

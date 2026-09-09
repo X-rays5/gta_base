@@ -5,6 +5,7 @@
 #include "manager.hpp"
 #include <base-common/fs/vfs.hpp>
 #include <glaze/glaze.hpp>
+#include <enchantum/enchantum.hpp>
 
 namespace base::menu::ui::localization {
     namespace {
@@ -38,7 +39,7 @@ namespace base::menu::ui::localization {
 
     Status Translation::Save(const std::string& name) {
         if (const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(loaded_translation_, GetProfilePath(name), std::string{})) {
-            return MakeFailure<ResultCode::kIO_ERROR>(std::string(magic_enum::enum_name(ec.ec)));
+            return MakeFailure<ResultCode::kIO_ERROR>(std::string(enchantum::to_string(ec.ec)));
         }
 
         return {};
@@ -63,7 +64,7 @@ namespace base::menu::ui::localization {
 
     void Translation::WriteDefaultTranslation() {
         if (const auto ec = glz::write_file_json<glz::opts{.prettify = true}>(default_translation, GetProfilePath("default"), std::string{})) {
-            LOG_ERROR("Failed to write default translation to disk: {}", magic_enum::enum_name(ec.ec));
+            LOG_ERROR("Failed to write default translation to disk: {}", enchantum::to_string(ec.ec));
         }
     }
 

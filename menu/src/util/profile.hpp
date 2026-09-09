@@ -9,6 +9,7 @@
 #include <base-common/fs/vfs.hpp>
 #include <base-common/util/time.hpp>
 #include <glaze/trace/trace.hpp>
+#include <enchantum/enchantum.hpp>
 
 #ifndef NDEBUG
 #define PROFILER_SAVE(profiler) if (const Status _prof_res = profiler.WriteToDisk(::base::common::util::string::ReplaceAll(__FUNCTION__, "::", "_")); _prof_res.error()) { LOG_ERROR("{}", _prof_res.error()); }
@@ -42,7 +43,7 @@ namespace base::menu::util {
         }
 
         if (const auto ec = glz::write_file_json(trace_, target_file.string(), std::string{}); ec.ec != glz::error_code::none) {
-          auto error_name = magic_enum::enum_name(ec.ec);
+          auto error_name = enchantum::to_string(ec.ec);
           return MakeFailure<ResultCode::kIO_ERROR>("Error writing trace file: {}", error_name);
         }
       }

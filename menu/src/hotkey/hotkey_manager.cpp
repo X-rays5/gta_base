@@ -5,6 +5,7 @@
 #include "hotkey_manager.hpp"
 #include "../options/base_option.hpp"
 #include <base-common/fs/vfs.hpp>
+#include <enchantum/enchantum.hpp>
 
 #include "../options/option_registry.hpp"
 
@@ -176,7 +177,7 @@ namespace base::menu::hotkey {
       }
 
       const std::uint32_t vk_key = it.second["vk_key"].as<std::uint32_t>();
-      const auto modifier = magic_enum::enum_cast<ModifierKey>(it.second["modifier"].as<std::uint32_t>());
+      const auto modifier = enchantum::cast<ModifierKey>(it.second["modifier"].as<std::uint32_t>());
       if (!modifier.has_value()) {
         LOG_ERROR("Invalid modifier value for hotkey entry of option '{}'", name);
         continue;

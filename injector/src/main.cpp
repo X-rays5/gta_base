@@ -6,7 +6,6 @@
 #include <base-common/fs/vfs.hpp>
 #include <base-common/logging/logger.hpp>
 #include <imgui/imgui.h>
-#include <magic_enum/magic_enum.hpp>
 #include "inject.hpp"
 #include "settings.hpp"
 #include "window.hpp"
