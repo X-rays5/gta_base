@@ -4,7 +4,7 @@
 
 #include "lua_coroutine.hpp"
 
-#include <base-coro/coroutine.hpp>
+#include <minicoropp/coroutine.hpp>
 
 #include "../../script/game_task_executor.hpp"
 

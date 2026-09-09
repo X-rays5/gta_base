@@ -6,7 +6,7 @@
 #include <future>
 #include <memory>
 #include <vector>
-#include <base-coro/coroutine.hpp>
+#include <minicoropp/coroutine.hpp>
 #include "script_base.hpp"
 #include "../natives/natives_gen9.hpp"
 
