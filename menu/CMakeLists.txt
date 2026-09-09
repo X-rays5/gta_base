@@ -17,6 +17,7 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/globals.hpp
         src/render/draw/draw_helpers.cpp
         src/render/draw/draw_helpers.hpp
+        src/render/draw/draw_commands.cpp
         src/render/draw/draw_commands.hpp
         src/render/render_thread.cpp
         src/render/render_thread.hpp
