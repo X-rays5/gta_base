@@ -29,6 +29,7 @@ namespace base::menu::ui::layout {
       sub->AddComponent(components::NumberRangeComponent("ui/option/ui_x_pos", "", menuTheme->x_position, 0.005F));
       sub->AddComponent(components::NumberRangeComponent("ui/option/ui_y_pos", "", menuTheme->y_position, 0.005F));
       sub->AddComponent(components::NumberRangeComponent("ui/option/ui_scale", "", menuTheme->menu_ui_scale, 0.1F));
+      sub->AddComponent(components::ToggleComponent("ui/option/mouse_input", "", &menuTheme->mouse_input_enabled));
     });
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kTHEME_SETTINGS, std::move(theme_submenu));
   }

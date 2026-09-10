@@ -82,7 +82,18 @@ namespace base::menu::ui {
     submenu->UpdateComponents();
 
     // Handle mouse input before rendering
-    HandleMouseInput(submenu.get());
+    if (ui_props_.theme->mouse_input_enabled) {
+      if (!mouse_was_enabled_last_frame_ && !render::kRENDERER->IsCursorVisible())
+        render::kRENDERER->RequestShowCursor();
+
+      mouse_was_enabled_last_frame_ = true;
+      HandleMouseInput(submenu.get());
+    } else if (mouse_was_enabled_last_frame_) {
+      mouse_was_enabled_last_frame_ = false;
+      // Reset mouse state when mouse input is disabled
+      mouse_in_menu_bounds_ = false;
+      render::kRENDERER->RequestHideCursor();
+    }
 
     if (menu_ui_navigation.WasKeyPressed(VK_UP)) {
       submenu->Scroll(Submenu::ScrollDirection::kUP);
@@ -374,7 +385,8 @@ namespace base::menu::ui {
 
   void MenuRenderer::OpenMenu() {
     is_menu_opened_ = true;
-    render::kRENDERER->RequestShowCursor();
+    if (ui_props_.theme->mouse_input_enabled)
+      render::kRENDERER->RequestShowCursor();
     const std::float_t start_alpha = current_alpha_;
     constexpr std::float_t end_alpha = 1.0f;
     fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(start_alpha, end_alpha, 100);
@@ -382,7 +394,8 @@ namespace base::menu::ui {
 
   void MenuRenderer::CloseMenu() {
     is_menu_opened_ = false;
-    render::kRENDERER->RequestHideCursor();
+    if (ui_props_.theme->mouse_input_enabled)
+      render::kRENDERER->RequestHideCursor();
     const std::float_t start_alpha = current_alpha_;
     constexpr std::float_t end_alpha = 0.0f;
     fade_animation_ = std::make_unique<base::render::animate::Lerp<std::float_t>>(start_alpha, end_alpha, 100);

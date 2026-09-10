@@ -123,6 +123,7 @@ namespace base::menu::ui {
 
     // Mouse state tracking
     bool mouse_in_menu_bounds_ = false;
+    bool mouse_was_enabled_last_frame_ = false;
 
   private:
     std::float_t DrawTopBar(render::DrawQueueBuffer* draw_queue, std::string_view sub_name, std::size_t cur_item_idx, std::size_t item_count, std::float_t y_offset);

@@ -49,6 +49,7 @@ namespace base::menu::ui {
     const RgbColor seperator_color = RgbColor(74, 144, 226);
     const RgbColor background_color = RgbColor(30, 30, 30);
     Text text_props;
+    std::atomic<bool> mouse_input_enabled = false;
 
     Status Save(const std::string& theme_name);
     Status Load(const std::string& theme_name);
