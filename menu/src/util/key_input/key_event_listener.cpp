@@ -4,6 +4,8 @@
 
 #include "key_event_listener.hpp"
 
+#include "../thread_pool.hpp"
+
 namespace base::menu::util {
   namespace {
     KeyEventListener::ModifierKey DetermineModifierKey() {
@@ -36,14 +38,18 @@ namespace base::menu::util {
       common::concurrency::ScopedSpinlock lock(spinlock_);
       for (auto* handler : event_listeners_ | std::views::values) {
         if (handler) {
-          handler->KeyDown(static_cast<std::uint32_t>(wparam), DetermineModifierKey());
+          kTHREAD_POOL->emplace_back([handler, wparam] {
+            handler->KeyDown(static_cast<std::uint32_t>(wparam), DetermineModifierKey());
+          });
         }
       }
     } else if (msg == WM_KEYUP) {
       common::concurrency::ScopedSpinlock lock(spinlock_);
       for (auto* handler : event_listeners_ | std::views::values) {
         if (handler) {
-          handler->KeyUp(static_cast<std::uint32_t>(wparam), DetermineModifierKey());
+          kTHREAD_POOL->emplace_back([handler, wparam] {
+            handler->KeyUp(static_cast<std::uint32_t>(wparam), DetermineModifierKey());
+          });
         }
       }
     }
