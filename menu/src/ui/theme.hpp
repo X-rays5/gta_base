@@ -5,8 +5,9 @@
 #ifndef THEME_HPP_05125856
 #define THEME_HPP_05125856
 #include <base-common/util/ranged_value.hpp>
-#include <imgui/imgui.h>
 #include <glaze/core/meta.hpp>
+#include <imgui/imgui.h>
+#include "ui_size.hpp"
 
 namespace base::menu::ui {
   struct RgbColor {
@@ -34,8 +35,8 @@ namespace base::menu::ui {
     const std::string font_bold = "roboto-bold";
     const std::float_t x_margin = 0.005f;
     const std::float_t y_margin = 0.005f;
-    const std::float_t font_size = 0.012f;
-    const std::float_t scroll_indicator_size = 0.02f;
+    const UiSize font_size = UiSize(0.012f);
+    const UiSize scroll_indicator_size = UiSize(0.02f);
     const RgbColor text_color = RgbColor(240, 240, 240);
     const RgbColor inverse_text_color = text_color;
     const RgbColor sec_text_color = RgbColor(155, 155, 155);
@@ -44,6 +45,7 @@ namespace base::menu::ui {
   struct Theme {
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> x_position;
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> y_position;
+    common::util::RangedValue<std::float_t, 0.2F, 2.0F> menu_ui_scale = 1.0f;
     const RgbColor seperator_color = RgbColor(74, 144, 226);
     const RgbColor background_color = RgbColor(30, 30, 30);
     Text text_props;
@@ -52,15 +54,25 @@ namespace base::menu::ui {
     Status Load(const std::string& theme_name);
   };
 
+  struct NotificationRenderProperties {
+    const UiSize notification_width = UiSize(0.12f);
+    const UiSize notification_height = UiSize(0.08f);
+    const UiSize title_text_size = UiSize(0.013f);
+    const UiSize message_text_size = UiSize(0.01f);
+    const UiSize x_margin = UiSize(0.006f);
+    const UiSize y_margin = UiSize(0.005f);
+    const UiSize text_margin = UiSize(0.002f);
+  };
+
   struct MenuRenderProperties {
     std::shared_ptr<Theme> theme = std::make_shared<Theme>();
     const std::chrono::milliseconds menu_ui_key_state_cooldown = std::chrono::milliseconds(200);
     const std::chrono::milliseconds menu_ui_navigation_key_state_cooldown = std::chrono::milliseconds(200);
     const std::chrono::milliseconds option_interaction_key_state_cooldown = std::chrono::milliseconds(500);
-    const std::float_t header_height = 0.1f;
-    const std::float_t seperator_height = 0.0015f;
-    const std::float_t menu_item_height = 0.025f;
-    const std::float_t menu_width = 0.16f;
+    const UiSize header_height = UiSize(0.1f);
+    const UiSize seperator_height = UiSize(0.0015f);
+    const UiSize menu_item_height = UiSize(0.025f);
+    const UiSize menu_width = UiSize(0.16f);
     const std::uint32_t max_options_drawn = 12;
     const RgbColor selector_color = RgbColor(47, 47, 47);
   };

@@ -39,11 +39,11 @@ namespace base::menu::ui::notification {
                   });
 
     // Calculate max visible based on screen height and notification dimensions
-    constexpr std::size_t max_visible = Notification::GetMaxVisibleNotifications();
+    const std::size_t max_visible = Notification::GetMaxVisibleNotifications();
     const std::size_t notifications_to_render = std::min(notifications_.size(), max_visible);
 
     // Render visible notifications from top to bottom (right aligned)
-    float current_y_offset = Notification::y_margin_;  // Start from top
+    float current_y_offset = Notification::render_props_.y_margin;  // Start from top
 
     for (std::size_t i = 0; i < notifications_to_render; ++i) {
       auto& notif = notifications_[i];

@@ -28,6 +28,7 @@ namespace base::menu::ui::layout {
       // Pass references directly to theme member variables so changes affect the actual theme object
       sub->AddComponent(components::NumberRangeComponent("ui/option/ui_x_pos", "", menuTheme->x_position, 0.005F));
       sub->AddComponent(components::NumberRangeComponent("ui/option/ui_y_pos", "", menuTheme->y_position, 0.005F));
+      sub->AddComponent(components::NumberRangeComponent("ui/option/ui_scale", "", menuTheme->menu_ui_scale, 0.1F));
     });
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kTHEME_SETTINGS, std::move(theme_submenu));
   }

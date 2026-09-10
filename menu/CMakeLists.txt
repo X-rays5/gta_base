@@ -151,6 +151,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/natives/natives_sol2.hpp
         src/natives/native_dumper.hpp
         src/natives/native_lookup.hpp
+        src/ui/ui_size.hpp
+        src/ui/ui_size.cpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

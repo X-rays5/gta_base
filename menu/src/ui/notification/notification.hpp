@@ -50,19 +50,14 @@ namespace base::menu::ui::notification {
     static constexpr auto fade_out_duration_ms_ = 300;
     static constexpr auto top_bar_thickness_ = 0.003f;
     static constexpr auto notification_transparency_ = 255;
-    static constexpr auto notification_width_ = 0.12f;
-    static constexpr auto notification_height_ = 0.08f;
-    static constexpr auto title_text_size_ = 0.013f;
-    static constexpr auto message_text_size_ = 0.01f;
-    static constexpr auto x_margin_ = 0.006f;
-    static constexpr auto y_margin_ = 0.005f;
-    static constexpr auto text_margin_ = 0.002f;
+
+    static NotificationRenderProperties render_props_;
 
     // Calculate max visible notifications based on screen height
     // Available height = 1.0f, each notification takes: notification_height + y_margin
     // Max visible = floor(1.0f / (notification_height + y_margin))
-    static constexpr auto GetMaxVisibleNotifications() {
-      return static_cast<std::size_t>(1.0f / (notification_height_ + y_margin_));
+    static auto GetMaxVisibleNotifications() {
+      return static_cast<std::size_t>(1.0f / (render_props_.notification_height + render_props_.y_margin));
     }
 
     static constexpr auto info_color_ = RgbColor(74, 144, 226);

@@ -87,6 +87,10 @@ namespace base::menu::ui {
       return (it != submenus_.end() && it->second) ? it->second : nullptr;
     }
 
+    std::float_t GetCurrentUiScale() const {
+      return ui_props_.theme->menu_ui_scale;
+    }
+
   private:
     MenuRenderProperties ui_props_{};
     util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK}, ui_props_.menu_ui_key_state_cooldown};

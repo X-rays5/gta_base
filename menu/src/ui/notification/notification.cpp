@@ -9,6 +9,8 @@
 #include "../../render/draw/draw_queue.hpp"
 
 namespace base::menu::ui::notification {
+  NotificationRenderProperties Notification::render_props_;
+
   RgbColor Notification::GetNotificationColor(const Type type) {
     switch (type) {
     case Type::Info:
@@ -64,33 +66,33 @@ namespace base::menu::ui::notification {
 
     // Calculate notification dimensions
     const ImVec2 notification_pos = {
-      right_align ? 1.0f - notification_width_ : x_margin_,
+      right_align ? 1.0f - render_props_.notification_width : render_props_.x_margin,
       y_offset
     };
 
     // Calculate dynamic height based on content
-    const float max_text_width = notification_width_ - (x_margin_ * 2);
+    const float max_text_width = render_props_.notification_width - (render_props_.x_margin * 2);
 
     // Title height (1 line)
-    ImVec2 title_size = render::draw_helpers::CalcTextSize(nullptr, title_text_size_, title_, max_text_width);
+    ImVec2 title_size = render::draw_helpers::CalcTextSize(nullptr, render_props_.title_text_size, title_, max_text_width);
 
     // Message height (max 2 lines with wrapping)
     std::string wrapped_message = message_;
     if (!message_.empty()) {
-      render::draw_helpers::WordWrap(message_text_size_, wrapped_message, max_text_width, 3);
+      render::draw_helpers::WordWrap(render_props_.message_text_size, wrapped_message, max_text_width, 3);
     }
-    ImVec2 message_size = render::draw_helpers::CalcTextSize(nullptr, message_text_size_, wrapped_message, max_text_width);
+    ImVec2 message_size = render::draw_helpers::CalcTextSize(nullptr, render_props_.message_text_size, wrapped_message, max_text_width);
 
     // Calculate total notification height
-    float notification_height = y_margin_;  // top margin
+    float notification_height = render_props_.y_margin;  // top margin
     notification_height += title_size.y;    // title height
     if (!message_.empty()) {
-      notification_height += text_margin_;  // gap between title and message
+      notification_height += render_props_.text_margin;  // gap between title and message
       notification_height += message_size.y; // message height
     }
-    notification_height += y_margin_;       // bottom margin
+    notification_height += render_props_.y_margin;       // bottom margin
 
-    const ImVec2 notification_size = {notification_width_, notification_height};
+    const ImVec2 notification_size = {render_props_.notification_width, notification_height};
 
     // Apply alpha to colors
     const ImU32 background_color = RgbColor(30, 30, 30, alpha);
@@ -112,15 +114,15 @@ namespace base::menu::ui::notification {
 
     // Draw title text
     const ImVec2 title_pos = {
-      notification_pos.x + x_margin_,
-      notification_pos.y + y_margin_
+      notification_pos.x + render_props_.x_margin,
+      notification_pos.y + render_props_.y_margin
     };
     draw_queue_buffer->AddCommand(render::PushFont(kMENU_RENDERER->GetTheme()->text_props.font_bold));
     draw_queue_buffer->AddCommand(render::Text(
       title_pos,
       text_color,
       title_,
-      title_text_size_,
+      render_props_.title_text_size,
       false,
       false,
       false,
@@ -131,14 +133,14 @@ namespace base::menu::ui::notification {
     // Draw message text (if not empty)
     if (!message_.empty()) {
       const ImVec2 message_pos = {
-        notification_pos.x + x_margin_,
-        notification_pos.y + y_margin_ + title_size.y + text_margin_
+        notification_pos.x + render_props_.x_margin,
+        notification_pos.y + render_props_.y_margin + title_size.y + render_props_.text_margin
       };
       draw_queue_buffer->AddCommand(render::Text(
         message_pos,
         text_color,
         wrapped_message,
-        message_text_size_,
+        render_props_.message_text_size,
         false,
         false,
         false,
@@ -148,6 +150,6 @@ namespace base::menu::ui::notification {
     }
 
     // Return the total height occupied by this notification including spacing
-    return notification_height + y_margin_;
+    return notification_height + render_props_.y_margin;
   }
 }
