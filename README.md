@@ -4,6 +4,10 @@
 
 **GTA Base** is a mod menu for GTA V.
 
+## GUI
+
+![UI video](./.assets/gui.gif)
+
 ## Project Structure
 
 - **`common/`**: Contains code shared between all other components. This includes utilities for string formatting, concurrency controls, virtual file system management, exception logging, memory operations, and Windows API wrappers. It serves as the foundational library that abstracts away complex or repetitive logic from the main feature modules.
