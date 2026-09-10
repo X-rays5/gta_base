@@ -1,7 +1,7 @@
 CPMAddPackage(
         NAME LuaJit
         GITHUB_REPOSITORY "LuaJIT/LuaJIT"
-        GIT_TAG "18b087cd2cd4ddc4a79782bf155383a689d5093d"
+        GIT_TAG "c6ffc141a8762b41703f9287d63d93622a13dd8f"
         DOWNLOAD_ONLY YES
 )
 
@@ -13,7 +13,7 @@ set(LUAJIT_DIR ${LuaJit_SOURCE_DIR})
 set(LUAJIT_BUILD_EXE OFF CACHE BOOL "" FORCE)
 
 enable_language(ASM_MASM)
-CPMAddPackage("gh:X-rays5/luajit-cmake#559c8126a99fd60b4df4e99322f4cd2634d1e1b1")
+CPMAddPackage("gh:X-rays5/luajit-cmake#714b60a81b76de981f2ec80a77ba1d0a21c0e11a")
 
 if (NOT ${luajit-cmake_ADDED})
     message(FATAL_ERROR "Failed to add luajit-cmake")
