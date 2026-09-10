@@ -4,10 +4,10 @@
 
 #ifndef ENUM_BITOPS_HPP_06041807
 #define ENUM_BITOPS_HPP_06041807
-#include <magic_enum/magic_enum.hpp>
+#include <enchantum/bitwise_operators.hpp>
 
 namespace base {
-  using namespace magic_enum::bitwise_operators;
+  using namespace enchantum::bitwise_operators;
 }
 
 

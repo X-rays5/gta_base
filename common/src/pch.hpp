@@ -6,7 +6,7 @@
 #define PCH_HPP_04225410
 
 #define WIN32_LEAN_AND_MEAN
-#include "logging/logging_macro.hpp"
+#include "base-common/logging/logging_macro.hpp"
 
 #ifdef MSVC
 #define FORCE_INLINE __forceinline
