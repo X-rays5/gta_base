@@ -21,15 +21,19 @@ namespace base::menu::lua {
     std::optional<std::filesystem::path> GetLicense() const;
 
   private:
+    struct Data {
+      std::string main_file;
+      std::string name;
+      std::optional<std::string> description;
+      std::vector<std::string> authors;
+      std::optional<std::string> version;
+      std::optional<std::string> repository;
+      std::optional<std::string> license;
+    };
+
     static const std::string meta_filename_;
 
-    std::filesystem::path main_file_;
     std::filesystem::path path_;
-    std::string name_;
-    std::string description_;
-    std::vector<std::string> authors_;
-    std::string version_;
-    std::string repository_;
-    std::filesystem::path license_;
+    Data data_;
   };
 }

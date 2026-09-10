@@ -4,13 +4,19 @@
 
 #include "lua_script_metadata.hpp"
 
-#pragma warning(push)
-#pragma warning(disable : 5321)
-#include <sol/sol.hpp>
-#pragma warning(pop)
+#include <glaze/toml.hpp>
 
 namespace base::menu::lua {
-  const std::string ScriptMetaData::meta_filename_ = "manifest.lua";
+  namespace {
+    bool EnsureIsWithinDirectory(const std::filesystem::path& base, const std::filesystem::path& target) {
+      const auto canonical_base = std::filesystem::canonical(base);
+      const auto canonical_target = std::filesystem::canonical(target);
+
+      return std::mismatch(canonical_base.begin(), canonical_base.end(), canonical_target.begin()).first == canonical_base.end();
+    }
+  }
+
+  const std::string ScriptMetaData::meta_filename_ = "manifest.toml";
 
   ScriptMetaData::ScriptMetaData(const std::filesystem::path& path) : path_(path) {}
 
@@ -24,57 +30,9 @@ namespace base::menu::lua {
       return MakeFailure<ResultCode::kNOT_FOUND>("Manifest file not found: {}", manifest_file);
     }
 
-    sol::state L{};
-    L.safe_script_file(manifest_file.string());
-
-    const auto name = L["name"];
-    if (name.valid() && name.get_type() == sol::type::string) {
-      name_ = name.get<std::string>();
-    } else {
-      return MakeFailure<ResultCode::kNOT_FOUND>("Mandatory field 'name' not found or invalid in manifest: {}", manifest_file);
-    }
-
-    const auto main_file = L["main_file"];
-    if (main_file.valid() && main_file.get_type() == sol::type::string) {
-      main_file_ = path_ / main_file.get<std::string>();
-      if (!std::filesystem::is_regular_file(main_file_)) {
-        return MakeFailure<ResultCode::kNOT_FOUND>("Main file specified in manifest not found: {}", main_file_);
-      }
-    } else {
-      return MakeFailure<ResultCode::kNOT_FOUND>("Mandatory field 'main_file' not found or invalid in manifest: {}", manifest_file);
-    }
-
-    const auto description = L["description"];
-    if (description.valid() && description.get_type() == sol::type::string) {
-      description_ = description.get<std::string>();
-    }
-
-    const auto author = L["author"];
-    if (author.valid() && author.get_type() == sol::type::string) {
-      authors_.push_back(author.get<std::string>());
-    }
-
-    const auto authors = L["authors"];
-    if (authors.valid() && authors.get_type() == sol::type::table) {
-      authors_ = authors.get<std::vector<std::string>>();
-    }
-
-    const auto version = L["version"];
-    if (version.valid() && version.get_type() == sol::type::string) {
-      version_ = version.get<std::string>();
-    }
-
-    const auto repository = L["repository"];
-    if (repository.valid() && repository.get_type() == sol::type::string) {
-      repository_ = repository.get<std::string>();
-    }
-
-    const auto license_file = L["license"];
-    if (license_file.valid() && license_file.get_type() == sol::type::string) {
-      license_ = license_file.get<std::string>();
-      if (!std::filesystem::is_regular_file(license_)) {
-        return MakeFailure<ResultCode::kNOT_FOUND>("License file specified in manifest not found: {}", license_);
-      }
+    auto ec = glz::read_file_toml(data_, manifest_file.string(), std::string{});
+    if (ec) {
+      return MakeFailure<ResultCode::kNOT_FOUND>("Failed to read manifest file: {}", ec);
     }
 
     LOG_DEBUG("Successfully read script metadata from manifest: {}", manifest_file);
@@ -82,7 +40,18 @@ namespace base::menu::lua {
   }
 
   std::filesystem::path ScriptMetaData::GetMainFile() const {
-    return main_file_;
+    const auto main_file_path = path_ / data_.main_file;
+    if (!EnsureIsWithinDirectory(path_, main_file_path)) {
+      LOG_ERROR("Main file is outside of script directory: {}", main_file_path);
+      return {};
+    }
+
+    if (!std::filesystem::is_regular_file(main_file_path)) {
+      LOG_ERROR("Main file does not exist: {}", main_file_path);
+      return {};
+    }
+
+    return main_file_path;
   }
 
   std::filesystem::path ScriptMetaData::GetPath() const {
@@ -90,26 +59,41 @@ namespace base::menu::lua {
   }
 
   std::string ScriptMetaData::GetName() const {
-    return name_;
+    return data_.name;
   }
 
   std::optional<std::string> ScriptMetaData::GetDescription() const {
-    return description_.empty() ? std::nullopt : std::make_optional(description_);
+    return data_.description;
   }
 
   std::vector<std::string> ScriptMetaData::GetAuthor() const {
-    return authors_;
+    return data_.authors;
   }
 
   std::optional<std::string> ScriptMetaData::GetVersion() const {
-    return version_.empty() ? std::nullopt : std::make_optional(version_);
+    return data_.version;
   }
 
   std::optional<std::string> ScriptMetaData::GetRepository() const {
-    return repository_.empty() ? std::nullopt : std::make_optional(repository_);
+    return data_.repository;
   }
 
   std::optional<std::filesystem::path> ScriptMetaData::GetLicense() const {
-    return license_.empty() ? std::nullopt : std::make_optional(license_);
+    if (data_.license.has_value()) {
+      const auto license_path = path_ / data_.license.value();
+      if (!EnsureIsWithinDirectory(path_, license_path)) {
+        LOG_ERROR("License file is outside of script directory: {}", license_path);
+        return std::nullopt;
+      }
+
+      if (!std::filesystem::is_regular_file(license_path)) {
+        LOG_ERROR("License file does not exist: {}", license_path);
+        return std::nullopt;
+      }
+
+      return license_path;
+    }
+
+    return std::nullopt;
   }
 }
