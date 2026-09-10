@@ -14,6 +14,7 @@
 #include "../memory/pointers.hpp"
 #include "../ui/menu_renderer.hpp"
 #include <vector>
+#include <windowsx.h>
 
 namespace base::menu::render {
   Renderer::Renderer() : d3d12_context_(*memory::kPOINTERS->swap_chain_, *memory::kPOINTERS->command_queue_) {
@@ -29,6 +30,18 @@ namespace base::menu::render {
     // This avoids blocking WndProc which runs on the game's message pump thread
     wndproc_handler_id_ = hooking::kWNDPROC->AddWndProcHandler([](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
       ImGuiInputQueue::Get().QueueEvent(hwnd, msg, wparam, lparam);
+
+      switch (msg) {
+        case WM_MOUSEMOVE: {
+          ImVec2 pos = {};
+          pos.x = static_cast<float>(GET_X_LPARAM(lparam));
+          pos.y = static_cast<float>(GET_Y_LPARAM(lparam));
+          kRENDERER->cursor_pos_.store(pos, std::memory_order_relaxed);
+          break;
+        }
+        default:
+          break;
+      }
     });
   }
 

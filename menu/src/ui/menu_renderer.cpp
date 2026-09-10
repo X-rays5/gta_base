@@ -407,35 +407,16 @@ namespace base::menu::ui {
       return;
     }
 
-    // Get current mouse state directly from Windows, not from ImGui
-    POINT mouse_pos;
-    if (!GetCursorPos(&mouse_pos)) {
-      mouse_in_menu_bounds_ = false;
-      return;  // Failed to get mouse position
-    }
+    const ImVec2 mouse_pos = render::kRENDERER->GetCursorPos();
 
-    // Get window handle
-    auto game_hwnd = win32::GetGameHwnd();
-    if (!game_hwnd) {
+    const ImVec2 client_size = render::kRENDERER->GetResolution();
+    const float display_width = client_size.x;
+    const float display_height = client_size.y;
+
+    if (display_width <= 0.0f || display_height <= 0.0f) {
       mouse_in_menu_bounds_ = false;
       return;
     }
-
-    // Convert screen coordinates to client coordinates
-    if (!ScreenToClient(game_hwnd.value(), &mouse_pos)) {
-      mouse_in_menu_bounds_ = false;
-      return;
-    }
-
-    // Get window client area size
-    RECT client_rect;
-    if (!GetClientRect(game_hwnd.value(), &client_rect)) {
-      mouse_in_menu_bounds_ = false;
-      return;
-    }
-
-    const float display_width = static_cast<float>(client_rect.right - client_rect.left);
-    const float display_height = static_cast<float>(client_rect.bottom - client_rect.top);
 
     // Convert to normalized coordinates [0, 1]
     const float norm_mouse_x = static_cast<float>(mouse_pos.x) / display_width;

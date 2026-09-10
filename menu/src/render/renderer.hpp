@@ -59,6 +59,10 @@ namespace base::menu::render {
       return cursor_show_requests_ > 0;
     }
 
+    ImVec2 GetCursorPos() const {
+      return cursor_pos_.load(std::memory_order_relaxed);
+    }
+
     /// Register a mouse input listener
     void RegisterMouseInputListener(util::input::MouseInputListener* listener);
 
@@ -94,6 +98,7 @@ namespace base::menu::render {
     std::unique_ptr<RenderThread> render_thread_;
     d3d12::Context d3d12_context_;
     std::vector<util::input::MouseInputListener*> mouse_input_listeners_;
+    std::atomic<ImVec2> cursor_pos_{};
 
   private:
     void SetDeltaTime(const std::uint64_t delta_time) {
