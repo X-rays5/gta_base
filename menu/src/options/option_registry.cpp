@@ -38,6 +38,26 @@ namespace base::menu::options {
 
       return {};
     }
+
+    StatusOr<std::string> GetSavedOptionFromData(glz::generic& save_data) {
+      std::string opt_saved;
+      auto ec = glz::write_toml(save_data, opt_saved);
+      if (ec) {
+        return MakeFailure<ResultCode::kIO_ERROR>("Failed to save options: {}", ec);
+      }
+
+      return opt_saved;
+    }
+
+    StatusOr<glz::generic> GetDataFromSavedOption(const std::string& opt_saved) {
+      glz::generic opt_data;
+      auto ec = glz::read_toml(opt_data, opt_saved);
+      if (ec) {
+        return MakeFailure<ResultCode::kIO_ERROR>("Failed to load options: {}", ec);
+      }
+
+      return opt_data;
+    }
   }
 
   OptionRegistry::OptionRegistry() {
@@ -70,17 +90,16 @@ namespace base::menu::options {
       return res.error().Forward();
     }
 
-    std::string opt_saved;
     glz::generic opt_data;
     opt->Save(opt_data);
-    auto ec = glz::write_toml(opt_data, opt_saved);
-    if (ec) {
-      LOG_ERROR("Failed to save options from file: {}", ec);
-      return MakeFailure<ResultCode::kIO_ERROR>("Failed to save options from file: {}", ec);
+    auto opt_saved = GetSavedOptionFromData(opt_data);
+    if (!opt_saved) {
+      LOG_ERROR("Failed to save option '{}': {}", opt->GetName(), opt_saved.error());
+      return opt_saved.error().Forward();
     }
 
     glz::generic save = res.value();
-    save[opt->GetName()] = opt_saved;
+    save[opt->GetName()] = opt_saved.value();
 
     return WriteProfile(active_profile_name_, save);
   }
@@ -89,7 +108,6 @@ namespace base::menu::options {
     LOG_INFO("Saving options to profile '{}'", profile_name);
 
     glz::generic save;
-    std::string glz_buff;
 
     common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
     for (auto&& opt : opt_name_to_option_) {
@@ -97,13 +115,13 @@ namespace base::menu::options {
       if (opt.second->IsSavable()) {
         glz::generic opt_data;
         opt.second->Save(opt_data);
-        const auto ec = glz::write_toml(opt_data, glz_buff);
-        if (ec) {
-          LOG_ERROR("Failed to save options to file: {}", ec);
+        const auto opt_saved = GetSavedOptionFromData(opt_data);
+        if (!opt_saved) {
+          LOG_ERROR("Failed to save option '{}': {}", opt.first, opt_saved.error());
           continue;
         }
 
-        save[opt.first] = glz_buff;
+        save[opt.first] = opt_saved.value();
         LOG_DEBUG("Saving option '{}': {}", opt.first, save[opt.first].get_string());
       }
     }
@@ -125,13 +143,12 @@ namespace base::menu::options {
     common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
     for (auto&& opt : opt_name_to_option_) {
       if (opt.second->IsSavable() && save.contains(opt.first) && save[opt.first].is_string()) {
-        glz::generic opt_data;
-        auto ec = glz::read_toml(opt_data, save[opt.first].get_string());
-        if (ec) {
-          LOG_ERROR("Failed to load option '{}': {}", opt.first, ec);
+        const auto opt_data = GetDataFromSavedOption(save[opt.first].get_string());
+        if (!opt_data) {
+          LOG_ERROR("Failed to load option '{}': {}", opt.first, opt_data.error());
           continue;
         }
-        opt.second->Load(opt_data);
+        opt.second->Load(opt_data.value());
       }
     }
 
