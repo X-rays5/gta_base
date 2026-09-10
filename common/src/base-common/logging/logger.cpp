@@ -94,7 +94,12 @@ namespace base::common::logging {
       spdlog::flush_every(std::chrono::milliseconds(200));
 
       auto formatter = std::make_unique<spdlog::pattern_formatter>();
-      formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%T] [%^%l%$] [thread: %N] [%s:%#] %v");
+#ifndef NDEBUG
+      formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%Y-%m-%dT%T%z] [%^%L%$] [%N] [%s:%#] %v");
+#else
+      formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%Y-%m-%dT%T%z] [%^%L%$] [%N] %v");
+#endif
+
       spdlog::set_formatter(std::move(formatter));
 
       logger->set_error_handler([&logger](const std::string& err) {
