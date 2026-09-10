@@ -40,6 +40,9 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/hotkey/add_success", "Successfully added hotkey for option '{}': {}")
     ADD_TRANSLATION("ui/hotkey/activated", "Triggered '{}'")
 
+    ADD_TRANSLATION("ui/save_option", "Save Option")
+    ADD_TRANSLATION("ui/save_option_desc", "Saving option '{}'")
+
     ADD_TRANSLATION("ui/sub/home", "Home")
     ADD_TRANSLATION("ui/sub/self", "Self")
     ADD_TRANSLATION("ui/sub/self_health", "Health")

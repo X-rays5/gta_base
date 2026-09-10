@@ -61,7 +61,7 @@ namespace base::menu::options {
       return MakeFailure<ResultCode::kINVALID_ARGUMENT>("Option '{}' is not savable", opt->GetName());
     }
 
-    LOG_INFO("Saving option '{}'", opt->GetName());
+    NOTIFY_INFO("ui/save_option", "ui/save_option_desc", opt->GetName());
 
     common::concurrency::ScopedSpinlock lock(opt_registry_lock_);
     auto res = ReadProfile(active_profile_name_);
