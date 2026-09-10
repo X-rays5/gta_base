@@ -4,7 +4,7 @@
 
 #include "option_registry.hpp"
 #include <base-common/fs/vfs.hpp>
-#include <glaze/toml.hpp>
+#include <glaze/json.hpp>
 #include "../default.hpp"
 
 namespace base::menu::options {
@@ -41,7 +41,7 @@ namespace base::menu::options {
 
     StatusOr<std::string> GetSavedOptionFromData(glz::generic& save_data) {
       std::string opt_saved;
-      auto ec = glz::write_toml(save_data, opt_saved);
+      auto ec = glz::write_json(save_data, opt_saved);
       if (ec) {
         return MakeFailure<ResultCode::kIO_ERROR>("Failed to save options: {}", ec);
       }
@@ -51,7 +51,7 @@ namespace base::menu::options {
 
     StatusOr<glz::generic> GetDataFromSavedOption(const std::string& opt_saved) {
       glz::generic opt_data;
-      auto ec = glz::read_toml(opt_data, opt_saved);
+      auto ec = glz::read_json(opt_data, opt_saved);
       if (ec) {
         return MakeFailure<ResultCode::kIO_ERROR>("Failed to load options: {}", ec);
       }
@@ -125,6 +125,7 @@ namespace base::menu::options {
         LOG_DEBUG("Saving option '{}': {}", opt.first, save[opt.first].get_string());
       }
     }
+    active_profile_name_ = profile_name;
     lock.Unlock();
 
     return WriteProfile(profile_name, save);
