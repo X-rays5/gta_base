@@ -25,6 +25,18 @@ header_includes = ['#include "../game/native_types.hpp"', '#include "invoker.hpp
 # Groups left out of every generated file. Matched case-insensitively.
 excluded_groups = ["BUILTIN"]
 
+[angelscript]
+# AngelScript namespace the native bindings are registered under. One lowercased
+# sub-namespace per NativeDB group with PascalCase native names, so PED::SET_PED_ARMOUR is
+# reached as natives::ped::SetPedArmour. This is not generation.base_namespace - that one is
+# the C++ namespace the typed natives are declared in.
+base_namespace = "natives"
+# Emit the NativeDB description through the doc registry so angel-lsp shows hover docs.
+docs = true
+# Literal strings, so the quotes inside need no escaping. as_bind.hpp carries the doc registry
+# and the registration wrappers the generated file calls.
+includes = ['#include "../as/as_bind.hpp"']
+
 [crossmap]
 # Native hash -> build-specific index. One "hash,index_hash" pair per line, '#' for comments.
 file = "tools/native_gen/crossmap.txt"

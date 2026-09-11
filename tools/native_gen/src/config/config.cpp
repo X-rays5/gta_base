@@ -22,6 +22,7 @@ namespace base::tools::native_gen::config {
         {"output", {"dir", "line_ending"}},
         {"generation",
          {"base_namespace", "invoker_function", "log_native_error_func", "header_includes", "excluded_groups"}},
+        {"angelscript", {"base_namespace", "docs", "includes"}},
         {"crossmap", {"file", "enabled"}},
         {"paths", {"root"}},
     };
@@ -209,6 +210,9 @@ namespace base::tools::native_gen::config {
     }
     if (!HasKey(assignments, "generation", "excluded_groups")) {
       settings.config.generation.excluded_groups = kDefaultExcludedGroups;
+    }
+    if (!HasKey(assignments, "angelscript", "includes")) {
+      settings.config.angelscript.includes = kDefaultAngelScriptIncludes;
     }
 
     // Command line wins over the config file.

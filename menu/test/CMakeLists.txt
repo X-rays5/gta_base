@@ -5,10 +5,14 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
+        src/as_docs_test.cpp
+        src/as_natives_test.cpp
 )
 
 # Link against the core library to share dependencies and avoid recompilation
-target_link_libraries(${PROJECT_NAME} PRIVATE base::menu_core)
+# The add-ons are linked explicitly because the core library keeps AngelScript private, and the
+# tests drive the engine directly.
+target_link_libraries(${PROJECT_NAME} PRIVATE base::menu_core angelscript_add_ons)
 
 include(../../vendor/gtest.cmake)
 enable_testing()

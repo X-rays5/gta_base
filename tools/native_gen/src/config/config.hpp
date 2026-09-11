@@ -16,6 +16,9 @@ namespace base::tools::native_gen::config {
       "#include \"invoker.hpp\"",
   };
   inline const std::vector<std::string> kDefaultExcludedGroups{"BUILTIN"};
+  inline const std::vector<std::string> kDefaultAngelScriptIncludes{
+      "#include \"../as/as_bind.hpp\"",
+  };
 
   // Mirrors config.toml one-to-one. Every key has a built-in default, so the tool runs
   // with no config file at all.
@@ -38,6 +41,14 @@ namespace base::tools::native_gen::config {
     std::vector<std::string> excluded_groups;
   };
 
+  // The AngelScript surface. base_namespace is deliberately separate from
+  // GenerationConfig::base_namespace, which is the C++ namespace the typed natives already live in.
+  struct AngelScriptConfig {
+    std::string base_namespace{"natives"};
+    bool docs{true};
+    std::vector<std::string> includes;
+  };
+
   struct CrossmapConfig {
     std::string file{"tools/native_gen/crossmap.txt"};
     bool enabled{true};
@@ -51,6 +62,7 @@ namespace base::tools::native_gen::config {
     NativesConfig natives{};
     OutputConfig output{};
     GenerationConfig generation{};
+    AngelScriptConfig angelscript{};
     CrossmapConfig crossmap{};
     PathsConfig paths{};
   };

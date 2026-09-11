@@ -33,6 +33,10 @@ namespace base::common::fs::vfs {
     LOG_DEBUG("Set working directory to: {}", appdata_path);
   }
 
+  inline std::filesystem::path GetWorkingDir() {
+    return std::filesystem::current_path();
+  }
+
   GET_PATH(LoggingDir, "logs")
   GET_PATH(LoggingSaveDir, "logs/saved")
   GET_PATH(ExceptionReportsDir, "logs/exception_reports")

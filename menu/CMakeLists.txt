@@ -149,10 +149,24 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/lua/lib/lua_coroutine.hpp
         src/natives/natives_sol2.cpp
         src/natives/natives_sol2.hpp
+        src/natives/natives_as.cpp
+        src/natives/natives_as.hpp
         src/natives/native_dumper.hpp
         src/natives/native_lookup.hpp
         src/ui/ui_size.hpp
         src/ui/ui_size.cpp
+        src/as/as_bind.cpp
+        src/as/as_bind.hpp
+        src/as/as_native_types.cpp
+        src/as/as_native_types.hpp
+        src/as/as_util.cpp
+        src/as/as_util.hpp
+        src/as/as_generate_predefined.cpp
+        src/as/as_generate_predefined.hpp
+        src/as/as_log.cpp
+        src/as/as_log.hpp
+        src/as/as_script.cpp
+        src/as/as_script.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
@@ -170,7 +184,7 @@ include(vendor.cmake)
 target_compile_definitions(${PROJECT_NAME}_core PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4189 /wd4068 /wd4324 /wd4100 /diagnostics:caret /W4 /permissive- /WX)
-target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
+target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
 target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
@@ -180,8 +194,12 @@ target_link_libraries(${PROJECT_NAME}_core PUBLIC base::rage)
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
-target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX CRT_SECURE_NO_WARNINGS)
+target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
 target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON=1 SOL_STRINGS_ARE_NUMBERS=1 SOL_LUAJIT=1 SOL_NO_EXCEPTIONS=1 SOL_PRINT_ERRORS=0)
+# The precompiled header for the core target was built with AS_USE_NAMESPACE defined.
+# Ensure the module target defines the same macro so the reused PCH is compatible
+# and avoids C4651 (PCH macro mismatch) when compiling `dllmain.cpp`.
+target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE)
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM ${PROJECT_NAME}_core)
 
 add_subdirectory(test)

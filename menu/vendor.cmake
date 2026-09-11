@@ -18,5 +18,6 @@ include(../vendor/ctninja.cmake)
 include(../vendor/argparse.cmake)
 include(../vendor/sol2.cmake)
 include(../vendor/minicoropp.cmake)
+include(../vendor/angelscript.cmake)
 
 set(PROJECT_NAME ${PROJECT_NAME_COPY})

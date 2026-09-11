@@ -11,6 +11,8 @@ namespace base::tools::native_gen {
   inline constexpr std::string_view kOutputCrossmapImpl = "crossmap.cpp";
   inline constexpr std::string_view kOutputSol2Header = "natives_sol2.hpp";
   inline constexpr std::string_view kOutputSol2Impl = "natives_sol2.cpp";
+  inline constexpr std::string_view kOutputAsHeader = "natives_as.hpp";
+  inline constexpr std::string_view kOutputAsImpl = "natives_as.cpp";
   inline constexpr std::string_view kOutputLookup = "native_lookup.hpp";
 
   inline constexpr std::string_view kDefaultUrl =

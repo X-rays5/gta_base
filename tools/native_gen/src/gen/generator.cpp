@@ -141,6 +141,18 @@ namespace base::tools::native_gen::gen {
       if (!write(kOutputSol2Impl, EmitSol2Impl(config, *database))) {
         return 1;
       }
+      // Built before either is written so an unsupported type leaves no half-written pair behind.
+      const auto angelscript_impl = EmitAngelScriptImpl(config, crossmap, *database);
+      if (!angelscript_impl) {
+        LOG_ERROR("error: {}", angelscript_impl.error());
+        return 1;
+      }
+      if (!write(kOutputAsHeader, EmitAngelScriptHeader(config))) {
+        return 1;
+      }
+      if (!write(kOutputAsImpl, *angelscript_impl)) {
+        return 1;
+      }
     }
 
     if (options.command != cli::Command::Generate) {
