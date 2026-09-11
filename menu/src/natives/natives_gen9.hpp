@@ -11,7 +11,7 @@
 
 namespace base::menu::natives {
 
-	namespace APP {
+	namespace APPS {
 
 		bool APP_DATA_VALID();
 		int APP_GET_INT(const char* property);
@@ -36,7 +36,7 @@ namespace base::menu::natives {
 		int APP_GET_DELETED_FILE_STATUS();
 		bool APP_DELETE_APP_DATA(const char* appName);
 
-	} // namespace APP
+	} // namespace APPS
 
 	namespace AUDIO {
 
@@ -196,7 +196,7 @@ namespace base::menu::natives {
 		 * All found occurrences in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/f2A7vTj0
 		 * No changes made in b678d.
 		 * 
-		 * gtaforums.com/topic/795622-audio-for-mods
+		 * https://gtaforums.com/topic/795622-audio-for-mods
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
@@ -209,17 +209,13 @@ namespace base::menu::natives {
 		/**
 		 * All found occurrences in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/eeFc5DiW
 		 * 
-		 * gtaforums.com/topic/795622-audio-for-mods
+		 * https://gtaforums.com/topic/795622-audio-for-mods
 		 * 
 		 * Full list of audio / sound names by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/soundNames.json
 		 */
 		void PLAY_SOUND_FROM_COORD(int soundId, const char* audioName, float x, float y, float z, const char* audioRef, bool isNetwork, int range, bool p8);
 		void UPDATE_SOUND_COORD(int soundId, float x, float y, float z);
 		void STOP_SOUND(int soundId);
-		/**
-		 * Could this be used alongside either,
-		 * SET_NETWORK_ID_EXISTS_ON_ALL_MACHINES or _SET_NETWORK_ID_SYNC_TO_PLAYER to make it so other players can hear the sound while online? It'd be a bit troll-fun to be able to play the Zancudo UFO creepy sounds globally.
-		 */
 		int GET_NETWORK_ID_FROM_SOUND_ID(int soundId);
 		int GET_SOUND_ID_FROM_NETWORK_ID(int netId);
 		void SET_VARIABLE_ON_SOUND(int soundId, const char* variable, float p2);
@@ -356,7 +352,7 @@ namespace base::menu::natives {
 		void DEACTIVATE_AUDIO_SLOWMO_MODE(const char* mode);
 		/**
 		 * Audio List
-		 * gtaforums.com/topic/795622-audio-for-mods/
+		 * https://gtaforums.com/topic/795622-audio-for-mods/
 		 * 
 		 * All found occurrences in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/FTeAj4yZ
 		 */
@@ -458,12 +454,10 @@ namespace base::menu::natives {
 		void SET_RADIO_RETUNE_DOWN();
 		/**
 		 * List of radio stations that are in the wheel, in clockwise order, as of LS Tuners DLC: https://git.io/J8a3k
-		 * An older list including hidden radio stations: https://pastebin.com/Kj9t38KF
 		 */
 		void SET_RADIO_TO_STATION_NAME(const char* stationName);
 		/**
 		 * List of radio stations that are in the wheel, in clockwise order, as of LS Tuners DLC: https://git.io/J8a3k
-		 * An older list including hidden radio stations: https://pastebin.com/Kj9t38KF
 		 */
 		void SET_VEH_RADIO_STATION(Vehicle vehicle, const char* radioStation);
 		void SET_VEH_HAS_NORMAL_RADIO(Vehicle vehicle);
@@ -720,7 +714,7 @@ namespace base::menu::natives {
 		 * Use the audioNameHash found in vehicles.meta
 		 * 
 		 * Example:
-		 * _SET_VEHICLE_AUDIO(veh, "ADDER");
+		 * FORCE_USE_AUDIO_GAME_OBJECT(veh, "ADDER");
 		 * The selected vehicle will now have the audio of the Adder.
 		 */
 		void FORCE_USE_AUDIO_GAME_OBJECT(Vehicle vehicle, const char* audioName);
@@ -1164,8 +1158,6 @@ namespace base::menu::natives {
 		 */
 		void REACTIVATE_NAMED_WORLD_BRAINS_WAITING_TILL_OUT_OF_RANGE(const char* scriptName);
 		/**
-		 * Looks like a cousin of above function _6D6840CEE8845831 as it was found among them. Must be similar
-		 * 
 		 * Here are possible values of argument -
 		 * 
 		 * "ob_tv"
@@ -1175,7 +1167,7 @@ namespace base::menu::natives {
 
 	} // namespace BRAIN
 
-	namespace CAM {
+	namespace CAMERA {
 
 		/**
 		 * ease - smooth transition between the camera's positions
@@ -1726,11 +1718,11 @@ namespace base::menu::natives {
 		 */
 		void SET_FOLLOW_VEHICLE_CAM_VIEW_MODE(int viewMode);
 		/**
-		 * context: see _GET_CAM_ACTIVE_VIEW_MODE_CONTEXT
+		 * context: see GET_CAM_ACTIVE_VIEW_MODE_CONTEXT
 		 */
 		int GET_CAM_VIEW_MODE_FOR_CONTEXT(int context);
 		/**
-		 * context: see _GET_CAM_ACTIVE_VIEW_MODE_CONTEXT, viewmode: see CAM.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE
+		 * context: see GET_CAM_ACTIVE_VIEW_MODE_CONTEXT, viewmode: see CAM.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE
 		 */
 		void SET_CAM_VIEW_MODE_FOR_CONTEXT(int context, int viewMode);
 		/**
@@ -1893,7 +1885,7 @@ namespace base::menu::natives {
 		void CAMERA_PREVENT_COLLISION_SETTINGS_FOR_TRIPLEHEAD_IN_INTERIORS_THIS_UPDATE();
 		float REPLAY_GET_MAX_DISTANCE_ALLOWED_FROM_PLAYER();
 
-	} // namespace CAM
+	} // namespace CAMERA
 
 	namespace CLOCK {
 
@@ -2419,9 +2411,6 @@ namespace base::menu::natives {
 		/**
 		 * Return height (z-dimension) above ground.
 		 * Example: The pilot in a titan plane is 1.844176 above ground.
-		 * 
-		 * How can i convert it to meters?
-		 * Everything seems to be in meters, probably this too.
 		 */
 		float GET_ENTITY_HEIGHT_ABOVE_GROUND(Entity entity);
 		void GET_ENTITY_MATRIX(Entity entity, Vector3* forwardVector, Vector3* rightVector, Vector3* upVector, Vector3* position);
@@ -2462,7 +2451,7 @@ namespace base::menu::natives {
 		 * rotationOrder refers to the order yaw pitch roll is applied; value ranges from 0 to 5 and is usually *2* in scripts.
 		 * What you use for rotationOrder when getting must be the same as rotationOrder when setting the rotation.
 		 * 
-		 * What it returns is the yaw on the z part of the vector, which makes sense considering R* considers z as vertical. Here's a picture for those of you who don't understand pitch, yaw, and roll: www.allstar.fiu.edu/aero/images/pic5-1.gif
+		 * What it returns is the yaw on the z part of the vector, which makes sense considering R* considers z as vertical. Here's a picture for those of you who don't understand pitch, yaw, and roll: https://web.archive.org/web/20160825124935/www.allstar.fiu.edu/aero/images/pic5-1.gif
 		 * 
 		 * Rotation Orders:
 		 * 0: ZYX - Rotate around the z-axis, then the y-axis and finally the x-axis.
@@ -2578,7 +2567,7 @@ namespace base::menu::natives {
 		 */
 		bool IS_ENTITY_ON_SCREEN(Entity entity);
 		/**
-		 * See also PED::IS_SCRIPTED_SCENARIO_PED_USING_CONDITIONAL_ANIM 0x6EC47A344923E1ED 0x3C30B447
+		 * See also PED::IS_SCRIPTED_SCENARIO_PED_USING_CONDITIONAL_ANIM
 		 * 
 		 * Taken from ENTITY::IS_ENTITY_PLAYING_ANIM(PLAYER::PLAYER_PED_ID(), "creatures@shark@move", "attack_player", 3)
 		 * 
@@ -2600,6 +2589,7 @@ namespace base::menu::natives {
 		bool IS_ENTITY_OCCLUDED(Entity entity);
 		bool WOULD_ENTITY_BE_OCCLUDED(Hash entityModelHash, float x, float y, float z, bool p4);
 		bool IS_ENTITY_WAITING_FOR_WORLD_COLLISION(Entity entity);
+		void _IS_ENTITY_FIXED(Entity entity); // Missing in crossmap
 		/**
 		 * Applies a force to the specified entity.
 		 * 
@@ -2621,8 +2611,8 @@ namespace base::menu::natives {
 		void APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(Entity entity, int forceType, float x, float y, float z, bool p5, bool isDirectionRel, bool isForceRel, bool p8);
 		/**
 		 * Documented here:
-		 * gtaforums.com/topic/885669-precisely-define-object-physics/
-		 * gtaforums.com/topic/887362-apply-forces-and-momentums-to-entityobject/
+		 * https://gtaforums.com/topic/885669-precisely-define-object-physics/
+		 * https://gtaforums.com/topic/887362-apply-forces-and-momentums-to-entityobject/
 		 * 
 		 * forceFlags:
 		 * First bit (lowest): Strong force flag, factor 100
@@ -2642,8 +2632,6 @@ namespace base::menu::natives {
 		 * 
 		 * isLocal: vector defined in local (body-fixed) coordinate frame
 		 * isMassRel: if true the force gets multiplied with the objects mass (this is why it was known as highForce) and different objects will have the same acceleration.
-		 * 
-		 * p8 !!! Whenever I set this !=0, my script stopped.
 		 */
 		void APPLY_FORCE_TO_ENTITY(Entity entity, int forceFlags, float x, float y, float z, float offX, float offY, float offZ, int boneIndex, bool isDirectionRel, bool ignoreUpVec, bool isForceRel, bool p12, bool p13);
 		/**
@@ -2805,14 +2793,8 @@ namespace base::menu::natives {
 		void SET_ENTITY_ANIM_SPEED(Entity entity, const char* animDictionary, const char* animName, float speedMultiplier);
 		/**
 		 * Makes the specified entity (ped, vehicle or object) persistent. Persistent entities will not automatically be removed by the engine.
-		 * 
-		 * p1 has no effect when either its on or off
-		 * maybe a quick disassembly will tell us what it does
-		 * 
-		 * p2 has no effect when either its on or off
-		 * maybe a quick disassembly will tell us what it does
 		 */
-		void SET_ENTITY_AS_MISSION_ENTITY(Entity entity, bool p1, bool p2);
+		void SET_ENTITY_AS_MISSION_ENTITY(Entity entity, bool bScriptHostObject, bool bGrabFromOtherScript);
 		/**
 		 * Marks the specified entity (ped, vehicle or object) as no longer needed if its population type is set to the mission type.
 		 * If the entity is ped, it will also clear their tasks immediately just like when CLEAR_PED_TASKS_IMMEDIATELY is called.
@@ -2946,6 +2928,7 @@ namespace base::menu::natives {
 		void SET_ENTITY_VELOCITY(Entity entity, float x, float y, float z);
 		void SET_ENTITY_ANGULAR_VELOCITY(Entity entity, float x, float y, float z);
 		void SET_ENTITY_HAS_GRAVITY(Entity entity, bool toggle);
+		void SET_ENTITY_DRAWABLE_LOD_THRESHOLDS(Entity entity, int highLod, int medLod, int lowLod, int vlowLod); // Missing in crossmap
 		/**
 		 * LOD distance can be 0 to 0xFFFF (higher values will result in 0xFFFF) as it is actually stored as a 16-bit value (aka uint16_t).
 		 */
@@ -2976,7 +2959,7 @@ namespace base::menu::natives {
 		void SET_ENTITY_ALWAYS_PRERENDER(Entity entity, bool toggle);
 		void SET_ENTITY_RENDER_SCORCHED(Entity entity, bool toggle);
 		/**
-		 * Example here: www.gtaforums.com/topic/830463-help-with-turning-lights-green-and-causing-peds-to-crash-into-each-other/#entry1068211340
+		 * Example here: https://gtaforums.com/topic/830463-help-with-turning-lights-green-and-causing-peds-to-crash-into-each-other/#entry1068211340
 		 * 
 		 * 0 = green
 		 * 1 = red
@@ -3062,6 +3045,7 @@ namespace base::menu::natives {
 		 * iVar8 = ENTITY::GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY(bParam0->f_9, joaat("p_cs_clipboard"));
 		 */
 		Entity GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY(Entity entity, Hash modelHash);
+		void _GET_CHILD_ATTACHMENT(Entity entity); // Missing in crossmap
 		void SET_PICK_UP_BY_CARGOBOB_DISABLED(Entity entity, bool toggle);
 
 	} // namespace ENTITY
@@ -3189,7 +3173,7 @@ namespace base::menu::natives {
 		void GET_SHOP_PED_QUERY_COMPONENT(int componentId, Any* outComponent);
 		/**
 		 * Returns some sort of index/offset for components.
-		 * Needs _GET_NUM_PROPS_FROM_OUTFIT to be called with p3 = false and componentId with the drawable's component slot first, returns -1 otherwise.
+		 * Needs SETUP_SHOP_PED_APPAREL_QUERY_TU to be called with p3 = false and componentId with the drawable's component slot first, returns -1 otherwise.
 		 */
 		int GET_SHOP_PED_QUERY_COMPONENT_INDEX(Hash componentHash);
 		/**
@@ -3202,7 +3186,7 @@ namespace base::menu::natives {
 		void GET_SHOP_PED_QUERY_PROP(int componentId, Any* outProp);
 		/**
 		 * Returns some sort of index/offset for props.
-		 * Needs _GET_NUM_PROPS_FROM_OUTFIT to be called with p3 = true and componentId = -1 first, returns -1 otherwise.
+		 * Needs SETUP_SHOP_PED_APPAREL_QUERY_TU to be called with p3 = true and componentId = -1 first, returns -1 otherwise.
 		 */
 		int GET_SHOP_PED_QUERY_PROP_INDEX(Hash componentHash);
 		/**
@@ -3546,6 +3530,14 @@ namespace base::menu::natives {
 		void DRAW_BOX(float x1, float y1, float z1, float x2, float y2, float z2, int red, int green, int blue, int alpha);
 		void SET_BACKFACECULLING(bool toggle);
 		void SET_DEPTHWRITING(bool toggle);
+		/**
+		 * Issues a ScriptIM command that sets the blend state to BS_Normal
+		 */
+		void _SET_BLEND_STATE_NORMAL(); // Missing in crossmap
+		/**
+		 * Issues a ScriptIM command that sets the blend state to BS_AlphaAdd
+		 */
+		void _SET_BLEND_STATE_ALPHA_ADDITIVE(); // Missing in crossmap
 		bool BEGIN_TAKE_MISSION_CREATOR_PHOTO();
 		int GET_STATUS_OF_TAKE_MISSION_CREATOR_PHOTO();
 		void FREE_MEMORY_FOR_MISSION_CREATOR_PHOTO();
@@ -3612,7 +3604,7 @@ namespace base::menu::natives {
 		 * * brightness - the brightness of the light
 		 * * roundness - "smoothness" of the circle edge
 		 * * radius - the radius size of the spotlight
-		 * * falloff - the falloff size of the light's edge (example: www.i.imgur.com/DemAWeO.jpg)
+		 * * falloff - the falloff size of the light's edge
 		 * 
 		 * Example in C# (spotlight aims at the closest vehicle):
 		 * Vector3 myPos = Game.Player.Character.Position;
@@ -3624,8 +3616,10 @@ namespace base::menu::natives {
 		 */
 		void DRAW_SPOT_LIGHT(float posX, float posY, float posZ, float dirX, float dirY, float dirZ, int colorR, int colorG, int colorB, float distance, float brightness, float hardness, float radius, float falloff);
 		void DRAW_SHADOWED_SPOT_LIGHT(float posX, float posY, float posZ, float dirX, float dirY, float dirZ, int colorR, int colorG, int colorB, float distance, float brightness, float roundness, float radius, float falloff, int shadowId);
+		void _DRAW_CAPSULE_LIGHT(float posX, float posY, float posZ, float dirX, float dirY, float dirZ, int colorR, int colorG, int colorB, float falloff, float intensity, float capsuleExtent, float exponent); // Missing in crossmap
 		void FADE_UP_PED_LIGHT(float p0);
 		void UPDATE_LIGHTS_ON_ENTITY(Entity entity);
+		void _UPDATE_LIGHTS_LOCATION_FROM_ENTITY(Entity entity); // Missing in crossmap
 		void SET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE(Any p0);
 		float GET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE();
 		/**
@@ -3693,11 +3687,16 @@ namespace base::menu::natives {
 		void DRAW_MARKER_EX(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, Any p19, bool rotate, const char* textureDict, const char* textureName, bool drawOnEnts, bool p24, bool p25);
 		/**
 		 * Draws a 3D sphere, typically seen in the GTA:O freemode event "Penned In".
-		 * Example https://imgur.com/nCbtS4H
+		 * Example: https://i.imgur.com/nCbtS4H.png
 		 * 
 		 * alpha - The alpha for the sphere. Goes from 0.0 to 1.0.
 		 */
 		void DRAW_MARKER_SPHERE(float x, float y, float z, float radius, int red, int green, int blue, float alpha);
+		void _DRAW_MARKER_GLOW(float x, float y, float z, float size, int red, int green, int blue, float intensity); // Missing in crossmap
+		/**
+		 * If enabled sets the blend state of all GameGlows to BS_AlphaAdd
+		 */
+		void _MAKE_GLOWS_ADDITIVE(bool toggle); // Missing in crossmap
 		/**
 		 * Creates a checkpoint. Returns the handle of the checkpoint.
 		 * 
@@ -3759,9 +3758,6 @@ namespace base::menu::natives {
 		 * Sets the checkpoint icon color.
 		 */
 		void SET_CHECKPOINT_RGBA2(int checkpoint, int red, int green, int blue, int alpha);
-		/**
-		 * This does not move an existing checkpoint... so wtf.
-		 */
 		void SET_CHECKPOINT_CLIPPLANE_WITH_POS_NORM(int checkpoint, float posX, float posY, float posZ, float unkX, float unkY, float unkZ);
 		void SET_CHECKPOINT_FORCE_OLD_ARROW_POINTING(int checkpoint);
 		/**
@@ -3884,7 +3880,7 @@ namespace base::menu::natives {
 		 */
 		void DRAW_SPRITE_ARX(const char* textureDict, const char* textureName, float x, float y, float width, float height, float p6, int red, int green, int blue, int alpha, Any p11, Any p12);
 		/**
-		 * Similar to _DRAW_SPRITE, but seems to be some kind of "interactive" sprite, at least used by render targets.
+		 * Similar to DRAW_SPRITE, but seems to be some kind of "interactive" sprite, at least used by render targets.
 		 * These seem to be the only dicts ever requested by this native:
 		 * 
 		 * prop_screen_biker_laptop
@@ -3907,6 +3903,8 @@ namespace base::menu::natives {
 		 * u2, v2 - texture coordinates for the bottom-right corner
 		 */
 		void DRAW_SPRITE_ARX_WITH_UV(const char* textureDict, const char* textureName, float x, float y, float width, float height, float u1, float v1, float u2, float v2, float heading, int red, int green, int blue, int alpha, Any p15);
+		void _CALCULATE_LINE_ORIENTATION_FROM_RENDERED_CAMERA(Vector3* result, float x1, float y1, float z1, float x2, float y2, float z2); // Missing in crossmap
+		void _CALCULATE_ROTATED_VECTOR(Vector3* direction, float roll, float pitch, float yaw); // Missing in crossmap
 		/**
 		 * Example:
 		 * GRAPHICS::ADD_ENTITY_ICON(a_0, "MP_Arrow");
@@ -3929,7 +3927,6 @@ namespace base::menu::natives {
 		 * Function.Call(Hash.DRAW_SPRITE, "helicopterhud", "hud_corner", 0.01, 0.015, 0.013, 0.013, 180.0, 255, 0, 0, 200);
 		 * Function.Call(Hash.CLEAR_DRAW_ORIGIN);
 		 * 
-		 * Result: www11.pic-upload.de/19.06.15/bkqohvil2uao.jpg
 		 * If the pedestrian starts walking around now, the sprites are always around her head, no matter where the head is displayed on the screen.
 		 * 
 		 * This function also effects the drawing of texts and other UI-elements.
@@ -3956,7 +3953,7 @@ namespace base::menu::natives {
 		 */
 		float GET_BINK_MOVIE_TIME(int binkMovie);
 		/**
-		 * binkMovie: Is return value from _SET_BINK_MOVIE. Has something to do with bink volume? (audRequestedSettings::SetVolumeCurveScale)
+		 * binkMovie: Is return value from SET_BINK_MOVIE.
 		 */
 		void SET_BINK_MOVIE_VOLUME(int binkMovie, float value);
 		void ATTACH_TV_AUDIO_TO_ENTITY(Entity entity);
@@ -4044,9 +4041,7 @@ namespace base::menu::natives {
 		 * }
 		 * //USE VERY SMALL VALUES FOR THE SCALE OF RECTS/TEXT because it is dramatically larger on screen than in 3D, e.g '0.05' small.
 		 * 
-		 * Used to be called _WORLD3D_TO_SCREEN2D
-		 * 
-		 * I thought we lost you from the scene forever. It does seem however that calling SET_DRAW_ORIGIN then your natives, then ending it. Seems to work better for certain things such as keeping boxes around people for a predator missile e.g.
+		 * It does seem however that calling SET_DRAW_ORIGIN then your natives, then ending it. Seems to work better for certain things such as keeping boxes around people for a predator missile e.g.
 		 */
 		bool GET_SCREEN_COORD_FROM_WORLD_COORD(float worldX, float worldY, float worldZ, float* screenX, float* screenY);
 		/**
@@ -4103,7 +4098,7 @@ namespace base::menu::natives {
 		void ENABLE_PROCOBJ_CREATION();
 		void GRASSBATCH_ENABLE_FLATTENING_EXT_IN_SPHERE(float x, float y, float z, Any p3, float p4, float p5, float p6, float scale);
 		/**
-		 * Wraps 0xAAE9BE70EC7C69AB with FLT_MAX as p7
+		 * Wraps GRASSBATCH_ENABLE_FLATTENING_EXT_IN_SPHERE with FLT_MAX as p7
 		 */
 		void GRASSBATCH_ENABLE_FLATTENING_IN_SPHERE(float x, float y, float z, float radius, float p4, float p5, float p6);
 		void GRASSBATCH_DISABLE_FLATTENING();
@@ -4188,7 +4183,7 @@ namespace base::menu::natives {
 		void SEETHROUGH_SET_FADE_ENDDISTANCE(float distance);
 		float SEETHROUGH_GET_MAX_THICKNESS();
 		/**
-		 * 0.0 = you will not be able to see people behind the walls. 50.0 and more = you will see everyone through the walls. More value is "better" view. See https://gfycat.com/FirmFlippantGourami
+		 * 0.0 = you will not be able to see people behind the walls. 50.0 and more = you will see everyone through the walls. More value is "better" view.
 		 * min: 1.0
 		 * max: 10000.0
 		 */
@@ -4597,7 +4592,7 @@ namespace base::menu::natives {
 		 */
 		void SET_EXTRA_TCMODIFIER(const char* modifierName);
 		/**
-		 * Clears the secondary timecycle modifier usually set with _SET_EXTRA_TIMECYCLE_MODIFIER
+		 * Clears the secondary timecycle modifier usually set with SET_EXTRA_TCMODIFIER
 		 */
 		void CLEAR_EXTRA_TCMODIFIER();
 		/**
@@ -4610,7 +4605,7 @@ namespace base::menu::natives {
 		 */
 		void ENABLE_MOON_CYCLE_OVERRIDE(float strength);
 		/**
-		 * Resets the extra timecycle modifier strength normally set with 0x2C328AF17210F009
+		 * Resets the timecycle modifier strength normally set with ENABLE_MOON_CYCLE_OVERRIDE
 		 */
 		void DISABLE_MOON_CYCLE_OVERRIDE();
 		int REQUEST_SCALEFORM_MOVIE(const char* scaleformName);
@@ -4635,14 +4630,8 @@ namespace base::menu::natives {
 		int REQUEST_SCALEFORM_MOVIE_SKIP_RENDER_WHILE_PAUSED(const char* scaleformName);
 		bool HAS_SCALEFORM_MOVIE_LOADED(int scaleformHandle);
 		bool _HAS_SCALEFORM_MOVIE_NAMED_LOADED(int* scaleformHandle, const char* scaleformName);
-		/**
-		 * val is 1-20 (0 will return false)
-		 */
-		bool IS_ACTIVE_SCALEFORM_MOVIE_DELETING(int val);
-		/**
-		 * val is 1-20. Return is related to INSTRUCTIONAL_BUTTONS, COLOUR_SWITCHER_02, etc?
-		 */
-		bool IS_SCALEFORM_MOVIE_DELETING(int val);
+		bool IS_ACTIVE_SCALEFORM_MOVIE_DELETING(int scaleformHandle);
+		bool IS_SCALEFORM_MOVIE_DELETING(int scaleformHandle);
 		/**
 		 * Only values used in the scripts are:
 		 * 
@@ -4791,7 +4780,7 @@ namespace base::menu::natives {
 		void END_TEXT_COMMAND_UNPARSED_SCALEFORM_STRING();
 		/**
 		 * Same as SCALEFORM_MOVIE_METHOD_ADD_PARAM_TEXTURE_NAME_STRING
-		 * Both SCALEFORM_MOVIE_METHOD_ADD_PARAM_TEXTURE_NAME_STRING / _SCALEFORM_MOVIE_METHOD_ADD_PARAM_TEXTURE_NAME_STRING_2 works, but _SCALEFORM_MOVIE_METHOD_ADD_PARAM_TEXTURE_NAME_STRING_2 is usually used for "name" (organisation, players..).
+		 * Both SCALEFORM_MOVIE_METHOD_ADD_PARAM_TEXTURE_NAME_STRING / SCALEFORM_MOVIE_METHOD_ADD_PARAM_LITERAL_STRING works, but SCALEFORM_MOVIE_METHOD_ADD_PARAM_LITERAL_STRING is usually used for "name" (organisation, players..).
 		 */
 		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_LITERAL_STRING(const char* string);
 		void SCALEFORM_MOVIE_METHOD_ADD_PARAM_TEXTURE_NAME_STRING(const char* string);
@@ -4894,15 +4883,13 @@ namespace base::menu::natives {
 		void UI3DSCENE_CLEAR_PATCHED_DATA();
 		void UI3DSCENE_MAKE_PUSHED_PRESET_PERSISTENT(bool toggle);
 		/**
-		 * This native enables/disables the gold putting grid display (https://i.imgur.com/TC6cku6.png).
+		 * This native enables/disables the gold putting grid display.
 		 * This requires these two natives to be called as well to configure the grid: `TERRAINGRID_SET_PARAMS` and `TERRAINGRID_SET_COLOURS`.
 		 */
 		void TERRAINGRID_ACTIVATE(bool toggle);
 		/**
 		 * This native is used along with these two natives: `TERRAINGRID_ACTIVATE` and `TERRAINGRID_SET_COLOURS`.
 		 * This native configures the location, size, rotation, normal height, and the difference ratio between min, normal and max.
-		 * 
-		 * All those natives combined they will output something like this: https://i.imgur.com/TC6cku6.png
 		 * 
 		 * This native renders a box at the given position, with a special shader that renders a grid on world geometry behind it. This box does not have backface culling.
 		 * The forward args here are a direction vector, something similar to what's returned by GET_ENTITY_FORWARD_VECTOR.
@@ -4914,7 +4901,6 @@ namespace base::menu::natives {
 		/**
 		 * This native is used along with these two natives: `TERRAINGRID_ACTIVATE` and `TERRAINGRID_SET_PARAMS`.
 		 * This native sets the colors for the golf putting grid. the 'min...' values are for the lower areas that the grid covers, the 'max...' values are for the higher areas that the grid covers, all remaining values are for the 'normal' ground height.
-		 * All those natives combined they will output something like this: https://i.imgur.com/TC6cku6.png
 		 */
 		void TERRAINGRID_SET_COLOURS(int lowR, int lowG, int lowB, int lowAlpha, int r, int g, int b, int alpha, int highR, int highG, int highB, int highAlpha);
 		/**
@@ -4956,6 +4942,75 @@ namespace base::menu::natives {
 		void ANIMPOSTFX_STOP_AND_FLUSH_REQUESTS(const char* effectName);
 
 	} // namespace GRAPHICS
+
+	namespace GTA {
+
+		/**
+		 * Creates a mobile phone of the specified type.
+		 * 
+		 * Possible phone types:
+		 * 
+		 * 0 - Default phone / Michael's phone
+		 * 1 - Trevor's phone
+		 * 2 - Franklin's phone
+		 * 3 - Unused police phone
+		 * 4 - Prologue phone
+		 * 
+		 * Higher values may crash your game.
+		 */
+		void CREATE_MOBILE_PHONE(int phoneType);
+		/**
+		 * Destroys the currently active mobile phone.
+		 */
+		void DESTROY_MOBILE_PHONE();
+		/**
+		 * The minimum/default is 500.0f. If you plan to make it bigger set it's position as well. Also this seems to need to be called in a loop as when you close the phone the scale is reset. If not in a loop you'd need to call it everytime before you re-open the phone.
+		 */
+		void SET_MOBILE_PHONE_SCALE(float scale);
+		/**
+		 * Last parameter is unknown and always zero.
+		 */
+		void SET_MOBILE_PHONE_ROTATION(float rotX, float rotY, float rotZ, Any p3);
+		void GET_MOBILE_PHONE_ROTATION(Vector3* rotation, Vehicle p1);
+		void SET_MOBILE_PHONE_POSITION(float posX, float posY, float posZ);
+		void GET_MOBILE_PHONE_POSITION(Vector3* position);
+		/**
+		 * If bool Toggle = true so the mobile is hide to screen.
+		 * If bool Toggle = false so the mobile is show to screen.
+		 */
+		void SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN(bool toggle);
+		/**
+		 * This one is weird and seems to return a TRUE state regardless of whether the phone is visible on screen or tucked away.
+		 * 
+		 * 
+		 * I can confirm the above. This function is hard-coded to always return 1.
+		 */
+		bool CAN_PHONE_BE_SEEN_ON_SCREEN();
+		void SET_MOBILE_PHONE_DOF_STATE(bool toggle);
+		/**
+		 * For move the finger of player, the value of int goes 1 at 5.
+		 */
+		void CELL_SET_INPUT(int direction);
+		/**
+		 * if the bool "Toggle" is "true" so the phone is lean.
+		 * if the bool "Toggle" is "false" so the phone is not lean.
+		 */
+		void CELL_HORIZONTAL_MODE_TOGGLE(bool toggle);
+		void CELL_CAM_ACTIVATE(bool p0, bool p1);
+		void CELL_CAM_ACTIVATE_SELFIE_MODE(bool toggle);
+		void CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE(bool toggle);
+		void CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING(float p0);
+		void CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET(float horizontalPan);
+		void CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET(float vertPan);
+		void CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET(float roll);
+		void CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING(float distanceScaling);
+		void CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET(float yaw);
+		void CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET(float roll);
+		void CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET(float pitch);
+		bool CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK(Entity entity);
+		void GET_MOBILE_PHONE_RENDER_ID(int* renderId);
+
+	} // namespace GTA
 
 	namespace HUD {
 
@@ -5101,7 +5156,7 @@ namespace base::menu::natives {
 		void THEFEED_SET_VIBRATE_PARAMETER_FOR_NEXT_MESSAGE(bool toggle);
 		void THEFEED_RESET_ALL_PARAMETERS();
 		/**
-		 * Requires manual management of game stream handles (i.e., 0xBE4390CB40B3E627).
+		 * Requires manual management of game stream handles (i.e., THEFEED_REMOVE_ITEM).
 		 */
 		void THEFEED_FREEZE_NEXT_POST();
 		void THEFEED_CLEAR_FROZEN_POST();
@@ -5123,7 +5178,6 @@ namespace base::menu::natives {
 		void BEGIN_TEXT_COMMAND_THEFEED_POST(const char* text);
 		/**
 		 * List of picture names: https://pastebin.com/XdpJVbHz
-		 * Example result: https://i.imgur.com/SdEZ22m.png
 		 */
 		int END_TEXT_COMMAND_THEFEED_POST_STATS(const char* statTitle, int iconEnum, bool stepVal, int barValue, bool isImportant, const char* pictureTextureDict, const char* pictureTextureName);
 		/**
@@ -5218,7 +5272,7 @@ namespace base::menu::natives {
 		 * {
 		 * BEGIN_TEXT_COMMAND_THEFEED_POST("STRING");
 		 * ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(text);
-		 * _SET_NOTIFICATION_MESSAGE_CLAN_TAG_2("CHAR_SOCIAL_CLUB", "CHAR_SOCIAL_CLUB", 1, 7, text2, Subject, 1.0f, "__EXAMPLE", 7);
+		 * END_TEXT_COMMAND_THEFEED_POST_MESSAGETEXT_WITH_CREW_TAG_AND_ADDITIONAL_ICON("CHAR_SOCIAL_CLUB", "CHAR_SOCIAL_CLUB", 1, 7, text2, Subject, 1.0f, "__EXAMPLE", 7);
 		 * return END_TEXT_COMMAND_THEFEED_POST_TICKER(1, 1);
 		 * }
 		 */
@@ -5227,7 +5281,7 @@ namespace base::menu::natives {
 		int END_TEXT_COMMAND_THEFEED_POST_TICKER_FORCED(bool blink, bool p1);
 		int END_TEXT_COMMAND_THEFEED_POST_TICKER_WITH_TOKENS(bool blink, bool p1);
 		/**
-		 * Shows an "award" notification above the minimap, example: https://i.imgur.com/e2DNaKX.png
+		 * Shows an "award" notification above the minimap
 		 * Example:
 		 * 
 		 * HUD::BEGIN_TEXT_COMMAND_THEFEED_POST("HUNT");
@@ -5245,7 +5299,6 @@ namespace base::menu::natives {
 		 * This function can show pictures of every texture that can be requested by REQUEST_STREAMED_TEXTURE_DICT.
 		 * 
 		 * List of picNames: https://pastebin.com/XdpJVbHz
-		 * HUD colors and their values: https://pastebin.com/d9aHPbXN
 		 * 
 		 * Shows a deathmatch score above the minimap, example: https://i.imgur.com/YmoMklG.png
 		 */
@@ -5257,7 +5310,7 @@ namespace base::menu::natives {
 		 * 
 		 * example:
 		 * HUD::END_TEXT_COMMAND_THEFEED_POST_REPLAY_INPUT(1, 20, "Who you trynna get crazy with, ese? Don't you know I'm LOCO?!");
-		 * - https://imgur.com/lGBPCz3
+		 * - https://i.imgur.com/lGBPCz3.jpeg
 		 */
 		int END_TEXT_COMMAND_THEFEED_POST_REPLAY(int type, int image, const char* text);
 		/**
@@ -5267,8 +5320,6 @@ namespace base::menu::natives {
 		 * 
 		 * example:
 		 * HUD::END_TEXT_COMMAND_THEFEED_POST_REPLAY_INPUT(1, "~INPUT_TALK~", "Who you trynna get crazy with, ese? Don't you know I'm LOCO?!");
-		 * - https://imgur.com/UPy0Ial
-		 * 
 		 * 
 		 * Examples from the scripts:
 		 * l_D1[1/*1* /]=HUD::END_TEXT_COMMAND_THEFEED_POST_REPLAY_INPUT(1,"~INPUT_REPLAY_START_STOP_RECORDING~","");
@@ -5293,8 +5344,6 @@ namespace base::menu::natives {
 		 * int duration = time in milliseconds to show text on screen before disappearing
 		 * 
 		 * drawImmediately = If true, the text will be drawn immediately, if false, the text will be drawn after the previous subtitle has finished
-		 * 
-		 * Used to be known as _DRAW_SUBTITLE_TIMED
 		 */
 		void END_TEXT_COMMAND_PRINT(int duration, bool drawImmediately);
 		/**
@@ -5315,14 +5364,10 @@ namespace base::menu::natives {
 		 * 
 		 * ESDOLLA - cash
 		 * ESMINDOLLA - cash (negative)
-		 * 
-		 * Used to be known as _SET_TEXT_ENTRY
 		 */
 		void BEGIN_TEXT_COMMAND_DISPLAY_TEXT(const char* text);
 		/**
 		 * After applying the properties to the text (See HUD::SET_TEXT_), this will draw the text in the applied position. Also 0.0f < x, y < 1.0f, percentage of the axis.
-		 * 
-		 * Used to be known as _DRAW_TEXT
 		 */
 		void END_TEXT_COMMAND_DISPLAY_TEXT(float x, float y, int p2);
 		void BEGIN_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT(const char* text);
@@ -5338,12 +5383,9 @@ namespace base::menu::natives {
 		void BEGIN_TEXT_COMMAND_GET_NUMBER_OF_LINES_FOR_STRING(const char* entry);
 		/**
 		 * Determines how many lines the text string will use when drawn on screen.
-		 * Must use 0x521FB041D93DD0E4 for setting up
+		 * Must use BEGIN_TEXT_COMMAND_GET_NUMBER_OF_LINES_FOR_STRING for setting up
 		 */
 		int END_TEXT_COMMAND_GET_NUMBER_OF_LINES_FOR_STRING(float x, float y);
-		/**
-		 * Used to be known as _SET_TEXT_COMPONENT_FORMAT
-		 */
 		void BEGIN_TEXT_COMMAND_DISPLAY_HELP(const char* inputType);
 		/**
 		 * shape goes from -1 to 50 (may be more).
@@ -5357,13 +5399,8 @@ namespace base::menu::natives {
 		 * END_TEXT_COMMAND_DISPLAY_HELP (0, 0, 1, -1);
 		 * }
 		 * 
-		 * Image:
-		 * - imgbin.org/images/26209.jpg
-		 * 
 		 * more inputs/icons:
 		 * - https://pastebin.com/nqNYWMSB
-		 * 
-		 * Used to be known as _DISPLAY_HELP_TEXT_FROM_STRING_LABEL
 		 */
 		void END_TEXT_COMMAND_DISPLAY_HELP(int p0, bool loop, bool beep, int shape);
 		/**
@@ -5587,6 +5624,7 @@ namespace base::menu::natives {
 		void FLASH_WANTED_DISPLAY(bool p0);
 		void FORCE_OFF_WANTED_STAR_FLASH(bool toggle);
 		void SET_CUSTOM_MP_HUD_COLOR(int hudColorId);
+		void GET_RENDERED_TEXT_PADDING_SIZE(); // Missing in crossmap
 		/**
 		 * This gets the height of the FONT and not the total text. You need to get the number of lines your text uses, and get the height of a newline (I'm using a smaller value) to get the total text height.
 		 */
@@ -5596,10 +5634,6 @@ namespace base::menu::natives {
 		 * p0 is unknown and doesn't seem to have an effect, yet in the game scripts it changes to 1.0F sometimes.
 		 */
 		void SET_TEXT_SCALE(float scale, float size);
-		/**
-		 * colors you input not same as you think?
-		 * A: for some reason its R B G A
-		 */
 		void SET_TEXT_COLOUR(int red, int green, int blue, int alpha);
 		void SET_TEXT_CENTRE(bool align);
 		void SET_TEXT_RIGHT_JUSTIFY(bool toggle);
@@ -5692,12 +5726,6 @@ namespace base::menu::natives {
 		 * It is recommended to use SET_BLIP_ROTATION and SET_BLIP_COLOUR to make the blip not rotate along with the camera.
 		 * 
 		 * By default, the blip will show as a _regular_ blip with the specified color/sprite if it is outside of the minimap view.
-		 * 
-		 * Example image:
-		 * minimap https://w.wew.wtf/pdcjig.png
-		 * big map https://w.wew.wtf/zgcjcm.png
-		 * 
-		 * (Native name is _likely_ to actually be ADD_BLIP_FOR_AREA, but due to the usual reasons this can't be confirmed)
 		 */
 		Blip ADD_BLIP_FOR_AREA(float x, float y, float z, float width, float height);
 		/**
@@ -5804,11 +5832,11 @@ namespace base::menu::natives {
 		void SET_BLIP_AS_SHORT_RANGE(Blip blip, bool toggle);
 		void SET_BLIP_SCALE(Blip blip, float scale);
 		/**
-		 * See https://imgur.com/a/lLkEsMN
+		 * https://i.imgur.com/jH2JMUl.png
 		 */
 		void SET_BLIP_SCALE_2D(Blip blip, float xScale, float yScale);
 		/**
-		 * See this topic for more details : gtaforums.com/topic/717612-v-scriptnative-documentation-and-research/page-35?p=1069477935
+		 * See this topic for more details : https://gtaforums.com/topic/717612-v-scriptnative-documentation-and-research/page-35?p=1069477935
 		 */
 		void SET_BLIP_PRIORITY(Blip blip, int priority);
 		/**
@@ -5829,8 +5857,6 @@ namespace base::menu::natives {
 		 */
 		void SET_BLIP_DISPLAY(Blip blip, int displayId);
 		/**
-		 * Example: https://i.imgur.com/skY6vAJ.png
-		 * 
 		 * Index:
 		 * 1 = No distance shown in legend
 		 * 2 = Distance shown in legend
@@ -5891,8 +5917,7 @@ namespace base::menu::natives {
 		 */
 		void SHOW_TICK_ON_BLIP(Blip blip, bool toggle);
 		/**
-		 * Adds a orange checkmark on top of a given blip handle: https://imgur.com/a/aw5OTMF
-		 * _SHOW_FRIEND_INDICATOR_ON_BLIP* - _SHOW_HEADING_INDICATOR_ON_BLIP*
+		 * Adds an orange checkmark on top of a given blip handle: https://i.imgur.com/KG9k6Fk.png
 		 */
 		void SHOW_GOLD_TICK_ON_BLIP(Blip blip, bool toggle);
 		void SHOW_FOR_SALE_ICON_ON_BLIP(Blip blip, bool toggle);
@@ -5907,13 +5932,12 @@ namespace base::menu::natives {
 		 */
 		void SHOW_OUTLINE_INDICATOR_ON_BLIP(Blip blip, bool toggle);
 		/**
-		 * Highlights a blip by a half cyan circle on the right side of the blip. https://i.imgur.com/FrV9M4e.png
-		 * .Indicating that that player is a friend (in GTA:O). This color can not be changed.
+		 * Highlights a blip by a half cyan circle on the right side of the blip. Indicating that that player is a friend (in GTA:O). This color can not be changed.
 		 * To toggle the left side (crew member indicator) of the half circle around the blip, use: `SHOW_CREW_INDICATOR_ON_BLIP`
 		 */
 		void SHOW_FRIEND_INDICATOR_ON_BLIP(Blip blip, bool toggle);
 		/**
-		 * Enables or disables the blue half circle https://i.imgur.com/iZes9Ec.png around the specified blip on the left side of the blip. This is used to indicate that the player is in your crew in GTA:O. Color is changeable by using `SET_BLIP_SECONDARY_COLOUR`.
+		 * Enables or disables the blue half circle around the specified blip on the left side of the blip. This is used to indicate that the player is in your crew in GTA:O. Color is changeable by using `SET_BLIP_SECONDARY_COLOUR`.
 		 */
 		void SHOW_CREW_INDICATOR_ON_BLIP(Blip blip, bool toggle);
 		/**
@@ -5927,7 +5951,7 @@ namespace base::menu::natives {
 		 */
 		void SET_BLIP_AS_MINIMAL_ON_EDGE(Blip blip, bool toggle);
 		/**
-		 * Enabling this on a radius blip will make it outline only. See https://cdn.discordapp.com/attachments/553235301632573459/575132227935928330/unknown.png
+		 * Enabling this on a radius blip will make it outline only.
 		 */
 		void SET_RADIUS_BLIP_EDGE(Blip blip, bool toggle);
 		bool DOES_BLIP_EXIST(Blip blip);
@@ -5966,7 +5990,7 @@ namespace base::menu::natives {
 		void _SET_BLIP_GPS_ROUTE_DISPLAY_DISTANCE(Blip blip, int blipChangeParam46, bool blipChangeParam47);
 		/**
 		 * This native is used to colorize certain map components like the army base at the top of the map.
-		 * p2 appears to be always -1. If p2 is -1 then native wouldn't change the color. See https://gfycat.com/SkinnyPinkChupacabra
+		 * p2 appears to be always -1. If p2 is -1 then native wouldn't change the color.
 		 */
 		bool SET_MINIMAP_COMPONENT(int componentId, bool toggle, int overrideColor);
 		void SET_MINIMAP_SONAR_SWEEP(bool toggle);
@@ -6053,16 +6077,11 @@ namespace base::menu::natives {
 		 * "Enter_bus"
 		 * "Tour_help"
 		 * "LETTERS_HELP2"
-		 * "Dummy"
+		 * "Dummy""
 		 * 
-		 * **The bool appears to always be false (if it even is a bool, as it's represented by a zero)**
-		 * --------
-		 * p1 doesn't seem to make a difference, regardless of the state it's in.
-		 * 
-		 * 
-		 * picture of where on the screen this is displayed?
+		 * curvedWindow is unused.
 		 */
-		void DISPLAY_HELP_TEXT_THIS_FRAME(const char* message, bool p1);
+		void DISPLAY_HELP_TEXT_THIS_FRAME(const char* message, bool curvedWindow);
 		/**
 		 * Forces the weapon wheel to show/hide.
 		 */
@@ -6112,7 +6131,6 @@ namespace base::menu::natives {
 		 * Starts a new GPS custom-route, allowing you to plot lines on the map.
 		 * Lines are drawn directly between points.
 		 * The GPS custom route works like the GPS multi route, except it does not follow roads.
-		 * Example result: https://i.imgur.com/BDm5pzt.png
 		 * hudColor: The HUD color of the GPS path.
 		 * displayOnFoot: Draws the path regardless if the player is in a vehicle or not.
 		 * followPlayer: Draw the path partially between the previous and next point based on the players position between them. When false, the GPS appears to not disappear after the last leg is completed.
@@ -6131,7 +6149,6 @@ namespace base::menu::natives {
 		 * Once the player has passed a point, the GPS will no longer force its path through it.
 		 * 
 		 * Works independently from the player-placed waypoint and blip routes.
-		 * Example result: https://i.imgur.com/ZZHQatX.png
 		 * hudColor: The HUD color of the GPS path.
 		 * routeFromPlayer: Makes the GPS draw a path from the player to the next point, rather than the original path from the previous point.
 		 * displayOnFoot: Draws the GPS path regardless if the player is in a vehicle or not.
@@ -6316,7 +6333,7 @@ namespace base::menu::natives {
 		 */
 		void CLEAR_REMINDER_MESSAGE();
 		/**
-		 * World to relative screen coords, this world to screen will keep the text on screen. Was named _GET_SCREEN_COORD_FROM_WORLD_COORD, but this conflicts with 0x34E82F05DF2974F5. As that hash actually matches GET_SCREEN_COORD_FROM_WORLD_COORD that one supercedes and this one was renamed to _GET_2D_COORD_FROM_3D_COORD
+		 * World to relative screen coords, this world to screen will keep the text on screen.
 		 */
 		int GET_HUD_SCREEN_POSITION_FROM_WORLD_POSITION(float worldX, float worldY, float worldZ, float* screenX, float* screenY);
 		/**
@@ -6325,6 +6342,11 @@ namespace base::menu::natives {
 		void OPEN_REPORTUGC_MENU();
 		void FORCE_CLOSE_REPORTUGC_MENU();
 		bool IS_REPORTUGC_MENU_OPEN();
+		/**
+		 * p1 is unused
+		 */
+		void _REPORT_NOMINATED_JOB(const char* jobNominated, Any* p1); // Missing in crossmap
+		void _GET_NOMINATED_JOB_REPORT_STATUS(int index); // Missing in crossmap
 		bool IS_FLOATING_HELP_TEXT_ON_SCREEN(int hudIndex);
 		void SET_FLOATING_HELP_TEXT_SCREEN_POSITION(int hudIndex, float x, float y);
 		void SET_FLOATING_HELP_TEXT_WORLD_POSITION(int hudIndex, float x, float y, float z);
@@ -6396,9 +6418,6 @@ namespace base::menu::natives {
 		/**
 		 * Ranges from 0 to 255. 0 is grey health bar, ~50 yellow, 200 purple.
 		 * Should be enabled as flag (2). Has 0 opacity by default.
-		 * 
-		 * - This was _SET_MP_GAMER_TAG_HEALTH_BAR_COLOR,
-		 * -> Rockstar use the EU spelling of 'color' so I hashed the same name with COLOUR and it came back as the correct hash, so it has been corrected above.
 		 */
 		void SET_MP_GAMER_TAG_HEALTH_BAR_COLOUR(int gamerTagId, int hudColorIndex);
 		/**
@@ -6456,7 +6475,7 @@ namespace base::menu::natives {
 		 * Example of usage:
 		 * SET_WARNING_MESSAGE_WITH_HEADER_AND_SUBSTRING_FLAGS("ALERT", "JL_INVITE_ND", 66, "", true, -1, -1, "Testing line 1", "Testing line 2", true, 0);
 		 * Screenshot:
-		 * https://imgur.com/a/IYA7vJ8
+		 * https://i.imgur.com/MsSIhPV.png
 		 */
 		void SET_WARNING_MESSAGE_WITH_HEADER_AND_SUBSTRING_FLAGS(const char* entryHeader, const char* entryLine1, int instructionalKey, const char* entryLine2, bool p4, Any p5, Any additionalIntInfo, const char* additionalTextInfoLine1, const char* additionalTextInfoLine2, bool showBackground, int errorCode);
 		void SET_WARNING_MESSAGE_WITH_HEADER_EXTENDED(const char* entryHeader, const char* entryLine1, int flags, const char* entryLine2, bool p4, Any p5, Any* p6, Any* p7, bool showBg, Any p9, Any p10);
@@ -6517,8 +6536,6 @@ namespace base::menu::natives {
 		 * ReturnKey = 8, -- (TURN)
 		 * Freemode = 16, -- (ESC)
 		 * }
-		 * 
-		 * Example: https://i.imgur.com/TvmNF4k.png
 		 */
 		void SET_WARNING_MESSAGE_WITH_HEADER_AND_SUBSTRING_FLAGS_EXTENDED(const char* labelTitle, const char* labelMessage, int p2, int p3, const char* labelMessage2, bool p5, int p6, int p7, const char* p8, const char* p9, bool background, int errorCode);
 		/**
@@ -6557,7 +6574,6 @@ namespace base::menu::natives {
 		/**
 		 * Toggles whether or not name labels are shown on the expanded minimap next to player blips, like in GTA:O.
 		 * Doesn't need to be called every frame.
-		 * Preview: https://i.imgur.com/DfqKWfJ.png
 		 * 
 		 * Make sure to call SET_BLIP_CATEGORY with index 7 for this to work on the desired blip.
 		 */
@@ -6656,8 +6672,7 @@ namespace base::menu::natives {
 		Vector3 GET_PAUSE_MENU_POSITION();
 		bool IS_PAUSE_MENU_RESTARTING();
 		/**
-		 * Not present in retail version of the game, actual definiton seems to be
-		 * _LOG_DEBUG_INFO(const char* category, const char* debugText);
+		 * Not present in retail version of the game
 		 */
 		void FORCE_SCRIPTED_GFX_WHEN_FRONTEND_ACTIVE(const char* p0);
 		void PAUSE_MENUCEPTION_GO_DEEPER(int page);
@@ -6797,7 +6812,7 @@ namespace base::menu::natives {
 		/**
 		 * This native turns on the AI blip on the specified ped. It also disappears automatically when the ped is too far or if the ped is dead. You don't need to control it with other natives.
 		 * 
-		 * See gtaforums.com/topic/884370-native-research-ai-blips for further information.
+		 * See https://gtaforums.com/topic/884370-native-research-ai-blips for further information.
 		 */
 		void SET_PED_HAS_AI_BLIP(Ped ped, bool hasCone);
 		/**
@@ -6940,7 +6955,7 @@ namespace base::menu::natives {
 		Interior GET_INTERIOR_FROM_COLLISION(float x, float y, float z);
 		void ENABLE_STADIUM_PROBES_THIS_FRAME(bool toggle);
 		/**
-		 * More info: http://gtaforums.com/topic/836367-adding-props-to-interiors/
+		 * More info: https://gtaforums.com/topic/836367-adding-props-to-interiors/
 		 * 
 		 * Full list of IPLs and interior entity sets by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ipls.json
 		 */
@@ -6961,16 +6976,10 @@ namespace base::menu::natives {
 		/**
 		 * This is the native that is used to hide the exterior of GTA Online apartment buildings when you are inside an apartment.
 		 * 
-		 * More info: http://gtaforums.com/topic/836301-hiding-gta-online-apartment-exteriors/
+		 * More info: https://gtaforums.com/topic/836301-hiding-gta-online-apartment-exteriors/
 		 */
 		void ENABLE_EXTERIOR_CULL_MODEL_THIS_FRAME(Hash mapObjectHash);
 		void ENABLE_SHADOW_CULL_MODEL_THIS_FRAME(Hash mapObjectHash);
-		/**
-		 * Example:
-		 * This removes the interior from the strip club and when trying to walk inside the player just falls:
-		 * 
-		 * INTERIOR::DISABLE_INTERIOR(118018, true);
-		 */
 		void DISABLE_INTERIOR(Interior interior, bool toggle);
 		bool IS_INTERIOR_DISABLED(Interior interior);
 		/**
@@ -6986,7 +6995,7 @@ namespace base::menu::natives {
 
 	} // namespace INTERIOR
 
-	namespace ITEMSET {
+	namespace ITEMSETS {
 
 		ScrHandle CREATE_ITEMSET(bool p0);
 		void DESTROY_ITEMSET(ScrHandle itemset);
@@ -6998,7 +7007,7 @@ namespace base::menu::natives {
 		bool IS_IN_ITEMSET(ScrHandle item, ScrHandle itemset);
 		void CLEAN_ITEMSET(ScrHandle itemset);
 
-	} // namespace ITEMSET
+	} // namespace ITEMSETS
 
 	namespace LANDINGPAGE {
 
@@ -7349,7 +7358,7 @@ namespace base::menu::natives {
 		 * y: Position on the Y-axis to get ground elevation at.
 		 * z: Position on the Z-axis to get ground elevation at.
 		 * groundZ: The ground elevation at the specified position.
-		 * ignoreWater: Nearly always 0, very rarely 1 in the scripts: https://gfycat.com/NiftyTatteredCricket
+		 * ignoreWater: Nearly always 0, very rarely 1 in the scripts
 		 * 
 		 * Bear in mind this native can only calculate the elevation when the coordinates are within the client's render distance.
 		 */
@@ -7444,9 +7453,6 @@ namespace base::menu::natives {
 		 */
 		void CLEAR_AREA_OF_VEHICLES(float x, float y, float z, float radius, bool p4, bool p5, bool p6, bool p7, bool p8, bool p9, Any p10);
 		void CLEAR_ANGLED_AREA_OF_VEHICLES(float x1, float y1, float z1, float x2, float y2, float z2, float width, bool p7, bool p8, bool p9, bool p10, bool p11, Any p12, Any p13);
-		/**
-		 * I looked through the PC scripts that this site provides you with a link to find. It shows the last param mainly uses, (0, 2, 6, 16, and 17) so I am going to assume it is a type of flag.
-		 */
 		void CLEAR_AREA_OF_OBJECTS(float x, float y, float z, float radius, int flags);
 		/**
 		 * Example:       CLEAR_AREA_OF_PEDS(0, 0, 0, 10000, 1);
@@ -7477,15 +7483,17 @@ namespace base::menu::natives {
 		void NETWORK_SET_SCRIPT_IS_SAFE_FOR_NETWORK_GAME();
 		/**
 		 * Returns the index of the newly created hospital spawn point.
-		 * 
-		 * p3 might be radius?
+		 * whenToUse: must be 0
 		 */
-		int ADD_HOSPITAL_RESTART(float x, float y, float z, float p3, Any p4);
+		int ADD_HOSPITAL_RESTART(float x, float y, float z, float heading, int whenToUse);
 		/**
 		 * The game by default has 5 hospital respawn points. Disabling them all will cause the player to respawn at the last position they were.
 		 */
 		void DISABLE_HOSPITAL_RESTART(int hospitalIndex, bool toggle);
-		int ADD_POLICE_RESTART(float p0, float p1, float p2, float p3, Any p4);
+		/**
+		 * whenToUse: must be 0
+		 */
+		int ADD_POLICE_RESTART(float x, float y, float z, float heading, int whenToUse);
 		/**
 		 * Disables the spawn point at the police house on the specified index.
 		 * 
@@ -7649,9 +7657,10 @@ namespace base::menu::natives {
 		bool IS_BULLET_IN_AREA(float x, float y, float z, float radius, bool ownedByPlayer);
 		bool IS_BULLET_IN_BOX(float x1, float y1, float z1, float x2, float y2, float z2, bool ownedByPlayer);
 		/**
-		 * p3 - possibly radius?
+		 * bIsPlayer: checks if the player fired the bullet
+		 * bEntryOnly: only find entry impacts
 		 */
-		bool HAS_BULLET_IMPACTED_IN_AREA(float x, float y, float z, float p3, bool p4, bool p5);
+		bool HAS_BULLET_IMPACTED_IN_AREA(float x, float y, float z, float radius, bool bIsPlayer, bool bIsEntry);
 		bool HAS_BULLET_IMPACTED_IN_BOX(float p0, float p1, float p2, float p3, float p4, float p5, bool p6, bool p7);
 		/**
 		 * PS4
@@ -7768,12 +7777,9 @@ namespace base::menu::natives {
 		bool HAS_PC_CHEAT_WITH_HASH_BEEN_ACTIVATED(Hash hash);
 		void OVERRIDE_FREEZE_FLAGS(bool p0);
 		/**
-		 * Formerly known as _LOWER_MAP_PROP_DENSITY and wrongly due to idiots as _ENABLE_MP_DLC_MAPS.
-		 * Sets the maximum prop density and changes a loading screen flag from 'loading story mode' to 'loading GTA Online'. Does not touch DLC map data at all.
-		 * 
-		 * In fact, I doubt this changes the flag whatsoever, that's the OTHER native idiots use together with this that does so, this one only causes a loading screen to show as it reloads map data.
+		 * Sets the maximum prop density and changes a loading screen flag from 'loading story mode' to 'loading GTA Online'. It causes a loading screen to show as it reloads map data.
 		 */
-		void SET_INSTANCE_PRIORITY_MODE(int p0);
+		void SET_INSTANCE_PRIORITY_MODE(int mode);
 		/**
 		 * Sets an unknown flag used by CScene in determining which entities from CMapData scene nodes to draw, similar to SET_INSTANCE_PRIORITY_MODE.
 		 */
@@ -7954,11 +7960,11 @@ namespace base::menu::natives {
 		void SET_RIOT_MODE_ENABLED(bool toggle);
 		void DISPLAY_ONSCREEN_KEYBOARD_WITH_LONGER_INITIAL_STRING(int p0, const char* windowTitle, Any* p2, const char* defaultText, const char* defaultConcat1, const char* defaultConcat2, const char* defaultConcat3, const char* defaultConcat4, const char* defaultConcat5, const char* defaultConcat6, const char* defaultConcat7, int maxInputLength);
 		/**
-		 * sfink: note, p0 is set to 6 for PC platform in at least 1 script, or to `unk::_get_ui_language_id() == 0` otherwise.
+		 * note, p0 is set to 6 for PC platform in at least 1 script, or to `GET_CURRENT_LANGUAGE() == 0` otherwise.
 		 * 
 		 * NOTE: windowTitle uses text labels, and an invalid value will display nothing.
 		 * 
-		 * www.gtaforums.com/topic/788343-vrel-script-hook-v/?p=1067380474
+		 * https://gtaforums.com/topic/788343-vrel-script-hook-v/?p=1067380474
 		 * 
 		 * windowTitle's
 		 * -----------------
@@ -8140,75 +8146,6 @@ namespace base::menu::natives {
 		int _GET_CONTENT_PROP_TYPE(Hash model);
 
 	} // namespace MISC
-
-	namespace MOBILE {
-
-		/**
-		 * Creates a mobile phone of the specified type.
-		 * 
-		 * Possible phone types:
-		 * 
-		 * 0 - Default phone / Michael's phone
-		 * 1 - Trevor's phone
-		 * 2 - Franklin's phone
-		 * 3 - Unused police phone
-		 * 4 - Prologue phone
-		 * 
-		 * Higher values may crash your game.
-		 */
-		void CREATE_MOBILE_PHONE(int phoneType);
-		/**
-		 * Destroys the currently active mobile phone.
-		 */
-		void DESTROY_MOBILE_PHONE();
-		/**
-		 * The minimum/default is 500.0f. If you plan to make it bigger set it's position as well. Also this seems to need to be called in a loop as when you close the phone the scale is reset. If not in a loop you'd need to call it everytime before you re-open the phone.
-		 */
-		void SET_MOBILE_PHONE_SCALE(float scale);
-		/**
-		 * Last parameter is unknown and always zero.
-		 */
-		void SET_MOBILE_PHONE_ROTATION(float rotX, float rotY, float rotZ, Any p3);
-		void GET_MOBILE_PHONE_ROTATION(Vector3* rotation, Vehicle p1);
-		void SET_MOBILE_PHONE_POSITION(float posX, float posY, float posZ);
-		void GET_MOBILE_PHONE_POSITION(Vector3* position);
-		/**
-		 * If bool Toggle = true so the mobile is hide to screen.
-		 * If bool Toggle = false so the mobile is show to screen.
-		 */
-		void SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN(bool toggle);
-		/**
-		 * This one is weird and seems to return a TRUE state regardless of whether the phone is visible on screen or tucked away.
-		 * 
-		 * 
-		 * I can confirm the above. This function is hard-coded to always return 1.
-		 */
-		bool CAN_PHONE_BE_SEEN_ON_SCREEN();
-		void SET_MOBILE_PHONE_DOF_STATE(bool toggle);
-		/**
-		 * For move the finger of player, the value of int goes 1 at 5.
-		 */
-		void CELL_SET_INPUT(int direction);
-		/**
-		 * if the bool "Toggle" is "true" so the phone is lean.
-		 * if the bool "Toggle" is "false" so the phone is not lean.
-		 */
-		void CELL_HORIZONTAL_MODE_TOGGLE(bool toggle);
-		void CELL_CAM_ACTIVATE(bool p0, bool p1);
-		void CELL_CAM_ACTIVATE_SELFIE_MODE(bool toggle);
-		void CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE(bool toggle);
-		void CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING(float p0);
-		void CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET(float horizontalPan);
-		void CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET(float vertPan);
-		void CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET(float roll);
-		void CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING(float distanceScaling);
-		void CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET(float yaw);
-		void CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET(float roll);
-		void CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET(float pitch);
-		bool CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK(Entity entity);
-		void GET_MOBILE_PHONE_RENDER_ID(int* renderId);
-
-	} // namespace MOBILE
 
 	namespace MONEY {
 
@@ -8732,6 +8669,9 @@ namespace base::menu::natives {
 		 * This function is hard-coded to always return 1.
 		 */
 		bool WAS_VC_WITHDRAWAL_SUCCESSFUL(Any p0);
+		void _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_100M(); // Missing in crossmap
+		void _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_500M(); // Missing in crossmap
+		void _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_1B(); // Missing in crossmap
 		bool NETWORK_GET_MP_WINDFALL_AVAILABLE();
 
 	} // namespace MONEY
@@ -8788,16 +8728,13 @@ namespace base::menu::natives {
 		bool NET_GAMESERVER_TRANSFER_BANK_TO_WALLET(int charSlot, int amount);
 		bool NET_GAMESERVER_TRANSFER_WALLET_TO_BANK(int charSlot, int amount);
 		/**
-		 * Same as 0x350AA5EBC03D3BD2
+		 * Same as NET_GAMESERVER_TRANSFER_WALLET_TO_BANK_GET_STATUS
 		 */
 		int NET_GAMESERVER_TRANSFER_BANK_TO_WALLET_GET_STATUS();
 		/**
-		 * Same as 0x23789E777D14CE44
+		 * Same as NET_GAMESERVER_TRANSFER_BANK_TO_WALLET_GET_STATUS
 		 */
 		int NET_GAMESERVER_TRANSFER_WALLET_TO_BANK_GET_STATUS();
-		/**
-		 * Used to be NETWORK_SHOP_CASH_TRANSFER_SET_TELEMETRY_NONCE_SEED
-		 */
 		bool NET_GAMESERVER_TRANSFER_CASH_SET_TELEMETRY_NONCE_SEED();
 		bool NET_GAMESERVER_SET_TELEMETRY_NONCE_SEED(int p0);
 
@@ -8813,7 +8750,7 @@ namespace base::menu::natives {
 		 * [ONLINE_VERSION_NUMBER]
 		 * 1.33
 		 * 
-		 * _GET_ONLINE_VERSION() will return "1.33"
+		 * GET_ONLINE_VERSION() will return "1.33"
 		 */
 		const char* GET_ONLINE_VERSION();
 		/**
@@ -9068,10 +9005,9 @@ namespace base::menu::natives {
 		/**
 		 * Hardcoded to return 0.
 		 */
-		bool _NETWORK_IS_AMERICAS_VERSION();
+		bool _0x0292BD7F3766CEBC();
 		/**
 		 * This checks if player is playing on gta online or not.
-		 * Please add an if and block your mod if this is "true".
 		 */
 		bool NETWORK_IS_SESSION_STARTED();
 		bool NETWORK_IS_SESSION_BUSY();
@@ -9080,9 +9016,6 @@ namespace base::menu::natives {
 		void NETWORK_SESSION_MARK_VISIBLE(bool toggle);
 		bool NETWORK_SESSION_IS_VISIBLE();
 		void NETWORK_SESSION_BLOCK_JOIN_REQUESTS(bool toggle);
-		/**
-		 * num player slots allowed in session, seems to work? 32 max
-		 */
 		void NETWORK_SESSION_CHANGE_SLOTS(int slots, bool p1);
 		int NETWORK_SESSION_GET_PRIVATE_SLOTS();
 		bool NETWORK_SESSION_VOICE_HOST();
@@ -9204,9 +9137,6 @@ namespace base::menu::natives {
 		void NETWORK_SET_PRESENCE_SESSION_INVITES_BLOCKED(bool toggle);
 		bool NETWORK_SEND_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
 		bool NETWORK_SEND_TRANSITION_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
-		/**
-		 * Contains the string "NETWORK_SEND_PRESENCE_TRANSITION_INVITE" but so does 0xC116FF9B4D488291; seems to fit alphabetically here, tho.
-		 */
 		bool NETWORK_SEND_IMPORTANT_TRANSITION_INVITE_VIA_PRESENCE(Any* gamerHandle, const char* p1, int dataCount, int p3);
 		int NETWORK_GET_PRESENCE_INVITE_INDEX_BY_ID(int p0);
 		int NETWORK_GET_NUM_PRESENCE_INVITES();
@@ -9647,13 +9577,10 @@ namespace base::menu::natives {
 		void NETWORK_CLEAR_VOICE_PROXIMITY_OVERRIDE();
 		void NETWORK_ENABLE_VOICE_BANDWIDTH_RESTRICTION(Player player);
 		void NETWORK_DISABLE_VOICE_BANDWIDTH_RESTRICTION(Player player);
-		/**
-		 * NETWORK_GET_M[A-U]
-		 */
 		void NETWORK_GET_MUTE_COUNT_FOR_PLAYER(Player p0, float* p1, float* p2);
 		void NETWORK_SET_SPECTATOR_TO_NON_SPECTATOR_TEXT_CHAT(bool toggle);
 		/**
-		 * Same as _IS_TEXT_CHAT_ACTIVE, except it does not check if the text chat HUD component is initialized, and therefore may crash.
+		 * Same as IS_MP_TEXT_CHAT_TYPING, except it does not check if the text chat HUD component is initialized, and therefore may crash.
 		 */
 		bool NETWORK_TEXT_CHAT_IS_TYPING();
 		/**
@@ -9696,9 +9623,7 @@ namespace base::menu::natives {
 		/**
 		 * bufferSize is 35 in the scripts.
 		 * 
-		 * bufferSize is the elementCount of p0(desc), sizeof(p0) == 280 == p1*8 == 35 * 8, p2(netHandle) is obtained from NETWORK::NETWORK_HANDLE_FROM_PLAYER.  And no, I can't explain why 35 * sizeof(int) == 280 and not 140, but I'll get back to you on that.
-		 * 
-		 * the answer is: because p0 an int64_t* / int64_t[35].  and FYI p2 is an int64_t[13]
+		 * bufferSize is the elementCount of p0(desc), sizeof(p0) == 280 == p1*8 == 35 * 8, p2(netHandle) is obtained from NETWORK::NETWORK_HANDLE_FROM_PLAYER.
 		 * 
 		 * https://pastebin.com/cSZniHak
 		 */
@@ -10039,9 +9964,6 @@ namespace base::menu::natives {
 		bool NETWORK_IS_CLOUD_BACKGROUND_SCRIPT_REQUEST_PENDING();
 		void NETWORK_REQUEST_CLOUD_TUNABLES();
 		bool NETWORK_IS_TUNABLE_CLOUD_REQUEST_PENDING();
-		/**
-		 * Actually returns the version (TUNABLE_VERSION)
-		 */
 		int NETWORK_GET_TUNABLE_CLOUD_CRC();
 		/**
 		 * Sets up tunable contexts for _NETWORK_GET_TUNABLES_REGISTRATION_{BOOL|INT|FLOAT}
@@ -10132,6 +10054,7 @@ namespace base::menu::natives {
 		void NETWORK_EXPLODE_HELI(Vehicle vehicle, bool isAudible, bool isInvisible, int netId);
 		void NETWORK_USE_LOGARITHMIC_BLENDING_THIS_FRAME(Entity entity);
 		void NETWORK_OVERRIDE_COORDS_AND_HEADING(Entity entity, float x, float y, float z, float heading);
+		void _NETWORK_ALLOW_DEAD_PED_NETWORK_BLENDING(int netId, bool allow); // Missing in crossmap
 		void NETWORK_ENABLE_EXTRA_VEHICLE_ORIENTATION_BLEND_CHECKS(int netId, bool toggle);
 		void NETWORK_DISABLE_PROXIMITY_MIGRATION(int netID);
 		/**
@@ -10229,6 +10152,7 @@ namespace base::menu::natives {
 		bool UGC_GET_MOST_RECENTLY_CREATED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
 		bool UGC_GET_MOST_RECENTLY_PLAYED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
 		bool UGC_GET_TOP_RATED_CONTENT(Any p0, Any p1, Any* p2, Any* p3);
+		void _UGC_GET_NOMINATED_CONTENT(int offset, int maxCount, const char* contentTypeName, Any* p3); // Missing in crossmap
 		void UGC_CANCEL_QUERY();
 		bool UGC_IS_GETTING();
 		bool UGC_HAS_GET_FINISHED();
@@ -10282,6 +10206,8 @@ namespace base::menu::natives {
 		bool UGC_HAS_PERMISSION_TO_WRITE();
 		bool UGC_PUBLISH(const char* contentId, const char* baseContentId, const char* contentTypeName);
 		bool UGC_SET_BOOKMARKED(const char* contentId, bool bookmarked, const char* contentTypeName);
+		void _UGC_SET_NOMINATED_JOB(const char* contentId, bool nominated, const char* contentTypeName); // Missing in crossmap
+		void _UGC_CLEAR_NOMINATED_JOB(const char* contentTypeName); // Missing in crossmap
 		bool UGC_SET_DELETED(Any* p0, bool p1, const char* p2);
 		bool UGC_IS_MODIFYING();
 		bool UGC_HAS_MODIFY_FINISHED();
@@ -10625,7 +10551,7 @@ namespace base::menu::natives {
 		bool IS_DOOR_CLOSED(Hash doorHash);
 		void OPEN_ALL_BARRIERS_FOR_RACE(bool p0);
 		/**
-		 * Clears the fields sets by 0xC7F29CA00F46350E (1604 retail: 0x1424A7A10, 0x1424A7A11) and iterates over the global CDoor's bucket-list.
+		 * Clears the fields sets by OPEN_ALL_BARRIERS_FOR_RACE and iterates over the global CDoor's bucket-list.
 		 * Related to its "Pre-networked state"?
 		 */
 		void CLOSE_ALL_BARRIERS_FOR_RACE();
@@ -10665,9 +10591,7 @@ namespace base::menu::natives {
 		 * 2. extent: the mid-point of opposite base edge on the other Z;
 		 * 3. width: the length of the base edge; (named derived from logging strings ``CNetworkRoadNodeWorldStateData``).
 		 * 
-		 * The oriented rectangle can then be derived from the direction of the two points (``norm(origin - extent)``), its orthonormal, and the width, e.g:
-		 * 1. golf_mp https://i.imgur.com/JhsQAK9.png
-		 * 2. am_taxi https://i.imgur.com/TJWCZaT.jpg
+		 * The oriented rectangle can then be derived from the direction of the two points (``norm(origin - extent)``), its orthonormal, and the width.
 		 */
 		bool IS_POINT_IN_ANGLED_AREA(float xPos, float yPos, float zPos, float x1, float y1, float z1, float x2, float y2, float z2, float width, bool debug, bool includeZ);
 		/**
@@ -11081,7 +11005,7 @@ namespace base::menu::natives {
 		 * GET_CONTROL_INSTRUCTIONAL_BUTTON (2, 202, 1) /*INPUT_FRONTEND_CANCEL (e.g. ESC button)* /
 		 * GET_CONTROL_INSTRUCTIONAL_BUTTON (2, 51, 1) /*INPUT_CONTEXT (e.g. E button)* /
 		 * 
-		 * gtaforums.com/topic/819070-c-draw-instructional-buttons-scaleform-movie/#entry1068197378
+		 * https://gtaforums.com/topic/819070-c-draw-instructional-buttons-scaleform-movie/#entry1068197378
 		 * 
 		 * control: unused parameter
 		 */
@@ -11124,24 +11048,6 @@ namespace base::menu::natives {
 		 */
 		void CLEAR_CONTROL_SHAKE_SUPPRESSED_ID(int control);
 		bool IS_LOOK_INVERTED();
-		/**
-		 * Used with IS_LOOK_INVERTED() and negates its affect.
-		 * 
-		 * --
-		 * 
-		 * Not sure how the person above got that description, but here's an actual example:
-		 * 
-		 * if (PAD::IS_USING_KEYBOARD_AND_MOUSE(2)) {
-		 * if (a_5) {
-		 * if (PAD::IS_LOOK_INVERTED()) {
-		 * a_3 *= -1;
-		 * }
-		 * if (PAD::IS_MOUSE_LOOK_INVERTED()) {
-		 * a_3 *= -1;
-		 * }
-		 * }
-		 * }
-		 */
 		bool IS_MOUSE_LOOK_INVERTED();
 		/**
 		 * Hard-coded to return 3 if using KBM, otherwise same behavior as GET_LOCAL_PLAYER_GAMEPAD_AIM_STATE.
@@ -11201,7 +11107,7 @@ namespace base::menu::natives {
 
 	} // namespace PAD
 
-	namespace PATHFIND {
+	namespace PATH {
 
 		/**
 		 * When nodeEnabled is set to false, all nodes in the area get disabled.
@@ -11246,7 +11152,7 @@ namespace base::menu::natives {
 		 * p6 is always 3.0
 		 * p7 is always 0
 		 * 
-		 * gtaforums.com/topic/843561-pathfind-node-types
+		 * https://gtaforums.com/topic/843561-pathfind-node-types
 		 * 
 		 * Example of usage, moving vehicle to closest path/road:
 		 * Vector3 coords = ENTITY::GET_ENTITY_COORDS(playerVeh, true);
@@ -11270,9 +11176,9 @@ namespace base::menu::natives {
 		 * Get the nth closest vehicle node and its heading.
 		 */
 		bool GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING(float x, float y, float z, int nthClosest, Vector3* outPosition, float* outHeading, int* outNumLanes, int nodeFlags, float unknown3, float unknown4);
-		int GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING(float x, float y, float z, int nthClosest, Vector3* outPosition, float* outHeading, int nodeFlags, float p7, float p8);
+		int GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING(float x, float y, float z, int nthClosest, float* outHeading, int* outNumLanes, int nodeFlags, float zMeasureMult, float zTolerance);
 		/**
-		 * See gtaforums.com/topic/843561-pathfind-node-types for node type info. 0 = paved road only, 1 = any road, 3 = water
+		 * See https://gtaforums.com/topic/843561-pathfind-node-types for node type info. 0 = paved road only, 1 = any road, 3 = water
 		 * 
 		 * p10 always equals 3.0
 		 * p11 always equals 0
@@ -11309,7 +11215,11 @@ namespace base::menu::natives {
 		 * p1 seems to be always 1.0f in the scripts
 		 */
 		bool GET_CLOSEST_ROAD(float x, float y, float z, float p3, int p4, Vector3* p5, Vector3* p6, Any* p7, Any* p8, float* p9, bool p10);
-		bool LOAD_ALL_PATH_NODES(bool set);
+		/**
+		 * Loads/unloads all path nodes on the map.
+		 * Returns true if all nodes are loaded (effectively ARE_NODES_LOADED_FOR_AREA for the entire map).
+		 */
+		bool LOAD_ALL_PATH_NODES(bool bLoadAll);
 		void SET_ALLOW_STREAM_PROLOGUE_NODES(bool toggle);
 		/**
 		 * Activates Cayo Perico path nodes if passed `1`. GPS navigation will start working, maybe more stuff will change, not sure. It seems if you try to unload (pass `0`) when close to the island, your game might crash.
@@ -11392,7 +11302,6 @@ namespace base::menu::natives {
 		 * 
 		 * **Setting a waypoint at the same coordinate:**
 		 * Disabled Zone: https://i.imgur.com/P9VUuxM.png
-		 * Enabled Zone (normal): https://i.imgur.com/BPi24aw.png
 		 */
 		void SET_GPS_DISABLED_ZONE_AT_INDEX(float x1, float y1, float z1, float x2, float y2, float z2, int index);
 		/**
@@ -11443,7 +11352,7 @@ namespace base::menu::natives {
 		 */
 		float CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS(float x1, float y1, float z1, float x2, float y2, float z2);
 
-	} // namespace PATHFIND
+	} // namespace PATH
 
 	namespace PED {
 
@@ -11496,18 +11405,7 @@ namespace base::menu::natives {
 		 * If the handle is invalid, the function returns true.
 		 */
 		bool IS_PED_FATALLY_INJURED(Ped ped);
-		/**
-		 * Seems to consistently return true if the ped is dead.
-		 * 
-		 * p1 is always passed 1 in the scripts.
-		 * 
-		 * I suggest to remove "OR_DYING" part, because it does not detect dying phase.
-		 * 
-		 * That's what the devs call it, cry about it.
-		 * 
-		 * lol
-		 */
-		bool IS_PED_DEAD_OR_DYING(Ped ped, bool p1);
+		bool IS_PED_DEAD_OR_DYING(Ped ped, bool checkMeleeDeathFlags);
 		bool IS_CONVERSATION_PED_DEAD(Ped ped);
 		bool IS_PED_AIMING_FROM_COVER(Ped ped);
 		/**
@@ -11957,7 +11855,7 @@ namespace base::menu::natives {
 		 */
 		int GET_RELATIONSHIP_BETWEEN_GROUPS(Hash group1, Hash group2);
 		void SET_RELATIONSHIP_GROUP_AFFECTS_WANTED_LEVEL(Hash group, bool p1);
-		void TELL_GROUP_PEDS_IN_AREA_TO_ATTACK(Ped ped, Any p1, float p2, Hash hash, Any p4, Any p5);
+		void TELL_GROUP_PEDS_IN_AREA_TO_ATTACK(Ped ped, float x, float y, float z, float radius, Hash hash);
 		void SET_PED_CAN_BE_TARGETED_WITHOUT_LOS(Ped ped, bool toggle);
 		void SET_PED_TO_INFORM_RESPECTED_FRIENDS(Ped ped, float radius, int maxFriends);
 		bool IS_PED_RESPONDING_TO_EVENT(Ped ped, Any event);
@@ -12063,6 +11961,7 @@ namespace base::menu::natives {
 		 * damages a ped with the given amount
 		 */
 		void APPLY_DAMAGE_TO_PED(Ped ped, int damageAmount, bool p2, Any p3, Hash weaponType);
+		void _GENERATE_PED_DAMAGE_EVENT(Ped ped, float x, float y, float z, Hash weaponType); // Missing in crossmap
 		int GET_TIME_PED_DAMAGED_BY_WEAPON(Ped ped, Hash weaponHash);
 		void SET_PED_ALLOWED_TO_DUCK(Ped ped, bool toggle);
 		void SET_PED_NEVER_LEAVES_GROUP(Ped ped, bool toggle);
@@ -12339,15 +12238,6 @@ namespace base::menu::natives {
 		 */
 		int GET_NUMBER_OF_PED_PROP_DRAWABLE_VARIATIONS(Ped ped, int propId);
 		/**
-		 * Need to check behavior when drawableId = -1
-		 * 
-		 * - Doofy.Ass
-		 * Why this function doesn't work and return nill value?
-		 * GET_NUMBER_OF_PED_PROP_TEXTURE_VARIATIONS(PLAYER.PLAYER_PED_ID(), 0, 5)
-		 * 
-		 * tick: scripts/addins/menu_execute.lua:51: attempt to call field 'GET_NUMBER_OF_PED_PROP_TEXTURE_VARIATIONS' (a nil value)
-		 * 
-		 * 
 		 * List of component/props ID
 		 * gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html
 		 */
@@ -12417,10 +12307,6 @@ namespace base::menu::natives {
 		 * The "shape" parameters control the shape of the ped's face. The "skin" parameters control the skin tone. ShapeMix and skinMix control how much the first and second IDs contribute,(typically mother and father.) ThirdMix overrides the others in favor of the third IDs. IsParent is set for "children" of the player character's grandparents during old-gen character creation. It has unknown effect otherwise.
 		 * 
 		 * The IDs start at zero and go Male Non-DLC, Female Non-DLC, Male DLC, and Female DLC.
-		 * 
-		 * !!!Can someone add working example for this???
-		 * 
-		 * try this:
 		 * headBlendData headData;
 		 * GET_PED_HEAD_BLEND_DATA(PLAYER_PED_ID(), &headData);
 		 * 
@@ -12429,7 +12315,7 @@ namespace base::menu::natives {
 		 * 
 		 * 
 		 * For more info please refer to this topic.
-		 * gtaforums.com/topic/858970-all-gtao-face-ids-pedset-ped-head-blend-data-explained
+		 * https://gtaforums.com/topic/858970-all-gtao-face-ids-pedset-ped-head-blend-data-explained
 		 */
 		void SET_PED_HEAD_BLEND_DATA(Ped ped, int shapeFirstID, int shapeSecondID, int shapeThirdID, int skinFirstID, int skinSecondID, int skinThirdID, float shapeMix, float skinMix, float thirdMix, bool isParent);
 		/**
@@ -12501,11 +12387,11 @@ namespace base::menu::natives {
 		 */
 		void SET_HEAD_BLEND_EYE_COLOR(Ped ped, int index);
 		/**
-		 * A getter for _SET_PED_EYE_COLOR. Returns -1 if fails to get.
+		 * A getter for SET_HEAD_BLEND_EYE_COLOR. Returns -1 if fails to get.
 		 */
 		int GET_HEAD_BLEND_EYE_COLOR(Ped ped);
 		/**
-		 * OverlayID ranges from 0 to 12, index from 0 to _GET_NUM_OVERLAY_VALUES(overlayID)-1, and opacity from 0.0 to 1.0.
+		 * OverlayID ranges from 0 to 12, index from 0 to GET_PED_HEAD_OVERLAY_NUM(overlayID)-1, and opacity from 0.0 to 1.0.
 		 * 
 		 * overlayID       Part                  Index, to disable
 		 * 0               Blemishes             0 - 23, 255
@@ -12617,7 +12503,6 @@ namespace base::menu::natives {
 		void FINALIZE_HEAD_BLEND(Ped ped);
 		/**
 		 * p4 seems to vary from 0 to 3.
-		 * Preview: https://gfycat.com/MaleRareAmazonparrot
 		 */
 		void SET_HEAD_BLEND_PALETTE_COLOR(Ped ped, int r, int g, int b, int id);
 		void DISABLE_HEAD_BLEND_PALETTE_COLOR(Ped ped);
@@ -13012,14 +12897,11 @@ namespace base::menu::natives {
 		 * 
 		 * Additional damage packs:
 		 * 
-		 * gist.github.com/alexguirre/f3f47f75ddcf617f416f3c8a55ae2227
+		 * https://gist.github.com/alexguirre/f3f47f75ddcf617f416f3c8a55ae2227
 		 * Full list of ped damage packs by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pedDamagePacks.json
 		 */
 		void APPLY_PED_DAMAGE_PACK(Ped ped, const char* damagePack, float damage, float mult);
 		void CLEAR_PED_BLOOD_DAMAGE(Ped ped);
-		/**
-		 * Somehow related to changing ped's clothes.
-		 */
 		void CLEAR_PED_BLOOD_DAMAGE_BY_ZONE(Ped ped, int p1);
 		void HIDE_PED_BLOOD_DAMAGE_BY_ZONE(Ped ped, Any p1, bool p2);
 		/**
@@ -13714,6 +13596,7 @@ namespace base::menu::natives {
 		void SET_PED_MODEL_IS_SUPPRESSED(Hash modelHash, bool toggle);
 		void STOP_ANY_PED_MODEL_BEING_SUPPRESSED();
 		void SET_PED_CAN_BE_TARGETED_WHEN_INJURED(Ped ped, bool toggle);
+		void _BLOCK_PED_FROM_WRITHING_WHEN_INJURED(Ped ped, bool toggle); // Missing in crossmap
 		void SET_PED_GENERATES_DEAD_BODY_EVENTS(Ped ped, bool toggle);
 		void BLOCK_PED_FROM_GENERATING_DEAD_BODY_EVENTS_WHEN_DEAD(Ped ped, bool toggle);
 		void SET_PED_WILL_ONLY_ATTACK_WANTED_PLAYER(Any p0, Any p1);
@@ -14106,7 +13989,7 @@ namespace base::menu::natives {
 		 */
 		void SET_PED_EMISSIVE_SCALE(Ped ped, float intensity);
 		/**
-		 * Use 0x4E90D746056E273D to set the illuminated clothing glow intensity for a specific ped.
+		 * Use SET_PED_EMISSIVE_SCALE to set the illuminated clothing glow intensity for a specific ped.
 		 * Returns a float between 0.0 and 1.0 representing the current illuminated clothing glow intensity.
 		 */
 		float GET_PED_EMISSIVE_SCALE(Ped ped);
@@ -14117,7 +14000,7 @@ namespace base::menu::natives {
 		 */
 		void REQUEST_RAGDOLL_BOUNDS_UPDATE(Any p0, Any p1);
 		/**
-		 * Enable/disable ped shadow (ambient occlusion). https://gfycat.com/thankfulesteemedgecko
+		 * Enable/disable ped shadow (ambient occlusion).
 		 */
 		void SET_PED_AO_BLOB_RENDERING(Ped ped, bool toggle);
 		bool IS_PED_SHELTERED(Ped ped);
@@ -14252,7 +14135,7 @@ namespace base::menu::natives {
 		 * 
 		 * -----------------------------------
 		 * 
-		 * Example: gtaforums.com/topic/789788-function-args-to-pedget-ped-nearby-peds/?p=1067386687
+		 * Example: https://gtaforums.com/topic/789788-function-args-to-pedget-ped-nearby-peds/?p=1067386687
 		 */
 		int GET_PED_NEARBY_PEDS(Ped ped, Any* sizeAndPeds, int ignore);
 		bool HAVE_ALL_STREAMING_REQUESTS_COMPLETED(Ped ped);
@@ -14273,28 +14156,28 @@ namespace base::menu::natives {
 		 */
 		void SET_PED_CAPSULE(Ped ped, float value);
 		/**
-		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
+		 * https://gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
 		int REGISTER_PEDHEADSHOT(Ped ped);
 		int REGISTER_PEDHEADSHOT_HIRES(Ped ped);
 		/**
-		 * Similar to REGISTER_PEDHEADSHOT but creates a transparent background instead of black. Example: https://i.imgur.com/iHz8ztn.png
+		 * Similar to REGISTER_PEDHEADSHOT but creates a transparent background instead of black.
 		 */
 		int REGISTER_PEDHEADSHOT_TRANSPARENT(Ped ped);
 		/**
-		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
+		 * https://gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
 		void UNREGISTER_PEDHEADSHOT(int id);
 		/**
-		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
+		 * https://gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
 		bool IS_PEDHEADSHOT_VALID(int id);
 		/**
-		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
+		 * https://gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
 		bool IS_PEDHEADSHOT_READY(int id);
 		/**
-		 * gtaforums.com/topic/885580-ped-headshotmugshot-txd/
+		 * https://gtaforums.com/topic/885580-ped-headshotmugshot-txd/
 		 */
 		const char* GET_PEDHEADSHOT_TXD_STRING(int id);
 		bool REQUEST_PEDHEADSHOT_IMG_UPLOAD(int id);
@@ -14470,7 +14353,7 @@ namespace base::menu::natives {
 		 */
 		Ped GET_PLAYER_PED(Player player);
 		/**
-		 * Does the same like PLAYER::GET_PLAYER_PED
+		 * Identical to PLAYER::GET_PLAYER_PED
 		 */
 		Ped GET_PLAYER_PED_SCRIPT_INDEX(Player player);
 		/**
@@ -14510,7 +14393,7 @@ namespace base::menu::natives {
 		 * P1: ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 1)
 		 * P2: Not set by any call
 		 */
-		void SET_PLAYER_WANTED_CENTRE_POSITION(Player player, Vector3* position, bool p2, bool p3);
+		void SET_PLAYER_WANTED_CENTRE_POSITION(Player player, float x, float y, float z);
 		/**
 		 * Drft
 		 */
@@ -14951,14 +14834,14 @@ namespace base::menu::natives {
 		/**
 		 * Simply sets you as invincible (Health will not deplete).
 		 * 
-		 * Use 0x733A643B5B0C53C1 instead if you want Ragdoll enabled, which is equal to:
+		 * Use SET_PLAYER_INVINCIBLE_BUT_HAS_REACTIONS instead if you want Ragdoll enabled, which is roughly equal to:
 		 * *(DWORD *)(playerPedAddress + 0x188) |= (1 << 9);
 		 */
 		void SET_PLAYER_INVINCIBLE(Player player, bool toggle);
 		/**
 		 * Returns the Player's Invincible status.
 		 * 
-		 * This function will always return false if 0x733A643B5B0C53C1 is used to set the invincibility status. To always get the correct result, use this:
+		 * This function will always return false if SET_PLAYER_INVINCIBLE_BUT_HAS_REACTIONS is used to set the invincibility status. To always get the correct result, use this:
 		 * 
 		 * bool IsPlayerInvincible(Player player)
 		 * {
@@ -15017,11 +14900,7 @@ namespace base::menu::natives {
 		void CLEAR_PLAYER_HAS_DAMAGED_AT_LEAST_ONE_NON_ANIMAL_PED(Player player);
 		bool HAS_PLAYER_DAMAGED_AT_LEAST_ONE_NON_ANIMAL_PED(Player player);
 		/**
-		 * This can be between 1.0f - 14.9f
-		 * 
-		 * You can change the max in IDA from 15.0. I say 15.0 as the function blrs if what you input is greater than or equal to 15.0 hence why it's 14.9 max default.
-		 * 
-		 * 
+		 * This can be between 1.0f - 50.0f
 		 */
 		void SET_AIR_DRAG_MULTIPLIER_FOR_PLAYERS_VEHICLE(Player player, float multiplier);
 		/**
@@ -15029,16 +14908,12 @@ namespace base::menu::natives {
 		 * Multiplier goes up to 1.49
 		 * 
 		 * Just call it one time, it is not required to be called once every tick. - Note copied from below native.
-		 * 
-		 * Note: At least the IDA method if you change the max float multiplier from 1.5 it will change it for both this and RUN_SPRINT below. I say 1.5 as the function blrs if what you input is greater than or equal to 1.5 hence why it's 1.49 max default.
 		 */
 		void SET_SWIM_MULTIPLIER_FOR_PLAYER(Player player, float multiplier);
 		/**
-		 * Multiplier goes up to 1.49 any value above will be completely overruled by the game and the multiplier will not take effect, this can be edited in memory however.
+		 * Multiplier goes up to 1.49 any value above will be completely overruled by the game and the multiplier will not take effect.
 		 * 
 		 * Just call it one time, it is not required to be called once every tick.
-		 * 
-		 * Note: At least the IDA method if you change the max float multiplier from 1.5 it will change it for both this and SWIM above. I say 1.5 as the function blrs if what you input is greater than or equal to 1.5 hence why it's 1.49 max default.
 		 */
 		void SET_RUN_SPRINT_MULTIPLIER_FOR_PLAYER(Player player, float multiplier);
 		/**
@@ -15082,6 +14957,10 @@ namespace base::menu::natives {
 		void DISABLE_PLAYER_THROW_GRENADE_WHILE_USING_GUN();
 		void SET_DISABLE_AMBIENT_MELEE_MOVE(Player player, bool toggle);
 		/**
+		 * stealthSpeed must be between 80 and 120
+		 */
+		void SET_PLAYER_STEALTH_SPEED(Player player, int stealthSpeed); // Missing in crossmap
+		/**
 		 * Default is 100. Use player id and not ped id. For instance: PLAYER::SET_PLAYER_MAX_ARMOUR(PLAYER::PLAYER_ID(), 100); // main_persistent.ct4
 		 */
 		void SET_PLAYER_MAX_ARMOUR(Player player, int value);
@@ -15124,9 +15003,6 @@ namespace base::menu::natives {
 		 * p2 is always 1
 		 */
 		void SPECIAL_ABILITY_CHARGE_NORMALIZED(Player player, float normalizedValue, bool p2, Any p3);
-		/**
-		 * Also known as _RECHARGE_SPECIAL_ABILITY
-		 */
 		void SPECIAL_ABILITY_FILL_METER(Player player, bool p1, Any p2);
 		/**
 		 * p1 was always true.
@@ -15303,6 +15179,7 @@ namespace base::menu::natives {
 		void SET_PLAYER_CAN_LEAVE_PARACHUTE_SMOKE_TRAIL(Player player, bool enabled);
 		void SET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR(Player player, int r, int g, int b);
 		void GET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR(Player player, int* r, int* g, int* b);
+		void SET_PLAYER_RESET_FLAG_PREFER_REAR_SEATS(Player player, Vehicle vehicle); // Missing in crossmap
 		void SET_PLAYER_PHONE_PALETTE_IDX(Player player, int idx);
 		void SET_PLAYER_NOISE_MULTIPLIER(Player player, float multiplier);
 		/**
@@ -15512,9 +15389,6 @@ namespace base::menu::natives {
 		 */
 		bool HAS_SCRIPT_LOADED(const char* scriptName);
 		bool DOES_SCRIPT_EXIST(const char* scriptName);
-		/**
-		 * formerly _REQUEST_STREAMED_SCRIPT
-		 */
 		void REQUEST_SCRIPT_WITH_NAME_HASH(Hash scriptHash);
 		void SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED(Hash scriptHash);
 		bool HAS_SCRIPT_WITH_NAME_HASH_LOADED(Hash scriptHash);
@@ -15626,13 +15500,13 @@ namespace base::menu::natives {
 		/**
 		 * Asynchronously starts a line-of-sight (raycast) world probe shape test.
 		 * 
-		 * Use the handle with 0x3D87450E15D98694 or 0x65287525D951F6BE until it returns 0 or 2.
+		 * Use the handle with GET_SHAPE_TEST_RESULT or GET_SHAPE_TEST_RESULT_INCLUDING_MATERIAL until it returns 0 or 2.
 		 * 
 		 * p8 is a bit mask with bits 1, 2 and/or 4, relating to collider types; 4 should usually be used.
 		 */
 		int START_SHAPE_TEST_LOS_PROBE(float x1, float y1, float z1, float x2, float y2, float z2, int flags, Entity entity, int p8);
 		/**
-		 * Does the same as 0x7EE9F5D83DD4F90E, except blocking until the shape test completes.
+		 * Does the same as START_SHAPE_TEST_LOS_PROBE, except blocking until the shape test completes.
 		 */
 		int START_EXPENSIVE_SYNCHRONOUS_SHAPE_TEST_LOS_PROBE(float x1, float y1, float z1, float x2, float y2, float z2, int flags, Entity entity, int p8);
 		int START_SHAPE_TEST_BOUNDING_BOX(Entity entity, int flags1, int flags2);
@@ -16420,6 +16294,9 @@ namespace base::menu::natives {
 		void _PLAYSTATS_LOBBY_EXIT(Any* p0);
 		void _PLAYSTATS_LOBBY_STARTED(Any* p0);
 		void _PLAYSTATS_CREATOR_END(Any* p0);
+		void _PLAYSTATS_HEIST5_FINALE(Any* data); // Missing in crossmap
+		void _PLAYSTATS_HEIST5_PREP(Any* data); // Missing in crossmap
+		void _PLAYSTATS_HEIST5_HACK(Any* data); // Missing in crossmap
 
 	} // namespace STATS
 
@@ -16722,7 +16599,7 @@ namespace base::menu::natives {
 		 * Flags is a bitflag:
 		 * 2^n - Enabled Functionality:
 		 * 0 - Skip camera rotate up
-		 * 3 - Wait for SET_PLAYER_SWITCH_ESTABLISHING_SHOT / hang at last step. You will still need to run 0x74DE2E8739086740 to exit "properly" and then STOP_PLAYER_SWITCH
+		 * 3 - Wait for SET_PLAYER_SWITCH_ESTABLISHING_SHOT / hang at last step. You will still need to run ALLOW_PLAYER_SWITCH_OUTRO to exit "properly" and then STOP_PLAYER_SWITCH
 		 * 6 - Invert Switch Direction (false = out, true = in)
 		 * 8 - Hang above ped
 		 * 
@@ -16743,7 +16620,6 @@ namespace base::menu::natives {
 		/**
 		 * This allows you to override "extended distance scaling" setting. Needs to be called each frame.
 		 * Max scaling seems to be 200.0, normal is 1.0
-		 * See https://gfycat.com/DetailedHauntingIncatern
 		 */
 		void OVERRIDE_LODSCALE_THIS_FRAME(float scaling);
 		void REMAP_LODSCALE_RANGE_THIS_FRAME(float p0, float p1, float p2, float p3);
@@ -16789,7 +16665,6 @@ namespace base::menu::natives {
 		 * Maximum model memory (as defined in common\data\missioncreatordata.meta) is 100 MiB
 		 */
 		float GET_USED_CREATOR_BUDGET();
-		float _GET_MODEL_ADDITIONAL_COST(Hash modelHash);
 		float _GET_TOTAL_MODEL_COST(Hash modelHash);
 		/**
 		 * Enables the specified island. For more information, see islandhopper.meta
@@ -17148,15 +17023,7 @@ namespace base::menu::natives {
 		void SET_ANIM_RATE(Entity entity, float rate, int priority, bool secondary);
 		void SET_ANIM_LOOPED(Entity entity, bool looped, int priority, bool secondary);
 		/**
-		 * Example from the scripts:
-		 * TASK::TASK_PLAY_PHONE_GESTURE_ANIMATION(PLAYER::PLAYER_PED_ID(), v_3, v_2, v_4, 0.25, 0.25, 0, 0);
-		 * 
-		 * =========================================================
-		 * ^^ No offense, but Idk how that would really help anyone.
-		 * 
-		 * As for the animDict & animation, they're both store in a global in all 5 scripts. So if anyone would be so kind as to read that global and comment what strings they use. Thanks.
-		 * 
-		 * Known boneMaskTypes'
+		 * Known boneMaskTypes
 		 * "BONEMASK_HEADONLY"
 		 * "BONEMASK_HEAD_NECK_AND_ARMS"
 		 * "BONEMASK_HEAD_NECK_AND_L_ARM"
@@ -17347,13 +17214,13 @@ namespace base::menu::natives {
 		 * 
 		 * if the target is closer than noRoadsDistance, the driver will ignore pathing/roads and follow you directly.
 		 * 
-		 * Driving Styles guide: gtaforums.com/topic/822314-guide-driving-styles/
+		 * Driving Styles guide: https://gtaforums.com/topic/822314-guide-driving-styles/
 		 */
 		void TASK_VEHICLE_ESCORT(Ped ped, Vehicle vehicle, Vehicle targetVehicle, int mode, float speed, int drivingStyle, float minDistance, int minHeightAboveTerrain, float noRoadsDistance);
 		/**
 		 * Makes a ped in a vehicle follow an entity (ped, vehicle, etc.)
 		 * 
-		 * drivingStyle: http://gtaforums.com/topic/822314-guide-driving-styles/
+		 * drivingStyle: https://gtaforums.com/topic/822314-guide-driving-styles/
 		 */
 		void TASK_VEHICLE_FOLLOW(Ped driver, Vehicle vehicle, Entity targetEntity, float speed, int drivingStyle, int minDistance);
 		/**
@@ -17526,7 +17393,7 @@ namespace base::menu::natives {
 		 * TASK::TASK_BOAT_MISSION(pedDriver, pedVehicle, 0, 0, waypointCoord.x, waypointCoord.y, waypointCoord.z, 4, vehicleMaxSpeed, 786469, -1.0, 7);
 		 * PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(pedDriver, 1);
 		 * 
-		 * P8 appears to be driving style flag - see gtaforums.com/topic/822314-guide-driving-styles/ for documentation
+		 * P8 appears to be driving style flag - see https://gtaforums.com/topic/822314-guide-driving-styles/ for documentation
 		 */
 		void TASK_BOAT_MISSION(Ped pedDriver, Vehicle vehicle, Vehicle targetVehicle, Ped targetPed, float x, float y, float z, int mission, float maxSpeed, int drivingStyle, float targetReached, Any boatFlags);
 		/**
@@ -17560,13 +17427,6 @@ namespace base::menu::natives {
 		 */
 		void SET_MOUNTED_WEAPON_TARGET(Ped shootingPed, Ped targetPed, Vehicle targetVehicle, float x, float y, float z, int taskMode, bool ignoreTargetVehDeadCheck);
 		bool IS_MOUNTED_WEAPON_TASK_UNDERNEATH_DRIVING_TASK(Ped ped);
-		/**
-		 * Actually has 3 params, not 2.
-		 * 
-		 * p0: Ped
-		 * p1: int (or bool?)
-		 * p2: int
-		 */
 		void TASK_USE_MOBILE_PHONE(Ped ped, bool usePhone, int desiredPhoneMode);
 		void TASK_USE_MOBILE_PHONE_TIMED(Ped ped, int duration);
 		/**
@@ -17718,7 +17578,7 @@ namespace base::menu::natives {
 		 * 262144
 		 * 786469
 		 * 
-		 * http://gtaforums.com/topic/822314-guide-driving-styles/
+		 * https://gtaforums.com/topic/822314-guide-driving-styles/
 		 */
 		void SET_DRIVE_TASK_DRIVING_STYLE(Ped ped, int drivingStyle);
 		void ADD_COVER_BLOCKING_AREA(float startX, float startY, float startZ, float endX, float endY, float endZ, bool blockObjects, bool blockVehicles, bool blockMap, bool blockPlayer);
@@ -17745,7 +17605,6 @@ namespace base::menu::natives {
 		 * This makes sense, as these are what I commonly see when going by a liquor store.
 		 * -------------------------
 		 * List of scenarioNames: https://pastebin.com/6mrYTdQv
-		 * (^ Thank you so fucking much for this)
 		 * 
 		 * Also these:
 		 * WORLD_FISH_FLEE
@@ -18138,7 +17997,7 @@ namespace base::menu::natives {
 		 * 
 		 * If using this to continually follow a Ped who is on foot:  You will need to run this in a tick loop.  Call it in with the Ped's updated coordinates every 20 ticks or so and you will have one hell of a smart, fast-reacting NPC driver -- provided he doesn't get stuck.  If your update frequency is too fast, the Ped may not have enough time to figure his way out of being stuck, and thus, remain stuck.  One way around this would be to implement an "anti-stuck" mechanism, which allows the driver to realize he's stuck, temporarily pause the tick, unstuck, then resume the tick.
 		 * 
-		 * EDIT:  This is being discussed in more detail at http://gtaforums.com/topic/818504-any-idea-on-how-to-make-peds-clever-and-insanely-fast-c/
+		 * EDIT: This is being discussed in more detail at https://gtaforums.com/topic/818504-any-idea-on-how-to-make-peds-clever-and-insanely-fast-c/
 		 */
 		void TASK_VEHICLE_GOTO_NAVMESH(Ped ped, Vehicle vehicle, float x, float y, float z, float speed, int behaviorFlag, float stoppingRange);
 		/**
@@ -18740,7 +18599,7 @@ namespace base::menu::natives {
 		 * 
 		 * Speed is in meters per second
 		 * You can convert meters/s to mph here:
-		 * http://www.calculateme.com/Speed/MetersperSecond/ToMilesperHour.htm
+		 * https://www.calculateme.com/speed/meters-per-second/to-miles-per-hour/
 		 */
 		void SET_VEHICLE_FORWARD_SPEED(Vehicle vehicle, float speed);
 		/**
@@ -18790,9 +18649,6 @@ namespace base::menu::natives {
 		 */
 		void SET_SHORT_SLOWDOWN_FOR_LANDING(Vehicle vehicle);
 		void SET_HELI_TURBULENCE_SCALAR(Vehicle vehicle, float p1);
-		/**
-		 * Initially used in Max Payne 3, that's why we know the name.
-		 */
 		void SET_CAR_BOOT_OPEN(Vehicle vehicle);
 		/**
 		 * "To burst tyres VEHICLE::SET_VEHICLE_TYRE_BURST(vehicle, 0, true, 1000.0)
@@ -18905,7 +18761,7 @@ namespace base::menu::natives {
 		void FIX_VEHICLE_WINDOW(Vehicle vehicle, int windowIndex);
 		/**
 		 * Detaches the vehicle's windscreen.
-		 * For further information, see : gtaforums.com/topic/859570-glass/#entry1068894566
+		 * For further information, see : https://gtaforums.com/topic/859570-glass/#entry1068894566
 		 */
 		void POP_OUT_VEHICLE_WINDSCREEN(Vehicle vehicle);
 		/**
@@ -18956,11 +18812,11 @@ namespace base::menu::natives {
 		/**
 		 * This is the proper way of attaching vehicles to the car carrier, it's what Rockstar uses. Video Demo: https://www.youtube.com/watch?v=2lVEIzf7bgo
 		 */
-		void ATTACH_VEHICLE_ON_TO_TRAILER(Vehicle vehicle, Vehicle trailer, float offsetX, float offsetY, float offsetZ, float coordsX, float coordsY, float coordsZ, float rotationX, float rotationY, float rotationZ, float disableCollisions);
+		void ATTACH_VEHICLE_ON_TO_TRAILER(Vehicle vehicle, Vehicle trailer, float offsetX, float offsetY, float offsetZ, float coordsX, float coordsY, float coordsZ, float rotationX, float rotationY, float rotationZ, bool disableCollisions);
 		void STABILISE_ENTITY_ATTACHED_TO_HELI(Vehicle vehicle, Entity entity, float p2);
 		void DETACH_VEHICLE_FROM_TRAILER(Vehicle vehicle);
 		bool IS_VEHICLE_ATTACHED_TO_TRAILER(Vehicle vehicle);
-		void SET_TRAILER_INVERSE_MASS_SCALE(Vehicle vehicle, float p1);
+		void SET_TRAILER_INVERSE_MASS_SCALE(Vehicle vehicle, float scale);
 		/**
 		 * in the decompiled scripts, seems to be always called on the vehicle right after being attached to a trailer.
 		 */
@@ -19207,7 +19063,7 @@ namespace base::menu::natives {
 		 * Only returns non police cars and motorbikes with the flag set to 70 and modelHash to 0. ModelHash seems to always be 0 when not a modelHash in the scripts, as stated above.
 		 * 
 		 * These flags were found in the b617d scripts: 0,2,4,6,7,23,127,260,2146,2175,12294,16384,16386,20503,32768,67590,67711,98309,100359.
-		 * Converted to binary, each bit probably represents a flag as explained regarding another native here: gtaforums.com/topic/822314-guide-driving-styles
+		 * Converted to binary, each bit probably represents a flag as explained regarding another native here: https://gtaforums.com/topic/822314-guide-driving-styles
 		 * 
 		 * Conversion of found flags to binary: https://pastebin.com/kghNFkRi
 		 * 
@@ -20228,9 +20084,6 @@ namespace base::menu::natives {
 		void SET_VEHICLE_WINDOW_TINT(Vehicle vehicle, int tint);
 		int GET_VEHICLE_WINDOW_TINT(Vehicle vehicle);
 		int GET_NUM_VEHICLE_WINDOW_TINTS();
-		/**
-		 * What's this for? Primary and Secondary RGB have their own natives and this one doesn't seem specific.
-		 */
 		void GET_VEHICLE_COLOR(Vehicle vehicle, int* r, int* g, int* b);
 		/**
 		 * Some kind of flags.
@@ -20321,9 +20174,6 @@ namespace base::menu::natives {
 		 * 
 		 * X forces the bike to turn left or right (-1, 1)
 		 * Y forces the bike to lean to the left or to the right (-1, 1)
-		 * 
-		 * Example with X -1/Y 1
-		 * http://i.imgur.com/TgIuAPJ.jpg
 		 */
 		void SET_BIKE_ON_STAND(Vehicle vehicle, float x, float y);
 		void SET_VEHICLE_NOT_STEALABLE_AMBIENTLY(Vehicle vehicle, bool p1);
@@ -20554,8 +20404,7 @@ namespace base::menu::natives {
 		/**
 		 * Money pickups are created around cars when they explode. Only works when the vehicle model is a car. A single pickup is between 1 and 18 dollars in size. All car models seem to give the same amount of money.
 		 * 
-		 * youtu.be/3arlUxzHl5Y
-		 * i.imgur.com/WrNpYFs.jpg
+		 * https://youtu.be/3arlUxzHl5Y
 		 */
 		void SET_VEHICLE_DROPS_MONEY_WHEN_BLOWN_UP(Vehicle vehicle, bool toggle);
 		void SET_VEHICLE_KEEP_ENGINE_ON_WHEN_ABANDONED(Vehicle vehicle, bool toggle);
@@ -20587,14 +20436,11 @@ namespace base::menu::natives {
 		void CLEAR_VEHICLE_ROUTE_HISTORY(Vehicle vehicle);
 		Vehicle DOES_VEHICLE_EXIST_WITH_DECORATOR(const char* decorator);
 		/**
-		 * Used to be incorrectly named SET_VEHICLE_EXCLUSIVE_DRIVER
 		 * Toggles a flag related to SET_VEHICLE_EXCLUSIVE_DRIVER, however, doesn't enable that feature (or trigger script events related to it).
 		 */
 		void SET_VEHICLE_AI_CAN_USE_EXCLUSIVE_SEATS(Vehicle vehicle, bool toggle);
 		/**
 		 * index: 0 - 1
-		 * 
-		 * Used to be incorrectly named _SET_VEHICLE_EXCLUSIVE_DRIVER_2
 		 */
 		void SET_VEHICLE_EXCLUSIVE_DRIVER(Vehicle vehicle, Ped ped, int index);
 		bool IS_PED_EXCLUSIVE_DRIVER_OF_VEHICLE(Ped ped, Vehicle vehicle, int* outIndex);
@@ -20689,8 +20535,6 @@ namespace base::menu::natives {
 		 * Rear can be damaged from 100-0
 		 * Only tested with two cars.
 		 * 
-		 * any idea how this differs from the first one?
-		 * 
 		 * --
 		 * May return the vehicle health on a scale of 0.0 - 100.0 (needs to be confirmed)
 		 * 
@@ -20730,7 +20574,7 @@ namespace base::menu::natives {
 		/**
 		 * Sets vehicle wheel hydraulic states transition. Known states:
 		 * 0 - reset
-		 * 1 - raise wheel (uses value arg, works just like _SET_VEHICLE_HYDRAULIC_WHEEL_VALUE)
+		 * 1 - raise wheel
 		 * 2 - jump using wheel
 		 */
 		void SET_HYDRAULIC_WHEEL_STATE(Vehicle vehicle, int wheelId, int state, float value, Any p4);
@@ -20874,8 +20718,6 @@ namespace base::menu::natives {
 		/**
 		 * Disables collision for this vehicle (maybe it also supports other entities, not sure).
 		 * Only world/building/fixed world objects will have their collisions disabled, props, peds, or any other entity still collides with the vehicle.
-		 * Example: https://streamable.com/6n45d5
-		 * Not sure if there is a native (and if so, which one) that resets the collisions.
 		 */
 		void SET_DISABLE_MAP_COLLISION(Vehicle vehicle);
 		void SET_DISABLE_PED_STAND_ON_TOP(Vehicle vehicle, bool toggle);
@@ -21040,7 +20882,7 @@ namespace base::menu::natives {
 		 */
 		bool GET_DOES_VEHICLE_HAVE_TOMBSTONE(Vehicle vehicle);
 		/**
-		 * Disables detachable bumber from domnator4, dominator5, dominator6, see https://gfycat.com/SecondUnluckyGosling
+		 * Disables detachable bumber from domnator4, dominator5, dominator6
 		 */
 		void HIDE_TOMBSTONE(Vehicle vehicle, bool toggle);
 		void APPLY_EMP_EFFECT(Vehicle vehicle);
@@ -21218,9 +21060,6 @@ namespace base::menu::natives {
 		Hash GET_WEAPON_COMPONENT_TYPE_MODEL(Hash componentHash);
 		/**
 		 * Returns the model of any weapon.
-		 * 
-		 * Can also take an ammo hash?
-		 * sub_6663a(&l_115B, WEAPON::GET_WEAPONTYPE_MODEL(${ammo_rpg}));
 		 */
 		Hash GET_WEAPONTYPE_MODEL(Hash weaponHash);
 		Hash GET_WEAPONTYPE_SLOT(Hash weaponHash);
@@ -21239,24 +21078,18 @@ namespace base::menu::natives {
 		 */
 		void SET_CURRENT_PED_WEAPON(Ped ped, Hash weaponHash, bool bForceInHand);
 		/**
-		 * The return value seems to indicate returns true if the hash of the weapon object weapon equals the weapon hash.
-		 * p2 seems to be 1 most of the time.
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * p2 is not implemented
-		 * 
-		 * disassembly said that?
-		 * 
+		 * Returns true if the hash of the equipped weapon object equals the weapon hash.
+		 * doDeadCheck does nothing in release builds.
 		 */
-		bool GET_CURRENT_PED_WEAPON(Ped ped, Hash* weaponHash, bool p2);
-		Entity GET_CURRENT_PED_WEAPON_ENTITY_INDEX(Ped ped, Any p1);
+		bool GET_CURRENT_PED_WEAPON(Ped ped, Hash* weaponHash, bool doDeadCheck);
 		/**
-		 * p1 is always 0 in the scripts.
+		 * doDeadCheck does nothing in release builds.
 		 */
-		Hash GET_BEST_PED_WEAPON(Ped ped, bool p1);
+		Entity GET_CURRENT_PED_WEAPON_ENTITY_INDEX(Ped ped, bool doDeadCheck);
+		/**
+		 * bIgnoreAmmoCheck is always false in the scripts.
+		 */
+		Hash GET_BEST_PED_WEAPON(Ped ped, bool bIgnoreAmmoCheck);
 		/**
 		 * Full list of weapons by DurtyFree (Search for VEHICLE_*): https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
@@ -21441,7 +21274,7 @@ namespace base::menu::natives {
 		/**
 		 * Returns the current ammo type of the specified ped's specified weapon.
 		 * MkII magazines will change the return value, like Pistol MkII returning AMMO_PISTOL without any components and returning AMMO_PISTOL_TRACER after Tracer Rounds component is attached.
-		 * Use 0xF489B44DD5AF4BD9 if you always want AMMO_PISTOL.
+		 * Use GET_PED_ORIGINAL_AMMO_TYPE_FROM_WEAPON if you always want AMMO_PISTOL.
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
 		Hash GET_PED_AMMO_TYPE_FROM_WEAPON(Ped ped, Hash weaponHash);
@@ -21483,10 +21316,7 @@ namespace base::menu::natives {
 		 * Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json
 		 */
 		Hash GET_SELECTED_PED_WEAPON(Ped ped);
-		/**
-		 * WEAPON::EXPLODE_PROJECTILES(PLAYER::PLAYER_PED_ID(), func_221(0x00000003), 0x00000001);
-		 */
-		void EXPLODE_PROJECTILES(Ped ped, Hash weaponHash, bool p2);
+		void EXPLODE_PROJECTILES(Ped ped, Hash weaponHash, bool instant);
 		/**
 		 * If `explode` true, then removal is done through exploding the projectile. Basically the same as EXPLODE_PROJECTILES but without defining the owner ped.
 		 */
@@ -21527,6 +21357,7 @@ namespace base::menu::natives {
 		void REQUEST_WEAPON_ASSET(Hash weaponHash, int p1, int p2);
 		bool HAS_WEAPON_ASSET_LOADED(Hash weaponHash);
 		void REMOVE_WEAPON_ASSET(Hash weaponHash);
+		void HAS_PED_GOT_WEAPON_MANAGER(Ped ped); // Missing in crossmap
 		/**
 		 * Now has 8 params.
 		 */
@@ -21825,7 +21656,7 @@ namespace base::menu::natives {
 		 */
 		bool CAN_USE_WEAPON_ON_PARACHUTE(Hash weaponHash);
 		/**
-		 * Both coordinates are from objects in the decompiled scripts. Native related to 0xECDC202B25E5CF48 p1 value. The only weapon hash used in the decompiled scripts is weapon_air_defence_gun. These two natives are used by the yacht script, decompiled scripts suggest it and the weapon hash used (valkyrie's rockets) are also used by yachts.
+		 * Both coordinates are from objects in the decompiled scripts. The only weapon hash used in the decompiled scripts is weapon_air_defence_gun. These two natives are used by the yacht script, decompiled scripts suggest it and the weapon hash used (valkyrie's rockets) are also used by yachts.
 		 */
 		int CREATE_AIR_DEFENCE_SPHERE(float x, float y, float z, float radius, float p4, float p5, float p6, Hash weaponHash);
 		/**
@@ -21844,7 +21675,7 @@ namespace base::menu::natives {
 		 */
 		void SET_CAN_PED_SELECT_INVENTORY_WEAPON(Ped ped, Hash weaponHash, bool toggle);
 		/**
-		 * Disable all weapons. Does the same as 0xB4771B9AAF4E68E4 except for all weapons.
+		 * Disable all weapons. Does the same as SET_CAN_PED_SELECT_INVENTORY_WEAPON except for all weapons.
 		 */
 		void SET_CAN_PED_SELECT_ALL_WEAPONS(Ped ped, bool toggle);
 

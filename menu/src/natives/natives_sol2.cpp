@@ -9,31 +9,31 @@
 
 namespace base::menu::natives {
 
-	namespace app {
-		sol::table register_app(sol::state& lua) {
-			auto app_table = lua.create_table();
+	namespace apps {
+		sol::table register_apps(sol::state& lua) {
+			auto apps_table = lua.create_table();
 
-			app_table["AppDataValid"] = sol::c_call<decltype(&base::menu::natives::APP::APP_DATA_VALID), &base::menu::natives::APP::APP_DATA_VALID>;
-			app_table["AppGetInt"] = sol::c_call<decltype(&base::menu::natives::APP::APP_GET_INT), &base::menu::natives::APP::APP_GET_INT>;
-			app_table["AppGetFloat"] = sol::c_call<decltype(&base::menu::natives::APP::APP_GET_FLOAT), &base::menu::natives::APP::APP_GET_FLOAT>;
-			app_table["AppGetString"] = sol::c_call<decltype(&base::menu::natives::APP::APP_GET_STRING), &base::menu::natives::APP::APP_GET_STRING>;
-			app_table["AppSetInt"] = sol::c_call<decltype(&base::menu::natives::APP::APP_SET_INT), &base::menu::natives::APP::APP_SET_INT>;
-			app_table["AppSetFloat"] = sol::c_call<decltype(&base::menu::natives::APP::APP_SET_FLOAT), &base::menu::natives::APP::APP_SET_FLOAT>;
-			app_table["AppSetString"] = sol::c_call<decltype(&base::menu::natives::APP::APP_SET_STRING), &base::menu::natives::APP::APP_SET_STRING>;
-			app_table["AppSetApp"] = sol::c_call<decltype(&base::menu::natives::APP::APP_SET_APP), &base::menu::natives::APP::APP_SET_APP>;
-			app_table["AppSetBlock"] = sol::c_call<decltype(&base::menu::natives::APP::APP_SET_BLOCK), &base::menu::natives::APP::APP_SET_BLOCK>;
-			app_table["AppClearBlock"] = sol::c_call<decltype(&base::menu::natives::APP::APP_CLEAR_BLOCK), &base::menu::natives::APP::APP_CLEAR_BLOCK>;
-			app_table["AppCloseApp"] = sol::c_call<decltype(&base::menu::natives::APP::APP_CLOSE_APP), &base::menu::natives::APP::APP_CLOSE_APP>;
-			app_table["AppCloseBlock"] = sol::c_call<decltype(&base::menu::natives::APP::APP_CLOSE_BLOCK), &base::menu::natives::APP::APP_CLOSE_BLOCK>;
-			app_table["AppHasLinkedSocialClubAccount"] = sol::c_call<decltype(&base::menu::natives::APP::APP_HAS_LINKED_SOCIAL_CLUB_ACCOUNT), &base::menu::natives::APP::APP_HAS_LINKED_SOCIAL_CLUB_ACCOUNT>;
-			app_table["AppHasSyncedData"] = sol::c_call<decltype(&base::menu::natives::APP::APP_HAS_SYNCED_DATA), &base::menu::natives::APP::APP_HAS_SYNCED_DATA>;
-			app_table["AppSaveData"] = sol::c_call<decltype(&base::menu::natives::APP::APP_SAVE_DATA), &base::menu::natives::APP::APP_SAVE_DATA>;
-			app_table["AppGetDeletedFileStatus"] = sol::c_call<decltype(&base::menu::natives::APP::APP_GET_DELETED_FILE_STATUS), &base::menu::natives::APP::APP_GET_DELETED_FILE_STATUS>;
-			app_table["AppDeleteAppData"] = sol::c_call<decltype(&base::menu::natives::APP::APP_DELETE_APP_DATA), &base::menu::natives::APP::APP_DELETE_APP_DATA>;
+			apps_table["AppDataValid"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_DATA_VALID), &base::menu::natives::APPS::APP_DATA_VALID>;
+			apps_table["AppGetInt"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_GET_INT), &base::menu::natives::APPS::APP_GET_INT>;
+			apps_table["AppGetFloat"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_GET_FLOAT), &base::menu::natives::APPS::APP_GET_FLOAT>;
+			apps_table["AppGetString"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_GET_STRING), &base::menu::natives::APPS::APP_GET_STRING>;
+			apps_table["AppSetInt"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_SET_INT), &base::menu::natives::APPS::APP_SET_INT>;
+			apps_table["AppSetFloat"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_SET_FLOAT), &base::menu::natives::APPS::APP_SET_FLOAT>;
+			apps_table["AppSetString"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_SET_STRING), &base::menu::natives::APPS::APP_SET_STRING>;
+			apps_table["AppSetApp"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_SET_APP), &base::menu::natives::APPS::APP_SET_APP>;
+			apps_table["AppSetBlock"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_SET_BLOCK), &base::menu::natives::APPS::APP_SET_BLOCK>;
+			apps_table["AppClearBlock"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_CLEAR_BLOCK), &base::menu::natives::APPS::APP_CLEAR_BLOCK>;
+			apps_table["AppCloseApp"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_CLOSE_APP), &base::menu::natives::APPS::APP_CLOSE_APP>;
+			apps_table["AppCloseBlock"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_CLOSE_BLOCK), &base::menu::natives::APPS::APP_CLOSE_BLOCK>;
+			apps_table["AppHasLinkedSocialClubAccount"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_HAS_LINKED_SOCIAL_CLUB_ACCOUNT), &base::menu::natives::APPS::APP_HAS_LINKED_SOCIAL_CLUB_ACCOUNT>;
+			apps_table["AppHasSyncedData"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_HAS_SYNCED_DATA), &base::menu::natives::APPS::APP_HAS_SYNCED_DATA>;
+			apps_table["AppSaveData"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_SAVE_DATA), &base::menu::natives::APPS::APP_SAVE_DATA>;
+			apps_table["AppGetDeletedFileStatus"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_GET_DELETED_FILE_STATUS), &base::menu::natives::APPS::APP_GET_DELETED_FILE_STATUS>;
+			apps_table["AppDeleteAppData"] = sol::c_call<decltype(&base::menu::natives::APPS::APP_DELETE_APP_DATA), &base::menu::natives::APPS::APP_DELETE_APP_DATA>;
 
-			return app_table;
+			return apps_table;
 		}
-	} // namespace app
+	} // namespace apps
 
 	namespace audio {
 		sol::table register_audio(sol::state& lua) {
@@ -345,262 +345,262 @@ namespace base::menu::natives {
 		}
 	} // namespace brain
 
-	namespace cam {
-		sol::table register_cam(sol::state& lua) {
-			auto cam_table = lua.create_table();
+	namespace camera {
+		sol::table register_camera(sol::state& lua) {
+			auto camera_table = lua.create_table();
 
-			cam_table["RenderScriptCams"] = sol::c_call<decltype(&base::menu::natives::CAM::RENDER_SCRIPT_CAMS), &base::menu::natives::CAM::RENDER_SCRIPT_CAMS>;
-			cam_table["StopRenderingScriptCamsUsingCatchUp"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_RENDERING_SCRIPT_CAMS_USING_CATCH_UP), &base::menu::natives::CAM::STOP_RENDERING_SCRIPT_CAMS_USING_CATCH_UP>;
-			cam_table["CreateCam"] = sol::c_call<decltype(&base::menu::natives::CAM::CREATE_CAM), &base::menu::natives::CAM::CREATE_CAM>;
-			cam_table["CreateCamWithParams"] = sol::c_call<decltype(&base::menu::natives::CAM::CREATE_CAM_WITH_PARAMS), &base::menu::natives::CAM::CREATE_CAM_WITH_PARAMS>;
-			cam_table["CreateCamera"] = sol::c_call<decltype(&base::menu::natives::CAM::CREATE_CAMERA), &base::menu::natives::CAM::CREATE_CAMERA>;
-			cam_table["CreateCameraWithParams"] = sol::c_call<decltype(&base::menu::natives::CAM::CREATE_CAMERA_WITH_PARAMS), &base::menu::natives::CAM::CREATE_CAMERA_WITH_PARAMS>;
-			cam_table["DestroyCam"] = sol::c_call<decltype(&base::menu::natives::CAM::DESTROY_CAM), &base::menu::natives::CAM::DESTROY_CAM>;
-			cam_table["DestroyAllCams"] = sol::c_call<decltype(&base::menu::natives::CAM::DESTROY_ALL_CAMS), &base::menu::natives::CAM::DESTROY_ALL_CAMS>;
-			cam_table["DoesCamExist"] = sol::c_call<decltype(&base::menu::natives::CAM::DOES_CAM_EXIST), &base::menu::natives::CAM::DOES_CAM_EXIST>;
-			cam_table["SetCamActive"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_ACTIVE), &base::menu::natives::CAM::SET_CAM_ACTIVE>;
-			cam_table["IsCamActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CAM_ACTIVE), &base::menu::natives::CAM::IS_CAM_ACTIVE>;
-			cam_table["IsCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CAM_RENDERING), &base::menu::natives::CAM::IS_CAM_RENDERING>;
-			cam_table["GetRenderingCam"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_RENDERING_CAM), &base::menu::natives::CAM::GET_RENDERING_CAM>;
-			cam_table["GetCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_COORD), &base::menu::natives::CAM::GET_CAM_COORD>;
-			cam_table["GetCamRot"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_ROT), &base::menu::natives::CAM::GET_CAM_ROT>;
-			cam_table["GetCamFov"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_FOV), &base::menu::natives::CAM::GET_CAM_FOV>;
-			cam_table["GetCamNearClip"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_NEAR_CLIP), &base::menu::natives::CAM::GET_CAM_NEAR_CLIP>;
-			cam_table["GetCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_FAR_CLIP), &base::menu::natives::CAM::GET_CAM_FAR_CLIP>;
-			cam_table["GetCamNearDof"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_NEAR_DOF), &base::menu::natives::CAM::GET_CAM_NEAR_DOF>;
-			cam_table["GetCamFarDof"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_FAR_DOF), &base::menu::natives::CAM::GET_CAM_FAR_DOF>;
-			cam_table["GetCamDofStrength"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_DOF_STRENGTH), &base::menu::natives::CAM::GET_CAM_DOF_STRENGTH>;
-			cam_table["SetCamParams"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_PARAMS), &base::menu::natives::CAM::SET_CAM_PARAMS>;
-			cam_table["SetCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_COORD), &base::menu::natives::CAM::SET_CAM_COORD>;
-			cam_table["SetCamRot"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_ROT), &base::menu::natives::CAM::SET_CAM_ROT>;
-			cam_table["SetCamFov"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_FOV), &base::menu::natives::CAM::SET_CAM_FOV>;
-			cam_table["SetCamNearClip"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_NEAR_CLIP), &base::menu::natives::CAM::SET_CAM_NEAR_CLIP>;
-			cam_table["SetCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_FAR_CLIP), &base::menu::natives::CAM::SET_CAM_FAR_CLIP>;
-			cam_table["ForceCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAM::FORCE_CAM_FAR_CLIP), &base::menu::natives::CAM::FORCE_CAM_FAR_CLIP>;
-			cam_table["SetCamMotionBlurStrength"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_MOTION_BLUR_STRENGTH), &base::menu::natives::CAM::SET_CAM_MOTION_BLUR_STRENGTH>;
-			cam_table["SetCamNearDof"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_NEAR_DOF), &base::menu::natives::CAM::SET_CAM_NEAR_DOF>;
-			cam_table["SetCamFarDof"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_FAR_DOF), &base::menu::natives::CAM::SET_CAM_FAR_DOF>;
-			cam_table["SetCamDofStrength"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_STRENGTH), &base::menu::natives::CAM::SET_CAM_DOF_STRENGTH>;
-			cam_table["SetCamDofPlanes"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_PLANES), &base::menu::natives::CAM::SET_CAM_DOF_PLANES>;
-			cam_table["SetCamUseShallowDofMode"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_USE_SHALLOW_DOF_MODE), &base::menu::natives::CAM::SET_CAM_USE_SHALLOW_DOF_MODE>;
-			cam_table["SetUseHiDof"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_USE_HI_DOF), &base::menu::natives::CAM::SET_USE_HI_DOF>;
-			cam_table["SetUseHiDofOnSyncedSceneThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_USE_HI_DOF_ON_SYNCED_SCENE_THIS_UPDATE), &base::menu::natives::CAM::SET_USE_HI_DOF_ON_SYNCED_SCENE_THIS_UPDATE>;
-			cam_table["SetCamDofOverriddenFocusDistance"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE), &base::menu::natives::CAM::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE>;
-			cam_table["SetCamDofOverriddenFocusDistanceBlendLevel"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE_BLEND_LEVEL), &base::menu::natives::CAM::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE_BLEND_LEVEL>;
-			cam_table["SetCamDofFnumberOfLens"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_FNUMBER_OF_LENS), &base::menu::natives::CAM::SET_CAM_DOF_FNUMBER_OF_LENS>;
-			cam_table["SetCamDofFocalLengthMultiplier"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_FOCAL_LENGTH_MULTIPLIER), &base::menu::natives::CAM::SET_CAM_DOF_FOCAL_LENGTH_MULTIPLIER>;
-			cam_table["SetCamDofFocusDistanceBias"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_FOCUS_DISTANCE_BIAS), &base::menu::natives::CAM::SET_CAM_DOF_FOCUS_DISTANCE_BIAS>;
-			cam_table["SetCamDofMaxNearInFocusDistance"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE), &base::menu::natives::CAM::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE>;
-			cam_table["SetCamDofMaxNearInFocusDistanceBlendLevel"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE_BLEND_LEVEL), &base::menu::natives::CAM::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE_BLEND_LEVEL>;
-			cam_table["SetCamDofShouldKeepLookAtTargetInFocus"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DOF_SHOULD_KEEP_LOOK_AT_TARGET_IN_FOCUS), &base::menu::natives::CAM::SET_CAM_DOF_SHOULD_KEEP_LOOK_AT_TARGET_IN_FOCUS>;
-			cam_table["AttachCamToEntity"] = sol::c_call<decltype(&base::menu::natives::CAM::ATTACH_CAM_TO_ENTITY), &base::menu::natives::CAM::ATTACH_CAM_TO_ENTITY>;
-			cam_table["AttachCamToPedBone"] = sol::c_call<decltype(&base::menu::natives::CAM::ATTACH_CAM_TO_PED_BONE), &base::menu::natives::CAM::ATTACH_CAM_TO_PED_BONE>;
-			cam_table["HardAttachCamToPedBone"] = sol::c_call<decltype(&base::menu::natives::CAM::HARD_ATTACH_CAM_TO_PED_BONE), &base::menu::natives::CAM::HARD_ATTACH_CAM_TO_PED_BONE>;
-			cam_table["HardAttachCamToEntity"] = sol::c_call<decltype(&base::menu::natives::CAM::HARD_ATTACH_CAM_TO_ENTITY), &base::menu::natives::CAM::HARD_ATTACH_CAM_TO_ENTITY>;
-			cam_table["AttachCamToVehicleBone"] = sol::c_call<decltype(&base::menu::natives::CAM::ATTACH_CAM_TO_VEHICLE_BONE), &base::menu::natives::CAM::ATTACH_CAM_TO_VEHICLE_BONE>;
-			cam_table["DetachCam"] = sol::c_call<decltype(&base::menu::natives::CAM::DETACH_CAM), &base::menu::natives::CAM::DETACH_CAM>;
-			cam_table["SetCamInheritRollVehicle"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_INHERIT_ROLL_VEHICLE), &base::menu::natives::CAM::SET_CAM_INHERIT_ROLL_VEHICLE>;
-			cam_table["PointCamAtCoord"] = sol::c_call<decltype(&base::menu::natives::CAM::POINT_CAM_AT_COORD), &base::menu::natives::CAM::POINT_CAM_AT_COORD>;
-			cam_table["PointCamAtEntity"] = sol::c_call<decltype(&base::menu::natives::CAM::POINT_CAM_AT_ENTITY), &base::menu::natives::CAM::POINT_CAM_AT_ENTITY>;
-			cam_table["PointCamAtPedBone"] = sol::c_call<decltype(&base::menu::natives::CAM::POINT_CAM_AT_PED_BONE), &base::menu::natives::CAM::POINT_CAM_AT_PED_BONE>;
-			cam_table["StopCamPointing"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_CAM_POINTING), &base::menu::natives::CAM::STOP_CAM_POINTING>;
-			cam_table["SetCamAffectsAiming"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_AFFECTS_AIMING), &base::menu::natives::CAM::SET_CAM_AFFECTS_AIMING>;
-			cam_table["SetCamControlsMiniMapHeading"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_CONTROLS_MINI_MAP_HEADING), &base::menu::natives::CAM::SET_CAM_CONTROLS_MINI_MAP_HEADING>;
-			cam_table["SetCamIsInsideVehicle"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_IS_INSIDE_VEHICLE), &base::menu::natives::CAM::SET_CAM_IS_INSIDE_VEHICLE>;
-			cam_table["AllowMotionBlurDecay"] = sol::c_call<decltype(&base::menu::natives::CAM::ALLOW_MOTION_BLUR_DECAY), &base::menu::natives::CAM::ALLOW_MOTION_BLUR_DECAY>;
-			cam_table["SetCamDebugName"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DEBUG_NAME), &base::menu::natives::CAM::SET_CAM_DEBUG_NAME>;
-			cam_table["GetDebugCam"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_DEBUG_CAM), &base::menu::natives::CAM::GET_DEBUG_CAM>;
-			cam_table["AddCamSplineNode"] = sol::c_call<decltype(&base::menu::natives::CAM::ADD_CAM_SPLINE_NODE), &base::menu::natives::CAM::ADD_CAM_SPLINE_NODE>;
-			cam_table["AddCamSplineNodeUsingCameraFrame"] = sol::c_call<decltype(&base::menu::natives::CAM::ADD_CAM_SPLINE_NODE_USING_CAMERA_FRAME), &base::menu::natives::CAM::ADD_CAM_SPLINE_NODE_USING_CAMERA_FRAME>;
-			cam_table["AddCamSplineNodeUsingCamera"] = sol::c_call<decltype(&base::menu::natives::CAM::ADD_CAM_SPLINE_NODE_USING_CAMERA), &base::menu::natives::CAM::ADD_CAM_SPLINE_NODE_USING_CAMERA>;
-			cam_table["AddCamSplineNodeUsingGameplayFrame"] = sol::c_call<decltype(&base::menu::natives::CAM::ADD_CAM_SPLINE_NODE_USING_GAMEPLAY_FRAME), &base::menu::natives::CAM::ADD_CAM_SPLINE_NODE_USING_GAMEPLAY_FRAME>;
-			cam_table["SetCamSplinePhase"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_SPLINE_PHASE), &base::menu::natives::CAM::SET_CAM_SPLINE_PHASE>;
-			cam_table["GetCamSplinePhase"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_SPLINE_PHASE), &base::menu::natives::CAM::GET_CAM_SPLINE_PHASE>;
-			cam_table["GetCamSplineNodePhase"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_SPLINE_NODE_PHASE), &base::menu::natives::CAM::GET_CAM_SPLINE_NODE_PHASE>;
-			cam_table["SetCamSplineDuration"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_SPLINE_DURATION), &base::menu::natives::CAM::SET_CAM_SPLINE_DURATION>;
-			cam_table["SetCamSplineSmoothingStyle"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_SPLINE_SMOOTHING_STYLE), &base::menu::natives::CAM::SET_CAM_SPLINE_SMOOTHING_STYLE>;
-			cam_table["GetCamSplineNodeIndex"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_SPLINE_NODE_INDEX), &base::menu::natives::CAM::GET_CAM_SPLINE_NODE_INDEX>;
-			cam_table["SetCamSplineNodeEase"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_SPLINE_NODE_EASE), &base::menu::natives::CAM::SET_CAM_SPLINE_NODE_EASE>;
-			cam_table["SetCamSplineNodeVelocityScale"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_SPLINE_NODE_VELOCITY_SCALE), &base::menu::natives::CAM::SET_CAM_SPLINE_NODE_VELOCITY_SCALE>;
-			cam_table["OverrideCamSplineVelocity"] = sol::c_call<decltype(&base::menu::natives::CAM::OVERRIDE_CAM_SPLINE_VELOCITY), &base::menu::natives::CAM::OVERRIDE_CAM_SPLINE_VELOCITY>;
-			cam_table["OverrideCamSplineMotionBlur"] = sol::c_call<decltype(&base::menu::natives::CAM::OVERRIDE_CAM_SPLINE_MOTION_BLUR), &base::menu::natives::CAM::OVERRIDE_CAM_SPLINE_MOTION_BLUR>;
-			cam_table["SetCamSplineNodeExtraFlags"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_SPLINE_NODE_EXTRA_FLAGS), &base::menu::natives::CAM::SET_CAM_SPLINE_NODE_EXTRA_FLAGS>;
-			cam_table["IsCamSplinePaused"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CAM_SPLINE_PAUSED), &base::menu::natives::CAM::IS_CAM_SPLINE_PAUSED>;
-			cam_table["InterpolateCameraWithParams"] = sol::c_call<decltype(&base::menu::natives::CAM::INTERPOLATE_CAMERA_WITH_PARAMS), &base::menu::natives::CAM::INTERPOLATE_CAMERA_WITH_PARAMS>;
-			cam_table["ActivateCamWithInterpAndFovCurve"] = sol::c_call<decltype(&base::menu::natives::CAM::_ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE), &base::menu::natives::CAM::_ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE>;
-			cam_table["SetCamActiveWithInterp"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_ACTIVE_WITH_INTERP), &base::menu::natives::CAM::SET_CAM_ACTIVE_WITH_INTERP>;
-			cam_table["IsCamInterpolating"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CAM_INTERPOLATING), &base::menu::natives::CAM::IS_CAM_INTERPOLATING>;
-			cam_table["ShakeCam"] = sol::c_call<decltype(&base::menu::natives::CAM::SHAKE_CAM), &base::menu::natives::CAM::SHAKE_CAM>;
-			cam_table["AnimatedShakeCam"] = sol::c_call<decltype(&base::menu::natives::CAM::ANIMATED_SHAKE_CAM), &base::menu::natives::CAM::ANIMATED_SHAKE_CAM>;
-			cam_table["IsCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CAM_SHAKING), &base::menu::natives::CAM::IS_CAM_SHAKING>;
-			cam_table["SetCamShakeAmplitude"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_SHAKE_AMPLITUDE), &base::menu::natives::CAM::SET_CAM_SHAKE_AMPLITUDE>;
-			cam_table["StopCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_CAM_SHAKING), &base::menu::natives::CAM::STOP_CAM_SHAKING>;
-			cam_table["ShakeScriptGlobal"] = sol::c_call<decltype(&base::menu::natives::CAM::SHAKE_SCRIPT_GLOBAL), &base::menu::natives::CAM::SHAKE_SCRIPT_GLOBAL>;
-			cam_table["AnimatedShakeScriptGlobal"] = sol::c_call<decltype(&base::menu::natives::CAM::ANIMATED_SHAKE_SCRIPT_GLOBAL), &base::menu::natives::CAM::ANIMATED_SHAKE_SCRIPT_GLOBAL>;
-			cam_table["IsScriptGlobalShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_SCRIPT_GLOBAL_SHAKING), &base::menu::natives::CAM::IS_SCRIPT_GLOBAL_SHAKING>;
-			cam_table["StopScriptGlobalShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_SCRIPT_GLOBAL_SHAKING), &base::menu::natives::CAM::STOP_SCRIPT_GLOBAL_SHAKING>;
-			cam_table["TriggerVehiclePartBrokenCameraShake"] = sol::c_call<decltype(&base::menu::natives::CAM::TRIGGER_VEHICLE_PART_BROKEN_CAMERA_SHAKE), &base::menu::natives::CAM::TRIGGER_VEHICLE_PART_BROKEN_CAMERA_SHAKE>;
-			cam_table["PlayCamAnim"] = sol::c_call<decltype(&base::menu::natives::CAM::PLAY_CAM_ANIM), &base::menu::natives::CAM::PLAY_CAM_ANIM>;
-			cam_table["IsCamPlayingAnim"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CAM_PLAYING_ANIM), &base::menu::natives::CAM::IS_CAM_PLAYING_ANIM>;
-			cam_table["SetCamAnimCurrentPhase"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_ANIM_CURRENT_PHASE), &base::menu::natives::CAM::SET_CAM_ANIM_CURRENT_PHASE>;
-			cam_table["GetCamAnimCurrentPhase"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_ANIM_CURRENT_PHASE), &base::menu::natives::CAM::GET_CAM_ANIM_CURRENT_PHASE>;
-			cam_table["PlaySynchronizedCamAnim"] = sol::c_call<decltype(&base::menu::natives::CAM::PLAY_SYNCHRONIZED_CAM_ANIM), &base::menu::natives::CAM::PLAY_SYNCHRONIZED_CAM_ANIM>;
-			cam_table["SetFlyCamHorizontalResponse"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FLY_CAM_HORIZONTAL_RESPONSE), &base::menu::natives::CAM::SET_FLY_CAM_HORIZONTAL_RESPONSE>;
-			cam_table["SetFlyCamVerticalResponse"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FLY_CAM_VERTICAL_RESPONSE), &base::menu::natives::CAM::SET_FLY_CAM_VERTICAL_RESPONSE>;
-			cam_table["SetFlyCamMaxHeight"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FLY_CAM_MAX_HEIGHT), &base::menu::natives::CAM::SET_FLY_CAM_MAX_HEIGHT>;
-			cam_table["SetFlyCamCoordAndConstrain"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FLY_CAM_COORD_AND_CONSTRAIN), &base::menu::natives::CAM::SET_FLY_CAM_COORD_AND_CONSTRAIN>;
-			cam_table["SetFlyCamVerticalControlsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FLY_CAM_VERTICAL_CONTROLS_THIS_UPDATE), &base::menu::natives::CAM::SET_FLY_CAM_VERTICAL_CONTROLS_THIS_UPDATE>;
-			cam_table["WasFlyCamConstrainedOnPreviousUdpate"] = sol::c_call<decltype(&base::menu::natives::CAM::WAS_FLY_CAM_CONSTRAINED_ON_PREVIOUS_UDPATE), &base::menu::natives::CAM::WAS_FLY_CAM_CONSTRAINED_ON_PREVIOUS_UDPATE>;
-			cam_table["IsScreenFadedOut"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_SCREEN_FADED_OUT), &base::menu::natives::CAM::IS_SCREEN_FADED_OUT>;
-			cam_table["IsScreenFadedIn"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_SCREEN_FADED_IN), &base::menu::natives::CAM::IS_SCREEN_FADED_IN>;
-			cam_table["IsScreenFadingOut"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_SCREEN_FADING_OUT), &base::menu::natives::CAM::IS_SCREEN_FADING_OUT>;
-			cam_table["IsScreenFadingIn"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_SCREEN_FADING_IN), &base::menu::natives::CAM::IS_SCREEN_FADING_IN>;
-			cam_table["DoScreenFadeIn"] = sol::c_call<decltype(&base::menu::natives::CAM::DO_SCREEN_FADE_IN), &base::menu::natives::CAM::DO_SCREEN_FADE_IN>;
-			cam_table["DoScreenFadeOut"] = sol::c_call<decltype(&base::menu::natives::CAM::DO_SCREEN_FADE_OUT), &base::menu::natives::CAM::DO_SCREEN_FADE_OUT>;
-			cam_table["SetWidescreenBorders"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_WIDESCREEN_BORDERS), &base::menu::natives::CAM::SET_WIDESCREEN_BORDERS>;
-			cam_table["AreWidescreenBordersActive"] = sol::c_call<decltype(&base::menu::natives::CAM::ARE_WIDESCREEN_BORDERS_ACTIVE), &base::menu::natives::CAM::ARE_WIDESCREEN_BORDERS_ACTIVE>;
-			cam_table["GetGameplayCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_GAMEPLAY_CAM_COORD), &base::menu::natives::CAM::GET_GAMEPLAY_CAM_COORD>;
-			cam_table["GetGameplayCamRot"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_GAMEPLAY_CAM_ROT), &base::menu::natives::CAM::GET_GAMEPLAY_CAM_ROT>;
-			cam_table["GetGameplayCamFov"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_GAMEPLAY_CAM_FOV), &base::menu::natives::CAM::GET_GAMEPLAY_CAM_FOV>;
-			cam_table["SetGameplayCamMotionBlurScalingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_MOTION_BLUR_SCALING_THIS_UPDATE), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_MOTION_BLUR_SCALING_THIS_UPDATE>;
-			cam_table["SetGameplayCamMaxMotionBlurStrengthThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_MAX_MOTION_BLUR_STRENGTH_THIS_UPDATE), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_MAX_MOTION_BLUR_STRENGTH_THIS_UPDATE>;
-			cam_table["GetGameplayCamRelativeHeading"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_GAMEPLAY_CAM_RELATIVE_HEADING), &base::menu::natives::CAM::GET_GAMEPLAY_CAM_RELATIVE_HEADING>;
-			cam_table["SetGameplayCamRelativeHeading"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_RELATIVE_HEADING), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_RELATIVE_HEADING>;
-			cam_table["GetGameplayCamRelativePitch"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_GAMEPLAY_CAM_RELATIVE_PITCH), &base::menu::natives::CAM::GET_GAMEPLAY_CAM_RELATIVE_PITCH>;
-			cam_table["SetGameplayCamRelativePitch"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_RELATIVE_PITCH), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_RELATIVE_PITCH>;
-			cam_table["ResetGameplayCamFullAttachParentTransformTimer"] = sol::c_call<decltype(&base::menu::natives::CAM::RESET_GAMEPLAY_CAM_FULL_ATTACH_PARENT_TRANSFORM_TIMER), &base::menu::natives::CAM::RESET_GAMEPLAY_CAM_FULL_ATTACH_PARENT_TRANSFORM_TIMER>;
-			cam_table["ForceCameraRelativeHeadingAndPitch"] = sol::c_call<decltype(&base::menu::natives::CAM::FORCE_CAMERA_RELATIVE_HEADING_AND_PITCH), &base::menu::natives::CAM::FORCE_CAMERA_RELATIVE_HEADING_AND_PITCH>;
-			cam_table["ForceBonnetCameraRelativeHeadingAndPitch"] = sol::c_call<decltype(&base::menu::natives::CAM::FORCE_BONNET_CAMERA_RELATIVE_HEADING_AND_PITCH), &base::menu::natives::CAM::FORCE_BONNET_CAMERA_RELATIVE_HEADING_AND_PITCH>;
-			cam_table["SetFirstPersonShooterCameraHeading"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_SHOOTER_CAMERA_HEADING), &base::menu::natives::CAM::SET_FIRST_PERSON_SHOOTER_CAMERA_HEADING>;
-			cam_table["SetFirstPersonShooterCameraPitch"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_SHOOTER_CAMERA_PITCH), &base::menu::natives::CAM::SET_FIRST_PERSON_SHOOTER_CAMERA_PITCH>;
-			cam_table["SetScriptedCameraIsFirstPersonThisFrame"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_SCRIPTED_CAMERA_IS_FIRST_PERSON_THIS_FRAME), &base::menu::natives::CAM::SET_SCRIPTED_CAMERA_IS_FIRST_PERSON_THIS_FRAME>;
-			cam_table["ShakeGameplayCam"] = sol::c_call<decltype(&base::menu::natives::CAM::SHAKE_GAMEPLAY_CAM), &base::menu::natives::CAM::SHAKE_GAMEPLAY_CAM>;
-			cam_table["IsGameplayCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_GAMEPLAY_CAM_SHAKING), &base::menu::natives::CAM::IS_GAMEPLAY_CAM_SHAKING>;
-			cam_table["SetGameplayCamShakeAmplitude"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_SHAKE_AMPLITUDE), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_SHAKE_AMPLITUDE>;
-			cam_table["StopGameplayCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_GAMEPLAY_CAM_SHAKING), &base::menu::natives::CAM::STOP_GAMEPLAY_CAM_SHAKING>;
-			cam_table["SetGameplayCamFollowPedThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_FOLLOW_PED_THIS_UPDATE), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_FOLLOW_PED_THIS_UPDATE>;
-			cam_table["IsGameplayCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_GAMEPLAY_CAM_RENDERING), &base::menu::natives::CAM::IS_GAMEPLAY_CAM_RENDERING>;
-			cam_table["IsInterpolatingFromScriptCams"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_INTERPOLATING_FROM_SCRIPT_CAMS), &base::menu::natives::CAM::IS_INTERPOLATING_FROM_SCRIPT_CAMS>;
-			cam_table["IsInterpolatingToScriptCams"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_INTERPOLATING_TO_SCRIPT_CAMS), &base::menu::natives::CAM::IS_INTERPOLATING_TO_SCRIPT_CAMS>;
-			cam_table["SetGameplayCamAltitudeFovScalingState"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_STATE), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_STATE>;
-			cam_table["DisableGameplayCamAltitudeFovScalingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_THIS_UPDATE>;
-			cam_table["IsGameplayCamLookingBehind"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_GAMEPLAY_CAM_LOOKING_BEHIND), &base::menu::natives::CAM::IS_GAMEPLAY_CAM_LOOKING_BEHIND>;
-			cam_table["SetGameplayCamIgnoreEntityCollisionThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_IGNORE_ENTITY_COLLISION_THIS_UPDATE), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_IGNORE_ENTITY_COLLISION_THIS_UPDATE>;
-			cam_table["DisableCamCollisionForObject"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_CAM_COLLISION_FOR_OBJECT), &base::menu::natives::CAM::DISABLE_CAM_COLLISION_FOR_OBJECT>;
-			cam_table["BypassCameraCollisionBuoyancyTestThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::BYPASS_CAMERA_COLLISION_BUOYANCY_TEST_THIS_UPDATE), &base::menu::natives::CAM::BYPASS_CAMERA_COLLISION_BUOYANCY_TEST_THIS_UPDATE>;
-			cam_table["SetGameplayCamEntityToLimitFocusOverBoundingSphereThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_CAM_ENTITY_TO_LIMIT_FOCUS_OVER_BOUNDING_SPHERE_THIS_UPDATE), &base::menu::natives::CAM::SET_GAMEPLAY_CAM_ENTITY_TO_LIMIT_FOCUS_OVER_BOUNDING_SPHERE_THIS_UPDATE>;
-			cam_table["DisableFirstPersonCameraWaterClippingTestThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_FIRST_PERSON_CAMERA_WATER_CLIPPING_TEST_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_FIRST_PERSON_CAMERA_WATER_CLIPPING_TEST_THIS_UPDATE>;
-			cam_table["SetFollowCamIgnoreAttachParentMovementThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_CAM_IGNORE_ATTACH_PARENT_MOVEMENT_THIS_UPDATE), &base::menu::natives::CAM::SET_FOLLOW_CAM_IGNORE_ATTACH_PARENT_MOVEMENT_THIS_UPDATE>;
-			cam_table["IsSphereVisible"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_SPHERE_VISIBLE), &base::menu::natives::CAM::IS_SPHERE_VISIBLE>;
-			cam_table["IsFollowPedCamActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_FOLLOW_PED_CAM_ACTIVE), &base::menu::natives::CAM::IS_FOLLOW_PED_CAM_ACTIVE>;
-			cam_table["SetFollowPedCamThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_PED_CAM_THIS_UPDATE), &base::menu::natives::CAM::SET_FOLLOW_PED_CAM_THIS_UPDATE>;
-			cam_table["UseScriptCamForAmbientPopulationOriginThisFrame"] = sol::c_call<decltype(&base::menu::natives::CAM::USE_SCRIPT_CAM_FOR_AMBIENT_POPULATION_ORIGIN_THIS_FRAME), &base::menu::natives::CAM::USE_SCRIPT_CAM_FOR_AMBIENT_POPULATION_ORIGIN_THIS_FRAME>;
-			cam_table["SetFollowPedCamLadderAlignThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_PED_CAM_LADDER_ALIGN_THIS_UPDATE), &base::menu::natives::CAM::SET_FOLLOW_PED_CAM_LADDER_ALIGN_THIS_UPDATE>;
-			cam_table["SetThirdPersonCamRelativeHeadingLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_THIRD_PERSON_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE), &base::menu::natives::CAM::SET_THIRD_PERSON_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE>;
-			cam_table["SetThirdPersonCamRelativePitchLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_THIRD_PERSON_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE), &base::menu::natives::CAM::SET_THIRD_PERSON_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE>;
-			cam_table["SetThirdPersonCamOrbitDistanceLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE), &base::menu::natives::CAM::SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE>;
-			cam_table["GetThirdPersonCamMinOrbitDistanceSpring"] = sol::c_call<decltype(&base::menu::natives::CAM::_GET_THIRD_PERSON_CAM_MIN_ORBIT_DISTANCE_SPRING), &base::menu::natives::CAM::_GET_THIRD_PERSON_CAM_MIN_ORBIT_DISTANCE_SPRING>;
-			cam_table["GetThirdPersonCamMaxOrbitDistanceSpring"] = sol::c_call<decltype(&base::menu::natives::CAM::_GET_THIRD_PERSON_CAM_MAX_ORBIT_DISTANCE_SPRING), &base::menu::natives::CAM::_GET_THIRD_PERSON_CAM_MAX_ORBIT_DISTANCE_SPRING>;
-			cam_table["SetInVehicleCamStateThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_IN_VEHICLE_CAM_STATE_THIS_UPDATE), &base::menu::natives::CAM::SET_IN_VEHICLE_CAM_STATE_THIS_UPDATE>;
-			cam_table["DisableOnFootFirstPersonViewThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_ON_FOOT_FIRST_PERSON_VIEW_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_ON_FOOT_FIRST_PERSON_VIEW_THIS_UPDATE>;
-			cam_table["DisableFirstPersonFlashEffectThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_FIRST_PERSON_FLASH_EFFECT_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_FIRST_PERSON_FLASH_EFFECT_THIS_UPDATE>;
-			cam_table["BlockFirstPersonOrientationResetThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::BLOCK_FIRST_PERSON_ORIENTATION_RESET_THIS_UPDATE), &base::menu::natives::CAM::BLOCK_FIRST_PERSON_ORIENTATION_RESET_THIS_UPDATE>;
-			cam_table["GetFollowPedCamZoomLevel"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FOLLOW_PED_CAM_ZOOM_LEVEL), &base::menu::natives::CAM::GET_FOLLOW_PED_CAM_ZOOM_LEVEL>;
-			cam_table["GetFollowPedCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FOLLOW_PED_CAM_VIEW_MODE), &base::menu::natives::CAM::GET_FOLLOW_PED_CAM_VIEW_MODE>;
-			cam_table["SetFollowPedCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_PED_CAM_VIEW_MODE), &base::menu::natives::CAM::SET_FOLLOW_PED_CAM_VIEW_MODE>;
-			cam_table["IsFollowVehicleCamActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_FOLLOW_VEHICLE_CAM_ACTIVE), &base::menu::natives::CAM::IS_FOLLOW_VEHICLE_CAM_ACTIVE>;
-			cam_table["SetFollowVehicleCamHighAngleModeThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_THIS_UPDATE), &base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_THIS_UPDATE>;
-			cam_table["SetFollowVehicleCamHighAngleModeEveryUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_EVERY_UPDATE), &base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_EVERY_UPDATE>;
-			cam_table["SetTableGamesCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_TABLE_GAMES_CAMERA_THIS_UPDATE), &base::menu::natives::CAM::SET_TABLE_GAMES_CAMERA_THIS_UPDATE>;
-			cam_table["GetFollowVehicleCamZoomLevel"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL), &base::menu::natives::CAM::GET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL>;
-			cam_table["SetFollowVehicleCamZoomLevel"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL), &base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL>;
-			cam_table["GetFollowVehicleCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FOLLOW_VEHICLE_CAM_VIEW_MODE), &base::menu::natives::CAM::GET_FOLLOW_VEHICLE_CAM_VIEW_MODE>;
-			cam_table["SetFollowVehicleCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_VIEW_MODE), &base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_VIEW_MODE>;
-			cam_table["GetCamViewModeForContext"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_VIEW_MODE_FOR_CONTEXT), &base::menu::natives::CAM::GET_CAM_VIEW_MODE_FOR_CONTEXT>;
-			cam_table["SetCamViewModeForContext"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_VIEW_MODE_FOR_CONTEXT), &base::menu::natives::CAM::SET_CAM_VIEW_MODE_FOR_CONTEXT>;
-			cam_table["GetCamActiveViewModeContext"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_CAM_ACTIVE_VIEW_MODE_CONTEXT), &base::menu::natives::CAM::GET_CAM_ACTIVE_VIEW_MODE_CONTEXT>;
-			cam_table["UseVehicleCamStuntSettingsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::USE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE), &base::menu::natives::CAM::USE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE>;
-			cam_table["UseDedicatedStuntCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::USE_DEDICATED_STUNT_CAMERA_THIS_UPDATE), &base::menu::natives::CAM::USE_DEDICATED_STUNT_CAMERA_THIS_UPDATE>;
-			cam_table["ForceVehicleCamStuntSettingsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::FORCE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE), &base::menu::natives::CAM::FORCE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE>;
-			cam_table["SetFollowVehicleCamSeatThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_SEAT_THIS_UPDATE), &base::menu::natives::CAM::SET_FOLLOW_VEHICLE_CAM_SEAT_THIS_UPDATE>;
-			cam_table["IsAimCamActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_AIM_CAM_ACTIVE), &base::menu::natives::CAM::IS_AIM_CAM_ACTIVE>;
-			cam_table["IsAimCamActiveInAccurateMode"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_AIM_CAM_ACTIVE_IN_ACCURATE_MODE), &base::menu::natives::CAM::IS_AIM_CAM_ACTIVE_IN_ACCURATE_MODE>;
-			cam_table["IsFirstPersonAimCamActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_FIRST_PERSON_AIM_CAM_ACTIVE), &base::menu::natives::CAM::IS_FIRST_PERSON_AIM_CAM_ACTIVE>;
-			cam_table["DisableAimCamThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_AIM_CAM_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_AIM_CAM_THIS_UPDATE>;
-			cam_table["GetFirstPersonAimCamZoomFactor"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR), &base::menu::natives::CAM::GET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR>;
-			cam_table["SetFirstPersonAimCamZoomFactor"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR), &base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR>;
-			cam_table["SetFirstPersonAimCamZoomFactorLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR_LIMITS_THIS_UPDATE), &base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR_LIMITS_THIS_UPDATE>;
-			cam_table["SetFirstPersonAimCamRelativeHeadingLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE), &base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE>;
-			cam_table["SetFirstPersonAimCamRelativePitchLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE), &base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE>;
-			cam_table["SetFirstPersonAimCamNearClipThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE), &base::menu::natives::CAM::SET_FIRST_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE>;
-			cam_table["SetThirdPersonAimCamNearClipThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_THIRD_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE), &base::menu::natives::CAM::SET_THIRD_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE>;
-			cam_table["SetAllowCustomVehicleDriveByCamThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_ALLOW_CUSTOM_VEHICLE_DRIVE_BY_CAM_THIS_UPDATE), &base::menu::natives::CAM::SET_ALLOW_CUSTOM_VEHICLE_DRIVE_BY_CAM_THIS_UPDATE>;
-			cam_table["ForceTightspaceCustomFramingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::FORCE_TIGHTSPACE_CUSTOM_FRAMING_THIS_UPDATE), &base::menu::natives::CAM::FORCE_TIGHTSPACE_CUSTOM_FRAMING_THIS_UPDATE>;
-			cam_table["GetFinalRenderedCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_COORD), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_COORD>;
-			cam_table["GetFinalRenderedCamRot"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_ROT), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_ROT>;
-			cam_table["GetFinalRenderedRemotePlayerCamRot"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_ROT), &base::menu::natives::CAM::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_ROT>;
-			cam_table["GetFinalRenderedCamFov"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_FOV), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_FOV>;
-			cam_table["GetFinalRenderedRemotePlayerCamFov"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_FOV), &base::menu::natives::CAM::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_FOV>;
-			cam_table["GetFinalRenderedCamNearClip"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_NEAR_CLIP), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_NEAR_CLIP>;
-			cam_table["GetFinalRenderedCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_FAR_CLIP), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_FAR_CLIP>;
-			cam_table["GetFinalRenderedCamNearDof"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_NEAR_DOF), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_NEAR_DOF>;
-			cam_table["GetFinalRenderedCamFarDof"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_FAR_DOF), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_FAR_DOF>;
-			cam_table["GetFinalRenderedCamMotionBlurStrength"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_MOTION_BLUR_STRENGTH), &base::menu::natives::CAM::GET_FINAL_RENDERED_CAM_MOTION_BLUR_STRENGTH>;
-			cam_table["SetGameplayCoordHint"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_COORD_HINT), &base::menu::natives::CAM::SET_GAMEPLAY_COORD_HINT>;
-			cam_table["SetGameplayPedHint"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_PED_HINT), &base::menu::natives::CAM::SET_GAMEPLAY_PED_HINT>;
-			cam_table["SetGameplayVehicleHint"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_VEHICLE_HINT), &base::menu::natives::CAM::SET_GAMEPLAY_VEHICLE_HINT>;
-			cam_table["SetGameplayObjectHint"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_OBJECT_HINT), &base::menu::natives::CAM::SET_GAMEPLAY_OBJECT_HINT>;
-			cam_table["SetGameplayEntityHint"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_ENTITY_HINT), &base::menu::natives::CAM::SET_GAMEPLAY_ENTITY_HINT>;
-			cam_table["IsGameplayHintActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_GAMEPLAY_HINT_ACTIVE), &base::menu::natives::CAM::IS_GAMEPLAY_HINT_ACTIVE>;
-			cam_table["StopGameplayHint"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_GAMEPLAY_HINT), &base::menu::natives::CAM::STOP_GAMEPLAY_HINT>;
-			cam_table["StopGameplayHintBeingCancelledThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_GAMEPLAY_HINT_BEING_CANCELLED_THIS_UPDATE), &base::menu::natives::CAM::STOP_GAMEPLAY_HINT_BEING_CANCELLED_THIS_UPDATE>;
-			cam_table["StopCodeGameplayHint"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_CODE_GAMEPLAY_HINT), &base::menu::natives::CAM::STOP_CODE_GAMEPLAY_HINT>;
-			cam_table["IsCodeGameplayHintActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CODE_GAMEPLAY_HINT_ACTIVE), &base::menu::natives::CAM::IS_CODE_GAMEPLAY_HINT_ACTIVE>;
-			cam_table["SetGameplayHintFov"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_HINT_FOV), &base::menu::natives::CAM::SET_GAMEPLAY_HINT_FOV>;
-			cam_table["SetGameplayHintFollowDistanceScalar"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_HINT_FOLLOW_DISTANCE_SCALAR), &base::menu::natives::CAM::SET_GAMEPLAY_HINT_FOLLOW_DISTANCE_SCALAR>;
-			cam_table["SetGameplayHintBaseOrbitPitchOffset"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_HINT_BASE_ORBIT_PITCH_OFFSET), &base::menu::natives::CAM::SET_GAMEPLAY_HINT_BASE_ORBIT_PITCH_OFFSET>;
-			cam_table["SetGameplayHintCameraRelativeSideOffset"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_SIDE_OFFSET), &base::menu::natives::CAM::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_SIDE_OFFSET>;
-			cam_table["SetGameplayHintCameraRelativeVerticalOffset"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_VERTICAL_OFFSET), &base::menu::natives::CAM::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_VERTICAL_OFFSET>;
-			cam_table["SetGameplayHintCameraBlendToFollowPedMediumViewMode"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_GAMEPLAY_HINT_CAMERA_BLEND_TO_FOLLOW_PED_MEDIUM_VIEW_MODE), &base::menu::natives::CAM::SET_GAMEPLAY_HINT_CAMERA_BLEND_TO_FOLLOW_PED_MEDIUM_VIEW_MODE>;
-			cam_table["SetCinematicButtonActive"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CINEMATIC_BUTTON_ACTIVE), &base::menu::natives::CAM::SET_CINEMATIC_BUTTON_ACTIVE>;
-			cam_table["IsCinematicCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CINEMATIC_CAM_RENDERING), &base::menu::natives::CAM::IS_CINEMATIC_CAM_RENDERING>;
-			cam_table["ShakeCinematicCam"] = sol::c_call<decltype(&base::menu::natives::CAM::SHAKE_CINEMATIC_CAM), &base::menu::natives::CAM::SHAKE_CINEMATIC_CAM>;
-			cam_table["IsCinematicCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CINEMATIC_CAM_SHAKING), &base::menu::natives::CAM::IS_CINEMATIC_CAM_SHAKING>;
-			cam_table["SetCinematicCamShakeAmplitude"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CINEMATIC_CAM_SHAKE_AMPLITUDE), &base::menu::natives::CAM::SET_CINEMATIC_CAM_SHAKE_AMPLITUDE>;
-			cam_table["StopCinematicCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_CINEMATIC_CAM_SHAKING), &base::menu::natives::CAM::STOP_CINEMATIC_CAM_SHAKING>;
-			cam_table["DisableCinematicBonnetCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_CINEMATIC_BONNET_CAMERA_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_CINEMATIC_BONNET_CAMERA_THIS_UPDATE>;
-			cam_table["DisableCinematicVehicleIdleModeThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_CINEMATIC_VEHICLE_IDLE_MODE_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_CINEMATIC_VEHICLE_IDLE_MODE_THIS_UPDATE>;
-			cam_table["InvalidateCinematicVehicleIdleMode"] = sol::c_call<decltype(&base::menu::natives::CAM::INVALIDATE_CINEMATIC_VEHICLE_IDLE_MODE), &base::menu::natives::CAM::INVALIDATE_CINEMATIC_VEHICLE_IDLE_MODE>;
-			cam_table["InvalidateIdleCam"] = sol::c_call<decltype(&base::menu::natives::CAM::INVALIDATE_IDLE_CAM), &base::menu::natives::CAM::INVALIDATE_IDLE_CAM>;
-			cam_table["IsCinematicIdleCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CINEMATIC_IDLE_CAM_RENDERING), &base::menu::natives::CAM::IS_CINEMATIC_IDLE_CAM_RENDERING>;
-			cam_table["IsCinematicFirstPersonVehicleInteriorCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CINEMATIC_FIRST_PERSON_VEHICLE_INTERIOR_CAM_RENDERING), &base::menu::natives::CAM::IS_CINEMATIC_FIRST_PERSON_VEHICLE_INTERIOR_CAM_RENDERING>;
-			cam_table["CreateCinematicShot"] = sol::c_call<decltype(&base::menu::natives::CAM::CREATE_CINEMATIC_SHOT), &base::menu::natives::CAM::CREATE_CINEMATIC_SHOT>;
-			cam_table["IsCinematicShotActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CINEMATIC_SHOT_ACTIVE), &base::menu::natives::CAM::IS_CINEMATIC_SHOT_ACTIVE>;
-			cam_table["StopCinematicShot"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_CINEMATIC_SHOT), &base::menu::natives::CAM::STOP_CINEMATIC_SHOT>;
-			cam_table["ForceCinematicRenderingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::FORCE_CINEMATIC_RENDERING_THIS_UPDATE), &base::menu::natives::CAM::FORCE_CINEMATIC_RENDERING_THIS_UPDATE>;
-			cam_table["SetCinematicNewsChannelActiveThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CINEMATIC_NEWS_CHANNEL_ACTIVE_THIS_UPDATE), &base::menu::natives::CAM::SET_CINEMATIC_NEWS_CHANNEL_ACTIVE_THIS_UPDATE>;
-			cam_table["SetCinematicModeActive"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CINEMATIC_MODE_ACTIVE), &base::menu::natives::CAM::SET_CINEMATIC_MODE_ACTIVE>;
-			cam_table["IsInVehicleMobilePhoneCameraRendering"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_IN_VEHICLE_MOBILE_PHONE_CAMERA_RENDERING), &base::menu::natives::CAM::IS_IN_VEHICLE_MOBILE_PHONE_CAMERA_RENDERING>;
-			cam_table["DisableCinematicSlowMoThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_CINEMATIC_SLOW_MO_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_CINEMATIC_SLOW_MO_THIS_UPDATE>;
-			cam_table["IsBonnetCinematicCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_BONNET_CINEMATIC_CAM_RENDERING), &base::menu::natives::CAM::IS_BONNET_CINEMATIC_CAM_RENDERING>;
-			cam_table["IsCinematicCamInputActive"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_CINEMATIC_CAM_INPUT_ACTIVE), &base::menu::natives::CAM::IS_CINEMATIC_CAM_INPUT_ACTIVE>;
-			cam_table["IgnoreMenuPreferenceForBonnetCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::IGNORE_MENU_PREFERENCE_FOR_BONNET_CAMERA_THIS_UPDATE), &base::menu::natives::CAM::IGNORE_MENU_PREFERENCE_FOR_BONNET_CAMERA_THIS_UPDATE>;
-			cam_table["BypassCutsceneCamRenderingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::BYPASS_CUTSCENE_CAM_RENDERING_THIS_UPDATE), &base::menu::natives::CAM::BYPASS_CUTSCENE_CAM_RENDERING_THIS_UPDATE>;
-			cam_table["StopCutsceneCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAM::STOP_CUTSCENE_CAM_SHAKING), &base::menu::natives::CAM::STOP_CUTSCENE_CAM_SHAKING>;
-			cam_table["SetCutsceneCamFarClipThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CUTSCENE_CAM_FAR_CLIP_THIS_UPDATE), &base::menu::natives::CAM::SET_CUTSCENE_CAM_FAR_CLIP_THIS_UPDATE>;
-			cam_table["GetFocusPedOnScreen"] = sol::c_call<decltype(&base::menu::natives::CAM::GET_FOCUS_PED_ON_SCREEN), &base::menu::natives::CAM::GET_FOCUS_PED_ON_SCREEN>;
-			cam_table["DisableNearClipScanThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::DISABLE_NEAR_CLIP_SCAN_THIS_UPDATE), &base::menu::natives::CAM::DISABLE_NEAR_CLIP_SCAN_THIS_UPDATE>;
-			cam_table["SetCamDeathFailEffectState"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_CAM_DEATH_FAIL_EFFECT_STATE), &base::menu::natives::CAM::SET_CAM_DEATH_FAIL_EFFECT_STATE>;
-			cam_table["SetFirstPersonFlashEffectType"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_FLASH_EFFECT_TYPE), &base::menu::natives::CAM::SET_FIRST_PERSON_FLASH_EFFECT_TYPE>;
-			cam_table["SetFirstPersonFlashEffectVehicleModelName"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_NAME), &base::menu::natives::CAM::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_NAME>;
-			cam_table["SetFirstPersonFlashEffectVehicleModelHash"] = sol::c_call<decltype(&base::menu::natives::CAM::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_HASH), &base::menu::natives::CAM::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_HASH>;
-			cam_table["IsAllowedIndependentCameraModes"] = sol::c_call<decltype(&base::menu::natives::CAM::IS_ALLOWED_INDEPENDENT_CAMERA_MODES), &base::menu::natives::CAM::IS_ALLOWED_INDEPENDENT_CAMERA_MODES>;
-			cam_table["CameraPreventCollisionSettingsForTripleheadInInteriorsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAM::CAMERA_PREVENT_COLLISION_SETTINGS_FOR_TRIPLEHEAD_IN_INTERIORS_THIS_UPDATE), &base::menu::natives::CAM::CAMERA_PREVENT_COLLISION_SETTINGS_FOR_TRIPLEHEAD_IN_INTERIORS_THIS_UPDATE>;
-			cam_table["ReplayGetMaxDistanceAllowedFromPlayer"] = sol::c_call<decltype(&base::menu::natives::CAM::REPLAY_GET_MAX_DISTANCE_ALLOWED_FROM_PLAYER), &base::menu::natives::CAM::REPLAY_GET_MAX_DISTANCE_ALLOWED_FROM_PLAYER>;
+			camera_table["RenderScriptCams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::RENDER_SCRIPT_CAMS), &base::menu::natives::CAMERA::RENDER_SCRIPT_CAMS>;
+			camera_table["StopRenderingScriptCamsUsingCatchUp"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_RENDERING_SCRIPT_CAMS_USING_CATCH_UP), &base::menu::natives::CAMERA::STOP_RENDERING_SCRIPT_CAMS_USING_CATCH_UP>;
+			camera_table["CreateCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::CREATE_CAM), &base::menu::natives::CAMERA::CREATE_CAM>;
+			camera_table["CreateCamWithParams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::CREATE_CAM_WITH_PARAMS), &base::menu::natives::CAMERA::CREATE_CAM_WITH_PARAMS>;
+			camera_table["CreateCamera"] = sol::c_call<decltype(&base::menu::natives::CAMERA::CREATE_CAMERA), &base::menu::natives::CAMERA::CREATE_CAMERA>;
+			camera_table["CreateCameraWithParams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::CREATE_CAMERA_WITH_PARAMS), &base::menu::natives::CAMERA::CREATE_CAMERA_WITH_PARAMS>;
+			camera_table["DestroyCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DESTROY_CAM), &base::menu::natives::CAMERA::DESTROY_CAM>;
+			camera_table["DestroyAllCams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DESTROY_ALL_CAMS), &base::menu::natives::CAMERA::DESTROY_ALL_CAMS>;
+			camera_table["DoesCamExist"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DOES_CAM_EXIST), &base::menu::natives::CAMERA::DOES_CAM_EXIST>;
+			camera_table["SetCamActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_ACTIVE), &base::menu::natives::CAMERA::SET_CAM_ACTIVE>;
+			camera_table["IsCamActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CAM_ACTIVE), &base::menu::natives::CAMERA::IS_CAM_ACTIVE>;
+			camera_table["IsCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CAM_RENDERING), &base::menu::natives::CAMERA::IS_CAM_RENDERING>;
+			camera_table["GetRenderingCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_RENDERING_CAM), &base::menu::natives::CAMERA::GET_RENDERING_CAM>;
+			camera_table["GetCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_COORD), &base::menu::natives::CAMERA::GET_CAM_COORD>;
+			camera_table["GetCamRot"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_ROT), &base::menu::natives::CAMERA::GET_CAM_ROT>;
+			camera_table["GetCamFov"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_FOV), &base::menu::natives::CAMERA::GET_CAM_FOV>;
+			camera_table["GetCamNearClip"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_NEAR_CLIP), &base::menu::natives::CAMERA::GET_CAM_NEAR_CLIP>;
+			camera_table["GetCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_FAR_CLIP), &base::menu::natives::CAMERA::GET_CAM_FAR_CLIP>;
+			camera_table["GetCamNearDof"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_NEAR_DOF), &base::menu::natives::CAMERA::GET_CAM_NEAR_DOF>;
+			camera_table["GetCamFarDof"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_FAR_DOF), &base::menu::natives::CAMERA::GET_CAM_FAR_DOF>;
+			camera_table["GetCamDofStrength"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_DOF_STRENGTH), &base::menu::natives::CAMERA::GET_CAM_DOF_STRENGTH>;
+			camera_table["SetCamParams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_PARAMS), &base::menu::natives::CAMERA::SET_CAM_PARAMS>;
+			camera_table["SetCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_COORD), &base::menu::natives::CAMERA::SET_CAM_COORD>;
+			camera_table["SetCamRot"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_ROT), &base::menu::natives::CAMERA::SET_CAM_ROT>;
+			camera_table["SetCamFov"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_FOV), &base::menu::natives::CAMERA::SET_CAM_FOV>;
+			camera_table["SetCamNearClip"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_NEAR_CLIP), &base::menu::natives::CAMERA::SET_CAM_NEAR_CLIP>;
+			camera_table["SetCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_FAR_CLIP), &base::menu::natives::CAMERA::SET_CAM_FAR_CLIP>;
+			camera_table["ForceCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAMERA::FORCE_CAM_FAR_CLIP), &base::menu::natives::CAMERA::FORCE_CAM_FAR_CLIP>;
+			camera_table["SetCamMotionBlurStrength"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_MOTION_BLUR_STRENGTH), &base::menu::natives::CAMERA::SET_CAM_MOTION_BLUR_STRENGTH>;
+			camera_table["SetCamNearDof"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_NEAR_DOF), &base::menu::natives::CAMERA::SET_CAM_NEAR_DOF>;
+			camera_table["SetCamFarDof"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_FAR_DOF), &base::menu::natives::CAMERA::SET_CAM_FAR_DOF>;
+			camera_table["SetCamDofStrength"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_STRENGTH), &base::menu::natives::CAMERA::SET_CAM_DOF_STRENGTH>;
+			camera_table["SetCamDofPlanes"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_PLANES), &base::menu::natives::CAMERA::SET_CAM_DOF_PLANES>;
+			camera_table["SetCamUseShallowDofMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_USE_SHALLOW_DOF_MODE), &base::menu::natives::CAMERA::SET_CAM_USE_SHALLOW_DOF_MODE>;
+			camera_table["SetUseHiDof"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_USE_HI_DOF), &base::menu::natives::CAMERA::SET_USE_HI_DOF>;
+			camera_table["SetUseHiDofOnSyncedSceneThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_USE_HI_DOF_ON_SYNCED_SCENE_THIS_UPDATE), &base::menu::natives::CAMERA::SET_USE_HI_DOF_ON_SYNCED_SCENE_THIS_UPDATE>;
+			camera_table["SetCamDofOverriddenFocusDistance"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE), &base::menu::natives::CAMERA::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE>;
+			camera_table["SetCamDofOverriddenFocusDistanceBlendLevel"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE_BLEND_LEVEL), &base::menu::natives::CAMERA::SET_CAM_DOF_OVERRIDDEN_FOCUS_DISTANCE_BLEND_LEVEL>;
+			camera_table["SetCamDofFnumberOfLens"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_FNUMBER_OF_LENS), &base::menu::natives::CAMERA::SET_CAM_DOF_FNUMBER_OF_LENS>;
+			camera_table["SetCamDofFocalLengthMultiplier"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_FOCAL_LENGTH_MULTIPLIER), &base::menu::natives::CAMERA::SET_CAM_DOF_FOCAL_LENGTH_MULTIPLIER>;
+			camera_table["SetCamDofFocusDistanceBias"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_FOCUS_DISTANCE_BIAS), &base::menu::natives::CAMERA::SET_CAM_DOF_FOCUS_DISTANCE_BIAS>;
+			camera_table["SetCamDofMaxNearInFocusDistance"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE), &base::menu::natives::CAMERA::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE>;
+			camera_table["SetCamDofMaxNearInFocusDistanceBlendLevel"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE_BLEND_LEVEL), &base::menu::natives::CAMERA::SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE_BLEND_LEVEL>;
+			camera_table["SetCamDofShouldKeepLookAtTargetInFocus"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DOF_SHOULD_KEEP_LOOK_AT_TARGET_IN_FOCUS), &base::menu::natives::CAMERA::SET_CAM_DOF_SHOULD_KEEP_LOOK_AT_TARGET_IN_FOCUS>;
+			camera_table["AttachCamToEntity"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ATTACH_CAM_TO_ENTITY), &base::menu::natives::CAMERA::ATTACH_CAM_TO_ENTITY>;
+			camera_table["AttachCamToPedBone"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ATTACH_CAM_TO_PED_BONE), &base::menu::natives::CAMERA::ATTACH_CAM_TO_PED_BONE>;
+			camera_table["HardAttachCamToPedBone"] = sol::c_call<decltype(&base::menu::natives::CAMERA::HARD_ATTACH_CAM_TO_PED_BONE), &base::menu::natives::CAMERA::HARD_ATTACH_CAM_TO_PED_BONE>;
+			camera_table["HardAttachCamToEntity"] = sol::c_call<decltype(&base::menu::natives::CAMERA::HARD_ATTACH_CAM_TO_ENTITY), &base::menu::natives::CAMERA::HARD_ATTACH_CAM_TO_ENTITY>;
+			camera_table["AttachCamToVehicleBone"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ATTACH_CAM_TO_VEHICLE_BONE), &base::menu::natives::CAMERA::ATTACH_CAM_TO_VEHICLE_BONE>;
+			camera_table["DetachCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DETACH_CAM), &base::menu::natives::CAMERA::DETACH_CAM>;
+			camera_table["SetCamInheritRollVehicle"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_INHERIT_ROLL_VEHICLE), &base::menu::natives::CAMERA::SET_CAM_INHERIT_ROLL_VEHICLE>;
+			camera_table["PointCamAtCoord"] = sol::c_call<decltype(&base::menu::natives::CAMERA::POINT_CAM_AT_COORD), &base::menu::natives::CAMERA::POINT_CAM_AT_COORD>;
+			camera_table["PointCamAtEntity"] = sol::c_call<decltype(&base::menu::natives::CAMERA::POINT_CAM_AT_ENTITY), &base::menu::natives::CAMERA::POINT_CAM_AT_ENTITY>;
+			camera_table["PointCamAtPedBone"] = sol::c_call<decltype(&base::menu::natives::CAMERA::POINT_CAM_AT_PED_BONE), &base::menu::natives::CAMERA::POINT_CAM_AT_PED_BONE>;
+			camera_table["StopCamPointing"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_CAM_POINTING), &base::menu::natives::CAMERA::STOP_CAM_POINTING>;
+			camera_table["SetCamAffectsAiming"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_AFFECTS_AIMING), &base::menu::natives::CAMERA::SET_CAM_AFFECTS_AIMING>;
+			camera_table["SetCamControlsMiniMapHeading"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_CONTROLS_MINI_MAP_HEADING), &base::menu::natives::CAMERA::SET_CAM_CONTROLS_MINI_MAP_HEADING>;
+			camera_table["SetCamIsInsideVehicle"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_IS_INSIDE_VEHICLE), &base::menu::natives::CAMERA::SET_CAM_IS_INSIDE_VEHICLE>;
+			camera_table["AllowMotionBlurDecay"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ALLOW_MOTION_BLUR_DECAY), &base::menu::natives::CAMERA::ALLOW_MOTION_BLUR_DECAY>;
+			camera_table["SetCamDebugName"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DEBUG_NAME), &base::menu::natives::CAMERA::SET_CAM_DEBUG_NAME>;
+			camera_table["GetDebugCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_DEBUG_CAM), &base::menu::natives::CAMERA::GET_DEBUG_CAM>;
+			camera_table["AddCamSplineNode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE), &base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE>;
+			camera_table["AddCamSplineNodeUsingCameraFrame"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE_USING_CAMERA_FRAME), &base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE_USING_CAMERA_FRAME>;
+			camera_table["AddCamSplineNodeUsingCamera"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE_USING_CAMERA), &base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE_USING_CAMERA>;
+			camera_table["AddCamSplineNodeUsingGameplayFrame"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE_USING_GAMEPLAY_FRAME), &base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE_USING_GAMEPLAY_FRAME>;
+			camera_table["SetCamSplinePhase"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_SPLINE_PHASE), &base::menu::natives::CAMERA::SET_CAM_SPLINE_PHASE>;
+			camera_table["GetCamSplinePhase"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_SPLINE_PHASE), &base::menu::natives::CAMERA::GET_CAM_SPLINE_PHASE>;
+			camera_table["GetCamSplineNodePhase"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_SPLINE_NODE_PHASE), &base::menu::natives::CAMERA::GET_CAM_SPLINE_NODE_PHASE>;
+			camera_table["SetCamSplineDuration"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_SPLINE_DURATION), &base::menu::natives::CAMERA::SET_CAM_SPLINE_DURATION>;
+			camera_table["SetCamSplineSmoothingStyle"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_SPLINE_SMOOTHING_STYLE), &base::menu::natives::CAMERA::SET_CAM_SPLINE_SMOOTHING_STYLE>;
+			camera_table["GetCamSplineNodeIndex"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_SPLINE_NODE_INDEX), &base::menu::natives::CAMERA::GET_CAM_SPLINE_NODE_INDEX>;
+			camera_table["SetCamSplineNodeEase"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_SPLINE_NODE_EASE), &base::menu::natives::CAMERA::SET_CAM_SPLINE_NODE_EASE>;
+			camera_table["SetCamSplineNodeVelocityScale"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_SPLINE_NODE_VELOCITY_SCALE), &base::menu::natives::CAMERA::SET_CAM_SPLINE_NODE_VELOCITY_SCALE>;
+			camera_table["OverrideCamSplineVelocity"] = sol::c_call<decltype(&base::menu::natives::CAMERA::OVERRIDE_CAM_SPLINE_VELOCITY), &base::menu::natives::CAMERA::OVERRIDE_CAM_SPLINE_VELOCITY>;
+			camera_table["OverrideCamSplineMotionBlur"] = sol::c_call<decltype(&base::menu::natives::CAMERA::OVERRIDE_CAM_SPLINE_MOTION_BLUR), &base::menu::natives::CAMERA::OVERRIDE_CAM_SPLINE_MOTION_BLUR>;
+			camera_table["SetCamSplineNodeExtraFlags"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_SPLINE_NODE_EXTRA_FLAGS), &base::menu::natives::CAMERA::SET_CAM_SPLINE_NODE_EXTRA_FLAGS>;
+			camera_table["IsCamSplinePaused"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CAM_SPLINE_PAUSED), &base::menu::natives::CAMERA::IS_CAM_SPLINE_PAUSED>;
+			camera_table["InterpolateCameraWithParams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::INTERPOLATE_CAMERA_WITH_PARAMS), &base::menu::natives::CAMERA::INTERPOLATE_CAMERA_WITH_PARAMS>;
+			camera_table["ActivateCamWithInterpAndFovCurve"] = sol::c_call<decltype(&base::menu::natives::CAMERA::_ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE), &base::menu::natives::CAMERA::_ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE>;
+			camera_table["SetCamActiveWithInterp"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_ACTIVE_WITH_INTERP), &base::menu::natives::CAMERA::SET_CAM_ACTIVE_WITH_INTERP>;
+			camera_table["IsCamInterpolating"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CAM_INTERPOLATING), &base::menu::natives::CAMERA::IS_CAM_INTERPOLATING>;
+			camera_table["ShakeCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SHAKE_CAM), &base::menu::natives::CAMERA::SHAKE_CAM>;
+			camera_table["AnimatedShakeCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ANIMATED_SHAKE_CAM), &base::menu::natives::CAMERA::ANIMATED_SHAKE_CAM>;
+			camera_table["IsCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CAM_SHAKING), &base::menu::natives::CAMERA::IS_CAM_SHAKING>;
+			camera_table["SetCamShakeAmplitude"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_SHAKE_AMPLITUDE), &base::menu::natives::CAMERA::SET_CAM_SHAKE_AMPLITUDE>;
+			camera_table["StopCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_CAM_SHAKING), &base::menu::natives::CAMERA::STOP_CAM_SHAKING>;
+			camera_table["ShakeScriptGlobal"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SHAKE_SCRIPT_GLOBAL), &base::menu::natives::CAMERA::SHAKE_SCRIPT_GLOBAL>;
+			camera_table["AnimatedShakeScriptGlobal"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ANIMATED_SHAKE_SCRIPT_GLOBAL), &base::menu::natives::CAMERA::ANIMATED_SHAKE_SCRIPT_GLOBAL>;
+			camera_table["IsScriptGlobalShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_SCRIPT_GLOBAL_SHAKING), &base::menu::natives::CAMERA::IS_SCRIPT_GLOBAL_SHAKING>;
+			camera_table["StopScriptGlobalShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_SCRIPT_GLOBAL_SHAKING), &base::menu::natives::CAMERA::STOP_SCRIPT_GLOBAL_SHAKING>;
+			camera_table["TriggerVehiclePartBrokenCameraShake"] = sol::c_call<decltype(&base::menu::natives::CAMERA::TRIGGER_VEHICLE_PART_BROKEN_CAMERA_SHAKE), &base::menu::natives::CAMERA::TRIGGER_VEHICLE_PART_BROKEN_CAMERA_SHAKE>;
+			camera_table["PlayCamAnim"] = sol::c_call<decltype(&base::menu::natives::CAMERA::PLAY_CAM_ANIM), &base::menu::natives::CAMERA::PLAY_CAM_ANIM>;
+			camera_table["IsCamPlayingAnim"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CAM_PLAYING_ANIM), &base::menu::natives::CAMERA::IS_CAM_PLAYING_ANIM>;
+			camera_table["SetCamAnimCurrentPhase"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_ANIM_CURRENT_PHASE), &base::menu::natives::CAMERA::SET_CAM_ANIM_CURRENT_PHASE>;
+			camera_table["GetCamAnimCurrentPhase"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_ANIM_CURRENT_PHASE), &base::menu::natives::CAMERA::GET_CAM_ANIM_CURRENT_PHASE>;
+			camera_table["PlaySynchronizedCamAnim"] = sol::c_call<decltype(&base::menu::natives::CAMERA::PLAY_SYNCHRONIZED_CAM_ANIM), &base::menu::natives::CAMERA::PLAY_SYNCHRONIZED_CAM_ANIM>;
+			camera_table["SetFlyCamHorizontalResponse"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FLY_CAM_HORIZONTAL_RESPONSE), &base::menu::natives::CAMERA::SET_FLY_CAM_HORIZONTAL_RESPONSE>;
+			camera_table["SetFlyCamVerticalResponse"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FLY_CAM_VERTICAL_RESPONSE), &base::menu::natives::CAMERA::SET_FLY_CAM_VERTICAL_RESPONSE>;
+			camera_table["SetFlyCamMaxHeight"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FLY_CAM_MAX_HEIGHT), &base::menu::natives::CAMERA::SET_FLY_CAM_MAX_HEIGHT>;
+			camera_table["SetFlyCamCoordAndConstrain"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FLY_CAM_COORD_AND_CONSTRAIN), &base::menu::natives::CAMERA::SET_FLY_CAM_COORD_AND_CONSTRAIN>;
+			camera_table["SetFlyCamVerticalControlsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FLY_CAM_VERTICAL_CONTROLS_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FLY_CAM_VERTICAL_CONTROLS_THIS_UPDATE>;
+			camera_table["WasFlyCamConstrainedOnPreviousUdpate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::WAS_FLY_CAM_CONSTRAINED_ON_PREVIOUS_UDPATE), &base::menu::natives::CAMERA::WAS_FLY_CAM_CONSTRAINED_ON_PREVIOUS_UDPATE>;
+			camera_table["IsScreenFadedOut"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_SCREEN_FADED_OUT), &base::menu::natives::CAMERA::IS_SCREEN_FADED_OUT>;
+			camera_table["IsScreenFadedIn"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_SCREEN_FADED_IN), &base::menu::natives::CAMERA::IS_SCREEN_FADED_IN>;
+			camera_table["IsScreenFadingOut"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_SCREEN_FADING_OUT), &base::menu::natives::CAMERA::IS_SCREEN_FADING_OUT>;
+			camera_table["IsScreenFadingIn"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_SCREEN_FADING_IN), &base::menu::natives::CAMERA::IS_SCREEN_FADING_IN>;
+			camera_table["DoScreenFadeIn"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DO_SCREEN_FADE_IN), &base::menu::natives::CAMERA::DO_SCREEN_FADE_IN>;
+			camera_table["DoScreenFadeOut"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DO_SCREEN_FADE_OUT), &base::menu::natives::CAMERA::DO_SCREEN_FADE_OUT>;
+			camera_table["SetWidescreenBorders"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_WIDESCREEN_BORDERS), &base::menu::natives::CAMERA::SET_WIDESCREEN_BORDERS>;
+			camera_table["AreWidescreenBordersActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::ARE_WIDESCREEN_BORDERS_ACTIVE), &base::menu::natives::CAMERA::ARE_WIDESCREEN_BORDERS_ACTIVE>;
+			camera_table["GetGameplayCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_COORD), &base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_COORD>;
+			camera_table["GetGameplayCamRot"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_ROT), &base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_ROT>;
+			camera_table["GetGameplayCamFov"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_FOV), &base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_FOV>;
+			camera_table["SetGameplayCamMotionBlurScalingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_MOTION_BLUR_SCALING_THIS_UPDATE), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_MOTION_BLUR_SCALING_THIS_UPDATE>;
+			camera_table["SetGameplayCamMaxMotionBlurStrengthThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_MAX_MOTION_BLUR_STRENGTH_THIS_UPDATE), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_MAX_MOTION_BLUR_STRENGTH_THIS_UPDATE>;
+			camera_table["GetGameplayCamRelativeHeading"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_RELATIVE_HEADING), &base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_RELATIVE_HEADING>;
+			camera_table["SetGameplayCamRelativeHeading"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_RELATIVE_HEADING), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_RELATIVE_HEADING>;
+			camera_table["GetGameplayCamRelativePitch"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_RELATIVE_PITCH), &base::menu::natives::CAMERA::GET_GAMEPLAY_CAM_RELATIVE_PITCH>;
+			camera_table["SetGameplayCamRelativePitch"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_RELATIVE_PITCH), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_RELATIVE_PITCH>;
+			camera_table["ResetGameplayCamFullAttachParentTransformTimer"] = sol::c_call<decltype(&base::menu::natives::CAMERA::RESET_GAMEPLAY_CAM_FULL_ATTACH_PARENT_TRANSFORM_TIMER), &base::menu::natives::CAMERA::RESET_GAMEPLAY_CAM_FULL_ATTACH_PARENT_TRANSFORM_TIMER>;
+			camera_table["ForceCameraRelativeHeadingAndPitch"] = sol::c_call<decltype(&base::menu::natives::CAMERA::FORCE_CAMERA_RELATIVE_HEADING_AND_PITCH), &base::menu::natives::CAMERA::FORCE_CAMERA_RELATIVE_HEADING_AND_PITCH>;
+			camera_table["ForceBonnetCameraRelativeHeadingAndPitch"] = sol::c_call<decltype(&base::menu::natives::CAMERA::FORCE_BONNET_CAMERA_RELATIVE_HEADING_AND_PITCH), &base::menu::natives::CAMERA::FORCE_BONNET_CAMERA_RELATIVE_HEADING_AND_PITCH>;
+			camera_table["SetFirstPersonShooterCameraHeading"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_SHOOTER_CAMERA_HEADING), &base::menu::natives::CAMERA::SET_FIRST_PERSON_SHOOTER_CAMERA_HEADING>;
+			camera_table["SetFirstPersonShooterCameraPitch"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_SHOOTER_CAMERA_PITCH), &base::menu::natives::CAMERA::SET_FIRST_PERSON_SHOOTER_CAMERA_PITCH>;
+			camera_table["SetScriptedCameraIsFirstPersonThisFrame"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_SCRIPTED_CAMERA_IS_FIRST_PERSON_THIS_FRAME), &base::menu::natives::CAMERA::SET_SCRIPTED_CAMERA_IS_FIRST_PERSON_THIS_FRAME>;
+			camera_table["ShakeGameplayCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SHAKE_GAMEPLAY_CAM), &base::menu::natives::CAMERA::SHAKE_GAMEPLAY_CAM>;
+			camera_table["IsGameplayCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_GAMEPLAY_CAM_SHAKING), &base::menu::natives::CAMERA::IS_GAMEPLAY_CAM_SHAKING>;
+			camera_table["SetGameplayCamShakeAmplitude"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_SHAKE_AMPLITUDE), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_SHAKE_AMPLITUDE>;
+			camera_table["StopGameplayCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_GAMEPLAY_CAM_SHAKING), &base::menu::natives::CAMERA::STOP_GAMEPLAY_CAM_SHAKING>;
+			camera_table["SetGameplayCamFollowPedThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_FOLLOW_PED_THIS_UPDATE), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_FOLLOW_PED_THIS_UPDATE>;
+			camera_table["IsGameplayCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_GAMEPLAY_CAM_RENDERING), &base::menu::natives::CAMERA::IS_GAMEPLAY_CAM_RENDERING>;
+			camera_table["IsInterpolatingFromScriptCams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_INTERPOLATING_FROM_SCRIPT_CAMS), &base::menu::natives::CAMERA::IS_INTERPOLATING_FROM_SCRIPT_CAMS>;
+			camera_table["IsInterpolatingToScriptCams"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_INTERPOLATING_TO_SCRIPT_CAMS), &base::menu::natives::CAMERA::IS_INTERPOLATING_TO_SCRIPT_CAMS>;
+			camera_table["SetGameplayCamAltitudeFovScalingState"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_STATE), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_STATE>;
+			camera_table["DisableGameplayCamAltitudeFovScalingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_GAMEPLAY_CAM_ALTITUDE_FOV_SCALING_THIS_UPDATE>;
+			camera_table["IsGameplayCamLookingBehind"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_GAMEPLAY_CAM_LOOKING_BEHIND), &base::menu::natives::CAMERA::IS_GAMEPLAY_CAM_LOOKING_BEHIND>;
+			camera_table["SetGameplayCamIgnoreEntityCollisionThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_IGNORE_ENTITY_COLLISION_THIS_UPDATE), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_IGNORE_ENTITY_COLLISION_THIS_UPDATE>;
+			camera_table["DisableCamCollisionForObject"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_CAM_COLLISION_FOR_OBJECT), &base::menu::natives::CAMERA::DISABLE_CAM_COLLISION_FOR_OBJECT>;
+			camera_table["BypassCameraCollisionBuoyancyTestThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::BYPASS_CAMERA_COLLISION_BUOYANCY_TEST_THIS_UPDATE), &base::menu::natives::CAMERA::BYPASS_CAMERA_COLLISION_BUOYANCY_TEST_THIS_UPDATE>;
+			camera_table["SetGameplayCamEntityToLimitFocusOverBoundingSphereThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_ENTITY_TO_LIMIT_FOCUS_OVER_BOUNDING_SPHERE_THIS_UPDATE), &base::menu::natives::CAMERA::SET_GAMEPLAY_CAM_ENTITY_TO_LIMIT_FOCUS_OVER_BOUNDING_SPHERE_THIS_UPDATE>;
+			camera_table["DisableFirstPersonCameraWaterClippingTestThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_FIRST_PERSON_CAMERA_WATER_CLIPPING_TEST_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_FIRST_PERSON_CAMERA_WATER_CLIPPING_TEST_THIS_UPDATE>;
+			camera_table["SetFollowCamIgnoreAttachParentMovementThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_CAM_IGNORE_ATTACH_PARENT_MOVEMENT_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FOLLOW_CAM_IGNORE_ATTACH_PARENT_MOVEMENT_THIS_UPDATE>;
+			camera_table["IsSphereVisible"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_SPHERE_VISIBLE), &base::menu::natives::CAMERA::IS_SPHERE_VISIBLE>;
+			camera_table["IsFollowPedCamActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_FOLLOW_PED_CAM_ACTIVE), &base::menu::natives::CAMERA::IS_FOLLOW_PED_CAM_ACTIVE>;
+			camera_table["SetFollowPedCamThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_PED_CAM_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FOLLOW_PED_CAM_THIS_UPDATE>;
+			camera_table["UseScriptCamForAmbientPopulationOriginThisFrame"] = sol::c_call<decltype(&base::menu::natives::CAMERA::USE_SCRIPT_CAM_FOR_AMBIENT_POPULATION_ORIGIN_THIS_FRAME), &base::menu::natives::CAMERA::USE_SCRIPT_CAM_FOR_AMBIENT_POPULATION_ORIGIN_THIS_FRAME>;
+			camera_table["SetFollowPedCamLadderAlignThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_PED_CAM_LADDER_ALIGN_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FOLLOW_PED_CAM_LADDER_ALIGN_THIS_UPDATE>;
+			camera_table["SetThirdPersonCamRelativeHeadingLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_THIRD_PERSON_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE), &base::menu::natives::CAMERA::SET_THIRD_PERSON_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE>;
+			camera_table["SetThirdPersonCamRelativePitchLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_THIRD_PERSON_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE), &base::menu::natives::CAMERA::SET_THIRD_PERSON_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE>;
+			camera_table["SetThirdPersonCamOrbitDistanceLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE), &base::menu::natives::CAMERA::SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE>;
+			camera_table["GetThirdPersonCamMinOrbitDistanceSpring"] = sol::c_call<decltype(&base::menu::natives::CAMERA::_GET_THIRD_PERSON_CAM_MIN_ORBIT_DISTANCE_SPRING), &base::menu::natives::CAMERA::_GET_THIRD_PERSON_CAM_MIN_ORBIT_DISTANCE_SPRING>;
+			camera_table["GetThirdPersonCamMaxOrbitDistanceSpring"] = sol::c_call<decltype(&base::menu::natives::CAMERA::_GET_THIRD_PERSON_CAM_MAX_ORBIT_DISTANCE_SPRING), &base::menu::natives::CAMERA::_GET_THIRD_PERSON_CAM_MAX_ORBIT_DISTANCE_SPRING>;
+			camera_table["SetInVehicleCamStateThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_IN_VEHICLE_CAM_STATE_THIS_UPDATE), &base::menu::natives::CAMERA::SET_IN_VEHICLE_CAM_STATE_THIS_UPDATE>;
+			camera_table["DisableOnFootFirstPersonViewThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_ON_FOOT_FIRST_PERSON_VIEW_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_ON_FOOT_FIRST_PERSON_VIEW_THIS_UPDATE>;
+			camera_table["DisableFirstPersonFlashEffectThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_FIRST_PERSON_FLASH_EFFECT_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_FIRST_PERSON_FLASH_EFFECT_THIS_UPDATE>;
+			camera_table["BlockFirstPersonOrientationResetThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::BLOCK_FIRST_PERSON_ORIENTATION_RESET_THIS_UPDATE), &base::menu::natives::CAMERA::BLOCK_FIRST_PERSON_ORIENTATION_RESET_THIS_UPDATE>;
+			camera_table["GetFollowPedCamZoomLevel"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FOLLOW_PED_CAM_ZOOM_LEVEL), &base::menu::natives::CAMERA::GET_FOLLOW_PED_CAM_ZOOM_LEVEL>;
+			camera_table["GetFollowPedCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FOLLOW_PED_CAM_VIEW_MODE), &base::menu::natives::CAMERA::GET_FOLLOW_PED_CAM_VIEW_MODE>;
+			camera_table["SetFollowPedCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_PED_CAM_VIEW_MODE), &base::menu::natives::CAMERA::SET_FOLLOW_PED_CAM_VIEW_MODE>;
+			camera_table["IsFollowVehicleCamActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_FOLLOW_VEHICLE_CAM_ACTIVE), &base::menu::natives::CAMERA::IS_FOLLOW_VEHICLE_CAM_ACTIVE>;
+			camera_table["SetFollowVehicleCamHighAngleModeThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_THIS_UPDATE>;
+			camera_table["SetFollowVehicleCamHighAngleModeEveryUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_EVERY_UPDATE), &base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_HIGH_ANGLE_MODE_EVERY_UPDATE>;
+			camera_table["SetTableGamesCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_TABLE_GAMES_CAMERA_THIS_UPDATE), &base::menu::natives::CAMERA::SET_TABLE_GAMES_CAMERA_THIS_UPDATE>;
+			camera_table["GetFollowVehicleCamZoomLevel"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL), &base::menu::natives::CAMERA::GET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL>;
+			camera_table["SetFollowVehicleCamZoomLevel"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL), &base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_ZOOM_LEVEL>;
+			camera_table["GetFollowVehicleCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FOLLOW_VEHICLE_CAM_VIEW_MODE), &base::menu::natives::CAMERA::GET_FOLLOW_VEHICLE_CAM_VIEW_MODE>;
+			camera_table["SetFollowVehicleCamViewMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_VIEW_MODE), &base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_VIEW_MODE>;
+			camera_table["GetCamViewModeForContext"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_VIEW_MODE_FOR_CONTEXT), &base::menu::natives::CAMERA::GET_CAM_VIEW_MODE_FOR_CONTEXT>;
+			camera_table["SetCamViewModeForContext"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_VIEW_MODE_FOR_CONTEXT), &base::menu::natives::CAMERA::SET_CAM_VIEW_MODE_FOR_CONTEXT>;
+			camera_table["GetCamActiveViewModeContext"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_CAM_ACTIVE_VIEW_MODE_CONTEXT), &base::menu::natives::CAMERA::GET_CAM_ACTIVE_VIEW_MODE_CONTEXT>;
+			camera_table["UseVehicleCamStuntSettingsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::USE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE), &base::menu::natives::CAMERA::USE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE>;
+			camera_table["UseDedicatedStuntCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::USE_DEDICATED_STUNT_CAMERA_THIS_UPDATE), &base::menu::natives::CAMERA::USE_DEDICATED_STUNT_CAMERA_THIS_UPDATE>;
+			camera_table["ForceVehicleCamStuntSettingsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::FORCE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE), &base::menu::natives::CAMERA::FORCE_VEHICLE_CAM_STUNT_SETTINGS_THIS_UPDATE>;
+			camera_table["SetFollowVehicleCamSeatThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_SEAT_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FOLLOW_VEHICLE_CAM_SEAT_THIS_UPDATE>;
+			camera_table["IsAimCamActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_AIM_CAM_ACTIVE), &base::menu::natives::CAMERA::IS_AIM_CAM_ACTIVE>;
+			camera_table["IsAimCamActiveInAccurateMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_AIM_CAM_ACTIVE_IN_ACCURATE_MODE), &base::menu::natives::CAMERA::IS_AIM_CAM_ACTIVE_IN_ACCURATE_MODE>;
+			camera_table["IsFirstPersonAimCamActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_FIRST_PERSON_AIM_CAM_ACTIVE), &base::menu::natives::CAMERA::IS_FIRST_PERSON_AIM_CAM_ACTIVE>;
+			camera_table["DisableAimCamThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_AIM_CAM_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_AIM_CAM_THIS_UPDATE>;
+			camera_table["GetFirstPersonAimCamZoomFactor"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR), &base::menu::natives::CAMERA::GET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR>;
+			camera_table["SetFirstPersonAimCamZoomFactor"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR), &base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR>;
+			camera_table["SetFirstPersonAimCamZoomFactorLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR_LIMITS_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_ZOOM_FACTOR_LIMITS_THIS_UPDATE>;
+			camera_table["SetFirstPersonAimCamRelativeHeadingLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE>;
+			camera_table["SetFirstPersonAimCamRelativePitchLimitsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE>;
+			camera_table["SetFirstPersonAimCamNearClipThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE), &base::menu::natives::CAMERA::SET_FIRST_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE>;
+			camera_table["SetThirdPersonAimCamNearClipThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_THIRD_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE), &base::menu::natives::CAMERA::SET_THIRD_PERSON_AIM_CAM_NEAR_CLIP_THIS_UPDATE>;
+			camera_table["SetAllowCustomVehicleDriveByCamThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_ALLOW_CUSTOM_VEHICLE_DRIVE_BY_CAM_THIS_UPDATE), &base::menu::natives::CAMERA::SET_ALLOW_CUSTOM_VEHICLE_DRIVE_BY_CAM_THIS_UPDATE>;
+			camera_table["ForceTightspaceCustomFramingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::FORCE_TIGHTSPACE_CUSTOM_FRAMING_THIS_UPDATE), &base::menu::natives::CAMERA::FORCE_TIGHTSPACE_CUSTOM_FRAMING_THIS_UPDATE>;
+			camera_table["GetFinalRenderedCamCoord"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_COORD), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_COORD>;
+			camera_table["GetFinalRenderedCamRot"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_ROT), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_ROT>;
+			camera_table["GetFinalRenderedRemotePlayerCamRot"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_ROT), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_ROT>;
+			camera_table["GetFinalRenderedCamFov"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_FOV), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_FOV>;
+			camera_table["GetFinalRenderedRemotePlayerCamFov"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_FOV), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_REMOTE_PLAYER_CAM_FOV>;
+			camera_table["GetFinalRenderedCamNearClip"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_NEAR_CLIP), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_NEAR_CLIP>;
+			camera_table["GetFinalRenderedCamFarClip"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_FAR_CLIP), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_FAR_CLIP>;
+			camera_table["GetFinalRenderedCamNearDof"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_NEAR_DOF), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_NEAR_DOF>;
+			camera_table["GetFinalRenderedCamFarDof"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_FAR_DOF), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_FAR_DOF>;
+			camera_table["GetFinalRenderedCamMotionBlurStrength"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_MOTION_BLUR_STRENGTH), &base::menu::natives::CAMERA::GET_FINAL_RENDERED_CAM_MOTION_BLUR_STRENGTH>;
+			camera_table["SetGameplayCoordHint"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_COORD_HINT), &base::menu::natives::CAMERA::SET_GAMEPLAY_COORD_HINT>;
+			camera_table["SetGameplayPedHint"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_PED_HINT), &base::menu::natives::CAMERA::SET_GAMEPLAY_PED_HINT>;
+			camera_table["SetGameplayVehicleHint"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_VEHICLE_HINT), &base::menu::natives::CAMERA::SET_GAMEPLAY_VEHICLE_HINT>;
+			camera_table["SetGameplayObjectHint"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_OBJECT_HINT), &base::menu::natives::CAMERA::SET_GAMEPLAY_OBJECT_HINT>;
+			camera_table["SetGameplayEntityHint"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_ENTITY_HINT), &base::menu::natives::CAMERA::SET_GAMEPLAY_ENTITY_HINT>;
+			camera_table["IsGameplayHintActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_GAMEPLAY_HINT_ACTIVE), &base::menu::natives::CAMERA::IS_GAMEPLAY_HINT_ACTIVE>;
+			camera_table["StopGameplayHint"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_GAMEPLAY_HINT), &base::menu::natives::CAMERA::STOP_GAMEPLAY_HINT>;
+			camera_table["StopGameplayHintBeingCancelledThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_GAMEPLAY_HINT_BEING_CANCELLED_THIS_UPDATE), &base::menu::natives::CAMERA::STOP_GAMEPLAY_HINT_BEING_CANCELLED_THIS_UPDATE>;
+			camera_table["StopCodeGameplayHint"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_CODE_GAMEPLAY_HINT), &base::menu::natives::CAMERA::STOP_CODE_GAMEPLAY_HINT>;
+			camera_table["IsCodeGameplayHintActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CODE_GAMEPLAY_HINT_ACTIVE), &base::menu::natives::CAMERA::IS_CODE_GAMEPLAY_HINT_ACTIVE>;
+			camera_table["SetGameplayHintFov"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_FOV), &base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_FOV>;
+			camera_table["SetGameplayHintFollowDistanceScalar"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_FOLLOW_DISTANCE_SCALAR), &base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_FOLLOW_DISTANCE_SCALAR>;
+			camera_table["SetGameplayHintBaseOrbitPitchOffset"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_BASE_ORBIT_PITCH_OFFSET), &base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_BASE_ORBIT_PITCH_OFFSET>;
+			camera_table["SetGameplayHintCameraRelativeSideOffset"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_SIDE_OFFSET), &base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_SIDE_OFFSET>;
+			camera_table["SetGameplayHintCameraRelativeVerticalOffset"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_VERTICAL_OFFSET), &base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_CAMERA_RELATIVE_VERTICAL_OFFSET>;
+			camera_table["SetGameplayHintCameraBlendToFollowPedMediumViewMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_CAMERA_BLEND_TO_FOLLOW_PED_MEDIUM_VIEW_MODE), &base::menu::natives::CAMERA::SET_GAMEPLAY_HINT_CAMERA_BLEND_TO_FOLLOW_PED_MEDIUM_VIEW_MODE>;
+			camera_table["SetCinematicButtonActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CINEMATIC_BUTTON_ACTIVE), &base::menu::natives::CAMERA::SET_CINEMATIC_BUTTON_ACTIVE>;
+			camera_table["IsCinematicCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CINEMATIC_CAM_RENDERING), &base::menu::natives::CAMERA::IS_CINEMATIC_CAM_RENDERING>;
+			camera_table["ShakeCinematicCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SHAKE_CINEMATIC_CAM), &base::menu::natives::CAMERA::SHAKE_CINEMATIC_CAM>;
+			camera_table["IsCinematicCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CINEMATIC_CAM_SHAKING), &base::menu::natives::CAMERA::IS_CINEMATIC_CAM_SHAKING>;
+			camera_table["SetCinematicCamShakeAmplitude"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CINEMATIC_CAM_SHAKE_AMPLITUDE), &base::menu::natives::CAMERA::SET_CINEMATIC_CAM_SHAKE_AMPLITUDE>;
+			camera_table["StopCinematicCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_CINEMATIC_CAM_SHAKING), &base::menu::natives::CAMERA::STOP_CINEMATIC_CAM_SHAKING>;
+			camera_table["DisableCinematicBonnetCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_CINEMATIC_BONNET_CAMERA_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_CINEMATIC_BONNET_CAMERA_THIS_UPDATE>;
+			camera_table["DisableCinematicVehicleIdleModeThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_CINEMATIC_VEHICLE_IDLE_MODE_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_CINEMATIC_VEHICLE_IDLE_MODE_THIS_UPDATE>;
+			camera_table["InvalidateCinematicVehicleIdleMode"] = sol::c_call<decltype(&base::menu::natives::CAMERA::INVALIDATE_CINEMATIC_VEHICLE_IDLE_MODE), &base::menu::natives::CAMERA::INVALIDATE_CINEMATIC_VEHICLE_IDLE_MODE>;
+			camera_table["InvalidateIdleCam"] = sol::c_call<decltype(&base::menu::natives::CAMERA::INVALIDATE_IDLE_CAM), &base::menu::natives::CAMERA::INVALIDATE_IDLE_CAM>;
+			camera_table["IsCinematicIdleCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CINEMATIC_IDLE_CAM_RENDERING), &base::menu::natives::CAMERA::IS_CINEMATIC_IDLE_CAM_RENDERING>;
+			camera_table["IsCinematicFirstPersonVehicleInteriorCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CINEMATIC_FIRST_PERSON_VEHICLE_INTERIOR_CAM_RENDERING), &base::menu::natives::CAMERA::IS_CINEMATIC_FIRST_PERSON_VEHICLE_INTERIOR_CAM_RENDERING>;
+			camera_table["CreateCinematicShot"] = sol::c_call<decltype(&base::menu::natives::CAMERA::CREATE_CINEMATIC_SHOT), &base::menu::natives::CAMERA::CREATE_CINEMATIC_SHOT>;
+			camera_table["IsCinematicShotActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CINEMATIC_SHOT_ACTIVE), &base::menu::natives::CAMERA::IS_CINEMATIC_SHOT_ACTIVE>;
+			camera_table["StopCinematicShot"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_CINEMATIC_SHOT), &base::menu::natives::CAMERA::STOP_CINEMATIC_SHOT>;
+			camera_table["ForceCinematicRenderingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::FORCE_CINEMATIC_RENDERING_THIS_UPDATE), &base::menu::natives::CAMERA::FORCE_CINEMATIC_RENDERING_THIS_UPDATE>;
+			camera_table["SetCinematicNewsChannelActiveThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CINEMATIC_NEWS_CHANNEL_ACTIVE_THIS_UPDATE), &base::menu::natives::CAMERA::SET_CINEMATIC_NEWS_CHANNEL_ACTIVE_THIS_UPDATE>;
+			camera_table["SetCinematicModeActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CINEMATIC_MODE_ACTIVE), &base::menu::natives::CAMERA::SET_CINEMATIC_MODE_ACTIVE>;
+			camera_table["IsInVehicleMobilePhoneCameraRendering"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_IN_VEHICLE_MOBILE_PHONE_CAMERA_RENDERING), &base::menu::natives::CAMERA::IS_IN_VEHICLE_MOBILE_PHONE_CAMERA_RENDERING>;
+			camera_table["DisableCinematicSlowMoThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_CINEMATIC_SLOW_MO_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_CINEMATIC_SLOW_MO_THIS_UPDATE>;
+			camera_table["IsBonnetCinematicCamRendering"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_BONNET_CINEMATIC_CAM_RENDERING), &base::menu::natives::CAMERA::IS_BONNET_CINEMATIC_CAM_RENDERING>;
+			camera_table["IsCinematicCamInputActive"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_CINEMATIC_CAM_INPUT_ACTIVE), &base::menu::natives::CAMERA::IS_CINEMATIC_CAM_INPUT_ACTIVE>;
+			camera_table["IgnoreMenuPreferenceForBonnetCameraThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IGNORE_MENU_PREFERENCE_FOR_BONNET_CAMERA_THIS_UPDATE), &base::menu::natives::CAMERA::IGNORE_MENU_PREFERENCE_FOR_BONNET_CAMERA_THIS_UPDATE>;
+			camera_table["BypassCutsceneCamRenderingThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::BYPASS_CUTSCENE_CAM_RENDERING_THIS_UPDATE), &base::menu::natives::CAMERA::BYPASS_CUTSCENE_CAM_RENDERING_THIS_UPDATE>;
+			camera_table["StopCutsceneCamShaking"] = sol::c_call<decltype(&base::menu::natives::CAMERA::STOP_CUTSCENE_CAM_SHAKING), &base::menu::natives::CAMERA::STOP_CUTSCENE_CAM_SHAKING>;
+			camera_table["SetCutsceneCamFarClipThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CUTSCENE_CAM_FAR_CLIP_THIS_UPDATE), &base::menu::natives::CAMERA::SET_CUTSCENE_CAM_FAR_CLIP_THIS_UPDATE>;
+			camera_table["GetFocusPedOnScreen"] = sol::c_call<decltype(&base::menu::natives::CAMERA::GET_FOCUS_PED_ON_SCREEN), &base::menu::natives::CAMERA::GET_FOCUS_PED_ON_SCREEN>;
+			camera_table["DisableNearClipScanThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::DISABLE_NEAR_CLIP_SCAN_THIS_UPDATE), &base::menu::natives::CAMERA::DISABLE_NEAR_CLIP_SCAN_THIS_UPDATE>;
+			camera_table["SetCamDeathFailEffectState"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_CAM_DEATH_FAIL_EFFECT_STATE), &base::menu::natives::CAMERA::SET_CAM_DEATH_FAIL_EFFECT_STATE>;
+			camera_table["SetFirstPersonFlashEffectType"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_FLASH_EFFECT_TYPE), &base::menu::natives::CAMERA::SET_FIRST_PERSON_FLASH_EFFECT_TYPE>;
+			camera_table["SetFirstPersonFlashEffectVehicleModelName"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_NAME), &base::menu::natives::CAMERA::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_NAME>;
+			camera_table["SetFirstPersonFlashEffectVehicleModelHash"] = sol::c_call<decltype(&base::menu::natives::CAMERA::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_HASH), &base::menu::natives::CAMERA::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_HASH>;
+			camera_table["IsAllowedIndependentCameraModes"] = sol::c_call<decltype(&base::menu::natives::CAMERA::IS_ALLOWED_INDEPENDENT_CAMERA_MODES), &base::menu::natives::CAMERA::IS_ALLOWED_INDEPENDENT_CAMERA_MODES>;
+			camera_table["CameraPreventCollisionSettingsForTripleheadInInteriorsThisUpdate"] = sol::c_call<decltype(&base::menu::natives::CAMERA::CAMERA_PREVENT_COLLISION_SETTINGS_FOR_TRIPLEHEAD_IN_INTERIORS_THIS_UPDATE), &base::menu::natives::CAMERA::CAMERA_PREVENT_COLLISION_SETTINGS_FOR_TRIPLEHEAD_IN_INTERIORS_THIS_UPDATE>;
+			camera_table["ReplayGetMaxDistanceAllowedFromPlayer"] = sol::c_call<decltype(&base::menu::natives::CAMERA::REPLAY_GET_MAX_DISTANCE_ALLOWED_FROM_PLAYER), &base::menu::natives::CAMERA::REPLAY_GET_MAX_DISTANCE_ALLOWED_FROM_PLAYER>;
 
-			return cam_table;
+			return camera_table;
 		}
-	} // namespace cam
+	} // namespace camera
 
 	namespace clock {
 		sol::table register_clock(sol::state& lua) {
@@ -895,6 +895,7 @@ namespace base::menu::natives {
 			entity_table["IsEntityOccluded"] = sol::c_call<decltype(&base::menu::natives::ENTITY::IS_ENTITY_OCCLUDED), &base::menu::natives::ENTITY::IS_ENTITY_OCCLUDED>;
 			entity_table["WouldEntityBeOccluded"] = sol::c_call<decltype(&base::menu::natives::ENTITY::WOULD_ENTITY_BE_OCCLUDED), &base::menu::natives::ENTITY::WOULD_ENTITY_BE_OCCLUDED>;
 			entity_table["IsEntityWaitingForWorldCollision"] = sol::c_call<decltype(&base::menu::natives::ENTITY::IS_ENTITY_WAITING_FOR_WORLD_COLLISION), &base::menu::natives::ENTITY::IS_ENTITY_WAITING_FOR_WORLD_COLLISION>;
+			entity_table["IsEntityFixed"] = sol::c_call<decltype(&base::menu::natives::ENTITY::_IS_ENTITY_FIXED), &base::menu::natives::ENTITY::_IS_ENTITY_FIXED>;
 			entity_table["ApplyForceToEntityCenterOfMass"] = sol::c_call<decltype(&base::menu::natives::ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS), &base::menu::natives::ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS>;
 			entity_table["ApplyForceToEntity"] = sol::c_call<decltype(&base::menu::natives::ENTITY::APPLY_FORCE_TO_ENTITY), &base::menu::natives::ENTITY::APPLY_FORCE_TO_ENTITY>;
 			entity_table["AttachEntityToEntity"] = sol::c_call<decltype(&base::menu::natives::ENTITY::ATTACH_ENTITY_TO_ENTITY), &base::menu::natives::ENTITY::ATTACH_ENTITY_TO_ENTITY>;
@@ -957,6 +958,7 @@ namespace base::menu::natives {
 			entity_table["SetEntityVelocity"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ENTITY_VELOCITY), &base::menu::natives::ENTITY::SET_ENTITY_VELOCITY>;
 			entity_table["SetEntityAngularVelocity"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ENTITY_ANGULAR_VELOCITY), &base::menu::natives::ENTITY::SET_ENTITY_ANGULAR_VELOCITY>;
 			entity_table["SetEntityHasGravity"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ENTITY_HAS_GRAVITY), &base::menu::natives::ENTITY::SET_ENTITY_HAS_GRAVITY>;
+			entity_table["SetEntityDrawableLodThresholds"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ENTITY_DRAWABLE_LOD_THRESHOLDS), &base::menu::natives::ENTITY::SET_ENTITY_DRAWABLE_LOD_THRESHOLDS>;
 			entity_table["SetEntityLodDist"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ENTITY_LOD_DIST), &base::menu::natives::ENTITY::SET_ENTITY_LOD_DIST>;
 			entity_table["GetEntityLodDist"] = sol::c_call<decltype(&base::menu::natives::ENTITY::GET_ENTITY_LOD_DIST), &base::menu::natives::ENTITY::GET_ENTITY_LOD_DIST>;
 			entity_table["SetEntityAlpha"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ENTITY_ALPHA), &base::menu::natives::ENTITY::SET_ENTITY_ALPHA>;
@@ -994,6 +996,7 @@ namespace base::menu::natives {
 			entity_table["SetEntityCantCauseCollisionDamagedEntity"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ENTITY_CANT_CAUSE_COLLISION_DAMAGED_ENTITY), &base::menu::natives::ENTITY::SET_ENTITY_CANT_CAUSE_COLLISION_DAMAGED_ENTITY>;
 			entity_table["SetAllowMigrateToSpectator"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_ALLOW_MIGRATE_TO_SPECTATOR), &base::menu::natives::ENTITY::SET_ALLOW_MIGRATE_TO_SPECTATOR>;
 			entity_table["GetEntityOfTypeAttachedToEntity"] = sol::c_call<decltype(&base::menu::natives::ENTITY::GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY), &base::menu::natives::ENTITY::GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY>;
+			entity_table["GetChildAttachment"] = sol::c_call<decltype(&base::menu::natives::ENTITY::_GET_CHILD_ATTACHMENT), &base::menu::natives::ENTITY::_GET_CHILD_ATTACHMENT>;
 			entity_table["SetPickUpByCargobobDisabled"] = sol::c_call<decltype(&base::menu::natives::ENTITY::SET_PICK_UP_BY_CARGOBOB_DISABLED), &base::menu::natives::ENTITY::SET_PICK_UP_BY_CARGOBOB_DISABLED>;
 
 			return entity_table;
@@ -1129,6 +1132,8 @@ namespace base::menu::natives {
 			graphics_table["DrawBox"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_BOX), &base::menu::natives::GRAPHICS::DRAW_BOX>;
 			graphics_table["SetBackfaceculling"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::SET_BACKFACECULLING), &base::menu::natives::GRAPHICS::SET_BACKFACECULLING>;
 			graphics_table["SetDepthwriting"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::SET_DEPTHWRITING), &base::menu::natives::GRAPHICS::SET_DEPTHWRITING>;
+			graphics_table["SetBlendStateNormal"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_SET_BLEND_STATE_NORMAL), &base::menu::natives::GRAPHICS::_SET_BLEND_STATE_NORMAL>;
+			graphics_table["SetBlendStateAlphaAdditive"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_SET_BLEND_STATE_ALPHA_ADDITIVE), &base::menu::natives::GRAPHICS::_SET_BLEND_STATE_ALPHA_ADDITIVE>;
 			graphics_table["BeginTakeMissionCreatorPhoto"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::BEGIN_TAKE_MISSION_CREATOR_PHOTO), &base::menu::natives::GRAPHICS::BEGIN_TAKE_MISSION_CREATOR_PHOTO>;
 			graphics_table["GetStatusOfTakeMissionCreatorPhoto"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::GET_STATUS_OF_TAKE_MISSION_CREATOR_PHOTO), &base::menu::natives::GRAPHICS::GET_STATUS_OF_TAKE_MISSION_CREATOR_PHOTO>;
 			graphics_table["FreeMemoryForMissionCreatorPhoto"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::FREE_MEMORY_FOR_MISSION_CREATOR_PHOTO), &base::menu::natives::GRAPHICS::FREE_MEMORY_FOR_MISSION_CREATOR_PHOTO>;
@@ -1162,13 +1167,17 @@ namespace base::menu::natives {
 			graphics_table["DrawLightWithRange"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_LIGHT_WITH_RANGE), &base::menu::natives::GRAPHICS::DRAW_LIGHT_WITH_RANGE>;
 			graphics_table["DrawSpotLight"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_SPOT_LIGHT), &base::menu::natives::GRAPHICS::DRAW_SPOT_LIGHT>;
 			graphics_table["DrawShadowedSpotLight"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_SHADOWED_SPOT_LIGHT), &base::menu::natives::GRAPHICS::DRAW_SHADOWED_SPOT_LIGHT>;
+			graphics_table["DrawCapsuleLight"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_DRAW_CAPSULE_LIGHT), &base::menu::natives::GRAPHICS::_DRAW_CAPSULE_LIGHT>;
 			graphics_table["FadeUpPedLight"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::FADE_UP_PED_LIGHT), &base::menu::natives::GRAPHICS::FADE_UP_PED_LIGHT>;
 			graphics_table["UpdateLightsOnEntity"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::UPDATE_LIGHTS_ON_ENTITY), &base::menu::natives::GRAPHICS::UPDATE_LIGHTS_ON_ENTITY>;
+			graphics_table["UpdateLightsLocationFromEntity"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_UPDATE_LIGHTS_LOCATION_FROM_ENTITY), &base::menu::natives::GRAPHICS::_UPDATE_LIGHTS_LOCATION_FROM_ENTITY>;
 			graphics_table["SetLightOverrideMaxIntensityScale"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::SET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE), &base::menu::natives::GRAPHICS::SET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE>;
 			graphics_table["GetLightOverrideMaxIntensityScale"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::GET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE), &base::menu::natives::GRAPHICS::GET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE>;
 			graphics_table["DrawMarker"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_MARKER), &base::menu::natives::GRAPHICS::DRAW_MARKER>;
 			graphics_table["DrawMarkerEx"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_MARKER_EX), &base::menu::natives::GRAPHICS::DRAW_MARKER_EX>;
 			graphics_table["DrawMarkerSphere"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_MARKER_SPHERE), &base::menu::natives::GRAPHICS::DRAW_MARKER_SPHERE>;
+			graphics_table["DrawMarkerGlow"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_DRAW_MARKER_GLOW), &base::menu::natives::GRAPHICS::_DRAW_MARKER_GLOW>;
+			graphics_table["MakeGlowsAdditive"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_MAKE_GLOWS_ADDITIVE), &base::menu::natives::GRAPHICS::_MAKE_GLOWS_ADDITIVE>;
 			graphics_table["CreateCheckpoint"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::CREATE_CHECKPOINT), &base::menu::natives::GRAPHICS::CREATE_CHECKPOINT>;
 			graphics_table["SetCheckpointInsideCylinderHeightScale"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::SET_CHECKPOINT_INSIDE_CYLINDER_HEIGHT_SCALE), &base::menu::natives::GRAPHICS::SET_CHECKPOINT_INSIDE_CYLINDER_HEIGHT_SCALE>;
 			graphics_table["SetCheckpointInsideCylinderScale"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::SET_CHECKPOINT_INSIDE_CYLINDER_SCALE), &base::menu::natives::GRAPHICS::SET_CHECKPOINT_INSIDE_CYLINDER_SCALE>;
@@ -1198,6 +1207,8 @@ namespace base::menu::natives {
 			graphics_table["DrawSpriteArx"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_SPRITE_ARX), &base::menu::natives::GRAPHICS::DRAW_SPRITE_ARX>;
 			graphics_table["DrawSpriteNamedRendertarget"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_SPRITE_NAMED_RENDERTARGET), &base::menu::natives::GRAPHICS::DRAW_SPRITE_NAMED_RENDERTARGET>;
 			graphics_table["DrawSpriteArxWithUv"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::DRAW_SPRITE_ARX_WITH_UV), &base::menu::natives::GRAPHICS::DRAW_SPRITE_ARX_WITH_UV>;
+			graphics_table["CalculateLineOrientationFromRenderedCamera"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_CALCULATE_LINE_ORIENTATION_FROM_RENDERED_CAMERA), &base::menu::natives::GRAPHICS::_CALCULATE_LINE_ORIENTATION_FROM_RENDERED_CAMERA>;
+			graphics_table["CalculateRotatedVector"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::_CALCULATE_ROTATED_VECTOR), &base::menu::natives::GRAPHICS::_CALCULATE_ROTATED_VECTOR>;
 			graphics_table["AddEntityIcon"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::ADD_ENTITY_ICON), &base::menu::natives::GRAPHICS::ADD_ENTITY_ICON>;
 			graphics_table["SetEntityIconVisibility"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::SET_ENTITY_ICON_VISIBILITY), &base::menu::natives::GRAPHICS::SET_ENTITY_ICON_VISIBILITY>;
 			graphics_table["SetEntityIconColor"] = sol::c_call<decltype(&base::menu::natives::GRAPHICS::SET_ENTITY_ICON_COLOR), &base::menu::natives::GRAPHICS::SET_ENTITY_ICON_COLOR>;
@@ -1522,6 +1533,40 @@ namespace base::menu::natives {
 		}
 	} // namespace graphics
 
+	namespace gta {
+		sol::table register_gta(sol::state& lua) {
+			auto gta_table = lua.create_table();
+
+			gta_table["CreateMobilePhone"] = sol::c_call<decltype(&base::menu::natives::GTA::CREATE_MOBILE_PHONE), &base::menu::natives::GTA::CREATE_MOBILE_PHONE>;
+			gta_table["DestroyMobilePhone"] = sol::c_call<decltype(&base::menu::natives::GTA::DESTROY_MOBILE_PHONE), &base::menu::natives::GTA::DESTROY_MOBILE_PHONE>;
+			gta_table["SetMobilePhoneScale"] = sol::c_call<decltype(&base::menu::natives::GTA::SET_MOBILE_PHONE_SCALE), &base::menu::natives::GTA::SET_MOBILE_PHONE_SCALE>;
+			gta_table["SetMobilePhoneRotation"] = sol::c_call<decltype(&base::menu::natives::GTA::SET_MOBILE_PHONE_ROTATION), &base::menu::natives::GTA::SET_MOBILE_PHONE_ROTATION>;
+			gta_table["GetMobilePhoneRotation"] = sol::c_call<decltype(&base::menu::natives::GTA::GET_MOBILE_PHONE_ROTATION), &base::menu::natives::GTA::GET_MOBILE_PHONE_ROTATION>;
+			gta_table["SetMobilePhonePosition"] = sol::c_call<decltype(&base::menu::natives::GTA::SET_MOBILE_PHONE_POSITION), &base::menu::natives::GTA::SET_MOBILE_PHONE_POSITION>;
+			gta_table["GetMobilePhonePosition"] = sol::c_call<decltype(&base::menu::natives::GTA::GET_MOBILE_PHONE_POSITION), &base::menu::natives::GTA::GET_MOBILE_PHONE_POSITION>;
+			gta_table["ScriptIsMovingMobilePhoneOffscreen"] = sol::c_call<decltype(&base::menu::natives::GTA::SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN), &base::menu::natives::GTA::SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN>;
+			gta_table["CanPhoneBeSeenOnScreen"] = sol::c_call<decltype(&base::menu::natives::GTA::CAN_PHONE_BE_SEEN_ON_SCREEN), &base::menu::natives::GTA::CAN_PHONE_BE_SEEN_ON_SCREEN>;
+			gta_table["SetMobilePhoneDofState"] = sol::c_call<decltype(&base::menu::natives::GTA::SET_MOBILE_PHONE_DOF_STATE), &base::menu::natives::GTA::SET_MOBILE_PHONE_DOF_STATE>;
+			gta_table["CellSetInput"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_SET_INPUT), &base::menu::natives::GTA::CELL_SET_INPUT>;
+			gta_table["CellHorizontalModeToggle"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_HORIZONTAL_MODE_TOGGLE), &base::menu::natives::GTA::CELL_HORIZONTAL_MODE_TOGGLE>;
+			gta_table["CellCamActivate"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_ACTIVATE), &base::menu::natives::GTA::CELL_CAM_ACTIVATE>;
+			gta_table["CellCamActivateSelfieMode"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_ACTIVATE_SELFIE_MODE), &base::menu::natives::GTA::CELL_CAM_ACTIVATE_SELFIE_MODE>;
+			gta_table["CellCamActivateShallowDofMode"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE), &base::menu::natives::GTA::CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE>;
+			gta_table["CellCamSetSelfieModeSideOffsetScaling"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING>;
+			gta_table["CellCamSetSelfieModeHorzPanOffset"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET>;
+			gta_table["CellCamSetSelfieModeVertPanOffset"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET>;
+			gta_table["CellCamSetSelfieModeRollOffset"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET>;
+			gta_table["CellCamSetSelfieModeDistanceScaling"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING>;
+			gta_table["CellCamSetSelfieModeHeadYawOffset"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET>;
+			gta_table["CellCamSetSelfieModeHeadRollOffset"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET>;
+			gta_table["CellCamSetSelfieModeHeadPitchOffset"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET), &base::menu::natives::GTA::CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET>;
+			gta_table["CellCamIsCharVisibleNoFaceCheck"] = sol::c_call<decltype(&base::menu::natives::GTA::CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK), &base::menu::natives::GTA::CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK>;
+			gta_table["GetMobilePhoneRenderId"] = sol::c_call<decltype(&base::menu::natives::GTA::GET_MOBILE_PHONE_RENDER_ID), &base::menu::natives::GTA::GET_MOBILE_PHONE_RENDER_ID>;
+
+			return gta_table;
+		}
+	} // namespace gta
+
 	namespace hud {
 		sol::table register_hud(sol::state& lua) {
 			auto hud_table = lua.create_table();
@@ -1683,6 +1728,7 @@ namespace base::menu::natives {
 			hud_table["FlashWantedDisplay"] = sol::c_call<decltype(&base::menu::natives::HUD::FLASH_WANTED_DISPLAY), &base::menu::natives::HUD::FLASH_WANTED_DISPLAY>;
 			hud_table["ForceOffWantedStarFlash"] = sol::c_call<decltype(&base::menu::natives::HUD::FORCE_OFF_WANTED_STAR_FLASH), &base::menu::natives::HUD::FORCE_OFF_WANTED_STAR_FLASH>;
 			hud_table["SetCustomMpHudColor"] = sol::c_call<decltype(&base::menu::natives::HUD::SET_CUSTOM_MP_HUD_COLOR), &base::menu::natives::HUD::SET_CUSTOM_MP_HUD_COLOR>;
+			hud_table["GetRenderedTextPaddingSize"] = sol::c_call<decltype(&base::menu::natives::HUD::GET_RENDERED_TEXT_PADDING_SIZE), &base::menu::natives::HUD::GET_RENDERED_TEXT_PADDING_SIZE>;
 			hud_table["GetRenderedCharacterHeight"] = sol::c_call<decltype(&base::menu::natives::HUD::GET_RENDERED_CHARACTER_HEIGHT), &base::menu::natives::HUD::GET_RENDERED_CHARACTER_HEIGHT>;
 			hud_table["SetTextScale"] = sol::c_call<decltype(&base::menu::natives::HUD::SET_TEXT_SCALE), &base::menu::natives::HUD::SET_TEXT_SCALE>;
 			hud_table["SetTextColour"] = sol::c_call<decltype(&base::menu::natives::HUD::SET_TEXT_COLOUR), &base::menu::natives::HUD::SET_TEXT_COLOUR>;
@@ -1912,6 +1958,8 @@ namespace base::menu::natives {
 			hud_table["OpenReportugcMenu"] = sol::c_call<decltype(&base::menu::natives::HUD::OPEN_REPORTUGC_MENU), &base::menu::natives::HUD::OPEN_REPORTUGC_MENU>;
 			hud_table["ForceCloseReportugcMenu"] = sol::c_call<decltype(&base::menu::natives::HUD::FORCE_CLOSE_REPORTUGC_MENU), &base::menu::natives::HUD::FORCE_CLOSE_REPORTUGC_MENU>;
 			hud_table["IsReportugcMenuOpen"] = sol::c_call<decltype(&base::menu::natives::HUD::IS_REPORTUGC_MENU_OPEN), &base::menu::natives::HUD::IS_REPORTUGC_MENU_OPEN>;
+			hud_table["ReportNominatedJob"] = sol::c_call<decltype(&base::menu::natives::HUD::_REPORT_NOMINATED_JOB), &base::menu::natives::HUD::_REPORT_NOMINATED_JOB>;
+			hud_table["GetNominatedJobReportStatus"] = sol::c_call<decltype(&base::menu::natives::HUD::_GET_NOMINATED_JOB_REPORT_STATUS), &base::menu::natives::HUD::_GET_NOMINATED_JOB_REPORT_STATUS>;
 			hud_table["IsFloatingHelpTextOnScreen"] = sol::c_call<decltype(&base::menu::natives::HUD::IS_FLOATING_HELP_TEXT_ON_SCREEN), &base::menu::natives::HUD::IS_FLOATING_HELP_TEXT_ON_SCREEN>;
 			hud_table["SetFloatingHelpTextScreenPosition"] = sol::c_call<decltype(&base::menu::natives::HUD::SET_FLOATING_HELP_TEXT_SCREEN_POSITION), &base::menu::natives::HUD::SET_FLOATING_HELP_TEXT_SCREEN_POSITION>;
 			hud_table["SetFloatingHelpTextWorldPosition"] = sol::c_call<decltype(&base::menu::natives::HUD::SET_FLOATING_HELP_TEXT_WORLD_POSITION), &base::menu::natives::HUD::SET_FLOATING_HELP_TEXT_WORLD_POSITION>;
@@ -2116,23 +2164,23 @@ namespace base::menu::natives {
 		}
 	} // namespace interior
 
-	namespace itemset {
-		sol::table register_itemset(sol::state& lua) {
-			auto itemset_table = lua.create_table();
+	namespace itemsets {
+		sol::table register_itemsets(sol::state& lua) {
+			auto itemsets_table = lua.create_table();
 
-			itemset_table["CreateItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::CREATE_ITEMSET), &base::menu::natives::ITEMSET::CREATE_ITEMSET>;
-			itemset_table["DestroyItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::DESTROY_ITEMSET), &base::menu::natives::ITEMSET::DESTROY_ITEMSET>;
-			itemset_table["IsItemsetValid"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::IS_ITEMSET_VALID), &base::menu::natives::ITEMSET::IS_ITEMSET_VALID>;
-			itemset_table["AddToItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::ADD_TO_ITEMSET), &base::menu::natives::ITEMSET::ADD_TO_ITEMSET>;
-			itemset_table["RemoveFromItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::REMOVE_FROM_ITEMSET), &base::menu::natives::ITEMSET::REMOVE_FROM_ITEMSET>;
-			itemset_table["GetItemsetSize"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::GET_ITEMSET_SIZE), &base::menu::natives::ITEMSET::GET_ITEMSET_SIZE>;
-			itemset_table["GetIndexedItemInItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::GET_INDEXED_ITEM_IN_ITEMSET), &base::menu::natives::ITEMSET::GET_INDEXED_ITEM_IN_ITEMSET>;
-			itemset_table["IsInItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::IS_IN_ITEMSET), &base::menu::natives::ITEMSET::IS_IN_ITEMSET>;
-			itemset_table["CleanItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSET::CLEAN_ITEMSET), &base::menu::natives::ITEMSET::CLEAN_ITEMSET>;
+			itemsets_table["CreateItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::CREATE_ITEMSET), &base::menu::natives::ITEMSETS::CREATE_ITEMSET>;
+			itemsets_table["DestroyItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::DESTROY_ITEMSET), &base::menu::natives::ITEMSETS::DESTROY_ITEMSET>;
+			itemsets_table["IsItemsetValid"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::IS_ITEMSET_VALID), &base::menu::natives::ITEMSETS::IS_ITEMSET_VALID>;
+			itemsets_table["AddToItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::ADD_TO_ITEMSET), &base::menu::natives::ITEMSETS::ADD_TO_ITEMSET>;
+			itemsets_table["RemoveFromItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::REMOVE_FROM_ITEMSET), &base::menu::natives::ITEMSETS::REMOVE_FROM_ITEMSET>;
+			itemsets_table["GetItemsetSize"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::GET_ITEMSET_SIZE), &base::menu::natives::ITEMSETS::GET_ITEMSET_SIZE>;
+			itemsets_table["GetIndexedItemInItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::GET_INDEXED_ITEM_IN_ITEMSET), &base::menu::natives::ITEMSETS::GET_INDEXED_ITEM_IN_ITEMSET>;
+			itemsets_table["IsInItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::IS_IN_ITEMSET), &base::menu::natives::ITEMSETS::IS_IN_ITEMSET>;
+			itemsets_table["CleanItemset"] = sol::c_call<decltype(&base::menu::natives::ITEMSETS::CLEAN_ITEMSET), &base::menu::natives::ITEMSETS::CLEAN_ITEMSET>;
 
-			return itemset_table;
+			return itemsets_table;
 		}
-	} // namespace itemset
+	} // namespace itemsets
 
 	namespace landingpage {
 		sol::table register_landingpage(sol::state& lua) {
@@ -2530,40 +2578,6 @@ namespace base::menu::natives {
 		}
 	} // namespace misc
 
-	namespace mobile {
-		sol::table register_mobile(sol::state& lua) {
-			auto mobile_table = lua.create_table();
-
-			mobile_table["CreateMobilePhone"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CREATE_MOBILE_PHONE), &base::menu::natives::MOBILE::CREATE_MOBILE_PHONE>;
-			mobile_table["DestroyMobilePhone"] = sol::c_call<decltype(&base::menu::natives::MOBILE::DESTROY_MOBILE_PHONE), &base::menu::natives::MOBILE::DESTROY_MOBILE_PHONE>;
-			mobile_table["SetMobilePhoneScale"] = sol::c_call<decltype(&base::menu::natives::MOBILE::SET_MOBILE_PHONE_SCALE), &base::menu::natives::MOBILE::SET_MOBILE_PHONE_SCALE>;
-			mobile_table["SetMobilePhoneRotation"] = sol::c_call<decltype(&base::menu::natives::MOBILE::SET_MOBILE_PHONE_ROTATION), &base::menu::natives::MOBILE::SET_MOBILE_PHONE_ROTATION>;
-			mobile_table["GetMobilePhoneRotation"] = sol::c_call<decltype(&base::menu::natives::MOBILE::GET_MOBILE_PHONE_ROTATION), &base::menu::natives::MOBILE::GET_MOBILE_PHONE_ROTATION>;
-			mobile_table["SetMobilePhonePosition"] = sol::c_call<decltype(&base::menu::natives::MOBILE::SET_MOBILE_PHONE_POSITION), &base::menu::natives::MOBILE::SET_MOBILE_PHONE_POSITION>;
-			mobile_table["GetMobilePhonePosition"] = sol::c_call<decltype(&base::menu::natives::MOBILE::GET_MOBILE_PHONE_POSITION), &base::menu::natives::MOBILE::GET_MOBILE_PHONE_POSITION>;
-			mobile_table["ScriptIsMovingMobilePhoneOffscreen"] = sol::c_call<decltype(&base::menu::natives::MOBILE::SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN), &base::menu::natives::MOBILE::SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN>;
-			mobile_table["CanPhoneBeSeenOnScreen"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CAN_PHONE_BE_SEEN_ON_SCREEN), &base::menu::natives::MOBILE::CAN_PHONE_BE_SEEN_ON_SCREEN>;
-			mobile_table["SetMobilePhoneDofState"] = sol::c_call<decltype(&base::menu::natives::MOBILE::SET_MOBILE_PHONE_DOF_STATE), &base::menu::natives::MOBILE::SET_MOBILE_PHONE_DOF_STATE>;
-			mobile_table["CellSetInput"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_SET_INPUT), &base::menu::natives::MOBILE::CELL_SET_INPUT>;
-			mobile_table["CellHorizontalModeToggle"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_HORIZONTAL_MODE_TOGGLE), &base::menu::natives::MOBILE::CELL_HORIZONTAL_MODE_TOGGLE>;
-			mobile_table["CellCamActivate"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_ACTIVATE), &base::menu::natives::MOBILE::CELL_CAM_ACTIVATE>;
-			mobile_table["CellCamActivateSelfieMode"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_ACTIVATE_SELFIE_MODE), &base::menu::natives::MOBILE::CELL_CAM_ACTIVATE_SELFIE_MODE>;
-			mobile_table["CellCamActivateShallowDofMode"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE), &base::menu::natives::MOBILE::CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE>;
-			mobile_table["CellCamSetSelfieModeSideOffsetScaling"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING>;
-			mobile_table["CellCamSetSelfieModeHorzPanOffset"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET>;
-			mobile_table["CellCamSetSelfieModeVertPanOffset"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET>;
-			mobile_table["CellCamSetSelfieModeRollOffset"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET>;
-			mobile_table["CellCamSetSelfieModeDistanceScaling"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING>;
-			mobile_table["CellCamSetSelfieModeHeadYawOffset"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET>;
-			mobile_table["CellCamSetSelfieModeHeadRollOffset"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET>;
-			mobile_table["CellCamSetSelfieModeHeadPitchOffset"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET), &base::menu::natives::MOBILE::CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET>;
-			mobile_table["CellCamIsCharVisibleNoFaceCheck"] = sol::c_call<decltype(&base::menu::natives::MOBILE::CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK), &base::menu::natives::MOBILE::CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK>;
-			mobile_table["GetMobilePhoneRenderId"] = sol::c_call<decltype(&base::menu::natives::MOBILE::GET_MOBILE_PHONE_RENDER_ID), &base::menu::natives::MOBILE::GET_MOBILE_PHONE_RENDER_ID>;
-
-			return mobile_table;
-		}
-	} // namespace mobile
-
 	namespace money {
 		sol::table register_money(sol::state& lua) {
 			auto money_table = lua.create_table();
@@ -2924,6 +2938,9 @@ namespace base::menu::natives {
 			money_table["DepositVc"] = sol::c_call<decltype(&base::menu::natives::MONEY::DEPOSIT_VC), &base::menu::natives::MONEY::DEPOSIT_VC>;
 			money_table["HasVcWithdrawalCompleted"] = sol::c_call<decltype(&base::menu::natives::MONEY::HAS_VC_WITHDRAWAL_COMPLETED), &base::menu::natives::MONEY::HAS_VC_WITHDRAWAL_COMPLETED>;
 			money_table["WasVcWithdrawalSuccessful"] = sol::c_call<decltype(&base::menu::natives::MONEY::WAS_VC_WITHDRAWAL_SUCCESSFUL), &base::menu::natives::MONEY::WAS_VC_WITHDRAWAL_SUCCESSFUL>;
+			money_table["NetworkGetTotalEvcBalanceIsGreaterThan100m"] = sol::c_call<decltype(&base::menu::natives::MONEY::_NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_100M), &base::menu::natives::MONEY::_NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_100M>;
+			money_table["NetworkGetTotalEvcBalanceIsGreaterThan500m"] = sol::c_call<decltype(&base::menu::natives::MONEY::_NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_500M), &base::menu::natives::MONEY::_NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_500M>;
+			money_table["NetworkGetTotalEvcBalanceIsGreaterThan1b"] = sol::c_call<decltype(&base::menu::natives::MONEY::_NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_1B), &base::menu::natives::MONEY::_NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_1B>;
 			money_table["NetworkGetMpWindfallAvailable"] = sol::c_call<decltype(&base::menu::natives::MONEY::NETWORK_GET_MP_WINDFALL_AVAILABLE), &base::menu::natives::MONEY::NETWORK_GET_MP_WINDFALL_AVAILABLE>;
 
 			return money_table;
@@ -3112,7 +3129,7 @@ namespace base::menu::natives {
 			network_table["NetworkIsGameInProgress"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_IS_GAME_IN_PROGRESS), &base::menu::natives::NETWORK::NETWORK_IS_GAME_IN_PROGRESS>;
 			network_table["NetworkIsSessionActive"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_IS_SESSION_ACTIVE), &base::menu::natives::NETWORK::NETWORK_IS_SESSION_ACTIVE>;
 			network_table["NetworkIsInSession"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_IS_IN_SESSION), &base::menu::natives::NETWORK::NETWORK_IS_IN_SESSION>;
-			network_table["NetworkIsAmericasVersion"] = sol::c_call<decltype(&base::menu::natives::NETWORK::_NETWORK_IS_AMERICAS_VERSION), &base::menu::natives::NETWORK::_NETWORK_IS_AMERICAS_VERSION>;
+			network_table["0x0292bd7f3766cebc"] = sol::c_call<decltype(&base::menu::natives::NETWORK::_0x0292BD7F3766CEBC), &base::menu::natives::NETWORK::_0x0292BD7F3766CEBC>;
 			network_table["NetworkIsSessionStarted"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_IS_SESSION_STARTED), &base::menu::natives::NETWORK::NETWORK_IS_SESSION_STARTED>;
 			network_table["NetworkIsSessionBusy"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_IS_SESSION_BUSY), &base::menu::natives::NETWORK::NETWORK_IS_SESSION_BUSY>;
 			network_table["NetworkCanSessionEnd"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_CAN_SESSION_END), &base::menu::natives::NETWORK::NETWORK_CAN_SESSION_END>;
@@ -3678,6 +3695,7 @@ namespace base::menu::natives {
 			network_table["NetworkExplodeHeli"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_EXPLODE_HELI), &base::menu::natives::NETWORK::NETWORK_EXPLODE_HELI>;
 			network_table["NetworkUseLogarithmicBlendingThisFrame"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_USE_LOGARITHMIC_BLENDING_THIS_FRAME), &base::menu::natives::NETWORK::NETWORK_USE_LOGARITHMIC_BLENDING_THIS_FRAME>;
 			network_table["NetworkOverrideCoordsAndHeading"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_OVERRIDE_COORDS_AND_HEADING), &base::menu::natives::NETWORK::NETWORK_OVERRIDE_COORDS_AND_HEADING>;
+			network_table["NetworkAllowDeadPedNetworkBlending"] = sol::c_call<decltype(&base::menu::natives::NETWORK::_NETWORK_ALLOW_DEAD_PED_NETWORK_BLENDING), &base::menu::natives::NETWORK::_NETWORK_ALLOW_DEAD_PED_NETWORK_BLENDING>;
 			network_table["NetworkEnableExtraVehicleOrientationBlendChecks"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_ENABLE_EXTRA_VEHICLE_ORIENTATION_BLEND_CHECKS), &base::menu::natives::NETWORK::NETWORK_ENABLE_EXTRA_VEHICLE_ORIENTATION_BLEND_CHECKS>;
 			network_table["NetworkDisableProximityMigration"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_DISABLE_PROXIMITY_MIGRATION), &base::menu::natives::NETWORK::NETWORK_DISABLE_PROXIMITY_MIGRATION>;
 			network_table["NetworkSetPlayerMentalState"] = sol::c_call<decltype(&base::menu::natives::NETWORK::NETWORK_SET_PLAYER_MENTAL_STATE), &base::menu::natives::NETWORK::NETWORK_SET_PLAYER_MENTAL_STATE>;
@@ -3742,6 +3760,7 @@ namespace base::menu::natives {
 			network_table["UgcGetMostRecentlyCreatedContent"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_GET_MOST_RECENTLY_CREATED_CONTENT), &base::menu::natives::NETWORK::UGC_GET_MOST_RECENTLY_CREATED_CONTENT>;
 			network_table["UgcGetMostRecentlyPlayedContent"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_GET_MOST_RECENTLY_PLAYED_CONTENT), &base::menu::natives::NETWORK::UGC_GET_MOST_RECENTLY_PLAYED_CONTENT>;
 			network_table["UgcGetTopRatedContent"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_GET_TOP_RATED_CONTENT), &base::menu::natives::NETWORK::UGC_GET_TOP_RATED_CONTENT>;
+			network_table["UgcGetNominatedContent"] = sol::c_call<decltype(&base::menu::natives::NETWORK::_UGC_GET_NOMINATED_CONTENT), &base::menu::natives::NETWORK::_UGC_GET_NOMINATED_CONTENT>;
 			network_table["UgcCancelQuery"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_CANCEL_QUERY), &base::menu::natives::NETWORK::UGC_CANCEL_QUERY>;
 			network_table["UgcIsGetting"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_IS_GETTING), &base::menu::natives::NETWORK::UGC_IS_GETTING>;
 			network_table["UgcHasGetFinished"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_HAS_GET_FINISHED), &base::menu::natives::NETWORK::UGC_HAS_GET_FINISHED>;
@@ -3789,6 +3808,8 @@ namespace base::menu::natives {
 			network_table["UgcHasPermissionToWrite"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_HAS_PERMISSION_TO_WRITE), &base::menu::natives::NETWORK::UGC_HAS_PERMISSION_TO_WRITE>;
 			network_table["UgcPublish"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_PUBLISH), &base::menu::natives::NETWORK::UGC_PUBLISH>;
 			network_table["UgcSetBookmarked"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_SET_BOOKMARKED), &base::menu::natives::NETWORK::UGC_SET_BOOKMARKED>;
+			network_table["UgcSetNominatedJob"] = sol::c_call<decltype(&base::menu::natives::NETWORK::_UGC_SET_NOMINATED_JOB), &base::menu::natives::NETWORK::_UGC_SET_NOMINATED_JOB>;
+			network_table["UgcClearNominatedJob"] = sol::c_call<decltype(&base::menu::natives::NETWORK::_UGC_CLEAR_NOMINATED_JOB), &base::menu::natives::NETWORK::_UGC_CLEAR_NOMINATED_JOB>;
 			network_table["UgcSetDeleted"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_SET_DELETED), &base::menu::natives::NETWORK::UGC_SET_DELETED>;
 			network_table["UgcIsModifying"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_IS_MODIFYING), &base::menu::natives::NETWORK::UGC_IS_MODIFYING>;
 			network_table["UgcHasModifyFinished"] = sol::c_call<decltype(&base::menu::natives::NETWORK::UGC_HAS_MODIFY_FINISHED), &base::menu::natives::NETWORK::UGC_HAS_MODIFY_FINISHED>;
@@ -4114,74 +4135,74 @@ namespace base::menu::natives {
 		}
 	} // namespace pad
 
-	namespace pathfind {
-		sol::table register_pathfind(sol::state& lua) {
-			auto pathfind_table = lua.create_table();
+	namespace path {
+		sol::table register_path(sol::state& lua) {
+			auto path_table = lua.create_table();
 
-			pathfind_table["SetRoadsInArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_ROADS_IN_AREA), &base::menu::natives::PATHFIND::SET_ROADS_IN_AREA>;
-			pathfind_table["SetRoadsInAngledArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_ROADS_IN_ANGLED_AREA), &base::menu::natives::PATHFIND::SET_ROADS_IN_ANGLED_AREA>;
-			pathfind_table["SetPedPathsInArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_PED_PATHS_IN_AREA), &base::menu::natives::PATHFIND::SET_PED_PATHS_IN_AREA>;
-			pathfind_table["GetSafeCoordForPed"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_SAFE_COORD_FOR_PED), &base::menu::natives::PATHFIND::GET_SAFE_COORD_FOR_PED>;
-			pathfind_table["GetClosestVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_CLOSEST_VEHICLE_NODE), &base::menu::natives::PATHFIND::GET_CLOSEST_VEHICLE_NODE>;
-			pathfind_table["GetClosestMajorVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_CLOSEST_MAJOR_VEHICLE_NODE), &base::menu::natives::PATHFIND::GET_CLOSEST_MAJOR_VEHICLE_NODE>;
-			pathfind_table["GetClosestVehicleNodeWithHeading"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_CLOSEST_VEHICLE_NODE_WITH_HEADING), &base::menu::natives::PATHFIND::GET_CLOSEST_VEHICLE_NODE_WITH_HEADING>;
-			pathfind_table["GetNthClosestVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE), &base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE>;
-			pathfind_table["GetNthClosestVehicleNodeId"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_ID), &base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_ID>;
-			pathfind_table["GetNthClosestVehicleNodeWithHeading"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING), &base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING>;
-			pathfind_table["GetNthClosestVehicleNodeIdWithHeading"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING), &base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING>;
-			pathfind_table["GetNthClosestVehicleNodeFavourDirection"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_FAVOUR_DIRECTION), &base::menu::natives::PATHFIND::GET_NTH_CLOSEST_VEHICLE_NODE_FAVOUR_DIRECTION>;
-			pathfind_table["GetVehicleNodeProperties"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_VEHICLE_NODE_PROPERTIES), &base::menu::natives::PATHFIND::GET_VEHICLE_NODE_PROPERTIES>;
-			pathfind_table["IsVehicleNodeIdValid"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::IS_VEHICLE_NODE_ID_VALID), &base::menu::natives::PATHFIND::IS_VEHICLE_NODE_ID_VALID>;
-			pathfind_table["GetVehicleNodePosition"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_VEHICLE_NODE_POSITION), &base::menu::natives::PATHFIND::GET_VEHICLE_NODE_POSITION>;
-			pathfind_table["GetVehicleNodeIsGpsAllowed"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_VEHICLE_NODE_IS_GPS_ALLOWED), &base::menu::natives::PATHFIND::GET_VEHICLE_NODE_IS_GPS_ALLOWED>;
-			pathfind_table["GetVehicleNodeIsSwitchedOff"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_VEHICLE_NODE_IS_SWITCHED_OFF), &base::menu::natives::PATHFIND::GET_VEHICLE_NODE_IS_SWITCHED_OFF>;
-			pathfind_table["GetClosestRoad"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_CLOSEST_ROAD), &base::menu::natives::PATHFIND::GET_CLOSEST_ROAD>;
-			pathfind_table["LoadAllPathNodes"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::LOAD_ALL_PATH_NODES), &base::menu::natives::PATHFIND::LOAD_ALL_PATH_NODES>;
-			pathfind_table["SetAllowStreamPrologueNodes"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_ALLOW_STREAM_PROLOGUE_NODES), &base::menu::natives::PATHFIND::SET_ALLOW_STREAM_PROLOGUE_NODES>;
-			pathfind_table["SetAllowStreamHeistIslandNodes"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_ALLOW_STREAM_HEIST_ISLAND_NODES), &base::menu::natives::PATHFIND::SET_ALLOW_STREAM_HEIST_ISLAND_NODES>;
-			pathfind_table["AreNodesLoadedForArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::ARE_NODES_LOADED_FOR_AREA), &base::menu::natives::PATHFIND::ARE_NODES_LOADED_FOR_AREA>;
-			pathfind_table["RequestPathNodesInAreaThisFrame"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::REQUEST_PATH_NODES_IN_AREA_THIS_FRAME), &base::menu::natives::PATHFIND::REQUEST_PATH_NODES_IN_AREA_THIS_FRAME>;
-			pathfind_table["SetRoadsBackToOriginal"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_ROADS_BACK_TO_ORIGINAL), &base::menu::natives::PATHFIND::SET_ROADS_BACK_TO_ORIGINAL>;
-			pathfind_table["SetRoadsBackToOriginalInAngledArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_ROADS_BACK_TO_ORIGINAL_IN_ANGLED_AREA), &base::menu::natives::PATHFIND::SET_ROADS_BACK_TO_ORIGINAL_IN_ANGLED_AREA>;
-			pathfind_table["SetAmbientPedRangeMultiplierThisFrame"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_AMBIENT_PED_RANGE_MULTIPLIER_THIS_FRAME), &base::menu::natives::PATHFIND::SET_AMBIENT_PED_RANGE_MULTIPLIER_THIS_FRAME>;
-			pathfind_table["AdjustAmbientPedSpawnDensitiesThisFrame"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::ADJUST_AMBIENT_PED_SPAWN_DENSITIES_THIS_FRAME), &base::menu::natives::PATHFIND::ADJUST_AMBIENT_PED_SPAWN_DENSITIES_THIS_FRAME>;
-			pathfind_table["SetPedPathsBackToOriginal"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_PED_PATHS_BACK_TO_ORIGINAL), &base::menu::natives::PATHFIND::SET_PED_PATHS_BACK_TO_ORIGINAL>;
-			pathfind_table["GetRandomVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_RANDOM_VEHICLE_NODE), &base::menu::natives::PATHFIND::GET_RANDOM_VEHICLE_NODE>;
-			pathfind_table["GetSpawnCoordsForVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_SPAWN_COORDS_FOR_VEHICLE_NODE), &base::menu::natives::PATHFIND::GET_SPAWN_COORDS_FOR_VEHICLE_NODE>;
-			pathfind_table["GetStreetNameAtCoord"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_STREET_NAME_AT_COORD), &base::menu::natives::PATHFIND::GET_STREET_NAME_AT_COORD>;
-			pathfind_table["GenerateDirectionsToCoord"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GENERATE_DIRECTIONS_TO_COORD), &base::menu::natives::PATHFIND::GENERATE_DIRECTIONS_TO_COORD>;
-			pathfind_table["SetIgnoreNoGpsFlag"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_IGNORE_NO_GPS_FLAG), &base::menu::natives::PATHFIND::SET_IGNORE_NO_GPS_FLAG>;
-			pathfind_table["SetIgnoreNoGpsFlagUntilFirstNormalNode"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_IGNORE_NO_GPS_FLAG_UNTIL_FIRST_NORMAL_NODE), &base::menu::natives::PATHFIND::SET_IGNORE_NO_GPS_FLAG_UNTIL_FIRST_NORMAL_NODE>;
-			pathfind_table["SetGpsDisabledZone"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_GPS_DISABLED_ZONE), &base::menu::natives::PATHFIND::SET_GPS_DISABLED_ZONE>;
-			pathfind_table["GetGpsBlipRouteLength"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_GPS_BLIP_ROUTE_LENGTH), &base::menu::natives::PATHFIND::GET_GPS_BLIP_ROUTE_LENGTH>;
-			pathfind_table["GetPosAlongGpsTypeRoute"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_POS_ALONG_GPS_TYPE_ROUTE), &base::menu::natives::PATHFIND::GET_POS_ALONG_GPS_TYPE_ROUTE>;
-			pathfind_table["GetGpsBlipRouteFound"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_GPS_BLIP_ROUTE_FOUND), &base::menu::natives::PATHFIND::GET_GPS_BLIP_ROUTE_FOUND>;
-			pathfind_table["GetRoadBoundaryUsingHeading"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_ROAD_BOUNDARY_USING_HEADING), &base::menu::natives::PATHFIND::GET_ROAD_BOUNDARY_USING_HEADING>;
-			pathfind_table["GetPositionBySideOfRoad"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_POSITION_BY_SIDE_OF_ROAD), &base::menu::natives::PATHFIND::GET_POSITION_BY_SIDE_OF_ROAD>;
-			pathfind_table["IsPointOnRoad"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::IS_POINT_ON_ROAD), &base::menu::natives::PATHFIND::IS_POINT_ON_ROAD>;
-			pathfind_table["GetNextGpsDisabledZoneIndex"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_NEXT_GPS_DISABLED_ZONE_INDEX), &base::menu::natives::PATHFIND::GET_NEXT_GPS_DISABLED_ZONE_INDEX>;
-			pathfind_table["SetGpsDisabledZoneAtIndex"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::SET_GPS_DISABLED_ZONE_AT_INDEX), &base::menu::natives::PATHFIND::SET_GPS_DISABLED_ZONE_AT_INDEX>;
-			pathfind_table["ClearGpsDisabledZoneAtIndex"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::CLEAR_GPS_DISABLED_ZONE_AT_INDEX), &base::menu::natives::PATHFIND::CLEAR_GPS_DISABLED_ZONE_AT_INDEX>;
-			pathfind_table["AddNavmeshRequiredRegion"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::ADD_NAVMESH_REQUIRED_REGION), &base::menu::natives::PATHFIND::ADD_NAVMESH_REQUIRED_REGION>;
-			pathfind_table["RemoveNavmeshRequiredRegions"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::REMOVE_NAVMESH_REQUIRED_REGIONS), &base::menu::natives::PATHFIND::REMOVE_NAVMESH_REQUIRED_REGIONS>;
-			pathfind_table["IsNavmeshRequiredRegionInUse"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::IS_NAVMESH_REQUIRED_REGION_IN_USE), &base::menu::natives::PATHFIND::IS_NAVMESH_REQUIRED_REGION_IN_USE>;
-			pathfind_table["DisableNavmeshInArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::DISABLE_NAVMESH_IN_AREA), &base::menu::natives::PATHFIND::DISABLE_NAVMESH_IN_AREA>;
-			pathfind_table["AreAllNavmeshRegionsLoaded"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::ARE_ALL_NAVMESH_REGIONS_LOADED), &base::menu::natives::PATHFIND::ARE_ALL_NAVMESH_REGIONS_LOADED>;
-			pathfind_table["IsNavmeshLoadedInArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::IS_NAVMESH_LOADED_IN_AREA), &base::menu::natives::PATHFIND::IS_NAVMESH_LOADED_IN_AREA>;
-			pathfind_table["GetNumNavmeshesExistingInArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_NUM_NAVMESHES_EXISTING_IN_AREA), &base::menu::natives::PATHFIND::GET_NUM_NAVMESHES_EXISTING_IN_AREA>;
-			pathfind_table["AddNavmeshBlockingObject"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::ADD_NAVMESH_BLOCKING_OBJECT), &base::menu::natives::PATHFIND::ADD_NAVMESH_BLOCKING_OBJECT>;
-			pathfind_table["UpdateNavmeshBlockingObject"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::UPDATE_NAVMESH_BLOCKING_OBJECT), &base::menu::natives::PATHFIND::UPDATE_NAVMESH_BLOCKING_OBJECT>;
-			pathfind_table["RemoveNavmeshBlockingObject"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::REMOVE_NAVMESH_BLOCKING_OBJECT), &base::menu::natives::PATHFIND::REMOVE_NAVMESH_BLOCKING_OBJECT>;
-			pathfind_table["DoesNavmeshBlockingObjectExist"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::DOES_NAVMESH_BLOCKING_OBJECT_EXIST), &base::menu::natives::PATHFIND::DOES_NAVMESH_BLOCKING_OBJECT_EXIST>;
-			pathfind_table["GetApproxHeightForPoint"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_APPROX_HEIGHT_FOR_POINT), &base::menu::natives::PATHFIND::GET_APPROX_HEIGHT_FOR_POINT>;
-			pathfind_table["GetApproxHeightForArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_APPROX_HEIGHT_FOR_AREA), &base::menu::natives::PATHFIND::GET_APPROX_HEIGHT_FOR_AREA>;
-			pathfind_table["GetApproxFloorForPoint"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_APPROX_FLOOR_FOR_POINT), &base::menu::natives::PATHFIND::GET_APPROX_FLOOR_FOR_POINT>;
-			pathfind_table["GetApproxFloorForArea"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::GET_APPROX_FLOOR_FOR_AREA), &base::menu::natives::PATHFIND::GET_APPROX_FLOOR_FOR_AREA>;
-			pathfind_table["CalculateTravelDistanceBetweenPoints"] = sol::c_call<decltype(&base::menu::natives::PATHFIND::CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS), &base::menu::natives::PATHFIND::CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS>;
+			path_table["SetRoadsInArea"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_ROADS_IN_AREA), &base::menu::natives::PATH::SET_ROADS_IN_AREA>;
+			path_table["SetRoadsInAngledArea"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_ROADS_IN_ANGLED_AREA), &base::menu::natives::PATH::SET_ROADS_IN_ANGLED_AREA>;
+			path_table["SetPedPathsInArea"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_PED_PATHS_IN_AREA), &base::menu::natives::PATH::SET_PED_PATHS_IN_AREA>;
+			path_table["GetSafeCoordForPed"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_SAFE_COORD_FOR_PED), &base::menu::natives::PATH::GET_SAFE_COORD_FOR_PED>;
+			path_table["GetClosestVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_CLOSEST_VEHICLE_NODE), &base::menu::natives::PATH::GET_CLOSEST_VEHICLE_NODE>;
+			path_table["GetClosestMajorVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_CLOSEST_MAJOR_VEHICLE_NODE), &base::menu::natives::PATH::GET_CLOSEST_MAJOR_VEHICLE_NODE>;
+			path_table["GetClosestVehicleNodeWithHeading"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_CLOSEST_VEHICLE_NODE_WITH_HEADING), &base::menu::natives::PATH::GET_CLOSEST_VEHICLE_NODE_WITH_HEADING>;
+			path_table["GetNthClosestVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE), &base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE>;
+			path_table["GetNthClosestVehicleNodeId"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_ID), &base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_ID>;
+			path_table["GetNthClosestVehicleNodeWithHeading"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING), &base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING>;
+			path_table["GetNthClosestVehicleNodeIdWithHeading"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING), &base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING>;
+			path_table["GetNthClosestVehicleNodeFavourDirection"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_FAVOUR_DIRECTION), &base::menu::natives::PATH::GET_NTH_CLOSEST_VEHICLE_NODE_FAVOUR_DIRECTION>;
+			path_table["GetVehicleNodeProperties"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_VEHICLE_NODE_PROPERTIES), &base::menu::natives::PATH::GET_VEHICLE_NODE_PROPERTIES>;
+			path_table["IsVehicleNodeIdValid"] = sol::c_call<decltype(&base::menu::natives::PATH::IS_VEHICLE_NODE_ID_VALID), &base::menu::natives::PATH::IS_VEHICLE_NODE_ID_VALID>;
+			path_table["GetVehicleNodePosition"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_VEHICLE_NODE_POSITION), &base::menu::natives::PATH::GET_VEHICLE_NODE_POSITION>;
+			path_table["GetVehicleNodeIsGpsAllowed"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_VEHICLE_NODE_IS_GPS_ALLOWED), &base::menu::natives::PATH::GET_VEHICLE_NODE_IS_GPS_ALLOWED>;
+			path_table["GetVehicleNodeIsSwitchedOff"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_VEHICLE_NODE_IS_SWITCHED_OFF), &base::menu::natives::PATH::GET_VEHICLE_NODE_IS_SWITCHED_OFF>;
+			path_table["GetClosestRoad"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_CLOSEST_ROAD), &base::menu::natives::PATH::GET_CLOSEST_ROAD>;
+			path_table["LoadAllPathNodes"] = sol::c_call<decltype(&base::menu::natives::PATH::LOAD_ALL_PATH_NODES), &base::menu::natives::PATH::LOAD_ALL_PATH_NODES>;
+			path_table["SetAllowStreamPrologueNodes"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_ALLOW_STREAM_PROLOGUE_NODES), &base::menu::natives::PATH::SET_ALLOW_STREAM_PROLOGUE_NODES>;
+			path_table["SetAllowStreamHeistIslandNodes"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_ALLOW_STREAM_HEIST_ISLAND_NODES), &base::menu::natives::PATH::SET_ALLOW_STREAM_HEIST_ISLAND_NODES>;
+			path_table["AreNodesLoadedForArea"] = sol::c_call<decltype(&base::menu::natives::PATH::ARE_NODES_LOADED_FOR_AREA), &base::menu::natives::PATH::ARE_NODES_LOADED_FOR_AREA>;
+			path_table["RequestPathNodesInAreaThisFrame"] = sol::c_call<decltype(&base::menu::natives::PATH::REQUEST_PATH_NODES_IN_AREA_THIS_FRAME), &base::menu::natives::PATH::REQUEST_PATH_NODES_IN_AREA_THIS_FRAME>;
+			path_table["SetRoadsBackToOriginal"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_ROADS_BACK_TO_ORIGINAL), &base::menu::natives::PATH::SET_ROADS_BACK_TO_ORIGINAL>;
+			path_table["SetRoadsBackToOriginalInAngledArea"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_ROADS_BACK_TO_ORIGINAL_IN_ANGLED_AREA), &base::menu::natives::PATH::SET_ROADS_BACK_TO_ORIGINAL_IN_ANGLED_AREA>;
+			path_table["SetAmbientPedRangeMultiplierThisFrame"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_AMBIENT_PED_RANGE_MULTIPLIER_THIS_FRAME), &base::menu::natives::PATH::SET_AMBIENT_PED_RANGE_MULTIPLIER_THIS_FRAME>;
+			path_table["AdjustAmbientPedSpawnDensitiesThisFrame"] = sol::c_call<decltype(&base::menu::natives::PATH::ADJUST_AMBIENT_PED_SPAWN_DENSITIES_THIS_FRAME), &base::menu::natives::PATH::ADJUST_AMBIENT_PED_SPAWN_DENSITIES_THIS_FRAME>;
+			path_table["SetPedPathsBackToOriginal"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_PED_PATHS_BACK_TO_ORIGINAL), &base::menu::natives::PATH::SET_PED_PATHS_BACK_TO_ORIGINAL>;
+			path_table["GetRandomVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_RANDOM_VEHICLE_NODE), &base::menu::natives::PATH::GET_RANDOM_VEHICLE_NODE>;
+			path_table["GetSpawnCoordsForVehicleNode"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_SPAWN_COORDS_FOR_VEHICLE_NODE), &base::menu::natives::PATH::GET_SPAWN_COORDS_FOR_VEHICLE_NODE>;
+			path_table["GetStreetNameAtCoord"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_STREET_NAME_AT_COORD), &base::menu::natives::PATH::GET_STREET_NAME_AT_COORD>;
+			path_table["GenerateDirectionsToCoord"] = sol::c_call<decltype(&base::menu::natives::PATH::GENERATE_DIRECTIONS_TO_COORD), &base::menu::natives::PATH::GENERATE_DIRECTIONS_TO_COORD>;
+			path_table["SetIgnoreNoGpsFlag"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_IGNORE_NO_GPS_FLAG), &base::menu::natives::PATH::SET_IGNORE_NO_GPS_FLAG>;
+			path_table["SetIgnoreNoGpsFlagUntilFirstNormalNode"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_IGNORE_NO_GPS_FLAG_UNTIL_FIRST_NORMAL_NODE), &base::menu::natives::PATH::SET_IGNORE_NO_GPS_FLAG_UNTIL_FIRST_NORMAL_NODE>;
+			path_table["SetGpsDisabledZone"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_GPS_DISABLED_ZONE), &base::menu::natives::PATH::SET_GPS_DISABLED_ZONE>;
+			path_table["GetGpsBlipRouteLength"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_GPS_BLIP_ROUTE_LENGTH), &base::menu::natives::PATH::GET_GPS_BLIP_ROUTE_LENGTH>;
+			path_table["GetPosAlongGpsTypeRoute"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_POS_ALONG_GPS_TYPE_ROUTE), &base::menu::natives::PATH::GET_POS_ALONG_GPS_TYPE_ROUTE>;
+			path_table["GetGpsBlipRouteFound"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_GPS_BLIP_ROUTE_FOUND), &base::menu::natives::PATH::GET_GPS_BLIP_ROUTE_FOUND>;
+			path_table["GetRoadBoundaryUsingHeading"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_ROAD_BOUNDARY_USING_HEADING), &base::menu::natives::PATH::GET_ROAD_BOUNDARY_USING_HEADING>;
+			path_table["GetPositionBySideOfRoad"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_POSITION_BY_SIDE_OF_ROAD), &base::menu::natives::PATH::GET_POSITION_BY_SIDE_OF_ROAD>;
+			path_table["IsPointOnRoad"] = sol::c_call<decltype(&base::menu::natives::PATH::IS_POINT_ON_ROAD), &base::menu::natives::PATH::IS_POINT_ON_ROAD>;
+			path_table["GetNextGpsDisabledZoneIndex"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_NEXT_GPS_DISABLED_ZONE_INDEX), &base::menu::natives::PATH::GET_NEXT_GPS_DISABLED_ZONE_INDEX>;
+			path_table["SetGpsDisabledZoneAtIndex"] = sol::c_call<decltype(&base::menu::natives::PATH::SET_GPS_DISABLED_ZONE_AT_INDEX), &base::menu::natives::PATH::SET_GPS_DISABLED_ZONE_AT_INDEX>;
+			path_table["ClearGpsDisabledZoneAtIndex"] = sol::c_call<decltype(&base::menu::natives::PATH::CLEAR_GPS_DISABLED_ZONE_AT_INDEX), &base::menu::natives::PATH::CLEAR_GPS_DISABLED_ZONE_AT_INDEX>;
+			path_table["AddNavmeshRequiredRegion"] = sol::c_call<decltype(&base::menu::natives::PATH::ADD_NAVMESH_REQUIRED_REGION), &base::menu::natives::PATH::ADD_NAVMESH_REQUIRED_REGION>;
+			path_table["RemoveNavmeshRequiredRegions"] = sol::c_call<decltype(&base::menu::natives::PATH::REMOVE_NAVMESH_REQUIRED_REGIONS), &base::menu::natives::PATH::REMOVE_NAVMESH_REQUIRED_REGIONS>;
+			path_table["IsNavmeshRequiredRegionInUse"] = sol::c_call<decltype(&base::menu::natives::PATH::IS_NAVMESH_REQUIRED_REGION_IN_USE), &base::menu::natives::PATH::IS_NAVMESH_REQUIRED_REGION_IN_USE>;
+			path_table["DisableNavmeshInArea"] = sol::c_call<decltype(&base::menu::natives::PATH::DISABLE_NAVMESH_IN_AREA), &base::menu::natives::PATH::DISABLE_NAVMESH_IN_AREA>;
+			path_table["AreAllNavmeshRegionsLoaded"] = sol::c_call<decltype(&base::menu::natives::PATH::ARE_ALL_NAVMESH_REGIONS_LOADED), &base::menu::natives::PATH::ARE_ALL_NAVMESH_REGIONS_LOADED>;
+			path_table["IsNavmeshLoadedInArea"] = sol::c_call<decltype(&base::menu::natives::PATH::IS_NAVMESH_LOADED_IN_AREA), &base::menu::natives::PATH::IS_NAVMESH_LOADED_IN_AREA>;
+			path_table["GetNumNavmeshesExistingInArea"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_NUM_NAVMESHES_EXISTING_IN_AREA), &base::menu::natives::PATH::GET_NUM_NAVMESHES_EXISTING_IN_AREA>;
+			path_table["AddNavmeshBlockingObject"] = sol::c_call<decltype(&base::menu::natives::PATH::ADD_NAVMESH_BLOCKING_OBJECT), &base::menu::natives::PATH::ADD_NAVMESH_BLOCKING_OBJECT>;
+			path_table["UpdateNavmeshBlockingObject"] = sol::c_call<decltype(&base::menu::natives::PATH::UPDATE_NAVMESH_BLOCKING_OBJECT), &base::menu::natives::PATH::UPDATE_NAVMESH_BLOCKING_OBJECT>;
+			path_table["RemoveNavmeshBlockingObject"] = sol::c_call<decltype(&base::menu::natives::PATH::REMOVE_NAVMESH_BLOCKING_OBJECT), &base::menu::natives::PATH::REMOVE_NAVMESH_BLOCKING_OBJECT>;
+			path_table["DoesNavmeshBlockingObjectExist"] = sol::c_call<decltype(&base::menu::natives::PATH::DOES_NAVMESH_BLOCKING_OBJECT_EXIST), &base::menu::natives::PATH::DOES_NAVMESH_BLOCKING_OBJECT_EXIST>;
+			path_table["GetApproxHeightForPoint"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_APPROX_HEIGHT_FOR_POINT), &base::menu::natives::PATH::GET_APPROX_HEIGHT_FOR_POINT>;
+			path_table["GetApproxHeightForArea"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_APPROX_HEIGHT_FOR_AREA), &base::menu::natives::PATH::GET_APPROX_HEIGHT_FOR_AREA>;
+			path_table["GetApproxFloorForPoint"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_APPROX_FLOOR_FOR_POINT), &base::menu::natives::PATH::GET_APPROX_FLOOR_FOR_POINT>;
+			path_table["GetApproxFloorForArea"] = sol::c_call<decltype(&base::menu::natives::PATH::GET_APPROX_FLOOR_FOR_AREA), &base::menu::natives::PATH::GET_APPROX_FLOOR_FOR_AREA>;
+			path_table["CalculateTravelDistanceBetweenPoints"] = sol::c_call<decltype(&base::menu::natives::PATH::CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS), &base::menu::natives::PATH::CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS>;
 
-			return pathfind_table;
+			return path_table;
 		}
-	} // namespace pathfind
+	} // namespace path
 
 	namespace ped {
 		sol::table register_ped(sol::state& lua) {
@@ -4389,6 +4410,7 @@ namespace base::menu::natives {
 			ped_table["SetPedGravity"] = sol::c_call<decltype(&base::menu::natives::PED::SET_PED_GRAVITY), &base::menu::natives::PED::SET_PED_GRAVITY>;
 			ped_table["SetPedSurvivesBeingOutOfWater"] = sol::c_call<decltype(&base::menu::natives::PED::_SET_PED_SURVIVES_BEING_OUT_OF_WATER), &base::menu::natives::PED::_SET_PED_SURVIVES_BEING_OUT_OF_WATER>;
 			ped_table["ApplyDamageToPed"] = sol::c_call<decltype(&base::menu::natives::PED::APPLY_DAMAGE_TO_PED), &base::menu::natives::PED::APPLY_DAMAGE_TO_PED>;
+			ped_table["GeneratePedDamageEvent"] = sol::c_call<decltype(&base::menu::natives::PED::_GENERATE_PED_DAMAGE_EVENT), &base::menu::natives::PED::_GENERATE_PED_DAMAGE_EVENT>;
 			ped_table["GetTimePedDamagedByWeapon"] = sol::c_call<decltype(&base::menu::natives::PED::GET_TIME_PED_DAMAGED_BY_WEAPON), &base::menu::natives::PED::GET_TIME_PED_DAMAGED_BY_WEAPON>;
 			ped_table["SetPedAllowedToDuck"] = sol::c_call<decltype(&base::menu::natives::PED::SET_PED_ALLOWED_TO_DUCK), &base::menu::natives::PED::SET_PED_ALLOWED_TO_DUCK>;
 			ped_table["SetPedNeverLeavesGroup"] = sol::c_call<decltype(&base::menu::natives::PED::SET_PED_NEVER_LEAVES_GROUP), &base::menu::natives::PED::SET_PED_NEVER_LEAVES_GROUP>;
@@ -4641,6 +4663,7 @@ namespace base::menu::natives {
 			ped_table["SetPedModelIsSuppressed"] = sol::c_call<decltype(&base::menu::natives::PED::SET_PED_MODEL_IS_SUPPRESSED), &base::menu::natives::PED::SET_PED_MODEL_IS_SUPPRESSED>;
 			ped_table["StopAnyPedModelBeingSuppressed"] = sol::c_call<decltype(&base::menu::natives::PED::STOP_ANY_PED_MODEL_BEING_SUPPRESSED), &base::menu::natives::PED::STOP_ANY_PED_MODEL_BEING_SUPPRESSED>;
 			ped_table["SetPedCanBeTargetedWhenInjured"] = sol::c_call<decltype(&base::menu::natives::PED::SET_PED_CAN_BE_TARGETED_WHEN_INJURED), &base::menu::natives::PED::SET_PED_CAN_BE_TARGETED_WHEN_INJURED>;
+			ped_table["BlockPedFromWrithingWhenInjured"] = sol::c_call<decltype(&base::menu::natives::PED::_BLOCK_PED_FROM_WRITHING_WHEN_INJURED), &base::menu::natives::PED::_BLOCK_PED_FROM_WRITHING_WHEN_INJURED>;
 			ped_table["SetPedGeneratesDeadBodyEvents"] = sol::c_call<decltype(&base::menu::natives::PED::SET_PED_GENERATES_DEAD_BODY_EVENTS), &base::menu::natives::PED::SET_PED_GENERATES_DEAD_BODY_EVENTS>;
 			ped_table["BlockPedFromGeneratingDeadBodyEventsWhenDead"] = sol::c_call<decltype(&base::menu::natives::PED::BLOCK_PED_FROM_GENERATING_DEAD_BODY_EVENTS_WHEN_DEAD), &base::menu::natives::PED::BLOCK_PED_FROM_GENERATING_DEAD_BODY_EVENTS_WHEN_DEAD>;
 			ped_table["SetPedWillOnlyAttackWantedPlayer"] = sol::c_call<decltype(&base::menu::natives::PED::SET_PED_WILL_ONLY_ATTACK_WANTED_PLAYER), &base::menu::natives::PED::SET_PED_WILL_ONLY_ATTACK_WANTED_PLAYER>;
@@ -5009,6 +5032,7 @@ namespace base::menu::natives {
 			player_table["DisablePlayerFiring"] = sol::c_call<decltype(&base::menu::natives::PLAYER::DISABLE_PLAYER_FIRING), &base::menu::natives::PLAYER::DISABLE_PLAYER_FIRING>;
 			player_table["DisablePlayerThrowGrenadeWhileUsingGun"] = sol::c_call<decltype(&base::menu::natives::PLAYER::DISABLE_PLAYER_THROW_GRENADE_WHILE_USING_GUN), &base::menu::natives::PLAYER::DISABLE_PLAYER_THROW_GRENADE_WHILE_USING_GUN>;
 			player_table["SetDisableAmbientMeleeMove"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_DISABLE_AMBIENT_MELEE_MOVE), &base::menu::natives::PLAYER::SET_DISABLE_AMBIENT_MELEE_MOVE>;
+			player_table["SetPlayerStealthSpeed"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_STEALTH_SPEED), &base::menu::natives::PLAYER::SET_PLAYER_STEALTH_SPEED>;
 			player_table["SetPlayerMaxArmour"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_MAX_ARMOUR), &base::menu::natives::PLAYER::SET_PLAYER_MAX_ARMOUR>;
 			player_table["SpecialAbilityActivate"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SPECIAL_ABILITY_ACTIVATE), &base::menu::natives::PLAYER::SPECIAL_ABILITY_ACTIVATE>;
 			player_table["SetSpecialAbilityMp"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_SPECIAL_ABILITY_MP), &base::menu::natives::PLAYER::SET_SPECIAL_ABILITY_MP>;
@@ -5068,6 +5092,7 @@ namespace base::menu::natives {
 			player_table["SetPlayerCanLeaveParachuteSmokeTrail"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_CAN_LEAVE_PARACHUTE_SMOKE_TRAIL), &base::menu::natives::PLAYER::SET_PLAYER_CAN_LEAVE_PARACHUTE_SMOKE_TRAIL>;
 			player_table["SetPlayerParachuteSmokeTrailColor"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR), &base::menu::natives::PLAYER::SET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR>;
 			player_table["GetPlayerParachuteSmokeTrailColor"] = sol::c_call<decltype(&base::menu::natives::PLAYER::GET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR), &base::menu::natives::PLAYER::GET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR>;
+			player_table["SetPlayerResetFlagPreferRearSeats"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_RESET_FLAG_PREFER_REAR_SEATS), &base::menu::natives::PLAYER::SET_PLAYER_RESET_FLAG_PREFER_REAR_SEATS>;
 			player_table["SetPlayerPhonePaletteIdx"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_PHONE_PALETTE_IDX), &base::menu::natives::PLAYER::SET_PLAYER_PHONE_PALETTE_IDX>;
 			player_table["SetPlayerNoiseMultiplier"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_NOISE_MULTIPLIER), &base::menu::natives::PLAYER::SET_PLAYER_NOISE_MULTIPLIER>;
 			player_table["SetPlayerSneakingNoiseMultiplier"] = sol::c_call<decltype(&base::menu::natives::PLAYER::SET_PLAYER_SNEAKING_NOISE_MULTIPLIER), &base::menu::natives::PLAYER::SET_PLAYER_SNEAKING_NOISE_MULTIPLIER>;
@@ -5699,6 +5724,9 @@ namespace base::menu::natives {
 			stats_table["PlaystatsLobbyExit"] = sol::c_call<decltype(&base::menu::natives::STATS::_PLAYSTATS_LOBBY_EXIT), &base::menu::natives::STATS::_PLAYSTATS_LOBBY_EXIT>;
 			stats_table["PlaystatsLobbyStarted"] = sol::c_call<decltype(&base::menu::natives::STATS::_PLAYSTATS_LOBBY_STARTED), &base::menu::natives::STATS::_PLAYSTATS_LOBBY_STARTED>;
 			stats_table["PlaystatsCreatorEnd"] = sol::c_call<decltype(&base::menu::natives::STATS::_PLAYSTATS_CREATOR_END), &base::menu::natives::STATS::_PLAYSTATS_CREATOR_END>;
+			stats_table["PlaystatsHeist5Finale"] = sol::c_call<decltype(&base::menu::natives::STATS::_PLAYSTATS_HEIST5_FINALE), &base::menu::natives::STATS::_PLAYSTATS_HEIST5_FINALE>;
+			stats_table["PlaystatsHeist5Prep"] = sol::c_call<decltype(&base::menu::natives::STATS::_PLAYSTATS_HEIST5_PREP), &base::menu::natives::STATS::_PLAYSTATS_HEIST5_PREP>;
+			stats_table["PlaystatsHeist5Hack"] = sol::c_call<decltype(&base::menu::natives::STATS::_PLAYSTATS_HEIST5_HACK), &base::menu::natives::STATS::_PLAYSTATS_HEIST5_HACK>;
 
 			return stats_table;
 		}
@@ -5827,7 +5855,6 @@ namespace base::menu::natives {
 			streaming_table["AddModelToCreatorBudget"] = sol::c_call<decltype(&base::menu::natives::STREAMING::ADD_MODEL_TO_CREATOR_BUDGET), &base::menu::natives::STREAMING::ADD_MODEL_TO_CREATOR_BUDGET>;
 			streaming_table["RemoveModelFromCreatorBudget"] = sol::c_call<decltype(&base::menu::natives::STREAMING::REMOVE_MODEL_FROM_CREATOR_BUDGET), &base::menu::natives::STREAMING::REMOVE_MODEL_FROM_CREATOR_BUDGET>;
 			streaming_table["GetUsedCreatorBudget"] = sol::c_call<decltype(&base::menu::natives::STREAMING::GET_USED_CREATOR_BUDGET), &base::menu::natives::STREAMING::GET_USED_CREATOR_BUDGET>;
-			streaming_table["GetModelAdditionalCost"] = sol::c_call<decltype(&base::menu::natives::STREAMING::_GET_MODEL_ADDITIONAL_COST), &base::menu::natives::STREAMING::_GET_MODEL_ADDITIONAL_COST>;
 			streaming_table["GetTotalModelCost"] = sol::c_call<decltype(&base::menu::natives::STREAMING::_GET_TOTAL_MODEL_COST), &base::menu::natives::STREAMING::_GET_TOTAL_MODEL_COST>;
 			streaming_table["SetIslandEnabled"] = sol::c_call<decltype(&base::menu::natives::STREAMING::SET_ISLAND_ENABLED), &base::menu::natives::STREAMING::SET_ISLAND_ENABLED>;
 			streaming_table["SetSphericalStreamDistantHilodsThisFrame"] = sol::c_call<decltype(&base::menu::natives::STREAMING::_SET_SPHERICAL_STREAM_DISTANT_HILODS_THIS_FRAME), &base::menu::natives::STREAMING::_SET_SPHERICAL_STREAM_DISTANT_HILODS_THIS_FRAME>;
@@ -7045,6 +7072,7 @@ namespace base::menu::natives {
 			weapon_table["RequestWeaponAsset"] = sol::c_call<decltype(&base::menu::natives::WEAPON::REQUEST_WEAPON_ASSET), &base::menu::natives::WEAPON::REQUEST_WEAPON_ASSET>;
 			weapon_table["HasWeaponAssetLoaded"] = sol::c_call<decltype(&base::menu::natives::WEAPON::HAS_WEAPON_ASSET_LOADED), &base::menu::natives::WEAPON::HAS_WEAPON_ASSET_LOADED>;
 			weapon_table["RemoveWeaponAsset"] = sol::c_call<decltype(&base::menu::natives::WEAPON::REMOVE_WEAPON_ASSET), &base::menu::natives::WEAPON::REMOVE_WEAPON_ASSET>;
+			weapon_table["HasPedGotWeaponManager"] = sol::c_call<decltype(&base::menu::natives::WEAPON::HAS_PED_GOT_WEAPON_MANAGER), &base::menu::natives::WEAPON::HAS_PED_GOT_WEAPON_MANAGER>;
 			weapon_table["CreateWeaponObject"] = sol::c_call<decltype(&base::menu::natives::WEAPON::CREATE_WEAPON_OBJECT), &base::menu::natives::WEAPON::CREATE_WEAPON_OBJECT>;
 			weapon_table["GiveWeaponComponentToWeaponObject"] = sol::c_call<decltype(&base::menu::natives::WEAPON::GIVE_WEAPON_COMPONENT_TO_WEAPON_OBJECT), &base::menu::natives::WEAPON::GIVE_WEAPON_COMPONENT_TO_WEAPON_OBJECT>;
 			weapon_table["RemoveWeaponComponentFromWeaponObject"] = sol::c_call<decltype(&base::menu::natives::WEAPON::REMOVE_WEAPON_COMPONENT_FROM_WEAPON_OBJECT), &base::menu::natives::WEAPON::REMOVE_WEAPON_COMPONENT_FROM_WEAPON_OBJECT>;
@@ -7120,10 +7148,10 @@ namespace base::menu::natives {
 	sol::table register_natives(sol::state& lua) {
 		auto natives = lua.create_table();
 
-		natives["app"] = app::register_app(lua);
+		natives["apps"] = apps::register_apps(lua);
 		natives["audio"] = audio::register_audio(lua);
 		natives["brain"] = brain::register_brain(lua);
-		natives["cam"] = cam::register_cam(lua);
+		natives["camera"] = camera::register_camera(lua);
 		natives["clock"] = clock::register_clock(lua);
 		natives["cutscene"] = cutscene::register_cutscene(lua);
 		natives["datafile"] = datafile::register_datafile(lua);
@@ -7134,21 +7162,21 @@ namespace base::menu::natives {
 		natives["extrametadata"] = extrametadata::register_extrametadata(lua);
 		natives["fire"] = fire::register_fire(lua);
 		natives["graphics"] = graphics::register_graphics(lua);
+		natives["gta"] = gta::register_gta(lua);
 		natives["hud"] = hud::register_hud(lua);
 		natives["iis"] = iis::register_iis(lua);
 		natives["interior"] = interior::register_interior(lua);
-		natives["itemset"] = itemset::register_itemset(lua);
+		natives["itemsets"] = itemsets::register_itemsets(lua);
 		natives["landingpage"] = landingpage::register_landingpage(lua);
 		natives["lobby"] = lobby::register_lobby(lua);
 		natives["localization"] = localization::register_localization(lua);
 		natives["misc"] = misc::register_misc(lua);
-		natives["mobile"] = mobile::register_mobile(lua);
 		natives["money"] = money::register_money(lua);
 		natives["netshopping"] = netshopping::register_netshopping(lua);
 		natives["network"] = network::register_network(lua);
 		natives["object"] = object::register_object(lua);
 		natives["pad"] = pad::register_pad(lua);
-		natives["pathfind"] = pathfind::register_pathfind(lua);
+		natives["path"] = path::register_path(lua);
 		natives["ped"] = ped::register_ped(lua);
 		natives["physics"] = physics::register_physics(lua);
 		natives["player"] = player::register_player(lua);

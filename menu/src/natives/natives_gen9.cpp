@@ -8,7 +8,7 @@
 
 namespace base::menu::natives {
 
-	namespace APP {
+	namespace APPS {
 
 		bool APP_DATA_VALID() {
 			return Invoker::Invoke<bool, 400>();
@@ -78,7 +78,7 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 416>(appName);
 		}
 
-	} // namespace APP
+	} // namespace APPS
 
 	namespace AUDIO {
 
@@ -1256,7 +1256,7 @@ namespace base::menu::natives {
 
 	} // namespace BRAIN
 
-	namespace CAM {
+	namespace CAMERA {
 
 		void RENDER_SCRIPT_CAMS(bool render, bool ease, int easeTime, bool p3, bool p4, Any p5) {
 			Invoker::Invoke<void, 3789>(render, ease, easeTime, p3, p4, p5);
@@ -2250,7 +2250,7 @@ namespace base::menu::natives {
 			return Invoker::Invoke<float, 4034>();
 		}
 
-	} // namespace CAM
+	} // namespace CAMERA
 
 	namespace CLOCK {
 
@@ -3250,6 +3250,10 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 1944>(entity);
 		}
 
+		void _IS_ENTITY_FIXED(Entity entity) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _IS_ENTITY_FIXED");
+		}
+
 		void APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(Entity entity, int forceType, float x, float y, float z, bool p5, bool isDirectionRel, bool isForceRel, bool p8) {
 			Invoker::Invoke<void, 1945>(entity, forceType, x, y, z, p5, isDirectionRel, isForceRel, p8);
 		}
@@ -3346,8 +3350,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 1968>(entity, animDictionary, animName, speedMultiplier);
 		}
 
-		void SET_ENTITY_AS_MISSION_ENTITY(Entity entity, bool p1, bool p2) {
-			Invoker::Invoke<void, 1969>(entity, p1, p2);
+		void SET_ENTITY_AS_MISSION_ENTITY(Entity entity, bool bScriptHostObject, bool bGrabFromOtherScript) {
+			Invoker::Invoke<void, 1969>(entity, bScriptHostObject, bGrabFromOtherScript);
 		}
 
 		void SET_ENTITY_AS_NO_LONGER_NEEDED(Entity* entity) {
@@ -3498,6 +3502,10 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 2006>(entity, toggle);
 		}
 
+		void SET_ENTITY_DRAWABLE_LOD_THRESHOLDS(Entity entity, int highLod, int medLod, int lowLod, int vlowLod) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: SET_ENTITY_DRAWABLE_LOD_THRESHOLDS");
+		}
+
 		void SET_ENTITY_LOD_DIST(Entity entity, int value) {
 			Invoker::Invoke<void, 2007>(entity, value);
 		}
@@ -3644,6 +3652,10 @@ namespace base::menu::natives {
 
 		Entity GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY(Entity entity, Hash modelHash) {
 			return Invoker::Invoke<Entity, 2042>(entity, modelHash);
+		}
+
+		void _GET_CHILD_ATTACHMENT(Entity entity) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_CHILD_ATTACHMENT");
 		}
 
 		void SET_PICK_UP_BY_CARGOBOB_DISABLED(Entity entity, bool toggle) {
@@ -4058,6 +4070,14 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 1170>(toggle);
 		}
 
+		void _SET_BLEND_STATE_NORMAL() {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_BLEND_STATE_NORMAL");
+		}
+
+		void _SET_BLEND_STATE_ALPHA_ADDITIVE() {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _SET_BLEND_STATE_ALPHA_ADDITIVE");
+		}
+
 		bool BEGIN_TAKE_MISSION_CREATOR_PHOTO() {
 			return Invoker::Invoke<bool, 1171>();
 		}
@@ -4190,12 +4210,20 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 1203>(posX, posY, posZ, dirX, dirY, dirZ, colorR, colorG, colorB, distance, brightness, roundness, radius, falloff, shadowId);
 		}
 
+		void _DRAW_CAPSULE_LIGHT(float posX, float posY, float posZ, float dirX, float dirY, float dirZ, int colorR, int colorG, int colorB, float falloff, float intensity, float capsuleExtent, float exponent) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _DRAW_CAPSULE_LIGHT");
+		}
+
 		void FADE_UP_PED_LIGHT(float p0) {
 			Invoker::Invoke<void, 1204>(p0);
 		}
 
 		void UPDATE_LIGHTS_ON_ENTITY(Entity entity) {
 			Invoker::Invoke<void, 1205>(entity);
+		}
+
+		void _UPDATE_LIGHTS_LOCATION_FROM_ENTITY(Entity entity) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _UPDATE_LIGHTS_LOCATION_FROM_ENTITY");
 		}
 
 		void SET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE(Any p0) {
@@ -4216,6 +4244,14 @@ namespace base::menu::natives {
 
 		void DRAW_MARKER_SPHERE(float x, float y, float z, float radius, int red, int green, int blue, float alpha) {
 			Invoker::Invoke<void, 1210>(x, y, z, radius, red, green, blue, alpha);
+		}
+
+		void _DRAW_MARKER_GLOW(float x, float y, float z, float size, int red, int green, int blue, float intensity) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _DRAW_MARKER_GLOW");
+		}
+
+		void _MAKE_GLOWS_ADDITIVE(bool toggle) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _MAKE_GLOWS_ADDITIVE");
 		}
 
 		int CREATE_CHECKPOINT(int type, float posX1, float posY1, float posZ1, float posX2, float posY2, float posZ2, float diameter, int red, int green, int blue, int alpha, int reserved) {
@@ -4332,6 +4368,14 @@ namespace base::menu::natives {
 
 		void DRAW_SPRITE_ARX_WITH_UV(const char* textureDict, const char* textureName, float x, float y, float width, float height, float u1, float v1, float u2, float v2, float heading, int red, int green, int blue, int alpha, Any p15) {
 			Invoker::Invoke<void, 1239>(textureDict, textureName, x, y, width, height, u1, v1, u2, v2, heading, red, green, blue, alpha, p15);
+		}
+
+		void _CALCULATE_LINE_ORIENTATION_FROM_RENDERED_CAMERA(Vector3* result, float x1, float y1, float z1, float x2, float y2, float z2) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _CALCULATE_LINE_ORIENTATION_FROM_RENDERED_CAMERA");
+		}
+
+		void _CALCULATE_ROTATED_VECTOR(Vector3* direction, float roll, float pitch, float yaw) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _CALCULATE_ROTATED_VECTOR");
 		}
 
 		int ADD_ENTITY_ICON(Entity entity, const char* icon) {
@@ -5322,12 +5366,12 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 6690>(scaleformHandle, scaleformName);
 		}
 
-		bool IS_ACTIVE_SCALEFORM_MOVIE_DELETING(int val) {
-			return Invoker::Invoke<bool, 1484>(val);
+		bool IS_ACTIVE_SCALEFORM_MOVIE_DELETING(int scaleformHandle) {
+			return Invoker::Invoke<bool, 1484>(scaleformHandle);
 		}
 
-		bool IS_SCALEFORM_MOVIE_DELETING(int val) {
-			return Invoker::Invoke<bool, 1485>(val);
+		bool IS_SCALEFORM_MOVIE_DELETING(int scaleformHandle) {
+			return Invoker::Invoke<bool, 1485>(scaleformHandle);
 		}
 
 		bool HAS_SCALEFORM_MOVIE_FILENAME_LOADED(const char* scaleformName) {
@@ -5611,6 +5655,110 @@ namespace base::menu::natives {
 		}
 
 	} // namespace GRAPHICS
+
+	namespace GTA {
+
+		void CREATE_MOBILE_PHONE(int phoneType) {
+			Invoker::Invoke<void, 3172>(phoneType);
+		}
+
+		void DESTROY_MOBILE_PHONE() {
+			Invoker::Invoke<void, 3173>();
+		}
+
+		void SET_MOBILE_PHONE_SCALE(float scale) {
+			Invoker::Invoke<void, 3174>(scale);
+		}
+
+		void SET_MOBILE_PHONE_ROTATION(float rotX, float rotY, float rotZ, Any p3) {
+			Invoker::Invoke<void, 3175>(rotX, rotY, rotZ, p3);
+		}
+
+		void GET_MOBILE_PHONE_ROTATION(Vector3* rotation, Vehicle p1) {
+			Invoker::Invoke<void, 3176>(rotation, p1);
+		}
+
+		void SET_MOBILE_PHONE_POSITION(float posX, float posY, float posZ) {
+			Invoker::Invoke<void, 3177>(posX, posY, posZ);
+		}
+
+		void GET_MOBILE_PHONE_POSITION(Vector3* position) {
+			Invoker::Invoke<void, 3178>(position);
+		}
+
+		void SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN(bool toggle) {
+			Invoker::Invoke<void, 3179>(toggle);
+		}
+
+		bool CAN_PHONE_BE_SEEN_ON_SCREEN() {
+			return Invoker::Invoke<bool, 3180>();
+		}
+
+		void SET_MOBILE_PHONE_DOF_STATE(bool toggle) {
+			Invoker::Invoke<void, 3181>(toggle);
+		}
+
+		void CELL_SET_INPUT(int direction) {
+			Invoker::Invoke<void, 3182>(direction);
+		}
+
+		void CELL_HORIZONTAL_MODE_TOGGLE(bool toggle) {
+			Invoker::Invoke<void, 3183>(toggle);
+		}
+
+		void CELL_CAM_ACTIVATE(bool p0, bool p1) {
+			Invoker::Invoke<void, 3184>(p0, p1);
+		}
+
+		void CELL_CAM_ACTIVATE_SELFIE_MODE(bool toggle) {
+			Invoker::Invoke<void, 3185>(toggle);
+		}
+
+		void CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE(bool toggle) {
+			Invoker::Invoke<void, 3186>(toggle);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING(float p0) {
+			Invoker::Invoke<void, 3187>(p0);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET(float horizontalPan) {
+			Invoker::Invoke<void, 3188>(horizontalPan);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET(float vertPan) {
+			Invoker::Invoke<void, 3189>(vertPan);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET(float roll) {
+			Invoker::Invoke<void, 3190>(roll);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING(float distanceScaling) {
+			Invoker::Invoke<void, 3191>(distanceScaling);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET(float yaw) {
+			Invoker::Invoke<void, 3192>(yaw);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET(float roll) {
+			Invoker::Invoke<void, 3193>(roll);
+		}
+
+		void CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET(float pitch) {
+			Invoker::Invoke<void, 3194>(pitch);
+		}
+
+		bool CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK(Entity entity) {
+			return Invoker::Invoke<bool, 3195>(entity);
+		}
+
+		void GET_MOBILE_PHONE_RENDER_ID(int* renderId) {
+			Invoker::Invoke<void, 3196>(renderId);
+		}
+
+	} // namespace GTA
 
 	namespace HUD {
 
@@ -6240,6 +6388,10 @@ namespace base::menu::natives {
 
 		void SET_CUSTOM_MP_HUD_COLOR(int hudColorId) {
 			Invoker::Invoke<void, 6200>(hudColorId);
+		}
+
+		void GET_RENDERED_TEXT_PADDING_SIZE() {
+			LOG_ERROR("[NATIVES] Missing in crossmap: GET_RENDERED_TEXT_PADDING_SIZE");
 		}
 
 		float GET_RENDERED_CHARACTER_HEIGHT(float size, int font) {
@@ -6890,8 +7042,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 6359>();
 		}
 
-		void DISPLAY_HELP_TEXT_THIS_FRAME(const char* message, bool p1) {
-			Invoker::Invoke<void, 6360>(message, p1);
+		void DISPLAY_HELP_TEXT_THIS_FRAME(const char* message, bool curvedWindow) {
+			Invoker::Invoke<void, 6360>(message, curvedWindow);
 		}
 
 		void HUD_FORCE_WEAPON_WHEEL(bool show) {
@@ -7156,6 +7308,14 @@ namespace base::menu::natives {
 
 		bool IS_REPORTUGC_MENU_OPEN() {
 			return Invoker::Invoke<bool, 6424>();
+		}
+
+		void _REPORT_NOMINATED_JOB(const char* jobNominated, Any* p1) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _REPORT_NOMINATED_JOB");
+		}
+
+		void _GET_NOMINATED_JOB_REPORT_STATUS(int index) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _GET_NOMINATED_JOB_REPORT_STATUS");
 		}
 
 		bool IS_FLOATING_HELP_TEXT_ON_SCREEN(int hudIndex) {
@@ -7892,7 +8052,7 @@ namespace base::menu::natives {
 
 	} // namespace INTERIOR
 
-	namespace ITEMSET {
+	namespace ITEMSETS {
 
 		ScrHandle CREATE_ITEMSET(bool p0) {
 			return Invoker::Invoke<ScrHandle, 3257>(p0);
@@ -7930,7 +8090,7 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 3265>(itemset);
 		}
 
-	} // namespace ITEMSET
+	} // namespace ITEMSETS
 
 	namespace LANDINGPAGE {
 
@@ -8474,16 +8634,16 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 2476>();
 		}
 
-		int ADD_HOSPITAL_RESTART(float x, float y, float z, float p3, Any p4) {
-			return Invoker::Invoke<int, 2477>(x, y, z, p3, p4);
+		int ADD_HOSPITAL_RESTART(float x, float y, float z, float heading, int whenToUse) {
+			return Invoker::Invoke<int, 2477>(x, y, z, heading, whenToUse);
 		}
 
 		void DISABLE_HOSPITAL_RESTART(int hospitalIndex, bool toggle) {
 			Invoker::Invoke<void, 2478>(hospitalIndex, toggle);
 		}
 
-		int ADD_POLICE_RESTART(float p0, float p1, float p2, float p3, Any p4) {
-			return Invoker::Invoke<int, 2479>(p0, p1, p2, p3, p4);
+		int ADD_POLICE_RESTART(float x, float y, float z, float heading, int whenToUse) {
+			return Invoker::Invoke<int, 2479>(x, y, z, heading, whenToUse);
 		}
 
 		void DISABLE_POLICE_RESTART(int policeIndex, bool toggle) {
@@ -8734,8 +8894,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 2541>(x1, y1, z1, x2, y2, z2, ownedByPlayer);
 		}
 
-		bool HAS_BULLET_IMPACTED_IN_AREA(float x, float y, float z, float p3, bool p4, bool p5) {
-			return Invoker::Invoke<bool, 2542>(x, y, z, p3, p4, p5);
+		bool HAS_BULLET_IMPACTED_IN_AREA(float x, float y, float z, float radius, bool bIsPlayer, bool bIsEntry) {
+			return Invoker::Invoke<bool, 2542>(x, y, z, radius, bIsPlayer, bIsEntry);
 		}
 
 		bool HAS_BULLET_IMPACTED_IN_BOX(float p0, float p1, float p2, float p3, float p4, float p5, bool p6, bool p7) {
@@ -8886,8 +9046,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 2578>(p0);
 		}
 
-		void SET_INSTANCE_PRIORITY_MODE(int p0) {
-			Invoker::Invoke<void, 2579>(p0);
+		void SET_INSTANCE_PRIORITY_MODE(int mode) {
+			Invoker::Invoke<void, 2579>(mode);
 		}
 
 		void SET_INSTANCE_PRIORITY_HINT(int flag) {
@@ -9387,110 +9547,6 @@ namespace base::menu::natives {
 		}
 
 	} // namespace MISC
-
-	namespace MOBILE {
-
-		void CREATE_MOBILE_PHONE(int phoneType) {
-			Invoker::Invoke<void, 3172>(phoneType);
-		}
-
-		void DESTROY_MOBILE_PHONE() {
-			Invoker::Invoke<void, 3173>();
-		}
-
-		void SET_MOBILE_PHONE_SCALE(float scale) {
-			Invoker::Invoke<void, 3174>(scale);
-		}
-
-		void SET_MOBILE_PHONE_ROTATION(float rotX, float rotY, float rotZ, Any p3) {
-			Invoker::Invoke<void, 3175>(rotX, rotY, rotZ, p3);
-		}
-
-		void GET_MOBILE_PHONE_ROTATION(Vector3* rotation, Vehicle p1) {
-			Invoker::Invoke<void, 3176>(rotation, p1);
-		}
-
-		void SET_MOBILE_PHONE_POSITION(float posX, float posY, float posZ) {
-			Invoker::Invoke<void, 3177>(posX, posY, posZ);
-		}
-
-		void GET_MOBILE_PHONE_POSITION(Vector3* position) {
-			Invoker::Invoke<void, 3178>(position);
-		}
-
-		void SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN(bool toggle) {
-			Invoker::Invoke<void, 3179>(toggle);
-		}
-
-		bool CAN_PHONE_BE_SEEN_ON_SCREEN() {
-			return Invoker::Invoke<bool, 3180>();
-		}
-
-		void SET_MOBILE_PHONE_DOF_STATE(bool toggle) {
-			Invoker::Invoke<void, 3181>(toggle);
-		}
-
-		void CELL_SET_INPUT(int direction) {
-			Invoker::Invoke<void, 3182>(direction);
-		}
-
-		void CELL_HORIZONTAL_MODE_TOGGLE(bool toggle) {
-			Invoker::Invoke<void, 3183>(toggle);
-		}
-
-		void CELL_CAM_ACTIVATE(bool p0, bool p1) {
-			Invoker::Invoke<void, 3184>(p0, p1);
-		}
-
-		void CELL_CAM_ACTIVATE_SELFIE_MODE(bool toggle) {
-			Invoker::Invoke<void, 3185>(toggle);
-		}
-
-		void CELL_CAM_ACTIVATE_SHALLOW_DOF_MODE(bool toggle) {
-			Invoker::Invoke<void, 3186>(toggle);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_SIDE_OFFSET_SCALING(float p0) {
-			Invoker::Invoke<void, 3187>(p0);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_HORZ_PAN_OFFSET(float horizontalPan) {
-			Invoker::Invoke<void, 3188>(horizontalPan);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_VERT_PAN_OFFSET(float vertPan) {
-			Invoker::Invoke<void, 3189>(vertPan);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_ROLL_OFFSET(float roll) {
-			Invoker::Invoke<void, 3190>(roll);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_DISTANCE_SCALING(float distanceScaling) {
-			Invoker::Invoke<void, 3191>(distanceScaling);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_HEAD_YAW_OFFSET(float yaw) {
-			Invoker::Invoke<void, 3192>(yaw);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_HEAD_ROLL_OFFSET(float roll) {
-			Invoker::Invoke<void, 3193>(roll);
-		}
-
-		void CELL_CAM_SET_SELFIE_MODE_HEAD_PITCH_OFFSET(float pitch) {
-			Invoker::Invoke<void, 3194>(pitch);
-		}
-
-		bool CELL_CAM_IS_CHAR_VISIBLE_NO_FACE_CHECK(Entity entity) {
-			return Invoker::Invoke<bool, 3195>(entity);
-		}
-
-		void GET_MOBILE_PHONE_RENDER_ID(int* renderId) {
-			Invoker::Invoke<void, 3196>(renderId);
-		}
-
-	} // namespace MOBILE
 
 	namespace MONEY {
 
@@ -10918,6 +10974,18 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 5188>(p0);
 		}
 
+		void _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_100M() {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_100M");
+		}
+
+		void _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_500M() {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_500M");
+		}
+
+		void _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_1B() {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_GET_TOTAL_EVC_BALANCE_IS_GREATER_THAN_1B");
+		}
+
 		bool NETWORK_GET_MP_WINDFALL_AVAILABLE() {
 			return Invoker::Invoke<bool, 6665>();
 		}
@@ -11606,7 +11674,7 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 5310>();
 		}
 
-		bool _NETWORK_IS_AMERICAS_VERSION() {
+		bool _0x0292BD7F3766CEBC() {
 			return Invoker::Invoke<bool, 5311>();
 		}
 
@@ -13870,6 +13938,10 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 5850>(entity, x, y, z, heading);
 		}
 
+		void _NETWORK_ALLOW_DEAD_PED_NETWORK_BLENDING(int netId, bool allow) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _NETWORK_ALLOW_DEAD_PED_NETWORK_BLENDING");
+		}
+
 		void NETWORK_ENABLE_EXTRA_VEHICLE_ORIENTATION_BLEND_CHECKS(int netId, bool toggle) {
 			Invoker::Invoke<void, 5851>(netId, toggle);
 		}
@@ -14126,6 +14198,10 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 5913>(p0, p1, p2, p3);
 		}
 
+		void _UGC_GET_NOMINATED_CONTENT(int offset, int maxCount, const char* contentTypeName, Any* p3) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _UGC_GET_NOMINATED_CONTENT");
+		}
+
 		void UGC_CANCEL_QUERY() {
 			Invoker::Invoke<void, 5914>();
 		}
@@ -14312,6 +14388,14 @@ namespace base::menu::natives {
 
 		bool UGC_SET_BOOKMARKED(const char* contentId, bool bookmarked, const char* contentTypeName) {
 			return Invoker::Invoke<bool, 5959>(contentId, bookmarked, contentTypeName);
+		}
+
+		void _UGC_SET_NOMINATED_JOB(const char* contentId, bool nominated, const char* contentTypeName) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _UGC_SET_NOMINATED_JOB");
+		}
+
+		void _UGC_CLEAR_NOMINATED_JOB(const char* contentTypeName) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _UGC_CLEAR_NOMINATED_JOB");
 		}
 
 		bool UGC_SET_DELETED(Any* p0, bool p1, const char* p2) {
@@ -15532,7 +15616,7 @@ namespace base::menu::natives {
 
 	} // namespace PAD
 
-	namespace PATHFIND {
+	namespace PATH {
 
 		void SET_ROADS_IN_AREA(float x1, float y1, float z1, float x2, float y2, float z2, bool nodeEnabled, bool unknown2) {
 			Invoker::Invoke<void, 3197>(x1, y1, z1, x2, y2, z2, nodeEnabled, unknown2);
@@ -15574,8 +15658,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 3206>(x, y, z, nthClosest, outPosition, outHeading, outNumLanes, nodeFlags, unknown3, unknown4);
 		}
 
-		int GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING(float x, float y, float z, int nthClosest, Vector3* outPosition, float* outHeading, int nodeFlags, float p7, float p8) {
-			return Invoker::Invoke<int, 3207>(x, y, z, nthClosest, outPosition, outHeading, nodeFlags, p7, p8);
+		int GET_NTH_CLOSEST_VEHICLE_NODE_ID_WITH_HEADING(float x, float y, float z, int nthClosest, float* outHeading, int* outNumLanes, int nodeFlags, float zMeasureMult, float zTolerance) {
+			return Invoker::Invoke<int, 3207>(x, y, z, nthClosest, outHeading, outNumLanes, nodeFlags, zMeasureMult, zTolerance);
 		}
 
 		bool GET_NTH_CLOSEST_VEHICLE_NODE_FAVOUR_DIRECTION(float x, float y, float z, float desiredX, float desiredY, float desiredZ, int nthClosest, Vector3* outPosition, float* outHeading, int nodeFlags, float p10, float p11) {
@@ -15606,8 +15690,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 3214>(x, y, z, p3, p4, p5, p6, p7, p8, p9, p10);
 		}
 
-		bool LOAD_ALL_PATH_NODES(bool set) {
-			return Invoker::Invoke<bool, 3215>(set);
+		bool LOAD_ALL_PATH_NODES(bool bLoadAll) {
+			return Invoker::Invoke<bool, 3215>(bLoadAll);
 		}
 
 		void SET_ALLOW_STREAM_PROLOGUE_NODES(bool toggle) {
@@ -15774,7 +15858,7 @@ namespace base::menu::natives {
 			return Invoker::Invoke<float, 3256>(x1, y1, z1, x2, y2, z2);
 		}
 
-	} // namespace PATHFIND
+	} // namespace PATH
 
 	namespace PED {
 
@@ -15830,8 +15914,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 429>(ped);
 		}
 
-		bool IS_PED_DEAD_OR_DYING(Ped ped, bool p1) {
-			return Invoker::Invoke<bool, 430>(ped, p1);
+		bool IS_PED_DEAD_OR_DYING(Ped ped, bool checkMeleeDeathFlags) {
+			return Invoker::Invoke<bool, 430>(ped, checkMeleeDeathFlags);
 		}
 
 		bool IS_CONVERSATION_PED_DEAD(Ped ped) {
@@ -16498,8 +16582,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 595>(group, p1);
 		}
 
-		void TELL_GROUP_PEDS_IN_AREA_TO_ATTACK(Ped ped, Any p1, float p2, Hash hash, Any p4, Any p5) {
-			Invoker::Invoke<void, 596>(ped, p1, p2, hash, p4, p5);
+		void TELL_GROUP_PEDS_IN_AREA_TO_ATTACK(Ped ped, float x, float y, float z, float radius, Hash hash) {
+			Invoker::Invoke<void, 596>(ped, x, y, z, radius, hash);
 		}
 
 		void SET_PED_CAN_BE_TARGETED_WITHOUT_LOS(Ped ped, bool toggle) {
@@ -16584,6 +16668,10 @@ namespace base::menu::natives {
 
 		void APPLY_DAMAGE_TO_PED(Ped ped, int damageAmount, bool p2, Any p3, Hash weaponType) {
 			Invoker::Invoke<void, 616>(ped, damageAmount, p2, p3, weaponType);
+		}
+
+		void _GENERATE_PED_DAMAGE_EVENT(Ped ped, float x, float y, float z, Hash weaponType) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _GENERATE_PED_DAMAGE_EVENT");
 		}
 
 		int GET_TIME_PED_DAMAGED_BY_WEAPON(Ped ped, Hash weaponHash) {
@@ -17594,6 +17682,10 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 867>(ped, toggle);
 		}
 
+		void _BLOCK_PED_FROM_WRITHING_WHEN_INJURED(Ped ped, bool toggle) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _BLOCK_PED_FROM_WRITHING_WHEN_INJURED");
+		}
+
 		void SET_PED_GENERATES_DEAD_BODY_EVENTS(Ped ped, bool toggle) {
 			Invoker::Invoke<void, 868>(ped, toggle);
 		}
@@ -18490,8 +18582,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<Vector3, 1569>(player);
 		}
 
-		void SET_PLAYER_WANTED_CENTRE_POSITION(Player player, Vector3* position, bool p2, bool p3) {
-			Invoker::Invoke<void, 1570>(player, position, p2, p3);
+		void SET_PLAYER_WANTED_CENTRE_POSITION(Player player, float x, float y, float z) {
+			Invoker::Invoke<void, 1570>(player, x, y, z);
 		}
 
 		int GET_WANTED_LEVEL_THRESHOLD(int wantedLevel) {
@@ -19002,6 +19094,10 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 1697>(player, toggle);
 		}
 
+		void SET_PLAYER_STEALTH_SPEED(Player player, int stealthSpeed) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: SET_PLAYER_STEALTH_SPEED");
+		}
+
 		void SET_PLAYER_MAX_ARMOUR(Player player, int value) {
 			Invoker::Invoke<void, 1698>(player, value);
 		}
@@ -19236,6 +19332,10 @@ namespace base::menu::natives {
 
 		void GET_PLAYER_PARACHUTE_SMOKE_TRAIL_COLOR(Player player, int* r, int* g, int* b) {
 			Invoker::Invoke<void, 1756>(player, r, g, b);
+		}
+
+		void SET_PLAYER_RESET_FLAG_PREFER_REAR_SEATS(Player player, Vehicle vehicle) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: SET_PLAYER_RESET_FLAG_PREFER_REAR_SEATS");
 		}
 
 		void SET_PLAYER_PHONE_PALETTE_IDX(Player player, int idx) {
@@ -21506,6 +21606,18 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 6600>(p0);
 		}
 
+		void _PLAYSTATS_HEIST5_FINALE(Any* data) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_HEIST5_FINALE");
+		}
+
+		void _PLAYSTATS_HEIST5_PREP(Any* data) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_HEIST5_PREP");
+		}
+
+		void _PLAYSTATS_HEIST5_HACK(Any* data) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: _PLAYSTATS_HEIST5_HACK");
+		}
+
 	} // namespace STATS
 
 	namespace STREAMING {
@@ -21984,10 +22096,6 @@ namespace base::menu::natives {
 
 		float GET_USED_CREATOR_BUDGET() {
 			return Invoker::Invoke<float, 2811>();
-		}
-
-		float _GET_MODEL_ADDITIONAL_COST(Hash modelHash) {
-			return Invoker::Invoke<float, 6599>(modelHash);
 		}
 
 		float _GET_TOTAL_MODEL_COST(Hash modelHash) {
@@ -23878,7 +23986,7 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 4185>(vehicle, trailer, radius);
 		}
 
-		void ATTACH_VEHICLE_ON_TO_TRAILER(Vehicle vehicle, Vehicle trailer, float offsetX, float offsetY, float offsetZ, float coordsX, float coordsY, float coordsZ, float rotationX, float rotationY, float rotationZ, float disableCollisions) {
+		void ATTACH_VEHICLE_ON_TO_TRAILER(Vehicle vehicle, Vehicle trailer, float offsetX, float offsetY, float offsetZ, float coordsX, float coordsY, float coordsZ, float rotationX, float rotationY, float rotationZ, bool disableCollisions) {
 			Invoker::Invoke<void, 4186>(vehicle, trailer, offsetX, offsetY, offsetZ, coordsX, coordsY, coordsZ, rotationX, rotationY, rotationZ, disableCollisions);
 		}
 
@@ -23894,8 +24002,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<bool, 4189>(vehicle);
 		}
 
-		void SET_TRAILER_INVERSE_MASS_SCALE(Vehicle vehicle, float p1) {
-			Invoker::Invoke<void, 4190>(vehicle, p1);
+		void SET_TRAILER_INVERSE_MASS_SCALE(Vehicle vehicle, float scale) {
+			Invoker::Invoke<void, 4190>(vehicle, scale);
 		}
 
 		void SET_TRAILER_LEGS_RAISED(Vehicle vehicle) {
@@ -26466,16 +26574,16 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 290>(ped, weaponHash, bForceInHand);
 		}
 
-		bool GET_CURRENT_PED_WEAPON(Ped ped, Hash* weaponHash, bool p2) {
-			return Invoker::Invoke<bool, 291>(ped, weaponHash, p2);
+		bool GET_CURRENT_PED_WEAPON(Ped ped, Hash* weaponHash, bool doDeadCheck) {
+			return Invoker::Invoke<bool, 291>(ped, weaponHash, doDeadCheck);
 		}
 
-		Entity GET_CURRENT_PED_WEAPON_ENTITY_INDEX(Ped ped, Any p1) {
-			return Invoker::Invoke<Entity, 292>(ped, p1);
+		Entity GET_CURRENT_PED_WEAPON_ENTITY_INDEX(Ped ped, bool doDeadCheck) {
+			return Invoker::Invoke<Entity, 292>(ped, doDeadCheck);
 		}
 
-		Hash GET_BEST_PED_WEAPON(Ped ped, bool p1) {
-			return Invoker::Invoke<Hash, 293>(ped, p1);
+		Hash GET_BEST_PED_WEAPON(Ped ped, bool bIgnoreAmmoCheck) {
+			return Invoker::Invoke<Hash, 293>(ped, bIgnoreAmmoCheck);
 		}
 
 		bool SET_CURRENT_PED_VEHICLE_WEAPON(Ped ped, Hash weaponHash) {
@@ -26670,8 +26778,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<Hash, 336>(ped);
 		}
 
-		void EXPLODE_PROJECTILES(Ped ped, Hash weaponHash, bool p2) {
-			Invoker::Invoke<void, 337>(ped, weaponHash, p2);
+		void EXPLODE_PROJECTILES(Ped ped, Hash weaponHash, bool instant) {
+			Invoker::Invoke<void, 337>(ped, weaponHash, instant);
 		}
 
 		void REMOVE_ALL_PROJECTILES_OF_TYPE(Hash weaponHash, bool explode) {
@@ -26728,6 +26836,10 @@ namespace base::menu::natives {
 
 		void REMOVE_WEAPON_ASSET(Hash weaponHash) {
 			Invoker::Invoke<void, 350>(weaponHash);
+		}
+
+		void HAS_PED_GOT_WEAPON_MANAGER(Ped ped) {
+			LOG_ERROR("[NATIVES] Missing in crossmap: HAS_PED_GOT_WEAPON_MANAGER");
 		}
 
 		Object CREATE_WEAPON_OBJECT(Hash weaponHash, int ammoCount, float x, float y, float z, bool showWorldModel, float scale, Any p7, Any p8, Any p9) {

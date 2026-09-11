@@ -23,6 +23,13 @@ add_subdirectory(rage)
 add_subdirectory(menu)
 add_subdirectory(injector)
 
+# Standalone developer tools. Off by default would be surprising; opt out to skip the
+# curl download cpr needs (it does not go through CPM_SOURCE_CACHE).
+option(BASE_BUILD_TOOLS "Build standalone developer tools" ON)
+if (BASE_BUILD_TOOLS)
+    add_subdirectory(tools)
+endif ()
+
 include(cmake_scripts/code_coverage.cmake)
 if (OPENCPPCOVERAGE_EXECUTABLE)
     set(COVERAGE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/coverage")

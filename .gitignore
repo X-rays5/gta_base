@@ -9,5 +9,8 @@
 
 .vendor
 
-native_gen/*.cpp
-native_gen/*.hpp
+tools/native_gen/*.cache.json
+
+# native_gen logs through base::common, whose log directory is relative to the working
+# directory, so running it from the repo root leaves logs here.
+/logs/

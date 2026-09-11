@@ -11,7 +11,10 @@
 namespace base::common::logging {
   class Manager {
   public:
-    Manager();
+    // Pass false from a console application that already owns a console. It skips the
+    // stdout sink, and with it EnsureConsole/FreeConsole, which can only fail for a process
+    // that is already attached to a console - a failure Init treats as fatal.
+    explicit Manager(bool console_sink = true);
     ~Manager();
 
     static void Shutdown() noexcept;

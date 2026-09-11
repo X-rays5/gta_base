@@ -20,6 +20,10 @@ namespace base::common::logging {
   namespace {
     std::atomic<bool> LOGGER_EXISTS = false;
 
+    // Manager is a singleton, so the console sink choice is process wide. A console
+    // application that already owns a console cannot use EnsureConsole and must pass false.
+    std::atomic<bool> CONSOLE_SINK = true;
+
     bool SetConsoleMode(const HANDLE console_handle) {
       DWORD console_mode{};
       if (!GetConsoleMode(console_handle, &console_mode)) {
@@ -82,10 +86,12 @@ namespace base::common::logging {
     }
 
     std::shared_ptr<spdlog::async_logger> SetupLoggerInst(const std::string& logger_name) {
-      const auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-      const auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(GetLogFile().string());
+      std::vector<spdlog::sink_ptr> sinks;
+      if (CONSOLE_SINK) {
+        sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
+      }
+      sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(GetLogFile().string()));
 
-      std::vector<spdlog::sink_ptr> sinks{console_sink, file_sink};
       auto logger = std::make_shared<spdlog::async_logger>(logger_name, sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
 
       logger->set_level(spdlog::level::trace);
@@ -110,12 +116,13 @@ namespace base::common::logging {
     }
   }
 
-  Manager::Manager() {
+  Manager::Manager(const bool console_sink) {
     if (LOGGER_EXISTS) {
       MessageBox(nullptr, xorstr_("Logger already exists."), xorstr_("Critical logging error"), MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
       abort();
     }
 
+    CONSOLE_SINK = console_sink;
     LOGGER_EXISTS = true;
     Init();
   }
@@ -126,7 +133,10 @@ namespace base::common::logging {
   }
 
   void Manager::Init() {
-    if (!EnsureConsole()) {
+    // The console lifecycle only exists to serve the console sink. A process that already
+    // owns a console fails both AttachConsole and AllocConsole, so it must skip this
+    // entirely rather than be treated as a fatal error.
+    if (CONSOLE_SINK && !EnsureConsole()) {
       MessageBoxA(nullptr, xorstr_("There was an error creating/obtaining a console window."), xorstr_("Critical logging error"), MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
       abort();
     }
@@ -152,7 +162,9 @@ namespace base::common::logging {
     spdlog::drop_all();
     spdlog::shutdown();
 
-    FreeConsole();
+    if (CONSOLE_SINK) {
+      FreeConsole();
+    }
 
     try {
       if (const auto log_file = GetLogFile(); std::filesystem::exists(log_file)) {

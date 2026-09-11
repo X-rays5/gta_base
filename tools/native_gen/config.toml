@@ -1,0 +1,31 @@
+# Settings for the native code generator. Every key is optional - the values below are the
+# built-in defaults, repeated here so the available knobs are discoverable.
+# Relative paths resolve against the repository root.
+
+[natives]
+# Where the GTA5 native database comes from. Fetched once and cached; --refresh re-fetches.
+url = "https://raw.githubusercontent.com/alloc8or/gta5-nativedb-data/master/natives_gen9.json"
+# The raw response body, word for word. Delete it to force a clean download.
+cache_file = "tools/native_gen/natives_gen9.cache.json"
+timeout_seconds = 10
+
+[output]
+# Directory the generated files land in. Overridable with --out-dir.
+dir = "menu/src/natives"
+# "crlf" reproduces what the previous Python generator wrote; "lf" for LF-only checkouts.
+line_ending = "crlf"
+
+[generation]
+base_namespace = "base::menu::natives"
+invoker_function = "Invoker::Invoke"
+log_native_error_func = "LOG_ERROR"
+# Literal strings, so the quotes inside need no escaping. Keep arrays on a single line -
+# the TOML parser does not accept them spread across lines.
+header_includes = ['#include "../game/native_types.hpp"', '#include "invoker.hpp"']
+# Groups left out of every generated file. Matched case-insensitively.
+excluded_groups = ["BUILTIN"]
+
+[crossmap]
+# Native hash -> build-specific index. One "hash,index_hash" pair per line, '#' for comments.
+file = "tools/native_gen/crossmap.txt"
+enabled = true
