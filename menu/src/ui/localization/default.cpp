@@ -22,6 +22,7 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("info/hotkey_able", "Press F12 to set a hotkey for this option")
 
     ADD_TRANSLATION("label/scripts", "Scripts")
+    ADD_TRANSLATION("label/no_scripts_found", "No scripts found")
     ADD_TRANSLATION("label/script_info", "Script Info")
     ADD_TRANSLATION("label/script_name", "Name")
     ADD_TRANSLATION("label/script_main_file", "Main file")
@@ -31,7 +32,14 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("label/script_version", "Version")
     ADD_TRANSLATION("label/script_repository", "Repository")
     ADD_TRANSLATION("label/script_license", "License")
+    ADD_TRANSLATION("label/script_state", "State")
+    ADD_TRANSLATION("label/script_state/not_loaded", "Not loaded")
+    ADD_TRANSLATION("label/script_state/loaded", "Loaded")
+    ADD_TRANSLATION("label/script_state/running", "Running")
+    ADD_TRANSLATION("label/script_state/suspended", "Suspended")
     ADD_TRANSLATION("ui/action/run_script", "Run Script")
+    ADD_TRANSLATION("ui/action/load_script", "Load Script")
+    ADD_TRANSLATION("ui/action/unload_script", "Unload Script")
 
     ADD_TRANSLATION("ui/hotkey", "Hotkey")
     ADD_TRANSLATION("ui/hotkey/press_key", "Press a key on the keyboard to bind the hotkey, or wait 5 seconds to cancel")
@@ -61,6 +69,7 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/action/vehicle_repair", "Repair Vehicle")
 
     ADD_TRANSLATION("ui/sub/lua", "Lua Scripts")
+    ADD_TRANSLATION("ui/sub/as", "AngelScript Scripts")
 
     ADD_TRANSLATION("ui/sub/settings", "Settings")
     ADD_TRANSLATION("ui/sub/hotkeys", "Hotkeys")

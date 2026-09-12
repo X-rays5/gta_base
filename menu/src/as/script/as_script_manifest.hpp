@@ -5,9 +5,9 @@
 #pragma once
 
 namespace base::menu::as::script {
-  class ScriptMetaData {
+  class ScriptManifest {
   public:
-    explicit ScriptMetaData(const std::filesystem::path& path);
+    explicit ScriptManifest(const std::filesystem::path& path);
 
     Status ReadMetaData();
 

@@ -16,7 +16,8 @@ namespace base::common::util::result {
     kNOT_FOUND,
     kIO_ERROR,
     kINTERNAL_ERROR,
-    kALLOCATION_ERROR
+    kALLOCATION_ERROR,
+    kALREADY_EXISTS
   };
 
   class StatusErr {

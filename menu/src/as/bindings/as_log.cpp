@@ -4,33 +4,14 @@
 
 #include "as_log.hpp"
 #include "../util/as_bind.hpp"
+#include "../util/as_script_logger.hpp"
 #include "../util/as_util.hpp"
 
 #include <fmt/args.h>
 
 namespace base::menu::as::bindings::log {
   namespace {
-    std::string FormatASVariadicArgs(AngelScript::asIScriptGeneric* gen, const bool format_only = false) {
-      static std::string base_msg = "[{}:{}:{}] {}";
-
-      std::string script_file = "unknown";
-      int line_number = 0;
-      std::string script_name = "unknown";
-
-      AngelScript::asIScriptContext* ctx = AngelScript::asGetActiveContext();
-      if (ctx) {
-        const char* section_name = nullptr;
-        line_number = ctx->GetLineNumber(0, nullptr, &section_name);
-        if (section_name) {
-          script_file = section_name;
-        }
-
-        const AngelScript::asIScriptFunction* func = ctx->GetFunction(0);
-        if (func && func->GetModule()) {
-          script_name = func->GetModule()->GetName();
-        }
-      }
-
+    std::string FormatASPayload(AngelScript::asIScriptGeneric* gen) {
       // Format string is argument 0
       const auto* fmt_ptr = static_cast<std::string*>(gen->GetArgAddress(0));
       const std::string format = fmt_ptr ? *fmt_ptr : "";
@@ -44,27 +25,35 @@ namespace base::menu::as::bindings::log {
         ds.push_back(util::ArgToString(gen, i, typeId));
       }
 
-      std::string formatted_payload;
       if (ds.size() > 0) {
         try {
-          formatted_payload = fmt::vformat(format, ds);
+          return fmt::vformat(format, ds);
         } catch (const std::exception& e) {
-          formatted_payload = fmt::format("{} [Format Error: {}]", format, e.what());
+          return fmt::format("{} [Format Error: {}]", format, e.what());
         }
-      } else {
-        formatted_payload = format;
       }
 
-      return fmt::format(fmt::runtime(format_only ? "{}" : base_msg), script_name, script_file, line_number, formatted_payload);
+      return format;
     }
 
-    void LogInfoGeneric(AngelScript::asIScriptGeneric* gen)  { LOG_INFO(FormatASVariadicArgs(gen)); }
-    void LogWarnGeneric(AngelScript::asIScriptGeneric* gen)  { LOG_WARN(FormatASVariadicArgs(gen)); }
-    void LogErrorGeneric(AngelScript::asIScriptGeneric* gen) { LOG_ERROR(FormatASVariadicArgs(gen)); }
-    void LogDebugGeneric(AngelScript::asIScriptGeneric* gen) { LOG_DEBUG(FormatASVariadicArgs(gen)); }
+    // The script and the line around each of these are the logger's business, not the message's:
+    // the logger is the script's own, and it is what records where in the script the line came from.
+    void LogInfoGeneric(AngelScript::asIScriptGeneric* gen)  { util::LogFromScript(spdlog::level::info, FormatASPayload(gen)); }
+    void LogWarnGeneric(AngelScript::asIScriptGeneric* gen)  { util::LogFromScript(spdlog::level::warn, FormatASPayload(gen)); }
+    void LogErrorGeneric(AngelScript::asIScriptGeneric* gen) { util::LogFromScript(spdlog::level::err, FormatASPayload(gen)); }
+
+    // log::debug is a no-op in a release build, as LOG_DEBUG is, and the message is not built at
+    // all - which is why this one carries the guard the other three do not need.
+    void LogDebugGeneric(AngelScript::asIScriptGeneric* gen) {
+#ifndef NDEBUG
+      util::LogFromScript(spdlog::level::debug, FormatASPayload(gen));
+#else
+      static_cast<void>(gen);
+#endif
+    }
 
     void FormatGeneric(AngelScript::asIScriptGeneric* gen) {
-      std::string result = FormatASVariadicArgs(gen, true);
+      std::string result = FormatASPayload(gen);
 
       auto* retPtr = static_cast<std::string*>(gen->GetAddressOfReturnLocation());
       if (retPtr) {
@@ -82,33 +71,36 @@ namespace base::menu::as::bindings::log {
 
     // Docs are keyed by name, so only one overload of each function carries them.
 
+    // Each of these writes to the script's own log, logs/scripts/<script name>/<script name>.log,
+    // and to the console, and every line records the script file and line it was logged from.
+
     // info
     util::RegisterGlobalFunction(engine, "void info(const std::string &in)", asFUNCTION(LogInfoGeneric), AngelScript::asCALL_GENERIC)
-      .Desc("Logs an informational message to the menu console.")
+      .Desc("Logs an informational message to the script's own log file and to the console.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
     util::RegisterGlobalFunction(engine, "void info(const std::string &in, const ?&in...)", asFUNCTION(LogInfoGeneric), AngelScript::asCALL_GENERIC);
 
     // warn
     util::RegisterGlobalFunction(engine, "void warn(const std::string &in)", asFUNCTION(LogWarnGeneric), AngelScript::asCALL_GENERIC)
-      .Desc("Logs a warning to the menu console.")
+      .Desc("Logs a warning to the script's own log file and to the console.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
     util::RegisterGlobalFunction(engine, "void warn(const std::string &in, const ?&in...)", asFUNCTION(LogWarnGeneric), AngelScript::asCALL_GENERIC);
 
     // error
     util::RegisterGlobalFunction(engine, "void error(const std::string &in)", asFUNCTION(LogErrorGeneric), AngelScript::asCALL_GENERIC)
-      .Desc("Logs an error to the menu console.")
+      .Desc("Logs an error to the script's own log file and to the console.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
     util::RegisterGlobalFunction(engine, "void error(const std::string &in, const ?&in...)", asFUNCTION(LogErrorGeneric), AngelScript::asCALL_GENERIC);
 
     // debug
     util::RegisterGlobalFunction(engine, "void debug(const std::string &in)", asFUNCTION(LogDebugGeneric), AngelScript::asCALL_GENERIC)
-      .Desc("Logs a debug message to the menu console, which is only written when debug logging is enabled.")
+      .Desc("Logs a debug message to the script's own log file and to the console, which is only written when debug logging is enabled.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
     util::RegisterGlobalFunction(engine, "void debug(const std::string &in, const ?&in...)", asFUNCTION(LogDebugGeneric), AngelScript::asCALL_GENERIC);
 
     // format
     util::RegisterGlobalFunction(engine, "std::string format(const std::string &in)", asFUNCTION(FormatGeneric), AngelScript::asCALL_GENERIC)
-      .Desc("Formats a message the same way the log functions do, without writing it to the console.")
+      .Desc("Formats a message the same way the log functions do, without writing it anywhere.")
       .Param("in", "The format string. Placeholders are replaced by the trailing arguments.")
       .Returns("The formatted message.");
     util::RegisterGlobalFunction(engine, "std::string format(const std::string &in, const ?&in...)", asFUNCTION(FormatGeneric), AngelScript::asCALL_GENERIC);

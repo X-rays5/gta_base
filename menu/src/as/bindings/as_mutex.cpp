@@ -58,7 +58,7 @@ namespace base::menu::as::bindings::mutex {
         // Contended, so this call would have to wait for another script to release it - and a script
         // that is not a coroutine has nothing to park. Blocking the thread instead would stall the
         // frame on a lock only a suspended script can ever release, so this is refused as loudly as
-        // the coro:: calls are, and the lock is not taken.
+        // the thread:: calls are, and the lock is not taken.
         ScriptContext* script = ScriptContext::Current();
         if (!script) {
           LOG_ERROR("[AS] std::mutex::lock called outside of a coroutine cannot wait for a held mutex, which has no effect");

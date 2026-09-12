@@ -18,7 +18,7 @@
 #include <thread>
 #include <vector>
 
-// The `coro` namespace and `std::mutex` both rest on one claim: a script that waits suspends its
+// The `thread` namespace and `std::mutex` both rest on one claim: a script that waits suspends its
 // minicoropp coroutine and hands the frame straight back to the game, rather than blocking the tick
 // it was resumed from. Nothing about that is visible in a compile, and the failure mode is a frozen
 // game rather than a wrong value, so every test here asserts on the clock as well as on the script's
@@ -133,7 +133,7 @@ TEST(as_coro, the_waiting_calls_cost_nothing_outside_a_coroutine) {
   // GameInit runs to completion rather than as a coroutine, so this is the shape every script starts
   // in. sleep() is the one that matters: outside a coroutine minicoropp falls back to
   // std::this_thread::sleep_for, which here would stall the game thread for the full second.
-  auto* func = CompileMain(engine, "coro::yield(); coro::sleep(1000); coro::suspend(); g_progress = 1;");
+  auto* func = CompileMain(engine, "thread::yield(); thread::sleep(1000); thread::suspend(); g_progress = 1;");
   ASSERT_NE(func, nullptr);
 
   ScriptContext ctx(engine);
@@ -142,7 +142,7 @@ TEST(as_coro, the_waiting_calls_cost_nothing_outside_a_coroutine) {
   });
 
   EXPECT_EQ(g_progress, 1) << "a waiting call outside a coroutine returned without running the script on";
-  EXPECT_LT(elapsed, 500) << "coro::sleep() blocked the caller's thread instead of having no effect";
+  EXPECT_LT(elapsed, 500) << "thread::sleep() blocked the caller's thread instead of having no effect";
   EXPECT_FALSE(ctx.IsRunning());
 
   engine->ShutDownAndRelease();
@@ -151,7 +151,7 @@ TEST(as_coro, the_waiting_calls_cost_nothing_outside_a_coroutine) {
 TEST(as_coro, handle_is_null_outside_a_coroutine) {
   auto* engine = MakeEngine();
 
-  auto* func = CompileMain(engine, "coro::Handle@ h = coro::handle();\n"
+  auto* func = CompileMain(engine, "thread::Handle@ h = thread::handle();\n"
                                    "if (h is null) { g_progress = 1; } else { g_progress = 2; }");
   ASSERT_NE(func, nullptr);
 
@@ -162,12 +162,12 @@ TEST(as_coro, handle_is_null_outside_a_coroutine) {
   engine->ShutDownAndRelease();
 }
 
-// ---------------------------------------------------------------- coro::yield across ticks
+// ---------------------------------------------------------------- thread::yield across ticks
 
 TEST(as_coro, yield_spreads_the_script_over_ticks) {
   auto* engine = MakeEngine();
 
-  auto* func = CompileMain(engine, "g_progress = 1; coro::yield(); g_progress = 2; coro::yield(); g_progress = 3;");
+  auto* func = CompileMain(engine, "g_progress = 1; thread::yield(); g_progress = 2; thread::yield(); g_progress = 3;");
   ASSERT_NE(func, nullptr);
 
   ScriptContext ctx(engine);
@@ -195,12 +195,12 @@ TEST(as_coro, yield_spreads_the_script_over_ticks) {
   engine->ShutDownAndRelease();
 }
 
-// ---------------------------------------------------------------- coro::sleep
+// ---------------------------------------------------------------- thread::sleep
 
 TEST(as_coro, sleep_gates_the_script_on_the_clock) {
   auto* engine = MakeEngine();
 
-  auto* func = CompileMain(engine, "g_progress = 1; coro::sleep(200); g_progress = 2;");
+  auto* func = CompileMain(engine, "g_progress = 1; thread::sleep(200); g_progress = 2;");
   ASSERT_NE(func, nullptr);
 
   ScriptContext ctx(engine);
@@ -223,22 +223,22 @@ TEST(as_coro, sleep_gates_the_script_on_the_clock) {
   engine->ShutDownAndRelease();
 }
 
-// ---------------------------------------------------------------- coro::suspend and coro::wake
+// ---------------------------------------------------------------- thread::suspend and thread::wake
 
 namespace {
   const char* kHandshakeScript = R"AS(
-coro::Handle@ g_handle;
+thread::Handle@ g_handle;
 
 void Waiter() {
-  @g_handle = coro::handle();
+  @g_handle = thread::handle();
   g_progress = 1;
-  coro::suspend();
+  thread::suspend();
   g_progress = 2;
 }
 
 void Waker() {
   g_progress = 3;
-  coro::wake(g_handle);
+  thread::wake(g_handle);
 }
 )AS";
 }
@@ -335,7 +335,7 @@ void Holder() {
   @g_lock = std::mutex();
   g_lock.lock();
   g_progress = 1;
-  coro::yield();
+  thread::yield();
   g_progress = 2;
   g_lock.unlock();
 }
@@ -385,7 +385,7 @@ void Holder() {
   @g_lock = std::mutex();
   g_lock.lock();
   g_progress = 1;
-  coro::yield();
+  thread::yield();
   g_progress = 2;
   g_lock.unlock();
   g_progress = 3;
@@ -447,7 +447,7 @@ std::mutex@ g_lock;
 void Holder() {
   @g_lock = std::mutex();
   g_lock.lock();
-  coro::yield();
+  thread::yield();
   g_lock.unlock();
 }
 

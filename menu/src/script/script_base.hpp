@@ -8,9 +8,17 @@
 namespace base::menu::script {
   class ScriptBase {
   public:
+    /**
+     * Which loop ticks a host, and therefore which thread its code runs on.
+     *
+     * `General` has a loop of its own - see ScriptManager - which exists to give work somewhere to go
+     * that is neither the menu's nor the game's: it runs continuously and parks while it is idle, so a
+     * host of this type may block without costing a frame.
+     */
     enum class Type {
       Menu,
-      GameScript
+      GameScript,
+      General
     };
 
   public:

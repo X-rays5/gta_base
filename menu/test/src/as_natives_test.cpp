@@ -93,6 +93,34 @@ namespace {
 
   rage::Vector3 ReturnVector3() { return rage::Vector3(1.5f, -2.5f, 3.5f); }
 
+  /// Where the engine asked each call of the probe below to write its result. A native returning a
+  /// value type is handed the destination as its first argument, and that destination belongs to the
+  /// script - it is a local or a temporary, allocated by AngelScript's own allocator.
+  std::vector<std::uintptr_t> g_return_slots;
+
+  /// What the probes below hand back, so that what they write into the engine's slot is a copy of an
+  /// object that already exists rather than values constructed in place. Invoker::Invoke returns a
+  /// vector that way - it is a thread_local it converted the game's vector into - and a copy is what
+  /// makes the compiler move all 16 bytes at once instead of storing three floats.
+  rage::Vector3 g_probe_source;
+
+  /// The same machine-level shape as ReturnVector3 above - the declared AngelScript signature has no
+  /// destination parameter, and the engine prepends one - but written so the test can see the address
+  /// it was given. MSVC compiles a function returning a 16 byte class to exactly this: the pointer
+  /// arrives in the first argument register and the store goes through it.
+  void ProbeVector3Return(rage::Vector3* destination, int seed) {
+    g_return_slots.push_back(reinterpret_cast<std::uintptr_t>(destination));
+    *destination = g_probe_source = rage::Vector3(static_cast<float>(seed), 2.0f, 3.0f);
+  }
+
+  /// The shape the generated wrappers have, and the shape that faulted: a C++ function that returns a
+  /// vector by value, so MSVC hands it the destination as a hidden first argument and the store into
+  /// that destination is the compiler's own.
+  rage::Vector3 ProbeReturnByValue(int seed) {
+    g_probe_source = rage::Vector3(static_cast<float>(seed), 2.0f, 3.0f);
+    return g_probe_source;
+  }
+
   void FillVector3(rage::Vector3& out) { out = rage::Vector3(9.0f, 8.0f, 7.0f); }
   void FillInt(int& out) { out = 1234; }
   void FillFloat(float& out) { out = 2.5f; }
@@ -119,6 +147,8 @@ namespace {
     // asFUNCTION expands to an unqualified asFunctionPtr, which only resolves here for the stub that
     // takes an asSMessageInfo argument, so the prefix is what makes these compile.
     RegisterGlobalFunction(engine, "natives::Vector3 ReturnVector3()", AngelScript::asFUNCTION(ReturnVector3), AngelScript::asCALL_CDECL);
+    RegisterGlobalFunction(engine, "natives::Vector3 ProbeVector3Return(int seed)", AngelScript::asFUNCTION(ProbeVector3Return), AngelScript::asCALL_CDECL);
+    RegisterGlobalFunction(engine, "natives::Vector3 ProbeReturnByValue(int seed)", AngelScript::asFUNCTION(ProbeReturnByValue), AngelScript::asCALL_CDECL);
     RegisterGlobalFunction(engine, "void FillVector3(natives::Vector3&out)", AngelScript::asFUNCTION(FillVector3), AngelScript::asCALL_CDECL);
     RegisterGlobalFunction(engine, "void FillInt(int&out)", AngelScript::asFUNCTION(FillInt), AngelScript::asCALL_CDECL);
     RegisterGlobalFunction(engine, "void FillFloat(float&out)", AngelScript::asFUNCTION(FillFloat), AngelScript::asCALL_CDECL);
@@ -190,10 +220,12 @@ namespace {
 
 // ---------------------------------------------------------------- the ABI of each mapping
 
-// rage::Vector3 is alignas(16), but the vendored AngelScript compiles with WIP_16BYTE_ALIGN
-// undefined, so the buffer it hands a returned value type is only 4-byte aligned. Whether that
-// faults depends on whether MSVC emits aligned moves for the copy, which cannot be settled by
-// reading the source - only by running it. Run this in Release as well as Debug.
+// The buffer AngelScript hands a returned value type is allocated by its own variable allocator,
+// which packs a function's variables at dword granularity, so it is 4-byte aligned at best. That is
+// why rage::Vector3 does not ask for 16-byte alignment - see the class comment in rage/vector.hpp.
+// Whether a copy into it faults cannot be settled by reading the source, only by running it, so this
+// test doubles as the canary for the type's alignment: an alignas(16) Vector3 makes MSVC emit an
+// aligned move for the assignment below. Run this in Release as well as Debug.
 TEST(as_natives, a_vector3_returned_by_value_survives_the_script_boundary) {
   auto* engine = EngineWithStubs();
   g_host.vec = rage::Vector3{};
@@ -234,6 +266,76 @@ TEST(as_natives, a_vector3_reference_parameter_reaches_the_callee) {
   EXPECT_FLOAT_EQ(g_host.other.x, 4.0f);
   EXPECT_FLOAT_EQ(g_host.other.y, 5.0f);
   EXPECT_FLOAT_EQ(g_host.other.z, 6.0f);
+}
+
+// Where a returned vector actually lands, which is what says whether the type may claim 16 byte
+// alignment.
+//
+// The tests above put the host's own Vector3 on the far side of the boundary, and an AngelScript
+// global property is heap allocated (asCGlobalProperty::AllocateMemory) - memory that happens to come
+// back well aligned. A local is placed per frame by the same allocator that chooses the destination of
+// a return, and dword by dword is all the alignment that comes with it.
+//
+// Locals declared ahead of the vector shift it one dword at a time, so the loop below walks the
+// offsets that allocator can produce rather than the one the first frame layout happens to give. A
+// probe that is handed the destination exactly as a by-value return is records it, and the loop
+// asserts both that the values arrive and that at least one destination was not 16 byte aligned. That
+// is the whole reason rage::Vector3 is not alignas(16): an aligned store into a slot the engine chose
+// faults on precisely those offsets, which is the access violation this came from, and the
+// static_assert on alignof(Vector3) in rage/vector.hpp is what keeps the licence for such a store out
+// of the type.
+//
+// What this test cannot do is reproduce that fault on demand: MSVC is free to store the 16 bytes
+// unaligned, and in this build it does - an alignas(16) Vector3 passes here. The fault in the crash
+// report is from a build where it did not.
+TEST(as_natives, a_vector3_script_local_survives_the_return_value_slot) {
+  auto* engine = EngineWithStubs();
+  g_host.vec = rage::Vector3{};
+  g_host.i = 0;
+
+  bool misaligned = false;
+  for (int pads = 0; pads < 4; ++pads) {
+    std::string body;
+    std::string reads;
+    for (int n = 0; n < pads; ++n) {
+      const auto name = "pad" + std::to_string(n);
+      body += "\tint " + name + " = " + std::to_string(n + 1) + ";\n";
+      reads += (n == 0 ? "" : " + ") + name;
+    }
+    // Both calls land in a local of their own, 16 bytes apart, so whichever offset the loop has
+    // walked to they are handed the same one - the first records it, the second stores into it the
+    // way the generated wrappers do.
+    body += "\tnatives::Vector3 v = test::ProbeVector3Return(1);\n"
+            "\ttest::g_vec = v;\n"
+            "\tnatives::Vector3 w = test::ProbeReturnByValue(1);\n"
+            "\ttest::g_other = w;\n"
+            // The locals are read, so the compiler cannot drop them: each has to hold its slot for
+            // the next one to shift the vector further along the frame.
+            "\ttest::g_int = " + (pads == 0 ? std::string{"0"} : reads) + ";\n";
+
+    g_return_slots.clear();
+    g_host.other = rage::Vector3{};
+    const auto result = RunScript(engine, body);
+    ASSERT_TRUE(result) << body;
+    ASSERT_EQ(g_return_slots.size(), 1U) << body;
+
+    EXPECT_FLOAT_EQ(g_host.vec.x, 1.0f) << body;
+    EXPECT_FLOAT_EQ(g_host.vec.y, 2.0f) << body;
+    EXPECT_FLOAT_EQ(g_host.vec.z, 3.0f) << body;
+    EXPECT_FLOAT_EQ(g_host.other.x, 1.0f) << body;
+    EXPECT_FLOAT_EQ(g_host.other.y, 2.0f) << body;
+    EXPECT_FLOAT_EQ(g_host.other.z, 3.0f) << body;
+    EXPECT_EQ(g_host.i, pads * (pads + 1) / 2) << body;
+
+    misaligned = misaligned || g_return_slots.front() % 16 != 0;
+  }
+  engine->ShutDownAndRelease();
+
+  // Without a slot that is not 16 byte aligned none of the above exercised anything, and the point of
+  // the type being 4 byte aligned - that the store into this slot lands wherever the engine puts it -
+  // would have gone untested.
+  EXPECT_TRUE(misaligned) << "every return slot the engine handed out was 16 byte aligned, so the "
+                             "local layout did not shift and this test proved nothing";
 }
 
 // int* / float* / bool* in the database are spelled `int &out` and friends. A reference is passed as

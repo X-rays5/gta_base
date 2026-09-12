@@ -61,8 +61,12 @@ namespace base::menu::as::util {
     GetDocRegistry().clear();
   }
 
+  bool IsDocumented(const Doc& doc) {
+    return !doc.description.empty() || !doc.params.empty() || !doc.returns.empty();
+  }
+
   std::string FormatDocComment(const Doc& doc, const std::string_view indent) {
-    if (doc.description.empty() && doc.params.empty() && doc.returns.empty()) return {};
+    if (!IsDocumented(doc)) return {};
 
     std::string out = std::format("{}/**\n", indent);
     const auto line = [&](const std::string_view text) {

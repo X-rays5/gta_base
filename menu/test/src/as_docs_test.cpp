@@ -8,7 +8,9 @@
 
 #include "../../src/as/util/as_bind.hpp"
 #include "../../src/as/util/as_generate_predefined.hpp"
+#include "../../src/as/bindings/as_game_task.hpp"
 #include "../../src/as/bindings/as_log.hpp"
+#include "../../src/as/bindings/as_mutex.hpp"
 #include "../../src/as/util/as_util.hpp"
 
 #include <filesystem>
@@ -91,6 +93,36 @@ namespace {
     return {};
   }
 
+  /**
+   * Runs `register_bindings` against an engine whose docs are the only ones in the registry, and hands
+   * back the keys their docs matched nothing for.
+   *
+   * The doc registry outlives an engine, so a test that looks at it has to clear it first and to
+   * account for everything it registers - which is why this one makes its own engine instead of sharing
+   * GeneratePredefined's, whose registrations would be in the registry too.
+   */
+  template <class Register>
+  std::vector<std::string> UnmatchedFrom(const Register& register_bindings) {
+    AngelScript::asIScriptEngine* engine = AngelScript::asCreateScriptEngine();
+    EXPECT_NE(engine, nullptr);
+
+    as_util::ClearDocs();
+    register_bindings(engine);
+
+    const auto unmatched = as_util::UnmatchedDocKeys(engine);
+    engine->ShutDownAndRelease();
+    return unmatched;
+  }
+
+  std::string Joined(const std::vector<std::string>& values) {
+    std::string out;
+    for (const auto& value : values) {
+      if (not out.empty()) out += ", ";
+      out += value;
+    }
+    return out;
+  }
+
   std::string GeneratePredefined() {
     AngelScript::asIScriptEngine* engine = AngelScript::asCreateScriptEngine();
     EXPECT_NE(engine, nullptr);
@@ -100,6 +132,13 @@ namespace {
     as_util::ClearDocs();
     as_util::RegisterAddOns(engine);
     base::menu::as::bindings::log::RegisterLog(engine);
+
+    // In the namespace the real one is registered in: thread::TaskFunc is the shape
+    // thread::queue_game_task() takes, and a funcdef is declared nowhere else in the file.
+    engine->SetDefaultNamespace("thread");
+    as_util::RegisterFuncdef(engine, "void TestFuncdef()")
+      .Desc("A shape a native can take, passed as @myFunction.");
+    engine->SetDefaultNamespace("");
 
     as_util::RegisterEnum(engine, "TestEnum")
       .Desc("An enum used to test generated documentation.");
@@ -163,7 +202,7 @@ TEST(as_docs, global_functions_get_docs) {
   const auto infos = FindDeclarationsContaining(lines, "void info(");
   ASSERT_FALSE(infos.empty()) << "the info binding was not emitted";
   const auto infoDoc = DocAbove(lines, infos.front());
-  EXPECT_NE(infoDoc.find("Logs an informational message to the menu console."), std::string::npos) << infoDoc;
+  EXPECT_NE(infoDoc.find("Logs an informational message to the script's own log file and to the console."), std::string::npos) << infoDoc;
   EXPECT_NE(infoDoc.find("@param in The message to log."), std::string::npos) << infoDoc;
 
   // The vendored string add-on also registers a bare 'format', so match on the return type.
@@ -216,4 +255,38 @@ TEST(as_docs, types_and_members_get_docs) {
   const auto enumValue = FindDeclaration(lines, "First");
   ASSERT_NE(enumValue, std::string::npos);
   EXPECT_NE(DocAbove(lines, enumValue).find("The first test value."), std::string::npos);
+}
+
+TEST(as_docs, a_funcdef_is_emitted_with_its_docs) {
+  const auto lines = SplitLines(GeneratePredefined());
+
+  // A funcdef is a type, and it is the only declaration of one that names it: a signature like
+  // thread::queue_game_task(TaskFunc@+ fn) is otherwise a reference to a type the file never mentions.
+  const auto funcdef = FindDeclaration(lines, "funcdef void TestFuncdef();");
+  ASSERT_NE(funcdef, std::string::npos) << "the test funcdef was not emitted";
+
+  const auto doc = DocAbove(lines, funcdef);
+  EXPECT_NE(doc.find("A shape a native can take, passed as @myFunction."), std::string::npos) << doc;
+}
+
+TEST(as_docs, a_registration_that_documented_nothing_is_not_documentation) {
+  // Every registration creates an entry for the fluent calls after it to write into, and most entries
+  // are never written to - std::mutex's three hand-written behaviours are the ones that used to be
+  // reported as documentation that matched no binding.
+  EXPECT_FALSE(as_util::IsDocumented(as_util::Doc{}));
+  EXPECT_TRUE(as_util::IsDocumented(as_util::Doc{.description = "Written."}));
+  EXPECT_TRUE(as_util::IsDocumented(as_util::Doc{.params = {{"in", "A parameter."}}}));
+  EXPECT_TRUE(as_util::IsDocumented(as_util::Doc{.returns = "Something."}));
+}
+
+TEST(as_docs, every_documented_binding_matches_something_in_the_engine) {
+  // The two the generator used to warn about, from the namespaces they came out of: thread::TaskFunc,
+  // a funcdef it never wrote out, and std::mutex::f, the empty entry the factory, AddRef and Release
+  // registrations leave behind.
+  const auto unmatched = UnmatchedFrom([](AngelScript::asIScriptEngine* engine) {
+    base::menu::as::bindings::mutex::RegisterMutex(engine);
+    base::menu::as::bindings::game_task::RegisterGameTask(engine);
+  });
+
+  EXPECT_TRUE(unmatched.empty()) << "documentation no binding in the engine carries: " << Joined(unmatched);
 }

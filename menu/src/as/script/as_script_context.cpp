@@ -6,9 +6,12 @@
 
 #include "../util/as_exception.hpp"
 
+#include <ankerl/unordered_dense.h>
+
 #include <chrono>
 #include <cstddef>
 #include <exception>
+#include <mutex>
 #include <stdexcept>
 #include <utility>
 
@@ -25,6 +28,32 @@ namespace base::menu::as::script {
       LOG_ERROR("[AS] Script '{}' threw in {} at {}:{}: {}", exception.script_name(), exception.function_name(),
                 exception.file_name(), exception.line_number(), exception.exception_msg());
     }
+
+    /**
+     * The coroutine handles that are live right now, which is the set of coroutines that have started
+     * and not yet finished.
+     *
+     * A handle is a bare pointer into the coroutine it names, and thread::wake() writes through it, so a
+     * handle that outlived its coroutine is a write into freed memory. That is reachable as soon as a
+     * script can be unloaded while another script still holds its handle, which is why this exists:
+     * handles are registered by the coroutine that owns them, and anything taking one has to ask first.
+     *
+     * The pointer may be handed out again by a later coroutine, which would read as live - waking that
+     * one is a coroutine resuming early rather than a write into nothing, which is as far as a raw
+     * pointer can be told apart.
+     */
+    std::mutex g_live_handles_mutex;
+    ankerl::unordered_dense::set<const void*> g_live_handles;
+
+    void RegisterLiveHandle(const void* handle) {
+      const std::scoped_lock lock(g_live_handles_mutex);
+      g_live_handles.insert(handle);
+    }
+
+    void UnregisterLiveHandle(const void* handle) {
+      const std::scoped_lock lock(g_live_handles_mutex);
+      g_live_handles.erase(handle);
+    }
   }
 
   ScriptContext::ScriptContext(AngelScript::asIScriptEngine* engine) : engine_(engine), context_(nullptr) {
@@ -38,7 +67,7 @@ namespace base::menu::as::script {
     // The coroutine goes first. A suspended coroutine's stack still holds the VM frame it was
     // resumed from, so releasing the context underneath it would leave that frame pointing at freed
     // memory for as long as the coroutine was still alive.
-    coro_.reset();
+    ResetCoroutine();
 
     if (context_) {
       const int r = context_->Release();
@@ -73,7 +102,19 @@ namespace base::menu::as::script {
     done_ = false;
     // The running context is handed over as the coroutine's user data, which is what
     // this_coro::get_data() reports for any native that needs to know whose script it is serving.
+    ResetCoroutine();
     coro_ = std::make_unique<minicoropp::Coroutine>([this] { RunCoroutine(); }, this, kCoroutineStackSize);
+  }
+
+  void ScriptContext::ResetCoroutine() {
+    if (live_handle_) {
+      // A coroutine that is still parked is destroyed by minicoropp without unwinding its stack, so
+      // this is the only thing that can take its handle out of the live set - see RunCoroutine.
+      UnregisterLiveHandle(live_handle_);
+      live_handle_ = nullptr;
+    }
+
+    coro_.reset();
   }
 
   bool ScriptContext::Tick() {
@@ -84,7 +125,7 @@ namespace base::menu::as::script {
     const minicoropp::CoroResult result = coro_->resume();
 
     // kSUCCESS is what a plain yield reports as well as a body that ran to the end, and kYIELDING is
-    // a coro::sleep() whose deadline has not passed yet. Neither is the end of the script on its own,
+    // a thread::sleep() whose deadline has not passed yet. Neither is the end of the script on its own,
     // which is what done_ is for.
     if (result == minicoropp::CoroResult::kSUCCESS || result == minicoropp::CoroResult::kYIELDING) {
       return !done_;
@@ -127,6 +168,9 @@ namespace base::menu::as::script {
   void ScriptContext::Suspend(const Wait kind, const std::chrono::high_resolution_clock::duration duration) {
     wait_ = kind;
     wait_duration_ = duration;
+    // Kept past the point ApplyWait exchanges wait_ away, so that a parked script can still say what
+    // it is parked on.
+    last_wait_ = kind;
 
     // Suspend the context rather than the coroutine. The native that got here is running inside
     // Execute(), so this is what makes that call return - and RunCoroutine is what parks the
@@ -138,6 +182,15 @@ namespace base::menu::as::script {
 
   ScriptContext* ScriptContext::Current() {
     return static_cast<ScriptContext*>(minicoropp::this_coro::get_data());
+  }
+
+  bool ScriptContext::IsCoroutineHandleLive(const void* handle) {
+    if (!handle) {
+      return false;
+    }
+
+    const std::scoped_lock lock(g_live_handles_mutex);
+    return g_live_handles.contains(handle);
   }
 
   void ScriptContext::ApplyWait() {
@@ -161,13 +214,31 @@ namespace base::menu::as::script {
   }
 
   void ScriptContext::RunCoroutine() {
+    // This coroutine's handle is live from here until it is released below, which is as long as a
+    // script holding it can expect thread::wake() to reach anything.
+    //
+    // Registered here and released by ResetCoroutine rather than by a guard in this frame, because
+    // minicoropp destroys a suspended coroutine with mco_destroy, which frees the stack without
+    // unwinding it: a guard here would never be destructed when a script is unloaded while parked,
+    // and that is the case a stale handle is reached through.
+    live_handle_ = minicoropp::this_coro::get_current_handle();
+    if (live_handle_) {
+      RegisterLiveHandle(live_handle_);
+    }
+
     int r = context_->Execute();
 
     // One pass of Execute() per turn, still following the loop in the engine's own coroutine sample.
     // The coroutine is parked by ApplyWait, which is what keeps a suspended context off the thread's
     // active-context stack for as long as it waits - see the note on ScriptContext.
+    //
+    // parked_ brackets the park rather than the yield, so it stays true across the turns where
+    // Resume() reports kYIELDING without entering the coroutine again, which is exactly the stretch a
+    // script is waiting through.
     while (r == AngelScript::asEXECUTION_SUSPENDED) {
+      parked_ = true;
       ApplyWait();
+      parked_ = false;
       r = context_->Execute();
     }
 
@@ -175,6 +246,13 @@ namespace base::menu::as::script {
       LogException(context_);
     } else if (r != AngelScript::asEXECUTION_FINISHED) {
       LOG_ERROR("[AS] Script coroutine stopped with execution result {}", r);
+    }
+
+    // The coroutine ran to its own end rather than being cut short, so its handle stops naming a live
+    // coroutine now. A body that threw never reaches this, and leaves the release to ResetCoroutine.
+    if (live_handle_) {
+      UnregisterLiveHandle(live_handle_);
+      live_handle_ = nullptr;
     }
 
     done_ = true;

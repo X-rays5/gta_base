@@ -99,14 +99,11 @@ namespace base::common::logging {
       spdlog::register_logger(logger);
       spdlog::flush_every(std::chrono::milliseconds(200));
 
-      auto formatter = std::make_unique<spdlog::pattern_formatter>();
 #ifndef NDEBUG
-      formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%Y-%m-%dT%T%z] [%^%L%$] [%N] [%s:%#] %v");
+      spdlog::set_formatter(MakeLogFormatter("[%Y-%m-%dT%T%z] [%^%L%$] [%N] [%s:%#] %v"));
 #else
-      formatter->add_flag<ThreadIdFormatter>('N').set_pattern("[%Y-%m-%dT%T%z] [%^%L%$] [%N] %v");
+      spdlog::set_formatter(MakeLogFormatter("[%Y-%m-%dT%T%z] [%^%L%$] [%N] %v"));
 #endif
-
-      spdlog::set_formatter(std::move(formatter));
 
       logger->set_error_handler([&logger](const std::string& err) {
         logger->critical("spdlog: {}", err);
@@ -114,6 +111,16 @@ namespace base::common::logging {
 
       return logger;
     }
+  }
+
+  bool ConsoleSinkEnabled() {
+    return CONSOLE_SINK;
+  }
+
+  std::unique_ptr<spdlog::pattern_formatter> MakeLogFormatter(const std::string& pattern) {
+    auto formatter = std::make_unique<spdlog::pattern_formatter>();
+    formatter->add_flag<ThreadIdFormatter>('N').set_pattern(pattern);
+    return formatter;
   }
 
   Manager::Manager(const bool console_sink) {

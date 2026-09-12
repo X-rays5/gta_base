@@ -69,6 +69,12 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/script/script_manager.hpp
         src/script/game_task_executor.cpp
         src/script/game_task_executor.hpp
+        src/script/general_task_executor.cpp
+        src/script/general_task_executor.hpp
+        src/script/task.cpp
+        src/script/task.hpp
+        src/script/task_executor.cpp
+        src/script/task_executor.hpp
         src/game/script.cpp
         src/game/script.hpp
         src/ui/theme.cpp
@@ -163,16 +169,22 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/as/util/as_util.hpp
         src/as/util/as_generate_predefined.cpp
         src/as/util/as_generate_predefined.hpp
+        src/as/util/as_script_logger.cpp
+        src/as/util/as_script_logger.hpp
         src/as/bindings/as_log.cpp
         src/as/bindings/as_log.hpp
         src/as/bindings/as_coro.cpp
         src/as/bindings/as_coro.hpp
         src/as/bindings/as_mutex.cpp
         src/as/bindings/as_mutex.hpp
+        src/as/bindings/as_game_task.cpp
+        src/as/bindings/as_game_task.hpp
+        src/as/bindings/as_lifecycle.cpp
+        src/as/bindings/as_lifecycle.hpp
         src/as/script/as_script.cpp
         src/as/script/as_script.hpp
-        src/as/script/as_script_metadata.cpp
-        src/as/script/as_script_metadata.hpp
+        src/as/script/as_script_manifest.cpp
+        src/as/script/as_script_manifest.hpp
         src/ui/layout/script/script_sub.cpp
         src/ui/layout/script/script_sub.hpp
         src/as/script/as_script_manager.cpp

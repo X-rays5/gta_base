@@ -3,49 +3,18 @@
 //
 
 #pragma once
-#include <future>
-#include <memory>
-#include <vector>
-#include <minicoropp/coroutine.hpp>
-#include "script_base.hpp"
+#include "task_executor.hpp"
 #include "../natives/natives_gen9.hpp"
 
 namespace base::menu::script {
-  class GameTaskExecutor : public ScriptBase {
-  public:
-    class GameTask {
-    public:
-      friend class GameTaskExecutor;
-
-      template <typename F>
-      explicit GameTask(F&& cb) {
-        promise_ = std::make_shared<std::promise<void>>();
-        coro_ = std::make_unique<minicoropp::Coroutine>([this, callback = std::forward<F>(cb)]() mutable {
-          callback();
-          done_ = true;
-          promise_->set_value();
-        });
-      }
-
-      ~GameTask() = default;
-
-      GameTask(const GameTask&) = delete;
-      GameTask(GameTask&&) = delete;
-      GameTask& operator=(const GameTask&) = delete;
-      GameTask& operator=(GameTask&&) = delete;
-
-      bool IsDone() const;
-      std::future<void> GetFuture() const;
-
-    protected:
-      void Tick();
-
-    private:
-      bool done_{false};
-      std::shared_ptr<std::promise<void>> promise_;
-      std::unique_ptr<minicoropp::Coroutine> coro_;
-    };
-
+  /**
+   * The task queue of the game thread: what `thread::queue_game_task()` hands over ends up here.
+   *
+   * Its thread is the game's own - the game scripts' host ticks this executor every frame - so it has
+   * no thread and no signal to park on, it is simply ticked. That is also why a task of this one is
+   * allowed to touch the game: it runs on the thread the game expects to be called from.
+   */
+  class GameTaskExecutor final : public TaskExecutor {
   public:
     GameTaskExecutor();
     ~GameTaskExecutor() override;
@@ -54,20 +23,8 @@ namespace base::menu::script {
       return Type::GameScript;
     }
 
-    template <typename F>
-    std::future<void> QueueTask(F&& cb) {
-      auto task = std::make_unique<GameTask>(std::forward<F>(cb));
-      auto future = task->GetFuture();
-      tasks_.emplace_back(std::move(task));
-      return future;
-    }
-
-  protected:
-    void OnInit() override;
-    void OnTick() override;
-
-  private:
-    std::vector<std::unique_ptr<GameTask>> tasks_;
+    // QueueTask is inherited: the game thread is the one that runs them, and it is ticked by the game
+    // rather than by this executor, so nothing has to be told that work arrived.
   };
   inline GameTaskExecutor* kGAME_TASK_EXECUTOR{};
 }

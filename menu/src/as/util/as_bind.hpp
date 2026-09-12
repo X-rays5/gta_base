@@ -36,6 +36,14 @@ namespace base::menu::as::util {
   };
 
   /**
+   * Whether anything was written for a binding. Every registration creates a registry entry for the
+   * fluent calls after it to write into, so an entry that is still empty is a binding nobody documented
+   * rather than documentation that lost its binding - which is the difference the generator's report of
+   * unmatched docs turns on.
+   */
+  [[nodiscard]] bool IsDocumented(const Doc& doc);
+
+  /**
    * Fluent view over the Doc stored for a binding. The underlying reference stays valid for the
    * lifetime of the registry entry, so it may be held past the registration call that produced it.
    */

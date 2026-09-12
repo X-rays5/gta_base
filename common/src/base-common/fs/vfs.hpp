@@ -47,6 +47,17 @@ namespace base::common::fs::vfs {
   GET_PATH(UIThemeDir, "settings/themes")
   GET_PATH(OptionSettingsDir, "settings/options")
   GET_PATH(LuaScripts, "lua/scripts")
+  GET_PATH(ScriptsDir, "scripts")
+  GET_PATH(ScriptLogsDir, "logs/scripts")
+
+  /**
+   * \brief The folder one script's own logs go to: logs/scripts/<script name>, created if it is not there.
+   */
+  inline std::filesystem::path GetScriptLogDir(const std::string& script_name) {
+    std::filesystem::path dir = GetScriptLogsDir() / script_name;
+    std::filesystem::create_directories(std::filesystem::absolute(dir));
+    return dir;
+  }
 }
 
 #undef GET_PATH

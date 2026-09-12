@@ -9,6 +9,8 @@ add_executable(${PROJECT_NAME}
         src/as_coro_test.cpp
         src/as_docs_test.cpp
         src/as_natives_test.cpp
+        src/as_script_manager_test.cpp
+        src/general_task_executor_test.cpp
         src/submenu_test.cpp
 )
 

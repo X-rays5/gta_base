@@ -5,11 +5,14 @@
 #include "as_generate_predefined.hpp"
 #include "as_bind.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <format>
 #include <fstream>
+#include <sstream>
 #include <string_view>
 #include <unordered_set>
+#include <vector>
 
 namespace base::menu::as::util {
   namespace {
@@ -130,6 +133,27 @@ namespace base::menu::as::util {
       }
     }
 
+    /**
+     * Global funcdefs, which are the shapes a script hands to a native: thread::TaskFunc is what
+     * thread::queue_game_task() takes. Nothing else in this file declares one, and a signature that
+     * names one - queue_game_task(TaskFunc@+ fn) - would otherwise name a type the reader never sees.
+     */
+    template <class Stream>
+    void printGlobalFuncdefList(const AngelScript::asIScriptEngine* engine, Stream& stream, ConsumedDocs& consumed) {
+      for (std::uint32_t i = 0; i < engine->GetFuncdefCount(); ++i) {
+        const auto t = engine->GetFuncdefByIndex(i);
+        if (not t) continue;
+        const auto signature = t->GetFuncdefSignature();
+        if (not signature) continue;
+
+        const std::string_view ns = namespaceOf(t->GetNamespace());
+        if (not ns.empty()) stream << std::format("namespace {} {{\n", ns);
+        printDoc(stream, reflectedKey(t->GetName(), ns), consumed, ns.empty() ? "" : "\t");
+        stream << std::format("{}funcdef {};\n", ns.empty() ? "" : "\t", signature->GetDeclaration(false));
+        if (not ns.empty()) stream << "}\n";
+      }
+    }
+
     template <class Stream>
     void printGlobalFunctionList(const AngelScript::asIScriptEngine* engine, Stream& stream, ConsumedDocs& consumed) {
       for (std::uint32_t i = 0; i < engine->GetGlobalFunctionCount(); i++) {
@@ -178,29 +202,57 @@ namespace base::menu::as::util {
         if (not ns.empty()) stream << "}\n";
       }
     }
+    /// Write out everything the engine has, in the order a reader wants it: the types first, since
+    /// the declarations after them are written in terms of those types.
+    template <class Stream>
+    void emitPredefined(const AngelScript::asIScriptEngine* engine, Stream& stream, ConsumedDocs& consumed) {
+      printEnumList(engine, stream, consumed);
+
+      printClassTypeList(engine, stream, consumed);
+
+      printGlobalFuncdefList(engine, stream, consumed);
+
+      printGlobalFunctionList(engine, stream, consumed);
+
+      printGlobalPropertyList(engine, stream, consumed);
+
+      printGlobalTypedef(engine, stream, consumed);
+    }
+
+    /// The docs no declaration was written for, sorted so that the report reads the same every run.
+    std::vector<std::string> unmatchedDocKeys(const ConsumedDocs& consumed) {
+      std::vector<std::string> unmatched;
+      for (const auto& [key, doc] : GetAllDocs()) {
+        if (IsDocumented(doc) && not consumed.contains(key)) {
+          unmatched.push_back(key);
+        }
+      }
+
+      std::ranges::sort(unmatched);
+      return unmatched;
+    }
+  }
+
+  std::vector<std::string> UnmatchedDocKeys(const AngelScript::asIScriptEngine* engine) {
+    // The declarations are emitted to find out which docs they carry; the text itself is not wanted.
+    std::ostringstream discarded;
+
+    ConsumedDocs consumed;
+    emitPredefined(engine, discarded, consumed);
+
+    return unmatchedDocKeys(consumed);
   }
 
   void GenerateScriptPredefined(const AngelScript::asIScriptEngine* engine, const std::filesystem::path& path) {
-    assert(path.string().ends_with("as.predefined"));
+    GTA_BASE_ASSERT(path.string().ends_with("as.predefined"), "Output path must end with 'as.predefined'");
 
     std::ofstream stream{path};
 
     ConsumedDocs consumed;
+    emitPredefined(engine, stream, consumed);
 
-    printEnumList(engine, stream, consumed);
-
-    printClassTypeList(engine, stream, consumed);
-
-    printGlobalFunctionList(engine, stream, consumed);
-
-    printGlobalPropertyList(engine, stream, consumed);
-
-    printGlobalTypedef(engine, stream, consumed);
-
-    for (const auto& entry : GetAllDocs()) {
-      if (not consumed.contains(entry.first)) {
-        LOG_WARN("Script documentation for '{}' matched no binding in the engine", entry.first);
-      }
+    for (const auto& key : unmatchedDocKeys(consumed)) {
+      LOG_WARN("Script documentation for '{}' matched no binding in the engine", key);
     }
   }
 }

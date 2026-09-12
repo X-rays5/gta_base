@@ -8,6 +8,7 @@
 
 #include "../../src/as/util/as_bind.hpp"
 #include "../../src/as/util/as_generate_predefined.hpp"
+#include "../../src/as/bindings/as_log.hpp"
 #include "../../src/as/bindings/as_native_types.hpp"
 #include "../../src/as/util/as_util.hpp"
 
@@ -482,4 +483,83 @@ TEST(as_bind, the_probe_type_registers_without_error) {
   engine->ShutDownAndRelease();
 
   EXPECT_EQ(g_error_count, 0U) << ReportedErrors();
+}
+
+// Why every log binding is declared twice: once with the trailing variable argument list, and once
+// without it. Neither half can carry the whole API on the engine's rules, both of which are pinned
+// below rather than described - a variadic declaration will not take the bare call, and a
+// declaration made only of the ellipsis hands the thunk a pointer it cannot read as a string
+// for anything but a literal. So the typed
+// 'const std::string &in' is what converts a literal, a variable or a computed string into the one
+// thing the thunk can read, and the bare overload is what accepts a call with nothing to format.
+TEST(as_bind, a_log_call_without_extra_arguments_is_formatted_as_a_plain_message) {
+  static std::string captured;
+  captured.clear();
+
+  auto* engine = MakeEngine(true);
+  base::menu::as::bindings::log::RegisterLog(engine);
+  RegisterGlobalProperty(engine, "std::string captured", &captured);
+
+  ASSERT_TRUE(RunScript(engine, R"(captured = log::format("plain");)")) << ReportedErrors();
+  EXPECT_EQ(captured, "plain") << "the thunk formatted an argument that was not passed";
+
+  ASSERT_TRUE(RunScript(engine, R"(captured = log::format("a={} b={}", 1, "x");)")) << ReportedErrors();
+  EXPECT_EQ(captured, "a=1 b=x");
+
+  // The shapes the typed 'const std::string &in' is what makes readable: a variable and an
+  // expression are not the same thing to the engine as a literal in the argument list.
+  ASSERT_TRUE(RunScript(engine, R"(std::string message = "variable"; captured = log::format(message);)")) << ReportedErrors();
+  EXPECT_EQ(captured, "variable");
+
+  ASSERT_TRUE(RunScript(engine, R"(captured = log::format("com" + "puted");)")) << ReportedErrors();
+  EXPECT_EQ(captured, "computed");
+
+  engine->ShutDownAndRelease();
+}
+
+namespace {
+  /// A thunk for the two declarations below, which are only ever built against, never called.
+  void VariadicOnlyGeneric(AngelScript::asIScriptGeneric*) {}
+
+  /// How many arguments a variadic call handed over, so a declaration made only of the ellipsis can
+  /// be told apart from one that names the format string.
+  int g_arg_count = 0;
+
+  void RecordArgCountGeneric(AngelScript::asIScriptGeneric* gen) {
+    g_arg_count = gen->GetArgCount();
+  }
+}
+
+// The same declaration as a log binding with the bare half removed, so the rule is pinned against
+// the engine rather than taken on trust: a variadic function is dropped from the candidates when
+// the call does not fill the fixed parameters plus at least one variadic one.
+TEST(as_bind, a_variadic_declaration_alone_rejects_a_call_with_nothing_to_format) {
+  auto* engine = MakeEngine(true);
+  as_util::RegisterGlobalFunction(engine, "void variadic_only(const std::string &in, const ?&in...)", AngelScript::asFUNCTION(VariadicOnlyGeneric), AngelScript::asCALL_GENERIC);
+
+  EXPECT_FALSE(RunScript(engine, R"(variadic_only("plain");)"))
+      << "the engine accepted a variadic call that passed no variadic argument";
+  EXPECT_NE(ReportedErrors().find("No matching signatures"), std::string::npos) << ReportedErrors();
+
+  engine->ShutDownAndRelease();
+}
+
+// The other spelling of "a format string and then whatever else", with the typed parameter gone so
+// that a call with nothing to format can match. It was tried and it does not carry the API: what
+// the engine hands the native for 'sole_variadic(message)' is not a std::string it can read but a
+// pointer that faults on the dereference (measured; not asserted here, since a fault takes the test
+// binary with it). A literal is the one call shape it survives. Both halves of the pair are needed
+// for opposite reasons - the bare one to accept a call with nothing to format, the typed one to
+// make that argument arrive as a std::string - which is why this stays two declarations.
+TEST(as_bind, a_declaration_of_only_the_ellipsis_cannot_carry_the_format_string) {
+  auto* engine = MakeEngine(true);
+  as_util::RegisterGlobalFunction(engine, "void sole_variadic(const ?&in...)", AngelScript::asFUNCTION(RecordArgCountGeneric), AngelScript::asCALL_GENERIC);
+
+  g_arg_count = 0;
+  ASSERT_TRUE(RunScript(engine, R"(sole_variadic("literal");)")) << ReportedErrors();
+  EXPECT_EQ(g_arg_count, 1);
+
+  EXPECT_FALSE(RunScript(engine, R"(sole_variadic();)")) << "the engine accepted a call with no arguments at all";
+
+  engine->ShutDownAndRelease();
 }

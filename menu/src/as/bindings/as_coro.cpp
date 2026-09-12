@@ -14,8 +14,10 @@
 
 #undef Yield
 
-// The script-facing `coro` namespace, backed by minicoropp::this_coro, mirroring what the Lua side
-// exposes as the `coro` table.
+// The script-facing `thread` namespace, backed by minicoropp::this_coro: what a script does with the
+// thread it is on rather than a set of coroutine operations, which is why the namespace says `thread`.
+// The Lua side has the same calls under a `coro` table; it keeps that name, since it is being retired
+// once this side has everything it has and nothing here needs it changed.
 //
 // The waiting calls do not park the coroutine themselves. They suspend the AngelScript context and
 // record what was asked for on the ScriptContext running the script, which parks the coroutine once
@@ -33,7 +35,7 @@ namespace base::menu::as::bindings::coro {
     using script::ScriptContext;
 
     // A coroutine handle is opaque to the script: the only one it can ever hold is a pointer
-    // coro::handle() handed out, and its only use is handing it back to coro::wake(). Giving it a
+    // thread::handle() handed out, and its only use is handing it back to thread::wake(). Giving it a
     // type of its own rather than passing the handle as an int keeps it out of reach of arithmetic
     // and of the natives that take numbers.
     struct CoroHandle;
@@ -47,7 +49,7 @@ namespace base::menu::as::bindings::coro {
         return false;
       }
 
-      LOG_ERROR("[AS] coro::{} called outside of a coroutine, which has no effect", name);
+      LOG_ERROR("[AS] thread::{} called outside of a coroutine, which has no effect", name);
       return true;
     }
 
@@ -86,16 +88,25 @@ namespace base::menu::as::bindings::coro {
     }
 
     void Wake(CoroHandle* handle) {
+      // A handle is a bare pointer into the coroutine it came from, and waking writes through it. The
+      // coroutine may be long gone - it finished, or the script that owned it was unloaded while this
+      // one kept its handle - so the write is only made once the handle is known to still name
+      // something.
+      if (!ScriptContext::IsCoroutineHandleLive(handle)) {
+        LOG_ERROR("[AS] thread::wake() was given the handle of a coroutine that has ended or whose script was unloaded, which has no effect");
+        return;
+      }
+
       minicoropp::this_coro::wake_handle(handle);
     }
   }
 
   void RegisterCoro(AngelScript::asIScriptEngine* engine) {
-    engine->SetDefaultNamespace("coro");
+    engine->SetDefaultNamespace("thread");
 
     util::RegisterObjectType(engine, "Handle", 0, AngelScript::asOBJ_REF | AngelScript::asOBJ_NOCOUNT)
-      .Desc("An opaque handle to a script coroutine. coro::handle() is the only thing that produces "
-            "one, and coro::wake() the only thing that takes one.");
+      .Desc("An opaque handle to a script coroutine. thread::handle() is the only thing that produces "
+            "one, and thread::wake() the only thing that takes one.");
 
     // Qualified rather than the bare asFUNCTION macro, which expands to an unqualified asFunctionPtr:
     // that only resolves when one of the arguments drags the AngelScript namespace in through ADL,
@@ -110,18 +121,19 @@ namespace base::menu::as::bindings::coro {
       .Param("ms", "How long to wait in milliseconds. The script resumes on the first tick after it.");
 
     util::RegisterGlobalFunction(engine, "void suspend()", AngelScript::asFUNCTION(Suspend), AngelScript::asCALL_CDECL)
-      .Desc("Suspends the script until another coroutine wakes it with coro::wake(). It stays "
+      .Desc("Suspends the script until another coroutine wakes it with thread::wake(). It stays "
             "suspended forever if nothing ever does.");
 
     util::RegisterGlobalFunction(engine, "Handle@ handle()", AngelScript::asFUNCTION(CurrentHandle), AngelScript::asCALL_CDECL)
       .Desc("The handle of the running coroutine, or null outside of one.")
-      .Returns("A handle another script can pass to coro::wake().");
+      .Returns("A handle another script can pass to thread::wake().");
 
     util::RegisterGlobalFunction(engine, "void wake(Handle@ handle)", AngelScript::asFUNCTION(Wake), AngelScript::asCALL_CDECL)
-      .Desc("Wakes a suspended coroutine. It is the only thing that ends a coro::suspend(), and it "
-            "also cuts a coro::sleep() short, as both are parked on the same deadline. A coroutine "
-            "waiting on the next tick is unaffected, since it has no deadline to clear.")
-      .Param("handle", "The handle of the coroutine to wake, from coro::handle().");
+      .Desc("Wakes a suspended coroutine. It is the only thing that ends a thread::suspend(), and it "
+            "also cuts a thread::sleep() short, as both are parked on the same deadline. A coroutine "
+            "waiting on the next tick is unaffected, since it has no deadline to clear. A handle that "
+            "outlived its coroutine - the script that owned it was unloaded - does nothing.")
+      .Param("handle", "The handle of the coroutine to wake, from thread::handle().");
 
     engine->SetDefaultNamespace("");
   }

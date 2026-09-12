@@ -22,6 +22,7 @@
 #include "util/key_input/key_event_listener.hpp"
 #include "hotkey/hotkey_manager.hpp"
 #include "ui/notification/manager.hpp"
+#include "as/script/as_script_manager.hpp"
 
 std::atomic_bool base::menu::globals::kRUNNING = true;
 
@@ -42,6 +43,7 @@ namespace base::menu {
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
     std::unique_ptr<ui::notification::Manager> notification_manager_inst;
+    std::unique_ptr<as::script::ScriptManager> as_script_manager_inst;
 
     void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
       RegisterThreadPoolStartupShutdown(thread_pool_inst, handler);
@@ -59,6 +61,7 @@ namespace base::menu {
       render::Renderer::RendererLifeTime(render_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "MenuRenderer", menu_renderer_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "NotificationManager", notification_manager_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "AngelScriptManager", as_script_manager_inst);
     }
   }
 }

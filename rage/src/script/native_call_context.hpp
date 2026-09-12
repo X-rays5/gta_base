@@ -63,10 +63,18 @@ namespace rage::script {
     void* args_; // 0x10
     std::int32_t num_vector_refs_; // 0x18
     Vector* vector_ref_targets_[4]; // 0x20
-    Vector3 vector_ref_sources_[4]; // 0x40
+    // This is the one place a Vector3 has to be 16 byte aligned, and the alignment is asked for here
+    // rather than on the type. The game writes these - they are the temporaries it is handed when a
+    // native takes a vector by value - and it is the game's code, compiled against its own alignas(16)
+    // Vector3, that does the storing. Vector3 itself is four byte aligned on purpose: see the class
+    // comment in rage/src/vector.hpp for the AngelScript return path that alignment breaks. The array
+    // still starts at 0x40 and every element is 16 bytes, so the layout is unchanged; asking for the
+    // alignment keeps it that way if a member above ever changes size.
+    alignas(16) Vector3 vector_ref_sources_[4]; // 0x40
   };
 
   static_assert(sizeof(NativeCallContext) == 0x80);
+  static_assert(alignof(Vector3) <= alignof(NativeCallContext));
 
   using NativeHash = std::uint64_t;
   using NativePair = std::pair<NativeHash, NativeHash>;

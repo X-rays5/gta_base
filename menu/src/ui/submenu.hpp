@@ -425,7 +425,11 @@ namespace base::menu::ui {
     kLUA,
     kLUA_SCRIPT,
     kHOTKEYS,
-    kHOTKEY_REMOVE_CONFIRM
+    kHOTKEY_REMOVE_CONFIRM,
+    // Appended rather than grouped with kLUA: the enumerator names are the strings the submenus are
+    // registered and navigated by, so inserting one would rename every id after it.
+    kAS,
+    kAS_SCRIPT
   };
 }
 
