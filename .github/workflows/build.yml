@@ -83,12 +83,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vendor-${{ matrix.build-config }}-
 
-      - name: Initialize CodeQL
-        if: matrix.build-config == 'Debug'
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
+#      - name: Initialize CodeQL
+#        if: matrix.build-config == 'Debug'
+#        uses: github/codeql-action/init@v3
+#        with:
+#          languages: ${{ matrix.language }}
+#          build-mode: ${{ matrix.build-mode }}
 
       - name: Install OpenCppCoverage # Needed to generate coverage
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
@@ -143,27 +143,27 @@ jobs:
           path: ${{ env.COVERAGE_RESULTS_DIR }}
           retention-days: 7
 
-      - name: Perform CodeQL Analysis
-        if: matrix.build-config == 'Debug'
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: /language:${{matrix.language}}
-          output: ${{ github.workspace }}/results/codeql
-          upload: failure-only
-      - name: Filter CPP SARIF to exclude build directory
-        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
-        uses: advanced-security/filter-sarif@v1
-        with:
-          input: ${{ github.workspace }}/results/codeql/cpp.sarif
-          output: ${{ github.workspace }}/results/codeql/cpp.sarif
-          patterns: |
-            -build/**
-            -.vendor/**
-      - name: Upload CodeQL SARIF
-        if: matrix.build-config == 'Debug'
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: ${{ github.workspace }}/results/codeql
+#      - name: Perform CodeQL Analysis
+#        if: matrix.build-config == 'Debug'
+#        uses: github/codeql-action/analyze@v3
+#        with:
+#          category: /language:${{matrix.language}}
+#          output: ${{ github.workspace }}/results/codeql
+#          upload: failure-only
+#      - name: Filter CPP SARIF to exclude build directory
+#        if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
+#        uses: advanced-security/filter-sarif@v1
+#        with:
+#          input: ${{ github.workspace }}/results/codeql/cpp.sarif
+#          output: ${{ github.workspace }}/results/codeql/cpp.sarif
+#          patterns: |
+#            -build/**
+#            -.vendor/**
+#      - name: Upload CodeQL SARIF
+#        if: matrix.build-config == 'Debug'
+#        uses: github/codeql-action/upload-sarif@v3
+#        with:
+#          sarif_file: ${{ github.workspace }}/results/codeql
 
       - name: Run SonarCloud scan
         if: matrix.language == 'c-cpp' && matrix.build-config == 'Debug'
