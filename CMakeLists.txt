@@ -38,7 +38,8 @@ if (OPENCPPCOVERAGE_EXECUTABLE)
     set(ALL_TEST_TARGETS
             common_test
             imfont_test
-            # Add other test targets as they're created
+            menu_test
+            injector_test
     )
 
     add_combined_coverage_target(
