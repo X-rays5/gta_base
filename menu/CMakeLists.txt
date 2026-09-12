@@ -155,18 +155,32 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/natives/native_lookup.hpp
         src/ui/ui_size.hpp
         src/ui/ui_size.cpp
-        src/as/as_bind.cpp
-        src/as/as_bind.hpp
-        src/as/as_native_types.cpp
-        src/as/as_native_types.hpp
-        src/as/as_util.cpp
-        src/as/as_util.hpp
-        src/as/as_generate_predefined.cpp
-        src/as/as_generate_predefined.hpp
-        src/as/as_log.cpp
-        src/as/as_log.hpp
-        src/as/as_script.cpp
-        src/as/as_script.hpp
+        src/as/util/as_bind.cpp
+        src/as/util/as_bind.hpp
+        src/as/bindings/as_native_types.cpp
+        src/as/bindings/as_native_types.hpp
+        src/as/util/as_util.cpp
+        src/as/util/as_util.hpp
+        src/as/util/as_generate_predefined.cpp
+        src/as/util/as_generate_predefined.hpp
+        src/as/bindings/as_log.cpp
+        src/as/bindings/as_log.hpp
+        src/as/bindings/as_coro.cpp
+        src/as/bindings/as_coro.hpp
+        src/as/bindings/as_mutex.cpp
+        src/as/bindings/as_mutex.hpp
+        src/as/script/as_script.cpp
+        src/as/script/as_script.hpp
+        src/as/script/as_script_metadata.cpp
+        src/as/script/as_script_metadata.hpp
+        src/ui/layout/script/script_sub.cpp
+        src/ui/layout/script/script_sub.hpp
+        src/as/script/as_script_manager.cpp
+        src/as/script/as_script_manager.hpp
+        src/as/util/as_exception.cpp
+        src/as/util/as_exception.hpp
+        src/as/script/as_script_context.cpp
+        src/as/script/as_script_context.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 
@@ -199,7 +213,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE SOL_ALL_SAFETIES_ON=1 SOL_STR
 # The precompiled header for the core target was built with AS_USE_NAMESPACE defined.
 # Ensure the module target defines the same macro so the reused PCH is compatible
 # and avoids C4651 (PCH macro mismatch) when compiling `dllmain.cpp`.
-target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE)
+target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE AS_USE_STLNAMES=1)
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM ${PROJECT_NAME}_core)
 
 add_subdirectory(test)

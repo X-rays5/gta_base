@@ -6,7 +6,7 @@
 
 #include <angelscript.h>
 
-namespace base::menu::as::native_types {
+namespace base::menu::as::bindings::native_types {
   /**
    * Register the types the generated native bindings are declared in terms of: Vector2/3/4, Hash and
    * NativeHandle. Must run before natives::RegisterAngelScript, which the declarations reference.

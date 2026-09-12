@@ -4,7 +4,6 @@
 
 #include "settings.hpp"
 #include "../../menu_renderer.hpp"
-#include "../../../as/as_script.hpp"
 #include "../../../hotkey/hotkey_manager.hpp"
 #include "../../../options/option_registry.hpp"
 #include "../../components/components.hpp"
@@ -112,11 +111,6 @@ namespace base::menu::ui::layout {
 
   void InitSettingsLayout() {
     Submenu settings_submenu("ui/sub/settings", [](Submenu* sub) {
-      sub->AddComponent(components::ExecuteComponent("Run AS test", "", [] {
-        util::kTHREAD_POOL->emplace_back([] {
-          as::ExecuteScriptTest();
-        });
-      }));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kTHEME_SETTINGS));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kLOAD_FEATURE_SETTINGS));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kHOTKEYS));

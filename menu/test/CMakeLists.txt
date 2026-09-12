@@ -5,14 +5,19 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
+        src/as_bind_test.cpp
+        src/as_coro_test.cpp
         src/as_docs_test.cpp
         src/as_natives_test.cpp
 )
 
 # Link against the core library to share dependencies and avoid recompilation
 # The add-ons are linked explicitly because the core library keeps AngelScript private, and the
-# tests drive the engine directly.
-target_link_libraries(${PROJECT_NAME} PRIVATE base::menu_core angelscript_add_ons)
+# tests drive the engine directly. minicoropp is here for the same reason but for a different half
+# of it: as_script_context.hpp includes <minicoropp/coroutine.hpp> in its own interface, while the
+# core library links minicoropp privately, so a test that drives a script coroutine needs the
+# headers on its own include path.
+target_link_libraries(${PROJECT_NAME} PRIVATE base::menu_core angelscript_add_ons minicoropp::minicoropp)
 
 include(../../vendor/gtest.cmake)
 enable_testing()

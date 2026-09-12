@@ -6,6 +6,6 @@
 
 #include <angelscript.h>
 
-namespace base::menu::as::log {
+namespace base::menu::as::bindings::log {
   void RegisterLog(AngelScript::asIScriptEngine* engine);
 }

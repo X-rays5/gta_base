@@ -82,7 +82,7 @@ add_library(angelscript_add_ons STATIC
         ${ANGELSCRIPT_MATH_ADD_ON}
 )
 
-target_compile_definitions(angelscript_add_ons PUBLIC AS_USE_NAMESPACE)
+target_compile_definitions(angelscript_add_ons PUBLIC AS_USE_NAMESPACE AS_USE_STLNAMES=1)
 
 target_link_libraries(angelscript_add_ons
         PUBLIC

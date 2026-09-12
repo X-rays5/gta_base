@@ -11,7 +11,7 @@
 #include <string_view>
 #include <unordered_set>
 
-namespace base::menu::as {
+namespace base::menu::as::util {
   namespace {
     /// Keys matched against registered docs while emitting, so typos can be reported afterwards.
     using ConsumedDocs = std::unordered_set<std::string>;
@@ -94,12 +94,18 @@ namespace base::menu::as {
         }
 
         stream << "{\n";
-        // The constructors inherit the documentation of the class itself.
+        bool behavioursDocumented = false;
         for (std::uint32_t j = 0; j < t->GetBehaviourCount(); ++j) {
           AngelScript::asEBehaviours behaviours;
           const auto f = t->GetBehaviourByIndex(j, &behaviours);
           if (behaviours == AngelScript::asBEHAVE_CONSTRUCT
             || behaviours == AngelScript::asBEHAVE_DESTRUCT) {
+            // Every constructor and destructor reflects as "f", and docs are keyed by name rather than
+            // by signature, so the first one carries the block for the whole set.
+            if (not behavioursDocumented) {
+              behavioursDocumented = true;
+              printDoc(stream, std::format("{}::f", typeKey), consumed, "\t");
+            }
             stream << std::format("\t{};\n", f->GetDeclaration(false, true, true));
           }
         }

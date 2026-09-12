@@ -724,7 +724,7 @@ namespace base::tools::native_gen::gen {
         }
 
         if (as.docs) {
-          group_body += "\t\tbase::menu::as::RegisterGlobalFunction(engine, \"" + binding->declaration +
+          group_body += "\t\tbase::menu::as::util::RegisterGlobalFunction(engine, \"" + binding->declaration +
                         "\", AngelScript::asFUNCTION(" + binding->symbol + "), AngelScript::asCALL_CDECL)";
           if (binding->doc.empty()) {
             group_body += ";\n";

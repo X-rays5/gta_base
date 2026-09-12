@@ -6,10 +6,10 @@
 
 #include <angelscript.h>
 
-#include "../../src/as/as_bind.hpp"
-#include "../../src/as/as_generate_predefined.hpp"
-#include "../../src/as/as_log.hpp"
-#include "../../src/as/as_util.hpp"
+#include "../../src/as/util/as_bind.hpp"
+#include "../../src/as/util/as_generate_predefined.hpp"
+#include "../../src/as/bindings/as_log.hpp"
+#include "../../src/as/util/as_util.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -18,6 +18,8 @@
 #include <vector>
 
 namespace {
+  namespace as_util = base::menu::as::util;
+
   struct TestThing {
     int value;
   };
@@ -95,25 +97,25 @@ namespace {
 
     // The doc registry outlives the engine, so start from a clean slate the way a second debug run
     // of the script test does.
-    base::menu::as::ClearDocs();
-    base::menu::as::util::RegisterAddOns(engine);
-    base::menu::as::log::RegisterLog(engine);
+    as_util::ClearDocs();
+    as_util::RegisterAddOns(engine);
+    base::menu::as::bindings::log::RegisterLog(engine);
 
-    base::menu::as::RegisterEnum(engine, "TestEnum")
+    as_util::RegisterEnum(engine, "TestEnum")
       .Desc("An enum used to test generated documentation.");
-    base::menu::as::RegisterEnumValue(engine, "TestEnum", "First", 0)
+    as_util::RegisterEnumValue(engine, "TestEnum", "First", 0)
       .Desc("The first test value.");
-    base::menu::as::RegisterObjectType(engine, "TestThing", 0, AngelScript::asOBJ_REF | AngelScript::asOBJ_NOCOUNT)
+    as_util::RegisterObjectType(engine, "TestThing", 0, AngelScript::asOBJ_REF | AngelScript::asOBJ_NOCOUNT)
       .Desc("A type used to test generated documentation.");
-    base::menu::as::RegisterObjectProperty(engine, "TestThing", "int value", 0)
+    as_util::RegisterObjectProperty(engine, "TestThing", "int value", 0)
       .Desc("The stored value.");
-    base::menu::as::RegisterObjectMethod(engine, "TestThing", "int doubled()", AngelScript::asFUNCTION(TestThingDoubled), AngelScript::asCALL_CDECL_OBJFIRST)
+    as_util::RegisterObjectMethod(engine, "TestThing", "int doubled()", AngelScript::asFUNCTION(TestThingDoubled), AngelScript::asCALL_CDECL_OBJFIRST)
       .Desc("Doubles the stored value.")
       .Returns("The stored value multiplied by two.");
 
     const auto path = std::filesystem::temp_directory_path() / "gta_base_as_docs_test" / "as.predefined";
     std::filesystem::create_directories(path.parent_path());
-    base::menu::as::GenerateScriptPredefined(engine, path);
+    as_util::GenerateScriptPredefined(engine, path);
 
     engine->ShutDownAndRelease();
 
@@ -125,25 +127,25 @@ namespace {
 }
 
 TEST(as_docs, symbol_path_from_decl) {
-  EXPECT_EQ(base::menu::as::SymbolPathFromDecl("void info(const std::string &in)"), "info");
-  EXPECT_EQ(base::menu::as::SymbolPathFromDecl("void log::info(const std::string &in)"), "log::info");
-  EXPECT_EQ(base::menu::as::SymbolPathFromDecl("int m_value"), "m_value");
-  EXPECT_EQ(base::menu::as::SymbolPathFromDecl("std::string format(const std::string &in)"), "format");
+  EXPECT_EQ(as_util::SymbolPathFromDecl("void info(const std::string &in)"), "info");
+  EXPECT_EQ(as_util::SymbolPathFromDecl("void log::info(const std::string &in)"), "log::info");
+  EXPECT_EQ(as_util::SymbolPathFromDecl("int m_value"), "m_value");
+  EXPECT_EQ(as_util::SymbolPathFromDecl("std::string format(const std::string &in)"), "format");
 }
 
 TEST(as_docs, qualify_namespace) {
-  EXPECT_EQ(base::menu::as::QualifyNamespace("info", "log"), "log::info");
-  EXPECT_EQ(base::menu::as::QualifyNamespace("info", ""), "info");
-  EXPECT_EQ(base::menu::as::QualifyNamespace("log::info", "other"), "log::info");
+  EXPECT_EQ(as_util::QualifyNamespace("info", "log"), "log::info");
+  EXPECT_EQ(as_util::QualifyNamespace("info", ""), "info");
+  EXPECT_EQ(as_util::QualifyNamespace("log::info", "other"), "log::info");
 }
 
 TEST(as_docs, format_doc_comment) {
-  base::menu::as::Doc doc;
+  as_util::Doc doc;
   doc.description = "First line.\nSecond line.";
   doc.params.push_back({"in", "The message."});
   doc.returns = "The message.";
 
-  EXPECT_EQ(base::menu::as::FormatDocComment(doc, "\t"),
+  EXPECT_EQ(as_util::FormatDocComment(doc, "\t"),
             "\t/**\n"
             "\t * First line.\n"
             "\t * Second line.\n"
@@ -152,7 +154,7 @@ TEST(as_docs, format_doc_comment) {
             "\t * @return The message.\n"
             "\t */\n");
 
-  EXPECT_TRUE(base::menu::as::FormatDocComment(base::menu::as::Doc{}, "").empty());
+  EXPECT_TRUE(as_util::FormatDocComment(as_util::Doc{}, "").empty());
 }
 
 TEST(as_docs, global_functions_get_docs) {

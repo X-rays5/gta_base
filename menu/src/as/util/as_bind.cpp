@@ -4,10 +4,9 @@
 
 #include "as_bind.hpp"
 
-#include <cctype>
 #include <format>
 
-namespace base::menu::as {
+namespace base::menu::as::util {
   namespace {
     std::vector<std::string_view> SplitLines(std::string_view text) {
       std::vector<std::string_view> lines;
@@ -140,6 +139,15 @@ namespace base::menu::as {
   DocBuilder RegisterObjectProperty(AngelScript::asIScriptEngine* engine, const char* obj, const char* declaration,
                                    const int byteOffset, const int compositeOffset, const bool isCompositeIndirect) {
     engine->RegisterObjectProperty(obj, declaration, byteOffset, compositeOffset, isCompositeIndirect);
+    return DocBuilder{Emplace(KeyForObjectMember(engine, obj, declaration))};
+  }
+
+  DocBuilder RegisterObjectBehaviour(AngelScript::asIScriptEngine* engine, const char* obj,
+                                     const AngelScript::asEBehaviours behaviour, const char* declaration,
+                                     const AngelScript::asSFuncPtr& funcPointer, const AngelScript::asDWORD callConv,
+                                     void* auxiliary, const int compositeOffset, const bool isCompositeIndirect) {
+    engine->RegisterObjectBehaviour(obj, behaviour, declaration, funcPointer, callConv, auxiliary, compositeOffset,
+                                    isCompositeIndirect);
     return DocBuilder{Emplace(KeyForObjectMember(engine, obj, declaration))};
   }
 

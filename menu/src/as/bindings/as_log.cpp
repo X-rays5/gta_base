@@ -3,14 +3,14 @@
 //
 
 #include "as_log.hpp"
-#include "as_bind.hpp"
-#include "as_util.hpp"
+#include "../util/as_bind.hpp"
+#include "../util/as_util.hpp"
 
 #include <fmt/args.h>
 
-namespace base::menu::as::log {
+namespace base::menu::as::bindings::log {
   namespace {
-    std::string FormatASVariadicArgs(AngelScript::asIScriptGeneric* gen) {
+    std::string FormatASVariadicArgs(AngelScript::asIScriptGeneric* gen, const bool format_only = false) {
       static std::string base_msg = "[{}:{}:{}] {}";
 
       std::string script_file = "unknown";
@@ -55,7 +55,7 @@ namespace base::menu::as::log {
         formatted_payload = format;
       }
 
-      return fmt::format(fmt::runtime(base_msg), script_name, script_file, line_number, formatted_payload);
+      return fmt::format(fmt::runtime(format_only ? "{}" : base_msg), script_name, script_file, line_number, formatted_payload);
     }
 
     void LogInfoGeneric(AngelScript::asIScriptGeneric* gen)  { LOG_INFO(FormatASVariadicArgs(gen)); }
@@ -64,7 +64,7 @@ namespace base::menu::as::log {
     void LogDebugGeneric(AngelScript::asIScriptGeneric* gen) { LOG_DEBUG(FormatASVariadicArgs(gen)); }
 
     void FormatGeneric(AngelScript::asIScriptGeneric* gen) {
-      std::string result = FormatASVariadicArgs(gen);
+      std::string result = FormatASVariadicArgs(gen, true);
 
       auto* retPtr = static_cast<std::string*>(gen->GetAddressOfReturnLocation());
       if (retPtr) {
@@ -83,35 +83,35 @@ namespace base::menu::as::log {
     // Docs are keyed by name, so only one overload of each function carries them.
 
     // info
-    RegisterGlobalFunction(engine, "void info(const std::string &in)", asFUNCTION(LogInfoGeneric), AngelScript::asCALL_GENERIC)
+    util::RegisterGlobalFunction(engine, "void info(const std::string &in)", asFUNCTION(LogInfoGeneric), AngelScript::asCALL_GENERIC)
       .Desc("Logs an informational message to the menu console.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
-    RegisterGlobalFunction(engine, "void info(const std::string &in, const ?&in...)", asFUNCTION(LogInfoGeneric), AngelScript::asCALL_GENERIC);
+    util::RegisterGlobalFunction(engine, "void info(const std::string &in, const ?&in...)", asFUNCTION(LogInfoGeneric), AngelScript::asCALL_GENERIC);
 
     // warn
-    RegisterGlobalFunction(engine, "void warn(const std::string &in)", asFUNCTION(LogWarnGeneric), AngelScript::asCALL_GENERIC)
+    util::RegisterGlobalFunction(engine, "void warn(const std::string &in)", asFUNCTION(LogWarnGeneric), AngelScript::asCALL_GENERIC)
       .Desc("Logs a warning to the menu console.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
-    RegisterGlobalFunction(engine, "void warn(const std::string &in, const ?&in...)", asFUNCTION(LogWarnGeneric), AngelScript::asCALL_GENERIC);
+    util::RegisterGlobalFunction(engine, "void warn(const std::string &in, const ?&in...)", asFUNCTION(LogWarnGeneric), AngelScript::asCALL_GENERIC);
 
     // error
-    RegisterGlobalFunction(engine, "void error(const std::string &in)", asFUNCTION(LogErrorGeneric), AngelScript::asCALL_GENERIC)
+    util::RegisterGlobalFunction(engine, "void error(const std::string &in)", asFUNCTION(LogErrorGeneric), AngelScript::asCALL_GENERIC)
       .Desc("Logs an error to the menu console.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
-    RegisterGlobalFunction(engine, "void error(const std::string &in, const ?&in...)", asFUNCTION(LogErrorGeneric), AngelScript::asCALL_GENERIC);
+    util::RegisterGlobalFunction(engine, "void error(const std::string &in, const ?&in...)", asFUNCTION(LogErrorGeneric), AngelScript::asCALL_GENERIC);
 
     // debug
-    RegisterGlobalFunction(engine, "void debug(const std::string &in)", asFUNCTION(LogDebugGeneric), AngelScript::asCALL_GENERIC)
+    util::RegisterGlobalFunction(engine, "void debug(const std::string &in)", asFUNCTION(LogDebugGeneric), AngelScript::asCALL_GENERIC)
       .Desc("Logs a debug message to the menu console, which is only written when debug logging is enabled.")
       .Param("in", "The message to log. Format placeholders are replaced by the trailing arguments.");
-    RegisterGlobalFunction(engine, "void debug(const std::string &in, const ?&in...)", asFUNCTION(LogDebugGeneric), AngelScript::asCALL_GENERIC);
+    util::RegisterGlobalFunction(engine, "void debug(const std::string &in, const ?&in...)", asFUNCTION(LogDebugGeneric), AngelScript::asCALL_GENERIC);
 
     // format
-    RegisterGlobalFunction(engine, "std::string format(const std::string &in)", asFUNCTION(FormatGeneric), AngelScript::asCALL_GENERIC)
+    util::RegisterGlobalFunction(engine, "std::string format(const std::string &in)", asFUNCTION(FormatGeneric), AngelScript::asCALL_GENERIC)
       .Desc("Formats a message the same way the log functions do, without writing it to the console.")
       .Param("in", "The format string. Placeholders are replaced by the trailing arguments.")
       .Returns("The formatted message.");
-    RegisterGlobalFunction(engine, "std::string format(const std::string &in, const ?&in...)", asFUNCTION(FormatGeneric), AngelScript::asCALL_GENERIC);
+    util::RegisterGlobalFunction(engine, "std::string format(const std::string &in, const ?&in...)", asFUNCTION(FormatGeneric), AngelScript::asCALL_GENERIC);
 
     engine->SetDefaultNamespace("");
   }

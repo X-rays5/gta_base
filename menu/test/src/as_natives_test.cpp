@@ -6,10 +6,10 @@
 
 #include <angelscript.h>
 
-#include "../../src/as/as_bind.hpp"
-#include "../../src/as/as_generate_predefined.hpp"
-#include "../../src/as/as_native_types.hpp"
-#include "../../src/as/as_util.hpp"
+#include "../../src/as/util/as_bind.hpp"
+#include "../../src/as/util/as_generate_predefined.hpp"
+#include "../../src/as/bindings/as_native_types.hpp"
+#include "../../src/as/util/as_util.hpp"
 #include "../../src/game/native_types.hpp"
 #include "../../src/natives/natives_as.hpp"
 
@@ -30,9 +30,11 @@
 // engine, and the last group registers all ~6,600 natives and fails on any declaration the engine
 // refuses.
 namespace {
-  using base::menu::as::RegisterGlobalFunction;
-  using base::menu::as::RegisterGlobalProperty;
-  using base::menu::as::native_types::Register;
+  namespace as_util = base::menu::as::util;
+
+  using as_util::RegisterGlobalFunction;
+  using as_util::RegisterGlobalProperty;
+  using base::menu::as::bindings::native_types::Register;
 
   std::uint32_t g_error_count = 0;
   std::vector<std::string> g_errors;
@@ -68,8 +70,8 @@ namespace {
       engine->SetMessageCallback(AngelScript::asFUNCTION(CollectErrors), nullptr, AngelScript::asCALL_CDECL);
     }
 
-    base::menu::as::ClearDocs();
-    base::menu::as::util::RegisterAddOns(engine);
+    as_util::ClearDocs();
+    as_util::RegisterAddOns(engine);
     Register(engine);
     return engine;
   }
@@ -367,7 +369,7 @@ TEST(as_natives, native_docs_land_on_their_declarations) {
 
   const auto path = std::filesystem::temp_directory_path() / "gta_base_as_natives_test" / "as.predefined";
   std::filesystem::create_directories(path.parent_path());
-  base::menu::as::GenerateScriptPredefined(engine, path);
+  as_util::GenerateScriptPredefined(engine, path);
   engine->ShutDownAndRelease();
 
   ASSERT_EQ(g_error_count, 0U) << ReportedErrors();

@@ -6,7 +6,7 @@
 
 #include <angelscript.h>
 
-namespace base::menu::as {
+namespace base::menu::as::util {
   /**
    * Generate stubs for angel-lsp
    * @param engine The AngelScript engine
