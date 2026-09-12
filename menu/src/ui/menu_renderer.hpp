@@ -32,6 +32,10 @@ namespace base::menu::ui {
       submenus_.emplace(id, std::make_shared<Submenu>(std::move(submenu)));
       if (submenu_stack_.empty()) {
         submenu_stack_.push(id);
+        // The first submenu registered becomes the root of the stack, and the root is what the
+        // user is looking at from the moment the menu exists: it has been opened, not merely
+        // stored. A later AddSubmenu changes nothing anybody can see, so it notifies nobody.
+        NotifyCurrentSubmenuOpened();
       }
     }
 
@@ -51,11 +55,17 @@ namespace base::menu::ui {
 
     Status PushSubmenu(const std::string& id) {
       common::concurrency::ScopedSpinlock lock(submenus_lock_);
-      if (submenus_.find(id) == submenus_.end()) {
+      const auto it = submenus_.find(id);
+      if (it == submenus_.end()) {
         return MakeFailure<ResultCode::kNOT_FOUND>("Submenu not found: {}", id);
       }
 
       submenu_stack_.push(id);
+
+      // The submenu is the current one from here on, which is what its open callback is for. The
+      // stack is already updated by the time it runs, so a callback that navigates further sees
+      // itself as current.
+      NotifyCurrentSubmenuOpened();
       return {};
     }
 
@@ -68,6 +78,10 @@ namespace base::menu::ui {
       common::concurrency::ScopedSpinlock lock(submenus_lock_);
       if (!IsOnHomeSubmenu()) {
         submenu_stack_.pop();
+        // Going back is also arriving: the submenu underneath is the one being looked at now, so
+        // its open callback runs here exactly as it did on the way in. Closing the menu instead
+        // leaves the root current, which is not a change of submenu and so not an opening.
+        NotifyCurrentSubmenuOpened();
       } else {
         CloseMenu();
       }
@@ -89,6 +103,25 @@ namespace base::menu::ui {
 
     std::float_t GetCurrentUiScale() const {
       return ui_props_.theme->menu_ui_scale;
+    }
+
+  private:
+    /**
+     * Tells the submenu on top of the stack that it is the current one.
+     *
+     * Every path that changes what the player is looking at ends here - the first AddSubmenu that
+     * gives the stack a root, a PushSubmenu onto it, a PopSubmenu back off it - so that "opened"
+     * means one thing rather than three. Call with submenus_lock_ held.
+     */
+    void NotifyCurrentSubmenuOpened() {
+      if (submenu_stack_.empty()) {
+        return;
+      }
+
+      const auto it = submenus_.find(submenu_stack_.top());
+      if (it != submenus_.end() && it->second) {
+        it->second->OnOpened();
+      }
     }
 
   private:

@@ -9,6 +9,7 @@ add_executable(${PROJECT_NAME}
         src/as_coro_test.cpp
         src/as_docs_test.cpp
         src/as_natives_test.cpp
+        src/submenu_test.cpp
 )
 
 # Link against the core library to share dependencies and avoid recompilation

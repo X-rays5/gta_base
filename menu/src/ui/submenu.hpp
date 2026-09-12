@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 #include <base-common/concurrency/spinlock.hpp>
+#include <base-common/util/callable.hpp>
 #include "components/base_component.hpp"
 
 namespace base::menu::options {
@@ -27,15 +28,26 @@ namespace base::menu::ui {
 
   public:
     using component_list_t = std::vector<Component>;
-    using update_components_cb_t = std::function<void(Submenu*)>;
+    // Type-erased, so that every submenu can be handed a lambda of its own, unrelated type.
+    // The const signature is what lets a submenu be updated through const access, and it
+    // refuses a mutable lambda here rather than letting it fail at the call.
+    using update_components_cb_t = base::common::util::Callback<void(Submenu*) const>;
+    using open_submenu_t = base::common::util::Callback<void(Submenu*) const>;
 
   public:
     /**
      *
      * @param name The name of the submenu.
      * @param update_components Callback function that will be called to update the components of the submenu.
+     * @param open_sub_cb Optional callback function that will be called when the submenu is opened.
+     *
+     * The callbacks are taken by value and moved in: Callback owns its target and has no copy to
+     * offer, so a lambda is passed as a temporary or as a std::move.
      */
-    explicit Submenu(const std::string& name, const update_components_cb_t& update_components) : sub_name_(name), update_components_cb_(update_components) {}
+    explicit Submenu(const std::string& name, update_components_cb_t update_components, open_submenu_t open_sub_cb = {})
+        : sub_name_(name),
+          update_components_cb_(std::move(update_components)),
+          open_submenu_cb_(std::move(open_sub_cb)) {}
     ~Submenu() = default;
 
     // Move constructor
@@ -43,9 +55,11 @@ namespace base::menu::ui {
         : prev_opt_count_(other.prev_opt_count_),
           cur_opt_idx_(other.cur_opt_idx_),
           scroll_offset_(other.scroll_offset_),
+          max_visible_options_(other.max_visible_options_),
           sub_name_(std::move(other.sub_name_)),
           components_(std::move(other.components_)),
-          update_components_cb_(std::move(other.update_components_cb_)) {}
+          update_components_cb_(std::move(other.update_components_cb_)),
+          open_submenu_cb_(std::move(other.open_submenu_cb_)) {}
 
     Submenu& operator=(Submenu&& other) = delete;
     Submenu(const Submenu&) = delete;
@@ -94,6 +108,23 @@ namespace base::menu::ui {
         // If the current option is not selectable, scroll to find the next selectable option
         Scroll(ScrollDirection::kDOWN);
       }
+    }
+
+    /**
+     * Tells the submenu it has become the current one, by calling the open callback it was
+     * constructed with.
+     *
+     * Nothing happens when no open callback was supplied: Callback does not throw on an empty call
+     * the way std::function does, so the check is what keeps this from being undefined.
+     */
+    void OnOpened() {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+
+      if (!open_submenu_cb_) {
+        return; // No callback to open with
+      }
+
+      open_submenu_cb_(this);
     }
 
     /**
@@ -376,7 +407,9 @@ namespace base::menu::ui {
     std::uint32_t max_visible_options_ = 12; // Default max visible options
     std::string sub_name_;
     component_list_t components_;
-    update_components_cb_t update_components_cb_ = nullptr;
+    // Default-constructed, which is the empty callback, until the constructor stores a target.
+    update_components_cb_t update_components_cb_;
+    open_submenu_t open_submenu_cb_;
   };
 
   enum class SubmenuIDs : std::uint32_t {
