@@ -22,7 +22,7 @@ namespace base::menu::ui::layout {
 
     // The scripts on disk and the one the selected submenu is showing. Both are read from the render
     // loop and written from the thread pool, which is where the load, refresh and sub-link handlers
-    // run, so both are behind this lock - the pattern the Lua layout uses, kept whole here.
+    // run, so both are behind this lock.
     common::concurrency::Spinlock scripts_lock;
     std::vector<ScriptManifest> scripts;
     // Absent until a script has been picked, and when there is nothing on disk to pick.

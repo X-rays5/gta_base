@@ -85,7 +85,7 @@ namespace base::tools::native_gen::cli {
            "\n"
            "Usage:\n"
            "  native_gen [all]     [options]   generate everything (default)\n"
-           "  native_gen generate  [options]   natives_gen9.hpp/.cpp, crossmap.hpp/.cpp, natives_sol2.hpp/.cpp\n"
+           "  native_gen generate  [options]   natives_gen9.hpp/.cpp, crossmap.hpp/.cpp, natives_as.hpp/.cpp\n"
            "  native_gen lookup    [options]   native_lookup.hpp\n"
            "\n"
            "Options:\n"

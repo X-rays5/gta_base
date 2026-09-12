@@ -135,12 +135,6 @@ namespace base::tools::native_gen::gen {
           return 1;
         }
       }
-      if (!write(kOutputSol2Header, EmitSol2Header(config))) {
-        return 1;
-      }
-      if (!write(kOutputSol2Impl, EmitSol2Impl(config, *database))) {
-        return 1;
-      }
       // Built before either is written so an unsupported type leaves no half-written pair behind.
       const auto angelscript_impl = EmitAngelScriptImpl(config, crossmap, *database);
       if (!angelscript_impl) {

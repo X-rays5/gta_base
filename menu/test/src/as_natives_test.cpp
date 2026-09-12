@@ -24,8 +24,8 @@
 #include <vector>
 
 // The generated bindings spell every native's declaration out by hand rather than deducing it from
-// the function pointer the way the sol2 emitter can, so a wrong spelling is silent memory corruption
-// at runtime instead of a compile error. These tests are the only thing standing between that and
+// the function pointer, so a wrong spelling is silent memory corruption at runtime instead of a
+// compile error. These tests are the only thing standing between that and
 // the game: the first group pins the ABI of each mapping by running real C functions through the
 // engine, and the last group registers all ~6,600 natives and fails on any declaration the engine
 // refuses.

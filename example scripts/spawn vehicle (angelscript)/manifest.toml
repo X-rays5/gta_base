@@ -1,3 +1,0 @@
-name = "Spawn vehicle"
-description = "Spawns an adder and sets the player into it. The AngelScript port of the lua example."
-main_file = "main.as"

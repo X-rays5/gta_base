@@ -25,8 +25,8 @@ namespace base::menu::as::script {
 
     /**
      * The scripts' way into the game tick loop. It is a ScriptBase rather than a hook of its own so
-     * that it is ticked by the same pass as the game task executor and the lua scripts, on the same
-     * thread and in the same order.
+     * that it is ticked by the same pass as the game task executor, on the same thread and in the
+     * same order.
      */
     class ScriptTickHost final : public base::menu::script::ScriptBase {
     public:

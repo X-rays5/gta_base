@@ -1,5 +1,5 @@
-// The AngelScript port of the spawn vehicle example: ask the game for the "adder" model, wait for it
-// a frame at a time, put the player in the car that comes out, and unload.
+// The spawn vehicle example: ask the game for the "adder" model, wait for it a frame at a time, put
+// the player in the car that comes out, and unload.
 
 // All of it is one tick function, which the menu runs as a coroutine: thread::yield() suspends it and
 // the next frame resumes it where it left off, so the whole thing reads top to bottom. Its locals
@@ -11,7 +11,7 @@ void GameTick() {
 
   // A string converts to a hash on its own, so the model can be named rather than hashed by hand.
   // Hash is an opaque value type rather than a number, so it is the name that gets logged: log::info
-  // would write "<Hash>" for the value where the lua example wrote the number.
+  // would write "<Hash>" for the value.
   const natives::Hash model = "adder";
   log::info("Model: adder");
 
@@ -25,8 +25,8 @@ void GameTick() {
   }
   log::info("Model loaded!");
 
-  // AngelScript has no default arguments here, so the flags the lua example left out are passed
-  // explicitly: the entity is alive, and the last parameter of CreateVehicle is unused by the game.
+  // AngelScript has no default arguments here, so the optional flags are passed explicitly: the
+  // entity is alive, and the last parameter of CreateVehicle is unused by the game.
   const natives::Vector3 coords = natives::entity::GetEntityCoords(ped, true);
   log::info("Coords: x={}, y={}, z={}", coords.x, coords.y, coords.z);
 

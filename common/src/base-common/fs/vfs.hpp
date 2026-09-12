@@ -46,7 +46,6 @@ namespace base::common::fs::vfs {
   GET_PATH(TimeTraceDir, "logs/time_trace")
   GET_PATH(UIThemeDir, "settings/themes")
   GET_PATH(OptionSettingsDir, "settings/options")
-  GET_PATH(LuaScripts, "lua/scripts")
   GET_PATH(ScriptsDir, "scripts")
   GET_PATH(ScriptLogsDir, "logs/scripts")
 

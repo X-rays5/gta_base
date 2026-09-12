@@ -16,8 +16,6 @@
 
 // The script-facing `thread` namespace, backed by minicoropp::this_coro: what a script does with the
 // thread it is on rather than a set of coroutine operations, which is why the namespace says `thread`.
-// The Lua side has the same calls under a `coro` table; it keeps that name, since it is being retired
-// once this side has everything it has and nothing here needs it changed.
 //
 // The waiting calls do not park the coroutine themselves. They suspend the AngelScript context and
 // record what was asked for on the ScriptContext running the script, which parks the coroutine once

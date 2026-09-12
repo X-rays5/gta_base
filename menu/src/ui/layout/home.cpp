@@ -6,7 +6,6 @@
 
 #include "../menu_renderer.hpp"
 #include "../components/components.hpp"
-#include "lua/lua.hpp"
 #include "script/script_sub.hpp"
 #include "self/self.hpp"
 #include "settings/settings.hpp"
@@ -23,7 +22,6 @@ namespace base::menu::ui::layout {
       }));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSELF));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kVEHICLE));
-      sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kLUA));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kAS));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSETTINGS));
     });
@@ -31,7 +29,6 @@ namespace base::menu::ui::layout {
 
     InitSelfLayout();
     InitVehicleLayout();
-    InitLuaLayout();
     InitScriptLayout();
     InitSettingsLayout();
   }

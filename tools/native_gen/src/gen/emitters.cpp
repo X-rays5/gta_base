@@ -400,86 +400,6 @@ namespace base::tools::native_gen::gen {
     return out;
   }
 
-  std::string EmitSol2Header(const config::Config& config) {
-    std::string out;
-    out += "#pragma once\n";
-    out += "\n";
-    AppendWarningsPush(out);
-    out += "// Auto-generated file - DO NOT EDIT\n";
-    out += "// Sol2 native registration functions\n";
-    out += "\n";
-    out += "#pragma warning(push)\n";
-    out += "#pragma warning(disable: 5321)\n";
-    out += "#include <sol/sol.hpp>\n";
-    out += "#pragma warning(pop)\n";
-    out += "\n";
-    out += "namespace " + config.generation.base_namespace + " {\n";
-    out += "\n";
-    out += "\t/**\n";
-    out += "\t * Register all natives to a sol2 lua state.\n";
-    out += "\t * \n";
-    out += "\t * @param lua The sol::state to register natives into\n";
-    out += "\t * @return A sol::table containing all registered native groups\n";
-    out += "\t */\n";
-    out += "\tsol::table register_natives(sol::state& lua);\n";
-    out += "\n";
-    out += "} // namespace " + config.generation.base_namespace + "\n";
-    out += "\n#pragma warning(pop)\n";
-    return out;
-  }
-
-  std::string EmitSol2Impl(const config::Config& config, const db::NativeDb& db) {
-    const auto& generation = config.generation;
-
-    std::string out;
-    AppendWarningsPush(out);
-    out += "// Auto-generated file - DO NOT EDIT\n";
-    out += "// Sol2 native registration functions\n";
-    out += "\n";
-    out += "#include \"" + std::string(kOutputSol2Header) + "\"\n";
-    out += "#include \"" + std::string(kOutputHeader) + "\"\n";
-    out += "\n";
-    out += "namespace " + generation.base_namespace + " {\n";
-    out += "\n";
-
-    std::vector<std::string> active_groups;
-    for (const auto* group : ActiveGroups(generation, db)) {
-      active_groups.push_back(group->name);
-      const std::string lower = util::ToLowerAscii(group->name);
-
-      out += "\tnamespace " + lower + " {\n";
-      out += "\t\tsol::table register_" + lower + "(sol::state& lua) {\n";
-      out += "\t\t\tauto " + lower + "_table = lua.create_table();\n";
-      out += "\n";
-
-      for (const auto& native : group->natives) {
-        const std::string full_name = generation.base_namespace + "::" + group->name + "::" + native.name;
-        out += "\t\t\t" + lower + "_table[\"" + util::PascalCase(native.name) + "\"] = sol::c_call<decltype(&" + full_name +
-               "), &" + full_name + ">;\n";
-      }
-
-      out += "\n";
-      out += "\t\t\treturn " + lower + "_table;\n";
-      out += "\t\t}\n";
-      out += "\t} // namespace " + lower + "\n\n";
-    }
-
-    out += "\tsol::table register_natives(sol::state& lua) {\n";
-    out += "\t\tauto natives = lua.create_table();\n";
-    out += "\n";
-    for (const auto& group : active_groups) {
-      const std::string lower = util::ToLowerAscii(group);
-      out += "\t\tnatives[\"" + lower + "\"] = " + lower + "::register_" + lower + "(lua);\n";
-    }
-    out += "\n";
-    out += "\t\treturn natives;\n";
-    out += "\t}\n";
-    out += "\n";
-    out += "} // namespace " + generation.base_namespace + "\n";
-    out += "\n#pragma warning(pop)\n";
-    return out;
-  }
-
   namespace {
     // One native's AngelScript surface.
     struct AsBinding {
@@ -490,9 +410,9 @@ namespace base::tools::native_gen::gen {
     };
 
     // Maps one native onto the AngelScript surface. AngelScript takes an explicit declaration
-    // string rather than deducing the signature from the function pointer the way sol2 does, so
-    // this is where the native vocabulary is spelled out - and a spelling that is wrong is silent
-    // memory corruption, not a compile error. An unmapped type therefore fails the run.
+    // string rather than deducing the signature from the function pointer, so this is where the
+    // native vocabulary is spelled out - and a spelling that is wrong is silent memory corruption,
+    // not a compile error. An unmapped type therefore fails the run.
     std::expected<AsBinding, std::string> BuildAsBinding(const config::GenerationConfig& generation,
                                                         const config::AngelScriptConfig& as,
                                                         const db::NativeGroup& group,

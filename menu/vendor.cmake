@@ -16,7 +16,6 @@ include(../vendor/unordered_dense.cmake)
 include(../vendor/xorstr.cmake)
 include(../vendor/ctninja.cmake)
 include(../vendor/argparse.cmake)
-include(../vendor/sol2.cmake)
 include(../vendor/minicoropp.cmake)
 include(../vendor/angelscript.cmake)
 

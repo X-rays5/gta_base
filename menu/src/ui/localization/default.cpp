@@ -37,7 +37,6 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("label/script_state/loaded", "Loaded")
     ADD_TRANSLATION("label/script_state/running", "Running")
     ADD_TRANSLATION("label/script_state/suspended", "Suspended")
-    ADD_TRANSLATION("ui/action/run_script", "Run Script")
     ADD_TRANSLATION("ui/action/load_script", "Load Script")
     ADD_TRANSLATION("ui/action/unload_script", "Unload Script")
 
@@ -68,7 +67,6 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/sub/vehicle", "Vehicle")
     ADD_TRANSLATION("ui/action/vehicle_repair", "Repair Vehicle")
 
-    ADD_TRANSLATION("ui/sub/lua", "Lua Scripts")
     ADD_TRANSLATION("ui/sub/as", "AngelScript Scripts")
 
     ADD_TRANSLATION("ui/sub/settings", "Settings")
