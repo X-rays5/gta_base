@@ -46,6 +46,8 @@ add_library(${PROJECT_NAME} STATIC
         src/base-common/conversion/joaat.hpp
         src/base-common/util/ranged_value.hpp
         src/base-common/util/enum_bitops.hpp
+        src/base-common/util/callable.cpp
+        src/base-common/util/callable.hpp
 )
 add_library(base::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
