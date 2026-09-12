@@ -17,6 +17,12 @@ namespace spdlog {
 
 namespace base::menu::as::script {
   /**
+   * What a script's own options are set apart from everything else by: the separator between a
+   * script's prefix and the name of one of its options, as in `optreg.set_level`.
+   */
+  inline constexpr std::string_view kOPTION_NAME_SEPARATOR = ".";
+
+  /**
    * Where a loaded script stands, as the UI reports it.
    */
   enum class ScriptState {
@@ -79,6 +85,22 @@ namespace base::menu::as::script {
 
     [[nodiscard]] bool IsUnloadRequested() const;
 
+    /**
+     * The prefix this script's own options are registered under, as the manifest gives it - see
+     * ScriptManifest::GetOptionPrefix. Empty for a script that has none to make one from.
+     */
+    [[nodiscard]] std::string GetOptionPrefix() const;
+
+    /**
+     * `name` as this script's options are registered: the prefix, the separator, and the name as the
+     * script wrote it. The name is returned unchanged when this script has no prefix.
+     *
+     * Nothing here works out whether `name` is already qualified: a name that is not this script's own
+     * is meant to be read as written, and the caller is the one that knows which of the two readings
+     * it is after - see how Options::Find and Options::Run resolve one.
+     */
+    [[nodiscard]] std::string QualifyOptionName(std::string_view name) const;
+
   protected:
     explicit Script(const ScriptManifest& metadata);
 
@@ -94,6 +116,13 @@ namespace base::menu::as::script {
     AngelScript::asIScriptEngine* engine_;
     AngelScript::asIScriptModule* module_;
     std::string name_;
+
+    /**
+     * Resolved once, in the constructor, from the manifest: an option a script registers carries this
+     * from the moment it is made, so it is read there rather than asked of a manifest the engine has
+     * long outlived - a script's options are registered and run from inside script code.
+     */
+    std::string option_prefix_;
 
     /**
      * Resolved once, in the constructor, so that a module which never built cannot be dereferenced

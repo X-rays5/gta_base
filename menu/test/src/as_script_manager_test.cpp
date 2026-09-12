@@ -102,6 +102,15 @@ namespace {
       return WriteManifest(name, "name = \"" + name + "\"\nmain_file = \"main.as\"\n", source);
     }
 
+    /// One more file of the fixture, at a path under the temporary directory: `first/src/module.as`
+    /// is that file of the script `first`, and a path with no directory in it lands beside the
+    /// scripts instead of inside one.
+    void WriteFileAt(const std::string& relative_path, const std::string& contents) const {
+      const auto path = dir_ / relative_path;
+      std::filesystem::create_directories(path.parent_path());
+      WriteFile(path, contents);
+    }
+
   private:
     static void WriteFile(const std::filesystem::path& path, const std::string& contents) {
       std::ofstream file(path, std::ios::binary | std::ios::trunc);
@@ -239,6 +248,74 @@ TEST(as_script_manager, a_manifest_without_a_name_is_refused) {
 
   ASSERT_TRUE(loaded.has_error());
   EXPECT_EQ(loaded.error().GetResult(), base::ResultCode::kINVALID_ARGUMENT);
+}
+
+// ---------------------------------------------------------------- the option prefix
+
+// What a script's options are kept apart by, which is worked out from what the manifest already says
+// rather than asked of every author at every name: a name meant to be read becomes the one word an
+// option name can be built from, and the manifest's own say on it is a shorter version of that word.
+TEST(as_script_manager, the_option_prefix_comes_from_the_script_name_unless_the_manifest_shortens_it) {
+  const ScriptDir dir;
+
+  EXPECT_EQ(dir.WriteManifest("readable", "name = \"Example Option Registry\"\nmain_file = \"main.as\"\n", kEmptyInit)
+                .GetOptionPrefix(),
+            "example_option_registry");
+
+  // Every run of what an option name cannot hold becomes one underscore, and none is left at either
+  // end: a name that is already one word comes back as itself, and one that is not is not made worse.
+  EXPECT_EQ(dir.WriteManifest("punctuated", "name = \"  My  Script!  v2  \"\nmain_file = \"main.as\"\n", kEmptyInit)
+                .GetOptionPrefix(),
+            "my_script_v2");
+
+  EXPECT_EQ(dir.WriteManifest("shortened", "name = \"Example Option Registry\"\nshort_name = \"optreg\"\nmain_file = \"main.as\"\n", kEmptyInit)
+                .GetOptionPrefix(),
+            "optreg");
+
+  // A short name that is not one word of letters, digits, underscores and dashes cannot be the half of
+  // an option name, so it is reported and the script's own name is used instead - rather than
+  // registering options under a name no script could write.
+  EXPECT_EQ(dir.WriteManifest("bad_short_name", "name = \"Example Option Registry\"\nshort_name = \"no spaces!\"\nmain_file = \"main.as\"\n", kEmptyInit)
+                .GetOptionPrefix(),
+            "example_option_registry");
+
+  // And a name with nothing nameable in it at all leaves the options unprefixed, which is the one case
+  // the prefix cannot keep two scripts apart in.
+  EXPECT_EQ(dir.WriteManifest("unnamable", "name = \"!!!\"\nmain_file = \"main.as\"\n", kEmptyInit).GetOptionPrefix(), "");
+}
+
+// A script's options are its own as soon as they are made, which is the fact the option layer reads
+// off it: what it calls itself is what it is registered under, with the prefix in front of it.
+TEST(as_script_manager, a_script_carries_the_prefix_its_manifest_gives_it_and_qualifies_names_with_it) {
+  const ScriptDir dir;
+  ScriptManager manager;
+
+  ASSERT_FALSE(manager.LoadScript(dir.WriteScript("hello", kEmptyInit)).has_error());
+
+  const auto found = manager.GetScript("hello");
+  ASSERT_FALSE(found.has_error());
+  const auto script = found.value().lock();
+  ASSERT_NE(script, nullptr);
+
+  EXPECT_EQ(script->GetOptionPrefix(), "hello");
+  EXPECT_EQ(script->QualifyOptionName("volume"), "hello.volume");
+
+  // A name is qualified, not checked against anything: the prefix goes in front of whatever it is
+  // given, and a name that is already somebody's full name is simply a name this script has not got -
+  // which is why the option layer reads a name as written before it reads it as one of its own.
+  EXPECT_EQ(script->QualifyOptionName("god_mode"), "hello.god_mode");
+
+  // A script with nothing to make a prefix from leaves a name alone rather than putting a separator in
+  // front of it, which is what its options are then registered as.
+  ASSERT_FALSE(manager.LoadScript(dir.WriteManifest("unnameable", "name = \"!!!\"\nmain_file = \"main.as\"\n", kEmptyInit)).has_error());
+
+  const auto odd = manager.GetScript("!!!");
+  ASSERT_FALSE(odd.has_error());
+  const auto unprefixed = odd.value().lock();
+  ASSERT_NE(unprefixed, nullptr);
+
+  EXPECT_EQ(unprefixed->GetOptionPrefix(), "");
+  EXPECT_EQ(unprefixed->QualifyOptionName("volume"), "volume");
 }
 
 TEST(as_script_manager, a_script_whose_main_file_is_missing_is_refused) {
@@ -885,4 +962,73 @@ TEST(as_script_manager, two_scripts_each_log_into_their_own_file) {
   // other's - the location is the logger's, not a heading on the file.
   EXPECT_NE(first.find("first:main.as:" + std::to_string(LineOf(kFirstLoggingInit, "log::info"))), std::string::npos) << first;
   EXPECT_NE(second.find("second:main.as:" + std::to_string(LineOf(kSecondLoggingInit, "log::info"))), std::string::npos) << second;
+}
+
+// ---------------------------------------------------------------- includes
+
+// An include names a file beside the one that asks for it, so a main file that lives in a subdirectory
+// reaches the modules next to it without spelling the directory out - and the section it pulls in is a
+// section like any other, which the unload below is what proves.
+TEST(as_script_manager, an_include_is_resolved_beside_the_file_that_asked_for_it) {
+  const ScriptDir dir;
+  ScriptManager manager;
+
+  const auto manifest = dir.WriteManifest("nested", "name = \"nested\"\nmain_file = \"src/main.as\"\n");
+  dir.WriteFileAt("nested/src/main.as", R"AS(
+#include "module.as"
+)AS");
+  dir.WriteFileAt("nested/src/module.as", R"AS(
+void GameTick() {
+  script::unload();
+}
+)AS");
+
+  ASSERT_FALSE(manager.LoadScript(manifest).has_error());
+
+  // The tick is what runs GameTick, and GameTick is only here if the include was found and built.
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("nested"), ScriptState::kNotLoaded) << "the included module never ran";
+}
+
+// The same file asked for from the other side, which is the fallback: a script whose main file is at
+// its root can still be named from one that is not.
+TEST(as_script_manager, an_include_falls_back_to_the_script_directory) {
+  const ScriptDir dir;
+  ScriptManager manager;
+
+  const auto manifest = dir.WriteManifest("rooted", "name = \"rooted\"\nmain_file = \"src/main.as\"\n");
+  dir.WriteFileAt("rooted/src/main.as", R"AS(
+#include "root.as"
+)AS");
+  dir.WriteFileAt("rooted/root.as", R"AS(
+void GameTick() {
+  script::unload();
+}
+)AS");
+
+  ASSERT_FALSE(manager.LoadScript(manifest).has_error());
+
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("rooted"), ScriptState::kNotLoaded) << "the included module never ran";
+}
+
+// What the resolution must never do is leave the script's own directory, whichever way it is tilted:
+// a relative path that climbs out is refused as firmly as an absolute one that points out.
+TEST(as_script_manager, an_include_that_climbs_out_of_the_script_is_refused) {
+  const ScriptDir dir;
+  ScriptManager manager;
+
+  const auto manifest = dir.WriteManifest("climber", "name = \"climber\"\nmain_file = \"main.as\"\n");
+  dir.WriteFileAt("climber/main.as", R"AS(
+#include "../escaped.as"
+)AS");
+  dir.WriteFileAt("escaped.as", R"AS(
+void GameInit() {
+}
+)AS");
+
+  const auto loaded = manager.LoadScript(manifest);
+
+  ASSERT_TRUE(loaded.has_error()) << "a script reached a file outside its own directory";
+  EXPECT_TRUE(manager.GetAllScripts().empty());
 }

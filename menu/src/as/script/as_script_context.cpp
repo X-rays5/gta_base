@@ -80,7 +80,7 @@ namespace base::menu::as::script {
     }
   }
 
-  void ScriptContext::Run(AngelScript::asIScriptFunction* func, const bool run_as_coroutine) {
+  void ScriptContext::Run(AngelScript::asIScriptFunction* func, const bool run_as_coroutine, void* const object_argument) {
     if (!func) {
       throw std::invalid_argument("Function pointer is null");
     }
@@ -92,6 +92,15 @@ namespace base::menu::as::script {
     const int r = context_->Prepare(func);
     if (r < 0) {
       throw std::runtime_error("Failed to prepare script context");
+    }
+
+    // Before the first Execute(): the argument lives on the frame Prepare laid out, and setting it
+    // afterwards would be writing into a frame that is already being walked.
+    if (object_argument) {
+      const int a = context_->SetArgAddress(0, object_argument);
+      if (a < 0) {
+        throw std::runtime_error("Failed to set the script context's argument");
+      }
     }
 
     if (!run_as_coroutine) {

@@ -14,6 +14,17 @@ namespace base::menu::as::script {
     std::filesystem::path GetMainFile() const;
     std::filesystem::path GetPath() const;
     std::string GetName() const;
+
+    /**
+     * The prefix this script's own options are registered and run under.
+     *
+     * A script's options are its own, so they are kept apart from the menu's and from any other
+     * script's by this prefix rather than by asking every author to spell one into every name they
+     * write. It is the manifest's `short_name` when it has one, and a word made out of the script's
+     * name otherwise - which is why a script that wants to write `optreg.set_level` rather than
+     * `example_option_registry.set_level` is a line rather than a longer name everywhere.
+     */
+    [[nodiscard]] std::string GetOptionPrefix() const;
     std::optional<std::string> GetDescription() const;
     std::vector<std::string> GetAuthor() const;
     std::optional<std::string> GetVersion() const;
@@ -24,6 +35,7 @@ namespace base::menu::as::script {
     struct Data {
       std::string main_file;
       std::string name;
+      std::optional<std::string> short_name;
       std::optional<std::string> description;
       std::vector<std::string> authors;
       std::optional<std::string> version;

@@ -5,57 +5,61 @@
 #include "as_script_manifest.hpp"
 #include <glaze/toml.hpp>
 
-#include <system_error>
+#include <base-common/fs/vfs.hpp>
 
 namespace base::menu::as::script {
   namespace {
-    /**
-     * Whether every element of `base` is the corresponding element of `target`, so that `target` is at
-     * or below `base`.
-     *
-     * Written out rather than handed to std::equal: equal's four-iterator form requires both ranges to
-     * be the same length and so would answer no for every file below the directory it was given, while
-     * its three-iterator form reads the second path as far as the first goes, off the end of a target
-     * that is shorter. Element-wise is also why this is not a string prefix test on the native form,
-     * which would call "/tmp/ab" a path below "/tmp/a".
-     */
-    bool IsPathPrefix(const std::filesystem::path& base, const std::filesystem::path& target) {
-      auto base_it = base.begin();
-      const auto base_end = base.end();
-      auto target_it = target.begin();
-      const auto target_end = target.end();
+    /// Whether `c` is a letter or a digit, spelled out rather than left to std::isalnum: a script's
+    /// name is UTF-8 text of whatever the author typed, and no locale has any business deciding which
+    /// of its bytes an option name can be made of.
+    bool IsNameChar(const char c) {
+      return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+    }
 
-      for (; base_it != base_end; ++base_it, ++target_it) {
-        if (target_it == target_end || *base_it != *target_it) {
+    /// `name` as the one word an option name can be built from: its letters and digits, with every run
+    /// of anything else - a space, a dash, the bytes of a character outside ASCII - become a single
+    /// underscore between them and none at either end.
+    ///
+    /// A script's name is written to be read rather than to be typed, so "Example Option Registry"
+    /// becomes `example_option_registry` here rather than being refused.
+    std::string ToPrefix(const std::string_view name) {
+      std::string prefix;
+      prefix.reserve(name.size());
+
+      for (const char c : name) {
+        if (c >= 'a' && c <= 'z') {
+          prefix.push_back(c);
+        } else if (c >= 'A' && c <= 'Z') {
+          prefix.push_back(static_cast<char>(c - 'A' + 'a'));
+        } else if (c >= '0' && c <= '9') {
+          prefix.push_back(c);
+        } else if (!prefix.empty() && prefix.back() != '_') {
+          prefix.push_back('_');
+        }
+      }
+
+      while (!prefix.empty() && prefix.back() == '_') {
+        prefix.pop_back();
+      }
+
+      return prefix;
+    }
+
+    /// Whether `short_name` is something an option name can be made from: one word of letters, digits,
+    /// underscores and dashes. A short name that cannot be read back the way it was written is
+    /// reported rather than used, since what it would produce is a name no script could run.
+    bool IsUsableShortName(const std::string_view short_name) {
+      if (short_name.empty()) {
+        return false;
+      }
+
+      for (const char c : short_name) {
+        if (!IsNameChar(c) && c != '_' && c != '-') {
           return false;
         }
       }
 
       return true;
-    }
-
-    /**
-     * Whether `target` is inside `base`, with both resolved first so that a ".." cannot be hidden in
-     * one of them.
-     *
-     * Neither path has to exist. A manifest whose main file or license was deleted asks a question
-     * about a path that is not there, and the answer is no - `canonical` would throw instead, out of
-     * the menu's render loop, which reads these every frame.
-     */
-    bool EnsureIsWithinDirectory(const std::filesystem::path& base, const std::filesystem::path& target) {
-      std::error_code ec;
-      const auto canonical_base = std::filesystem::canonical(base, ec);
-      if (ec) {
-        return false;
-      }
-
-      // Weakly canonical because the target is not required to exist.
-      const auto canonical_target = std::filesystem::weakly_canonical(target, ec);
-      if (ec) {
-        return false;
-      }
-
-      return IsPathPrefix(canonical_base, canonical_target);
     }
   }
 
@@ -84,7 +88,7 @@ namespace base::menu::as::script {
 
   std::filesystem::path ScriptManifest::GetMainFile() const {
     const auto main_file_path = path_ / data_.main_file;
-    if (!EnsureIsWithinDirectory(path_, main_file_path)) {
+    if (!common::fs::vfs::EnsureIsWithinDirectory(path_, main_file_path)) {
       LOG_ERROR("Main file is outside of script directory: {}", main_file_path);
       return {};
     }
@@ -103,6 +107,29 @@ namespace base::menu::as::script {
 
   std::string ScriptManifest::GetName() const {
     return data_.name;
+  }
+
+  std::string ScriptManifest::GetOptionPrefix() const {
+    if (data_.short_name.has_value()) {
+      if (IsUsableShortName(*data_.short_name)) {
+        return *data_.short_name;
+      }
+
+      LOG_ERROR("The short_name '{}' of script '{}' is not one word of letters, digits, underscores and "
+                "dashes, so it cannot be what an option name is built from: the script's own name is used "
+                "instead", *data_.short_name, data_.name);
+    }
+
+    const std::string prefix = ToPrefix(data_.name);
+    if (prefix.empty()) {
+      // A name with nothing nameable in it. Its options are registered unprefixed, which is what a
+      // script registered before prefixes existed - said out loud because two scripts in that state
+      // would then collide over an option name rather than being kept apart by it.
+      LOG_WARN("The name '{}' of a script has nothing an option prefix can be made from, so its options are "
+               "registered unprefixed", data_.name);
+    }
+
+    return prefix;
   }
 
   std::optional<std::string> ScriptManifest::GetDescription() const {
@@ -124,7 +151,7 @@ namespace base::menu::as::script {
   std::optional<std::filesystem::path> ScriptManifest::GetLicense() const {
     if (data_.license.has_value()) {
       const auto license_path = path_ / data_.license.value();
-      if (!EnsureIsWithinDirectory(path_, license_path)) {
+      if (!common::fs::vfs::EnsureIsWithinDirectory(path_, license_path)) {
         LOG_ERROR("License file is outside of script directory: {}", license_path);
         return std::nullopt;
       }

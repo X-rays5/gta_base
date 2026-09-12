@@ -34,6 +34,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/localization/default.cpp
         src/util/glaze/glaze_meta.cpp
         src/util/glaze/glaze_meta.hpp
+        src/util/glaze/generic_tree.cpp
+        src/util/glaze/generic_tree.hpp
         src/util/type_traits.hpp
         src/logging/plh_logger.hpp
         src/memory/signature/pattern.cpp
@@ -112,6 +114,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/layout/vehicle/vehicle.hpp
         src/options/base_command.hpp
         src/options/base_option.hpp
+        src/options/command_line.cpp
+        src/options/command_line.hpp
         src/options/opt/self/godmode.hpp
         src/options/opt/self/godmode.cpp
         src/options/option_registry.cpp
@@ -167,6 +171,10 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/as/bindings/as_game_task.hpp
         src/as/bindings/as_lifecycle.cpp
         src/as/bindings/as_lifecycle.hpp
+        src/as/bindings/as_option.cpp
+        src/as/bindings/as_option.hpp
+        src/as/bindings/as_value.cpp
+        src/as/bindings/as_value.hpp
         src/as/script/as_script.cpp
         src/as/script/as_script.hpp
         src/as/script/as_script_manifest.cpp

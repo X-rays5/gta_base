@@ -21,6 +21,13 @@ namespace base::menu::options {
     BaseOption(const std::string& name, const std::string& description) : BaseCommand(name, description) {}
     ~BaseOption() override = default;
 
+    /// The script this option belongs to, or empty for one the menu itself registered. What the
+    /// registry asks before letting go of an option that a script registered, so that unloading the
+    /// script takes its options out with it.
+    virtual std::string GetOwnerScript() const {
+      return {};
+    }
+
     virtual bool IsHotkeyAble() const {
       return false;
     }

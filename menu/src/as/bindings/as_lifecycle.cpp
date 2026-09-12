@@ -49,9 +49,9 @@ namespace base::menu::as::bindings::lifecycle {
       }
 
       if (const auto status = script::kAS_SCRIPT_MANAGER->UnloadScript(name); status.has_error()) {
-        LOG_ERROR("[AS] Script '{}' failed to unload itself: {}", name, status.error());
+        LOG_INFO("[AS] Script '{}' failed to unload itself: {}", name, status.error());
       } else {
-        LOG_DEBUG("[AS] Script '{}' unloaded itself", name);
+        LOG_INFO("[AS] Script '{}' unloaded itself", name);
       }
     }
   }

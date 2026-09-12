@@ -6,6 +6,7 @@
 #include "as_script_manager.hpp"
 #include <angelscript.h>
 #include "../../natives/natives_as.hpp"
+#include "../../options/option_registry.hpp"
 #include "../../script/script_manager.hpp"
 #include "../bindings/as_coro.hpp"
 #include "../bindings/as_game_task.hpp"
@@ -13,10 +14,14 @@
 #include "../bindings/as_log.hpp"
 #include "../bindings/as_mutex.hpp"
 #include "../bindings/as_native_types.hpp"
+#include "../bindings/as_option.hpp"
+#include "../bindings/as_value.hpp"
+#include "../util/as_bind.hpp"
 #include "../util/as_generate_predefined.hpp"
 #include "../util/as_script_logger.hpp"
 #include "../util/as_util.hpp"
 #include <angelscript/scriptbuilder/scriptbuilder.h>
+#include <base-common/fs/vfs.hpp>
 
 namespace base::menu::as::script {
   namespace {
@@ -45,15 +50,20 @@ namespace base::menu::as::script {
 
       std::filesystem::path include_path = include;
       if (include_path.is_relative()) {
-        include_path = *script_dir / include_path;
-      } else {
-        const std::filesystem::path absolute_include = std::filesystem::absolute(include_path);
-        if (absolute_include.string().find(script_dir->string()) != 0) {
-          LOG_ERROR("[AS] Include path '{}' requested by '{}' is outside of the script directory '{}'", include, from, script_dir->string());
-          return -1;
-        }
+        // A relative include names a file beside the one that asked for it, which is how an include
+        // reads anywhere else: a main file under src/ finds its neighbours there without spelling the
+        // folder out, and a nested one goes on from wherever it is. The script's own directory is the
+        // fallback, so a file at the root of a script stays reachable from one that is not.
+        const std::filesystem::path from_dir = from ? std::filesystem::path(from).parent_path() : std::filesystem::path{};
+        const std::filesystem::path beside = from_dir / include_path;
+        include_path = std::filesystem::is_regular_file(beside) ? beside : *script_dir / include_path;
+      }
 
-        include_path = absolute_include;
+      // Whatever was written - and whatever it resolved to - an include that ends up outside the
+      // script's own directory is refused, and it is refused before anything is opened.
+      if (!common::fs::vfs::EnsureIsWithinDirectory(*script_dir, include_path)) {
+        LOG_ERROR("[AS] Include path '{}' requested by '{}' is outside of the script directory '{}'", include, from, script_dir->string());
+        return -1;
       }
 
       return builder->AddSectionFromFile(include_path.string().c_str());
@@ -101,6 +111,12 @@ namespace base::menu::as::script {
     }
 
     void RegisterBindings(AngelScript::asIScriptEngine* engine) {
+      // The doc registry outlives one engine and Emplace only ever appends, so a second registration
+      // into it in the same process would leave every @param of every binding written twice. Every
+      // engine registers the same bindings, so what is dropped here is exactly what is written again
+      // below. The builders are the only thing that writes into it, and none survives its call.
+      util::ClearDocs();
+
       util::RegisterAddOns(engine);
       bindings::log::RegisterLog(engine);
       bindings::coro::RegisterCoro(engine);
@@ -108,7 +124,13 @@ namespace base::menu::as::script {
       bindings::lifecycle::RegisterLifecycle(engine);
       bindings::mutex::RegisterMutex(engine);
       bindings::native_types::Register(engine);
-      natives::RegisterAngelScript(engine);
+      bindings::value::RegisterValue(engine);
+      bindings::option::RegisterOption(engine);
+
+      // Qualified as the global namespace, which is where the generated registration header declares it:
+      // the rest of the natives are in base::menu::natives, and that name is the one this reaches for
+      // from in here - so a bare `natives::` would look in the wrong namespace for this one function.
+      ::natives::RegisterAngelScript(engine);
     }
 
     AngelScript::asIScriptEngine* InitEngine() {
@@ -128,7 +150,8 @@ namespace base::menu::as::script {
     }
   }
 
-  Script::Script(const ScriptManifest& metadata) : module_{nullptr}, name_(metadata.GetName()) {
+  Script::Script(const ScriptManifest& metadata)
+    : module_{nullptr}, name_(metadata.GetName()), option_prefix_(metadata.GetOptionPrefix()) {
     engine_ = InitEngine();
 
     try {
@@ -177,7 +200,20 @@ namespace base::menu::as::script {
   }
 
   Script::~Script() {
-    // The runtime context goes first. A parked coroutine's stack still holds the VM frame it was
+    // The options this script registered go first, and before the engine does: the registry holds them
+    // strongly, so it is the only thing keeping them alive, and an option whose module has been
+    // discarded can name a callback that is no longer there. Nothing else takes them out - a script
+    // that unloads is not a script that unregisters itself - and every path a script can end on comes
+    // through here, including one that failed to build and one the manager is being torn down with.
+    //
+    // An unnamed script is one that was never loaded, which is the shape the doc generator makes; it
+    // owns nothing, and asking for the options of the empty name would match every option the menu
+    // registered itself, which are all owned by no script at all.
+    if (!name_.empty() && options::kOPTION_REGISTRY) {
+      options::kOPTION_REGISTRY->RemoveOptionsOwnedBy(name_);
+    }
+
+    // The runtime context goes next. A parked coroutine's stack still holds the VM frame it was
     // resumed from, so shutting the engine down underneath it would leave that frame pointing at
     // freed memory - see the note on ScriptContext.
     runtime_context_.reset();
@@ -287,6 +323,21 @@ namespace base::menu::as::script {
 
   bool Script::IsUnloadRequested() const {
     return unload_requested_;
+  }
+
+  std::string Script::GetOptionPrefix() const {
+    return option_prefix_;
+  }
+
+  std::string Script::QualifyOptionName(const std::string_view name) const {
+    if (option_prefix_.empty()) {
+      return std::string(name);
+    }
+
+    std::string qualified = option_prefix_;
+    qualified += kOPTION_NAME_SEPARATOR;
+    qualified += name;
+    return qualified;
   }
 
   void Script::DumpAsPredefined(const std::filesystem::path& path) {
