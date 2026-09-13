@@ -20,6 +20,7 @@ include(cmake_scripts/get_cpm.cmake)
 add_subdirectory(common)
 add_subdirectory(imfont)
 add_subdirectory(rage)
+add_subdirectory(asjit)
 add_subdirectory(menu)
 add_subdirectory(injector)
 
@@ -38,6 +39,7 @@ if (OPENCPPCOVERAGE_EXECUTABLE)
     set(ALL_TEST_TARGETS
             common_test
             imfont_test
+            asjit_test
             menu_test
             injector_test
     )

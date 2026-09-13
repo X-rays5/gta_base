@@ -5,6 +5,7 @@
 #include "as_script.hpp"
 #include "as_script_manager.hpp"
 #include <angelscript.h>
+#include <asjit.hpp>
 #include "../../natives/natives_as.hpp"
 #include "../../options/option_registry.hpp"
 #include "../../script/script_manager.hpp"
@@ -99,7 +100,12 @@ namespace base::menu::as::script {
       engine->SetEngineProperty(AngelScript::asEP_INIT_CALL_STACK_SIZE, 1024 * 32);
       engine->SetEngineProperty(AngelScript::asEP_BUILD_WITHOUT_LINE_CUES, false);
       engine->SetEngineProperty(AngelScript::asEP_INIT_GLOBAL_VARS_AFTER_BUILD, true);
-      engine->SetEngineProperty(AngelScript::asEP_INCLUDE_JIT_INSTRUCTIONS, false);
+      // Both have to be set before the first module is built: the optimizer drops every
+      // asBC_JitEntry when the first is false (as_bytecode.cpp), and the compiler hook reads the
+      // second to decide which asIJITCompiler interface to call. SetEngineProperties runs before
+      // any module exists, which is what makes this the right place for them.
+      engine->SetEngineProperty(AngelScript::asEP_INCLUDE_JIT_INSTRUCTIONS, true);
+      engine->SetEngineProperty(AngelScript::asEP_JIT_INTERFACE_VERSION, 2);
       engine->SetEngineProperty(AngelScript::asEP_EXPAND_DEF_ARRAY_TO_TMPL, true);
       engine->SetEngineProperty(AngelScript::asEP_AUTO_GARBAGE_COLLECT, true);
       engine->SetEngineProperty(AngelScript::asEP_NO_DEBUG_OUTPUT, true);
@@ -144,6 +150,12 @@ namespace base::menu::as::script {
       }
 
       SetEngineProperties(engine);
+
+      // Before RegisterBindings, and so before any module is built: the JIT compiles a function the
+      // moment its module finishes building, so it has to be attached first or the first script to
+      // load is the one that misses out.
+      asjit::Attach(engine);
+
       RegisterBindings(engine);
 
       return engine;
