@@ -518,7 +518,7 @@ namespace base::menu::ui {
     const std::float_t text_max_x = ui_props_.menu_width - ui_props_.theme->text_props.x_margin * 2;
 
     std::string description = current_component->GetDescription();
-    render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, description, text_max_x, 2);
+    render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, description, text_max_x, ui_props_.max_description_lines);
 
     if (current_component->IsSavable()) {
       std::string savable_text = localization::kMANAGER->Localize("info/save_able");

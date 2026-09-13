@@ -75,6 +75,7 @@ namespace base::menu::ui {
     const UiSize menu_item_height = UiSize(0.025f);
     const UiSize menu_width = UiSize(0.16f);
     const std::uint32_t max_options_drawn = 12;
+    const std::size_t max_description_lines = 3;
     const RgbColor selector_color = RgbColor(47, 47, 47);
   };
 }
