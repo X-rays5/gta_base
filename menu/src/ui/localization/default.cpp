@@ -20,6 +20,7 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("label/invalid_submenu", "Invalid Submenu")
     ADD_TRANSLATION("info/save_able", "Press F11 to save this option")
     ADD_TRANSLATION("info/hotkey_able", "Press F12 to set a hotkey for this option")
+    ADD_TRANSLATION("info/hotkey", "Hotkey set to '{}' press F12 to replace")
 
     ADD_TRANSLATION("label/scripts", "Scripts")
     ADD_TRANSLATION("label/no_scripts_found", "No scripts found")

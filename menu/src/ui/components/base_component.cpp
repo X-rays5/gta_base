@@ -27,6 +27,24 @@ namespace base::menu::ui::components {
     hotkey::kHOTKEY_MANAGER->AddNewHotkey(opt);
   }
 
+  std::optional<std::string> BaseComponent::GetHotkeyText() const {
+    // An option that cannot take a hotkey is not worth the lookup, and neither is a menu with no hotkey
+    // manager behind it - which is a test or a harness rather than a running game, and there is nothing
+    // bound to anything in one.
+    if (!IsHotkeyAble() || !hotkey::kHOTKEY_MANAGER) {
+      return std::nullopt;
+    }
+
+    // Looked up by name rather than by pointer: the manager holds whatever the registry handed it when
+    // the key was bound, which is not necessarily the same option object this component was built with.
+    const auto hotkey = hotkey::kHOTKEY_MANAGER->GetHotkeyForOption(option_->GetName());
+    if (!hotkey) {
+      return std::nullopt;
+    }
+
+    return hotkey->AsString();
+  }
+
   bool BaseComponent::IsSavable() const {
     return option_ ? option_->IsSavable() : false;
   }

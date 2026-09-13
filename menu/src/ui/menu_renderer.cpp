@@ -4,6 +4,8 @@
 
 #include "menu_renderer.hpp"
 
+#include <fmt/format.h>
+
 #include "../options/base_option.hpp"
 #include "../render/animate.hpp"
 #include "../render/renderer.hpp"
@@ -520,23 +522,36 @@ namespace base::menu::ui {
     std::string description = current_component->GetDescription();
     render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, description, text_max_x, ui_props_.max_description_lines);
 
+    // The box is a single string, and every line below is one of its lines in the order they read. They
+    // all go through here rather than each repeating what amounts to "start the box, or start a new line
+    // in it", which is the same sentence three times and the same place for all three to go wrong.
+    const auto append_line = [&description](std::string line) {
+      if (line.empty()) {
+        return;
+      }
+      if (description.empty()) {
+        description = std::move(line);
+      } else {
+        description += "\n" + line;
+      }
+    };
+
     if (current_component->IsSavable()) {
       std::string savable_text = localization::kMANAGER->Localize("info/save_able");
       render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, savable_text, text_max_x, 1);
-      if (description.empty()) {
-        description = savable_text;
-      } else {
-        description += "\n" + savable_text;
-      }
+      append_line(std::move(savable_text));
     }
-    if (current_component->IsHotkeyAble()) {
+    // One line or the other, never both: a bound key is exactly when the player wants to know what it
+    // is and how to change it, and that is one sentence - the "to set one" hint would be the same
+    // sentence about a key that is not there.
+    if (const auto bound_hotkey = current_component->GetHotkeyText()) {
+      std::string bound_text = fmt::format(fmt::runtime(localization::kMANAGER->Localize("info/hotkey")), *bound_hotkey);
+      render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, bound_text, text_max_x, 1);
+      append_line(std::move(bound_text));
+    } else if (current_component->IsHotkeyAble()) {
       std::string hotkey_text = localization::kMANAGER->Localize("info/hotkey_able");
       render::draw_helpers::WordWrap(ui_props_.theme->text_props.font_size, hotkey_text, text_max_x, 1);
-      if (description.empty()) {
-        description = hotkey_text;
-      } else {
-        description += "\n" + hotkey_text;
-      }
+      append_line(std::move(hotkey_text));
     }
 
     if (description.empty()) {

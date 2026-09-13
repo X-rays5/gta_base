@@ -4,6 +4,7 @@
 
 #ifndef BASE_COMPONENT_HPP_05184123
 #define BASE_COMPONENT_HPP_05184123
+#include <optional>
 #include "component_flags.hpp"
 #include "../localization/manager.hpp"
 
@@ -76,6 +77,18 @@ namespace base::menu::ui::components {
 
     bool IsHotkeyAble() const;
     void AddNewHotkey() const;
+
+    /**
+     * The key this component's option is bound to, written the way the hotkey list writes it - so that
+     * the two read the same way - or nothing when it is bound to none.
+     *
+     * Nothing is the answer for two different situations and they are the same to a caller: an option
+     * that cannot take a hotkey never has a key to show, and an option that could take one but has not
+     * been given any yet has none to show either. What tells those apart is IsHotkeyAble(), which is
+     * what a caller that needs to say "you could set one" has to ask in addition.
+     */
+    [[nodiscard]] std::optional<std::string> GetHotkeyText() const;
+
     bool IsSavable() const;
     void Save() const;
 

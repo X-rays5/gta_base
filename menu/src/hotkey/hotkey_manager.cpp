@@ -98,6 +98,23 @@ namespace base::menu::hotkey {
     return hotkeys;
   }
 
+  std::optional<Hotkey> HotkeyManager::GetHotkeyForOption(const std::string& option_name) const {
+    // The same lock the rest of the map is read and written under, since this is called from the render
+    // thread while a key can be bound on whichever thread the player pressed F12 on.
+    common::concurrency::ScopedSpinlock lock(add_hotkey_lock_);
+
+    for (const auto& [hotkey, option] : key_opt_map_) {
+      // By name, which is what an option is identified by everywhere else - the registry, the save file,
+      // and this map when the key was added. A null entry is not expected, but skipping one costs
+      // nothing next to dereferencing it.
+      if (option && option->GetName() == option_name) {
+        return hotkey;
+      }
+    }
+
+    return std::nullopt;
+  }
+
   void HotkeyManager::KeyDown(const std::uint32_t vk_key, const ModifierKey modifier) {
     if (ShouldIgnoreKey(vk_key)) {
       return;
