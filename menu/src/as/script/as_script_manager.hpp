@@ -64,7 +64,7 @@ namespace base::menu::as::script {
     [[nodiscard]] ScriptState GetScriptState(const std::string& name) const;
 
     /**
-     * One pass over the loaded scripts: GameInit where it has not run, then a turn of GameTick.
+     * One pass over the loaded scripts: the inits still to run, then a turn of GameTick.
      *
      * Game thread only. It is also the only place a script is destroyed, since an unloading thread
      * queues the script here rather than releasing it, and the pass holds its own references for as
@@ -109,8 +109,10 @@ namespace base::menu::as::script {
     ankerl::unordered_dense::map<std::string, std::shared_ptr<Script>> scripts_{};
 
     /**
-     * Scripts that were unloaded but not yet released, oldest first. Never non-empty for longer than
-     * the game thread takes to make a pass.
+     * References to release on the game thread, oldest first: scripts that were unloaded, from
+     * whichever thread asked. What they have in common is that releasing the last of a script's
+     * engines may not happen where the request was made, and this is where it is parked until the
+     * thread that may do it makes a pass.
      */
     std::vector<std::shared_ptr<Script>> pending_destruction_;
 

@@ -140,8 +140,8 @@ void GameTick() {
 }
 )AS";
 
-  /// GameInit's waiting calls have no coroutine to park, so it runs to its end either way; GameTick
-  /// then runs as one, which the first tick carries to the yield and the second past it.
+  /// Both game-thread calls wait, and the tick behind them unloads the script - so the pass each of them
+  /// needs is visible in whether the script is still loaded.
   constexpr const char* kYieldThenUnload = R"AS(
 void GameInit() {
   thread::yield();
@@ -149,6 +149,30 @@ void GameInit() {
 
 void GameTick() {
   thread::yield();
+  script::unload();
+}
+)AS";
+
+  /// A general init that waits before it is done, and a tick that yields - so a script that reached its
+  /// tick early would be a script whose init had not finished, which the state it reports says.
+  constexpr const char* kWaitingInit = R"AS(
+void init() {
+  thread::yield();
+}
+
+void GameTick() {
+  thread::yield();
+}
+)AS";
+
+  /// A GameInit that waits, with a tick that ends the script: the pass the tick runs in is then readable
+  /// as whether the script is still loaded.
+  constexpr const char* kWaitingGameInit = R"AS(
+void GameInit() {
+  thread::yield();
+}
+
+void GameTick() {
   script::unload();
 }
 )AS";
@@ -351,27 +375,107 @@ TEST(as_script_manager, unloading_a_script_that_is_not_loaded_reports_it) {
 
 // ---------------------------------------------------------------- what a tick pass does
 
+// One turn per pass, and GameTick behind GameInit rather than beside it: the two share the script's one
+// context, so a GameInit that waits holds the tick up for as long as it waits.
 TEST(as_script_manager, a_tick_runs_game_init_and_then_the_game_tick_coroutine) {
   const ScriptDir dir;
   ScriptManager manager;
 
   ASSERT_FALSE(manager.LoadScript(dir.WriteScript("steps", kYieldThenUnload)).has_error());
 
-  // Nothing has been ticked yet, so GameInit has not run.
+  // Nothing has been ticked yet, so neither of the inits has run.
   EXPECT_EQ(manager.GetScriptState("steps"), ScriptState::kLoaded);
 
-  // The first pass runs GameInit to its end - its thread::yield() has no coroutine to park - and takes
-  // GameTick to its own yield, which leaves the script running and not suspended.
+  // The first pass starts GameInit and takes it to its yield. GameTick does not start behind it: the
+  // init it is gated on has not ended, and a tick that ran now would be reading what GameInit has not
+  // finished setting up.
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("steps"), ScriptState::kLoaded) << "GameTick started before GameInit had ended";
+
+  // The second pass resumes GameInit past the yield, which is the end of it.
   manager.TickScripts();
   EXPECT_EQ(manager.GetScriptState("steps"), ScriptState::kRunning);
 
-  // The second pass resumes GameTick past the yield, which is where it unloads itself.
+  // The third is the first with a GameTick to run, and it takes it to its own yield - so the unload
+  // after that yield has not happened yet.
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("steps"), ScriptState::kRunning);
+
+  // The fourth is the one past it, which is where the script unloads itself.
   manager.TickScripts();
   EXPECT_EQ(manager.GetScriptState("steps"), ScriptState::kNotLoaded);
   EXPECT_TRUE(manager.GetAllScripts().empty());
 
   // And a pass with nothing loaded is not a crash.
   manager.TickScripts();
+}
+
+// The general init gates the tick the same way GameInit does, and it does it from another thread: the
+// game thread only ever asks whether it has finished, and never waits on the thread itself.
+TEST(as_script_manager, the_game_tick_waits_for_the_general_init_to_end) {
+  const ScriptDir dir;
+  ScriptManager manager;
+
+  // The general queue with no thread of its own, ticked by hand from here. The real one parks a thread
+  // and wakes it, which would make "has the init finished" a question about the machine's timing; this
+  // one makes it a question about how many times the queue has been turned over.
+  base::menu::script::GeneralTaskExecutor general{nullptr};
+
+  ASSERT_FALSE(manager.LoadScript(dir.WriteScript("gated", kWaitingInit)).has_error());
+  ASSERT_EQ(manager.GetScriptState("gated"), ScriptState::kLoaded);
+
+  // The first pass starts both ends of it: init() goes onto the general queue, where it has not run,
+  // and there is no GameInit to run here. GameTick does not get a turn.
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("gated"), ScriptState::kLoaded) << "GameTick ran before init() had";
+
+  // The first turn of the queue carries the init to its yield, and the tick behind it stays behind it.
+  general.Tick();
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("gated"), ScriptState::kLoaded) << "GameTick ran while init() was still waiting";
+
+  // The turn past the yield, which ends the init - and the pass after it is the first that has a tick
+  // to run.
+  general.Tick();
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("gated"), ScriptState::kRunning) << "GameTick never started after init() ended";
+}
+
+// A script with no init() at all is not gated on anything, which is the shape most scripts have and the
+// one every other test here relies on: the tick is free from the first pass.
+TEST(as_script_manager, a_script_with_no_init_ticks_from_the_first_pass) {
+  const ScriptDir dir;
+  ScriptManager manager;
+
+  ASSERT_FALSE(manager.LoadScript(dir.WriteScript("plain", kYieldingTick)).has_error());
+
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("plain"), ScriptState::kRunning);
+}
+
+// GameInit is a coroutine like GameTick, so a wait in it costs the game nothing and holds the tick back
+// for exactly as many passes as it waits - which is what the tick here says by not unloading the script
+// until the pass after the init has ended.
+TEST(as_script_manager, the_game_tick_waits_for_a_game_init_that_waits) {
+  const ScriptDir dir;
+  ScriptManager manager;
+
+  ASSERT_FALSE(manager.LoadScript(dir.WriteScript("gated", kWaitingGameInit)).has_error());
+
+  // GameInit's own yield: the init is parked, and the tick is behind it.
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("gated"), ScriptState::kLoaded) << "GameTick ran before GameInit had ended";
+
+  // The pass past that yield, which ends the init. The script reads as running from here - GameTick
+  // starts on the next pass, and "initialised, with a tick that has not had its first turn" is a
+  // distinction the states do not draw.
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("gated"), ScriptState::kRunning);
+
+  // The tick's first turn, which is where it unloads the script.
+  manager.TickScripts();
+  EXPECT_EQ(manager.GetScriptState("gated"), ScriptState::kNotLoaded);
+  EXPECT_TRUE(manager.GetAllScripts().empty());
 }
 
 TEST(as_script_manager, a_script_parked_on_a_suspend_reads_as_suspended) {

@@ -1,0 +1,3 @@
+name = "Example GUI Options"
+description = "An example of how to create a simple GUI with options in the game."
+main_file = "src/main.as"

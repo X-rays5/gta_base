@@ -130,9 +130,10 @@ TEST(as_coro, both_namespaces_register_without_the_engine_refusing_anything) {
 TEST(as_coro, the_waiting_calls_cost_nothing_outside_a_coroutine) {
   auto* engine = MakeEngine();
 
-  // GameInit runs to completion rather than as a coroutine, so this is the shape every script starts
-  // in. sleep() is the one that matters: outside a coroutine minicoropp falls back to
-  // std::this_thread::sleep_for, which here would stall the game thread for the full second.
+  // A page's UI callback and an option's own row are plain calls rather than coroutines - a frame is
+  // waiting on them, so they have nothing to park - so this is the shape a script's drawing runs in.
+  // sleep() is the one that matters: outside a coroutine minicoropp falls back to
+  // std::this_thread::sleep_for, which here would stall the render thread for the full second.
   auto* func = CompileMain(engine, "thread::yield(); thread::sleep(1000); thread::suspend(); g_progress = 1;");
   ASSERT_NE(func, nullptr);
 
@@ -299,10 +300,10 @@ TEST(as_mutex, try_lock_reports_ownership_without_waiting) {
 }
 
 // The one place std::mutex is deliberately not std::mutex: a script that is not a coroutine has
-// nothing to park, so lock() cannot wait for it. Taking a free lock still has to work - GameInit
-// locking an uncontended mutex is the ordinary case - and locking a held one is refused and logged
-// rather than stalling the frame on a lock only a suspended script can release. This pins that
-// choice; if it is ever changed, it should be changed deliberately.
+// nothing to park, so lock() cannot wait for it. Taking a free lock still has to work - a page's UI
+// callback reading state a script only writes behind a lock is the ordinary case - and locking a
+// held one is refused and logged rather than stalling the frame on a lock only a suspended script
+// can release. This pins that choice; if it is ever changed, it should be changed deliberately.
 TEST(as_mutex, lock_outside_a_coroutine_takes_a_free_mutex_but_never_waits) {
   auto* engine = MakeEngine();
 
@@ -326,8 +327,9 @@ TEST(as_mutex, lock_outside_a_coroutine_takes_a_free_mutex_but_never_waits) {
 }
 
 namespace {
-  /// A holder that parks on the lock across a tick, and a script that runs to completion against it -
-  /// the shape a GameInit locking something another script holds takes.
+  /// A holder that parks on the lock across a tick, and a plain call that runs against it in one go -
+  /// the shape a UI callback drawing what a script has locked takes. The script it draws for is a
+  /// coroutine that is mid-wait, so the lock is held for as long as the callback can do nothing about.
   const char* kHeldAcrossTicksScript = R"AS(
 std::mutex@ g_lock;
 

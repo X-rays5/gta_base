@@ -65,6 +65,15 @@ void AddNotification(const Type type,
       }
 
       common::concurrency::ScopedSpinlock lock(notification_lock_);
+
+      // Bounded, and bounded by dropping the oldest rather than refusing the newest: a script can now
+      // raise notifications as fast as it is ticked, and the one a player wants to see is the one that
+      // just happened. Without this the queue grows for as long as whatever is spamming it keeps going,
+      // and none of it is ever shown - only some fixed count of the earliest arrivals are.
+      if (notifications_.size() >= max_queued_notifications_) {
+        notifications_.erase(notifications_.begin());
+      }
+
       Notify notif = {
         common::util::time::GetTimeStamp(),
         duration_ms,

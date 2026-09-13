@@ -8,13 +8,17 @@ add_executable(${PROJECT_NAME}
         src/as_bind_test.cpp
         src/as_coro_test.cpp
         src/as_docs_test.cpp
+        src/as_gui_test.cpp
         src/as_natives_test.cpp
+        src/as_notify_test.cpp
         src/as_option_test.cpp
         src/as_script_manager_test.cpp
         src/as_value_test.cpp
         src/command_line_test.cpp
         src/general_task_executor_test.cpp
         src/generic_tree_test.cpp
+        src/localization_overlay_test.cpp
+        src/script_submenu_id_test.cpp
         src/submenu_test.cpp
 )
 

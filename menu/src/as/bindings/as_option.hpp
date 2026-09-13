@@ -58,10 +58,29 @@ namespace base::menu::as::bindings::option {
     /// here, so a callback that waits is waited for by the executor rather than by this call.
     void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
 
-    /// Contributes no UI of its own. The contract is "add whatever components this option needs", and
-    /// an option that needs none has met it; the menu's own layout is where a script's options would
-    /// be listed, and that is a later piece of work.
+    /**
+     * Draws this option's own row, by running the script's UI callback on the page being built right
+     * now.
+     *
+     * This is the same hook a C++ option implements to draw its own components, reached the same way:
+     * the option's row on a page is whatever this adds, and the components it adds are this option's -
+     * they get its hotkey and are saved with it - because the callback runs with this option as the
+     * page's current one.
+     *
+     * Nothing is drawn, and a report is made, when there is no page being built: an option's UI is
+     * drawn by a page, and this has no frame to draw into otherwise.
+     */
     void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;
+
+    /// Names the function that draws this option's own row, which is what gives an option a script
+    /// registered a face of its own rather than the nothing the menu draws for one it does not know.
+    /// The declaration is held rather than the function, for the same reason SetCallback holds one.
+    /// False when `fn` is null or is not the shape a UI callback is called with.
+    bool SetUiCallback(AngelScript::asIScriptFunction* fn);
+
+    [[nodiscard]] bool HasUiCallback() const {
+      return !ui_decl_.empty();
+    }
 
     /// Declares one more argument, which is what gives the option a command line to be run with and a
     /// line in its help text. False when the name is empty, the type is not one of the type chars of
@@ -83,6 +102,9 @@ namespace base::menu::as::bindings::option {
     std::string owner_script_;
     std::weak_ptr<script::Script> owner_;
     std::string callback_decl_;
+    /// The declaration of the function that draws this option's row, or empty when it has none - which
+    /// is every option until SetUiCallback is called, the menu's own included.
+    std::string ui_decl_;
   };
 
   /**
@@ -117,6 +139,23 @@ namespace base::menu::as::bindings::option {
     /// own.
     bool AddArg(const std::string& name, const std::string& type, const std::string& help);
     bool SetCallback(AngelScript::asIScriptFunction* fn);
+
+    /// The same for the function that draws the option's row, refused for one of the menu's own for the
+    /// same reason: the menu draws its own rows, and an option that has its own row drawn for it is a
+    /// script's option.
+    bool SetUiCallback(AngelScript::asIScriptFunction* fn);
+    [[nodiscard]] bool HasUiCallback() const;
+
+    /**
+     * The option this handle names, held strongly.
+     *
+     * C++ only - it is not registered with the engine and no script can reach it. It is what the GUI
+     * binding draws when a page places this option: a page holds the *option* rather than the handle,
+     * since an option outlives every handle a script may let go of.
+     */
+    [[nodiscard]] const std::shared_ptr<menu::options::BaseOption>& GetOption() const {
+      return option_;
+    }
 
     /// Puts the option this handle names into the registry under its own name, so that it can be found
     /// by name and run. Refused, with a report, for an option that is already registered under that
@@ -156,6 +195,19 @@ namespace base::menu::as::bindings::option {
     std::shared_ptr<menu::options::BaseOption> option_;
     std::shared_ptr<const std::vector<menu::options::ParsedArg>> args_;
   };
+
+  /**
+   * `Option::SetUiCallback` and `Option::HasUiCallback`, the two calls that give an option a row of its
+   * own for a page to draw.
+   *
+   * Declared and defined beside the rest of the option binding, but *registered* by the GUI binding,
+   * which is the only place the funcdef they take exists: `SetUiCallback` takes a `gui::UiCallback`, and
+   * that type is declared once RegisterGui has run. That is the one thing about the GUI the option
+   * binding would have to be ordered around, and this is what keeps it out: it names the functions, it
+   * does not know what a page is.
+   */
+  bool SetOptionUiCallback(ScriptOptionHandle* self, AngelScript::asIScriptFunction* fn);
+  bool HasOptionUiCallback(const ScriptOptionHandle* self);
 
   /// Binds `Option`, the `OptionCallback` shape its callback is declared with, and the `Options`
   /// namespace of things to do with them.

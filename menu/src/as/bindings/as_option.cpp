@@ -9,6 +9,7 @@
 #include "../util/as_bind.hpp"
 #include "../../options/option_registry.hpp"
 #include "../../script/game_task_executor.hpp"
+#include "../../ui/script_gui/script_submenu.hpp"
 
 #include <angelscript/scriptarray/scriptarray.h>
 #include <minicoropp/coroutine.hpp>
@@ -172,7 +173,10 @@ namespace base::menu::as::bindings::option {
       return menu::options::kOPTION_REGISTRY->GetOption(qualified);
     }
 
-    /// Whether `fn` is the shape a callback is called with: `void fn(Option@ &in self)`.
+    /// Whether `fn` is the shape a callback is called with: `void fn(Option@ &in self)`, and for an
+    /// option's UI callback `void fn(gui::Submenu@ &in sub)`, which is the same shape over a handle of
+    /// another type - which is all this can see, and all it needs to: the funcdef a callback is handed
+    /// over as is what checks the type.
     ///
     /// The funcdef parameter of SetCallback is what really enforces this - a function of any other shape
     /// is not an `OptionCallback` and the compiler refuses to convert it - so this is the second lock on
@@ -511,10 +515,45 @@ namespace base::menu::as::bindings::option {
     self_handle->Release();
   }
 
+  bool ScriptOption::SetUiCallback(AngelScript::asIScriptFunction* fn) {
+    if (!fn) {
+      LOG_ERROR("[AS] '{}' was given no UI callback, which leaves its row with nothing to draw", GetName());
+      return false;
+    }
+
+    if (!IsCallbackShape(fn)) {
+      LOG_ERROR("[AS] '{}' was given '{}' as its UI callback, which is not the shape a UI callback is called "
+                "with: it takes one parameter, `gui::Submenu@ &in sub`", GetName(), fn->GetDeclaration());
+      return false;
+    }
+
+    // The declaration rather than the function, for the same reason the callback is held that way: a
+    // page outlives every call, and the engine lends a function to a call and no longer.
+    ui_decl_ = fn->GetDeclaration(true, true);
+    return true;
+  }
+
   void ScriptOption::CreateOptionUi(const std::string&, ui::Submenu*) {
-    // Contributes nothing, which is what this option needs: the contract is "add whatever components
-    // this option needs", and where a script's options are listed in the menu is the menu's own layout
-    // rather than something an option draws for itself.
+    if (!HasUiCallback()) {
+      // Contributes nothing, which is what an option with no UI of its own needs: the contract is "add
+      // whatever components this option needs", and an option that needs none has met it.
+      return;
+    }
+
+    // The page being built rather than the frame this was handed: the two are the same page - it is
+    // BuildInto that draws this - and the page is what the UI callback has to be given a handle to,
+    // since a component a script adds from inside the callback is added through it.
+    ui::script_gui::ScriptSubmenu* const page = ui::script_gui::ScriptSubmenu::CurrentBuild();
+    if (!page) {
+      LOG_ERROR("[AS] '{}' has a UI callback to draw its row with, and was drawn where no page is being "
+                "built: an option's row is drawn by a page, and there is no frame for it otherwise", GetName());
+      return;
+    }
+
+    // The option is the page's current one for exactly as long as its own UI runs, which is what makes
+    // every component the callback adds this option's - its hotkey, and saved with it.
+    const ui::script_gui::ScriptSubmenu::OptionScope scope(this);
+    static_cast<void>(gui::InvokeUiCallback(owner_, ui_decl_, *page));
   }
 
   ScriptOptionHandle::ScriptOptionHandle(std::shared_ptr<menu::options::BaseOption> option,
@@ -570,6 +609,22 @@ namespace base::menu::as::bindings::option {
     }
 
     return script_option->SetCallback(fn);
+  }
+
+  bool ScriptOptionHandle::SetUiCallback(AngelScript::asIScriptFunction* fn) {
+    const std::shared_ptr<ScriptOption> script_option = AsScriptOption();
+    if (!script_option) {
+      LOG_ERROR("[AS] A UI callback was set on '{}', which the menu itself registered: an option of the menu's "
+                "own already has its row drawn for it", GetName());
+      return false;
+    }
+
+    return script_option->SetUiCallback(fn);
+  }
+
+  bool ScriptOptionHandle::HasUiCallback() const {
+    const std::shared_ptr<ScriptOption> script_option = AsScriptOption();
+    return script_option && script_option->HasUiCallback();
   }
 
   bool ScriptOptionHandle::Register() {
@@ -651,6 +706,14 @@ namespace base::menu::as::bindings::option {
 
   std::int64_t ScriptOptionHandle::LiveInstances() {
     return live_instances.load(std::memory_order_relaxed);
+  }
+
+  bool SetOptionUiCallback(ScriptOptionHandle* const self, AngelScript::asIScriptFunction* const fn) {
+    return self->SetUiCallback(fn);
+  }
+
+  bool HasOptionUiCallback(const ScriptOptionHandle* const self) {
+    return self->HasUiCallback();
   }
 
   void RegisterOption(AngelScript::asIScriptEngine* engine) {

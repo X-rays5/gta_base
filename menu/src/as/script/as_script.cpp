@@ -8,13 +8,18 @@
 #include <asjit.hpp>
 #include "../../natives/natives_as.hpp"
 #include "../../options/option_registry.hpp"
+#include "../../script/general_task_executor.hpp"
 #include "../../script/script_manager.hpp"
+#include "../../ui/localization/manager.hpp"
+#include "../../ui/script_gui/script_submenu_registry.hpp"
 #include "../bindings/as_coro.hpp"
 #include "../bindings/as_game_task.hpp"
+#include "../bindings/as_gui.hpp"
 #include "../bindings/as_lifecycle.hpp"
 #include "../bindings/as_log.hpp"
 #include "../bindings/as_mutex.hpp"
 #include "../bindings/as_native_types.hpp"
+#include "../bindings/as_notify.hpp"
 #include "../bindings/as_option.hpp"
 #include "../bindings/as_value.hpp"
 #include "../util/as_bind.hpp"
@@ -23,6 +28,7 @@
 #include "../util/as_util.hpp"
 #include <angelscript/scriptbuilder/scriptbuilder.h>
 #include <base-common/fs/vfs.hpp>
+#include <minicoropp/coroutine.hpp>
 
 namespace base::menu::as::script {
   namespace {
@@ -132,6 +138,13 @@ namespace base::menu::as::script {
       bindings::native_types::Register(engine);
       bindings::value::RegisterValue(engine);
       bindings::option::RegisterOption(engine);
+      // After the option binding, and not before it: the GUI's `Submenu::AddOption` names `Option`, and
+      // the two methods that give an option a UI callback of its own are registered onto the type the
+      // option binding declared. The option binding knows nothing about the GUI and stays that way.
+      bindings::gui::RegisterGui(engine);
+      // Not part of the GUI despite being a thing the GUI shows: a notification is not a page, and the
+      // namespace it lives in is a top-level one for that reason.
+      bindings::notify::RegisterNotify(engine);
 
       // Qualified as the global namespace, which is where the generated registration header declares it:
       // the rest of the natives are in base::menu::natives, and that name is the one this reaches for
@@ -187,6 +200,7 @@ namespace base::menu::as::script {
         throw std::runtime_error("No module was built for script '" + metadata.GetName() + "'");
       }
 
+      init_ = GetInitFunction();
       game_init_ = GetGameInitFunction();
       game_tick_ = GetGameTickFunction();
 
@@ -221,8 +235,29 @@ namespace base::menu::as::script {
     // An unnamed script is one that was never loaded, which is the shape the doc generator makes; it
     // owns nothing, and asking for the options of the empty name would match every option the menu
     // registered itself, which are all owned by no script at all.
-    if (!name_.empty() && options::kOPTION_REGISTRY) {
-      options::kOPTION_REGISTRY->RemoveOptionsOwnedBy(name_);
+    if (!name_.empty()) {
+      // Everything the script put into the menu's own state goes, in one place, before the engine does.
+      // All three hold what a script made strongly - an option, a page, a string - so they are the only
+      // things keeping them alive, and all three are keyed by the name of the script that made them,
+      // which is all that is still readable this far into the destruction. A script that unloads does
+      // not unregister itself, so every path a script can end on comes through here: a failed build, a
+      // reload, a request from the script's own tick, and the manager's own teardown.
+      //
+      // Each is null-guarded, so a harness with no renderer or no localization manager unloads cleanly.
+      if (ui::script_gui::kSCRIPT_SUBMENUS) {
+        // The page is taken out of the renderer's map and off its stack, which leaves whoever was
+        // standing on it on the page underneath. Nothing of the script is called back while that
+        // happens - see ScriptSubmenuRegistry::RemoveOwnedBy.
+        ui::script_gui::kSCRIPT_SUBMENUS->RemoveOwnedBy(name_);
+      }
+
+      if (ui::localization::kMANAGER) {
+        ui::localization::kMANAGER->RemoveScriptTranslationsOwnedBy(name_);
+      }
+
+      if (options::kOPTION_REGISTRY) {
+        options::kOPTION_REGISTRY->RemoveOptionsOwnedBy(name_);
+      }
     }
 
     // The runtime context goes next. A parked coroutine's stack still holds the VM frame it was
@@ -273,22 +308,41 @@ namespace base::menu::as::script {
     }
 
     try {
-      if (!init_done_) {
-        if (game_init_) {
-          // Runs to completion rather than as a coroutine: there is nothing for GameInit to wait on,
-          // and it has to have finished before GameTick gets a turn.
-          runtime_context_->Run(game_init_, false);
+      if (!inits_started_) {
+        // The one pass that starts anything: init() goes to the general thread here, and GameInit -
+        // which is this thread's - gets its first turn below. Both are started at once rather than one
+        // after the other, since neither waits on the other; what they are both in front of is
+        // GameTick, and that is gated on the two of them having finished.
+        StartInits();
+      }
+
+      if (!game_init_done_.load(std::memory_order_relaxed)) {
+        // One turn per pass, exactly as GameTick gets, and nothing else this pass: a GameInit that
+        // parks is resumed on the next tick, and GameTick does not start until it has ended.
+        if (runtime_context_->IsRunning()) {
+          runtime_context_->Tick();
+        } else if (game_init_) {
+          runtime_context_->Run(game_init_, true);
+          // So the first turn of GameInit runs in the pass the script was loaded in rather than the
+          // next one. Run() only prepares the coroutine - this is what executes it.
+          runtime_context_->Tick();
         }
 
-        // Set even for a script with no GameInit: what it stands for is that the script has started,
-        // which is the difference between the loaded and running states.
-        init_done_ = true;
-
-        // A script that unloaded itself from GameInit has no GameTick to start, and the engine it
-        // just ran on is only still alive because this pass holds a reference to the script.
-        if (unload_requested_) {
-          return;
+        // Read off the context rather than assumed, because a first turn that ran to the end has
+        // finished the init and one that parked has not.
+        if (!runtime_context_->IsRunning()) {
+          game_init_done_.store(true, std::memory_order_relaxed);
         }
+
+        return;
+      }
+
+      if (!general_init_done_.load(std::memory_order_acquire)) {
+        // Still on the general thread, or still queued there. GameTick waits: the whole point of the
+        // general init is that it is the script's setup, and a tick that started before it ended would
+        // be reading globals it is still making. Nothing this pass does either - the wait costs the
+        // game nothing, which is why the init is a coroutine on a thread that parks.
+        return;
       }
 
       if (runtime_context_->IsRunning()) {
@@ -298,7 +352,8 @@ namespace base::menu::as::script {
 
       if (game_tick_) {
         runtime_context_->Run(game_tick_, true);
-        // So the first GameTick runs in the pass the script was loaded in rather than the next one.
+        // As above: Run() starts the coroutine and does not execute it, so this is what gives the
+        // first GameTick its turn - in the pass the script was loaded in rather than the next one.
         runtime_context_->Tick();
       }
     } catch (const std::exception& e) {
@@ -315,8 +370,96 @@ namespace base::menu::as::script {
     }
   }
 
+  void Script::StartInits() {
+    inits_started_ = true;
+
+    // Marked finished rather than left alone: what the flags gate is GameTick, and a script without an
+    // init has nothing for it to wait for. Set here, on the game thread, before either is read.
+    if (!game_init_) {
+      game_init_done_.store(true, std::memory_order_relaxed);
+    }
+
+    if (!init_) {
+      general_init_done_.store(true, std::memory_order_release);
+      return;
+    }
+
+    QueueGeneralInit();
+  }
+
+  void Script::QueueGeneralInit() {
+    auto* const executor = menu::script::kGENERAL_TASK_EXECUTOR;
+    if (!executor) {
+      // Nothing will ever be waiting on a thread that does not exist, so the init is skipped rather
+      // than the script sitting at its first tick for the rest of its life. It is a fault worth
+      // reporting: a menu with no general thread has no init() for anybody, and every script that has
+      // one is quietly missing its setup.
+      LOG_ERROR("[AS] Script '{}' has an init() but there is no general task executor to run it on; it is skipped", name_);
+      general_init_done_.store(true, std::memory_order_release);
+      return;
+    }
+
+    // The handle rather than a reference, and the same reasoning as the task bodies in as_game_task:
+    // this runs on the general thread while the game thread can unload the script at any moment, so
+    // the task holds the script up for as long as it runs and lets go of one that is already gone. It
+    // is also the only thing that keeps the engine alive for the context below.
+    //
+    // The declaration rather than the function, for the same reason a queued task names one: what is
+    // handed out here outlives nothing, and a declaration resolved again in the module of a script this
+    // task is holding is a lookup that can only answer while that script is alive.
+    const std::string declaration = "void init()";
+    executor->QueueTask([declaration, self = weak_from_this()] {
+      const std::shared_ptr<Script> script = self.lock();
+      if (!script) {
+        // Unloaded between the queueing and this first pass. Nothing of the script is left to run.
+        return;
+      }
+
+      try {
+        auto* const fn = script->GetFunctionByDecl(declaration);
+        if (!fn) {
+          // The module this was resolved against is still loaded, so the function it named is gone
+          // from it. Nothing to run, and the gate below still has to open - see the flag below.
+          LOG_ERROR("[AS] Script '{}' cannot find '{}' in its own module", script->name_, declaration);
+        } else {
+          // Reached only while the script is alive, so this is the engine that keeps fn valid as well.
+          // Declared after `script`, so that it - and the coroutine parked in it - is destroyed before
+          // the reference that would take the engine down with it: the general thread may not be the
+          // one that shuts an engine down, and this ordering is what makes it not be.
+          ScriptContext context(fn->GetEngine());
+          context.Run(fn, true);
+          // So the init starts in the pass it was queued in rather than the one after it.
+          context.Tick();
+
+          while (context.IsRunning() && !script->IsUnloadRequested()) {
+            minicoropp::this_coro::yield();
+            context.Tick();
+          }
+        }
+      } catch (const std::exception& e) {
+        // The same treatment a GameTick the engine cannot run gets, except that the unload is asked for
+        // and not carried out: this is the general thread, and the engine's teardown stays the game
+        // thread's - the manager only queues it.
+        LOG_ERROR("[AS] Script '{}' failed to run init: {}", script->name_, e.what());
+        script->RequestUnload();
+
+        if (kAS_SCRIPT_MANAGER) {
+          static_cast<void>(kAS_SCRIPT_MANAGER->UnloadScript(script->name_));
+        }
+      }
+
+      // Set on every path, including the two that ran nothing: what it gates is GameTick, and a script
+      // whose init could not run is one that is on its way out rather than one to wait on forever. The
+      // release pairs with the acquire at the gate in Tick: what it publishes is everything the init
+      // wrote into the script's globals, which the game thread is about to start reading.
+      script->general_init_done_.store(true, std::memory_order_release);
+    });
+  }
+
   ScriptState Script::GetState() const {
-    if (!init_done_) {
+    // Both ends of both inits, and no distinction between one still running and one not started:
+    // either way the script is initialising rather than ticking.
+    if (!game_init_done_.load(std::memory_order_relaxed) || !general_init_done_.load(std::memory_order_acquire)) {
       return ScriptState::kLoaded;
     }
 
@@ -357,14 +500,27 @@ namespace base::menu::as::script {
     util::GenerateScriptPredefined(script.engine_, path);
   }
 
+  AngelScript::asIScriptFunction* Script::GetInitFunction() const {
+    if (!module_) {
+      return nullptr;
+    }
+
+    // The general one, and the one most scripts will have: it is where a script puts the setup that is
+    // neither the game's nor a frame's - an option, a translation, a page, a file read - since it is
+    // the only entry point that runs off the game thread and may therefore wait.
+    const auto init = module_->GetFunctionByDecl("void init()");
+    LOG_DEBUG_CONDITIONAL(!init, "init function not found in script module '{}'", module_->GetName());
+    return init;
+  }
+
   AngelScript::asIScriptFunction* Script::GetGameInitFunction() const {
     if (!module_) {
       return nullptr;
     }
 
-    // Either entry point may be left out - a script whose work is all in queued tasks has neither -
-    // so an absent one is not a fault to report at error level. It is still worth a line at debug
-    // level, since a script that meant to have one and misspelled it looks the same from here.
+    // Any entry point may be left out - a script whose work is all in queued tasks has none of the
+    // three - so an absent one is not a fault to report at error level. It is still worth a line at
+    // debug level, since a script that meant to have one and misspelled it looks the same from here.
     const auto init = module_->GetFunctionByDecl("void GameInit()");
     LOG_DEBUG_CONDITIONAL(!init, "GameInit function not found in script module '{}'", module_->GetName());
     return init;

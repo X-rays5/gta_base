@@ -175,12 +175,22 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/as/bindings/as_option.hpp
         src/as/bindings/as_value.cpp
         src/as/bindings/as_value.hpp
+        src/as/bindings/as_gui.cpp
+        src/as/bindings/as_gui.hpp
+        src/as/bindings/as_notify.cpp
+        src/as/bindings/as_notify.hpp
         src/as/script/as_script.cpp
         src/as/script/as_script.hpp
         src/as/script/as_script_manifest.cpp
         src/as/script/as_script_manifest.hpp
         src/ui/layout/script/script_sub.cpp
         src/ui/layout/script/script_sub.hpp
+        src/ui/script_gui/submenu_id.cpp
+        src/ui/script_gui/submenu_id.hpp
+        src/ui/script_gui/script_submenu.cpp
+        src/ui/script_gui/script_submenu.hpp
+        src/ui/script_gui/script_submenu_registry.cpp
+        src/ui/script_gui/script_submenu_registry.hpp
         src/as/script/as_script_manager.cpp
         src/as/script/as_script_manager.hpp
         src/as/util/as_exception.cpp

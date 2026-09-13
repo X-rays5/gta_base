@@ -6,11 +6,25 @@
 
 #include <angelscript.h>
 
+// The menu's headers are written against its precompiled header and name things like LOG_ERROR without
+// including them, so the base-common headers go first, as the other tests here do - the option and gui
+// bindings are what bring the menu's own headers in at all.
+#include <base-common/fs/vfs.hpp>
+#include <base-common/logging/logging_macro.hpp>
+#include <base-common/util/result.hpp>
+
+// as_option.hpp reaches the option UI components, which are written against the precompiled header's icon
+// font. A test is not that translation unit, so the font is brought in here rather than there.
+#include <imfont/IconsFontAwesome6.hpp>
+
 #include "../../src/as/util/as_bind.hpp"
 #include "../../src/as/util/as_generate_predefined.hpp"
 #include "../../src/as/bindings/as_game_task.hpp"
+#include "../../src/as/bindings/as_gui.hpp"
 #include "../../src/as/bindings/as_log.hpp"
 #include "../../src/as/bindings/as_mutex.hpp"
+#include "../../src/as/bindings/as_notify.hpp"
+#include "../../src/as/bindings/as_option.hpp"
 #include "../../src/as/util/as_util.hpp"
 
 #include <filesystem>
@@ -286,6 +300,26 @@ TEST(as_docs, every_documented_binding_matches_something_in_the_engine) {
   const auto unmatched = UnmatchedFrom([](AngelScript::asIScriptEngine* engine) {
     base::menu::as::bindings::mutex::RegisterMutex(engine);
     base::menu::as::bindings::game_task::RegisterGameTask(engine);
+  });
+
+  EXPECT_TRUE(unmatched.empty()) << "documentation no binding in the engine carries: " << Joined(unmatched);
+}
+
+TEST(as_docs, a_documented_factory_is_documentation_too) {
+  // A factory is the only behaviour a reference type has, and the engine reflects it as "f" exactly as
+  // it does a constructor - so a type registered with one and documented through it used to be reported
+  // as documentation that matched no binding, and the block was dropped from the generated file. Every
+  // type the script API is written in is a reference type, which is why this is the whole `gui`
+  // namespace: gui::Toggle, gui::Submenu and Option are all documented that way.
+  //
+  // Registered in the order the real one is - the add-ons first for std::string and the array the list
+  // components take, then option, then gui, which is what names Option - so a test that passes here is
+  // the registration set a script actually sees.
+  const auto unmatched = UnmatchedFrom([](AngelScript::asIScriptEngine* engine) {
+    as_util::RegisterAddOns(engine);
+    base::menu::as::bindings::option::RegisterOption(engine);
+    base::menu::as::bindings::gui::RegisterGui(engine);
+    base::menu::as::bindings::notify::RegisterNotify(engine);
   });
 
   EXPECT_TRUE(unmatched.empty()) << "documentation no binding in the engine carries: " << Joined(unmatched);
