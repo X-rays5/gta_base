@@ -46,6 +46,8 @@ namespace base::menu::ui {
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> x_position;
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> y_position;
     common::util::RangedValue<std::float_t, 0.2F, 2.0F> menu_ui_scale = 1.0f;
+    bool render_header = true;
+    UiSize header_height = UiSize(0.05f);
     const RgbColor seperator_color = RgbColor(74, 144, 226);
     const RgbColor background_color = RgbColor(30, 30, 30);
     Text text_props;

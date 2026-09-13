@@ -197,6 +197,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/as/util/as_exception.hpp
         src/as/script/as_script_context.cpp
         src/as/script/as_script_context.hpp
+        src/ui/header/base_header.hpp
+        src/ui/header/text_header.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

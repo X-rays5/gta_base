@@ -11,11 +11,14 @@
 #include "../render/renderer.hpp"
 #include "components/label_component.hpp"
 #include "layout/home.hpp"
+#include "header/text_header.hpp"
 
 namespace base::menu::ui {
   MenuRenderer::MenuRenderer() {
     fallback_option_ = std::make_shared<components::LabelComponent>("label/invalid_submenu");
     fallback_submenu_->AddComponent(components::LabelComponent("label/invalid_submenu"));
+
+    header_ = std::make_unique<TextHeader>();
 
     kMENU_RENDERER = this;
 
@@ -119,6 +122,11 @@ namespace base::menu::ui {
     const Submenu::component_list_t& components = submenu->GetComponents();
 
     std::float_t y_offset = ui_props_.theme->y_position;
+    if (header_ && ui_props_.theme->render_header) {
+      header_->Render(draw_queue, ImVec2(ui_props_.menu_width, ui_props_.theme->header_height), ImVec2(ui_props_.theme->x_position, ui_props_.theme->y_position), current_alpha_, ui_props_);
+      y_offset += ui_props_.theme->header_height;
+    }
+
     y_offset = DrawTopBar(draw_queue, submenu->GetName(), submenu->GetCurrentOptionIndexForDisplay(), submenu->GetOptionCountForDisplay(), y_offset);
     const std::float_t top_bar_y_offset = y_offset;
     if (components.empty()) {
@@ -157,7 +165,7 @@ namespace base::menu::ui {
       {ui_props_.menu_width + render::draw_helpers::ScaleSquare(ui_props_.seperator_height).x * 2, ui_props_.menu_item_height},
       ApplyAlphaToColor(ui_props_.theme->background_color),
       ApplyAlphaToColor(ui_props_.theme->seperator_color),
-      true, false, true, true,
+      !ui_props_.theme->render_header, false, true, true,
       ui_props_.seperator_height));
 
     draw_queue->AddCommand(render::Text({sub_name_x, text_y_pos}, ApplyAlphaToColor(ui_props_.theme->text_props.text_color), display_name, ui_props_.theme->text_props.font_size, false, false, true));
@@ -430,7 +438,7 @@ namespace base::menu::ui {
     const std::uint32_t visible_items = std::min(static_cast<std::uint32_t>(total_components), max_visible_options);
 
     // Calculate the Y offset of the components area (after top bar)
-    float components_y_offset = menu_top + ui_props_.menu_item_height; // After top bar
+    const float components_y_offset = menu_top + ui_props_.menu_item_height + (ui_props_.theme->render_header ? ui_props_.theme->header_height : 0.f); // After top bar
 
     mouse_in_menu_bounds_ = false;
 

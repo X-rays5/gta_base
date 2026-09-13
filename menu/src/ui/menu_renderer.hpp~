@@ -202,7 +202,7 @@ namespace base::menu::ui {
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> selector_animation_;
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> fade_animation_;
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> height_animation_;
-    std::atomic<bool> is_menu_opened_ = true;
+    std::atomic<bool> is_menu_opened_ = false;
     std::float_t current_selector_y_ = 0.0f;
     std::float_t current_alpha_ = 1.0f;
     std::float_t current_menu_height_ = 0.0f;
