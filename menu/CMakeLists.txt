@@ -201,6 +201,9 @@ target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::rage)
+# asjit owns the AngelScript build and re-exports it, so this is also what keeps the engine headers,
+# the add-ons and AS_USE_NAMESPACE reaching menu_core now that vendor.cmake no longer includes them.
+target_link_libraries(${PROJECT_NAME}_core PUBLIC base::asjit)
 
 # Configure main module
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")

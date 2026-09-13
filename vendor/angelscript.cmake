@@ -16,8 +16,23 @@ add_subdirectory(
         ${CMAKE_CURRENT_BINARY_DIR}/angelscript
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE angelscript)
-target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE)
+# PUBLIC, not PRIVATE: this file is included from asjit, which owns the engine build and re-exports
+# it. PRIVATE here would stop the engine library, the add-on headers and AS_USE_NAMESPACE all at
+# asjit's own target, and nothing downstream would see them.
+target_link_libraries(${PROJECT_NAME} PUBLIC angelscript)
+target_compile_definitions(${PROJECT_NAME} PUBLIC AS_USE_NAMESPACE)
+
+# The engine library itself, which the two lines above do not reach - they name the *consumer*.
+#
+# Without this the tree is half-namespaced: `angelscript_add_ons` and every consumer are compiled with
+# AS_USE_NAMESPACE, so they see `AngelScript::asIScriptEngine`, while angelscript.lib's own objects are
+# not, so its internal C++ symbols - everything that is not the `extern "C"` API - are unqualified.
+# Nothing notices until something reaches one of them, and then the reference is to
+# `AngelScript::as_powi` and the definition is `as_powi`.
+#
+# PUBLIC to match everywhere else, and because it is what the comment above already claims the tree
+# does. The `extern "C"` public API is unaffected either way: C linkage has no namespace to lose.
+target_compile_definitions(angelscript PUBLIC AS_USE_NAMESPACE)
 
 set(ANGELSCRIPT_ADD_ON_DIR
         ${Angelscript_SOURCE_DIR}/sdk/add_on
@@ -129,7 +144,10 @@ target_include_directories(angelscript_add_ons
         $<BUILD_INTERFACE:${ANGELSCRIPT_ADD_ON_INCLUDE_DIR}>
 )
 
+# This is the line that carries everything downstream: angelscript_add_ons already exports
+# AS_USE_NAMESPACE, AS_USE_STLNAMES=1 and the engine library PUBLIC, so linking it PUBLIC is what
+# lets menu_core go on compiling as AngelScript::asIScriptEngine after the include() moved to asjit.
 target_link_libraries(${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         angelscript_add_ons
 )
