@@ -9,7 +9,6 @@
 #include <vector>
 #include <base-common/concurrency/spinlock.hpp>
 #include <base-common/win32/signal.hpp>
-#include <imgui/imgui.h>
 #include "draw_commands.hpp"
 
 namespace base::menu::render {

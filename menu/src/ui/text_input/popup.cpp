@@ -5,7 +5,7 @@
 #include "popup.hpp"
 
 #include <cmath>
-#include <imgui/imgui.h>
+#include <imgui.h>
 #include "../../render/renderer.hpp"
 #include "../../render/render_thread.hpp"
 #include "../../render/draw/draw_commands.hpp"

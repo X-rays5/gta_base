@@ -1,1 +1,16 @@
-{}
+{
+  "dependencies": [
+    {
+      "name": "imgui",
+      "features": [
+        "dx12-binding",
+        "freetype",
+        "sdl3-binding",
+        "sdl3-renderer-binding",
+        "win32-binding"
+      ]
+    },
+    "sdl3",
+    "cpr"
+  ]
+}

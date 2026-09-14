@@ -72,7 +72,7 @@ jobs:
         uses: johnwason/vcpkg-action@v8
         with:
           manifest-dir: ${{ github.workspace }} # Set to directory containing vcpkg.json
-          triplet: x64-windows-release
+          triplet: x64-windows-static-md
           token: ${{ github.token }}
 
       - name: Cache vendor

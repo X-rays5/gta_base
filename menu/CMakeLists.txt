@@ -233,8 +233,8 @@ include(vendor.cmake)
 # Configure core library
 target_compile_definitions(${PROJECT_NAME}_core PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
-target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4189 /wd4068 /wd4324 /wd4100 /diagnostics:caret /W4 /permissive- /WX)
-target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
+target_compile_options(${PROJECT_NAME}_core PUBLIC /bigobj /wd4189 /wd4068 /wd4324 /wd4100 /diagnostics:caret /W4 /permissive- /WX)
+target_compile_definitions(${PROJECT_NAME}_core PUBLIC WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS IMGUI_ENABLE_FREETYPE)
 target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
@@ -246,12 +246,10 @@ target_link_libraries(${PROJECT_NAME}_core PUBLIC base::asjit)
 # Configure main module
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
-target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
-target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
 # The precompiled header for the core target was built with AS_USE_NAMESPACE defined.
 # Ensure the module target defines the same macro so the reused PCH is compatible
 # and avoids C4651 (PCH macro mismatch) when compiling `dllmain.cpp`.
-target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE AS_USE_STLNAMES=1)
+target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE AS_USE_STLNAMES=1 IMGUI_ENABLE_FREETYPE)
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM ${PROJECT_NAME}_core)
 
 add_subdirectory(test)
