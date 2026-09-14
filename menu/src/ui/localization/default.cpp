@@ -22,6 +22,13 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("info/hotkey_able", "Press F12 to set a hotkey for this option")
     ADD_TRANSLATION("info/hotkey", "Hotkey set to '{}' press F12 to replace")
 
+    ADD_TRANSLATION("ui/option/render_header", "Header")
+    ADD_TRANSLATION("ui/option/header_type", "Header type")
+    ADD_TRANSLATION("ui/option/header_type_text", "Text")
+    ADD_TRANSLATION("ui/option/header_type_image", "Image")
+    ADD_TRANSLATION("ui/option/header_image", "Header image")
+    ADD_TRANSLATION("ui/option/header_image_none", "None")
+
     ADD_TRANSLATION("label/scripts", "Scripts")
     ADD_TRANSLATION("label/no_scripts_found", "No scripts found")
     ADD_TRANSLATION("label/script_info", "Script Info")

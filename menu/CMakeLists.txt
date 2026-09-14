@@ -49,6 +49,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/notification/notification.hpp
         src/ui/notification/manager.cpp
         src/ui/notification/manager.hpp
+        src/ui/text_input/popup.cpp
+        src/ui/text_input/popup.hpp
         src/render/animate.hpp
         src/util/profile.hpp
         src/util/common.cpp
@@ -59,6 +61,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/render/d3d12/heap/descriptor_heap_allocator.hpp
         src/render/d3d12/context.hpp
         src/render/d3d12/context.cpp
+        src/render/d3d12/texture.hpp
+        src/render/d3d12/texture.cpp
         src/natives/invoker.cpp
         src/natives/invoker.hpp
         src/natives/natives_gen9.cpp
@@ -199,8 +203,22 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/as/script/as_script_context.hpp
         src/ui/header/base_header.hpp
         src/ui/header/text_header.hpp
+        src/ui/header/image_header.hpp
+        src/ui/header/header_image.cpp
+        src/ui/header/header_image.hpp
+        src/ui/header/header_type.cpp
+        src/ui/header/header_type.hpp
+        src/render/draw/image/base_image.cpp
+        src/render/draw/image/base_image.hpp
+        src/render/draw/image/static_image.cpp
+        src/render/draw/image/static_image.hpp
+        src/render/draw/image/animated_image.cpp
+        src/render/draw/image/animated_image.hpp
+        src/render/draw/image/image_loader.cpp
+        src/render/draw/image/image_loader.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
+
 
 # Main module (DLL) that uses the core library
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp)

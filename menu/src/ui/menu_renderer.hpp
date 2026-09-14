@@ -184,6 +184,12 @@ namespace base::menu::ui {
     }
 
   private:
+    /// Rebuilds the header the theme asks for - see MakeHeader.
+    void RebuildHeader();
+
+    /// Rebuilds only if the theme asks for a header other than the one that was built.
+    void SyncHeader();
+
     MenuRenderProperties ui_props_{};
     util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK}, ui_props_.menu_ui_key_state_cooldown};
     util::KeyState menu_ui_navigation = {{VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT, VK_RETURN}, ui_props_.menu_ui_navigation_key_state_cooldown};
@@ -198,6 +204,10 @@ namespace base::menu::ui {
     common::concurrency::RecursiveSpinlock submenus_lock_;
 
     std::unique_ptr<BaseHeader> header_;
+    /// The theme values header_ was built from, so that the next frame notices them changing - whether
+    /// the player chose another type or image, or loaded another theme over this one.
+    HeaderType header_type_ = HeaderType::kText;
+    std::string header_image_path_;
 
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> selector_animation_;
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> fade_animation_;

@@ -5,9 +5,8 @@
 #pragma once
 #ifndef GTA_BASE_DRAW_COMMANDS_545AB8D13AD244EE82FA159E81A729AD_HPP
 #define GTA_BASE_DRAW_COMMANDS_545AB8D13AD244EE82FA159E81A729AD_HPP
-#include <d3d12.h>
-
 #include "draw_helpers.hpp"
+#include "image/base_image.hpp"
 
 namespace base::menu::render {
   class BaseDrawCommand {
@@ -116,16 +115,14 @@ namespace base::menu::render {
 
   class Image final : public BaseDrawCommand {
   public:
-    Image(D3D12_GPU_DESCRIPTOR_HANDLE texture_handle, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE, const ImVec2& uv_min = ImVec2(0, 0), const ImVec2& uv_max = ImVec2(1, 1));
+    Image(std::shared_ptr<draw::BaseImage> image, ImVec2 pos, ImVec2 size, ImU32 col = IM_COL32_WHITE);
 
     void Draw() const override;
 
   private:
-    D3D12_GPU_DESCRIPTOR_HANDLE texture_handle_;
+    std::shared_ptr<draw::BaseImage> image_;
     ImVec2 pos_;
     ImVec2 size_;
-    ImVec2 uv_min_;
-    ImVec2 uv_max_;
     ImU32 col_;
   };
 

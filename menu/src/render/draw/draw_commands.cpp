@@ -138,11 +138,23 @@ namespace base::menu::render {
     Text::Draw();
   }
 
-  Image::Image(const D3D12_GPU_DESCRIPTOR_HANDLE texture_handle, const ImVec2 pos, const ImVec2 size, const ImU32 col, const ImVec2& uv_min, const ImVec2& uv_max) :
-    texture_handle_(texture_handle), pos_(pos), size_(size), uv_min_(uv_min), uv_max_(uv_max), col_(col) {}
+  Image::Image(std::shared_ptr<draw::BaseImage> image, const ImVec2 pos, const ImVec2 size, const ImU32 col) :
+    image_(std::move(image)), pos_(pos), size_(size), col_(col) {}
 
   void Image::Draw() const {
-    draw_helpers::GetDrawList()->AddImage(texture_handle_.ptr, draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(draw_helpers::GetSize(pos_, size_)), uv_min_, uv_max_, col_);
+    if (!image_) {
+      LOG_ERROR("Image::Draw called with null image_");
+      return;
+    }
+
+    // Uploads on first draw, which is also the first point the device is guaranteed to exist.
+    const ImTextureID texture = image_->GetTextureId();
+    if (texture == ImTextureID_Invalid) {
+      LOG_ERROR("Image::Draw called with invalid texture");
+      return;
+    }
+
+    draw_helpers::GetDrawList()->AddImage(texture, draw_helpers::ScaleToScreen(pos_), draw_helpers::ScaleToScreen(draw_helpers::GetSize(pos_, size_)), image_->GetUvMin(), image_->GetUvMax(), col_);
   }
 
   RunRenderCode::RunRenderCode(std::function<void()> render_code) :

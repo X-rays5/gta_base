@@ -16,16 +16,21 @@ namespace base::menu::render {
   class DrawQueue {
   public:
     template <typename T> requires std::is_base_of_v<BaseDrawCommand, T>
-    FORCE_INLINE
     void AddCommand(T&& command) {
       draw_commands_.push_back(std::make_unique<T>(std::forward<T>(command)));
     }
 
-    FORCE_INLINE void Clear() {
+    void Clear() {
       draw_commands_.clear();
     }
 
-    FORCE_INLINE void Draw() const {
+    /// How many commands there are to draw. For tests, which have no renderer to draw them and so can
+    /// only tell drawn-nothing from what is queued.
+    [[nodiscard]] std::size_t CommandCount() const {
+      return draw_commands_.size();
+    }
+
+    void Draw() const {
       for (auto&& command : draw_commands_) {
         command->Draw();
       }
@@ -41,7 +46,7 @@ namespace base::menu::render {
     ~DrawQueueBuffer();
 
     /// @note This function is only supposed to be called when shutting down to prevent a deadlock. In the case the render thread was waiting for a signal, but the render detour is already disabled.
-    FORCE_INLINE void UnblockRenderThread() const {
+    void UnblockRenderThread() const {
       read_signal_.Notify();
     }
 
@@ -49,13 +54,19 @@ namespace base::menu::render {
 
     /// @note This function should ONLY be called from the render thread.
     template <typename... Args>
-    FORCE_INLINE void AddCommand(Args&&... command) {
+    void AddCommand(Args&&... command) {
       common::concurrency::ScopedSpinlock lock(spinlock_);
       draw_queue_[write_idx_].AddCommand(std::forward<Args>(command)...);
     }
 
     /// @warning This function may ONLY be called from RenderThread::RenderMain().
     void SwapBuffers();
+
+    /// How many commands the frame being built holds - see DrawQueue::CommandCount.
+    [[nodiscard]] std::size_t CommandCount() {
+      common::concurrency::ScopedSpinlock lock(spinlock_);
+      return draw_queue_[write_idx_].CommandCount();
+    }
 
   private:
     std::vector<DrawQueue> draw_queue_;

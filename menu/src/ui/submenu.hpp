@@ -96,10 +96,7 @@ namespace base::menu::ui {
       components_.clear();
       update_components_cb_(this);
 
-      if (components_.size() > prev_opt_count_) {
-        // If new components were added, reset the current option index to 0
-        cur_opt_idx_ = 0;
-      } else if (cur_opt_idx_ >= components_.size()) {
+      if (cur_opt_idx_ >= components_.size()) {
         // If the current option index is out of bounds, reset it to the last valid index
         cur_opt_idx_ = components_.empty() ? 0 : components_.size() - 1;
       }

@@ -108,6 +108,18 @@ namespace base::menu::render::draw_helpers {
     return ScaleFromScreen(CalcTextSizeRaw(font, font_size, text, ScaleXToScreen(wrap_width)));
   }
 
+  [[nodiscard]] FittedRect FitIntoBox(const ImVec2 box_position, const ImVec2 box_size, const ImVec2 content_size, const ImVec2 resolution) {
+    if (box_size.x <= 0.F || box_size.y <= 0.F || content_size.x <= 0.F || content_size.y <= 0.F || resolution.x <= 0.F || resolution.y <= 0.F) {
+      return {box_position, {0.F, 0.F}};
+    }
+
+    const ImVec2 box_px{box_size.x * resolution.x, box_size.y * resolution.y};
+    const auto scale = std::min(box_px.x / content_size.x, box_px.y / content_size.y);
+    const ImVec2 size{content_size.x * scale / resolution.x, content_size.y * scale / resolution.y};
+
+    return {{box_position.x + (box_size.x - size.x) / 2.F, box_position.y + (box_size.y - size.y) / 2.F}, size};
+  }
+
   std::uint32_t WordWrap(const float font_size, std::string& str, const float max_x, const std::size_t max_lines) {
     const auto real_max_x = ScaleXToScreen(max_x);
 

@@ -4,7 +4,6 @@
 
 #ifndef NOTIFICATION_HPP_05174124
 #define NOTIFICATION_HPP_05174124
-#include <imgui/imgui.h>
 
 #include "../theme.hpp"
 

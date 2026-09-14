@@ -11,14 +11,24 @@
 #include "../render/renderer.hpp"
 #include "components/label_component.hpp"
 #include "layout/home.hpp"
-#include "header/text_header.hpp"
+#include "header/header_type.hpp"
+#include "text_input/popup.hpp"
 
 namespace base::menu::ui {
+  namespace {
+    /// The popup owns the keyboard while it is up: what is being typed there is a string, and the menu
+    /// walking itself with the same keys - Backspace among them - would edit it out from under the
+    /// player.
+    bool IsTextInputPopupOpen() {
+      return text_input::kPOPUP && text_input::kPOPUP->IsOpen();
+    }
+  }
+
   MenuRenderer::MenuRenderer() {
     fallback_option_ = std::make_shared<components::LabelComponent>("label/invalid_submenu");
     fallback_submenu_->AddComponent(components::LabelComponent("label/invalid_submenu"));
 
-    header_ = std::make_unique<TextHeader>();
+    RebuildHeader();
 
     kMENU_RENDERER = this;
 
@@ -44,7 +54,7 @@ namespace base::menu::ui {
           kMENU_RENDERER->OpenMenu();
         }
       }
-      if (kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_BACK)) {
+      if (!IsTextInputPopupOpen() && kMENU_RENDERER->menu_ui_key_state_.WasKeyPressed(VK_BACK)) {
         if (kMENU_RENDERER->IsOnHomeSubmenu()) {
           kMENU_RENDERER->CloseMenu();
         } else {
@@ -72,6 +82,19 @@ namespace base::menu::ui {
     kMENU_RENDERER = nullptr;
   }
 
+  void MenuRenderer::RebuildHeader() {
+    header_type_ = ui_props_.theme->header_type;
+    header_image_path_ = ui_props_.theme->header_image;
+
+    header_ = MakeHeader(header_type_, header_image_path_);
+  }
+
+  void MenuRenderer::SyncHeader() {
+    if (header_type_ != ui_props_.theme->header_type || header_image_path_ != ui_props_.theme->header_image) {
+      RebuildHeader();
+    }
+  }
+
   void MenuRenderer::RenderMenu(render::DrawQueueBuffer* draw_queue) {
     const auto submenu = GetCurrentSubmenu();
     if (!draw_queue || !submenu) {
@@ -81,13 +104,23 @@ namespace base::menu::ui {
 
     submenu->UpdateComponents();
 
+    // While the popup is up the keyboard is the field's, so the menu neither walks itself with it nor
+    // acts on the option it is sitting on: Enter and the arrow keys are the field's too.
+    const bool text_input_open = IsTextInputPopupOpen();
+
     // Handle mouse input before rendering
     if (ui_props_.theme->mouse_input_enabled) {
       if (!mouse_was_enabled_last_frame_ && !render::kRENDERER->IsCursorVisible())
         render::kRENDERER->RequestShowCursor();
 
       mouse_was_enabled_last_frame_ = true;
-      HandleMouseInput(submenu.get());
+      if (text_input_open) {
+        // The popup is modal, and the click handler runs off what was recorded here, so a click that
+        // lands on the menu behind it must leave nothing behind to handle.
+        mouse_in_menu_bounds_ = false;
+      } else {
+        HandleMouseInput(submenu.get());
+      }
     } else if (mouse_was_enabled_last_frame_) {
       mouse_was_enabled_last_frame_ = false;
       // Reset mouse state when mouse input is disabled
@@ -95,35 +128,45 @@ namespace base::menu::ui {
       render::kRENDERER->RequestHideCursor();
     }
 
-    if (menu_ui_navigation.WasKeyPressed(VK_UP)) {
-      submenu->Scroll(Submenu::ScrollDirection::kUP);
-    } else if (menu_ui_navigation.WasKeyPressed(VK_DOWN)) {
-      submenu->Scroll(Submenu::ScrollDirection::kDOWN);
-    }
+    if (!text_input_open) {
+      if (menu_ui_navigation.WasKeyPressed(VK_UP)) {
+        submenu->Scroll(Submenu::ScrollDirection::kUP);
+      } else if (menu_ui_navigation.WasKeyPressed(VK_DOWN)) {
+        submenu->Scroll(Submenu::ScrollDirection::kDOWN);
+      }
 
-    if (menu_ui_navigation.WasKeyPressed(VK_RETURN)) {
-      submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kSUBMIT);
-    } else if (menu_ui_navigation.WasKeyPressed(VK_LEFT)) {
-      submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kLEFT);
-    } else if (menu_ui_navigation.WasKeyPressed(VK_RIGHT)) {
-      submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kRIGHT);
-    }
+      if (menu_ui_navigation.WasKeyPressed(VK_RETURN)) {
+        submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kSUBMIT);
+      } else if (menu_ui_navigation.WasKeyPressed(VK_LEFT)) {
+        submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kLEFT);
+      } else if (menu_ui_navigation.WasKeyPressed(VK_RIGHT)) {
+        submenu->GetCurrentComponent()->HandleButtonPress(components::BaseComponent::PressedButton::kRIGHT);
+      }
 
-    if (option_interaction.WasKeyPressed(VK_F11)) {
-      util::kTHREAD_POOL->emplace_back([submenu] {
-        submenu->GetCurrentComponent()->Save();
-      });
-    } else if (option_interaction.WasKeyPressed(VK_F12)) {
-      util::kTHREAD_POOL->emplace_back([submenu] {
-        submenu->GetCurrentComponent()->AddNewHotkey();
-      });
+      if (option_interaction.WasKeyPressed(VK_F11)) {
+        util::kTHREAD_POOL->emplace_back([submenu] {
+          submenu->GetCurrentComponent()->Save();
+        });
+      } else if (option_interaction.WasKeyPressed(VK_F12)) {
+        util::kTHREAD_POOL->emplace_back([submenu] {
+          submenu->GetCurrentComponent()->AddNewHotkey();
+        });
+      }
     }
 
     const Submenu::component_list_t& components = submenu->GetComponents();
 
     std::float_t y_offset = ui_props_.theme->y_position;
+    // After the components were updated above, so a header image chosen this frame is the one drawn
+    // in it.
+    SyncHeader();
     if (header_ && ui_props_.theme->render_header) {
-      header_->Render(draw_queue, ImVec2(ui_props_.menu_width, ui_props_.theme->header_height), ImVec2(ui_props_.theme->x_position, ui_props_.theme->y_position), current_alpha_, ui_props_);
+      auto dimensions = ImVec2(ui_props_.menu_width, ui_props_.theme->header_height);
+      auto position = ImVec2(ui_props_.theme->x_position, ui_props_.theme->y_position);
+      position.x -= render::draw_helpers::ScaleSquare(ui_props_.seperator_height).x;
+      dimensions.x += render::draw_helpers::ScaleSquare(ui_props_.seperator_height).x * 2;
+
+      header_->Render(draw_queue, dimensions, position, current_alpha_, ui_props_);
       y_offset += ui_props_.theme->header_height;
     }
 
@@ -165,7 +208,7 @@ namespace base::menu::ui {
       {ui_props_.menu_width + render::draw_helpers::ScaleSquare(ui_props_.seperator_height).x * 2, ui_props_.menu_item_height},
       ApplyAlphaToColor(ui_props_.theme->background_color),
       ApplyAlphaToColor(ui_props_.theme->seperator_color),
-      !ui_props_.theme->render_header, false, true, true,
+      !ui_props_.theme->render_header || ui_props_.theme->header_type == HeaderType::kImage, false, true, true,
       ui_props_.seperator_height));
 
     draw_queue->AddCommand(render::Text({sub_name_x, text_y_pos}, ApplyAlphaToColor(ui_props_.theme->text_props.text_color), display_name, ui_props_.theme->text_props.font_size, false, false, true));
@@ -470,7 +513,9 @@ namespace base::menu::ui {
 
   // MouseInputListener interface implementations
   void MenuRenderer::OnMouseLeftClick() {
-    if (!is_menu_opened_ || !mouse_in_menu_bounds_) {
+    // The popup's window is between the menu and the click, and this runs off what the last frame
+    // recorded, so the popup is asked as well as the bounds.
+    if (!is_menu_opened_ || !mouse_in_menu_bounds_ || IsTextInputPopupOpen()) {
       return;
     }
 
@@ -486,7 +531,7 @@ namespace base::menu::ui {
   }
 
   void MenuRenderer::OnMouseRightClick() {
-    if (!is_menu_opened_ || !mouse_in_menu_bounds_) {
+    if (!is_menu_opened_ || !mouse_in_menu_bounds_ || IsTextInputPopupOpen()) {
       return;
     }
 
@@ -494,7 +539,8 @@ namespace base::menu::ui {
   }
 
   void MenuRenderer::OnMouseWheel(float delta) {
-    if (!is_menu_opened_) {
+    // A wheel over the popup is the popup's, the same as a click on it is.
+    if (!is_menu_opened_ || IsTextInputPopupOpen()) {
       return;
     }
 

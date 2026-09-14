@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
+        src/animated_image_test.cpp
         src/as_bind_test.cpp
         src/as_coro_test.cpp
         src/as_docs_test.cpp
@@ -15,11 +16,16 @@ add_executable(${PROJECT_NAME}
         src/as_script_manager_test.cpp
         src/as_value_test.cpp
         src/command_line_test.cpp
+        src/draw_helpers_test.cpp
         src/general_task_executor_test.cpp
         src/generic_tree_test.cpp
+        src/header_image_test.cpp
+        src/header_type_test.cpp
+        src/image_header_test.cpp
         src/localization_overlay_test.cpp
         src/script_submenu_id_test.cpp
         src/submenu_test.cpp
+        src/text_input_popup_test.cpp
 )
 
 # Link against the core library to share dependencies and avoid recompilation
