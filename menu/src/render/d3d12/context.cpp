@@ -2,8 +2,8 @@
 // Created by X-ray on 22/08/2025.
 //
 #include "context.hpp"
-#include <imgui/imgui_impl_dx12.h>
-#include <imgui/imgui_impl_win32.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
 #include "../imgui_input_queue.hpp"
 
 namespace base::menu::render::d3d12 {

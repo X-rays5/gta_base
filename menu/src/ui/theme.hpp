@@ -6,9 +6,8 @@
 #define THEME_HPP_05125856
 #include <base-common/util/ranged_value.hpp>
 #include <glaze/core/meta.hpp>
-#include <imgui/imgui.h>
-#include "header/header_type.hpp"
 #include "ui_size.hpp"
+#include "header/header_type.hpp"
 
 namespace base::menu::ui {
   struct RgbColor {
@@ -26,7 +25,7 @@ namespace base::menu::ui {
       std::uint32_t value;
     };
 
-    constexpr operator ImU32() const {
+    constexpr operator std::uint32_t() const {
       return value;
     }
   };

@@ -4,9 +4,9 @@
 
 #include "window.hpp"
 #include <base-common/globals.hpp>
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_sdl3.h>
-#include <imgui/imgui_impl_sdlrenderer3.h>
+#include <imgui.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_sdlrenderer3.h>
 #include <SDL3/SDL.h>
 
 namespace {

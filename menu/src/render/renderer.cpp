@@ -5,16 +5,16 @@
 #include "renderer.hpp"
 #include <d3d12.h>
 #include <dxgi.h>
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_dx12.h>
-#include <imgui/imgui_impl_win32.h>
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+#include <vector>
+#include <windowsx.h>
 #include "imgui_input_queue.hpp"
 #include "../hooking/hooking.hpp"
 #include "../hooking/wndproc.hpp"
 #include "../memory/pointers.hpp"
 #include "../ui/menu_renderer.hpp"
-#include <vector>
-#include <windowsx.h>
 
 namespace base::menu::render {
   Renderer::Renderer() : d3d12_context_(*memory::kPOINTERS->swap_chain_, *memory::kPOINTERS->command_queue_) {

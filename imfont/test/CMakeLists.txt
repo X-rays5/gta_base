@@ -10,10 +10,13 @@ add_executable(${PROJECT_NAME}
         src/test_globals.hpp
 )
 
+find_package(imgui CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)
+
+find_package(SDL3 CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+
 include(../../vendor/battery_embed.cmake)
-include(../../vendor/sdl.cmake)
-include(../../vendor/imgui.cmake)
-target_link_libraries(imgui PRIVATE SDL3::SDL3)
 
 include(../../vendor/gtest.cmake)
 enable_testing()

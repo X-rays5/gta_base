@@ -13,8 +13,8 @@ set(CMAKE_TOOLCHAIN_FILE
         CACHE FILEPATH "Vcpkg toolchain file"
 )
 
-set(VCPKG_TARGET_TRIPLET "x64-windows-static" CACHE STRING "Vcpkg target triplet")
-set(VCPKG_HOST_TRIPLET "x64-windows-static" CACHE STRING "Vcpkg host triplet")
+set(VCPKG_TARGET_TRIPLET "x64-windows-static-md" CACHE STRING "Vcpkg target triplet")
+set(VCPKG_HOST_TRIPLET "x64-windows-static-md" CACHE STRING "Vcpkg host triplet")
 
 # Keep vcpkg state inside the CMake build directory.
 set(VCPKG_INSTALLED_DIR
@@ -42,6 +42,8 @@ if (NOT MSVC)
 endif ()
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+
+set(CMAKE_SKIP_INSTALL_RULES ON)
 
 enable_testing()
 

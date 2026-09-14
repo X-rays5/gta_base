@@ -1,10 +1,12 @@
+find_package(zydis CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC Zydis::Zydis)
+
 include(../vendor/fmt.cmake)
 include(../vendor/result.cmake)
 include(../vendor/enchantum.cmake)
 # enchantum is used in public headers (result.hpp), so it needs to be PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC enchantum::enchantum)
 include(../vendor/spdlog.cmake)
-include(../vendor/xorstr.cmake)
-include(../vendor/zydis.cmake)
 include(../vendor/gtest.cmake)
 include(../vendor/glaze.cmake)
+include(../vendor/xorstr.cmake)
