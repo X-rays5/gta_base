@@ -32,6 +32,7 @@ jobs:
       SONAR_USER_HOME: ${{ github.workspace }}/.sonar
       TEST_RESULTS_DIR: ${{ github.workspace }}/build/test-results
       COVERAGE_RESULTS_DIR: ${{ github.workspace }}/build/coverage
+      VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 
     strategy:
       fail-fast: false
@@ -64,6 +65,15 @@ jobs:
             Write-Host "Fetching ${{ env.GIT_MAIN_BRANCH }} branch"
             git fetch origin ${{ env.GIT_MAIN_BRANCH }}:refs/remotes/origin/${{ env.GIT_MAIN_BRANCH }}
           }
+
+      - name: vcpkg build
+        if: matrix.language == 'c-cpp'
+        id: vcpkg
+        uses: johnwason/vcpkg-action@v8
+        with:
+          manifest-dir: ${{ github.workspace }} # Set to directory containing vcpkg.json
+          triplet: x64-windows-release
+          token: ${{ github.token }}
 
       - name: Cache vendor
         if: matrix.language == 'c-cpp'
