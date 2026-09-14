@@ -17,5 +17,6 @@ include(../vendor/xorstr.cmake)
 include(../vendor/ctninja.cmake)
 include(../vendor/argparse.cmake)
 include(../vendor/minicoropp.cmake)
+include(../vendor/stb.cmake)
 
 set(PROJECT_NAME ${PROJECT_NAME_COPY})
