@@ -7,7 +7,7 @@
 #include "natives_as.hpp"
 #include "natives_gen9.hpp"
 
-#include "../as/as_bind.hpp"
+#include "../as/util/as_bind.hpp"
 
 #include <string>
 

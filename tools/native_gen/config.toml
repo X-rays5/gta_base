@@ -35,7 +35,7 @@ base_namespace = "natives"
 docs = true
 # Literal strings, so the quotes inside need no escaping. as_bind.hpp carries the doc registry
 # and the registration wrappers the generated file calls.
-includes = ['#include "../as/as_bind.hpp"']
+includes = ['#include "../as/util/as_bind.hpp"']
 
 [crossmap]
 # Native hash -> build-specific index. One "hash,index_hash" pair per line, '#' for comments.
