@@ -3,15 +3,18 @@
 //
 
 #include "vehicle_repair.hpp"
-#include "../../../script/game_task_executor.hpp"
+#include "../../../game/globals.hpp"
 #include "../../../natives/natives_gen9.hpp"
+#include "../../../script/game_task_executor.hpp"
 
 namespace base::menu::options {
   namespace {
     void RepairVehicle() {
       script::kGAME_TASK_EXECUTOR->QueueTask([] {
-        natives::VEHICLE::SET_VEHICLE_FIXED(natives::PED::GET_VEHICLE_PED_IS_IN(natives::PLAYER::PLAYER_PED_ID(), false));
-        natives::VEHICLE::SET_VEHICLE_FIXED(natives::PED::GET_VEHICLE_PED_IS_IN(natives::PLAYER::PLAYER_PED_ID(), false));
+        const auto vehicle = game::globals::local_player.vehicle_id.load();
+        if (vehicle.IsValid()) {
+          vehicle.Fix();
+        }
       });
     }
   }
