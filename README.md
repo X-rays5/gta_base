@@ -10,6 +10,7 @@
 
 ## Project Structure
 
+- **`asjit/`**: An AngelScript bytecode JIT, translating script functions to x86-64 through AsmJit. Standalone - it depends on nothing else here, and can be lifted into its own repository. See [asjit/README.md](./asjit/README.md).
 - **`common/`**: Contains code shared between all other components. This includes utilities for string formatting, concurrency controls, virtual file system management, exception logging, memory operations, and Windows API wrappers. It serves as the foundational library that abstracts away complex or repetitive logic from the main feature modules.
 - **`imfont/`**: A component to help with loading fonts and merging Font Awesome icons into ImGui font atlases. It provides utilities for managing custom fonts and icons used in the UI.
 - **`injector/`**: A standalone executable responsible for attaching natively to the game. It's a simple injector using VirtualAlloc and LoadLibrary.
