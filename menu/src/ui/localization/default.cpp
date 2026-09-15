@@ -89,5 +89,8 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/option/ui_y_pos", "UI Y Position")
 
     ADD_TRANSLATION("ui/sub/feature_settings", "Feature Settings")
+
+    ADD_TRANSLATION("ui/sub/debug", "Debug")
+    ADD_TRANSLATION("ui/sub/debug_invoker", "Invoker")
   };
 }

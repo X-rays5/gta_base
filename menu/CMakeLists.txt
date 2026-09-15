@@ -114,6 +114,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/components/components.hpp
         src/ui/layout/self/self.cpp
         src/ui/layout/self/self.hpp
+        src/ui/layout/debug/debug.cpp
+        src/ui/layout/debug/debug.hpp
         src/ui/layout/vehicle/vehicle.cpp
         src/ui/layout/vehicle/vehicle.hpp
         src/options/base_command.hpp
@@ -216,6 +218,18 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/render/draw/image/animated_image.hpp
         src/render/draw/image/image_loader.cpp
         src/render/draw/image/image_loader.hpp
+        src/game/native_types.hpp
+        src/game/handles.hpp
+        src/game/entity.cpp
+        src/game/entity.hpp
+        src/game/ped.cpp
+        src/game/ped.hpp
+        src/game/vehicle.cpp
+        src/game/vehicle.hpp
+        src/game/player.cpp
+        src/game/player.hpp
+        src/game/blip.cpp
+        src/game/blip.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

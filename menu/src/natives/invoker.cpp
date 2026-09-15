@@ -3,6 +3,7 @@
 //
 
 #include "invoker.hpp"
+#include <base-common/logging/logging_macro.hpp>
 #include "../memory/pointers.hpp"
 
 namespace base::menu::natives {
@@ -37,5 +38,6 @@ namespace base::menu::natives {
 
     handler(&context_);
     context_.FixVectors();
+    ApplyHandleOuts();
   }
 }

@@ -422,7 +422,9 @@ namespace base::menu::ui {
     kHOTKEYS,
     kHOTKEY_REMOVE_CONFIRM,
     kAS,
-    kAS_SCRIPT
+    kAS_SCRIPT,
+    kDEBUG,
+    kDEBUG_INVOKER
   };
 }
 

@@ -17,11 +17,11 @@ add_executable(${PROJECT_NAME}
         src/as_value_test.cpp
         src/command_line_test.cpp
         src/draw_helpers_test.cpp
+        src/game_handle_test.cpp
         src/general_task_executor_test.cpp
         src/generic_tree_test.cpp
         src/header_image_test.cpp
         src/header_type_test.cpp
-        src/image_header_test.cpp
         src/localization_overlay_test.cpp
         src/script_submenu_id_test.cpp
         src/submenu_test.cpp

@@ -4,23 +4,31 @@
 
 #pragma once
 
+#include <cstdint>
 #include <fmt/format.h>
 #include <rage/vector.hpp>
+#include "blip.hpp"
+#include "entity.hpp"
+#include "handles.hpp"
+#include "ped.hpp"
+#include "player.hpp"
+#include "vehicle.hpp"
 
 namespace base::menu::natives {
   using Any = std::uint32_t;
-  using Object = std::int32_t;
-  using FireId = std::int32_t;
-  using Blip = std::int32_t;
-  using Interior = std::int32_t;
-  using Pickup = std::int32_t;
   using Hash = std::uint32_t;
-  using Cam = std::int32_t;
-  using Entity = std::int32_t;
-  using ScrHandle = Entity;
-  using Ped = Entity;
-  using Player = Entity;
-  using Vehicle = Entity;
+
+  using Object = game::Object;
+  using FireId = game::FireId;
+  using Blip = game::Blip;
+  using Interior = game::Interior;
+  using Pickup = game::Pickup;
+  using Cam = game::Cam;
+  using Entity = game::Entity;
+  using ScrHandle = game::ScrHandle;
+  using Ped = game::Ped;
+  using Player = game::Player;
+  using Vehicle = game::Vehicle;
   using Vector3 = ::rage::Vector3;
 }
 

@@ -6,6 +6,7 @@
 
 #include "../menu_renderer.hpp"
 #include "../components/components.hpp"
+#include "debug/debug.hpp"
 #include "script/script_sub.hpp"
 #include "self/self.hpp"
 #include "settings/settings.hpp"
@@ -24,6 +25,9 @@ namespace base::menu::ui::layout {
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kVEHICLE));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kAS));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSETTINGS));
+#ifndef NDEBUG
+      sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kDEBUG));
+#endif
 
       // Last, so that what the menu put here itself stays above what a script did.
       AddScriptRootSubmenus(sub);
@@ -34,5 +38,8 @@ namespace base::menu::ui::layout {
     InitVehicleLayout();
     InitScriptLayout();
     InitSettingsLayout();
+#ifndef NDEBUG
+    InitDebugLayout();
+#endif
   }
 }
