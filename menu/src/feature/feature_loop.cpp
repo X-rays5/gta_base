@@ -3,6 +3,7 @@
 //
 
 #include "feature_loop.hpp"
+#include "../game/globals.hpp"
 #include "../natives/natives_gen9.hpp"
 #include "../options/option_registry.hpp"
 #include "../render/renderer.hpp"
@@ -10,11 +11,6 @@
 
 namespace base::menu::feature {
   namespace {
-    thread_local natives::Player player_id;
-    thread_local natives::Ped player_ped;
-    thread_local bool is_player_in_vehicle;
-    thread_local natives::Vehicle player_vehicle;
-
     void DisableGameUIInteractWhenMenuOpened() {
       if (ui::kMENU_RENDERER->IsMenuOpened()) {
         natives::PAD::DISABLE_CONTROL_ACTION(0, 18, true); // INPUT_SKIP_CUTSCENE
@@ -40,6 +36,49 @@ namespace base::menu::feature {
         natives::PAD::DISABLE_CONTROL_ACTION(0, 308, true); // INPUT_REPLAY_BACK
       }
     }
+
+    /// Whether the last tick had a local ped, so that the ticks where one appears or goes away are
+    /// marked in the log and the sixty a second in between stay quiet.
+    bool had_local_ped{};
+
+    void UpdateGameGlobals() {
+      const auto player = natives::PLAYER::PLAYER_ID();
+      const auto ped = player.GetPed();
+
+      game::globals::local_player.player_id = player;
+      game::globals::local_player.ped_id = ped;
+
+      const auto has_ped = ped.IsValid();
+      if (!has_ped) {
+        // The vehicle natives dereference the ped, and the first ticks can run before the game has
+        // spawned one - GET_VEHICLE_PED_IS_IN on an invalid ped faults inside the game. With no local
+        // ped there is no vehicle to report either, so the globals go back to zero rather than keeping
+        // whatever the ped that just went away was in.
+        game::globals::local_player.vehicle_id = natives::Vehicle{};
+        game::globals::local_player.vehicle_include_entering = natives::Vehicle{};
+        game::globals::local_player.last_vehicle = natives::Vehicle{};
+      } else {
+        const auto vehicle = ped.GetVehicle(false);
+        const auto entering = ped.GetVehicle(true);
+        const auto last_vehicle = natives::PLAYER::GET_PLAYERS_LAST_VEHICLE();
+
+        game::globals::local_player.vehicle_id = vehicle;
+        game::globals::local_player.vehicle_include_entering = entering;
+        game::globals::local_player.last_vehicle = last_vehicle;
+      }
+
+      if (has_ped != had_local_ped) {
+        had_local_ped = has_ped;
+        if (has_ped) {
+          LOG_INFO("Local ped: player {} ped {} vehicle {} entering {} last {}", player, ped,
+                   game::globals::local_player.vehicle_id.load(),
+                   game::globals::local_player.vehicle_include_entering.load(),
+                   game::globals::local_player.last_vehicle.load());
+        } else {
+          LOG_INFO("No local ped.");
+        }
+      }
+    }
   }
 
   GameFeatureLoop::GameFeatureLoop() : ScriptBase{"GameFeatureLoop"} {}
@@ -49,14 +88,7 @@ namespace base::menu::feature {
   }
 
   void GameFeatureLoop::OnTick() {
-    player_id = natives::PLAYER::PLAYER_ID();
-    player_ped = natives::PLAYER::GET_PLAYER_PED_SCRIPT_INDEX(player_id);
-    is_player_in_vehicle = natives::PED::IS_PED_IN_ANY_VEHICLE(player_ped, false);
-    if (is_player_in_vehicle) {
-      player_vehicle = natives::PED::GET_VEHICLE_PED_IS_IN(player_ped, false);
-    } else {
-      player_vehicle = 0;
-    }
+    UpdateGameGlobals();
 
     if (ui::kMENU_RENDERER) {
       DisableGameUIInteractWhenMenuOpened();

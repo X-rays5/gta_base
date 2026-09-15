@@ -218,6 +218,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/render/draw/image/animated_image.hpp
         src/render/draw/image/image_loader.cpp
         src/render/draw/image/image_loader.hpp
+        src/game/globals.cpp
+        src/game/globals.hpp
         src/game/native_types.hpp
         src/game/handles.hpp
         src/game/entity.cpp
