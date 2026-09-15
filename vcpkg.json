@@ -1,6 +1,5 @@
 {
   "dependencies": [
-    "cpr",
     {
       "name": "imgui",
       "features": [
@@ -12,6 +11,7 @@
       ]
     },
     "sdl3",
-    "zydis"
+    "zydis",
+    "openssl"
   ]
 }

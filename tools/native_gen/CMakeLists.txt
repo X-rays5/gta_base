@@ -40,9 +40,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_core)
 # recipes need including again.
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
 
-find_package(cpr CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME}_core PRIVATE cpr::cpr)
-
 # Configure core library
 set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
 target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /diagnostics:caret /W4 /permissive- /WX)

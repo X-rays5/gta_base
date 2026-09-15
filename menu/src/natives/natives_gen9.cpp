@@ -4234,12 +4234,12 @@ namespace base::menu::natives {
 			return Invoker::Invoke<float, 1207>();
 		}
 
-		void DRAW_MARKER(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int p19, bool rotate, const char* textureDict, const char* textureName, bool drawOnEnts) {
-			Invoker::Invoke<void, 1208>(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, p19, rotate, textureDict, textureName, drawOnEnts);
+		void DRAW_MARKER(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const char* textureDict, const char* textureName, bool invert) {
+			Invoker::Invoke<void, 1208>(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, rotationOrder, rotate, textureDict, textureName, invert);
 		}
 
-		void DRAW_MARKER_EX(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, Any p19, bool rotate, const char* textureDict, const char* textureName, bool drawOnEnts, bool p24, bool p25) {
-			Invoker::Invoke<void, 1209>(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, p19, rotate, textureDict, textureName, drawOnEnts, p24, p25);
+		void DRAW_MARKER_EX(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const char* textureDict, const char* textureName, bool invert, bool usePreAlphaDepth, bool matchEntityRotOrder) {
+			Invoker::Invoke<void, 1209>(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, rotationOrder, rotate, textureDict, textureName, invert, usePreAlphaDepth, matchEntityRotOrder);
 		}
 
 		void DRAW_MARKER_SPHERE(float x, float y, float z, float radius, int red, int green, int blue, float alpha) {
@@ -15326,16 +15326,16 @@ namespace base::menu::natives {
 			return Invoker::Invoke<int, 244>(object);
 		}
 
-		void SET_OBJECT_TINT_INDEX(Object object, int textureVariation) {
-			Invoker::Invoke<void, 245>(object, textureVariation);
+		void SET_OBJECT_TINT_INDEX(Object object, int tintIndex) {
+			Invoker::Invoke<void, 245>(object, tintIndex);
 		}
 
-		bool SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, int textureVariation) {
-			return Invoker::Invoke<bool, 246>(x, y, z, radius, modelHash, textureVariation);
+		bool SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE(float x, float y, float z, float radius, Hash modelHash, int tintIndex) {
+			return Invoker::Invoke<bool, 246>(x, y, z, radius, modelHash, tintIndex);
 		}
 
-		void SET_PROP_TINT_INDEX(Any p0, Any p1) {
-			Invoker::Invoke<void, 247>(p0, p1);
+		void SET_PROP_TINT_INDEX(Object object, int tintIndex) {
+			Invoker::Invoke<void, 247>(object, tintIndex);
 		}
 
 		bool SET_PROP_LIGHT_COLOR(Object object, bool p1, int r, int g, int b) {
@@ -17642,8 +17642,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 857>(ped, flagId, value);
 		}
 
-		void SET_PED_RESET_FLAG(Ped ped, int flagId, bool doReset) {
-			Invoker::Invoke<void, 858>(ped, flagId, doReset);
+		void SET_PED_RESET_FLAG(Ped ped, int flagId, bool value) {
+			Invoker::Invoke<void, 858>(ped, flagId, value);
 		}
 
 		bool GET_PED_CONFIG_FLAG(Ped ped, int flagId, bool p2) {
@@ -18074,8 +18074,8 @@ namespace base::menu::natives {
 			Invoker::Invoke<void, 964>(scene);
 		}
 
-		bool FORCE_PED_MOTION_STATE(Ped ped, Hash motionStateHash, bool p2, int p3, bool p4) {
-			return Invoker::Invoke<bool, 965>(ped, motionStateHash, p2, p3, p4);
+		bool FORCE_PED_MOTION_STATE(Ped ped, Hash motionStateHash, bool shouldReset, int updateState, bool forceAIPreCameraUpdate) {
+			return Invoker::Invoke<bool, 965>(ped, motionStateHash, shouldReset, updateState, forceAIPreCameraUpdate);
 		}
 
 		bool GET_PED_CURRENT_MOVE_BLEND_RATIO(Ped ped, float* speedX, float* speedY) {
@@ -22442,8 +22442,8 @@ namespace base::menu::natives {
 			return Invoker::Invoke<int, 2122>(ped);
 		}
 
-		bool GET_IS_TASK_ACTIVE(Ped ped, int taskIndex) {
-			return Invoker::Invoke<bool, 2123>(ped, taskIndex);
+		bool GET_IS_TASK_ACTIVE(Ped ped, int taskType) {
+			return Invoker::Invoke<bool, 2123>(ped, taskType);
 		}
 
 		int GET_SCRIPT_TASK_STATUS(Ped ped, Hash taskHash) {

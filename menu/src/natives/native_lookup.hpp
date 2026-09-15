@@ -239,9 +239,9 @@ inline NativeSignature GetNativeSignature(std::uint64_t index) {
         case 242: return {"OBJECT::GET_PICKUP_TYPE_FROM_WEAPON_HASH", "uint32_t", "uint32_t weaponHash"};
         case 243: return {"OBJECT::IS_PICKUP_WEAPON_OBJECT_VALID", "bool", "int object"};
         case 244: return {"OBJECT::GET_OBJECT_TINT_INDEX", "int", "int object"};
-        case 245: return {"OBJECT::SET_OBJECT_TINT_INDEX", "void", "int object, int textureVariation"};
-        case 246: return {"OBJECT::SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE", "bool", "float x, float y, float z, float radius, uint32_t modelHash, int textureVariation"};
-        case 247: return {"OBJECT::SET_PROP_TINT_INDEX", "void", "int32_t p0, int32_t p1"};
+        case 245: return {"OBJECT::SET_OBJECT_TINT_INDEX", "void", "int object, int tintIndex"};
+        case 246: return {"OBJECT::SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE", "bool", "float x, float y, float z, float radius, uint32_t modelHash, int tintIndex"};
+        case 247: return {"OBJECT::SET_PROP_TINT_INDEX", "void", "int object, int tintIndex"};
         case 248: return {"OBJECT::SET_PROP_LIGHT_COLOR", "bool", "int object, bool p1, int r, int g, int b"};
         case 249: return {"OBJECT::IS_PROP_LIGHT_OVERRIDEN", "bool", "int object"};
         case 250: return {"OBJECT::SET_OBJECT_IS_VISIBLE_IN_MIRRORS", "void", "int object, bool toggle"};
@@ -852,7 +852,7 @@ inline NativeSignature GetNativeSignature(std::uint64_t index) {
         case 855: return {"PED::SET_PED_CLOTH_PACKAGE_INDEX", "void", "int32_t p0, int32_t p1"};
         case 856: return {"PED::SET_PED_CLOTH_PRONE", "void", "int32_t p0, bool p1"};
         case 857: return {"PED::SET_PED_CONFIG_FLAG", "void", "int ped, int flagId, bool value"};
-        case 858: return {"PED::SET_PED_RESET_FLAG", "void", "int ped, int flagId, bool doReset"};
+        case 858: return {"PED::SET_PED_RESET_FLAG", "void", "int ped, int flagId, bool value"};
         case 859: return {"PED::GET_PED_CONFIG_FLAG", "bool", "int ped, int flagId, bool p2"};
         case 860: return {"PED::GET_PED_RESET_FLAG", "bool", "int ped, int flagId"};
         case 861: return {"PED::SET_PED_GROUP_MEMBER_PASSENGER_INDEX", "void", "int ped, int index"};
@@ -959,7 +959,7 @@ inline NativeSignature GetNativeSignature(std::uint64_t index) {
         case 962: return {"PED::ATTACH_SYNCHRONIZED_SCENE_TO_ENTITY", "void", "int sceneID, int entity, int boneIndex"};
         case 963: return {"PED::DETACH_SYNCHRONIZED_SCENE", "void", "int sceneID"};
         case 964: return {"PED::TAKE_OWNERSHIP_OF_SYNCHRONIZED_SCENE", "void", "int scene"};
-        case 965: return {"PED::FORCE_PED_MOTION_STATE", "bool", "int ped, uint32_t motionStateHash, bool p2, int p3, bool p4"};
+        case 965: return {"PED::FORCE_PED_MOTION_STATE", "bool", "int ped, uint32_t motionStateHash, bool shouldReset, int updateState, bool forceAIPreCameraUpdate"};
         case 966: return {"PED::GET_PED_CURRENT_MOVE_BLEND_RATIO", "bool", "int ped, uint64_t* speedX, uint64_t* speedY"};
         case 967: return {"PED::SET_PED_MAX_MOVE_BLEND_RATIO", "void", "int ped, float value"};
         case 968: return {"PED::SET_PED_MIN_MOVE_BLEND_RATIO", "void", "int ped, float value"};
@@ -1202,8 +1202,8 @@ inline NativeSignature GetNativeSignature(std::uint64_t index) {
         case 1205: return {"GRAPHICS::UPDATE_LIGHTS_ON_ENTITY", "void", "int entity"};
         case 1206: return {"GRAPHICS::SET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE", "void", "int32_t p0"};
         case 1207: return {"GRAPHICS::GET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE", "float", ""};
-        case 1208: return {"GRAPHICS::DRAW_MARKER", "void", "int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int p19, bool rotate, const char* textureDict, const char* textureName, bool drawOnEnts"};
-        case 1209: return {"GRAPHICS::DRAW_MARKER_EX", "void", "int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int32_t p19, bool rotate, const char* textureDict, const char* textureName, bool drawOnEnts, bool p24, bool p25"};
+        case 1208: return {"GRAPHICS::DRAW_MARKER", "void", "int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const char* textureDict, const char* textureName, bool invert"};
+        case 1209: return {"GRAPHICS::DRAW_MARKER_EX", "void", "int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const char* textureDict, const char* textureName, bool invert, bool usePreAlphaDepth, bool matchEntityRotOrder"};
         case 1210: return {"GRAPHICS::DRAW_MARKER_SPHERE", "void", "float x, float y, float z, float radius, int red, int green, int blue, float alpha"};
         case 1211: return {"GRAPHICS::CREATE_CHECKPOINT", "int", "int type, float posX1, float posY1, float posZ1, float posX2, float posY2, float posZ2, float diameter, int red, int green, int blue, int alpha, int reserved"};
         case 1212: return {"GRAPHICS::SET_CHECKPOINT_INSIDE_CYLINDER_HEIGHT_SCALE", "void", "int checkpoint, float scale"};
@@ -2117,7 +2117,7 @@ inline NativeSignature GetNativeSignature(std::uint64_t index) {
         case 2120: return {"TASK::CLEAR_SEQUENCE_TASK", "void", "uint64_t* taskSequenceId"};
         case 2121: return {"TASK::SET_SEQUENCE_TO_REPEAT", "void", "int taskSequenceId, bool repeat"};
         case 2122: return {"TASK::GET_SEQUENCE_PROGRESS", "int", "int ped"};
-        case 2123: return {"TASK::GET_IS_TASK_ACTIVE", "bool", "int ped, int taskIndex"};
+        case 2123: return {"TASK::GET_IS_TASK_ACTIVE", "bool", "int ped, int taskType"};
         case 2124: return {"TASK::GET_SCRIPT_TASK_STATUS", "int", "int ped, uint32_t taskHash"};
         case 2125: return {"TASK::GET_ACTIVE_VEHICLE_MISSION_TYPE", "int", "int vehicle"};
         case 2126: return {"TASK::TASK_LEAVE_ANY_VEHICLE", "void", "int ped, int delayTime, int flags"};

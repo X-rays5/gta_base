@@ -7,7 +7,7 @@
 #include "natives_as.hpp"
 #include "natives_gen9.hpp"
 
-#include "../as/util/as_bind.hpp"
+#include "../as/as_bind.hpp"
 
 #include <string>
 
@@ -809,12 +809,12 @@ namespace {
 			base::menu::natives::GRAPHICS::DRAW_TEXTURED_POLY_WITH_THREE_COLOURS(x1, y1, z1, x2, y2, z2, x3, y3, z3, red1, green1, blue1, alpha1, red2, green2, blue2, alpha2, red3, green3, blue3, alpha3, textureDict.c_str(), textureName.c_str(), u1, v1, w1, u2, v2, w2, u3, v3, w3);
 		}
 
-		void GraphicsDrawMarkerShim(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int p19, bool rotate, const std::string& textureDict, const std::string& textureName, bool drawOnEnts) {
-			base::menu::natives::GRAPHICS::DRAW_MARKER(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, p19, rotate, textureDict.c_str(), textureName.c_str(), drawOnEnts);
+		void GraphicsDrawMarkerShim(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const std::string& textureDict, const std::string& textureName, bool invert) {
+			base::menu::natives::GRAPHICS::DRAW_MARKER(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, rotationOrder, rotate, textureDict.c_str(), textureName.c_str(), invert);
 		}
 
-		void GraphicsDrawMarkerExShim(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, ::base::menu::natives::Any p19, bool rotate, const std::string& textureDict, const std::string& textureName, bool drawOnEnts, bool p24, bool p25) {
-			base::menu::natives::GRAPHICS::DRAW_MARKER_EX(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, p19, rotate, textureDict.c_str(), textureName.c_str(), drawOnEnts, p24, p25);
+		void GraphicsDrawMarkerExShim(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const std::string& textureDict, const std::string& textureName, bool invert, bool usePreAlphaDepth, bool matchEntityRotOrder) {
+			base::menu::natives::GRAPHICS::DRAW_MARKER_EX(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, red, green, blue, alpha, bobUpAndDown, faceCamera, rotationOrder, rotate, textureDict.c_str(), textureName.c_str(), invert, usePreAlphaDepth, matchEntityRotOrder);
 		}
 
 		void GraphicsRequestStreamedTextureDictShim(const std::string& textureDict, bool p1) {
@@ -4336,7 +4336,7 @@ CAM::DISABLE_ON_FOOT_FIRST_PERSON_VIEW_THIS_UPDATE();)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetFollowVehicleCamViewMode()", AngelScript::asFUNCTION(base::menu::natives::CAMERA::GET_FOLLOW_VEHICLE_CAM_VIEW_MODE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the type of camera:
 
-enum _viewmode //0xA11D7CA8
+enum camControlHelperMetadataViewMode__eViewMode
 {
 THIRD_PERSON_NEAR = 0,
 THIRD_PERSON_MEDIUM = 1,
@@ -4352,7 +4352,7 @@ viewmode: see CAM.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetCamViewModeForContext(int context, int viewMode)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::SET_CAM_VIEW_MODE_FOR_CONTEXT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(context: see GET_CAM_ACTIVE_VIEW_MODE_CONTEXT, viewmode: see CAM.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetCamActiveViewModeContext()", AngelScript::asFUNCTION(base::menu::natives::CAMERA::GET_CAM_ACTIVE_VIEW_MODE_CONTEXT), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(enum Context
+			.Desc(R"ASDOC(enum camControlHelperMetadataViewMode__eViewModeContext
 {
 ON_FOOT,
 IN_VEHICLE,
@@ -4728,7 +4728,15 @@ DATAFILE::DATAFILE_LOAD_OFFLINE_UGC("RockstarPlaylists") // loads "rockstarplayl
 			.Desc(R"ASDOC(Returns whether or not the specified property is set for the entity.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DecorRemove(int entity, const std::string&in propertyName)", AngelScript::asFUNCTION(DecoratorDecorRemoveShim), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DecorRegister(const std::string&in propertyName, int type)", AngelScript::asFUNCTION(DecoratorDecorRegisterShim), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(https://alloc8or.re/gta5/doc/enums/eDecorType.txt)ASDOC");
+			.Desc(R"ASDOC(enum eDecorType
+{
+DECOR_TYPE_UNKNOWN = 0,
+DECOR_TYPE_FLOAT = 1,
+DECOR_TYPE_BOOL = 2,
+DECOR_TYPE_INT = 3,
+DECOR_TYPE_STRING = 4,
+DECOR_TYPE_TIME = 5
+};)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DecorIsRegisteredAsType(const std::string&in propertyName, int type)", AngelScript::asFUNCTION(DecoratorDecorIsRegisteredAsTypeShim), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(type: see DECOR_REGISTER)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DecorRegisterLock()", AngelScript::asFUNCTION(base::menu::natives::DECORATOR::DECOR_REGISTER_LOCK), AngelScript::asCALL_CDECL)
@@ -5757,65 +5765,84 @@ Function.Call(Hash.DRAW_SPOT_LIGHT, pos.X, pos.Y, pos.Z, dirVector.X, dirVector.
 		base::menu::as::util::RegisterGlobalFunction(engine, "void UpdateLightsOnEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::GRAPHICS::UPDATE_LIGHTS_ON_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetLightOverrideMaxIntensityScale(int p0)", AngelScript::asFUNCTION(base::menu::natives::GRAPHICS::SET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "float GetLightOverrideMaxIntensityScale()", AngelScript::asFUNCTION(base::menu::natives::GRAPHICS::GET_LIGHT_OVERRIDE_MAX_INTENSITY_SCALE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "void DrawMarker(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int p19, bool rotate, const std::string&in textureDict, const std::string&in textureName, bool drawOnEnts)", AngelScript::asFUNCTION(GraphicsDrawMarkerShim), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(enum MarkerTypes
+		base::menu::as::util::RegisterGlobalFunction(engine, "void DrawMarker(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const std::string&in textureDict, const std::string&in textureName, bool invert)", AngelScript::asFUNCTION(GraphicsDrawMarkerShim), AngelScript::asCALL_CDECL)
+			.Desc(R"ASDOC(Draws a marker with the specified appearance at the target location. This has to be called every frame.
+
+type: The marker type to draw.
+posX: The X coordinate to draw the marker at.
+posY: The Y coordinate to draw the marker at.
+posZ: The Z coordinate to draw the marker at.
+dirX: The X component of the direction vector for the marker, or 0.0 to use rotX/Y/Z.
+dirY: The Y component of the direction vector for the marker, or 0.0 to use rotX/Y/Z.
+dirZ: The Z component of the direction vector for the marker, or 0.0 to use rotX/Y/Z.
+rotX: The X rotation for the marker. Only used if the direction vector is 0.0.
+rotY: The Y rotation for the marker. Only used if the direction vector is 0.0.
+rotZ: The Z rotation for the marker. Only used if the direction vector is 0.0.
+scaleX: The scale for the marker on the X axis.
+scaleY: The scale for the marker on the Y axis.
+scaleZ: The scale for the marker on the Z axis.
+red: The red component of the marker color, on a scale from 0-255.
+green: The green component of the marker color, on a scale from 0-255.
+blue: The blue component of the marker color, on a scale from 0-255.
+alpha: The alpha component of the marker color, on a scale from 0-255.
+bobUpAndDown: Whether or not the marker should slowly animate up/down.
+faceCamera: Whether the marker should be a 'billboard', as in, should constantly face the camera.
+rotationOrder: The order yaw, pitch and roll is applied. Usually 2.
+rotate: Rotations only apply to the heading.
+textureDict: A texture dictionary to draw the marker with, or NULL. Example: 'GolfPutting'
+textureName: A texture name in textureDict to draw the marker with, or NULL. Example: 'PuttingMarker'
+invert: Whether or not the marker should use an inverted depth test.
+
+enum eMarkerType
 {
-MarkerTypeUpsideDownCone = 0,
-MarkerTypeVerticalCylinder = 1,
-MarkerTypeThickChevronUp = 2,
-MarkerTypeThinChevronUp = 3,
-MarkerTypeCheckeredFlagRect = 4,
-MarkerTypeCheckeredFlagCircle = 5,
-MarkerTypeVerticleCircle = 6,
-MarkerTypePlaneModel = 7,
-MarkerTypeLostMCDark = 8,
-MarkerTypeLostMCLight = 9,
-MarkerTypeNumber0 = 10,
-MarkerTypeNumber1 = 11,
-MarkerTypeNumber2 = 12,
-MarkerTypeNumber3 = 13,
-MarkerTypeNumber4 = 14,
-MarkerTypeNumber5 = 15,
-MarkerTypeNumber6 = 16,
-MarkerTypeNumber7 = 17,
-MarkerTypeNumber8 = 18,
-MarkerTypeNumber9 = 19,
-MarkerTypeChevronUpx1 = 20,
-MarkerTypeChevronUpx2 = 21,
-MarkerTypeChevronUpx3 = 22,
-MarkerTypeHorizontalCircleFat = 23,
-MarkerTypeReplayIcon = 24,
-MarkerTypeHorizontalCircleSkinny = 25,
-MarkerTypeHorizontalCircleSkinny_Arrow = 26,
-MarkerTypeHorizontalSplitArrowCircle = 27,
-MarkerTypeDebugSphere = 28,
-MarkerTypeDallorSign = 29,
-MarkerTypeHorizontalBars = 30,
-MarkerTypeWolfHead = 31
-};
-
-dirX/Y/Z represent a heading on each axis in which the marker should face, alternatively you can rotate each axis independently with rotX/Y/Z (and set dirX/Y/Z all to 0).
-
-faceCamera - Rotates only the y-axis (the heading) towards the camera
-
-p19 - no effect, default value in script is 2
-
-rotate - Rotates only on the y-axis (the heading)
-
-textureDict - Name of texture dictionary to load texture from (e.g. "GolfPutting")
-
-textureName - Name of texture inside dictionary to load (e.g. "PuttingMarker")
-
-drawOnEnts - Draws the marker onto any entities that intersect it
-
-basically what he said, except textureDict and textureName are totally not const char*, or if so, then they are always set to 0/NULL/nullptr in every script I checked, eg:
-
-bj.c: graphics::draw_marker(6, vParam0, 0f, 0f, 1f, 0f, 0f, 0f, 4f, 4f, 4f, 240, 200, 80, iVar1, 0, 0, 2, 0, 0, 0, false);
-
-his is what I used to draw an amber downward pointing chevron "V", has to be redrawn every frame.  The 180 is for 180 degrees rotation around the Y axis, the 50 is alpha, assuming max is 100, but it will accept 255.
-
-GRAPHICS::DRAW_MARKER(2, v.x, v.y, v.z + 2, 0, 0, 0, 0, 180, 0, 2, 2, 2, 255, 128, 0, 50, 0, 1, 1, 0, 0, 0, 0);)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "void DrawMarkerEx(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int p19, bool rotate, const std::string&in textureDict, const std::string&in textureName, bool drawOnEnts, bool p24, bool p25)", AngelScript::asFUNCTION(GraphicsDrawMarkerExShim), AngelScript::asCALL_CDECL);
+MARKER_CONE = 0,
+MARKER_CYLINDER = 1,
+MARKER_ARROW = 2,
+MARKER_ARROW_FLAT = 3,
+MARKER_FLAG = 4,
+MARKER_RING_FLAG = 5,
+MARKER_RING = 6,
+MARKER_PLANE = 7,
+MARKER_BIKE_LOGO_1 = 8,
+MARKER_BIKE_LOGO_2 = 9,
+MARKER_NUM_0 = 10,
+MARKER_NUM_1 = 11,
+MARKER_NUM_2 = 12,
+MARKER_NUM_3 = 13,
+MARKER_NUM_4 = 14,
+MARKER_NUM_5 = 15,
+MARKER_NUM_6 = 16,
+MARKER_NUM_7 = 17,
+MARKER_NUM_8 = 18,
+MARKER_NUM_9 = 19,
+MARKER_CHEVRON_1 = 20,
+MARKER_CHEVRON_2 = 21,
+MARKER_CHEVRON_3 = 22,
+MARKER_RING_FLAT = 23,
+MARKER_LAP = 24,
+MARKER_HALO = 25,
+MARKER_HALO_POINT = 26,
+MARKER_HALO_ROTATE = 27,
+MARKER_SPHERE = 28,
+MARKER_MONEY = 29,
+MARKER_LINES = 30,
+MARKER_BEAST = 31,
+MARKER_QUESTION_MARK = 32,
+MARKER_TRANSFORM_PLANE = 33,
+MARKER_TRANSFORM_HELICOPTER = 34,
+MARKER_TRANSFORM_BOAT = 35,
+MARKER_TRANSFORM_CAR = 36,
+MARKER_TRANSFORM_BIKE = 37,
+MARKER_TRANSFORM_PUSH_BIKE = 38,
+MARKER_TRANSFORM_TRUCK = 39,
+MARKER_TRANSFORM_PARACHUTE = 40,
+MARKER_TRANSFORM_THRUSTER = 41,
+MARKER_WARP = 42,
+MARKER_BOXES = 43,
+MARKER_PIT_LANE = 44,
+};)ASDOC");
+		base::menu::as::util::RegisterGlobalFunction(engine, "void DrawMarkerEx(int type, float posX, float posY, float posZ, float dirX, float dirY, float dirZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ, int red, int green, int blue, int alpha, bool bobUpAndDown, bool faceCamera, int rotationOrder, bool rotate, const std::string&in textureDict, const std::string&in textureName, bool invert, bool usePreAlphaDepth, bool matchEntityRotOrder)", AngelScript::asFUNCTION(GraphicsDrawMarkerExShim), AngelScript::asCALL_CDECL)
+			.Desc(R"ASDOC(See DRAW_MARKER)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DrawMarkerSphere(float x, float y, float z, float radius, int red, int green, int blue, float alpha)", AngelScript::asFUNCTION(base::menu::natives::GRAPHICS::DRAW_MARKER_SPHERE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Draws a 3D sphere, typically seen in the GTA:O freemode event "Penned In".
 Example: https://i.imgur.com/nCbtS4H.png
@@ -6948,7 +6975,7 @@ sets background color for the next notification
 184 = green
 190 = yellow
 
-Here is a list of some colors that can be used: https://gyazo.com/68bd384455fceb0a85a8729e48216e15)ASDOC");
+Here is a list of some colors that can be used: https://i.gyazo.com/68bd384455fceb0a85a8729e48216e15.gif)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ThefeedSetRgbaParameterForNextMessage(int red, int green, int blue, int alpha)", AngelScript::asFUNCTION(base::menu::natives::HUD::THEFEED_SET_RGBA_PARAMETER_FOR_NEXT_MESSAGE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ThefeedSetFlashDurationParameterForNextMessage(int count)", AngelScript::asFUNCTION(base::menu::natives::HUD::THEFEED_SET_FLASH_DURATION_PARAMETER_FOR_NEXT_MESSAGE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Related to notification color flashing, setting count to 0 invalidates a `THEFEED_SET_RGBA_PARAMETER_FOR_NEXT_MESSAGE` call for the target notification.)ASDOC");
@@ -8050,7 +8077,7 @@ Make sure to call SET_BLIP_CATEGORY with index 7 for this to work on the desired
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DrawHudOverFadeThisFrame()", AngelScript::asFUNCTION(base::menu::natives::HUD::DRAW_HUD_OVER_FADE_THIS_FRAME), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ActivateFrontendMenu(Hash menuhash, bool togglePause, int component)", AngelScript::asFUNCTION(base::menu::natives::HUD::ACTIVATE_FRONTEND_MENU), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Does stuff like this:
-gyazo.com/7fcb78ea3520e3dbc5b2c0c0f3712617
+https://i.gyazo.com/7fcb78ea3520e3dbc5b2c0c0f3712617.png
 
 Example:
 int GetHash = GET_HASH_KEY("fe_menu_version_corona_lobby");
@@ -10202,7 +10229,7 @@ This native is exactly the same as 'PARTICIPANT_ID' native.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetCurrentPublicContentId(const std::string&in missionId)", AngelScript::asFUNCTION(NetworkNetworkSetCurrentPublicContentIdShim), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetCurrentChatOption(int newChatOption)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_SET_CURRENT_CHAT_OPTION), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetCurrentSpawnLocationOption(Hash mpSettingSpawn)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_SET_CURRENT_SPAWN_LOCATION_OPTION), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(mpSettingSpawn:
+			.Desc(R"ASDOC(Enumeration for reference (mpSettingSpawn must be the hash of one of these):
 
 enum eMpSettingSpawn
 {
@@ -11342,6 +11369,7 @@ Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SuppressPickupRewardType(int rewardType, bool suppress)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SUPPRESS_PICKUP_REWARD_TYPE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(enum ePickupRewardType
 {
+PICKUP_REWARD_TYPE_NONE = 0,
 PICKUP_REWARD_TYPE_AMMO = (1 << 0),
 PICKUP_REWARD_TYPE_BULLET_MP = (1 << 1),
 PICKUP_REWARD_TYPE_MISSILE_MP = (1 << 2),
@@ -11356,6 +11384,7 @@ PICKUP_REWARD_TYPE_STAT = (1 << 8),
 PICKUP_REWARD_TYPE_STAT_VARIABLE = PICKUP_REWARD_TYPE_STAT,
 PICKUP_REWARD_TYPE_VEHICLE_FIX = (1 << 9),
 PICKUP_REWARD_TYPE_FIREWORK_MP = (1 << 10),
+PICKUP_REWARD_TYPE_ALL = (1 << 11) - 1
 };)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClearAllPickupRewardTypeSuppression()", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CLEAR_ALL_PICKUP_REWARD_TYPE_SUPPRESSION), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClearPickupRewardTypeSuppression(int rewardType)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CLEAR_PICKUP_REWARD_TYPE_SUPPRESSION), AngelScript::asCALL_CDECL);
@@ -11379,28 +11408,9 @@ PICKUP_REWARD_TYPE_FIREWORK_MP = (1 << 10),
 			.Desc(R"ASDOC(Returns the pickup hash for the given weapon hash)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPickupWeaponObjectValid(int object)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::IS_PICKUP_WEAPON_OBJECT_VALID), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetObjectTintIndex(int object)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::GET_OBJECT_TINT_INDEX), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "void SetObjectTintIndex(int object, int textureVariation)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_OBJECT_TINT_INDEX), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(enum ObjectPaintVariants
-{
-Pacific = 0,
-Azure = 1,
-Nautical = 2,
-Continental = 3,
-Battleship = 4,
-Intrepid = 5,
-Uniform = 6,
-Classico = 7,
-Mediterranean = 8,
-Command = 9,
-Mariner = 10,
-Ruby = 11,
-Vintage = 12,
-Pristine = 13,
-Merchant = 14,
-Voyager = 15
-};)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "bool SetTintIndexClosestBuildingOfType(float x, float y, float z, float radius, Hash modelHash, int textureVariation)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPropTintIndex(int p0, int p1)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_PROP_TINT_INDEX), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "void SetObjectTintIndex(int object, int tintIndex)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_OBJECT_TINT_INDEX), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "bool SetTintIndexClosestBuildingOfType(float x, float y, float z, float radius, Hash modelHash, int tintIndex)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_TINT_INDEX_CLOSEST_BUILDING_OF_TYPE), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPropTintIndex(int object, int tintIndex)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_PROP_TINT_INDEX), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool SetPropLightColor(int object, bool p1, int r, int g, int b)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_PROP_LIGHT_COLOR), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPropLightOverriden(int object)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::IS_PROP_LIGHT_OVERRIDEN), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetObjectIsVisibleInMirrors(int object, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_OBJECT_IS_VISIBLE_IN_MIRRORS), AngelScript::asCALL_CDECL);
@@ -11695,7 +11705,8 @@ The vehicle parameter is not implemented (ignored).)ASDOC");
 You can clear the disabled zone with CLEAR_GPS_DISABLED_ZONE_AT_INDEX.
 
 **Setting a waypoint at the same coordinate:**
-Disabled Zone: https://i.imgur.com/P9VUuxM.png)ASDOC");
+Disabled Zone: https://i.imgur.com/vsxkvjC.png
+Enabled Zone (normal): https://i.imgur.com/OUZYLWL.png)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClearGpsDisabledZoneAtIndex(int index)", AngelScript::asFUNCTION(base::menu::natives::PATH::CLEAR_GPS_DISABLED_ZONE_AT_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Clears a disabled GPS route area from a certain index previously set using `SET_GPS_DISABLED_ZONE_AT_INDEX`.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AddNavmeshRequiredRegion(float x, float y, float radius)", AngelScript::asFUNCTION(base::menu::natives::PATH::ADD_NAVMESH_REQUIRED_REGION), AngelScript::asCALL_CDECL);
@@ -13122,63 +13133,64 @@ PED::SET_PED_PRIMARY_LOOKAT(getElem(3, &l_34, 4), PLAYER::PLAYER_PED_ID());)ASDO
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedConfigFlag(int ped, int flagId, bool value)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_CONFIG_FLAG), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(enum ePedConfigFlags
 {
-_CPED_CONFIG_FLAG_0xC63DE95E = 1,
+CPED_CONFIG_FLAG_CreatedByFactory = 0,
+CPED_CONFIG_FLAG_CanBeShotInVehicle = 1,
 CPED_CONFIG_FLAG_NoCriticalHits = 2,
 CPED_CONFIG_FLAG_DrownsInWater = 3,
-CPED_CONFIG_FLAG_DisableReticuleFixedLockon = 4,
-_CPED_CONFIG_FLAG_0x37D196F4 = 5,
-_CPED_CONFIG_FLAG_0xE2462399 = 6,
+CPED_CONFIG_FLAG_DrownsInSinkingVehicle = 4,
+CPED_CONFIG_FLAG_DiesInstantlyWhenSwimming = 5,
+CPED_CONFIG_FLAG_HasBulletProofVest = 6,
 CPED_CONFIG_FLAG_UpperBodyDamageAnimsOnly = 7,
-_CPED_CONFIG_FLAG_0xEDDEB838 = 8,
-_CPED_CONFIG_FLAG_0xB398B6FD = 9,
-_CPED_CONFIG_FLAG_0xF6664E68 = 10,
-_CPED_CONFIG_FLAG_0xA05E7CA3 = 11,
-_CPED_CONFIG_FLAG_0xCE394045 = 12,
+CPED_CONFIG_FLAG_NeverFallOffSkis = 8,
+CPED_CONFIG_FLAG_NeverEverTargetThisPed = 9,
+CPED_CONFIG_FLAG_ThisPedIsATargetPriority = 10,
+CPED_CONFIG_FLAG_TargettableWithNoLos = 11,
+CPED_CONFIG_FLAG_DoesntListenToPlayerGroupCommands = 12,
 CPED_CONFIG_FLAG_NeverLeavesGroup = 13,
-_CPED_CONFIG_FLAG_0xCD8D1411 = 14,
-_CPED_CONFIG_FLAG_0xB031F1A9 = 15,
-_CPED_CONFIG_FLAG_0xFE65BEE3 = 16,
+CPED_CONFIG_FLAG_DoesntDropWeaponsWhenDead = 14,
+CPED_CONFIG_FLAG_SetDelayedWeaponAsCurrent = 15,
+CPED_CONFIG_FLAG_KeepTasksAfterCleanUp = 16,
 CPED_CONFIG_FLAG_BlockNonTemporaryEvents = 17,
-_CPED_CONFIG_FLAG_0x380165BD = 18,
-_CPED_CONFIG_FLAG_0x07C045C7 = 19,
-_CPED_CONFIG_FLAG_0x583B5E2D = 20,
-_CPED_CONFIG_FLAG_0x475EDA58 = 21,
-_CPED_CONFIG_FLAG_0x8629D05B = 22,
-_CPED_CONFIG_FLAG_0x1522968B = 23,
+CPED_CONFIG_FLAG_HasAScriptBrain = 18,
+CPED_CONFIG_FLAG_WaitingForScriptBrainToLoad = 19,
+CPED_CONFIG_FLAG_AllowMedicsToReviveMe = 20,
+CPED_CONFIG_FLAG_MoneyHasBeenGivenByScript = 21,
+CPED_CONFIG_FLAG_NotAllowedToCrouch = 22,
+CPED_CONFIG_FLAG_DeathPickupsPersist = 23,
 CPED_CONFIG_FLAG_IgnoreSeenMelee = 24,
-_CPED_CONFIG_FLAG_0x4CC09C4B = 25,
-_CPED_CONFIG_FLAG_0x034F3053 = 26,
-_CPED_CONFIG_FLAG_0xD91BA7CC = 27,
-_CPED_CONFIG_FLAG_0x5C8DC66E = 28,
+CPED_CONFIG_FLAG_ForceDieIfInjured = 25,
+CPED_CONFIG_FLAG_DontDragMeOutCar = 26,
+CPED_CONFIG_FLAG_StayInCarOnJack = 27,
+CPED_CONFIG_FLAG_ForceDieInCar = 28,
 CPED_CONFIG_FLAG_GetOutUndriveableVehicle = 29,
-_CPED_CONFIG_FLAG_0x6580B9D2 = 30,
-_CPED_CONFIG_FLAG_0x0EF7A297 = 31,
-CPED_CONFIG_FLAG_WillFlyThruWindscreen = 32,
+CPED_CONFIG_FLAG_WillRemainOnBoatAfterMissionEnds = 30,
+CPED_CONFIG_FLAG_DontStoreAsPersistent = 31,
+CPED_CONFIG_FLAG_WillFlyThroughWindscreen = 32,
 CPED_CONFIG_FLAG_DieWhenRagdoll = 33,
 CPED_CONFIG_FLAG_HasHelmet = 34,
 CPED_CONFIG_FLAG_UseHelmet = 35,
 CPED_CONFIG_FLAG_DontTakeOffHelmet = 36,
-_CPED_CONFIG_FLAG_0xB130D17B = 37,
-_CPED_CONFIG_FLAG_0x5F071200 = 38,
+CPED_CONFIG_FLAG_HideInCutscene = 37,
+CPED_CONFIG_FLAG_PedIsEnemyToPlayer = 38,
 CPED_CONFIG_FLAG_DisableEvasiveDives = 39,
-_CPED_CONFIG_FLAG_0xC287AAFF = 40,
-_CPED_CONFIG_FLAG_0x203328CC = 41,
+CPED_CONFIG_FLAG_PedGeneratesDeadBodyEvents = 40,
+CPED_CONFIG_FLAG_DontAttackPlayerWithoutWantedLevel = 41,
 CPED_CONFIG_FLAG_DontInfluenceWantedLevel = 42,
 CPED_CONFIG_FLAG_DisablePlayerLockon = 43,
 CPED_CONFIG_FLAG_DisableLockonToRandomPeds = 44,
 CPED_CONFIG_FLAG_AllowLockonToFriendlyPlayers = 45,
-_CPED_CONFIG_FLAG_0xDB115BFA = 46,
+CPED_CONFIG_FLAG_DisableHornAudioWhenDead = 46,
 CPED_CONFIG_FLAG_PedBeingDeleted = 47,
 CPED_CONFIG_FLAG_BlockWeaponSwitching = 48,
-_CPED_CONFIG_FLAG_0xF8E99565 = 49,
-_CPED_CONFIG_FLAG_0xDD17FEE6 = 50,
-_CPED_CONFIG_FLAG_0x7ED9B2C9 = 51,
-_CPED_CONFIG_FLAG_NoCollison = 52,
-_CPED_CONFIG_FLAG_0x5A6C1F6E = 53,
-_CPED_CONFIG_FLAG_0xD749FC41 = 54,
-_CPED_CONFIG_FLAG_0x357F63F3 = 55,
-_CPED_CONFIG_FLAG_0xC5E60961 = 56,
-_CPED_CONFIG_FLAG_0x29275C3E = 57,
+CPED_CONFIG_FLAG_BlockGroupPedAimedAtResponse = 49,
+CPED_CONFIG_FLAG_WillFollowLeaderAnyMeans = 50,
+CPED_CONFIG_FLAG_BlippedByScript = 51,
+CPED_CONFIG_FLAG_DrawRadarVisualField = 52,
+CPED_CONFIG_FLAG_StopWeaponFiringOnImpact = 53,
+CPED_CONFIG_FLAG_DissableAutoFallOffTests = 54,
+CPED_CONFIG_FLAG_SteerAroundDeadBodies = 55,
+CPED_CONFIG_FLAG_ConstrainToNavMesh = 56,
+CPED_CONFIG_FLAG_SyncingAnimatedProps = 57,
 CPED_CONFIG_FLAG_IsFiring = 58,
 CPED_CONFIG_FLAG_WasFiring = 59,
 CPED_CONFIG_FLAG_IsStanding = 60,
@@ -13193,38 +13205,38 @@ CPED_CONFIG_FLAG_IsSitting = 68,
 CPED_CONFIG_FLAG_KilledByStealth = 69,
 CPED_CONFIG_FLAG_KilledByTakedown = 70,
 CPED_CONFIG_FLAG_Knockedout = 71,
-_CPED_CONFIG_FLAG_0x3E3C4560 = 72,
-_CPED_CONFIG_FLAG_0x2994C7B7 = 73,
-_CPED_CONFIG_FLAG_0x6D59D275 = 74,
+CPED_CONFIG_FLAG_ClearRadarBlipOnDeath = 72,
+CPED_CONFIG_FLAG_JustGotOffTrain = 73,
+CPED_CONFIG_FLAG_JustGotOnTrain = 74,
 CPED_CONFIG_FLAG_UsingCoverPoint = 75,
 CPED_CONFIG_FLAG_IsInTheAir = 76,
-_CPED_CONFIG_FLAG_0x2D493FB7 = 77,
+CPED_CONFIG_FLAG_KnockedUpIntoAir = 77,
 CPED_CONFIG_FLAG_IsAimingGun = 78,
-_CPED_CONFIG_FLAG_0x14D69875 = 79,
-_CPED_CONFIG_FLAG_0x40B05311 = 80,
-_CPED_CONFIG_FLAG_0x8B230BC5 = 81,
-_CPED_CONFIG_FLAG_0xC74E5842 = 82,
-_CPED_CONFIG_FLAG_0x9EA86147 = 83,
-_CPED_CONFIG_FLAG_0x674C746C = 84,
-_CPED_CONFIG_FLAG_0x3E56A8C2 = 85,
-_CPED_CONFIG_FLAG_0xC144A1EF = 86,
-_CPED_CONFIG_FLAG_0x0548512D = 87,
-_CPED_CONFIG_FLAG_0x31C93909 = 88,
-_CPED_CONFIG_FLAG_0xA0269315 = 89,
-_CPED_CONFIG_FLAG_0xD4D59D4D = 90,
-_CPED_CONFIG_FLAG_0x411D4420 = 91,
-_CPED_CONFIG_FLAG_0xDF4AEF0D = 92,
+CPED_CONFIG_FLAG_HasJustLeftCar = 79,
+CPED_CONFIG_FLAG_TargetWhenInjuredAllowed = 80,
+CPED_CONFIG_FLAG_CurrLeftFootCollNM = 81,
+CPED_CONFIG_FLAG_PrevLeftFootCollNM = 82,
+CPED_CONFIG_FLAG_CurrRightFootCollNM = 83,
+CPED_CONFIG_FLAG_PrevRightFootCollNM = 84,
+CPED_CONFIG_FLAG_HasBeenBumpedInCar = 85,
+CPED_CONFIG_FLAG_InWaterTaskQuitToClimbLadder = 86,
+CPED_CONFIG_FLAG_NMTwoHandedWeaponBothHandsConstrained = 87,
+CPED_CONFIG_FLAG_CreatedBloodPoolTimer = 88,
+CPED_CONFIG_FLAG_DontActivateRagdollFromAnyPedImpact = 89,
+CPED_CONFIG_FLAG_GroupPedFailedToEnterCover = 90,
+CPED_CONFIG_FLAG_AlreadyChattedOnPhone = 91,
+CPED_CONFIG_FLAG_AlreadyReactedToPedOnRoof = 92,
 CPED_CONFIG_FLAG_ForcePedLoadCover = 93,
-_CPED_CONFIG_FLAG_0x300E4CD3 = 94,
-_CPED_CONFIG_FLAG_0xF1C5BF04 = 95,
-_CPED_CONFIG_FLAG_0x89C2EF13 = 96,
+CPED_CONFIG_FLAG_BlockCoweringInCover = 94,
+CPED_CONFIG_FLAG_BlockPeekingInCover = 95,
+CPED_CONFIG_FLAG_JustLeftCarNotCheckedForDoors = 96,
 CPED_CONFIG_FLAG_VaultFromCover = 97,
-_CPED_CONFIG_FLAG_0x02A852C8 = 98,
-_CPED_CONFIG_FLAG_0x3D9407F1 = 99,
-_CPED_CONFIG_FLAG_IsDrunk = 100, // 0x319B4558
+CPED_CONFIG_FLAG_AutoConversationLookAts = 98,
+CPED_CONFIG_FLAG_UsingCrouchedPedCapsule = 99,
+CPED_CONFIG_FLAG_HasDeadPedBeenReported = 100,
 CPED_CONFIG_FLAG_ForcedAim = 101,
-_CPED_CONFIG_FLAG_0xB942D71A = 102,
-_CPED_CONFIG_FLAG_0xD26C55A8 = 103,
+CPED_CONFIG_FLAG_SteersAroundPeds = 102,
+CPED_CONFIG_FLAG_SteersAroundObjects = 103,
 CPED_CONFIG_FLAG_OpenDoorArmIK = 104,
 CPED_CONFIG_FLAG_ForceReload = 105,
 CPED_CONFIG_FLAG_DontActivateRagdollFromVehicleImpact = 106,
@@ -13232,11 +13244,11 @@ CPED_CONFIG_FLAG_DontActivateRagdollFromBulletImpact = 107,
 CPED_CONFIG_FLAG_DontActivateRagdollFromExplosions = 108,
 CPED_CONFIG_FLAG_DontActivateRagdollFromFire = 109,
 CPED_CONFIG_FLAG_DontActivateRagdollFromElectrocution = 110,
-_CPED_CONFIG_FLAG_0x83C0A4BF = 111,
-_CPED_CONFIG_FLAG_0x0E0FAF8C = 112,
+CPED_CONFIG_FLAG_IsBeingDraggedToSafety = 111,
+CPED_CONFIG_FLAG_HasBeenDraggedToSafety = 112,
 CPED_CONFIG_FLAG_KeepWeaponHolsteredUnlessFired = 113,
-_CPED_CONFIG_FLAG_0x43B80B79 = 114,
-_CPED_CONFIG_FLAG_0x0D2A9309 = 115,
+CPED_CONFIG_FLAG_ForceScriptControlledKnockout = 114,
+CPED_CONFIG_FLAG_FallOutOfVehicleWhenKilled = 115,
 CPED_CONFIG_FLAG_GetOutBurningVehicle = 116,
 CPED_CONFIG_FLAG_BumpedByPlayer = 117,
 CPED_CONFIG_FLAG_RunFromFiresAndExplosions = 118,
@@ -13246,7 +13258,7 @@ CPED_CONFIG_FLAG_IsAnkleCuffed = 121,
 CPED_CONFIG_FLAG_DisableMelee = 122,
 CPED_CONFIG_FLAG_DisableUnarmedDrivebys = 123,
 CPED_CONFIG_FLAG_JustGetsPulledOutWhenElectrocuted = 124,
-_CPED_CONFIG_FLAG_0x5FED6BFD = 125,
+CPED_CONFIG_FLAG_UNUSED_REPLACE_ME = 125,
 CPED_CONFIG_FLAG_WillNotHotwireLawEnforcementVehicle = 126,
 CPED_CONFIG_FLAG_WillCommandeerRatherThanJack = 127,
 CPED_CONFIG_FLAG_CanBeAgitated = 128,
@@ -13263,14 +13275,14 @@ CPED_CONFIG_FLAG_RidingTrain = 138,
 CPED_CONFIG_FLAG_ArrestResult = 139,
 CPED_CONFIG_FLAG_CanAttackFriendly = 140,
 CPED_CONFIG_FLAG_WillJackAnyPlayer = 141,
-_CPED_CONFIG_FLAG_0x6901E731 = 142,
-_CPED_CONFIG_FLAG_0x9EC9BF6C = 143,
+CPED_CONFIG_FLAG_BumpedByPlayerVehicle = 142,
+CPED_CONFIG_FLAG_DodgedPlayerVehicle = 143,
 CPED_CONFIG_FLAG_WillJackWantedPlayersRatherThanStealCar = 144,
-CPED_CONFIG_FLAG_ShootingAnimFlag = 145,
+CPED_CONFIG_FLAG_NoCopWantedAggro = 145,
 CPED_CONFIG_FLAG_DisableLadderClimbing = 146,
 CPED_CONFIG_FLAG_StairsDetected = 147,
 CPED_CONFIG_FLAG_SlopeDetected = 148,
-_CPED_CONFIG_FLAG_0x1A15670B = 149,
+CPED_CONFIG_FLAG_HelmetHasBeenShot = 149,
 CPED_CONFIG_FLAG_CowerInsteadOfFlee = 150,
 CPED_CONFIG_FLAG_CanActivateRagdollWhenVehicleUpsideDown = 151,
 CPED_CONFIG_FLAG_AlwaysRespondToCriesForHelp = 152,
@@ -13279,27 +13291,27 @@ CPED_CONFIG_FLAG_ShouldFixIfNoCollision = 154,
 CPED_CONFIG_FLAG_CanPerformArrest = 155,
 CPED_CONFIG_FLAG_CanPerformUncuff = 156,
 CPED_CONFIG_FLAG_CanBeArrested = 157,
-_CPED_CONFIG_FLAG_0xF7960FF5 = 158,
+CPED_CONFIG_FLAG_MoverConstrictedByOpposingCollisions = 158,
 CPED_CONFIG_FLAG_PlayerPreferFrontSeatMP = 159,
-_CPED_CONFIG_FLAG_0x0C6C3099 = 160,
-_CPED_CONFIG_FLAG_0x645F927A = 161,
-_CPED_CONFIG_FLAG_0xA86549B9 = 162,
-_CPED_CONFIG_FLAG_0x8AAF337A = 163,
-_CPED_CONFIG_FLAG_0x13BAA6E7 = 164,
-_CPED_CONFIG_FLAG_0x5FB9D1F5 = 165,
+CPED_CONFIG_FLAG_DontActivateRagdollFromImpactObject = 160,
+CPED_CONFIG_FLAG_DontActivateRagdollFromMelee = 161,
+CPED_CONFIG_FLAG_DontActivateRagdollFromWaterJet = 162,
+CPED_CONFIG_FLAG_DontActivateRagdollFromDrowning = 163,
+CPED_CONFIG_FLAG_DontActivateRagdollFromFalling = 164,
+CPED_CONFIG_FLAG_DontActivateRagdollFromRubberBullet = 165,
 CPED_CONFIG_FLAG_IsInjured = 166,
 CPED_CONFIG_FLAG_DontEnterVehiclesInPlayersGroup = 167,
-_CPED_CONFIG_FLAG_0xD8072639 = 168,
+CPED_CONFIG_FLAG_SwimmingTasksRunning = 168,
 CPED_CONFIG_FLAG_PreventAllMeleeTaunts = 169,
 CPED_CONFIG_FLAG_ForceDirectEntry = 170,
 CPED_CONFIG_FLAG_AlwaysSeeApproachingVehicles = 171,
 CPED_CONFIG_FLAG_CanDiveAwayFromApproachingVehicles = 172,
 CPED_CONFIG_FLAG_AllowPlayerToInterruptVehicleEntryExit = 173,
 CPED_CONFIG_FLAG_OnlyAttackLawIfPlayerIsWanted = 174,
-_CPED_CONFIG_FLAG_0x90008BFA = 175,
-_CPED_CONFIG_FLAG_0x07C7A910 = 176,
+CPED_CONFIG_FLAG_PlayerInContactWithKinematicPed = 175,
+CPED_CONFIG_FLAG_PlayerInContactWithSomethingOtherThanKinematicPed = 176,
 CPED_CONFIG_FLAG_PedsJackingMeDontGetIn = 177,
-_CPED_CONFIG_FLAG_0xCE4E8BE2 = 178,
+CPED_CONFIG_FLAG_AdditionalRappellingPed = 178,
 CPED_CONFIG_FLAG_PedIgnoresAnimInterruptEvents = 179,
 CPED_CONFIG_FLAG_IsInCustody = 180,
 CPED_CONFIG_FLAG_ForceStandardBumpReactionThresholds = 181,
@@ -13311,24 +13323,24 @@ CPED_CONFIG_FLAG_EnableWeaponBlocking = 186,
 CPED_CONFIG_FLAG_HasHurtStarted = 187,
 CPED_CONFIG_FLAG_DisableHurt = 188,
 CPED_CONFIG_FLAG_PlayerIsWeird = 189,
-_CPED_CONFIG_FLAG_0x32FC208B = 190,
-_CPED_CONFIG_FLAG_0x0C296E5A = 191,
-_CPED_CONFIG_FLAG_0xE63B73EC = 192,
+CPED_CONFIG_FLAG_PedHadPhoneConversation = 190,
+CPED_CONFIG_FLAG_BeganCrossingRoad = 191,
+CPED_CONFIG_FLAG_WarpIntoLeadersVehicle = 192,
 CPED_CONFIG_FLAG_DoNothingWhenOnFootByDefault = 193,
 CPED_CONFIG_FLAG_UsingScenario = 194,
 CPED_CONFIG_FLAG_VisibleOnScreen = 195,
-_CPED_CONFIG_FLAG_0xD88C58A1 = 196,
-_CPED_CONFIG_FLAG_0x5A3DCF43 = 197,
-_CPED_CONFIG_FLAG_0xEA02B420 = 198,
+CPED_CONFIG_FLAG_DontCollideWithKinematic = 196,
+CPED_CONFIG_FLAG_ActivateOnSwitchFromLowPhysicsLod = 197,
+CPED_CONFIG_FLAG_DontActivateRagdollOnPedCollisionWhenDead = 198,
 CPED_CONFIG_FLAG_DontActivateRagdollOnVehicleCollisionWhenDead = 199,
 CPED_CONFIG_FLAG_HasBeenInArmedCombat = 200,
-_CPED_CONFIG_FLAG_0x5E6466F6 = 201,
+CPED_CONFIG_FLAG_UseDiminishingAmmoRate = 201,
 CPED_CONFIG_FLAG_Avoidance_Ignore_All = 202,
 CPED_CONFIG_FLAG_Avoidance_Ignored_by_All = 203,
 CPED_CONFIG_FLAG_Avoidance_Ignore_Group1 = 204,
 CPED_CONFIG_FLAG_Avoidance_Member_of_Group1 = 205,
 CPED_CONFIG_FLAG_ForcedToUseSpecificGroupSeatIndex = 206,
-_CPED_CONFIG_FLAG_0x415B26B9 = 207,
+CPED_CONFIG_FLAG_LowPhysicsLodMayPlaceOnNavMesh = 207,
 CPED_CONFIG_FLAG_DisableExplosionReactions = 208,
 CPED_CONFIG_FLAG_DodgedPlayer = 209,
 CPED_CONFIG_FLAG_WaitingForPlayerControlInterrupt = 210,
@@ -13339,28 +13351,28 @@ CPED_CONFIG_FLAG_AllowToBeTargetedInAVehicle = 214,
 CPED_CONFIG_FLAG_WaitForDirectEntryPointToBeFreeWhenExiting = 215,
 CPED_CONFIG_FLAG_OnlyRequireOnePressToExitVehicle = 216,
 CPED_CONFIG_FLAG_ForceExitToSkyDive = 217,
-_CPED_CONFIG_FLAG_0x3C7DF9DF = 218,
-_CPED_CONFIG_FLAG_0x848FFEF2 = 219,
+CPED_CONFIG_FLAG_SteersAroundVehicles = 218,
+CPED_CONFIG_FLAG_AllowPedInVehiclesOverrideTaskFlags = 219,
 CPED_CONFIG_FLAG_DontEnterLeadersVehicle = 220,
 CPED_CONFIG_FLAG_DisableExitToSkyDive = 221,
-_CPED_CONFIG_FLAG_0x84F722FA = 222,
-_CPED_CONFIG_FLAG_Shrink = 223, // 0xD1B87B1F
-_CPED_CONFIG_FLAG_0x728AA918 = 224,
+CPED_CONFIG_FLAG_ScriptHasDisabledCollision = 222,
+CPED_CONFIG_FLAG_UseAmbientModelScaling = 223,
+CPED_CONFIG_FLAG_DontWatchFirstOnNextHurryAway = 224,
 CPED_CONFIG_FLAG_DisablePotentialToBeWalkedIntoResponse = 225,
 CPED_CONFIG_FLAG_DisablePedAvoidance = 226,
 CPED_CONFIG_FLAG_ForceRagdollUponDeath = 227,
-_CPED_CONFIG_FLAG_0x1EA7225F = 228,
+CPED_CONFIG_FLAG_CanLosePropsOnDamage = 228,
 CPED_CONFIG_FLAG_DisablePanicInVehicle = 229,
 CPED_CONFIG_FLAG_AllowedToDetachTrailer = 230,
-_CPED_CONFIG_FLAG_0xFC3E572D = 231,
-_CPED_CONFIG_FLAG_0x08E9F9CF = 232,
-_CPED_CONFIG_FLAG_0x2D3BA52D = 233,
-_CPED_CONFIG_FLAG_0xFD2F53EA = 234,
-_CPED_CONFIG_FLAG_0x31A1B03B = 235,
+CPED_CONFIG_FLAG_HasShotBeenReactedToFromFront = 231,
+CPED_CONFIG_FLAG_HasShotBeenReactedToFromBack = 232,
+CPED_CONFIG_FLAG_HasShotBeenReactedToFromLeft = 233,
+CPED_CONFIG_FLAG_HasShotBeenReactedToFromRight = 234,
+CPED_CONFIG_FLAG_AllowBlockDeadPedRagdollActivation = 235,
 CPED_CONFIG_FLAG_IsHoldingProp = 236,
 CPED_CONFIG_FLAG_BlocksPathingWhenDead = 237,
-_CPED_CONFIG_FLAG_0xCE57C9A3 = 238,
-_CPED_CONFIG_FLAG_0x26149198 = 239,
+CPED_CONFIG_FLAG_ForcePlayNormalScenarioExitOnNextScriptCommand = 238,
+CPED_CONFIG_FLAG_ForcePlayImmediateScenarioExitOnNextScriptCommand = 239,
 CPED_CONFIG_FLAG_ForceSkinCharacterCloth = 240,
 CPED_CONFIG_FLAG_LeaveEngineOnWhenExitingVehicles = 241,
 CPED_CONFIG_FLAG_PhoneDisableTextingAnimations = 242,
@@ -13368,85 +13380,85 @@ CPED_CONFIG_FLAG_PhoneDisableTalkingAnimations = 243,
 CPED_CONFIG_FLAG_PhoneDisableCameraAnimations = 244,
 CPED_CONFIG_FLAG_DisableBlindFiringInShotReactions = 245,
 CPED_CONFIG_FLAG_AllowNearbyCoverUsage = 246,
-_CPED_CONFIG_FLAG_0x0C754ACA = 247,
+CPED_CONFIG_FLAG_InStrafeTransition = 247,
 CPED_CONFIG_FLAG_CanPlayInCarIdles = 248,
 CPED_CONFIG_FLAG_CanAttackNonWantedPlayerAsLaw = 249,
 CPED_CONFIG_FLAG_WillTakeDamageWhenVehicleCrashes = 250,
 CPED_CONFIG_FLAG_AICanDrivePlayerAsRearPassenger = 251,
 CPED_CONFIG_FLAG_PlayerCanJackFriendlyPlayers = 252,
 CPED_CONFIG_FLAG_OnStairs = 253,
-_CPED_CONFIG_FLAG_0xE1A2F73F = 254,
+CPED_CONFIG_FLAG_SimulatingAiming = 254,
 CPED_CONFIG_FLAG_AIDriverAllowFriendlyPassengerSeatEntry = 255,
-_CPED_CONFIG_FLAG_0xF1EB20A9 = 256,
+CPED_CONFIG_FLAG_ParentCarIsBeingRemoved = 256,
 CPED_CONFIG_FLAG_AllowMissionPedToUseInjuredMovement = 257,
-_CPED_CONFIG_FLAG_0x329DCF1A = 258,
-_CPED_CONFIG_FLAG_0x8D90DD1B = 259,
-_CPED_CONFIG_FLAG_0xB8A292B7 = 260,
+CPED_CONFIG_FLAG_CanLoseHelmetOnDamage = 258,
+CPED_CONFIG_FLAG_NeverDoScenarioExitProbeChecks = 259,
+CPED_CONFIG_FLAG_SuppressLowLODRagdollSwitchWhenCorpseSettles = 260,
 CPED_CONFIG_FLAG_PreventUsingLowerPrioritySeats = 261,
-_CPED_CONFIG_FLAG_0x2AF558F0 = 262,
-_CPED_CONFIG_FLAG_0x82251455 = 263,
-_CPED_CONFIG_FLAG_0x30CF498B = 264,
-_CPED_CONFIG_FLAG_0xE1CD50AF = 265,
-_CPED_CONFIG_FLAG_0x72E4AE48 = 266,
-_CPED_CONFIG_FLAG_0xC2657EA1 = 267,
+CPED_CONFIG_FLAG_JustLeftVehicleNeedsReset = 262,
+CPED_CONFIG_FLAG_TeleportIfCantReachPlayer = 263,
+CPED_CONFIG_FLAG_PedsInVehiclePositionNeedsReset = 264,
+CPED_CONFIG_FLAG_PedsFullyInSeat = 265,
+CPED_CONFIG_FLAG_AllowPlayerLockOnIfFriendly = 266,
+CPED_CONFIG_FLAG_UseCameraHeadingForDesiredDirectionLockOnTest = 267,
 CPED_CONFIG_FLAG_TeleportToLeaderVehicle = 268,
 CPED_CONFIG_FLAG_Avoidance_Ignore_WeirdPedBuffer = 269,
 CPED_CONFIG_FLAG_OnStairSlope = 270,
-_CPED_CONFIG_FLAG_0xA0897933 = 271,
+CPED_CONFIG_FLAG_HasPlayedNMGetup = 271,
 CPED_CONFIG_FLAG_DontBlipCop = 272,
-CPED_CONFIG_FLAG_ClimbedShiftedFence = 273,
-_CPED_CONFIG_FLAG_0xF7823618 = 274,
+CPED_CONFIG_FLAG_SpawnedAtExtendedRangeScenario = 273,
+CPED_CONFIG_FLAG_WalkAlongsideLeaderWhenClose = 274,
 CPED_CONFIG_FLAG_KillWhenTrapped = 275,
 CPED_CONFIG_FLAG_EdgeDetected = 276,
-_CPED_CONFIG_FLAG_0x92B67896 = 277,
-_CPED_CONFIG_FLAG_0xCAD677C9 = 278,
+CPED_CONFIG_FLAG_AlwaysWakeUpPhysicsOfIntersectedPeds = 277,
+CPED_CONFIG_FLAG_EquippedAmbientLoadOutWeapon = 278,
 CPED_CONFIG_FLAG_AvoidTearGas = 279,
-_CPED_CONFIG_FLAG_0x5276AC7B = 280,
+CPED_CONFIG_FLAG_StoppedSpeechUponFreezing = 280,
 CPED_CONFIG_FLAG_DisableGoToWritheWhenInjured = 281,
 CPED_CONFIG_FLAG_OnlyUseForcedSeatWhenEnteringHeliInGroup = 282,
-_CPED_CONFIG_FLAG_0x9139724D = 283,
-_CPED_CONFIG_FLAG_0xA1457461 = 284,
+CPED_CONFIG_FLAG_ThrownFromVehicleDueToExhaustion = 283,
+CPED_CONFIG_FLAG_UpdateEnclosedSearchRegion = 284,
 CPED_CONFIG_FLAG_DisableWeirdPedEvents = 285,
 CPED_CONFIG_FLAG_ShouldChargeNow = 286,
 CPED_CONFIG_FLAG_RagdollingOnBoat = 287,
 CPED_CONFIG_FLAG_HasBrandishedWeapon = 288,
-_CPED_CONFIG_FLAG_0x1B9EE8A1 = 289,
-_CPED_CONFIG_FLAG_0xF3F5758C = 290,
-_CPED_CONFIG_FLAG_0x2A9307F1 = 291,
-_CPED_CONFIG_FLAG_FreezePosition = 292, // 0x7403D216
-_CPED_CONFIG_FLAG_0xA06A3C6C = 293,
+CPED_CONFIG_FLAG_AllowMinorReactionsAsMissionPed = 289,
+CPED_CONFIG_FLAG_BlockDeadBodyShockingEventsWhenDead = 290,
+CPED_CONFIG_FLAG_PedHasBeenSeen = 291,
+CPED_CONFIG_FLAG_PedIsInReusePool = 292,
+CPED_CONFIG_FLAG_PedWasReused = 293,
 CPED_CONFIG_FLAG_DisableShockingEvents = 294,
-_CPED_CONFIG_FLAG_0xF8DA25A5 = 295,
+CPED_CONFIG_FLAG_MovedUsingLowLodPhysicsSinceLastActive = 295,
 CPED_CONFIG_FLAG_NeverReactToPedOnRoof = 296,
-_CPED_CONFIG_FLAG_0xB31F1187 = 297,
-_CPED_CONFIG_FLAG_0x84315402 = 298,
+CPED_CONFIG_FLAG_ForcePlayFleeScenarioExitOnNextScriptCommand = 297,
+CPED_CONFIG_FLAG_JustBumpedIntoVehicle = 298,
 CPED_CONFIG_FLAG_DisableShockingDrivingOnPavementEvents = 299,
-_CPED_CONFIG_FLAG_0xC7829B67 = 300,
+CPED_CONFIG_FLAG_ShouldThrowSmokeNow = 300,
 CPED_CONFIG_FLAG_DisablePedConstraints = 301,
 CPED_CONFIG_FLAG_ForceInitialPeekInCover = 302,
-_CPED_CONFIG_FLAG_0x2ADA871B = 303,
-_CPED_CONFIG_FLAG_0x47BC8A58 = 304,
+CPED_CONFIG_FLAG_CreatedByDispatch = 303,
+CPED_CONFIG_FLAG_PointGunLeftHandSupporting = 304,
 CPED_CONFIG_FLAG_DisableJumpingFromVehiclesAfterLeader = 305,
-_CPED_CONFIG_FLAG_0x4A133C50 = 306,
-_CPED_CONFIG_FLAG_0xC58099C3 = 307,
-_CPED_CONFIG_FLAG_0xF3D76D41 = 308,
-_CPED_CONFIG_FLAG_0xB0EEE9F2 = 309,
+CPED_CONFIG_FLAG_DontActivateRagdollFromPlayerPedImpact = 306,
+CPED_CONFIG_FLAG_DontActivateRagdollFromAiRagdollImpact = 307,
+CPED_CONFIG_FLAG_DontActivateRagdollFromPlayerRagdollImpact = 308,
+CPED_CONFIG_FLAG_DisableQuadrupedSpring = 309,
 CPED_CONFIG_FLAG_IsInCluster = 310,
 CPED_CONFIG_FLAG_ShoutToGroupOnPlayerMelee = 311,
 CPED_CONFIG_FLAG_IgnoredByAutoOpenDoors = 312,
-_CPED_CONFIG_FLAG_0xD4136C22 = 313,
+CPED_CONFIG_FLAG_PreferInjuredGetup = 313,
 CPED_CONFIG_FLAG_ForceIgnoreMeleeActiveCombatant = 314,
 CPED_CONFIG_FLAG_CheckLoSForSoundEvents = 315,
-_CPED_CONFIG_FLAG_0xD5C98277 = 316,
+CPED_CONFIG_FLAG_JackedAbandonedCar = 316,
 CPED_CONFIG_FLAG_CanSayFollowedByPlayerAudio = 317,
 CPED_CONFIG_FLAG_ActivateRagdollFromMinorPlayerContact = 318,
-_CPED_CONFIG_FLAG_0xD8BE1D54 = 319,
+CPED_CONFIG_FLAG_HasPortablePickupAttached = 319,
 CPED_CONFIG_FLAG_ForcePoseCharacterCloth = 320,
 CPED_CONFIG_FLAG_HasClothCollisionBounds = 321,
 CPED_CONFIG_FLAG_HasHighHeels = 322,
-_CPED_CONFIG_FLAG_0x86B01E54 = 323,
+CPED_CONFIG_FLAG_TreatAsAmbientPedForDriverLockOn = 323,
 CPED_CONFIG_FLAG_DontBehaveLikeLaw = 324,
-_CPED_CONFIG_FLAG_0xC03B736C = 325, // SpawnedAtScenario?
+CPED_CONFIG_FLAG_SpawnedAtScenario = 325,
 CPED_CONFIG_FLAG_DisablePoliceInvestigatingBody = 326,
 CPED_CONFIG_FLAG_DisableWritheShootFromGround = 327,
 CPED_CONFIG_FLAG_LowerPriorityOfWarpSeats = 328,
@@ -13454,29 +13466,29 @@ CPED_CONFIG_FLAG_DisableTalkTo = 329,
 CPED_CONFIG_FLAG_DontBlip = 330,
 CPED_CONFIG_FLAG_IsSwitchingWeapon = 331,
 CPED_CONFIG_FLAG_IgnoreLegIkRestrictions = 332,
-_CPED_CONFIG_FLAG_0x150468FD = 333,
-_CPED_CONFIG_FLAG_0x914EBD6B = 334,
-_CPED_CONFIG_FLAG_0x79AF3B6D = 335,
-_CPED_CONFIG_FLAG_0x75C7A632 = 336,
-_CPED_CONFIG_FLAG_0x52D530E2 = 337,
-_CPED_CONFIG_FLAG_0xDB2A90E0 = 338,
+CPED_CONFIG_FLAG_ScriptForceNoTimesliceIntelligenceUpdate = 333,
+CPED_CONFIG_FLAG_JackedOutOfMyVehicle = 334,
+CPED_CONFIG_FLAG_WentIntoCombatAfterBeingJacked = 335,
+CPED_CONFIG_FLAG_DontActivateRagdollForVehicleGrab = 336,
+CPED_CONFIG_FLAG_ForcePackageCharacterCloth = 337,
+CPED_CONFIG_FLAG_DontRemoveWithValidOrder = 338,
 CPED_CONFIG_FLAG_AllowTaskDoNothingTimeslicing = 339,
-_CPED_CONFIG_FLAG_0x12ADB567 = 340,
-_CPED_CONFIG_FLAG_0x105C8518 = 341,
+CPED_CONFIG_FLAG_ForcedToStayInCoverDueToPlayerSwitch = 340,
+CPED_CONFIG_FLAG_ForceProneCharacterCloth = 341,
 CPED_CONFIG_FLAG_NotAllowedToJackAnyPlayers = 342,
-_CPED_CONFIG_FLAG_0xED152C3E = 343,
-_CPED_CONFIG_FLAG_0xA0EFE6A8 = 344,
+CPED_CONFIG_FLAG_InToStrafeTransition = 343,
+CPED_CONFIG_FLAG_KilledByStandardMelee = 344,
 CPED_CONFIG_FLAG_AlwaysLeaveTrainUponArrival = 345,
-_CPED_CONFIG_FLAG_0xCDDFE830 = 346,
+CPED_CONFIG_FLAG_ForcePlayDirectedNormalScenarioExitOnNextScriptCommand = 346,
 CPED_CONFIG_FLAG_OnlyWritheFromWeaponDamage = 347,
 CPED_CONFIG_FLAG_UseSloMoBloodVfx = 348,
 CPED_CONFIG_FLAG_EquipJetpack = 349,
 CPED_CONFIG_FLAG_PreventDraggedOutOfCarThreatResponse = 350,
-_CPED_CONFIG_FLAG_0xE13D1F7C = 351,
-_CPED_CONFIG_FLAG_0x40E25FB9 = 352,
-_CPED_CONFIG_FLAG_0x930629D9 = 353,
-_CPED_CONFIG_FLAG_0xECCF0C7F = 354,
-_CPED_CONFIG_FLAG_0xB6E9613B = 355,
+CPED_CONFIG_FLAG_ScriptHasCompletelyDisabledCollision = 351,
+CPED_CONFIG_FLAG_NeverDoScenarioNavChecks = 352,
+CPED_CONFIG_FLAG_ForceSynchronousScenarioExitChecking = 353,
+CPED_CONFIG_FLAG_ThrowingGrenadeWhileAiming = 354,
+CPED_CONFIG_FLAG_HeadbobToRadioEnabled = 355,
 CPED_CONFIG_FLAG_ForceDeepSurfaceCheck = 356,
 CPED_CONFIG_FLAG_DisableDeepSurfaceAnims = 357,
 CPED_CONFIG_FLAG_DontBlipNotSynced = 358,
@@ -13488,33 +13500,33 @@ CPED_CONFIG_FLAG_UseReserveParachute = 363,
 CPED_CONFIG_FLAG_TreatDislikeAsHateWhenInCombat = 364,
 CPED_CONFIG_FLAG_OnlyUpdateTargetWantedIfSeen = 365,
 CPED_CONFIG_FLAG_AllowAutoShuffleToDriversSeat = 366,
-_CPED_CONFIG_FLAG_0xD7E07D37 = 367,
-_CPED_CONFIG_FLAG_0x03C4FD24 = 368,
-_CPED_CONFIG_FLAG_0x7675789A = 369,
-_CPED_CONFIG_FLAG_0xB7288A88 = 370,
-_CPED_CONFIG_FLAG_0xC06B6291 = 371,
+CPED_CONFIG_FLAG_DontActivateRagdollFromSmokeGrenade = 367,
+CPED_CONFIG_FLAG_LinkMBRToOwnerOnChain = 368,
+CPED_CONFIG_FLAG_AmbientFriendBumpedByPlayer = 369,
+CPED_CONFIG_FLAG_AmbientFriendBumpedByPlayerVehicle = 370,
+CPED_CONFIG_FLAG_InFPSUnholsterTransition = 371,
 CPED_CONFIG_FLAG_PreventReactingToSilencedCloneBullets = 372,
 CPED_CONFIG_FLAG_DisableInjuredCryForHelpEvents = 373,
 CPED_CONFIG_FLAG_NeverLeaveTrain = 374,
 CPED_CONFIG_FLAG_DontDropJetpackOnDeath = 375,
-_CPED_CONFIG_FLAG_0x147F1FFB = 376,
-_CPED_CONFIG_FLAG_0x4376DD79 = 377,
-_CPED_CONFIG_FLAG_0xCD3DB518 = 378,
-_CPED_CONFIG_FLAG_0xFE4BA4B6 = 379,
+CPED_CONFIG_FLAG_UseFPSUnholsterTransitionDuringCombatRoll = 376,
+CPED_CONFIG_FLAG_ExitingFPSCombatRoll = 377,
+CPED_CONFIG_FLAG_ScriptHasControlOfPlayer = 378,
+CPED_CONFIG_FLAG_PlayFPSIdleFidgetsForProjectile = 379,
 CPED_CONFIG_FLAG_DisableAutoEquipHelmetsInBikes = 380,
-_CPED_CONFIG_FLAG_0xBCD816CD = 381,
-_CPED_CONFIG_FLAG_0xCF02DD69 = 382,
-_CPED_CONFIG_FLAG_0xF73AFA2E = 383,
-_CPED_CONFIG_FLAG_0x80B9A9D0 = 384,
-_CPED_CONFIG_FLAG_0xF601F7EE = 385,
-_CPED_CONFIG_FLAG_0xA91350FC = 386,
-_CPED_CONFIG_FLAG_0x3AB23B96 = 387,
+CPED_CONFIG_FLAG_DisableAutoEquipHelmetsInAircraft = 381,
+CPED_CONFIG_FLAG_WasPlayingFPSGetup = 382,
+CPED_CONFIG_FLAG_WasPlayingFPSMeleeActionResult = 383,
+CPED_CONFIG_FLAG_PreferNoPriorityRemoval = 384,
+CPED_CONFIG_FLAG_FPSFidgetsAbortedOnFire = 385,
+CPED_CONFIG_FLAG_ForceFPSIKWithUpperBodyAnim = 386,
+CPED_CONFIG_FLAG_SwitchingCharactersInFirstPerson = 387,
 CPED_CONFIG_FLAG_IsClimbingLadder = 388,
 CPED_CONFIG_FLAG_HasBareFeet = 389,
 CPED_CONFIG_FLAG_UNUSED_REPLACE_ME_2 = 390,
 CPED_CONFIG_FLAG_GoOnWithoutVehicleIfItIsUnableToGetBackToRoad = 391,
 CPED_CONFIG_FLAG_BlockDroppingHealthSnacksOnDeath = 392,
-_CPED_CONFIG_FLAG_0xC11D3E8F = 393,
+CPED_CONFIG_FLAG_ResetLastVehicleOnVehicleExit = 393,
 CPED_CONFIG_FLAG_ForceThreatResponseToNonFriendToFriendMeleeActions = 394,
 CPED_CONFIG_FLAG_DontRespondToRandomPedsDamage = 395,
 CPED_CONFIG_FLAG_AllowContinuousThreatResponseWantedLevelUpdates = 396,
@@ -13524,10 +13536,10 @@ CPED_CONFIG_FLAG_BroadcastRepondedToThreatWhenGoingToPointShooting = 399,
 CPED_CONFIG_FLAG_IgnorePedTypeForIsFriendlyWith = 400,
 CPED_CONFIG_FLAG_TreatNonFriendlyAsHateWhenInCombat = 401,
 CPED_CONFIG_FLAG_DontLeaveVehicleIfLeaderNotInVehicle = 402,
-_CPED_CONFIG_FLAG_0x5E5B9591 = 403,
+CPED_CONFIG_FLAG_ChangeFromPermanentToAmbientPopTypeOnMigration = 403,
 CPED_CONFIG_FLAG_AllowMeleeReactionIfMeleeProofIsOn = 404,
-_CPED_CONFIG_FLAG_0x77840177 = 405,
-_CPED_CONFIG_FLAG_0x1C7ACAC4 = 406,
+CPED_CONFIG_FLAG_UsingLowriderLeans = 405,
+CPED_CONFIG_FLAG_UsingAlternateLowriderLeans = 406,
 CPED_CONFIG_FLAG_UseNormalExplosionDamageWhenBlownUpInVehicle = 407,
 CPED_CONFIG_FLAG_DisableHomingMissileLockForVehiclePedInside = 408,
 CPED_CONFIG_FLAG_DisableTakeOffScubaGear = 409,
@@ -13541,12 +13553,12 @@ CPED_CONFIG_FLAG_BlockAutoSwapOnWeaponPickups = 416,
 CPED_CONFIG_FLAG_ThisPedIsATargetPriorityForAI = 417,
 CPED_CONFIG_FLAG_IsSwitchingHelmetVisor = 418,
 CPED_CONFIG_FLAG_ForceHelmetVisorSwitch = 419,
-_CPED_CONFIG_FLAG_0xCFF5F6DE = 420,
+CPED_CONFIG_FLAG_IsPerformingVehicleMelee = 420,
 CPED_CONFIG_FLAG_UseOverrideFootstepPtFx = 421,
 CPED_CONFIG_FLAG_DisableVehicleCombat = 422,
-_CPED_CONFIG_FLAG_0xFE401D26 = 423,
-CPED_CONFIG_FLAG_FallsLikeAircraft = 424,
-_CPED_CONFIG_FLAG_0x2B42AE82 = 425,
+CPED_CONFIG_FLAG_TreatAsFriendlyForTargetingAndDamage = 423,
+CPED_CONFIG_FLAG_AllowBikeAlternateAnimations = 424,
+CPED_CONFIG_FLAG_TreatAsFriendlyForTargetingAndDamageNonSynced = 425,
 CPED_CONFIG_FLAG_UseLockpickVehicleEntryAnimations = 426,
 CPED_CONFIG_FLAG_IgnoreInteriorCheckForSprinting = 427,
 CPED_CONFIG_FLAG_SwatHeliSpawnWithinLastSpottedLocation = 428,
@@ -13560,8 +13572,8 @@ CPED_CONFIG_FLAG_ForceIgnoreMaxMeleeActiveSupportCombatants = 435,
 CPED_CONFIG_FLAG_StayInDefensiveAreaWhenInVehicle = 436,
 CPED_CONFIG_FLAG_DontShoutTargetPosition = 437,
 CPED_CONFIG_FLAG_DisableHelmetArmor = 438,
-_CPED_CONFIG_FLAG_0xCB7F3A1E = 439,
-_CPED_CONFIG_FLAG_0x50178878 = 440,
+CPED_CONFIG_FLAG_CreatedByConcealedPlayer = 439,
+CPED_CONFIG_FLAG_PermanentlyDisablePotentialToBeWalkedIntoResponse = 440,
 CPED_CONFIG_FLAG_PreventVehExitDueToInvalidWeapon = 441,
 CPED_CONFIG_FLAG_IgnoreNetSessionFriendlyFireCheckForAllowDamage = 442,
 CPED_CONFIG_FLAG_DontLeaveCombatIfTargetPlayerIsAttackedByPolice = 443,
@@ -13576,18 +13588,488 @@ CPED_CONFIG_FLAG_IsDecoyPed = 451,
 CPED_CONFIG_FLAG_HasEstablishedDecoy = 452,
 CPED_CONFIG_FLAG_BlockDispatchedHelicoptersFromLanding = 453,
 CPED_CONFIG_FLAG_DontCryForHelpOnStun = 454,
-_CPED_CONFIG_FLAG_0xB68D3EAB = 455,
+CPED_CONFIG_FLAG_HitByTranqWeapon = 455,
 CPED_CONFIG_FLAG_CanBeIncapacitated = 456,
-_CPED_CONFIG_FLAG_0x4BD5EBAD = 457,
+CPED_CONFIG_FLAG_ForcedAimFromArrest = 457,
 CPED_CONFIG_FLAG_DontChangeTargetFromMelee = 458,
+CPED_CONFIG_FLAG_DisableHealthRegenerationWhenStunned = 459,
+CPED_CONFIG_FLAG_RagdollFloatsIndefinitely = 460,
+CPED_CONFIG_FLAG_BlockElectricWeaponDamage = 461,
+_0x262A3B8E = 462,
+_0x1AA79A25 = 463,
+_0x92293319 = 464,
+_0x8E997FDA = 465,
+_0x32EB48DC = 466,
+_0x760B91AE = 467,
 };)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedResetFlag(int ped, int flagId, bool doReset)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_RESET_FLAG), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(PED::SET_PED_RESET_FLAG(PLAYER::PLAYER_PED_ID(), 240, 1);
-Known values:
-PRF_PreventGoingIntoStillInVehicleState = 236 *(fanatic2.c)*)ASDOC");
+		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedResetFlag(int ped, int flagId, bool value)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_RESET_FLAG), AngelScript::asCALL_CDECL)
+			.Desc(R"ASDOC(enum ePedResetFlags
+{
+CPED_RESET_FLAG_FallenDown = 0,
+CPED_RESET_FLAG_DontRenderThisFrame = 1,
+CPED_RESET_FLAG_IsDrowning = 2,
+CPED_RESET_FLAG_PedHitWallLastFrame = 3,
+CPED_RESET_FLAG_UsingMobilePhone = 4,
+CPED_RESET_FLAG_BlockMovementAnims = 5,
+CPED_RESET_FLAG_ZeroDesiredMoveBlendRatios = 6,
+CPED_RESET_FLAG_DontChangeMbrInSimpleMoveDoNothing = 7,
+CPED_RESET_FLAG_FollowingRoute = 8,
+CPED_RESET_FLAG_TakingRouteSplineCorner = 9,
+CPED_RESET_FLAG_Wandering = 10,
+CPED_RESET_FLAG_ProcessPhysicsTasks = 11,
+CPED_RESET_FLAG_ProcessPreRender2 = 12,
+CPED_RESET_FLAG_SetLastMatrixDone = 13,
+CPED_RESET_FLAG_FiringWeapon = 14,
+CPED_RESET_FLAG_SearchingForCover = 15,
+CPED_RESET_FLAG_KeepCoverPoint = 16,
+CPED_RESET_FLAG_IsClimbing = 17,
+CPED_RESET_FLAG_IsJumping = 18,
+CPED_RESET_FLAG_IsLanding = 19,
+CPED_RESET_FLAG_CullExtraFarAway = 20,
+CPED_RESET_FLAG_DontActivateRagdollFromAnyPedImpactReset = 21,
+CPED_RESET_FLAG_ForceScriptControlledRagdoll = 22,
+CPED_RESET_FLAG_TaskUseKinematicPhysics = 23,
+CPED_RESET_FLAG_TemporarilyBlockWeaponSwitching = 24,
+CPED_RESET_FLAG_DoNotClampFootIk = 25,
+CPED_RESET_FLAG_MoveBlend_bFleeTaskRunning = 26,
+CPED_RESET_FLAG_IsAiming = 27,
+CPED_RESET_FLAG_MoveBlend_bTaskComplexGunRunning = 28,
+CPED_RESET_FLAG_MoveBlend_bMeleeTaskRunning = 29,
+CPED_RESET_FLAG_MoveBlend_bCopSearchTaskRunning = 30,
+CPED_RESET_FLAG_PatrollingInVehicle = 31,
+CPED_RESET_FLAG_RaiseVelocityChangeLimit = 32,
+CPED_RESET_FLAG_DimTargetReticule = 33,
+CPED_RESET_FLAG_IsWalkingRoundPlayer = 34,
+CPED_RESET_FLAG_GestureAnimsAllowed = 35,
+CPED_RESET_FLAG_VisemeAnimsBlocked = 36,
+CPED_RESET_FLAG_AmbientAnimsBlocked = 37,
+CPED_RESET_FLAG_KnockedToTheFloorByPlayer = 38,
+CPED_RESET_FLAG_RandomisePointsDuringNavigation = 39,
+CPED_RESET_FLAG_Prevent180SkidTurns = 40,
+CPED_RESET_FLAG_IsOnAssistedMovementRoute = 41,
+CPED_RESET_FLAG_ApplyVelocityDirectly = 42,
+CPED_RESET_FLAG_DisablePlayerLockon = 43,
+CPED_RESET_FLAG_ResetMoveGroupAfterRagdoll = 44,
+CPED_RESET_FLAG_DisablePedConstraints = 45,
+CPED_RESET_FLAG_DisablePlayerJumping = 46,
+CPED_RESET_FLAG_DisablePlayerVaulting = 47,
+CPED_RESET_FLAG_DisableAsleepImpulse = 48,
+CPED_RESET_FLAG_ForcePostCameraAIUpdate = 49,
+CPED_RESET_FLAG_ForcePostCameraAnimUpdate = 50,
+CPED_RESET_FLAG_ePostCameraAnimUpdateUseZeroTimestep = 51,
+CPED_RESET_FLAG_CollideWithGlassRagdoll = 52,
+CPED_RESET_FLAG_CollideWithGlassWeapon = 53,
+CPED_RESET_FLAG_SyncDesiredHeadingToCurrentHeading = 54,
+CPED_RESET_FLAG_AllowUpdateIfNoCollisionLoaded = 55,
+CPED_RESET_FLAG_InternalWalkingRndPlayer = 56,
+CPED_RESET_FLAG_PlacingCharge = 57,
+CPED_RESET_FLAG_ScriptDisableSecondaryAnimationTasks = 58,
+CPED_RESET_FLAG_SearchingForClimb = 59,
+CPED_RESET_FLAG_SearchingForDoors = 60,
+CPED_RESET_FLAG_WanderingStoppedForOtherPed = 61,
+CPED_RESET_FLAG_SupressGunfireEvents = 62,
+CPED_RESET_FLAG_InfiniteStamina = 63,
+CPED_RESET_FLAG_BlockWeaponReactionsUnlessDead = 64,
+CPED_RESET_FLAG_ForcePlayerFiring = 65,
+CPED_RESET_FLAG_InCoverFacingLeft = 66,
+CPED_RESET_FLAG_ForcePeekFromCover = 67,
+CPED_RESET_FLAG_NotAllowedToChangeCrouchState = 68,
+CPED_RESET_FLAG_ForcePedToStrafe = 69,
+CPED_RESET_FLAG_ForceMeleeStrafingAnims = 70,
+CPED_RESET_FLAG_UseKinematicPhysics = 71,
+CPED_RESET_FLAG_ClearLockonTarget = 72,
+CPED_RESET_FLAG_CanPedSeeHatedPedBeingUsed = 73,
+CPED_RESET_FLAG_InstantBlendToAim = 74,
+CPED_RESET_FLAG_ForceImprovedIdleTurns = 75,
+CPED_RESET_FLAG_HitPedWithWeapon = 76,
+CPED_RESET_FLAG_ForcePedToUseScripCamHeading = 77,
+CPED_RESET_FLAG_ProcessProbesWhenExtractingZ = 78,
+CPED_RESET_FLAG_KeepDesiredCoverPoint = 79,
+CPED_RESET_FLAG_HasProcessedCornering = 80,
+CPED_RESET_FLAG_StandingOnForkliftForks = 81,
+CPED_RESET_FLAG_AimWeaponReactionRunning = 82,
+CPED_RESET_FLAG_InContactWithFoliage = 83,
+CPED_RESET_FLAG_ForceExplosionCollisions = 84,
+CPED_RESET_FLAG_IgnoreTargetsCoverForLOS = 85,
+CPED_RESET_FLAG_BlockAnimatedWeaponReactions = 86,
+CPED_RESET_FLAG_DisablePedCapsule = 87,
+CPED_RESET_FLAG_DisableCrouchWhileInCover = 88,
+CPED_RESET_FLAG_IncreasedAvoidanceRadius = 89,
+CPED_RESET_FLAG_UNUSED_REPLACE_ME = 90,
+CPED_RESET_FLAG_ForceRunningSpeedForFragSmashing = 91,
+CPED_RESET_FLAG_EnableMoverAnimationWhileAttached = 92,
+CPED_RESET_FLAG_NoTimeDelayBeforeShot = 93,
+CPED_RESET_FLAG_SearchingForAutoVaultClimb = 94,
+CPED_RESET_FLAG_ExtraLongWeaponRange = 95,
+CPED_RESET_FLAG_ForcePlayerToEnterVehicleThroughDirectDoorOnly = 96,
+CPED_RESET_FLAG_TaskCullExtraFarAway = 97,
+CPED_RESET_FLAG_IsVaulting = 98,
+CPED_RESET_FLAG_IsParachuting = 99,
+CPED_RESET_FLAG_SuppressSlowingForCorners = 100,
+CPED_RESET_FLAG_DisableProcessProbes = 101,
+CPED_RESET_FLAG_DisablePlayerAutoVaulting = 102,
+CPED_RESET_FLAG_DisableGaitReduction = 103,
+CPED_RESET_FLAG_ExitVehicleTaskFinishedThisFrame = 104,
+CPED_RESET_FLAG_RequiresLegIk = 105,
+CPED_RESET_FLAG_JayWalking = 106,
+CPED_RESET_FLAG_UseBulletPenetration = 107,
+CPED_RESET_FLAG_ForceAimAtHead = 108,
+CPED_RESET_FLAG_IsInStationaryScenario = 109,
+CPED_RESET_FLAG_TemporarilyBlockWeaponEquipping = 110,
+CPED_RESET_FLAG_CoverOutroRunning = 111,
+CPED_RESET_FLAG_DisableSeeThroughChecksWhenTargeting = 112,
+CPED_RESET_FLAG_PuttingOnHelmet = 113,
+CPED_RESET_FLAG_AllowPullingPedOntoRoute = 114,
+CPED_RESET_FLAG_ApplyAnimatedVelocityWhilstAttached = 115,
+CPED_RESET_FLAG_AICoverEntryRunning = 116,
+CPED_RESET_FLAG_ResponseAfterScenarioPanic = 117,
+CPED_RESET_FLAG_IsNearDoor = 118,
+CPED_RESET_FLAG_DisableTorsoSolver = 119,
+CPED_RESET_FLAG_PanicInVehicle = 120,
+CPED_RESET_FLAG_DisableDynamicCapsuleRadius = 121,
+CPED_RESET_FLAG_IsRappelling = 122,
+CPED_RESET_FLAG_SkipReactInReactAndFlee = 123,
+CPED_RESET_FLAG_CannotBeTargeted = 124,
+CPED_RESET_FLAG_IsFalling = 125,
+CPED_RESET_FLAG_ForceInjuryAfterStunned = 126,
+CPED_RESET_FLAG_HurtThisFrame = 127,
+CPED_RESET_FLAG_BlockWeaponFire = 128,
+CPED_RESET_FLAG_ExpandPedCapsuleFromSkeleton = 129,
+CPED_RESET_FLAG_DisableWeaponLaserSight = 130,
+CPED_RESET_FLAG_PedExitedVehicleThisFrame = 131,
+CPED_RESET_FLAG_SearchingForDropDown = 132,
+CPED_RESET_FLAG_UseTighterTurnSettings = 133,
+CPED_RESET_FLAG_DisableArmSolver = 134,
+CPED_RESET_FLAG_DisableHeadSolver = 135,
+CPED_RESET_FLAG_DisableLegSolver = 136,
+CPED_RESET_FLAG_DisableTorsoReactSolver = 137,
+CPED_RESET_FLAG_ForcePreCameraAIUpdate = 138,
+CPED_RESET_FLAG_TasksNeedProcessMoveSignalCalls = 139,
+CPED_RESET_FLAG_ShootFromGround = 140,
+CPED_RESET_FLAG_NoCollisionMovementMode = 141,
+CPED_RESET_FLAG_IsNearLaddder = 142,
+CPED_RESET_FLAG_SkipAimingIdleIntro = 143,
+CPED_RESET_FLAG_IgnoredByAutoOpenDoors = 144,
+CPED_RESET_FLAG_BlockIkWeaponReactions = 145,
+CPED_RESET_FLAG_FirstPhysicsUpdate = 146,
+CPED_RESET_FLAG_SpawnedThisFrameByAmbientPopulation = 147,
+CPED_RESET_FLAG_DisableRootSlopeFixupSolver = 148,
+CPED_RESET_FLAG_SuspendInitiatedMeleeActions = 149,
+CPED_RESET_FLAG_SuppressInAirEvent = 150,
+CPED_RESET_FLAG_AllowTasksIncompatibleWithMotion = 151,
+CPED_RESET_FLAG_IsEnteringOrExitingVehicle = 152,
+CPED_RESET_FLAG_PlayerOnHorse = 153,
+CPED_RESET_FLAG_HasGunTaskWithAimingState = 154,
+CPED_RESET_FLAG_SuppressLethalMeleeActions = 155,
+CPED_RESET_FLAG_InstantBlendToAimFromScript = 156,
+CPED_RESET_FLAG_IsStillOnBicycle = 157,
+CPED_RESET_FLAG_IsSittingAndCycling = 158,
+CPED_RESET_FLAG_IsStandingAndCycling = 159,
+CPED_RESET_FLAG_IsDoingCoverAimOutro = 160,
+CPED_RESET_FLAG_ApplyCoverWeaponBlockingOffsets = 161,
+CPED_RESET_FLAG_IsInLowCover = 162,
+CPED_RESET_FLAG_AmbientIdleAndBaseAnimsBlocked = 163,
+CPED_RESET_FLAG_UseAlternativeWhenBlock = 164,
+CPED_RESET_FLAG_ForceLowLodWaterCheck = 165,
+CPED_RESET_FLAG_MakeHeadInvisible = 166,
+CPED_RESET_FLAG_NoAutoRunWhenFiring = 167,
+CPED_RESET_FLAG_PermitEventDuringScenarioExit = 168,
+CPED_RESET_FLAG_DisableSteeringAroundVehicles = 169,
+CPED_RESET_FLAG_DisableSteeringAroundPeds = 170,
+CPED_RESET_FLAG_DisableSteeringAroundObjects = 171,
+CPED_RESET_FLAG_DisableSteeringAroundNavMeshEdges = 172,
+CPED_RESET_FLAG_WantsToEnterVehicleFromCover = 173,
+CPED_RESET_FLAG_WantsToEnterCover = 174,
+CPED_RESET_FLAG_WantsToEnterVehicleFromAiming = 175,
+CPED_RESET_FLAG_CapsuleBeingPushedByVehicle = 176,
+CPED_RESET_FLAG_DisableTakeOffParachutePack = 177,
+CPED_RESET_FLAG_IsCallingPolice = 178,
+CPED_RESET_FLAG_ForceCombatTaunt = 179,
+CPED_RESET_FLAG_IgnoreCombatTaunts = 180,
+CPED_RESET_FLAG_SkipAiUpdateProcessControl = 181,
+CPED_RESET_FLAG_OverridePhysics = 182,
+CPED_RESET_FLAG_WasPhysicsOverridden = 183,
+CPED_RESET_FLAG_BlockWeaponHoldingAnims = 184,
+CPED_RESET_FLAG_DisableMoveTaskHeadingAdjustments = 185,
+CPED_RESET_FLAG_DisableBodyLookSolver = 186,
+CPED_RESET_FLAG_PreventAllMeleeTakedowns = 187,
+CPED_RESET_FLAG_PreventFailedMeleeTakedowns = 188,
+CPED_RESET_FLAG_IsPedalling = 189,
+CPED_RESET_FLAG_UseTighterAvoidanceSettings = 190,
+CPED_RESET_FLAG_IsHigherPriorityClipControllingPed = 191,
+CPED_RESET_FLAG_VehicleCrushingRagdoll = 192,
+CPED_RESET_FLAG_OnActivationUpdate = 193,
+CPED_RESET_FLAG_ForceMotionStateLeaveDesiredMBR = 194,
+CPED_RESET_FLAG_DisableDropDowns = 195,
+CPED_RESET_FLAG_InContactWithBIGFoliage = 196,
+CPED_RESET_FLAG_DisableTakeOffScubaGear = 197,
+CPED_RESET_FLAG_DisableCellphoneAnimations = 198,
+CPED_RESET_FLAG_IsExitingVehicle = 199,
+CPED_RESET_FLAG_DisableActionMode = 200,
+CPED_RESET_FLAG_EquippedWeaponChanged = 201,
+CPED_RESET_FLAG_TouchingOverhang = 202,
+CPED_RESET_FLAG_TooSteepForPlayer = 203,
+CPED_RESET_FLAG_BlockSecondaryAnim = 204,
+CPED_RESET_FLAG_IsInCombat = 205,
+CPED_RESET_FLAG_UseHeadOrientationForPerception = 206,
+CPED_RESET_FLAG_IsDoingDriveby = 207,
+CPED_RESET_FLAG_IsEnteringCover = 208,
+CPED_RESET_FLAG_ForceMovementScannerCheck = 209,
+CPED_RESET_FLAG_DisableJumpRagdollOnCollision = 210,
+CPED_RESET_FLAG_IsBeingMeleeHomedByPlayer = 211,
+CPED_RESET_FLAG_ShouldLaunchBicycleThisFrame = 212,
+CPED_RESET_FLAG_CanDoBicycleWheelie = 213,
+CPED_RESET_FLAG_ForceProcessPhysicsUpdateEachSimStep = 214,
+CPED_RESET_FLAG_DisablePedCapsuleMapCollision = 215,
+CPED_RESET_FLAG_DisableSeatShuffleDueToInjuredDriver = 216,
+CPED_RESET_FLAG_DisableParachuting = 217,
+CPED_RESET_FLAG_ProcessPostMovement = 218,
+CPED_RESET_FLAG_ProcessPostCamera = 219,
+CPED_RESET_FLAG_ProcessPostPreRender = 220,
+CPED_RESET_FLAG_PreventBicycleFromLeaningOver = 221,
+CPED_RESET_FLAG_KeepParachutePackOnAfterTeleport = 222,
+CPED_RESET_FLAG_DontRaiseFistsWhenLockedOn = 223,
+CPED_RESET_FLAG_PreferMeleeBodyIkHitReaction = 224,
+CPED_RESET_FLAG_ProcessPhysicsTasksMotion = 225,
+CPED_RESET_FLAG_ProcessPhysicsTasksMovement = 226,
+CPED_RESET_FLAG_DisableFriendlyGunReactAudio = 227,
+CPED_RESET_FLAG_DisableAgitationTriggers = 228,
+CPED_RESET_FLAG_ForceForwardTransitionInReactAndFlee = 229,
+CPED_RESET_FLAG_IsEnteringVehicle = 230,
+CPED_RESET_FLAG_DoNotSkipNavMeshTrackerUpdate = 231,
+CPED_RESET_FLAG_RagdollOnVehicle = 232,
+CPED_RESET_FLAG_BlockRagdollActivationInVehicle = 233,
+CPED_RESET_FLAG_DisableNMForRiverRapids = 234,
+CPED_RESET_FLAG_IsInWrithe = 235,
+CPED_RESET_FLAG_PreventGoingIntoStillInVehicleState = 236,
+CPED_RESET_FLAG_UseFastEnterExitVehicleRates = 237,
+CPED_RESET_FLAG_DisableGroundAttachment = 238,
+CPED_RESET_FLAG_DisableAgitation = 239,
+CPED_RESET_FLAG_DisableTalk = 240,
+CPED_RESET_FLAG_InterruptedToQuickStartEngine = 241,
+CPED_RESET_FLAG_PedEnteredFromLeftEntry = 242,
+CPED_RESET_FLAG_IsDiving = 243,
+CPED_RESET_FLAG_DisableVehicleImpacts = 244,
+CPED_RESET_FLAG_DeepVehicleImpacts = 245,
+CPED_RESET_FLAG_DisablePedCapsuleControl = 246,
+CPED_RESET_FLAG_UseProbeSlopeStairsDetection = 247,
+CPED_RESET_FLAG_DisableVehicleDamageReactions = 248,
+CPED_RESET_FLAG_DisablePotentialBlastReactions = 249,
+CPED_RESET_FLAG_OnlyAllowLeftArmDoorIk = 250,
+CPED_RESET_FLAG_OnlyAllowRightArmDoorIk = 251,
+CPED_RESET_FLAG_ForceProcessPedStandingUpdateEachSimStep = 252,
+CPED_RESET_FLAG_DisableFlashLight = 253,
+CPED_RESET_FLAG_DoingCombatRoll = 254,
+CPED_RESET_FLAG_DisableBodyRecoilSolver = 255,
+CPED_RESET_FLAG_CanAbortExitForInAirEvent = 256,
+CPED_RESET_FLAG_DisableSprintDamage = 257,
+CPED_RESET_FLAG_ForceEnableFlashLightForAI = 258,
+CPED_RESET_FLAG_IsDoingCoverAimIntro = 259,
+CPED_RESET_FLAG_IsAimingFromCover = 260,
+CPED_RESET_FLAG_WaitingForCompletedPathRequest = 261,
+CPED_RESET_FLAG_DisableCombatAudio = 262,
+CPED_RESET_FLAG_DisableCoverAudio = 263,
+CPED_RESET_FLAG_PreventBikeFromLeaning = 264,
+CPED_RESET_FLAG_InCoverTaskActive = 265,
+CPED_RESET_FLAG_EnableSteepSlopePrevention = 266,
+CPED_RESET_FLAG_InsideEnclosedSearchRegion = 267,
+CPED_RESET_FLAG_JumpingOutOfVehicle = 268,
+CPED_RESET_FLAG_IsTuckedOnBicycleThisFrame = 269,
+CPED_RESET_FLAG_ProcessPostMovementTimeSliced = 270,
+CPED_RESET_FLAG_EnablePressAndReleaseDives = 271,
+CPED_RESET_FLAG_OnlyExitVehicleOnButtonRelease = 272,
+CPED_RESET_FLAG_IsGoingToStandOnExitedVehicle = 273,
+CPED_RESET_FLAG_BlockRagdollFromVehicleFallOff = 274,
+CPED_RESET_FLAG_DisableTorsoVehicleSolver = 275,
+CPED_RESET_FLAG_IsExitingUpsideDownVehicle = 276,
+CPED_RESET_FLAG_IsExitingOnsideVehicle = 277,
+CPED_RESET_FLAG_IsExactStopping = 278,
+CPED_RESET_FLAG_IsExactStopSettling = 279,
+CPED_RESET_FLAG_IsTrainCrushingRagdoll = 280,
+CPED_RESET_FLAG_OverrideHairScale = 281,
+CPED_RESET_FLAG_ConsiderAsPlayerCoverThreatWithoutLOS = 282,
+CPED_RESET_FLAG_BlockCustomAIEntryAnims = 283,
+CPED_RESET_FLAG_IgnoreVehicleEntryCollisionTests = 284,
+CPED_RESET_FLAG_StreamActionModeAnimsIfDisabled = 285,
+CPED_RESET_FLAG_ForceUpdateRagdollMatrix = 286,
+CPED_RESET_FLAG_PreventGoingIntoShuntInVehicleState = 287,
+CPED_RESET_FLAG_DisableIndependentMoverFrame = 288,
+CPED_RESET_FLAG_DoingDrivebyOutro = 289,
+CPED_RESET_FLAG_BeingElectrocuted = 290,
+CPED_RESET_FLAG_DisableUnarmedDrivebys = 291,
+CPED_RESET_FLAG_TalkingToPlayer = 292,
+CPED_RESET_FLAG_DontActivateRagdollFromPlayerPedImpactReset = 293,
+CPED_RESET_FLAG_DontActivateRagdollFromAiRagdollImpactReset = 294,
+CPED_RESET_FLAG_DontActivateRagdollFromPlayerRagdollImpactReset = 295,
+CPED_RESET_FLAG_DisableVisemeBodyAdditive = 296,
+CPED_RESET_FLAG_CapsuleBeingPushedByPlayerCapsule = 297,
+CPED_RESET_FLAG_ForceActionMode = 298,
+CPED_RESET_FLAG_ForceUnarmedActionMode = 299,
+CPED_RESET_FLAG_UsingMoverExtraction = 300,
+CPED_RESET_FLAG_BeingJacked = 301,
+CPED_RESET_FLAG_EnableVoiceDrivenMouthMovement = 302,
+CPED_RESET_FLAG_IsReloading = 303,
+CPED_RESET_FLAG_UseTighterEnterVehicleSettings = 304,
+CPED_RESET_FLAG_InRaceMode = 305,
+CPED_RESET_FLAG_DisableAmbientMeleeMoves = 306,
+CPED_RESET_FLAG_ForceBuoyancyProcessingIfAsleep = 307,
+CPED_RESET_FLAG_AllowSpecialAbilityInVehicle = 308,
+CPED_RESET_FLAG_DisableInVehicleActions = 309,
+CPED_RESET_FLAG_ForceInstantSteeringWheelIkBlendIn = 310,
+CPED_RESET_FLAG_IgnoreThreatEngagePlayerCoverBonus = 311,
+CPED_RESET_FLAG_Block180Turns = 312,
+CPED_RESET_FLAG_DontCloseVehicleDoor = 313,
+CPED_RESET_FLAG_SkipExplosionOcclusion = 314,
+CPED_RESET_FLAG_ProcessPhysicsTasksTimeSliced = 315,
+CPED_RESET_FLAG_MeleeStrikeAgainstNonPed = 316,
+CPED_RESET_FLAG_IgnoreNavigationForDoorArmIK = 317,
+CPED_RESET_FLAG_DisableAimingWhileParachuting = 318,
+CPED_RESET_FLAG_DisablePedCollisionWithPedEvent = 319,
+CPED_RESET_FLAG_IgnoreVelocityWhenClosingVehicleDoor = 320,
+CPED_RESET_FLAG_SkipOnFootIdleIntro = 321,
+CPED_RESET_FLAG_DontWalkRoundObjects = 322,
+CPED_RESET_FLAG_DisablePedEnteredMyVehicleEvents = 323,
+CPED_RESET_FLAG_CancelLeftHandGripIk = 324,
+CPED_RESET_FLAG_ResetMovementStaticCounter = 325,
+CPED_RESET_FLAG_DisableInVehiclePedVariationBlocking = 326,
+CPED_RESET_FLAG_ReduceEffectOfVehicleRamControlLoss = 327,
+CPED_RESET_FLAG_DisablePlayerMeleeFriendlyAttacks = 328,
+CPED_RESET_FLAG_MotionPedDoPostMovementIndependentMover = 329,
+CPED_RESET_FLAG_IsMeleeTargetUnreachable = 330,
+CPED_RESET_FLAG_DisableAutoForceOutWhenBlowingUpCar = 331,
+CPED_RESET_FLAG_ThrowingProjectile = 332,
+CPED_RESET_FLAG_OverrideHairScaleLarger = 333,
+CPED_RESET_FLAG_DisableDustOffAnims = 334,
+CPED_RESET_FLAG_DisableMeleeHitReactions = 335,
+CPED_RESET_FLAG_VisemeAnimsAudioBlocked = 336,
+CPED_RESET_FLAG_AllowHeadPropInVehicle = 337,
+CPED_RESET_FLAG_IsInVehicleChase = 338,
+CPED_RESET_FLAG_DontQuitMotionAiming = 339,
+CPED_RESET_FLAG_SetLastBoundMatricesDone = 340,
+CPED_RESET_FLAG_PreserveAnimatedAngularVelocity = 341,
+CPED_RESET_FLAG_OpenDoorArmIK = 342,
+CPED_RESET_FLAG_UseTighterTurnSettingsForScript = 343,
+CPED_RESET_FLAG_ForcePreCameraProcessExternallyDrivenDOFs = 344,
+CPED_RESET_FLAG_LadderBlockingMovement = 345,
+CPED_RESET_FLAG_DisableVoiceDrivenMouthMovement = 346,
+CPED_RESET_FLAG_SteerIntoSkids = 347,
+CPED_RESET_FLAG_AllowOpenDoorIkBeforeFullMovement = 348,
+CPED_RESET_FLAG_AllowHomingMissileLockOnInVehicle = 349,
+CPED_RESET_FLAG_AllowCloneForcePostCameraAIUpdate = 350,
+CPED_RESET_FLAG_DisableHighHeels = 351,
+CPED_RESET_FLAG_BreakTargetLock = 352,
+CPED_RESET_FLAG_DontUseSprintEnergy = 353,
+CPED_RESET_FLAG_DontChangeHorseMbr = 354,
+CPED_RESET_FLAG_DisableMaterialCollisionDamage = 355,
+CPED_RESET_FLAG_DisableMPFriendlyLockon = 356,
+CPED_RESET_FLAG_DisableMPFriendlyLethalMeleeActions = 357,
+CPED_RESET_FLAG_IfLeaderStopsSeekCover = 358,
+CPED_RESET_FLAG_ProcessPostPreRenderAfterAttachments = 359,
+CPED_RESET_FLAG_DoDamageCoughFacial = 360,
+CPED_RESET_FLAG_IsUsingJetpack = 361,
+CPED_RESET_FLAG_UseInteriorCapsuleSettings = 362,
+CPED_RESET_FLAG_IsClosingVehicleDoor = 363,
+CPED_RESET_FLAG_DisableIdleExtraHeadingChange = 364,
+CPED_RESET_FLAG_OnlySelectVehicleWeapons = 365,
+CPED_RESET_FLAG_IsWarpingIntoVehicleMP = 366,
+CPED_RESET_FLAG_RemoveHelmet = 367,
+CPED_RESET_FLAG_IsRemovingHelmet = 368,
+CPED_RESET_FLAG_GestureAnimsBlockedFromScript = 369,
+CPED_RESET_FLAG_NeverRagdoll = 370,
+CPED_RESET_FLAG_DisableWallHitAnimation = 371,
+CPED_RESET_FLAG_PlayAgitatedAnimsInVehicle = 372,
+CPED_RESET_FLAG_IsSeatShuffling = 373,
+CPED_RESET_FLAG_IsThrowingProjectileWhileAiming = 374,
+CPED_RESET_FLAG_DisableProjectileThrowsWhileAimingGun = 375,
+CPED_RESET_FLAG_AllowControlRadioInAnySeatInMP = 376,
+CPED_RESET_FLAG_DisableSpycarTransformation = 377,
+CPED_RESET_FLAG_BlockQuadLocomotionIdleTurns = 378,
+CPED_RESET_FLAG_BlockHeadbobbingToRadio = 379,
+CPED_RESET_FLAG_PlayFPSIdleFidgets = 380,
+CPED_RESET_FLAG_ForceExtraLongBlendInForPedSkipIdleCoverTransition = 381,
+CPED_RESET_FLAG_BlendingOutFPSIdleFidgets = 382,
+CPED_RESET_FLAG_DisableMotionBaseVelocityOverride = 383,
+CPED_RESET_FLAG_FPSSwimUseSwimMotionTask = 384,
+CPED_RESET_FLAG_FPSSwimUseAimingMotionTask = 385,
+CPED_RESET_FLAG_FiringWeaponWhenReady = 386,
+CPED_RESET_FLAG_IsBlindFiring = 387,
+CPED_RESET_FLAG_IsPeekingFromCover = 388,
+CPED_RESET_FLAG_TaskSkipProcessPreComputeImpacts = 389,
+CPED_RESET_FLAG_DisableAssistedAimLockon = 390,
+CPED_RESET_FLAG_FPSAllowAimIKForThrownProjectile = 391,
+CPED_RESET_FLAG_TriggerRoadRageAnim = 392,
+CPED_RESET_FLAG_ForcePreCameraAiAnimUpdateIfFirstPerson = 393,
+CPED_RESET_FLAG_NoCollisionDamageFromOtherPeds = 394,
+CPED_RESET_FLAG_BlockCameraSwitching = 395,
+CPED_RESET_FLAG_NeverDieFromCapsuleRagdollSettings = 396,
+CPED_RESET_FLAG_InContactWithDeepSurface = 397,
+CPED_RESET_FLAG_DontSuppressUseNavMeshToNavigateToVehicleDoorWhenVehicleInWater = 398,
+CPED_RESET_FLAG_IncludePedReferenceVelocityWhenFiringProjectiles = 399,
+CPED_RESET_FLAG_IsDoingCoverOutroToPeek = 400,
+CPED_RESET_FLAG_InstantBlendToAimNoSettle = 401,
+CPED_RESET_FLAG_ForcePreCameraAnimUpdate = 402,
+CPED_RESET_FLAG_DisableHelmetCullFPS = 403,
+CPED_RESET_FLAG_ShouldIgnoreCoverAutoHeadingCorrection = 404,
+CPED_RESET_FLAG_DisableReticuleInCoverThisFrame = 405,
+CPED_RESET_FLAG_ForceScriptedCameraLowCoverAngleWhenEnteringCover = 406,
+CPED_RESET_FLAG_DisableCameraConstraintFallBackThisFrame = 407,
+CPED_RESET_FLAG_DisableFPSArmIK = 408,
+CPED_RESET_FLAG_DisableRightArmIKInCoverOutroFPS = 409,
+CPED_RESET_FLAG_DoFPSSprintBreakOut = 410,
+CPED_RESET_FLAG_DoFPSJumpBreakOut = 411,
+CPED_RESET_FLAG_IsExitingCover = 412,
+CPED_RESET_FLAG_WeaponBlockedInFPSMode = 413,
+CPED_RESET_FLAG_PoVCameraConstrained = 414,
+CPED_RESET_FLAG_ScriptClearingPedTasks = 415,
+CPED_RESET_FLAG_WasFPSJumpingWithProjectile = 416,
+CPED_RESET_FLAG_DisableMeleeWeaponSelection = 417,
+CPED_RESET_FLAG_WaypointPlaybackSlowMoreForCorners = 418,
+CPED_RESET_FLAG_FPSPlacingProjectile = 419,
+CPED_RESET_FLAG_UseBulletPenetrationForGlass = 420,
+CPED_RESET_FLAG_FPSPlantingBombOnFloor = 421,
+CPED_RESET_FLAG_ForceSkipFPSAimIntro = 422,
+CPED_RESET_FLAG_CanBePinnedByFriendlyBullets = 423,
+CPED_RESET_FLAG_DisableLeftArmIKInCoverOutroFPS = 424,
+CPED_RESET_FLAG_DisableSpikeStripRoadBlocks = 425,
+CPED_RESET_FLAG_SkipFPSUnHolsterTransition = 426,
+CPED_RESET_FLAG_PutDownHelmetFX = 427,
+CPED_RESET_FLAG_IsLowerPriorityMeleeTarget = 428,
+CPED_RESET_FLAG_ForceScanForEventsThisFrame = 429,
+CPED_RESET_FLAG_StartProjectileTaskWithPrimingDisabled = 430,
+CPED_RESET_FLAG_CheckFPSSwitchInCameraUpdate = 431,
+CPED_RESET_FLAG_ForceAutoEquipHelmetsInAicraft = 432,
+CPED_RESET_FLAG_BlockRemotePlayerRecording = 433,
+CPED_RESET_FLAG_InflictedDamageThisFrame = 434,
+CPED_RESET_FLAG_UseFirstPersonVehicleAnimsIfFPSCamNotDominant = 435,
+CPED_RESET_FLAG_ForceIntoStandPoseOnJetski = 436,
+CPED_RESET_FLAG_InAirDefenceSphere = 437,
+CPED_RESET_FLAG_SuppressTakedownMeleeActions = 438,
+CPED_RESET_FLAG_InvertLookAroundControls = 439,
+CPED_RESET_FLAG_IgnoreCombatManager = 440,
+CPED_RESET_FLAG_UseBlendedCamerasOnUpdateFpsCameraRelativeMatrix = 441,
+CPED_RESET_FLAG_ForceMeleeCounter = 442,
+CPED_RESET_FLAG_WasHitByVehicleMelee = 443,
+CPED_RESET_FLAG_SuppressNavmeshForEnterVehicleTask = 444,
+CPED_RESET_FLAG_DisableShallowWaterBikeJumpOutThisFrame = 445,
+CPED_RESET_FLAG_DisablePlayerCombatRoll = 446,
+CPED_RESET_FLAG_IgnoreDetachSafePositionCheck = 447,
+CPED_RESET_FLAG_DisableEasyLadderConditions = 448,
+CPED_RESET_FLAG_PlayerIgnoresScenarioSpawnRestrictions = 449,
+CPED_RESET_FLAG_UsingDrone = 450,
+CPED_RESET_FLAG_ForceWantedLevelWhenKilled = 451,
+CPED_RESET_FLAG_UseScriptedWeaponFirePosition = 452,
+CPED_RESET_FLAG_EnableCollisionOnNetworkCloneWhenFixed = 453,
+CPED_RESET_FLAG_UseExtendedRagdollCollisionCalculator = 454,
+CPED_RESET_FLAG_PreventLockonToFriendlyPlayers = 455,
+CPED_RESET_FLAG_OnlyAbortScriptedAnimOnMovementByInput = 456,
+CPED_RESET_FLAG_PreventAllStealthKills = 457,
+CPED_RESET_FLAG_BlockFallTaskFromExplosionDamage = 458,
+CPED_RESET_FLAG_AllowPedRearEntry = 459,
+};)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetPedConfigFlag(int ped, int flagId, bool p2)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_CONFIG_FLAG), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(See SET_PED_CONFIG_FLAG)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetPedResetFlag(int ped, int flagId)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_RESET_FLAG), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetPedResetFlag(int ped, int flagId)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_RESET_FLAG), AngelScript::asCALL_CDECL)
+			.Desc(R"ASDOC(See SET_PED_RESET_FLAG)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedGroupMemberPassengerIndex(int ped, int index)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_GROUP_MEMBER_PASSENGER_INDEX), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedCanEvasiveDive(int ped, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_CAN_EVASIVE_DIVE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedEvasiveDiving(int ped, int&out evadingEntity)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_EVASIVE_DIVING), AngelScript::asCALL_CDECL)
@@ -13647,7 +14129,7 @@ Peds flee attributes must be set to not to flee, first. Else, most of the peds, 
 		base::menu::as::util::RegisterGlobalFunction(engine, "void StopPedWeaponFiringWhenDropped(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::STOP_PED_WEAPON_FIRING_WHEN_DROPPED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetScriptedAnimSeatOffset(int ped, float p1)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_SCRIPTED_ANIM_SEAT_OFFSET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedCombatMovement(int ped, int combatMovement)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_COMBAT_MOVEMENT), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(enum eCombatMovement // 0x4F456B61
+			.Desc(R"ASDOC(enum CCombatData__Movement
 {
 CM_Stationary,
 CM_Defensive,
@@ -13657,7 +14139,7 @@ CM_WillRetreat
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedCombatMovement(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_COMBAT_MOVEMENT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(See SET_PED_COMBAT_MOVEMENT)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedCombatAbility(int ped, int abilityLevel)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_COMBAT_ABILITY), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(enum eCombatAbility // 0xE793438C
+			.Desc(R"ASDOC(enum CCombatData__Ability
 {
 CA_Poor,
 CA_Average,
@@ -13665,7 +14147,7 @@ CA_Professional,
 CA_NumTypes
 };)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedCombatRange(int ped, int combatRange)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_COMBAT_RANGE), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(enum eCombatRange // 0xB69160F5
+			.Desc(R"ASDOC(enum CCombatData__Range
 {
 CR_Near,
 CR_Medium,
@@ -13676,100 +14158,99 @@ CR_NumRanges
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedCombatRange(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_COMBAT_RANGE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(See SET_PED_COMBAT_RANGE)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedCombatAttributes(int ped, int attributeId, bool enabled)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_COMBAT_ATTRIBUTES), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(enum eCombatAttributes // 0x0E8E7201
-{
+			.Desc(R"ASDOC(enum CCombatData__BehaviourFlags {
 BF_CanUseCover = 0,
 BF_CanUseVehicles = 1,
 BF_CanDoDrivebys = 2,
 BF_CanLeaveVehicle = 3,
 BF_CanUseDynamicStrafeDecisions = 4,
 BF_AlwaysFight = 5,
-BF_0x66BB9FCC = 6,
-BF_0x6837DA41 = 7,
-BF_0xB4A13A5A = 8,
-BF_0xEE326AAD = 9,
-BF_0x7DF2CCFA = 10,
-BF_0x0036D422 = 11,
+BF_FleeWhilstInVehicle = 6,
+BF_JustFollowInVehicle = 7,
+BF_Unused_3 = 8,
+BF_WillScanForDeadPeds = 9,
+BF_Unused_1 = 10,
+BF_JustSeekCover = 11,
 BF_BlindFireWhenInCover = 12,
 BF_Aggressive = 13,
 BF_CanInvestigate = 14,
 BF_HasRadio = 15,
-BF_0x6BDE28D1 = 16,
+BF_Unused_2 = 16,
 BF_AlwaysFlee = 17,
-BF_0x7852797D = 18,
-BF_0x33497B95 = 19,
+BF_ForceInjuredOnGround = 18,
+BF_DisableInjuredOnGround = 19,
 BF_CanTauntInVehicle = 20,
 BF_CanChaseTargetOnFoot = 21,
 BF_WillDragInjuredPedsToSafety = 22,
-BF_0xCD7168B8 = 23,
+BF_RequiresLosToShoot = 23,
 BF_UseProximityFiringRate = 24,
-BF_0x48F914F8 = 25,
-BF_0x2EA543D0 = 26,
+BF_DisableSecondaryTarget = 25,
+BF_DisableEntryReactions = 26,
 BF_PerfectAccuracy = 27,
 BF_CanUseFrustratedAdvance = 28,
-BF_0x3D131AC1 = 29,
-BF_0x3AD95F27 = 30,
+BF_MoveToLocationBeforeCoverSearch = 29,
+BF_CanShootWithoutLOS = 30,
 BF_MaintainMinDistanceToTarget = 31,
-BF_0xEAD68AD2 = 32,
-BF_0xA206C2E0 = 33,
+BF_IgnoreHatedPedsInFastMovingVehicles = 32,
+BF_UseProximityAccuracy = 33,
 BF_CanUsePeekingVariations = 34,
-BF_0xA5715184 = 35,
-BF_0xD5265533 = 36,
-BF_0x2B84C2BF = 37,
+BF_DisablePinnedDown = 35,
+BF_DisablePinDownOthers = 36,
+BF_ClearAreaSetDefensiveIfDefensiveAreaReached = 37,
 BF_DisableBulletReactions = 38,
 BF_CanBust = 39,
-BF_0xAA525726 = 40,
+BF_IgnoredByOtherPedsWhenWanted = 40,
 BF_CanCommandeerVehicles = 41,
 BF_CanFlank = 42,
 BF_SwitchToAdvanceIfCantFindCover = 43,
 BF_SwitchToDefensiveIfInCover = 44,
-BF_0xEB4786A0 = 45,
+BF_ClearPrimaryDefensiveAreaWhenReached = 45,
 BF_CanFightArmedPedsWhenNotArmed = 46,
-BF_0xA08E9402 = 47,
-BF_0x952EAD7D = 48,
+BF_EnableTacticalPointsWhenDefensive = 47,
+BF_DisableCoverArcAdjustments = 48,
 BF_UseEnemyAccuracyScaling = 49,
 BF_CanCharge = 50,
-BF_0xDA8C2BD3 = 51,
-BF_0x6562F017 = 52,
-BF_0xA2C3D53B = 53,
+BF_ClearAreaSetAdvanceIfDefensiveAreaReached = 51,
+BF_UseVehicleAttack = 52,
+BF_UseVehicleAttackIfVehicleHasMountedGuns = 53,
 BF_AlwaysEquipBestWeapon = 54,
 BF_CanSeeUnderwaterPeds = 55,
-BF_0xF619486B = 56,
-BF_0x61EB63A3 = 57,
+BF_DisableAimAtAITargetsInHelis = 56,
+BF_DisableSeekDueToLineOfSight = 57,
 BF_DisableFleeFromCombat = 58,
-BF_0x8976D12B = 59,
+BF_DisableTargetChangesDuringVehiclePursuit = 59,
 BF_CanThrowSmokeGrenade = 60,
 BF_NonMissionPedsFleeFromThisPedUnlessArmed = 61,
-BF_0x5452A10C = 62,
+BF_ClearAreaSetDefensiveIfDefensiveCannotBeReached = 62,
 BF_FleesFromInvincibleOpponents = 63,
 BF_DisableBlockFromPursueDuringVehicleChase = 64,
 BF_DisableSpinOutDuringVehicleChase = 65,
 BF_DisableCruiseInFrontDuringBlockDuringVehicleChase = 66,
-BF_0x0B404731 = 67,
+BF_CanIgnoreBlockedLosWeighting = 67,
 BF_DisableReactToBuddyShot = 68,
-BF_0x7FFD6AEB = 69,
-BF_0x51F4AEF8 = 70,
+BF_PreferNavmeshDuringVehicleChase = 69,
+BF_AllowedToAvoidOffroadDuringVehicleChase = 70,
 BF_PermitChargeBeyondDefensiveArea = 71,
-BF_0x63E0A8E2 = 72,
-BF_0xDF974436 = 73,
-BF_0x556C080B = 74,
-BF_0xA4D50035 = 75,
+BF_UseRocketsAgainstVehiclesOnly = 72,
+BF_DisableTacticalPointsWithoutClearLos = 73,
+BF_DisablePullAlongsideDuringVehicleChase = 74,
+BF_DisableShoutTargetPosition = 75,
 BF_SetDisableShoutTargetPositionOnCombatStart = 76,
 BF_DisableRespondedToThreatBroadcast = 77,
-BF_0xCBB01765 = 78,
-BF_0x4F862ED4 = 79,
-BF_0xEF9C7C40 = 80,
-BF_0xE51B494F = 81,
-BF_0x054D0199 = 82,
-BF_0xD36BCE94 = 83,
-BF_0xFB11F690 = 84,
-BF_0xD208A9AD = 85,
+BF_DisableAllRandomsFlee = 78,
+BF_WillGenerateDeadPedSeenScriptEvents = 79,
+BF_UseMaxSenseRangeWhenReceivingEvents = 80,
+BF_RestrictInVehicleAimingToCurrentSide = 81,
+BF_UseDefaultBlockedLosPositionAndDirection = 82,
+BF_RequiresLosToAim = 83,
+BF_CruiseAndBlockInVehicle = 84,
+BF_PreferAirCombatWhenInAircraft = 85,
 BF_AllowDogFighting = 86,
-BF_0x07A6E531 = 87,
-BF_0x34F9317B = 88,
-BF_0x4240F5A9 = 89,
-BF_0xEE129DBD = 90,
-BF_0x053AEAD9 = 91
+BF_PreferNonAircraftTargets = 87,
+BF_PreferKnownTargetsWhenCombatClosestTarget = 88,
+BF_ForceCheckAttackAngleForMountedGuns = 89,
+BF_BlockFireForVehiclePassengerMountedGuns = 90,
+MAX_COMBAT_FLAGS = 91,
 };)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedTargetLossResponse(int ped, int responseType)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_TARGET_LOSS_RESPONSE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(enum eTargetLossResponseType
@@ -13978,10 +14459,8 @@ yaw to Ped.rotation)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AttachSynchronizedSceneToEntity(int sceneID, int entity, int boneIndex)", AngelScript::asFUNCTION(base::menu::natives::PED::ATTACH_SYNCHRONIZED_SCENE_TO_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DetachSynchronizedScene(int sceneID)", AngelScript::asFUNCTION(base::menu::natives::PED::DETACH_SYNCHRONIZED_SCENE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TakeOwnershipOfSynchronizedScene(int scene)", AngelScript::asFUNCTION(base::menu::natives::PED::TAKE_OWNERSHIP_OF_SYNCHRONIZED_SCENE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "bool ForcePedMotionState(int ped, Hash motionStateHash, bool p2, int p3, bool p4)", AngelScript::asFUNCTION(base::menu::natives::PED::FORCE_PED_MOTION_STATE), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(Regarding p2, p3 and p4: Most common is 0, 0, 0); followed by 0, 1, 0); and 1, 1, 0); in R* scripts. p4 is very rarely something other than 0.
-
-enum eMotionState // 0x92A659FE
+		base::menu::as::util::RegisterGlobalFunction(engine, "bool ForcePedMotionState(int ped, Hash motionStateHash, bool shouldReset, int updateState, bool forceAIPreCameraUpdate)", AngelScript::asFUNCTION(base::menu::natives::PED::FORCE_PED_MOTION_STATE), AngelScript::asCALL_CDECL)
+			.Desc(R"ASDOC(enum CPedMotionStates__eMotionState
 {
 MotionState_None = 0xEE717723,
 MotionState_Idle = 0x9072A713,
@@ -14031,7 +14510,7 @@ Note: According to IDA for the Xbox360 xex, when they check bgt they seem to hav
 enum eSexinessFlags
 {
 SF_JEER_AT_HOT_PED = 0,
-SF_HURRIEDFEMALES_SEXY = 1,
+SF_JEER_SCENARIO_ANIM = 1,
 SF_HOT_PERSON = 2,
 };)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedNearbyVehicles(int ped, NativeHandle@ sizeAndVehs)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_NEARBY_VEHICLES), AngelScript::asCALL_CDECL)
@@ -15939,8 +16418,7 @@ Returns True if success, used only 7 times in decompiled scripts of 1868)ASDOC")
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsNewLoadSceneLoaded()", AngelScript::asFUNCTION(base::menu::natives::STREAMING::IS_NEW_LOAD_SCENE_LOADED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsSafeToStartPlayerSwitch()", AngelScript::asFUNCTION(base::menu::natives::STREAMING::IS_SAFE_TO_START_PLAYER_SWITCH), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void StartPlayerSwitch(int from_, int to, int flags, int switchType)", AngelScript::asFUNCTION(base::menu::natives::STREAMING::START_PLAYER_SWITCH), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(// this enum comes directly from R* so don't edit this
-enum ePlayerSwitchTypes
+			.Desc(R"ASDOC(enum ePlayerSwitchTypes
 {
 SWITCH_TYPE_AUTO,
 SWITCH_TYPE_LONG,
@@ -16396,13 +16874,688 @@ SLF_USE_REF_DIR_ABSOLUTE    = 65536  // use absolute reference direction mode fo
 			.Desc(R"ASDOC(returned values:
 0 to 7 = task that's currently in progress, 0 meaning the first one.
 -1 no task sequence in progress.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetIsTaskActive(int ped, int taskIndex)", AngelScript::asFUNCTION(base::menu::natives::TASK::GET_IS_TASK_ACTIVE), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(Task index enum: https://alloc8or.re/gta5/doc/enums/eTaskTypeIndex.txt)ASDOC");
+		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetIsTaskActive(int ped, int taskType)", AngelScript::asFUNCTION(base::menu::natives::TASK::GET_IS_TASK_ACTIVE), AngelScript::asCALL_CDECL)
+			.Desc(R"ASDOC(enum class eTaskType
+{
+TASK_INVALID_ID                                         = -1,
+TASK_HANDS_UP                                           = 0,   // CTaskHandsUp
+TASK_CLIMB_LADDER                                       = 1,   // CTaskClimbLadder
+TASK_EXIT_VEHICLE                                       = 2,   // CTaskExitVehicle
+TASK_COMBAT_ROLL                                        = 3,   // CTaskCombatRoll
+TASK_AIM_GUN_ON_FOOT                                    = 4,   // CTaskAimGunOnFoot
+TASK_MOVE_PLAYER                                        = 5,   // CTaskMovePlayer
+TASK_PLAYER_ON_FOOT                                     = 6,   // CTaskPlayerOnFoot
+TASK_PLAYER_ON_HORSE                                    = 7,   // CTaskPlayerOnHorse
+TASK_WEAPON                                             = 8,   // CTaskWeapon
+TASK_PLAYER_WEAPON                                      = 9,   // CTaskPlayerWeapon
+TASK_PLAYER_IDLES                                       = 10,  // CTaskPlayerIdles
+TASK_UNINTERRUPTABLE                                    = 13,  // CTaskUninterruptable
+TASK_PAUSE                                              = 14,  // CTaskPause
+TASK_DO_NOTHING                                         = 15,  // CTaskDoNothing
+TASK_GET_UP                                             = 16,  // CTaskGetUp
+TASK_GET_UP_AND_STAND_STILL                             = 17,  // CTaskGetUpAndStandStill
+TASK_FALL_OVER                                          = 18,  // CTaskFallOver
+TASK_FALL_AND_GET_UP                                    = 19,  // CTaskFallAndGetUp
+TASK_CRAWL                                              = 20,  // CTaskCrawl
+TASK_HIT_RESPONSE                                       = 24,  // CTaskHitResponse
+TASK_COMPLEX_ON_FIRE                                    = 25,  // CTaskComplexOnFire
+TASK_DAMAGE_ELECTRIC                                    = 26,  // CTaskDamageElectric
+TASK_TRIGGER_LOOK_AT                                    = 28,  // CTaskTriggerLookAt
+TASK_CLEAR_LOOK_AT                                      = 29,  // CTaskClearLookAt
+TASK_SET_CHAR_DECISION_MAKER                            = 30,  // CTaskSetCharDecisionMaker
+TASK_SET_PED_DEFENSIVE_AREA                             = 31,  // CTaskSetPedDefensiveArea
+TASK_USE_SEQUENCE                                       = 32,  // CTaskUseSequence
+TASK_SIMPLE_CONTROL_MOVEMENT                            = 33,  // CTaskComplexControlMovement
+TASK_MOVE_STAND_STILL                                   = 34,  // CTaskMoveStandStill
+TASK_COMPLEX_CONTROL_MOVEMENT                           = 35,  // CTaskComplexControlMovement
+TASK_COMPLEX_MOVE_SEQUENCE                              = 36,  // CTaskMoveSequence
+TASK_MOVE_AROUND_COVERPOINTS                            = 37,  // CTaskMoveAroundCoverPoints
+TASK_AMBIENT_CLIPS                                      = 38,  // CTaskAmbientClips
+TASK_MOVE_IN_AIR                                        = 39,  // CTaskMoveInAir
+TASK_NETWORK_CLONE                                      = 40,  // CTaskNetworkClone
+TASK_USE_CLIMB_ON_ROUTE                                 = 41,  // CTaskUseClimbOnRoute
+TASK_USE_DROPDOWN_ON_ROUTE                              = 42,  // CTaskUseDropDownOnRoute
+TASK_USE_LADDER_ON_ROUTE                                = 43,  // CTaskUseLadderOnRoute
+TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS               = 44,  // CTaskSetBlockingOfNonTemporaryEvents
+TASK_FORCE_MOTION_STATE                                 = 45,  // CTaskForceMotionState
+TASK_ON_FOOT_SLOPE_SCRAMBLE                             = 46,  // CTaskSlopeScramble
+TASK_GO_TO_AND_CLIMB_LADDER                             = 47,  // CTaskGoToAndClimbLadder
+TASK_CLIMB_LADDER_FULLY                                 = 48,  // CTaskClimbLadderFully
+TASK_RAPPEL                                             = 49,  // CTaskRappel
+TASK_VAULT                                              = 50,  // CTaskVault
+TASK_DROP_DOWN                                          = 51,  // CTaskDropDown
+TASK_AFFECT_SECONDARY_BEHAVIOUR                         = 52,  // CTaskAffectSecondaryBehaviour
+TASK_AMBIENT_LOOK_AT_EVENT                              = 53,  // CTaskAmbientLookAtEvent
+TASK_OPEN_DOOR                                          = 54,  // CTaskOpenDoor
+TASK_SHOVE_PED                                          = 55,  // CTaskShovePed
+TASK_SWAP_WEAPON                                        = 56,  // CTaskSwapWeapon
+TASK_GENERAL_SWEEP                                      = 57,  // CTaskGeneralSweep
+TASK_POLICE                                             = 58,  // CTaskPolice
+TASK_POLICE_ORDER_RESPONSE                              = 59,  // CTaskPoliceOrderResponse
+TASK_PURSUE_CRIMINAL                                    = 60,  // CTaskPursueCriminal
+TASK_ARREST_PED                                         = 62,  // CTaskArrestPed
+TASK_ARREST_PED2                                        = 63,  // CTaskArrestPed2
+TASK_BUSTED                                             = 64,  // CTaskBusted
+TASK_FIRE_PATROL                                        = 65,  // CTaskFirePatrol
+TASK_HELI_ORDER_RESPONSE                                = 66,  // CTaskHeliOrderResponse
+TASK_HELI_PASSENGER_RAPPEL                              = 67,  // CTaskHeliPassengerRappel
+TASK_AMBULANCE_PATROL                                   = 68,  // CTaskAmbulancePatrol
+TASK_POLICE_WANTED_RESPONSE                             = 69,  // CTaskPoliceWantedResponse
+TASK_SWAT                                               = 70,  // CTaskSwat
+TASK_SWAT_WANTED_RESPONSE                               = 72,  // CTaskSwatWantedResponse
+TASK_SWAT_ORDER_RESPONSE                                = 73,  // CTaskSwatOrderResponse
+TASK_SWAT_GO_TO_STAGING_AREA                            = 74,  // CTaskSwatGoToStagingArea
+TASK_SWAT_FOLLOW_IN_LINE                                = 75,  // CTaskSwatFollowInLine
+TASK_WITNESS                                            = 76,  // CTaskWitness
+TASK_GANG_PATROL                                        = 77,  // CTaskGangPatrol
+TASK_ARMY                                               = 78,  // CTaskArmy
+TASK_SHOCKING_EVENT_WATCH                               = 80,  // CTaskShockingEventWatch
+TASK_SHOCKING_EVENT_GOTO                                = 82,  // CTaskShockingEventGoto
+TASK_SHOCKING_EVENT_HURRYAWAY                           = 83,  // CTaskShockingEventHurryAway
+TASK_SHOCKING_EVENT_REACT_TO_AIRCRAFT                   = 84,  // CTaskShockingEventReactToAircraft
+TASK_SHOCKING_EVENT_REACT                               = 85,  // CTaskShockingEventReact
+TASK_SHOCKING_EVENT_BACK_AWAY                           = 86,  // CTaskShockingEventBackAway
+TASK_SHOCKING_POLICE_INVESTIGATE                        = 87,  // CTaskShockingPoliceInvestigate
+TASK_SHOCKING_EVENT_STOP_AND_STARE                      = 88,  // CTaskShockingEventStopAndStare
+TASK_SHOCKING_NICE_CAR_PICTURE                          = 89,  // CTaskShockingNiceCarPicture
+TASK_SHOCKING_EVENT_THREAT_RESPONSE                     = 90,  // CTaskShockingEventThreatResponse
+TASK_PUT_ON_HELMET                                      = 91,  // CTaskPutOnHelmet
+TASK_TAKE_OFF_HELMET                                    = 92,  // CTaskTakeOffHelmet
+TASK_CAR_REACT_TO_VEHICLE_COLLISION                     = 93,  // CTaskCarReactToVehicleCollision
+TASK_REACT_TO_RUNNING_PED_OVER                          = 94,  // CTaskReactToRanPedOver
+TASK_CAR_REACT_TO_VEHICLE_COLLISION_GET_OUT             = 95,  // CTaskCarReactToVehicleCollisionGetOut
+TASK_DYING_DEAD                                         = 97,  // CTaskDyingDead
+TASK_PARKED_VEHICLE_SCENARIO                            = 99,  // CTaskParkedVehicleScenario
+TASK_WANDERING_SCENARIO                                 = 100, // CTaskWanderingScenario
+TASK_WANDERING_IN_RADIUS_SCENARIO                       = 101, // CTaskWanderingInRadiusScenario
+TASK_MOVE_BETWEEN_POINTS_SCENARIO                       = 103, // CTaskMoveBetweenPointsScenario
+TASK_CHAT_SCENARIO                                      = 104, // CTaskChatScenario
+TASK_COWER_SCENARIO                                     = 106, // CTaskCowerScenario
+TASK_DEAD_BODY_SCENARIO                                 = 107, // CTaskDeadBodyScenario
+TASK_SAY_AUDIO                                          = 114, // CTaskSayAudio
+TASK_WAIT_FOR_STEPPING_OUT                              = 116, // CTaskWaitForSteppingOut
+TASK_COUPLE_SCENARIO                                    = 117, // CTaskCoupleScenario
+TASK_USE_SCENARIO                                       = 118, // CTaskUseScenario
+TASK_USE_VEHICLE_SCENARIO                               = 119, // CTaskUseVehicleScenario
+TASK_UNALERTED                                          = 120, // CTaskUnalerted
+TASK_STEAL_VEHICLE                                      = 121, // CTaskStealVehicle
+TASK_REACT_TO_PURSUIT                                   = 122, // CTaskReactToPursuit
+TASK_RUN_CLIP                                           = 123, // CTaskRunClip
+TASK_RUN_NAMED_CLIP                                     = 124, // CTaskRunNamedClip
+TASK_HIT_WALL                                           = 125, // CTaskHitWall
+TASK_COWER                                              = 126, // CTaskCower
+TASK_CROUCH                                             = 127, // CTaskCrouch
+TASK_MELEE                                              = 128, // CTaskMelee
+TASK_MOVE_MELEE_MOVEMENT                                = 129, // CTaskMoveMeleeMovement
+TASK_MELEE_ACTION_RESULT                                = 130, // CTaskMeleeActionResult
+TASK_MELEE_UPPERBODY_ANIM                               = 131, // CTaskMeleeUpperbodyAnims
+TASK_MELEE_UNINTERRUPTABLE                              = 132, // CTaskMeleeUninterruptable
+TASK_MOVE_SCRIPTED                                      = 133, // CTaskMoVEScripted
+TASK_SCRIPTED_ANIMATION                                 = 134, // CTaskScriptedAnimation
+TASK_SYNCHRONIZED_SCENE                                 = 135, // CTaskSynchronizedScene
+TASK_REACH_ARM                                          = 136, // CTaskReachArm
+TASK_COMPLEX_EVASIVE_STEP                               = 137, // CTaskComplexEvasiveStep
+TASK_MOVE_WANDER_AROUND_VEHICLE                         = 138, // CTaskWalkRoundCarWhileWandering
+TASK_WALK_ROUND_FIRE                                    = 139, // CTaskWalkRoundFire
+TASK_COMPLEX_STUCK_IN_AIR                               = 140, // CTaskComplexStuckInAir
+TASK_WALK_ROUND_ENTITY                                  = 141, // CTaskWalkRoundEntity
+TASK_MOVE_WALK_ROUND_VEHICLE                            = 142, // CTaskMoveWalkRoundVehicle
+TASK_MOVE_WALK_ROUND_VEHICLE_DOOR                       = 143, // CTaskWalkRoundVehicleDoor
+TASK_REACT_TO_GUN_AIMED_AT                              = 144, // CTaskReactToGunAimedAt
+TASK_ON_FOOT_DUCK_AND_COVER                             = 146, // CTaskDuckAndCover
+TASK_AGGRESSIVE_RUBBERNECK                              = 147, // CTaskAggressiveRubberneck
+TASK_IN_VEHICLE_BASIC                                   = 150, // CTaskInVehicleBasic
+TASK_CAR_DRIVE_WANDER                                   = 151, // CTaskCarDriveWander
+TASK_LEAVE_ANY_CAR                                      = 152, // CTaskLeaveAnyCar
+TASK_COMPLEX_GET_OFF_BOAT                               = 153, // CTaskComplexGetOffBoat
+TASK_CAR_DRIVE_POINT_ROUTE                              = 154, // CTaskDrivePointRoute
+TASK_CAR_SET_TEMP_ACTION                                = 155, // CTaskCarSetTempAction
+TASK_BRING_VEHICLE_TO_HALT                              = 156, // CTaskBringVehicleToHalt
+TASK_CAR_DRIVE                                          = 157, // CTaskCarDrive
+TASK_PLAYER_DRIVE                                       = 159, // CTaskPlayerDrive
+TASK_ENTER_VEHICLE                                      = 160, // CTaskEnterVehicle
+TASK_ENTER_VEHICLE_ALIGN                                = 161, // CTaskEnterVehicleAlign
+TASK_OPEN_VEHICLE_DOOR_FROM_OUTSIDE                     = 162, // CTaskOpenVehicleDoorFromOutside
+TASK_ENTER_VEHICLE_SEAT                                 = 163, // CTaskEnterVehicleSeat
+TASK_CLOSE_VEHICLE_DOOR_FROM_INSIDE                     = 164, // CTaskCloseVehicleDoorFromInside
+TASK_IN_VEHICLE_SEAT_SHUFFLE                            = 165, // CTaskInVehicleSeatShuffle
+TASK_OPEN_VEHICLE_DOOR_FROM_INSIDE                      = 166, // CTaskOpenVehicleDoorFromInside
+TASK_EXIT_VEHICLE_SEAT                                  = 167, // CTaskExitVehicleSeat
+TASK_CLOSE_VEHICLE_DOOR_FROM_OUTSIDE                    = 168, // CTaskCloseVehicleDoorFromOutside
+TASK_CONTROL_VEHICLE                                    = 169, // CTaskControlVehicle
+TASK_MOTION_IN_AUTOMOBILE                               = 170, // CTaskMotionInAutomobile
+TASK_MOTION_ON_BICYCLE                                  = 171, // CTaskMotionOnBicycle
+TASK_MOTION_ON_BICYCLE_CONTROLLER                       = 172, // CTaskMotionOnBicycleController
+TASK_MOTION_IN_VEHICLE                                  = 173, // CTaskMotionInVehicle
+TASK_MOTION_IN_TURRET                                   = 174, // CTaskMotionInTurret
+TASK_REACT_TO_BEING_JACKED                              = 175, // CTaskReactToBeingJacked
+TASK_REACT_TO_BEING_ASKED_TO_LEAVE_VEHICLE              = 176, // CTaskReactToBeingAskedToLeaveVehicle
+TASK_TRY_TO_GRAB_VEHICLE_DOOR                           = 177, // CTaskTryToGrabVehicleDoor
+TASK_GET_ON_TRAIN                                       = 178, // CTaskGetOnTrain
+TASK_GET_OFF_TRAIN                                      = 179, // CTaskGetOffTrain
+TASK_RIDE_TRAIN                                         = 180, // CTaskRideTrain
+TASK_MOUNT_THROW_PROJECTILE                             = 190, // CTaskMountThrowProjectile
+TASK_GO_TO_CAR_DOOR_AND_STAND_STILL                     = 195, // CTaskGoToCarDoorAndStandStill
+TASK_MOVE_GO_TO_VEHICLE_DOOR                            = 196, // CTaskMoveGoToVehicleDoor
+TASK_SET_PED_IN_VEHICLE                                 = 197, // CTaskSetPedInVehicle
+TASK_SET_PED_OUT_OF_VEHICLE                             = 198, // CTaskSetPedOutOfVehicle
+TASK_VEHICLE_MOUNTED_WEAPON                             = 199, // CTaskVehicleMountedWeapon
+TASK_VEHICLE_GUN                                        = 200, // CTaskVehicleGun
+TASK_VEHICLE_PROJECTILE                                 = 201, // CTaskVehicleProjectile
+TASK_SMASH_CAR_WINDOW                                   = 204, // CTaskSmashCarWindow
+TASK_MOVE_GO_TO_POINT                                   = 205, // CTaskMoveGoToPoint
+TASK_MOVE_ACHIEVE_HEADING                               = 206, // CTaskMoveAchieveHeading
+TASK_MOVE_FACE_TARGET                                   = 207, // CTaskMoveFaceTarget
+TASK_MOVE_GO_TO_POINT_AND_STAND_STILL                   = 208, // CTaskMoveGoToPointAndStandStill
+TASK_MOVE_FOLLOW_POINT_ROUTE                            = 209, // CTaskMoveFollowPointRoute
+TASK_MOVE_SEEK_ENTITY_STANDARD                          = 210, // TTaskMoveSeekEntityStandard
+TASK_MOVE_SEEK_ENTITY_LAST_NAV_MESH_INTERSECTION        = 211, // TTaskMoveSeekEntityLastNavMeshIntersection
+TASK_MOVE_SEEK_ENTITY_OFFSET_ROTATE                     = 212, // TTaskMoveSeekEntityXYOffsetRotated
+TASK_MOVE_SEEK_ENTITY_OFFSET_FIXED                      = 213, // TTaskMoveSeekEntityXYOffsetFixed
+TASK_MOVE_SEEK_ENTITY_RADIUS_ANGLE                      = 214, // TTaskMoveSeekEntityRadiusAngleOffset
+TASK_EXHAUSTED_FLEE                                     = 215, // CTaskExhaustedFlee
+TASK_GROWL_AND_FLEE                                     = 216, // CTaskGrowlAndFlee
+TASK_SCENARIO_FLEE                                      = 217, // CTaskScenarioFlee
+TASK_SMART_FLEE                                         = 218, // CTaskSmartFlee
+TASK_FLY_AWAY                                           = 219, // CTaskFlyAway
+TASK_WALK_AWAY                                          = 220, // CTaskWalkAway
+TASK_WANDER                                             = 221, // CTaskWander
+TASK_WANDER_IN_AREA                                     = 222, // CTaskWanderInArea
+TASK_FOLLOW_LEADER_IN_FORMATION                         = 223, // CTaskFollowLeaderInFormation
+TASK_GO_TO_POINT_ANY_MEANS                              = 224, // CTaskGoToPointAnyMeans
+TASK_COMPLEX_TURN_TO_FACE_ENTITY                        = 225, // CTaskTurnToFaceEntityOrCoord
+TASK_FOLLOW_LEADER_ANY_MEANS                            = 226, // CTaskFollowLeaderAnyMeans
+TASK_FLY_TO_POINT                                       = 228, // CTaskFlyToPoint
+TASK_FLYING_WANDER                                      = 229, // CTaskFlyingWander
+TASK_GO_TO_POINT_AIMING                                 = 230, // CTaskGoToPointAiming
+TASK_GO_TO_SCENARIO                                     = 231, // CTaskGoToScenario
+TASK_FOLLOW_PATROL_ROUTE                                = 232, // CTaskFollowPatrolRoute
+TASK_SEEK_ENTITY_AIMING                                 = 233, // CTaskSeekEntityAiming
+TASK_SLIDE_TO_COORD                                     = 234, // CTaskSlideToCoord
+TASK_SWIMMING_WANDER                                    = 235, // CTaskSwimmingWander
+TASK_MOVE_TRACKING_ENTITY                               = 237, // CTaskMoveTrackingEntity
+TASK_MOVE_FOLLOW_NAVMESH                                = 238, // CTaskMoveFollowNavMesh
+TASK_MOVE_GO_TO_POINT_ON_ROUTE                          = 239, // CTaskMoveGoToPointOnRoute
+TASK_ESCAPE_BLAST                                       = 240, // CTaskEscapeBlast
+TASK_MOVE_WANDER                                        = 241, // CTaskMoveWander
+TASK_MOVE_BE_IN_FORMATION                               = 242, // CTaskMoveBeInFormation
+TASK_MOVE_CROWD_AROUND_LOCATION                         = 243, // CTaskMoveCrowdAroundLocation
+TASK_MOVE_CROSS_ROAD_AT_TRAFFIC_LIGHTS                  = 244, // CTaskMoveCrossRoadAtTrafficLights
+TASK_MOVE_WAIT_FOR_TRAFFIC                              = 245, // CTaskMoveWaitForTraffic
+TASK_MOVE_GOTO_POINT_STAND_STILL_ACHIEVE_HEADING        = 246, // CTaskMoveGoToPointStandStillAchieveHeading
+TASK_MOVE_WAIT_FOR_NAVMESH_SPECIAL_ACTION_EVENT         = 247, // CTaskMoveWaitForNavMeshSpecialActionEvent
+TASK_MOVE_GOTO_SAFE_POSITION_ON_NAVMESH                 = 248, // CTasMoveGoToSafePositionOnNavMesh
+TASK_MOVE_RETURN_TO_ROUTE                               = 249, // CTaskMoveReturnToRoute
+TASK_MOVE_GOTO_SHELTER_AND_WAIT                         = 250, // CTaskMoveGoToShelterAndWait
+TASK_MOVE_GET_ONTO_MAIN_NAVMESH                         = 251, // CTaskMoveGetOntoMainNavMesh
+TASK_MOVE_SLIDE_TO_COORD                                = 252, // CTaskMoveSlideToCoord
+TASK_MOVE_GOTO_POINT_RELATIVE_TO_ENTITY_AND_STAND_STILL = 253, // CTaskMoveGoToPointRelativeToEntityAndStandStill
+TASK_HELICOPTER_STRAFE                                  = 254, // CTaskHelicopterStrafe
+TASK_COMPLEX_USE_MOBILE_PHONE_AND_MOVEMENT              = 255, // CTaskComplexUseMobilePhoneAndMovement
+TASK_GET_OUT_OF_WATER                                   = 256, // CTaskGetOutOfWater
+TASK_MOVE_FOLLOW_ENTITY_OFFSET                          = 259, // CTaskMoveFollowEntityOffset
+TASK_FOLLOW_WAYPOINT_RECORDING                          = 261, // CTaskFollowWaypointRecording
+TASK_GENERIC_MOVE_TO_POINT                              = 263, // CTaskGenericMoveToPoint
+TASK_MOTION_PED                                         = 264, // CTaskMotionPed
+TASK_MOTION_PED_LOW_LOD                                 = 265, // CTaskMotionPedLowLod
+TASK_MOTION_BASIC_LOCOMOTION                            = 267, // CTaskMotionBasicLocomotion
+TASK_HUMAN_LOCOMOTION                                   = 268, // CTaskHumanLocomotion
+TASK_MOTION_BASIC_LOCOMOTION_LOW_LOD                    = 269, // CTaskMotionBasicLocomotionLowLod
+TASK_MOTION_STRAFING                                    = 270, // CTaskMotionStrafing
+TASK_MOTION_TENNIS                                      = 271, // CTaskMotionTennis
+TASK_MOTION_AIMING                                      = 272, // CTaskMotionAiming
+TASK_ON_FOOT_BIRD                                       = 273, // CTaskBirdLocomotion
+TASK_ON_FOOT_FLIGHTLESS_BIRD                            = 274, // CTaskFlightlessBirdLocomotion
+TASK_ON_FOOT_FISH                                       = 278, // CTaskFishLocomotion
+TASK_ON_FOOT_QUAD                                       = 279, // CTaskQuadLocomotion
+TASK_MOTION_DIVING                                      = 280, // CTaskMotionDiving
+TASK_MOTION_SWIMMING                                    = 281, // CTaskMotionSwimming
+TASK_MOTION_PARACHUTING                                 = 282, // CTaskMotionParachuting
+TASK_MOTION_DRUNK                                       = 283, // CTaskMotionDrunk
+TASK_REPOSITION_MOVE                                    = 284, // CTaskRepositionMove
+TASK_MOTION_AIMING_TRANSITION                           = 285, // CTaskMotionAimingTransition
+TASK_THROW_PROJECTILE                                   = 286, // CTaskThrowProjectile
+TASK_COVER                                              = 287, // CTaskCover
+TASK_MOTION_IN_COVER                                    = 288, // CTaskMotionInCover
+TASK_AIM_AND_THROW_PROJECTILE                           = 289, // CTaskAimAndThrowProjectile
+TASK_GUN                                                = 290, // CTaskGun
+TASK_AIM_FROM_GROUND                                    = 291, // CTaskAimFromGround
+TASK_AIM_GUN_VEHICLE_DRIVE_BY                           = 295, // CTaskAimGunVehicleDriveBy
+TASK_AIM_GUN_SCRIPTED                                   = 296, // CTaskAimGunScripted
+TASK_RELOAD_GUN                                         = 298, // CTaskReloadGun
+TASK_WEAPON_BLOCKED                                     = 299, // CTaskWeaponBlocked
+TASK_ENTER_COVER                                        = 300, // CTaskEnterCover
+TASK_EXIT_COVER                                         = 301, // CTaskExitCover
+TASK_AIM_GUN_FROM_COVER_INTRO                           = 302, // CTaskAimGunFromCoverIntro
+TASK_AIM_GUN_FROM_COVER_OUTRO                           = 303, // CTaskAimGunFromCoverOutro
+TASK_AIM_GUN_BLIND_FIRE                                 = 304, // CTaskAimGunBlindFire
+TASK_COMBAT_CLOSEST_TARGET_IN_AREA                      = 307, // CTaskCombatClosestTargetInArea
+TASK_ADDITIONAL_COMBAT_TASK                             = 308, // CTaskCombatAdditionalTask
+TASK_IN_COVER                                           = 309, // CTaskInCover
+TASK_AIM_SWEEP                                          = 313, // CTaskAimSweep
+TASK_ARREST                                             = 314, // CTaskArrest
+TASK_CUFFED                                             = 315, // CTaskCuffed
+TASK_IN_CUSTODY                                         = 316, // CTaskInCustody
+TASK_INCAPACITATED                                      = 317, // CTaskIncapacitated
+TASK_PLAY_CUFFED_SECONDARY_ANIMS                        = 318, // CTaskPlayCuffedSecondaryAnims
+TASK_SHARK_CIRCLE                                       = 319, // CTaskSharkCircle
+TASK_SHARK_ATTACK                                       = 320, // CTaskSharkAttack
+TASK_AGITATED                                           = 321, // CTaskAgitated
+TASK_AGITATED_ACTION                                    = 322, // CTaskAgitatedAction
+TASK_CONFRONT                                           = 323, // CTaskConfront
+TASK_INTIMIDATE                                         = 324, // CTaskIntimidate
+TASK_SHOVE                                              = 325, // CTaskShove
+TASK_SHOVED                                             = 326, // CTaskShoved
+TASK_CROUCH_TOGGLE                                      = 328, // CTaskCrouchToggle
+TASK_REVIVE                                             = 329, // CTaskRevive
+TASK_COMPLEX_USE_MOBILE_PHONE                           = 331, // CTaskComplexUseMobilePhone
+TASK_PARACHUTE                                          = 335, // CTaskParachute
+TASK_PARACHUTE_OBJECT                                   = 336, // CTaskParachuteObject
+TASK_TAKE_OFF_PED_VARIATION                             = 337, // CTaskTakeOffPedVariation
+TASK_COMBAT_SEEK_COVER                                  = 340, // CTaskCombatSeekCover
+TASK_COMBAT_CHARGE                                      = 341, // CTaskCombatChargeSubtask
+TASK_COMBAT_FLANK                                       = 342, // CTaskCombatFlank
+TASK_COMBAT                                             = 343, // CTaskCombat
+TASK_COMBAT_MOUNTED                                     = 344, // CTaskCombatMounted
+TASK_MOVE_CIRCLE                                        = 345, // CTaskMoveCircle
+TASK_MOVE_COMBAT_MOUNTED                                = 346, // CTaskMoveCombatMounted
+TASK_SEARCH                                             = 347, // CTaskSearch
+TASK_SEARCH_ON_FOOT                                     = 348, // CTaskSearchOnFoot
+TASK_SEARCH_IN_AUTOMOBILE                               = 349, // CTaskSearchInAutomobile
+TASK_SEARCH_IN_BOAT                                     = 350, // CTaskSearchInBoat
+TASK_SEARCH_IN_HELI                                     = 351, // CTaskSearchInHeli
+TASK_THREAT_RESPONSE                                    = 352, // CTaskThreatResponse
+TASK_INVESTIGATE                                        = 353, // CTaskInvestigate
+TASK_STAND_GUARD_FSM                                    = 354, // CTaskStandGuardFSM
+TASK_PATROL                                             = 355, // CTaskPatrol
+TASK_SHOOT_AT_TARGET                                    = 356, // CTaskShootAtTarget
+TASK_SET_AND_GUARD_AREA                                 = 357, // CTaskSetAndGuardArea
+TASK_STAND_GUARD                                        = 358, // CTaskStandGuard
+TASK_SEPARATE                                           = 359, // CTaskSeparate
+TASK_STAY_IN_COVER                                      = 360, // CTaskStayInCover
+TASK_VEHICLE_COMBAT                                     = 361, // CTaskVehicleCombat
+TASK_VEHICLE_PERSUIT                                    = 362, // CTaskVehiclePersuit
+TASK_VEHICLE_CHASE                                      = 363, // CTaskVehicleChase
+TASK_DRAGGING_TO_SAFETY                                 = 364, // CTaskDraggingToSafety
+TASK_DRAGGED_TO_SAFETY                                  = 365, // CTaskDraggedToSafety
+TASK_VARIED_AIM_POSE                                    = 366, // CTaskVariedAimPose
+TASK_MOVE_WITHIN_ATTACK_WINDOW                          = 367, // CTaskMoveWithinAttackWindow
+TASK_MOVE_WITHIN_DEFENSIVE_AREA                         = 368, // CTaskMoveWithinDefensiveArea
+TASK_SHOOT_OUT_TIRE                                     = 369, // CTaskShootOutTire
+TASK_SHELL_SHOCKED                                      = 370, // CTaskShellShocked
+TASK_BOAT_CHASE                                         = 371, // CTaskBoatChase
+TASK_BOAT_COMBAT                                        = 372, // CTaskBoatCombat
+TASK_BOAT_STRAFE                                        = 373, // CTaskBoatStrafe
+TASK_HELI_CHASE                                         = 374, // CTaskHeliChase
+TASK_HELI_COMBAT                                        = 375, // CTaskHeliCombat
+TASK_SUBMARINE_COMBAT                                   = 376, // CTaskSubmarineCombat
+TASK_SUBMARINE_CHASE                                    = 377, // CTaskSubmarineChase
+TASK_PLANE_CHASE                                        = 378, // CTaskPlaneChase
+TASK_TARGET_UNREACHABLE                                 = 379, // CTaskTargetUnreachable
+TASK_TARGET_UNREACHABLE_IN_INTERIOR                     = 380, // CTaskTargetUnreachableInInterior
+TASK_TARGET_UNREACHABLE_IN_EXTERIOR                     = 381, // CTaskTargetUnreachableInExterior
+TASK_STEALTH_KILL                                       = 382, // CTaskStealthKill
+TASK_WRITHE                                             = 383, // CTaskWrithe
+TASK_ADVANCE                                            = 384, // CTaskAdvance
+TASK_CHARGE                                             = 385, // CTaskCharge
+TASK_MOVE_TO_TACTICAL_POINT                             = 386, // CTaskMoveToTacticalPoint
+TASK_TO_HURT_TRANSIT                                    = 387, // CTaskToHurtTransit
+TASK_ANIMATED_HIT_BY_EXPLOSION                          = 388, // CTaskAnimatedHitByExplosion
+TASK_NM_RELAX                                           = 389, // CTaskNMRelax
+TASK_NM_ROLL_UP_AND_RELAX                               = 390, // CTaskNMRollUpAndRelax
+TASK_NM_POSE                                            = 391, // CTaskNMPose
+TASK_NM_BRACE                                           = 392, // CTaskNMBrace
+TASK_NM_SHOT                                            = 395, // CTaskNMShot
+TASK_NM_HIGH_FALL                                       = 396, // CTaskNMHighFall
+TASK_NM_BALANCE                                         = 397, // CTaskNMBalance
+TASK_NM_ELECTROCUTE                                     = 398, // CTaskNMElectrocute
+TASK_NM_EXPLOSION                                       = 400, // CTaskNMExplosion
+TASK_NM_ONFIRE                                          = 401, // CTaskNMOnFire
+TASK_NM_SCRIPT_CONTROL                                  = 402, // CTaskNMScriptControl
+TASK_NM_JUMP_ROLL_FROM_ROAD_VEHICLE                     = 403, // CTaskNMJumpRollFromRoadVehicle
+TASK_NM_FLINCH                                          = 404, // CTaskNMFlinch
+TASK_NM_SIT                                             = 405, // CTaskNMSit
+TASK_NM_FALL_DOWN                                       = 406, // CTaskNMFallDown
+TASK_BLEND_FROM_NM                                      = 407, // CTaskBlendFromNM
+TASK_NM_CONTROL                                         = 408, // CTaskNMControl
+TASK_NM_DANGLE                                          = 409, // CTaskNMDangle
+TASK_NM_SLUNG_OVER_SHOULDER                             = 410, // CTaskNMSlungOverShoulder
+TASK_NM_GENERIC_ATTACH                                  = 412, // CTaskNMGenericAttach
+TASK_NM_DRUNK                                           = 413, // CTaskNMDrunk
+TASK_NM_DRAGGING_TO_SAFETY                              = 414, // CTaskNMDraggingToSafety
+TASK_NM_THROUGH_WINDSCREEN                              = 415, // CTaskNMThroughWindscreen
+TASK_NM_SIMPLE                                          = 417, // CTaskNMSimple
+TASK_RAGE_RAGDOLL                                       = 418, // CTaskRageRagdoll
+TASK_JUMPVAULT                                          = 421, // CTaskJumpVault
+TASK_JUMP                                               = 422, // CTaskJump
+TASK_FALL                                               = 423, // CTaskFall
+TASK_REACT_AIM_WEAPON                                   = 425, // CTaskReactAimWeapon
+TASK_CHAT                                               = 426, // CTaskChat
+TASK_MOBILE_PHONE                                       = 427, // CTaskMobilePhone
+TASK_REACT_TO_DEAD_PED                                  = 428, // CTaskReactToDeadPed
+TASK_WATCH_INVESTIGATION                                = 429, // CTaskWatchInvestigation
+TASK_SEARCH_FOR_UNKNOWN_THREAT                          = 430, // CTaskSearchForUnknownThreat
+TASK_CHECK_PED_IS_DEAD                                  = 431, // CTaskCheckPedIsDead
+TASK_BOMB                                               = 432, // CTaskBomb
+TASK_DETONATOR                                          = 433, // CTaskDetonator
+TASK_ANIMATED_ATTACH                                    = 435, // CTaskAnimatedAttach
+TASK_CUTSCENE                                           = 441, // CTaskCutScene
+TASK_REACT_TO_EXPLOSION                                 = 442, // CTaskReactToExplosion
+TASK_REACT_TO_IMMINENT_EXPLOSION                        = 443, // CTaskReactToImminentExplosion
+TASK_DIVE_TO_GROUND                                     = 444, // CTaskDiveToGround
+TASK_REACT_AND_FLEE                                     = 445, // CTaskReactAndFlee
+TASK_SIDESTEP                                           = 446, // CTaskSidestep
+TASK_CALL_POLICE                                        = 447, // CTaskCallPolice
+TASK_REACT_IN_DIRECTION                                 = 448, // CTaskReactInDirection
+TASK_REACT_TO_BUDDY_SHOT                                = 449, // CTaskReactToBuddyShot
+TASK_VEHICLE_GOTO                                       = 453, // CTaskVehicleGoTo
+TASK_VEHICLE_GOTO_AUTOMOBILE_NEW                        = 454, // CTaskVehicleGoToAutomobileNew
+TASK_VEHICLE_GOTO_PLANE                                 = 455, // CTaskVehicleGoToPlane
+TASK_VEHICLE_GOTO_HELICOPTER                            = 456, // CTaskVehicleGoToHelicopter
+TASK_VEHICLE_GOTO_SUBMARINE                             = 457, // CTaskVehicleGoToSubmarine
+TASK_VEHICLE_GOTO_BOAT                                  = 458, // CTaskVehicleGoToBoat
+TASK_VEHICLE_GOTO_POINT_AUTOMOBILE                      = 459, // CTaskVehicleGoToPointAutomobile
+TASK_VEHICLE_GOTO_POINT_WITH_AVOIDANCE_AUTOMOBILE       = 460, // CTaskVehicleGoToPointWithAvoidanceAutomobile
+TASK_VEHICLE_PURSUE                                     = 461, // CTaskVehiclePursue
+TASK_VEHICLE_RAM                                        = 462, // CTaskVehicleRam
+TASK_VEHICLE_SPIN_OUT                                   = 463, // CTaskVehicleSpinOut
+TASK_VEHICLE_APPROACH                                   = 464, // CTaskVehicleApproach
+TASK_VEHICLE_THREE_POINT_TURN                           = 465, // CTaskVehicleThreePointTurn
+TASK_VEHICLE_DEAD_DRIVER                                = 466, // CTaskVehicleDeadDriver
+TASK_VEHICLE_CRUISE_NEW                                 = 467, // CTaskVehicleCruiseNew
+TASK_VEHICLE_CRUISE_BOAT                                = 468, // CTaskVehicleCruiseBoat
+TASK_VEHICLE_STOP                                       = 469, // CTaskVehicleStop
+TASK_VEHICLE_PULL_OVER                                  = 470, // CTaskVehiclePullOver
+TASK_VEHICLE_FLEE                                       = 472, // CTaskVehicleFlee
+TASK_VEHICLE_FLEE_AIRBORNE                              = 473, // CTaskVehicleFleeAirborne
+TASK_VEHICLE_FLEE_BOAT                                  = 474, // CTaskVehicleFleeBoat
+TASK_VEHICLE_FOLLOW_RECORDING                           = 475, // CTaskVehicleFollowRecording
+TASK_VEHICLE_FOLLOW                                     = 476, // CTaskVehicleFollow
+TASK_VEHICLE_BLOCK                                      = 477, // CTaskVehicleBlock
+TASK_VEHICLE_BLOCK_CRUISE_IN_FRONT                      = 478, // CTaskVehicleBlockCruiseInFront
+TASK_VEHICLE_BLOCK_BRAKE_IN_FRONT                       = 479, // CTaskVehicleBlockBrakeInFront
+TASK_VEHICLE_BLOCK_BACK_AND_FORTH                       = 480, // CTaskVehicleBlockBackAndForth
+TASK_VEHICLE_CRASH                                      = 481, // CTaskVehicleCrash
+TASK_VEHICLE_LAND                                       = 482, // CTaskVehicleLand
+TASK_VEHICLE_LAND_PLANE                                 = 483, // CTaskVehicleLandPlane
+TASK_VEHICLE_HOVER                                      = 484, // CTaskVehicleHover
+TASK_VEHICLE_ATTACK                                     = 485, // CTaskVehicleAttack
+TASK_VEHICLE_ATTACK_TANK                                = 486, // CTaskVehicleAttackTank
+TASK_VEHICLE_CIRCLE                                     = 487, // CTaskVehicleCircle
+TASK_VEHICLE_POLICE_BEHAVIOUR                           = 488, // CTaskVehiclePoliceBehaviour
+TASK_VEHICLE_ESCORT                                     = 491, // CTaskVehicleEscort
+TASK_VEHICLE_HELI_PROTECT                               = 492, // CTaskVehicleHeliProtect
+TASK_VEHICLE_PLAYER_DRIVE                               = 493, // CTaskVehiclePlayerDrive
+TASK_VEHICLE_PLAYER_DRIVE_AUTOMOBILE                    = 494, // CTaskVehiclePlayerDriveAutomobile
+TASK_VEHICLE_PLAYER_DRIVE_BIKE                          = 495, // CTaskVehiclePlayerDriveBike
+TASK_VEHICLE_PLAYER_DRIVE_BOAT                          = 496, // CTaskVehiclePlayerDriveBoat
+TASK_VEHICLE_PLAYER_DRIVE_SUBMARINE                     = 497, // CTaskVehiclePlayerDriveSubmarine
+TASK_VEHICLE_PLAYER_DRIVE_SUBMARINECAR                  = 498, // CTaskVehiclePlayerDriveSubmarineCar
+TASK_VEHICLE_PLAYER_DRIVE_AMPHIBIOUS_AUTOMOBILE         = 499, // CTaskVehiclePlayerDriveAmphibiousAutomobile
+TASK_VEHICLE_PLAYER_DRIVE_PLANE                         = 500, // CTaskVehiclePlayerDrivePlane
+TASK_VEHICLE_PLAYER_DRIVE_HELI                          = 501, // CTaskVehiclePlayerDriveHeli
+TASK_VEHICLE_PLAYER_DRIVE_AUTOGYRO                      = 502, // CTaskVehiclePlayerDriveAutogyro
+TASK_VEHICLE_PLAYER_DRIVE_DIGGER_ARM                    = 503, // CTaskVehiclePlayerDriveDiggerArm
+TASK_VEHICLE_PLAYER_DRIVE_TRAIN                         = 504, // CTaskVehiclePlayerDriveTrain
+TASK_VEHICLE_PLANE_CHASE                                = 505, // CTaskVehiclePlaneChase
+TASK_VEHICLE_NO_DRIVER                                  = 506, // CTaskVehicleNoDriver
+TASK_VEHICLE_ANIMATION                                  = 507, // CTaskVehicleAnimation
+TASK_VEHICLE_CONVERTIBLE_ROOF                           = 508, // CTaskVehicleConvertibleRoof
+TASK_VEHICLE_PARK_NEW                                   = 509, // CTaskVehicleParkNew
+TASK_VEHICLE_FOLLOW_WAYPOINT_RECORDING                  = 510, // CTaskVehicleFollowWaypointRecording
+TASK_VEHICLE_GOTO_NAVMESH                               = 511, // CTaskVehicleGoToNavmesh
+TASK_VEHICLE_REACT_TO_COP_SIREN                         = 512, // CTaskVehicleReactToCopSiren
+TASK_VEHICLE_GOTO_LONGRANGE                             = 513, // CTaskVehicleGotoLongRange
+TASK_VEHICLE_WAIT                                       = 514, // CTaskVehicleWait
+TASK_VEHICLE_REVERSE                                    = 515, // CTaskVehicleReverse
+TASK_VEHICLE_BRAKE                                      = 516, // CTaskVehicleBrake
+TASK_VEHICLE_HANDBRAKE                                  = 517, // CTaskVehicleHandBrake
+TASK_VEHICLE_TURN                                       = 518, // CTaskVehicleTurn
+TASK_VEHICLE_GO_FORWARD                                 = 519, // CTaskVehicleGoForward
+TASK_VEHICLE_SWERVE                                     = 520, // CTaskVehicleSwerve
+TASK_VEHICLE_FLY_DIRECTION                              = 521, // CTaskVehicleFlyDirection
+TASK_VEHICLE_HEADON_COLLISION                           = 522, // CTaskVehicleHeadonCollision
+TASK_VEHICLE_BOOST_USE_STEERING_ANGLE                   = 523, // CTaskVehicleBoostUseSteeringAngle
+TASK_VEHICLE_SHOT_TIRE                                  = 524, // CTaskVehicleShotTire
+TASK_VEHICLE_BURNOUT                                    = 525, // CTaskVehicleBurnout
+TASK_VEHICLE_REV_ENGINE                                 = 526, // CTaskVehicleRevEngine
+TASK_VEHICLE_SURFACE_IN_SUBMARINE                       = 527, // CTaskVehicleSurfaceInSubmarine
+TASK_VEHICLE_PULL_ALONGSIDE                             = 528, // CTaskVehiclePullAlongside
+TASK_VEHICLE_TRANSFORM_TO_SUBMARINE                     = 529, // CTaskVehicleTransformToSubmarine
+TASK_ANIMATED_FALLBACK                                  = 530, // CTaskAnimatedFallback
+MAX_NUM_TASK_TYPES                                      = 531,
+};)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetScriptTaskStatus(int ped, Hash taskHash)", AngelScript::asFUNCTION(base::menu::natives::TASK::GET_SCRIPT_TASK_STATUS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets the status of a script-assigned task.
-taskHash: https://alloc8or.re/gta5/doc/enums/eScriptTaskHash.txt)ASDOC");
+
+enum ScriptTaskStatus
+{
+WAITING_TO_START_TASK = 0,
+PERFORMING_TASK,
+DORMANT_TASK,
+VACANT_STAGE,
+GROUP_TASK_STAGE,
+ATTRACTOR_SCRIPT_TASK_STAGE,
+SECONDARY_TASK_STAGE,
+FINISHED_TASK
+};
+
+enum ScriptTaskTypes : Hash
+{
+SCRIPT_TASK_ANY = 0x55966344,
+SCRIPT_TASK_INVALID = 0x811E343C,
+SCRIPT_TASK_PAUSE = 0x03C990EC,
+SCRIPT_TASK_STAND_STILL = 0xC572E06A,
+DEPRECATED_SCRIPT_TASK_FALL_AND_GET_UP = 0xA6296C9D,
+SCRIPT_TASK_JUMP = 0x24415046,
+SCRIPT_TASK_COWER = 0x1C43F4CF,
+SCRIPT_TASK_HANDS_UP = 0xA573B67C,
+SCRIPT_TASK_DUCK = 0x1D415F6C,
+DEPRECATED_SCRIPT_TASK_SCRATCH_HEAD = 0xD9162485,
+DEPRECATED_SCRIPT_TASK_LOOK_ABOUT = 0x255F21CC,
+SCRIPT_TASK_ENTER_VEHICLE = 0x950B6492,
+SCRIPT_TASK_LEAVE_VEHICLE = 0x1AE73569,
+SCRIPT_TASK_VEHICLE_DRIVE_TO_COORD = 0x93A5526E,
+SCRIPT_TASK_VEHICLE_DRIVE_TO_COORD_LONGRANGE = 0x21D33957,
+SCRIPT_TASK_VEHICLE_DRIVE_WANDER = 0xF09B15B3,
+SCRIPT_TASK_GO_STRAIGHT_TO_COORD = 0x7D8F4411,
+SCRIPT_TASK_GO_STRAIGHT_TO_COORD_RELATIVE_TO_ENTITY = 0x78EC0FF6,
+DEPRECATED_SCRIPT_TASK_GO_STRAIGHT_TO_COORD_RELATIVE_TO_VEHICLE = 0x96066708,
+SCRIPT_TASK_ACHIEVE_HEADING = 0x7276D3DF,
+SCRIPT_TASK_FOLLOW_POINT_ROUTE = 0xB232526F,
+SCRIPT_TASK_GO_TO_ENTITY = 0x4924437D,
+DEPRECATED_SCRIPT_TASK_GO_TO_PED = 0xD7F626D1,
+SCRIPT_TASK_0xEEDD9B66 = 0xEEDD9B66,
+SCRIPT_TASK_0x114F64E3 = 0x114F64E3,
+SCRIPT_TASK_0xF10822AA = 0xF10822AA,
+SCRIPT_TASK_SMART_FLEE_PED = 0x6BA30179,
+SCRIPT_TASK_WANDER_STANDARD = 0xBBA3B7CA,
+SCRIPT_TASK_FOLLOW_NAV_MESH_TO_COORD = 0x2A89B8A7,
+SCRIPT_TASK_GO_TO_COORD_ANY_MEANS = 0x93399E79,
+SCRIPT_TASK_PERFORM_SEQUENCE = 0x0E763797,
+SCRIPT_TASK_LEAVE_ANY_VEHICLE = 0xCE98FBB3,
+SCRIPT_TASK_AIM_GUN_SCRIPTED = 0x0C69931F,
+SCRIPT_TASK_AIM_GUN_AT_ENTITY = 0x6134071B,
+SCRIPT_TASK_GO_TO_COORD_WHILE_SHOOTING = 0x9387DEAB,
+SCRIPT_TASK_TURN_PED_TO_FACE_ENTITY = 0xCBCE4595,
+DEPRECATED_SCRIPT_TASK_TURN_PED_TO_FACE_PED = 0xE51B372C,
+SCRIPT_TASK_AIM_GUN_AT_COORD = 0x49BEF36E,
+SCRIPT_TASK_SHOOT_AT_COORD = 0xD90EF188,
+DEPRECATED_SCRIPT_TASK_DESTROY_VEHICLE = 0x0B45DACC,
+DEPRECATED_SCRIPT_TASK_DIVE_AND_GET_UP = 0x7BA620DD,
+SCRIPT_TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT = 0x153011FC,
+SCRIPT_TASK_EVERYONE_LEAVE_VEHICLE = 0xA569F146,
+DEPRECATED_SCRIPT_TASK_DIVE_FROM_ATTACHMENT_AND_GET_UP = 0xC09E33A2,
+SCRIPT_TASK_GOTO_ENTITY_OFFSET = 0x87E3E0A8,
+DEPRECATED_SCRIPT_TASK_GOTO_PED_OFFSET = 0xBF57AF1C,
+DEPRECATED_SCRIPT_TASK_SIT_DOWN = 0x190DC01B,
+SCRIPT_TASK_TURN_PED_TO_FACE_COORD = 0x574BB8F5,
+SCRIPT_TASK_DRIVE_POINT_ROUTE = 0xBAE13130,
+DEPRECATED_SCRIPT_TASK_GO_TO_COORD_WHILE_AIMING = 0x7DEC090B,
+SCRIPT_TASK_VEHICLE_TEMP_ACTION = 0x81B4D53A,
+SCRIPT_TASK_0x30A0DC39 = 0x30A0DC39,
+SCRIPT_TASK_VEHICLE_MISSION = 0xB41F1A34,
+DEPRECATED_SCRIPT_TASK_GO_TO_OBJECT = 0xE4A207BD,
+DEPRECATED_SCRIPT_TASK_WEAPON_ROLL = 0xB2A2BF11,
+DEPRECATED_SCRIPT_TASK_SIDEWAYS_DIVE = 0x2C1A612F,
+SCRIPT_TASK_DRIVE_BY = 0x7D711E7D,
+SCRIPT_TASK_USE_MOBILE_PHONE = 0x37D339A1,
+SCRIPT_TASK_WARP_PED_INTO_VEHICLE = 0xBC555B9D,
+DEPRECATED_SCRIPT_TASK_USE_ATTRACTOR = 0x63694D9D,
+SCRIPT_TASK_SHOOT_AT_ENTITY = 0x0A01F8B8,
+DEPRECATED_SCRIPT_TASK_SHOOT_AT_PED = 0x15F49B5F,
+SCRIPT_TASK_0x3A82EBC5 = 0x3A82EBC5,
+DEPRECATED_SCRIPT_TASK_DEAD = 0xF793E251,
+DEPRECATED_SCRIPT_TASK_GOTO_VEHICLE = 0x9A2943F2,
+SCRIPT_TASK_CLIMB = 0xB802FDCA,
+SCRIPT_TASK_PERFORM_SEQUENCE_FROM_PROGRESS = 0x5485FD94,
+SCRIPT_TASK_GOTO_ENTITY_AIMING = 0x967EA21C,
+DEPRECATED_SCRIPT_TASK_GOTO_PED_AIMING = 0x1A230A59,
+DEPRECATED_SCRIPT_TASK_JETPACK = 0x6EA2E79A,
+SCRIPT_TASK_SET_PED_DECISION_MAKER = 0x4E5B453C,
+SCRIPT_TASK_SET_PED_DEFENSIVE_AREA = 0x00A101C8,
+DEPRECATED_SCRIPT_TASK_HOLD_OBJECT = 0xC8BCA367,
+DEPRECATED_SCRIPT_TASK_COMPLEX_PICKUP_OBJECT = 0xA9D6E737,
+SCRIPT_TASK_PED_SLIDE_TO_COORD = 0x3E5094A7,
+DEPRECATED_SCRIPT_TASK_SWIM_TO_COORD = 0xABFCB97C,
+SCRIPT_TASK_DRIVE_POINT_ROUTE_ADVANCED = 0xEA6A323F,
+SCRIPT_TASK_PED_SLIDE_TO_COORD_AND_PLAY_ANIM = 0x8A0970F4,
+SCRIPT_TASK_0x22024D52 = 0x22024D52,
+DEPRECATED_SCRIPT_TASK_GREET_PARTNER = 0xAD4CD615,
+DEPRECATED_SCRIPT_TASK_DIE_NAMED_ANIM = 0xD73264BC,
+DEPRECATED_SCRIPT_TASK_FOLLOW_FOOTSTEPS = 0xA0A7761F,
+DEPRECATED_SCRIPT_TASK_WALK_ALONGSIDE_PED = 0xA92F7B36,
+DEPRECATED_SCRIPT_TASK_USE_CLOSEST_MAP_ATTRACTOR = 0xD0D5F297,
+DEPRECATED_SCRIPT_TASK_SET_IGNORE_WEAPON_RANGE_FLAG = 0xADC7E889,
+DEPRECATED_SCRIPT_TASK_HAND_GESTURE = 0x1F53A7DA,
+SCRIPT_TASK_PLAY_ANIM = 0x87B9A382,
+DEPRECATED_SCRIPT_TASK_PLAY_ANIM_ADVANCED = 0x8ECCBFB3,
+DEPRECATED_SCRIPT_SET_TASK_PLAY_ANIM_PLAYBACK_COORDS = 0xAF35BD9C,
+DEPRECATED_SCRIPT_TASK_PED_ARREST_PED = 0xB99876B9,
+SCRIPT_TASK_ARREST_PED = 0x52FF82C0,
+SCRIPT_TASK_COMBAT = 0x2E85A751,
+SCRIPT_TASK_COMBAT_TIMED = 0xF2E41A8A,
+SCRIPT_TASK_SEEK_COVER_FROM_POS = 0xA77A06C5,
+SCRIPT_TASK_SEEK_COVER_FROM_PED = 0x71E30BDC,
+SCRIPT_TASK_SEEK_COVER_TO_COVER_POINT = 0x99AFA8A3,
+DEPRECATED_SCRIPT_TASK_SET_COMBAT_DECISION_MAKER = 0x9B95A683,
+SCRIPT_TASK_TOGGLE_DUCK = 0x0F3B8554,
+DEPRECATED_SCRIPT_TASK_USE_SKIS = 0x97AE64AB,
+SCRIPT_TASK_GUARD_DEFENSIVE_AREA = 0xDF5F4BA7,
+SCRIPT_TASK_PICKUP_AND_CARRY_OBJECT = 0x89025025,
+DEPRECATED_SCRIPT_TASK_SEEK_COVER_TO_OBJECT = 0x5A2825BB,
+SCRIPT_TASK_SEEK_COVER_TO_COORDS = 0x6C01775C,
+DEPRECATED_SCRIPT_TASK_SIT_DOWN_PLAY_ANIM = 0xBA284891,
+SCRIPT_TASK_GUARD_ANGLED_DEFENSIVE_AREA = 0x84AEE7A0,
+SCRIPT_TASK_STAND_GUARD = 0xD88F2CDE,
+SCRIPT_TASK_CLIMB_LADDER = 0x66403353,
+DEPRECATED_SCRIPT_TASK_SIT_DOWN_ON_OBJECT = 0xFD790A1B,
+SCRIPT_TASK_GUARD_SPHERE_DEFENSIVE_AREA = 0x21E8D4E4,
+SCRIPT_TASK_START_SCENARIO_IN_PLACE = 0x3B3A458F,
+SCRIPT_TASK_START_SCENARIO_AT_POSITION = 0xBE86C566,
+SCRIPT_TASK_START_VEHICLE_SCENARIO = 0x86016E38,
+SCRIPT_TASK_PUT_PED_DIRECTLY_INTO_COVER = 0x8B2F140E,
+SCRIPT_TASK_PUT_PED_DIRECTLY_INTO_COVER_FROM_TARGET = 0x9DD414F5,
+SCRIPT_TASK_PUT_PED_DIRECTLY_INTO_MELEE = 0xFBBF6F4D,
+SCRIPT_TASK_GUARD_CURRENT_POSITION = 0x8CE49D34,
+SCRIPT_TASK_USE_NEAREST_SCENARIO_TO_POS = 0x623A5EFE,
+SCRIPT_TASK_USE_NEAREST_SCENARIO_CHAIN_TO_POS = 0x9BD19AE7,
+DEPRECATED_SCRIPT_TASK_LEAVE_GROUP = 0x9F5DBCE5,
+SCRIPT_TASK_PERFORM_SEQUENCE_LOCALLY = 0xE7FBAB4F,
+SCRIPT_TASK_COMBAT_HATED_TARGETS_IN_AREA = 0x42CC4F21,
+SCRIPT_TASK_COMBAT_HATED_TARGETS_AROUND_PED = 0xAA05B492,
+DEPRECATED_SCRIPT_TASK_HOLSTERING_WEAPON = 0x81FB0B11,
+DEPRECATED_SCRIPT_TASK_COMBAT_ROLL = 0x71F49E88,
+DEPRECATED_SCRIPT_TASK_MOBILE_CONVERSATION = 0xE3380A30,
+SCRIPT_TASK_SWAP_WEAPON = 0x2AB81462,
+SCRIPT_TASK_RELOAD_WEAPON = 0xC322ED6F,
+SCRIPT_TASK_0xAB4B293A = 0xAB4B293A,
+SCRIPT_TASK_COMBAT_HATED_TARGETS_AROUND_PED_TIMED = 0x2719C0D1,
+SCRIPT_TASK_GET_OFF_BOAT = 0x9A27A999,
+SCRIPT_TASK_FOLLOW_NAVMESH_TO_COORD_ADVANCED = 0x9C4FBCAC,
+SCRIPT_TASK_PATROL = 0xB550726C,
+SCRIPT_TASK_STAY_IN_COVER = 0xE1C16E99,
+SCRIPT_TASK_HANG_GLIDER = 0x00E1228C,
+SCRIPT_TASK_FOLLOW_TO_OFFSET_OF_ENTITY = 0x3EF867F4,
+SCRIPT_TASK_FOLLOW_TO_OFFSET_OF_PICKUP = 0x70AEF4E9,
+SCRIPT_TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD = 0x19CE5AFC,
+SCRIPT_TASK_GO_TO_COORD_WHILE_AIMING_AT_ENTITY = 0x972C6757,
+DEPRECATED_SCRIPT_TASK_GO_TO_COORD_WHILE_AIMING_AT_PED = 0x0A81CE80,
+DEPRECATED_SCRIPT_TASK_GO_TO_COORD_WHILE_AIMING_AT_VEHICLE = 0xE677F9FB,
+DEPRECATED_SCRIPT_TASK_GO_TO_COORD_WHILE_AIMING_AT_OBJECT = 0x89E45204,
+SCRIPT_TASK_GO_TO_ENTITY_WHILE_AIMING_AT_COORD = 0xBAEB517C,
+DEPRECATED_SCRIPT_TASK_GO_TO_PED_WHILE_AIMING_AT_COORD = 0xA2B07D24,
+SCRIPT_TASK_GO_TO_ENTITY_WHILE_AIMING_AT_ENTITY = 0xB80BFB24,
+DEPRECATED_SCRIPT_TASK_GO_TO_PED_WHILE_AIMING_AT_PED = 0x6C095462,
+DEPRECATED_SCRIPT_TASK_GO_TO_PED_WHILE_AIMING_AT_VEHICLE = 0x7BF24249,
+DEPRECATED_SCRIPT_TASK_GO_TO_PED_WHILE_AIMING_AT_OBJECT = 0xC93D7834,
+SCRIPT_TASK_USE_WALKIE_TALKIE = 0x29BABC64,
+SCRIPT_TASK_CHAT_TO_PED = 0x0FC239CD,
+DEPRECATED_SCRIPT_TASK_WARP_PED_ONTO_VEHICLE = 0xFCC0F996,
+SCRIPT_TASK_FIRE_FLARE = 0xDEB1C08F,
+SCRIPT_TASK_BIND_POSE = 0x4929CE40,
+SCRIPT_TASK_NM_ELECTROCUTE = 0x8944A9A0,
+SCRIPT_TASK_NM_HIGH_FALL = 0x015D63E3,
+SCRIPT_TASK_NM_DANGLE = 0x0B49EAEC,
+SCRIPT_TASK_NM_SLUNG_OVER_SHOULDER = 0xF0F9FFC0,
+SCRIPT_TASK_NM_STUMBLE = 0xBACF9837,
+SCRIPT_TASK_SKY_DIVE = 0x4B65F15C,
+SCRIPT_TASK_PARACHUTE = 0x76CA4A8E,
+SCRIPT_TASK_PARACHUTE_TO_TARGET = 0x4921B47A,
+SCRIPT_TASK_0x9B4FC7D8 = 0x9B4FC7D8,
+DEPRECATED_SCRIPT_TASK_GET_ON_SKI_LIFT = 0x536E59F9,
+SCRIPT_TASK_NM_ATTACH_TO_VEHICLE = 0x4847A94F,
+SCRIPT_TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS = 0x6F9C865C,
+SCRIPT_TASK_MOVE_NETWORK = 0x0494661C,
+SCRIPT_TASK_SYNCHRONIZED_SCENE = 0x6A67A5CC,
+SCRIPT_TASK_VEHICLE_SHOOT_AT_COORD = 0xAF18B824,
+SCRIPT_TASK_VEHICLE_SHOOT_AT_ENTITY = 0x20123810,
+SCRIPT_TASK_VEHICLE_PARK = 0xEFC8537E,
+SCRIPT_TASK_MOUNT_ANIMAL = 0x6F5F73AE,
+SCRIPT_TASK_DISMOUNT_ANIMAL = 0x1DE2A7BD,
+SCRIPT_TASK_THROW_PROJECTILE = 0xAD37BF03,
+SCRIPT_TASK_VEHICLE_AIM_AT_COORD = 0x00C59C52,
+SCRIPT_TASK_VEHICLE_AIM_AT_ENTITY = 0x6F30F4C1,
+SCRIPT_TASK_VEHICLE_AIM_USING_CAMERA = 0x3BDBC83C,
+SCRIPT_TASK_ADVANCE_TO_TARGET_IN_LINE = 0xCC312EC4,
+SCRIPT_TASK_RAPPEL_FROM_HELI = 0xEF8D6B40,
+SCRIPT_TASK_GENERAL_SWEEP = 0x491A782D,
+SCRIPT_TASK_DRAG_PED_TO_COORD = 0x87A3DFEA,
+SCRIPT_TASK_VEHICLE_FOLLOW_WAYPOINT_RECORDING = 0xF1F17AE7,
+SCRIPT_TASK_RAPPEL_DOWN_WALL = 0x8E29DEF2,
+SCRIPT_TASK_GO_TO_COORD_AND_AIM_AT_HATED_ENTITIES_NEAR_COORD = 0x290A02BC,
+SCRIPT_TASK_WANDER_IN_AREA = 0x370BCF53,
+SCRIPT_TASK_VEHICLE_GOTO_NAVMESH = 0xFBB43C4A,
+SCRIPT_TASK_FORCE_MOTION_STATE = 0x9E78AC1F,
+SCRIPT_TASK_IN_CUSTODY = 0x6D4411C9,
+SCRIPT_TASK_LOOK_AT_ENTITY = 0x08F5AF9D,
+SCRIPT_TASK_LOOK_AT_COORD = 0xCB842EEC,
+SCRIPT_TASK_VEHICLE_CHASE = 0x2288A57C,
+SCRIPT_TASK_STEALTH_KILL = 0x5014CC1A,
+SCRIPT_TASK_HELI_CHASE = 0x27369192,
+SCRIPT_TASK_PLANE_CHASE = 0x02DBA9BF,
+SCRIPT_TASK_PLANE_LAND = 0x043E4A56,
+SCRIPT_TASK_0x7F9814E9 = 0x7F9814E9,
+SCRIPT_TASK_0xEC685098 = 0xEC685098,
+SCRIPT_TASK_SHOCKING_EVENT_REACT = 0x498BABE3,
+SCRIPT_TASK_WRITHE = 0x8EC23E41,
+SCRIPT_TASK_EXIT_COVER = 0x4E961D82,
+SCRIPT_TASK_PLANT_BOMB = 0x8127FD1A,
+SCRIPT_TASK_INVESTIGATE_COORDS = 0x9C250C19,
+SCRIPT_TASK_WANDER_SPECIFIC = 0xD46F7254,
+SCRIPT_TASK_SHARK_CIRCLE_COORD = 0x48EED267,
+SCRIPT_TASK_SHARK_CIRCLE_PED = 0xFD0B5826,
+SCRIPT_TASK_0x29269FF1 = 0x29269FF1,
+SCRIPT_TASK_REACT_AND_FLEE_PED = 0x7DEDF098,
+SCRIPT_TASK_GO_TO_COORD_ANY_MEANS_EXTRA_PARAMS = 0x45B5A146,
+SCRIPT_TASK_USE_NEAREST_TRAIN_SCENARIO_TO_POS = 0xA5806868,
+SCRIPT_TASK_JETPACK = 0x828EBA07,
+SCRIPT_TASK_GO_TO_COORD_ANY_MEANS_EXTRA_PARAMS_WITH_CRUISE_SPEED = 0x4DE5C290,
+SCRIPT_TASK_AGITATED_ACTION = 0x548CB4B4,
+SCRIPT_TASK_WARP_PED_DIRECTLY_INTO_COVER = 0x0E802924
+};)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetActiveVehicleMissionType(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::TASK::GET_ACTIVE_VEHICLE_MISSION_TYPE), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(https://alloc8or.re/gta5/doc/enums/eVehicleMissionType.txt)ASDOC");
+			.Desc(R"ASDOC(See TASK_VEHICLE_MISSION)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskLeaveAnyVehicle(int ped, int delayTime, int flags)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_LEAVE_ANY_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Flags are the same flags used in TASK_LEAVE_VEHICLE)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskAimGunScripted(int ped, Hash scriptTask, bool disableBlockingClip, bool instantBlendToAim)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_AIM_GUN_SCRIPTED), AngelScript::asCALL_CDECL);
@@ -16465,7 +17618,33 @@ ESEEK_KEEP_TO_PAVEMENTS = 0x02
 Seems to be this:
 Works on NPCs, but overrides their current task. If inside a task sequence (and not being the last task), "time" will work, otherwise the task will be performed forever until tasked with something else)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskVehicleMission(int driver, int vehicle, int vehicleTarget, int missionType, float cruiseSpeed, int drivingStyle, float targetReached, float straightLineDistance, bool DriveAgainstTraffic)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_VEHICLE_MISSION), AngelScript::asCALL_CDECL)
-			.Desc(R"ASDOC(missionType: https://alloc8or.re/gta5/doc/enums/eVehicleMissionType.txt)ASDOC");
+			.Desc(R"ASDOC(enum VehMissionType
+{
+MISSION_NONE,
+MISSION_CRUISE,
+MISSION_RAM,
+MISSION_BLOCK,
+MISSION_GOTO,
+MISSION_STOP,
+MISSION_ATTACK,
+MISSION_FOLLOW,
+MISSION_FLEE,
+MISSION_CIRCLE,
+MISSION_ESCORT_LEFT,
+MISSION_ESCORT_RIGHT,
+MISSION_ESCORT_REAR,
+MISSION_ESCORT_FRONT,
+MISSION_GOTO_RACING,
+MISSION_FOLLOW_RECORDING,
+MISSION_POLICE_BEHAVIOUR,
+MISSION_PARK_PERPENDICULAR,
+MISSION_PARK_PARALLEL,
+MISSION_LAND,
+MISSION_LAND_AND_WAIT,
+MISSION_CRASH,
+MISSION_PULL_OVER,
+MISSION_PROTECT,
+};)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskVehicleMissionPedTarget(int ped, int vehicle, int pedTarget, int missionType, float maxSpeed, int drivingStyle, float minDistance, float straightLineDistance, bool DriveAgainstTraffic)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_VEHICLE_MISSION_PED_TARGET), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(See TASK_VEHICLE_MISSION)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskVehicleMissionCoorsTarget(int ped, int vehicle, float x, float y, float z, int mission, float cruiseSpeed, int drivingStyle, float targetReached, float straightLineDistance, bool DriveAgainstTraffic)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_VEHICLE_MISSION_COORS_TARGET), AngelScript::asCALL_CDECL)
