@@ -4,7 +4,9 @@
 
 #ifndef GTA_BASE_DRAW_UTIL_AE07DB6C33FB43E1B6FE62992EE1D737_HPP
 #define GTA_BASE_DRAW_UTIL_AE07DB6C33FB43E1B6FE62992EE1D737_HPP
-#include <imgui/imgui.h>
+#include <cstdint>
+#include <imgui.h>
+#include <string>
 
 namespace base::menu::render::draw_helpers {
   ImVec2 GetSize(ImVec2 pos, ImVec2 size);
@@ -23,7 +25,23 @@ namespace base::menu::render::draw_helpers {
 
   ImVec2 CalcTextSizeRaw(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
   ImVec2 CalcTextSize(const ImFont* font, float font_size, const std::string& text, float wrap_width = 0.0f);
-  
+
+  /// Where to draw content and how big, in the same space as the box it was fitted into.
+  struct FittedRect {
+    ImVec2 position;
+    ImVec2 size;
+  };
+
+  /**
+   * Scales content to fill as much of a box as it can without changing shape, and centres it.
+   *
+   * @param resolution Screen size in pixels. The box and the result are in [0, 1] screen space,
+   *                   where the two axes hold different numbers of pixels, so an aspect ratio can
+   *                   only be compared once both are measured in pixels.
+   * @returns A zero size if the box, the content or the resolution has no extent to fit into.
+   */
+  FittedRect FitIntoBox(ImVec2 box_position, ImVec2 box_size, ImVec2 content_size, ImVec2 resolution);
+
   std::uint32_t WordWrap(float font_size, std::string& str, float max_x, std::size_t max_lines);
 
   ImDrawList* GetDrawList();

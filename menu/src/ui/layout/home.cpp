@@ -24,6 +24,9 @@ namespace base::menu::ui::layout {
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kVEHICLE));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kAS));
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSETTINGS));
+
+      // Last, so that what the menu put here itself stays above what a script did.
+      AddScriptRootSubmenus(sub);
     });
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kMAIN_MENU, std::move(home_submenu));
 

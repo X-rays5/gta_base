@@ -6,8 +6,8 @@
 #define THEME_HPP_05125856
 #include <base-common/util/ranged_value.hpp>
 #include <glaze/core/meta.hpp>
-#include <imgui/imgui.h>
 #include "ui_size.hpp"
+#include "header/header_type.hpp"
 
 namespace base::menu::ui {
   struct RgbColor {
@@ -25,7 +25,7 @@ namespace base::menu::ui {
       std::uint32_t value;
     };
 
-    constexpr operator ImU32() const {
+    constexpr operator std::uint32_t() const {
       return value;
     }
   };
@@ -46,6 +46,20 @@ namespace base::menu::ui {
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> x_position;
     common::util::RangedValue<std::float_t, 0.005F, 1.0F> y_position;
     common::util::RangedValue<std::float_t, 0.2F, 2.0F> menu_ui_scale = 1.0f;
+    std::atomic<bool> render_header = true;
+    /**
+     * Which header the menu draws - see MakeHeader, which is where the type is turned into one. The
+     * type is the choice, so a header of that type is drawn however little it ends up drawing, rather
+     * than another type being put in its place.
+     */
+    HeaderType header_type = HeaderType::kText;
+    /**
+     * The image the image header draws, as a path. Empty, or a path that does not load, leaves that
+     * header with nothing to draw. Resolved against the images directory unless it is absolute.
+     * Belongs to the image header and is not read by any other.
+     */
+    std::string header_image;
+    UiSize header_height = UiSize(0.05f);
     const RgbColor seperator_color = RgbColor(74, 144, 226);
     const RgbColor background_color = RgbColor(30, 30, 30);
     Text text_props;
@@ -75,6 +89,7 @@ namespace base::menu::ui {
     const UiSize menu_item_height = UiSize(0.025f);
     const UiSize menu_width = UiSize(0.16f);
     const std::uint32_t max_options_drawn = 12;
+    const std::size_t max_description_lines = 3;
     const RgbColor selector_color = RgbColor(47, 47, 47);
   };
 }

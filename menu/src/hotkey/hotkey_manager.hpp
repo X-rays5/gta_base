@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <optional>
 #include <ankerl/unordered_dense.h>
 #include "../util/key_input/key_event_listener.hpp"
 
@@ -54,6 +55,16 @@ namespace base::menu::hotkey {
     void RemoveHotkey(const Hotkey& hotkey);
 
     std::vector<std::pair<Hotkey, std::shared_ptr<options::BaseOption>>> GetAllHotkeys() const;
+
+    /**
+     * The key `option_name` is currently bound to, or nothing when it is bound to none.
+     *
+     * The map is keyed the other way round, so this is a scan of it. That is deliberate rather than a
+     * second map kept in step: the only callers are the ones drawing a frame, and the scan is over one
+     * entry per key the player has actually bound, which is a handful at worst - a second map would be
+     * state to keep consistent for a lookup nobody does often enough to notice.
+     */
+    [[nodiscard]] std::optional<Hotkey> GetHotkeyForOption(const std::string& option_name) const;
 
     virtual void KeyDown(std::uint32_t vk_key, ModifierKey modifier) override;
     virtual void KeyUp(std::uint32_t vk_key, ModifierKey modifier) override;

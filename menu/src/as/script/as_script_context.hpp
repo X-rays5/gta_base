@@ -54,8 +54,15 @@ namespace base::menu::as::script {
     /**
      * Prepare `func` and either run it to completion or start it as a coroutine. A coroutine does not
      * execute until Tick() is called and is never restarted once it has finished.
+     *
+     * `object_argument` is the first parameter of `func` when there is one to hand over, and null when
+     * the callee takes none. It is the *address of the variable holding the handle* rather than the
+     * handle: a parameter declared as a reference receives where the value is, which is what the engine
+     * itself pushes for one. Nothing here counts the reference either way - the caller owns the handle
+     * it put in that variable and is the one that releases it, on every path including a callee that
+     * throws - so a callee cannot be handed one this class would have to know how to give back.
      */
-    void Run(AngelScript::asIScriptFunction* func, bool run_as_coroutine = false);
+    void Run(AngelScript::asIScriptFunction* func, bool run_as_coroutine = false, void* object_argument = nullptr);
 
     /**
      * Advance a coroutine started by Run. Returns false once it has finished, which includes a

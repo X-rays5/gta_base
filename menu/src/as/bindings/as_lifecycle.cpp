@@ -20,9 +20,12 @@
 // The suspension is what makes the unload take effect immediately rather than at the end of the
 // script's turn. Suspend() only flags the context; the VM honours it when this native returns, so
 // Execute() comes back instead of running whatever followed the call, and the manager is free to let
-// go of the script. GameInit runs to completion rather than as a coroutine - it has no coroutine to
-// park - so there the unload is carried by the ScriptManager's unload flag alone, which stops the
-// GameTick that would otherwise have started off the back of it.
+// go of the script.
+//
+// Which run it reaches depends on who is calling: GameInit, GameTick and init() are all coroutines, so
+// in any of them there is a context to suspend and the script stops where it stands, while a page's UI
+// callback is a plain call with no coroutine of its own to park and runs on to its end. Either way the
+// request itself is the manager's, and that is what stops the script being resumed again.
 namespace base::menu::as::bindings::lifecycle {
   namespace {
     using script::ScriptContext;
@@ -49,9 +52,9 @@ namespace base::menu::as::bindings::lifecycle {
       }
 
       if (const auto status = script::kAS_SCRIPT_MANAGER->UnloadScript(name); status.has_error()) {
-        LOG_ERROR("[AS] Script '{}' failed to unload itself: {}", name, status.error());
+        LOG_INFO("[AS] Script '{}' failed to unload itself: {}", name, status.error());
       } else {
-        LOG_DEBUG("[AS] Script '{}' unloaded itself", name);
+        LOG_INFO("[AS] Script '{}' unloaded itself", name);
       }
     }
   }

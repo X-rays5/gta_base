@@ -11,6 +11,7 @@ namespace base::menu::options {
     void RepairVehicle() {
       script::kGAME_TASK_EXECUTOR->QueueTask([] {
         natives::VEHICLE::SET_VEHICLE_FIXED(natives::PED::GET_VEHICLE_PED_IS_IN(natives::PLAYER::PLAYER_PED_ID(), false));
+        natives::VEHICLE::SET_VEHICLE_FIXED(natives::PED::GET_VEHICLE_PED_IS_IN(natives::PLAYER::PLAYER_PED_ID(), false));
       });
     }
   }

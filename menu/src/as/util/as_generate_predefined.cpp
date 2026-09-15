@@ -97,16 +97,33 @@ namespace base::menu::as::util {
         }
 
         stream << "{\n";
-        bool behavioursDocumented = false;
+        // A constructor, a destructor and a factory all reflect as "f" - the engine names every one of
+        // them after the type rather than after a name of their own - and docs are keyed by name rather
+        // than by signature, so the first of them carries the block for the whole set.
+        bool madeDocumented = false;
+
+        // The factories come first, and they are what a reference type is made by: the engine keeps them
+        // out of the behaviour list ("Count the number of behaviours (except factory functions)"), so a
+        // type that is only ever made through one - gui::Toggle, gui::Submenu, Option, every type this
+        // API is written in - has no other declaration of how it is made in this file, and the
+        // documentation written on its factory matched nothing here and was dropped with it.
+        for (std::uint32_t j = 0; j < t->GetFactoryCount(); ++j) {
+          const auto f = t->GetFactoryByIndex(j);
+          if (not f) continue;
+          if (not madeDocumented) {
+            madeDocumented = true;
+            printDoc(stream, std::format("{}::f", typeKey), consumed, "\t");
+          }
+          stream << std::format("\t{};\n", f->GetDeclaration(false, true, true));
+        }
+
         for (std::uint32_t j = 0; j < t->GetBehaviourCount(); ++j) {
           AngelScript::asEBehaviours behaviours;
           const auto f = t->GetBehaviourByIndex(j, &behaviours);
           if (behaviours == AngelScript::asBEHAVE_CONSTRUCT
             || behaviours == AngelScript::asBEHAVE_DESTRUCT) {
-            // Every constructor and destructor reflects as "f", and docs are keyed by name rather than
-            // by signature, so the first one carries the block for the whole set.
-            if (not behavioursDocumented) {
-              behavioursDocumented = true;
+            if (not madeDocumented) {
+              madeDocumented = true;
               printDoc(stream, std::format("{}::f", typeKey), consumed, "\t");
             }
             stream << std::format("\t{};\n", f->GetDeclaration(false, true, true));

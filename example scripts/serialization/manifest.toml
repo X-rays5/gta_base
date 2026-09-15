@@ -1,0 +1,3 @@
+name = "Example Serialization"
+description = "An example of keeping a script's own data in a document and writing it to disk."
+main_file = "main.as"

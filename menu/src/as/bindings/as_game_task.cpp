@@ -148,15 +148,18 @@ namespace base::menu::as::bindings::game_task {
     util::RegisterGlobalFunction(engine, "void queue_general_task(TaskFunc@+ fn)",
                                  AngelScript::asFUNCTION(QueueGeneralTask), AngelScript::asCALL_CDECL)
       .Desc("Queues `fn` to run on the general thread, which is neither the game's nor the menu's. It "
-            "is a thread of its own with nothing else to do, so a task that waits costs nothing at all "
-            "while it waits, and it is where work that is not the game's business belongs: a wait, a "
-            "load, a computation, anything that would cost frames on the game thread. It starts on that "
-            "thread's next pass - immediately, if the thread is idle and has to be woken for it - and "
-            "from then on it is ticked once per pass, which is what thread::yield, thread::sleep and "
-            "thread::suspend make it wait for. It runs the same engine as the script's own GameTick, so "
-            "it must not touch the script's handles, globals or the game itself: those belong to the "
-            "game thread, and neither the engine nor the object types registered here are safe to use "
-            "from two threads at once. A task cannot outlive the script that queued it: unloading the "
+            "is a thread of its own, so a task that waits costs nothing at all while it waits, and it is "
+            "where work that is not the game's business belongs: a wait, a load, a computation, anything "
+            "that would cost frames on the game thread. It starts on that thread's next pass - "
+            "immediately, if the thread is idle and has to be woken for it - and from then on it is "
+            "ticked once per pass, which is what thread::yield, thread::sleep and thread::suspend make "
+            "it wait for. What runs there is concurrent with the script's own GameTick, which is still "
+            "being ticked by the game all the while, and neither the engine nor the object types "
+            "registered here are safe to use from two threads at once - so a task must not touch the "
+            "script's handles, its globals or the game itself, and must reach the game through "
+            "thread::queue_game_task instead. The one thing that runs on this thread alongside the "
+            "script's own is a script's init(), which is there precisely because nothing else of the "
+            "script has started yet. A task cannot outlive the script that queued it: unloading the "
             "script stops it at the next pass.")
       .Param("fn", "The function to run, passed as thread::queue_general_task(@myFunction).")
       .Returns("Nothing. The task has no handle to wait on; a script that needs to know when one "

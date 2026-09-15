@@ -34,6 +34,15 @@ namespace base::menu::render {
       return last_time_;
     }
 
+    /**
+     * @note For GPU resources that outlive a frame - an image texture, say - which need the
+     *       device and descriptor heap directly. Only touch it from the render thread, and only
+     *       while this renderer is alive.
+     */
+    [[nodiscard]] d3d12::Context& GetD3D12Context() {
+      return d3d12_context_;
+    }
+
     [[nodiscard]] ImVec2 GetResolution() const {
       common::concurrency::ScopedSpinlock lock(window_size_lock_);
       return {static_cast<float>(window_width_), static_cast<float>(window_height_)};

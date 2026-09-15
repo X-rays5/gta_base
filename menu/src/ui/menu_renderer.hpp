@@ -5,7 +5,7 @@
 #ifndef MENU_RENDERER_HPP_05191653
 #define MENU_RENDERER_HPP_05191653
 #include <atomic>
-#include <stack>
+#include <deque>
 #include <ankerl/unordered_dense.h>
 #include <enchantum/enchantum.hpp>
 #include "submenu.hpp"
@@ -14,6 +14,7 @@
 #include "../util/key_input/key_state.hpp"
 #include "../util/input/mouse_input_listener.hpp"
 #include "components/label_component.hpp"
+#include "header/base_header.hpp"
 
 namespace base::menu::render {
   class DrawQueueBuffer;
@@ -28,15 +29,19 @@ namespace base::menu::ui {
     void RenderMenu(render::DrawQueueBuffer* draw_queue);
 
     void AddSubmenu(const std::string& id, Submenu&& submenu) {
-      common::concurrency::ScopedSpinlock lock(submenus_lock_);
-      submenus_.emplace(id, std::make_shared<Submenu>(std::move(submenu)));
-      if (submenu_stack_.empty()) {
-        submenu_stack_.push(id);
-        // The first submenu registered becomes the root of the stack, and the root is what the
-        // user is looking at from the moment the menu exists: it has been opened, not merely
-        // stored. A later AddSubmenu changes nothing anybody can see, so it notifies nobody.
-        NotifyCurrentSubmenuOpened();
+      std::shared_ptr<Submenu> opened;
+      {
+        common::concurrency::ScopedSpinlock lock(submenus_lock_);
+        submenus_.emplace(id, std::make_shared<Submenu>(std::move(submenu)));
+        if (submenu_stack_.empty()) {
+          submenu_stack_.push_back(id);
+          // The first submenu registered becomes the root of the stack, and the root is what the
+          // user is looking at from the moment the menu exists: it has been opened, not merely
+          // stored. A later AddSubmenu changes nothing anybody can see, so it notifies nobody.
+          opened = CurrentSubmenuLocked();
+        }
       }
+      OpenSubmenu(opened);
     }
 
     void AddSubmenu(const SubmenuIDs id, Submenu&& submenu) {
@@ -49,23 +54,27 @@ namespace base::menu::ui {
         return fallback_submenu_;
       }
 
-      const auto it = submenus_.find(submenu_stack_.top());
+      const auto it = submenus_.find(submenu_stack_.back());
       return (it != submenus_.end() && it->second) ? it->second : fallback_submenu_;
     }
 
     Status PushSubmenu(const std::string& id) {
-      common::concurrency::ScopedSpinlock lock(submenus_lock_);
-      const auto it = submenus_.find(id);
-      if (it == submenus_.end()) {
-        return MakeFailure<ResultCode::kNOT_FOUND>("Submenu not found: {}", id);
+      std::shared_ptr<Submenu> opened;
+      {
+        common::concurrency::ScopedSpinlock lock(submenus_lock_);
+        const auto it = submenus_.find(id);
+        if (it == submenus_.end()) {
+          return MakeFailure<ResultCode::kNOT_FOUND>("Submenu not found: {}", id);
+        }
+
+        submenu_stack_.push_back(id);
+
+        // The submenu is the current one from here on, which is what its open callback is for. The
+        // stack is already updated by the time it runs, so a callback that navigates further sees
+        // itself as current.
+        opened = CurrentSubmenuLocked();
       }
-
-      submenu_stack_.push(id);
-
-      // The submenu is the current one from here on, which is what its open callback is for. The
-      // stack is already updated by the time it runs, so a callback that navigates further sees
-      // itself as current.
-      NotifyCurrentSubmenuOpened();
+      OpenSubmenu(opened);
       return {};
     }
 
@@ -75,16 +84,52 @@ namespace base::menu::ui {
     }
 
     void PopSubmenu() {
-      common::concurrency::ScopedSpinlock lock(submenus_lock_);
-      if (!IsOnHomeSubmenu()) {
-        submenu_stack_.pop();
-        // Going back is also arriving: the submenu underneath is the one being looked at now, so
-        // its open callback runs here exactly as it did on the way in. Closing the menu instead
-        // leaves the root current, which is not a change of submenu and so not an opening.
-        NotifyCurrentSubmenuOpened();
-      } else {
-        CloseMenu();
+      std::shared_ptr<Submenu> opened;
+      {
+        common::concurrency::ScopedSpinlock lock(submenus_lock_);
+        if (!IsOnHomeSubmenu()) {
+          submenu_stack_.pop_back();
+          // Going back is also arriving: the submenu underneath is the one being looked at now, so
+          // its open callback runs here exactly as it did on the way in. Closing the menu instead
+          // leaves the root current, which is not a change of submenu and so not an opening.
+          opened = CurrentSubmenuLocked();
+        } else {
+          CloseMenu();
+        }
       }
+      OpenSubmenu(opened);
+    }
+
+    /**
+     * Forgets a submenu entirely: it is erased from the map, and every entry of the stack that names
+     * it is dropped, so a page removed while the player is standing on it lands them on the one
+     * underneath rather than on an id nothing answers to.
+     *
+     * The renderer's keys are its own - a script's page is keyed by the id its registry handed out -
+     * so this is what a script's cleanup calls, and what a test calls to put the renderer back.
+     * Returns whether there was such a submenu at all.
+     */
+    bool RemoveSubmenu(const std::string& id) {
+      std::shared_ptr<Submenu> opened;
+      {
+        common::concurrency::ScopedSpinlock lock(submenus_lock_);
+        if (submenus_.erase(id) == 0) {
+          return false;
+        }
+
+        const bool was_top = !submenu_stack_.empty() && submenu_stack_.back() == id;
+        // The whole stack, not just its top: a page can be removed from the middle of it, which is
+        // why the stack is a deque rather than a stack.
+        std::erase(submenu_stack_, id);
+
+        // Only a change of what is on top is a change of what the player is looking at; a page that
+        // was merely somewhere further down the stack left the view alone.
+        if (was_top) {
+          opened = CurrentSubmenuLocked();
+        }
+      }
+      OpenSubmenu(opened);
+      return true;
     }
 
     bool IsMenuOpened() const {
@@ -107,33 +152,62 @@ namespace base::menu::ui {
 
   private:
     /**
-     * Tells the submenu on top of the stack that it is the current one.
-     *
-     * Every path that changes what the player is looking at ends here - the first AddSubmenu that
-     * gives the stack a root, a PushSubmenu onto it, a PopSubmenu back off it - so that "opened"
-     * means one thing rather than three. Call with submenus_lock_ held.
+     * The submenu on top of the stack, or null when the stack is empty or names one that is not
+     * registered. Call with submenus_lock_ held.
      */
-    void NotifyCurrentSubmenuOpened() {
+    std::shared_ptr<Submenu> CurrentSubmenuLocked() const {
       if (submenu_stack_.empty()) {
-        return;
+        return nullptr;
       }
 
-      const auto it = submenus_.find(submenu_stack_.top());
-      if (it != submenus_.end() && it->second) {
-        it->second->OnOpened();
+      const auto it = submenus_.find(submenu_stack_.back());
+      return (it != submenus_.end() && it->second) ? it->second : nullptr;
+    }
+
+    /**
+     * Tells a submenu it is the one being looked at.
+     *
+     * Every path that changes that - the first AddSubmenu that gives the stack a root, a PushSubmenu
+     * onto it, a PopSubmenu back off it, a RemoveSubmenu of the page being stood on - ends here, so
+     * that "opened" means one thing rather than four.
+     *
+     * Called with submenus_lock_ **released**, which is the point of it taking the pointer rather
+     * than looking one up: OnOpened() takes the submenu's own spinlock, and the render path holds
+     * that spinlock while it takes submenus_lock_, so running it under the lock would cross the two
+     * orders and can deadlock. The caller keeps the submenu alive across the call by holding the
+     * shared_ptr it passes here.
+     */
+    static void OpenSubmenu(const std::shared_ptr<Submenu>& submenu) {
+      if (submenu) {
+        submenu->OnOpened();
       }
     }
 
   private:
+    /// Rebuilds the header the theme asks for - see MakeHeader.
+    void RebuildHeader();
+
+    /// Rebuilds only if the theme asks for a header other than the one that was built.
+    void SyncHeader();
+
     MenuRenderProperties ui_props_{};
     util::KeyState menu_ui_key_state_ = {{VK_F4, VK_BACK}, ui_props_.menu_ui_key_state_cooldown};
     util::KeyState menu_ui_navigation = {{VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT, VK_RETURN}, ui_props_.menu_ui_navigation_key_state_cooldown};
     util::KeyState option_interaction = {{VK_F11, VK_F12}, ui_props_.option_interaction_key_state_cooldown};
     ankerl::unordered_dense::map<std::string, std::shared_ptr<Submenu>> submenus_;
-    std::stack<std::string> submenu_stack_;
-    std::size_t script_id_ = 0;
+    /**
+     * What the player is looking at, deepest last. A deque rather than a stack because a submenu can
+     * be dropped from the middle of it - see RemoveSubmenu - and not only off the top.
+     */
+    std::deque<std::string> submenu_stack_;
 
     common::concurrency::RecursiveSpinlock submenus_lock_;
+
+    std::unique_ptr<BaseHeader> header_;
+    /// The theme values header_ was built from, so that the next frame notices them changing - whether
+    /// the player chose another type or image, or loaded another theme over this one.
+    HeaderType header_type_ = HeaderType::kText;
+    std::string header_image_path_;
 
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> selector_animation_;
     std::unique_ptr<base::render::animate::Lerp<std::float_t>> fade_animation_;

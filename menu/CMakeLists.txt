@@ -34,6 +34,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/localization/default.cpp
         src/util/glaze/glaze_meta.cpp
         src/util/glaze/glaze_meta.hpp
+        src/util/glaze/generic_tree.cpp
+        src/util/glaze/generic_tree.hpp
         src/util/type_traits.hpp
         src/logging/plh_logger.hpp
         src/memory/signature/pattern.cpp
@@ -47,6 +49,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/notification/notification.hpp
         src/ui/notification/manager.cpp
         src/ui/notification/manager.hpp
+        src/ui/text_input/popup.cpp
+        src/ui/text_input/popup.hpp
         src/render/animate.hpp
         src/util/profile.hpp
         src/util/common.cpp
@@ -57,6 +61,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/render/d3d12/heap/descriptor_heap_allocator.hpp
         src/render/d3d12/context.hpp
         src/render/d3d12/context.cpp
+        src/render/d3d12/texture.hpp
+        src/render/d3d12/texture.cpp
         src/natives/invoker.cpp
         src/natives/invoker.hpp
         src/natives/natives_gen9.cpp
@@ -112,6 +118,8 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/ui/layout/vehicle/vehicle.hpp
         src/options/base_command.hpp
         src/options/base_option.hpp
+        src/options/command_line.cpp
+        src/options/command_line.hpp
         src/options/opt/self/godmode.hpp
         src/options/opt/self/godmode.cpp
         src/options/option_registry.cpp
@@ -167,20 +175,50 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/as/bindings/as_game_task.hpp
         src/as/bindings/as_lifecycle.cpp
         src/as/bindings/as_lifecycle.hpp
+        src/as/bindings/as_option.cpp
+        src/as/bindings/as_option.hpp
+        src/as/bindings/as_value.cpp
+        src/as/bindings/as_value.hpp
+        src/as/bindings/as_gui.cpp
+        src/as/bindings/as_gui.hpp
+        src/as/bindings/as_notify.cpp
+        src/as/bindings/as_notify.hpp
         src/as/script/as_script.cpp
         src/as/script/as_script.hpp
         src/as/script/as_script_manifest.cpp
         src/as/script/as_script_manifest.hpp
         src/ui/layout/script/script_sub.cpp
         src/ui/layout/script/script_sub.hpp
+        src/ui/script_gui/submenu_id.cpp
+        src/ui/script_gui/submenu_id.hpp
+        src/ui/script_gui/script_submenu.cpp
+        src/ui/script_gui/script_submenu.hpp
+        src/ui/script_gui/script_submenu_registry.cpp
+        src/ui/script_gui/script_submenu_registry.hpp
         src/as/script/as_script_manager.cpp
         src/as/script/as_script_manager.hpp
         src/as/util/as_exception.cpp
         src/as/util/as_exception.hpp
         src/as/script/as_script_context.cpp
         src/as/script/as_script_context.hpp
+        src/ui/header/base_header.hpp
+        src/ui/header/text_header.hpp
+        src/ui/header/image_header.hpp
+        src/ui/header/header_image.cpp
+        src/ui/header/header_image.hpp
+        src/ui/header/header_type.cpp
+        src/ui/header/header_type.hpp
+        src/render/draw/image/base_image.cpp
+        src/render/draw/image/base_image.hpp
+        src/render/draw/image/static_image.cpp
+        src/render/draw/image/static_image.hpp
+        src/render/draw/image/animated_image.cpp
+        src/render/draw/image/animated_image.hpp
+        src/render/draw/image/image_loader.cpp
+        src/render/draw/image/image_loader.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
+
 
 # Main module (DLL) that uses the core library
 add_library(${PROJECT_NAME} MODULE src/dllmain.cpp)
@@ -195,8 +233,8 @@ include(vendor.cmake)
 # Configure core library
 target_compile_definitions(${PROJECT_NAME}_core PUBLIC BASE_SUBCOMPONENT="${PROJECT_NAME}")
 set_property(TARGET ${PROJECT_NAME}_core PROPERTY COMPILE_WARNING_AS_ERROR ON)
-target_compile_options(${PROJECT_NAME}_core PRIVATE /bigobj /wd4189 /wd4068 /wd4324 /wd4100 /diagnostics:caret /W4 /permissive- /WX)
-target_compile_definitions(${PROJECT_NAME}_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
+target_compile_options(${PROJECT_NAME}_core PUBLIC /bigobj /wd4189 /wd4068 /wd4324 /wd4100 /diagnostics:caret /W4 /permissive- /WX)
+target_compile_definitions(${PROJECT_NAME}_core PUBLIC WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS IMGUI_ENABLE_FREETYPE)
 target_precompile_headers(${PROJECT_NAME}_core PRIVATE src/pch.hpp)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::common)
 target_link_libraries(${PROJECT_NAME}_core PUBLIC base::imfont)
@@ -208,12 +246,10 @@ target_link_libraries(${PROJECT_NAME}_core PUBLIC base::asjit)
 # Configure main module
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/menu_bin")
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_WARNING_AS_ERROR ON)
-target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /wd4068 /diagnostics:caret /W4 /permissive- /WX)
-target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
 # The precompiled header for the core target was built with AS_USE_NAMESPACE defined.
 # Ensure the module target defines the same macro so the reused PCH is compatible
 # and avoids C4651 (PCH macro mismatch) when compiling `dllmain.cpp`.
-target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE AS_USE_STLNAMES=1)
+target_compile_definitions(${PROJECT_NAME} PRIVATE AS_USE_NAMESPACE AS_USE_STLNAMES=1 IMGUI_ENABLE_FREETYPE)
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM ${PROJECT_NAME}_core)
 
 add_subdirectory(test)

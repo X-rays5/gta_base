@@ -22,6 +22,8 @@
 #include "util/key_input/key_event_listener.hpp"
 #include "hotkey/hotkey_manager.hpp"
 #include "ui/notification/manager.hpp"
+#include "ui/text_input/popup.hpp"
+#include "ui/script_gui/script_submenu_registry.hpp"
 #include "as/script/as_script_manager.hpp"
 
 std::atomic_bool base::menu::globals::kRUNNING = true;
@@ -43,6 +45,8 @@ namespace base::menu {
     std::unique_ptr<render::Renderer> render_inst;
     std::unique_ptr<ui::MenuRenderer> menu_renderer_inst;
     std::unique_ptr<ui::notification::Manager> notification_manager_inst;
+    std::unique_ptr<ui::text_input::Popup> text_input_popup_inst;
+    std::unique_ptr<ui::script_gui::ScriptSubmenuRegistry> script_submenus_inst;
     std::unique_ptr<as::script::ScriptManager> as_script_manager_inst;
 
     void SetupStartupShutdownSequence(util::StartupShutdownHandler* handler) {
@@ -61,6 +65,11 @@ namespace base::menu {
       render::Renderer::RendererLifeTime(render_inst, handler);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "MenuRenderer", menu_renderer_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "NotificationManager", notification_manager_inst);
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "TextInputPopup", text_input_popup_inst);
+      // Before the AngelScript manager, so that it is torn down after it: a page a script made is
+      // taken away by that script's own destruction, which means the registry outlives every script
+      // that ever registered one. Below the renderer, which every removal reaches.
+      GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "ScriptSubmenus", script_submenus_inst);
       GTA_BASE_DEFAULT_START_DOWN_HANDLER(handler, "AngelScriptManager", as_script_manager_inst);
     }
   }

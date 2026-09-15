@@ -3,13 +3,13 @@
 //
 
 #include <future>
+#include <imgui.h>
 #include <base-common/fs/vfs.hpp>
 #include <base-common/logging/logger.hpp>
-#include <imgui/imgui.h>
+#include <SDL3/SDL_timer.h>
 #include "inject.hpp"
 #include "settings.hpp"
 #include "window.hpp"
-#include <SDL3/SDL_timer.h>
 
 std::atomic_bool kRUNNING = true;
 std::atomic_bool kGAME_RUNNING = false;

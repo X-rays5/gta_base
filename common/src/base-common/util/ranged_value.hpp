@@ -10,7 +10,7 @@
 #include <glaze/glaze.hpp>
 
 namespace base::common::util {
-  template <typename T, T min_val = std::numeric_limits<T>::lowest(), T max_val = std::numeric_limits<T>::max()> requires std::is_arithmetic_v<T>
+  template <typename T, T min_val = std::numeric_limits<T>::lowest(), T max_val = (std::numeric_limits<T>::max)()> requires std::is_arithmetic_v<T>
   class RangedValue {
   public:
     RangedValue() : value_(min_val) {}

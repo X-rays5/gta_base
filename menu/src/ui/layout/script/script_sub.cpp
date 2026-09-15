@@ -6,6 +6,7 @@
 
 #include "../../menu_renderer.hpp"
 #include "../../components/components.hpp"
+#include "../../script_gui/script_submenu_registry.hpp"
 #include "../../../as/script/as_script_manager.hpp"
 
 #include <base-common/concurrency/spinlock.hpp>
@@ -192,5 +193,13 @@ namespace base::menu::ui::layout {
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kAS, std::move(script_submenu));
 
     InitSelectedScript();
+  }
+
+  void AddScriptRootSubmenus(Submenu* home) {
+    if (!script_gui::kSCRIPT_SUBMENUS) {
+      return;
+    }
+
+    script_gui::kSCRIPT_SUBMENUS->BuildRootLinks(home);
   }
 }

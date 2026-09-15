@@ -1,0 +1,4 @@
+name = "Example Option Registry"
+description = "An example of registering an option from a script and running one by name."
+short_name = "optreg"
+main_file = "main.as"

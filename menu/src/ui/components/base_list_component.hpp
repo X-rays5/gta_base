@@ -13,11 +13,17 @@ namespace base::menu::ui::components {
    */
   class BaseListComponent : public BaseComponent {
   protected:
-    std::shared_ptr<std::vector<std::string>> items_;
+    /**
+     * The list of items as published, not as it is being edited. A component is rebuilt every frame on
+     * the render thread out of whatever the last published snapshot was, so whoever builds the next
+     * one - a script on another thread - is never writing the vector this is reading. Republishing is
+     * a new shared_ptr, which is what makes the swap atomic by itself.
+     */
+    std::shared_ptr<const std::vector<std::string>> items_;
     std::shared_ptr<std::atomic<std::size_t>> selected_index_;
 
   public:
-    BaseListComponent(const std::string& name, const std::string& description, const std::shared_ptr<std::vector<std::string>>& items,
+    BaseListComponent(const std::string& name, const std::string& description, const std::shared_ptr<const std::vector<std::string>>& items,
                       const std::shared_ptr<std::atomic<std::size_t>>& selected_index)
         : items_(items), selected_index_(selected_index) {
       left_text_ = name;

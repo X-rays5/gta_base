@@ -143,7 +143,7 @@ namespace base::menu::as::script {
       return MakeFailure<ResultCode::kALREADY_EXISTS>("Script with name '{}' is already loaded", name);
     }
 
-    LOG_DEBUG("Loaded script '{}'", name);
+    LOG_INFO("Loaded script '{}'", name);
     return std::weak_ptr(it->second);
   }
 
@@ -177,7 +177,7 @@ namespace base::menu::as::script {
     pending_destruction_.emplace_back(std::move(it->second));
     scripts_.erase(it);
 
-    LOG_DEBUG("Unloaded script '{}'", name);
+    LOG_INFO("Unloaded script '{}'", name);
     return {};
   }
 

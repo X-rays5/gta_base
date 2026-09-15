@@ -1,4 +1,37 @@
 cmake_minimum_required(VERSION 3.16)
+
+if(NOT DEFINED ENV{VCPKG_ROOT})
+    message(FATAL_ERROR
+            "VCPKG_ROOT environment variable is not set.\n"
+            "Please set VCPKG_ROOT to your vcpkg installation directory.\n"
+            "See: https://learn.microsoft.com/en-us/vcpkg/users/config-environment"
+    )
+endif()
+
+set(CMAKE_TOOLCHAIN_FILE
+        "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        CACHE FILEPATH "Vcpkg toolchain file"
+)
+
+set(VCPKG_TARGET_TRIPLET "x64-windows-static-md" CACHE STRING "Vcpkg target triplet")
+set(VCPKG_HOST_TRIPLET "x64-windows-static-md" CACHE STRING "Vcpkg host triplet")
+
+# Keep vcpkg state inside the CMake build directory.
+set(VCPKG_INSTALLED_DIR
+        "${CMAKE_BINARY_DIR}/vcpkg_installed"
+        CACHE PATH "vcpkg installed directory"
+)
+
+set(VCPKG_DOWNLOADS
+        "${CMAKE_BINARY_DIR}/vcpkg_downloads"
+        CACHE PATH "vcpkg downloads directory"
+)
+
+set(VCPKG_BINARY_SOURCES
+        "clear;files,${CMAKE_BINARY_DIR}/vcpkg_cache"
+        CACHE STRING "vcpkg binary cache"
+)
+
 project(gta_base)
 
 message(STATUS "C Compiler path: ${CMAKE_C_COMPILER}")
