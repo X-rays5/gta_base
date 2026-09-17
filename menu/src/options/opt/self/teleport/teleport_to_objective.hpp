@@ -1,14 +1,14 @@
 //
-// Created by X-ray on 27/03/2026.
+// Created by X-ray on 17/09/2026.
 //
 
 #pragma once
-#include "../../base_option.hpp"
+#include "../../../base_option.hpp"
 
 namespace base::menu::options {
-  class SelfHealOption final : public BaseOption {
+  class TeleportToObjective final : public BaseOption {
   public:
-    SelfHealOption() : BaseOption("self_heal") {}
+    TeleportToObjective() : BaseOption("teleport_to_objective", "") {}
 
     virtual bool IsHotkeyAble() const override;
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;

@@ -221,17 +221,31 @@ add_library(${PROJECT_NAME}_core OBJECT
         src/game/globals.cpp
         src/game/globals.hpp
         src/game/native_types.hpp
-        src/game/handles.hpp
-        src/game/entity.cpp
-        src/game/entity.hpp
-        src/game/ped.cpp
-        src/game/ped.hpp
-        src/game/vehicle.cpp
-        src/game/vehicle.hpp
-        src/game/player.cpp
-        src/game/player.hpp
-        src/game/blip.cpp
-        src/game/blip.hpp
+        src/game/native_types/handles.hpp
+        src/game/native_types/entity.cpp
+        src/game/native_types/entity.hpp
+        src/game/native_types/ped.cpp
+        src/game/native_types/ped.hpp
+        src/game/native_types/vehicle.cpp
+        src/game/native_types/vehicle.hpp
+        src/game/native_types/player.cpp
+        src/game/native_types/player.hpp
+        src/game/native_types/blip.cpp
+        src/game/native_types/blip.hpp
+        src/game/local_player.cpp
+        src/game/local_player.hpp
+        src/game/enums/blip_icon.hpp
+        src/game/enums/blip_color.hpp
+        src/options/opt/self/teleport/teleport_to_waypoint.cpp
+        src/options/opt/self/teleport/teleport_to_waypoint.hpp
+        src/options/opt/self/teleport/teleport_to_objective.cpp
+        src/options/opt/self/teleport/teleport_to_objective.hpp
+        src/options/opt/self/teleport/teleport_into_last_vehicle.cpp
+        src/options/opt/self/teleport/teleport_into_last_vehicle.hpp
+        src/options/opt/self/teleport/teleport_to_last_vehicle.cpp
+        src/options/opt/self/teleport/teleport_to_last_vehicle.hpp
+        src/game/streaming.cpp
+        src/game/streaming.hpp
 )
 add_library(base::${PROJECT_NAME}_core ALIAS ${PROJECT_NAME}_core)
 

@@ -5,7 +5,7 @@
 #include "force_wanted_level.hpp"
 
 namespace base::menu::options {
-  void ForceWantedLevelOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void ForceWantedLevelOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     enabled_ = !enabled_;
   }
 
@@ -17,8 +17,9 @@ namespace base::menu::options {
     return true;
   }
 
-  void ForceWantedLevelOption::HandleHotkey() {
+  bool ForceWantedLevelOption::HandleHotkey() {
     enabled_ = !enabled_;
+    return true;
   }
 
   void ForceWantedLevelOption::Save(glz::generic& data) {
@@ -55,8 +56,8 @@ namespace base::menu::options {
     return true;
   }
 
-  BaseOption::TickThread ForceWantedLevelOption::GetTickThread() const {
-    return TickThread::kGAME_SCRIPT;
+  BaseOption::ThreadType ForceWantedLevelOption::GetThreadType() const {
+    return ThreadType::kGAME_SCRIPT;
   }
 }
 

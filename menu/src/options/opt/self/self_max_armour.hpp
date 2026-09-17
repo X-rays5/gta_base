@@ -10,9 +10,11 @@ namespace base::menu::options {
   public:
     SelfMaxArmourOption() : BaseOption("self_max_armour") {}
 
-    virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;
     virtual bool IsHotkeyAble() const override;
-    virtual void HandleHotkey() override;
+
+  protected:
+    virtual void runCommand(std::shared_ptr<argparse::ArgumentParser> args) override;
+    virtual bool HandleHotkey() override;
   };
 }

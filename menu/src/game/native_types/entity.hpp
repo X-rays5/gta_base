@@ -7,6 +7,13 @@
 #include <rage/vector.hpp>
 
 namespace base::menu::game {
+  /// A model's bounding box, in the frame of an entity built from it and measured from that entity's
+  /// origin. See Entity::GetModelExtents.
+  struct ModelExtents {
+    rage::Vector3 minimum{};
+    rage::Vector3 maximum{};
+  };
+
   /**
    * An entity: the part of the game world that has a place in it.
    *
@@ -23,10 +30,24 @@ namespace base::menu::game {
     [[nodiscard]] bool IsVehicle() const;
     [[nodiscard]] rage::Vector3 GetCoords() const;
 
+    /// A point `offset` away from this entity, in the entity's own frame: x is left/right, y
+    /// forward/backward, z up/down. This is how a caller arrives *near* an entity rather than on it,
+    /// which is what a vehicle needs: a ped put down inside one is left standing in it, and the vehicle
+    /// does not survive that.
+    [[nodiscard]] rage::Vector3 GetOffsetCoords(float offsetX, float offsetY, float offsetZ) const;
+
+    /// The bounding box of the model this entity is built from, in the entity's own frame.
+    ///
+    /// This is what a caller measures when it has to arrive *past* an entity rather than near it: the
+    /// model decides how much room that takes, and a model's length is not known ahead of time. A
+    /// vehicle's origin sits at the middle of it, so the distance from that origin back to the tail is
+    /// one of the box's two Y corners.
+    [[nodiscard]] ModelExtents GetModelExtents() const;
+
     /// Moves the entity. `clearArea` empties whatever was standing there, which is what a vehicle needs
     /// to land in its place instead of on top of it. A null handle is left alone: there is nothing to
     /// move, and the game treats a move of entity 0 as a request about another script's world.
-    void SetCoords(const rage::Vector3& position, bool clearArea = false) const;
+    bool SetCoords(const rage::Vector3& position, bool clearArea = false) const;
 
     /// Whether the game lets us move this entity. An entity we do not control is one the game will
     /// ignore moves for - in a session that is anything the server has not handed over.
@@ -35,7 +56,7 @@ namespace base::menu::game {
     /// Asks for that control. The answer does not arrive with the call: the server gives it on one of
     /// the following frames, so a caller that needs it *now* has to wait for HasControl() to turn true,
     /// which is a job for the game task executor rather than for a single method.
-    void RequestControl() const;
+    bool RequestControl() const;
   };
   static_assert(sizeof(Entity) == sizeof(ScrHandle));
 

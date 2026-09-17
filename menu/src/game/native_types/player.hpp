@@ -11,9 +11,9 @@ namespace base::menu::game {
   /// the ped, and a player who is not in the session has no ped to hand out.
   class Player : public ScrHandle {
   public:
-    using ScrHandle::ScrHandle;
+    constexpr Player() = default;
+    constexpr Player(const std::int32_t value) : ScrHandle(value) {}
 
     [[nodiscard]] Ped GetPed() const;
   };
-  static_assert(sizeof(Player) == sizeof(ScrHandle));
 }

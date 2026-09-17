@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <type_traits>
 #include <rage/script/custom_call_context.hpp>
-#include "../game/handles.hpp"
+#include "../game/native_types/handles.hpp"
 #include "crossmap.hpp"
 
 namespace base::menu::natives {
@@ -25,6 +25,18 @@ namespace base::menu::natives {
     concept HandlePointer = std::is_pointer_v<std::remove_cvref_t<T>> &&
                             std::derived_from<std::remove_pointer_t<std::remove_cvref_t<T>>, game::ScrHandle> &&
                             !std::is_const_v<std::remove_pointer_t<std::remove_cvref_t<T>>>;
+
+    /// A pointer to a vector, which is the script API's `*` spelling for one. The game does not write the
+    /// caller's object: it fills a temporary of its own and leaves the result for the VM to copy back
+    /// through this pointer, and what it copies back is a *script* vector - three eight byte slots, the
+    /// components at offsets 0, 8 and 16 (rage/src/script/vector.hpp, and the copy is
+    /// NativeCallContext::FixVectors, which is why the context holds these pointers as `Vector*` and not
+    /// as `Vector3*`). A rage::Vector3 is sixteen bytes with its components at 0, 4 and 8, so a caller's
+    /// object is not what belongs behind that pointer at all: the copy-back would write eight bytes past
+    /// the end of it and put y and z where its padding is. The invoker therefore hands the game storage
+    /// that really is a script vector - its own - and carries the components to and from the caller.
+    template <typename T>
+    concept VectorPointer = std::is_same_v<std::remove_cvref_t<T>, ::rage::Vector3*>;
   }
 
   class Invoker {
@@ -45,6 +57,8 @@ namespace base::menu::natives {
       void PushArg(T&& value) {
         if constexpr (detail::HandlePointer<T>) {
           PushHandleOut(value);
+        } else if constexpr (detail::VectorPointer<T>) {
+          PushVectorOut(value);
         } else if constexpr (detail::HandleValue<T>) {
           context_.PushArg(value.Get());
         } else {
@@ -119,9 +133,54 @@ namespace base::menu::natives {
         handle_out_count_ = 0;
       }
 
+      /// One of the `*` parameters of the call being made that stands for a vector.
+      struct VectorOut {
+        /// The caller's object, which is where the components belong - and which is *not* what the game
+        /// is given, because a rage::Vector3 is neither the size nor the shape of what gets written.
+        ::rage::Vector3* target;
+        /// The script vector the game is given in the caller's place, and the one the copy-back lands in,
+        /// so that the components can be read out of it at the offsets they really have.
+        ::rage::script::Vector source;
+      };
+
+      /// The widest call in the database takes four of these - GET_ENTITY_MATRIX - and the call context
+      /// keeps room for four of the game's own (vector_ref_sources_), so a call cannot outrun this table
+      /// without first outrunning the game's.
+      static constexpr std::size_t kMAX_VECTOR_OUTS = 4;
+
+      void PushVectorOut(::rage::Vector3* const target) {
+        auto& out = vector_outs_[vector_out_count_++];
+        out.target = target;
+        // An out-parameter may be read as well as written - the script API's `*` is in, out or both, as
+        // the handles above note - so what the caller's object holds goes in first, and the result comes
+        // back to it afterwards. A null one is the caller not wanting the result: the game is still given
+        // storage to fill, since it writes through whatever it was handed either way, but there is
+        // nowhere to put the components and so nothing to write at the end.
+        out.source = target != nullptr ? ::rage::script::Vector{target->x, target->y, target->z}
+                                       : ::rage::script::Vector{};
+        context_.PushArg(&out.source);
+      }
+
+      /// The vectors the call filled, put back into the objects they were asked for.
+      void ApplyVectorOuts() {
+        for (std::size_t i = 0; i < vector_out_count_; i++) {
+          const auto& out = vector_outs_[i];
+          if (out.target == nullptr) {
+            continue;
+          }
+
+          out.target->x = out.source.x;
+          out.target->y = out.source.y;
+          out.target->z = out.source.z;
+        }
+        vector_out_count_ = 0;
+      }
+
       ::rage::script::CustomCallContext context_{};
       std::array<HandleOut, kMAX_HANDLE_OUTS> handle_outs_{};
       std::size_t handle_out_count_{};
+      std::array<VectorOut, kMAX_VECTOR_OUTS> vector_outs_{};
+      std::size_t vector_out_count_{};
     };
 
   public:

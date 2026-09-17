@@ -24,11 +24,28 @@ namespace base::menu::ui::layout {
     kMENU_RENDERER->AddSubmenu(SubmenuIDs::kSELF_HEALTH, std::move(health_submenu));
   }
 
+  void InitTeleportSub() {
+    Submenu teleport_submenu("label/teleport", [](Submenu* sub) {
+      if (options::kOPTION_REGISTRY) {
+        const auto options = options::kOPTION_REGISTRY->options().lock();
+
+        options->teleport_to_waypoint_option->CreateOptionUi("ui/action/teleport_to_waypoint", sub);
+        options->teleport_to_objective_option->CreateOptionUi("ui/action/teleport_to_objective", sub);
+        options->teleport_into_last_vehicle->CreateOptionUi("ui/action/teleport_into_last_vehicle", sub);
+        options->teleport_to_last_vehicle_option->CreateOptionUi("ui/action/teleport_to_last_vehicle", sub);
+      }
+    });
+
+    kMENU_RENDERER->AddSubmenu(SubmenuIDs::kSELF_TELEPORT, std::move(teleport_submenu));
+  }
+
   void InitSelfLayout() {
     InitHealthSub();
+    InitTeleportSub();
 
     Submenu self_submenu("ui/sub/self", [](Submenu* sub) {
       sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSELF_HEALTH));
+      sub->AddComponent(components::SubLinkComponent(SubmenuIDs::kSELF_TELEPORT));
       if (options::kOPTION_REGISTRY) {
         const auto options = options::kOPTION_REGISTRY->options().lock();
 

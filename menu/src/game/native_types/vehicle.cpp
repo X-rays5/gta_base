@@ -3,7 +3,7 @@
 //
 
 #include "vehicle.hpp"
-#include "../natives/natives_gen9.hpp"
+#include "../../natives/natives_gen9.hpp"
 
 namespace base::menu::game {
   void Vehicle::Fix() const {
@@ -12,6 +12,11 @@ namespace base::menu::game {
   }
 
   bool Vehicle::IsSeatFree(const int seat, const bool isTaskRunning) const {
+    if (!IsValid()) {
+      LOG_ERROR("Vehicle::IsSeatFree called on invalid vehicle handle");
+      return false;
+    }
+
     return natives::VEHICLE::IS_VEHICLE_SEAT_FREE(*this, seat, isTaskRunning);
   }
 
@@ -19,22 +24,10 @@ namespace base::menu::game {
     if (IsSeatFree(kDRIVER_SEAT, isTaskRunning)) {
       return kDRIVER_SEAT;
     }
+
     if (IsSeatFree(kPASSENGER_SEAT, isTaskRunning)) {
       return kPASSENGER_SEAT;
     }
     return std::nullopt;
-  }
-
-  void Vehicle::Teleport(const rage::Vector3& position) const {
-    if (!IsValid()) {
-      return;
-    }
-
-    if (!HasControl()) {
-      RequestControl();
-    }
-
-    SetCoords(position, true);
-    natives::VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(*this, 5.f);
   }
 }

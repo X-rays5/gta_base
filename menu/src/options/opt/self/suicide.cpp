@@ -14,19 +14,20 @@ namespace base::menu::options {
     }
   }
 
-  void SuicideOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void SuicideOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     Suicide();
   }
 
   void SuicideOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-   GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), Suicide));
+    GTA_BASE_OPTION_EXECUTE_UI_COMP(sub, label);
   }
 
   bool SuicideOption::IsHotkeyAble() const {
     return true;
   }
 
-  void SuicideOption::HandleHotkey() {
+  bool SuicideOption::HandleHotkey() {
     Suicide();
+    return true;
   }
 }

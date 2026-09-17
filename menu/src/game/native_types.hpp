@@ -7,12 +7,12 @@
 #include <cstdint>
 #include <fmt/format.h>
 #include <rage/vector.hpp>
-#include "blip.hpp"
-#include "entity.hpp"
-#include "handles.hpp"
-#include "ped.hpp"
-#include "player.hpp"
-#include "vehicle.hpp"
+#include "native_types/blip.hpp"
+#include "native_types/entity.hpp"
+#include "native_types/handles.hpp"
+#include "native_types/ped.hpp"
+#include "native_types/player.hpp"
+#include "native_types/vehicle.hpp"
 
 namespace base::menu::natives {
   using Any = std::uint32_t;

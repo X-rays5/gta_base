@@ -23,11 +23,6 @@ namespace base::menu::game {
 
     [[nodiscard]] bool IsSeatFree(int seat, bool isTaskRunning = true) const;
     [[nodiscard]] std::optional<int> GetFreeSeat(bool isTaskRunning = true) const;
-
-    /// Moves the vehicle and drops it back onto the ground properly, so it arrives standing rather than
-    /// halfway into it. Control is asked for first when the vehicle is not ours to move - whether the
-    /// answer arrives in time to matter is the caller's business, see RequestControl().
-    void Teleport(const rage::Vector3& position) const;
   };
   static_assert(sizeof(Vehicle) == sizeof(ScrHandle));
 }

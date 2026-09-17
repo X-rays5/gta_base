@@ -3,7 +3,7 @@
 //
 
 #include "player.hpp"
-#include "../natives/natives_gen9.hpp"
+#include "../../natives/natives_gen9.hpp"
 
 namespace base::menu::game {
   Ped Player::GetPed() const {

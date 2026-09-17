@@ -18,6 +18,10 @@ namespace base::menu::options {
     REGISTER_OPTION(self_remove_armour_option)
     REGISTER_OPTION(force_wanted_level_option)
     REGISTER_OPTION(never_wanted_option)
+    REGISTER_OPTION(teleport_to_objective_option)
+    REGISTER_OPTION(teleport_to_waypoint_option)
+    REGISTER_OPTION(teleport_to_last_vehicle_option)
+    REGISTER_OPTION(teleport_into_last_vehicle)
     REGISTER_OPTION(vehicle_repair_option)
   }
 }

@@ -14,7 +14,7 @@ namespace base::menu::options {
     }
   }
 
-  void SelfHealOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void SelfHealOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     HealPlayer();
   }
 
@@ -22,11 +22,12 @@ namespace base::menu::options {
     return true;
   }
 
-  void SelfHealOption::HandleHotkey() {
+  bool SelfHealOption::HandleHotkey() {
     HealPlayer();
+    return true;
   }
 
   void SelfHealOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), HealPlayer));
+    GTA_BASE_OPTION_EXECUTE_UI_COMP(sub, label);
   }
 }

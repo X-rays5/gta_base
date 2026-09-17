@@ -33,10 +33,10 @@ namespace base::menu::as::bindings::option {
    * resolved again in the module the script still owns, which can only answer while it is loaded, and
    * holds no reference to a function the engine has already let go of.
    */
-  class ScriptOption final : public std::enable_shared_from_this<ScriptOption>, public menu::options::BaseOption {
+  class ScriptOption final : public std::enable_shared_from_this<ScriptOption>, public options::BaseOption {
   public:
     ScriptOption(std::string name, std::string description, std::string owner_script, std::weak_ptr<script::Script> owner);
-    ~ScriptOption() override = default;
+    virtual ~ScriptOption() override = default;
 
     ScriptOption(const ScriptOption&) = delete;
     ScriptOption(ScriptOption&&) = delete;
@@ -45,18 +45,13 @@ namespace base::menu::as::bindings::option {
 
     /// The script that registered this, which is what the registry asks before letting go of it when
     /// that script unloads.
-    std::string GetOwnerScript() const override {
+    virtual std::string GetOwnerScript() const override {
       return owner_script_;
     }
 
-    std::vector<menu::options::CommandArg> GetArgs() const override {
+    virtual std::vector<options::CommandArg> GetArgs() const override {
       return args_;
     }
-
-    /// Runs the script's callback for the command line `args` was parsed from, on the game task
-    /// executor's thread - which is where the caller queued this. The callback is driven to its end
-    /// here, so a callback that waits is waited for by the executor rather than by this call.
-    void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
 
     /**
      * Draws this option's own row, by running the script's UI callback on the page being built right
@@ -70,7 +65,7 @@ namespace base::menu::as::bindings::option {
      * Nothing is drawn, and a report is made, when there is no page being built: an option's UI is
      * drawn by a page, and this has no frame to draw into otherwise.
      */
-    void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;
+    virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;
 
     /// Names the function that draws this option's own row, which is what gives an option a script
     /// registered a face of its own rather than the nothing the menu draws for one it does not know.
@@ -97,8 +92,14 @@ namespace base::menu::as::bindings::option {
       return !callback_decl_.empty();
     }
 
+  protected:
+    /// Runs the script's callback for the command line `args` was parsed from, on the game task
+    /// executor's thread - which is where the caller queued this. The callback is driven to its end
+    /// here, so a callback that waits is waited for by the executor rather than by this call.
+    virtual void runCommand(std::shared_ptr<argparse::ArgumentParser> args) override;
+
   private:
-    std::vector<menu::options::CommandArg> args_;
+    std::vector<options::CommandArg> args_;
     std::string owner_script_;
     std::weak_ptr<script::Script> owner_;
     std::string callback_decl_;
@@ -123,7 +124,7 @@ namespace base::menu::as::bindings::option {
    */
   class ScriptOptionHandle {
   public:
-    ScriptOptionHandle(std::shared_ptr<menu::options::BaseOption> option, std::shared_ptr<const std::vector<menu::options::ParsedArg>> args);
+    ScriptOptionHandle(std::shared_ptr<options::BaseOption> option, std::shared_ptr<const std::vector<options::ParsedArg>> args);
 
     /// AngelScript's reference count: a handle is a reference type, and the engine counts it while a
     /// script holds it or passes it around.
@@ -153,7 +154,7 @@ namespace base::menu::as::bindings::option {
      * binding draws when a page places this option: a page holds the *option* rather than the handle,
      * since an option outlives every handle a script may let go of.
      */
-    [[nodiscard]] const std::shared_ptr<menu::options::BaseOption>& GetOption() const {
+    [[nodiscard]] const std::shared_ptr<options::BaseOption>& GetOption() const {
       return option_;
     }
 
@@ -185,15 +186,15 @@ namespace base::menu::as::bindings::option {
     /// The argument `name` names, or null when it is not one this option declares or there is no run
     /// to read from - both reported, since a callback reading an argument it never declared is a bug
     /// that would otherwise be answered with a zero.
-    [[nodiscard]] const menu::options::ParsedArg* Find(const std::string& name) const;
+    [[nodiscard]] const options::ParsedArg* Find(const std::string& name) const;
 
     /// The option as the thing a script registered, or null when it names one of the menu's own - for
     /// the two calls that only make sense on a script's option.
     [[nodiscard]] std::shared_ptr<ScriptOption> AsScriptOption() const;
 
     std::atomic<std::uint32_t> refs_{1};
-    std::shared_ptr<menu::options::BaseOption> option_;
-    std::shared_ptr<const std::vector<menu::options::ParsedArg>> args_;
+    std::shared_ptr<options::BaseOption> option_;
+    std::shared_ptr<const std::vector<options::ParsedArg>> args_;
   };
 
   /**

@@ -14,19 +14,20 @@ namespace base::menu::options {
     }
   }
 
-  void SelfRemoveArmourOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void SelfRemoveArmourOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     RemoveArmour();
   }
 
   void SelfRemoveArmourOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), RemoveArmour));
+    GTA_BASE_OPTION_EXECUTE_UI_COMP(sub, label);
   }
 
   bool SelfRemoveArmourOption::IsHotkeyAble() const {
     return true;
   }
 
-  void SelfRemoveArmourOption::HandleHotkey() {
+  bool SelfRemoveArmourOption::HandleHotkey() {
     RemoveArmour();
+    return true;
   }
 }

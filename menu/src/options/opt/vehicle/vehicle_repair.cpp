@@ -11,15 +11,14 @@ namespace base::menu::options {
   namespace {
     void RepairVehicle() {
       script::kGAME_TASK_EXECUTOR->QueueTask([] {
-        const auto vehicle = game::globals::local_player.vehicle_id.load();
-        if (vehicle.IsValid()) {
+        if (const auto vehicle = game::globals::local_player.vehicle; vehicle.IsValid()) {
           vehicle.Fix();
         }
       });
     }
   }
 
-  void VehicleRepairOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void VehicleRepairOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     RepairVehicle();
   }
 
@@ -31,8 +30,9 @@ namespace base::menu::options {
     return true;
   }
 
-  void VehicleRepairOption::HandleHotkey() {
+  bool VehicleRepairOption::HandleHotkey() {
     RepairVehicle();
+    return true;
   }
 }
 

@@ -454,32 +454,16 @@ namespace {
 			base::menu::natives::BRAIN::REACTIVATE_NAMED_OBJECT_BRAINS_WAITING_TILL_OUT_OF_RANGE(scriptName.c_str());
 		}
 
-		int CameraCreateCamShim(const std::string& camName, bool p1) {
-			return base::menu::natives::CAMERA::CREATE_CAM(camName.c_str(), p1).Get();
+		::base::menu::natives::Cam CameraCreateCamShim(const std::string& camName, bool p1) {
+			return base::menu::natives::CAMERA::CREATE_CAM(camName.c_str(), p1);
 		}
 
-		int CameraCreateCamWithParamsShim(const std::string& camName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, bool p8, int p9) {
-			return base::menu::natives::CAMERA::CREATE_CAM_WITH_PARAMS(camName.c_str(), posX, posY, posZ, rotX, rotY, rotZ, fov, p8, p9).Get();
-		}
-
-		int CameraCreateCameraShim(::base::menu::natives::Hash camHash, bool p1) {
-			return base::menu::natives::CAMERA::CREATE_CAMERA(camHash, p1).Get();
-		}
-
-		int CameraCreateCameraWithParamsShim(::base::menu::natives::Hash camHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, bool p8, ::base::menu::natives::Any p9) {
-			return base::menu::natives::CAMERA::CREATE_CAMERA_WITH_PARAMS(camHash, posX, posY, posZ, rotX, rotY, rotZ, fov, p8, p9).Get();
-		}
-
-		int CameraGetRenderingCamShim() {
-			return base::menu::natives::CAMERA::GET_RENDERING_CAM().Get();
+		::base::menu::natives::Cam CameraCreateCamWithParamsShim(const std::string& camName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, bool p8, int p9) {
+			return base::menu::natives::CAMERA::CREATE_CAM_WITH_PARAMS(camName.c_str(), posX, posY, posZ, rotX, rotY, rotZ, fov, p8, p9);
 		}
 
 		void CameraSetCamDebugNameShim(::base::menu::natives::Cam camera, const std::string& name) {
 			base::menu::natives::CAMERA::SET_CAM_DEBUG_NAME(camera, name.c_str());
-		}
-
-		int CameraGetDebugCamShim() {
-			return base::menu::natives::CAMERA::GET_DEBUG_CAM().Get();
 		}
 
 		void CameraShakeCamShim(::base::menu::natives::Cam cam, const std::string& type, float amplitude) {
@@ -526,10 +510,6 @@ namespace {
 			base::menu::natives::CAMERA::SHAKE_CINEMATIC_CAM(shakeType.c_str(), amount);
 		}
 
-		int CameraGetFocusPedOnScreenShim(float p0, int p1, float p2, float p3, float p4, float p5, float p6, int p7, int p8) {
-			return base::menu::natives::CAMERA::GET_FOCUS_PED_ON_SCREEN(p0, p1, p2, p3, p4, p5, p6, p7, p8).Get();
-		}
-
 		void CameraSetFirstPersonFlashEffectVehicleModelNameShim(const std::string& vehicleName) {
 			base::menu::natives::CAMERA::SET_FIRST_PERSON_FLASH_EFFECT_VEHICLE_MODEL_NAME(vehicleName.c_str());
 		}
@@ -570,8 +550,8 @@ namespace {
 			return base::menu::natives::CUTSCENE::GET_CUT_FILE_CONCAT_COUNT(cutsceneName.c_str());
 		}
 
-		int CutsceneGetEntityIndexOfCutsceneEntityShim(const std::string& cutsceneEntName, ::base::menu::natives::Hash modelHash) {
-			return base::menu::natives::CUTSCENE::GET_ENTITY_INDEX_OF_CUTSCENE_ENTITY(cutsceneEntName.c_str(), modelHash).Get();
+		::base::menu::natives::Entity CutsceneGetEntityIndexOfCutsceneEntityShim(const std::string& cutsceneEntName, ::base::menu::natives::Hash modelHash) {
+			return base::menu::natives::CUTSCENE::GET_ENTITY_INDEX_OF_CUTSCENE_ENTITY(cutsceneEntName.c_str(), modelHash);
 		}
 
 		bool CutsceneIsCutsceneAuthorizedShim(const std::string& cutsceneName) {
@@ -582,8 +562,8 @@ namespace {
 			base::menu::natives::CUTSCENE::REGISTER_ENTITY_FOR_CUTSCENE(cutscenePed, cutsceneEntName.c_str(), p2, modelHash, p4);
 		}
 
-		int CutsceneGetEntityIndexOfRegisteredEntityShim(const std::string& cutsceneEntName, ::base::menu::natives::Hash modelHash) {
-			return base::menu::natives::CUTSCENE::GET_ENTITY_INDEX_OF_REGISTERED_ENTITY(cutsceneEntName.c_str(), modelHash).Get();
+		::base::menu::natives::Entity CutsceneGetEntityIndexOfRegisteredEntityShim(const std::string& cutsceneEntName, ::base::menu::natives::Hash modelHash) {
+			return base::menu::natives::CUTSCENE::GET_ENTITY_INDEX_OF_REGISTERED_ENTITY(cutsceneEntName.c_str(), modelHash);
 		}
 
 		bool CutsceneCanSetEnterStateForRegisteredEntityShim(const std::string& cutsceneEntName, ::base::menu::natives::Hash modelHash) {
@@ -756,10 +736,6 @@ namespace {
 			return base::menu::natives::ENTITY::HAS_ENTITY_ANIM_FINISHED(entity, animDict.c_str(), animName.c_str(), p3);
 		}
 
-		int EntityGetLastEntityHitByEntityShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::ENTITY::_GET_LAST_ENTITY_HIT_BY_ENTITY(entity).Get();
-		}
-
 		float EntityGetEntityAnimCurrentTimeShim(::base::menu::natives::Entity entity, const std::string& animDict, const std::string& animName) {
 			return base::menu::natives::ENTITY::GET_ENTITY_ANIM_CURRENT_TIME(entity, animDict.c_str(), animName.c_str());
 		}
@@ -772,33 +748,9 @@ namespace {
 			return base::menu::natives::ENTITY::GET_ANIM_DURATION(animDict.c_str(), animName.c_str());
 		}
 
-		int EntityGetEntityAttachedToShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::ENTITY::GET_ENTITY_ATTACHED_TO(entity).Get();
-		}
-
 		std::string EntityGetEntityScriptShim(::base::menu::natives::Entity entity, ::base::menu::natives::ScrHandle* script) {
 			const char* const result = base::menu::natives::ENTITY::GET_ENTITY_SCRIPT(entity, script);
 			return result != nullptr ? std::string(result) : std::string();
-		}
-
-		int EntityGetObjectIndexFromEntityIndexShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::ENTITY::GET_OBJECT_INDEX_FROM_ENTITY_INDEX(entity).Get();
-		}
-
-		int EntityGetPedIndexFromEntityIndexShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(entity).Get();
-		}
-
-		int EntityGetVehicleIndexFromEntityIndexShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::ENTITY::GET_VEHICLE_INDEX_FROM_ENTITY_INDEX(entity).Get();
-		}
-
-		int EntityGetNearestPlayerToEntityShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::ENTITY::GET_NEAREST_PLAYER_TO_ENTITY(entity).Get();
-		}
-
-		int EntityGetNearestPlayerToEntityOnTeamShim(::base::menu::natives::Entity entity, int team) {
-			return base::menu::natives::ENTITY::GET_NEAREST_PLAYER_TO_ENTITY_ON_TEAM(entity, team).Get();
 		}
 
 		bool EntityIsEntityInZoneShim(::base::menu::natives::Entity entity, const std::string& zone) {
@@ -839,26 +791,6 @@ namespace {
 
 		void EntitySetEntityAnimSpeedShim(::base::menu::natives::Entity entity, const std::string& animDictionary, const std::string& animName, float speedMultiplier) {
 			base::menu::natives::ENTITY::SET_ENTITY_ANIM_SPEED(entity, animDictionary.c_str(), animName.c_str(), speedMultiplier);
-		}
-
-		int EntityGetEntityOfTypeAttachedToEntityShim(::base::menu::natives::Entity entity, ::base::menu::natives::Hash modelHash) {
-			return base::menu::natives::ENTITY::GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY(entity, modelHash).Get();
-		}
-
-		int FireStartScriptFireShim(float X, float Y, float Z, int maxChildren, bool isGasFire) {
-			return base::menu::natives::FIRE::START_SCRIPT_FIRE(X, Y, Z, maxChildren, isGasFire).Get();
-		}
-
-		int FireStartEntityFireShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::FIRE::START_ENTITY_FIRE(entity).Get();
-		}
-
-		int FireGetOwnerOfExplosionInSphereShim(int explosionType, float x, float y, float z, float radius) {
-			return base::menu::natives::FIRE::GET_OWNER_OF_EXPLOSION_IN_SPHERE(explosionType, x, y, z, radius).Get();
-		}
-
-		int FireGetOwnerOfExplosionInAngledAreaShim(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float radius) {
-			return base::menu::natives::FIRE::GET_OWNER_OF_EXPLOSION_IN_ANGLED_AREA(explosionType, x1, y1, z1, x2, y2, z2, radius).Get();
 		}
 
 		void GraphicsDrawDebugTextShim(const std::string& text, float x, float y, float z, int red, int green, int blue, int alpha) {
@@ -1388,60 +1320,8 @@ namespace {
 			return base::menu::natives::HUD::GET_NAMED_RENDERTARGET_RENDER_ID(name.c_str());
 		}
 
-		int HudGetNextBlipInfoIdShim(int blipSprite) {
-			return base::menu::natives::HUD::GET_NEXT_BLIP_INFO_ID(blipSprite).Get();
-		}
-
-		int HudGetFirstBlipInfoIdShim(int blipSprite) {
-			return base::menu::natives::HUD::GET_FIRST_BLIP_INFO_ID(blipSprite).Get();
-		}
-
-		int HudGetClosestBlipInfoIdShim(int blipSprite) {
-			return base::menu::natives::HUD::GET_CLOSEST_BLIP_INFO_ID(blipSprite).Get();
-		}
-
-		int HudGetBlipInfoIdEntityIndexShim(::base::menu::natives::Blip blip) {
-			return base::menu::natives::HUD::GET_BLIP_INFO_ID_ENTITY_INDEX(blip).Get();
-		}
-
-		int HudGetBlipInfoIdPickupIndexShim(::base::menu::natives::Blip blip) {
-			return base::menu::natives::HUD::GET_BLIP_INFO_ID_PICKUP_INDEX(blip).Get();
-		}
-
-		int HudGetBlipFromEntityShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::HUD::GET_BLIP_FROM_ENTITY(entity).Get();
-		}
-
-		int HudAddBlipForRadiusShim(float posX, float posY, float posZ, float radius) {
-			return base::menu::natives::HUD::ADD_BLIP_FOR_RADIUS(posX, posY, posZ, radius).Get();
-		}
-
-		int HudAddBlipForAreaShim(float x, float y, float z, float width, float height) {
-			return base::menu::natives::HUD::ADD_BLIP_FOR_AREA(x, y, z, width, height).Get();
-		}
-
-		int HudAddBlipForEntityShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::HUD::ADD_BLIP_FOR_ENTITY(entity).Get();
-		}
-
-		int HudAddBlipForPickupShim(::base::menu::natives::Pickup pickup) {
-			return base::menu::natives::HUD::ADD_BLIP_FOR_PICKUP(pickup).Get();
-		}
-
-		int HudAddBlipForCoordShim(float x, float y, float z) {
-			return base::menu::natives::HUD::ADD_BLIP_FOR_COORD(x, y, z).Get();
-		}
-
 		void HudSetBlipNameFromTextFileShim(::base::menu::natives::Blip blip, const std::string& gxtEntry) {
 			base::menu::natives::HUD::SET_BLIP_NAME_FROM_TEXT_FILE(blip, gxtEntry.c_str());
-		}
-
-		int HudGetNewSelectedMissionCreatorBlipShim() {
-			return base::menu::natives::HUD::GET_NEW_SELECTED_MISSION_CREATOR_BLIP().Get();
-		}
-
-		int HudGetMainPlayerBlipIdShim() {
-			return base::menu::natives::HUD::GET_MAIN_PLAYER_BLIP_ID().Get();
 		}
 
 		void HudDisplayHelpTextThisFrameShim(const std::string& message, bool curvedWindow) {
@@ -1500,10 +1380,6 @@ namespace {
 			return base::menu::natives::HUD::SET_WARNING_MESSAGE_OPTION_ITEMS(index, name.c_str(), cash, rp, lvl, colour);
 		}
 
-		int HudGetNorthBlidIndexShim() {
-			return base::menu::natives::HUD::GET_NORTH_BLID_INDEX().Get();
-		}
-
 		void HudForceScriptedGfxWhenFrontendActiveShim(const std::string& p0) {
 			base::menu::natives::HUD::FORCE_SCRIPTED_GFX_WHEN_FRONTEND_ACTIVE(p0.c_str());
 		}
@@ -1516,44 +1392,16 @@ namespace {
 			base::menu::natives::HUD::SET_SOCIAL_CLUB_TOUR(name.c_str());
 		}
 
-		int HudGetAiPedPedBlipIndexShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::HUD::GET_AI_PED_PED_BLIP_INDEX(ped).Get();
-		}
-
-		int HudGetAiPedVehicleBlipIndexShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::HUD::GET_AI_PED_VEHICLE_BLIP_INDEX(ped).Get();
-		}
-
-		int InteriorGetInteriorFromEntityShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::INTERIOR::GET_INTERIOR_FROM_ENTITY(entity).Get();
-		}
-
 		void InteriorSetRoomForGameViewportByNameShim(const std::string& roomName) {
 			base::menu::natives::INTERIOR::SET_ROOM_FOR_GAME_VIEWPORT_BY_NAME(roomName.c_str());
-		}
-
-		int InteriorGetInteriorFromPrimaryViewShim() {
-			return base::menu::natives::INTERIOR::GET_INTERIOR_FROM_PRIMARY_VIEW().Get();
-		}
-
-		int InteriorGetInteriorAtCoordsShim(float x, float y, float z) {
-			return base::menu::natives::INTERIOR::GET_INTERIOR_AT_COORDS(x, y, z).Get();
 		}
 
 		void InteriorAddPickupToInteriorRoomByNameShim(::base::menu::natives::Pickup pickup, const std::string& roomName) {
 			base::menu::natives::INTERIOR::ADD_PICKUP_TO_INTERIOR_ROOM_BY_NAME(pickup, roomName.c_str());
 		}
 
-		int InteriorGetInteriorAtCoordsWithTypeShim(float x, float y, float z, const std::string& interiorType) {
-			return base::menu::natives::INTERIOR::GET_INTERIOR_AT_COORDS_WITH_TYPE(x, y, z, interiorType.c_str()).Get();
-		}
-
-		int InteriorGetInteriorAtCoordsWithTypehashShim(float x, float y, float z, ::base::menu::natives::Hash typeHash) {
-			return base::menu::natives::INTERIOR::GET_INTERIOR_AT_COORDS_WITH_TYPEHASH(x, y, z, typeHash).Get();
-		}
-
-		int InteriorGetInteriorFromCollisionShim(float x, float y, float z) {
-			return base::menu::natives::INTERIOR::GET_INTERIOR_FROM_COLLISION(x, y, z).Get();
+		::base::menu::natives::Interior InteriorGetInteriorAtCoordsWithTypeShim(float x, float y, float z, const std::string& interiorType) {
+			return base::menu::natives::INTERIOR::GET_INTERIOR_AT_COORDS_WITH_TYPE(x, y, z, interiorType.c_str());
 		}
 
 		void InteriorActivateInteriorEntitySetShim(::base::menu::natives::Interior interior, const std::string& entitySetName) {
@@ -1570,14 +1418,6 @@ namespace {
 
 		void InteriorSetInteriorEntitySetTintIndexShim(::base::menu::natives::Interior interior, const std::string& entitySetName, int color) {
 			base::menu::natives::INTERIOR::SET_INTERIOR_ENTITY_SET_TINT_INDEX(interior, entitySetName.c_str(), color);
-		}
-
-		int ItemsetsCreateItemsetShim(bool p0) {
-			return base::menu::natives::ITEMSETS::CREATE_ITEMSET(p0).Get();
-		}
-
-		int ItemsetsGetIndexedItemInItemsetShim(int index, ::base::menu::natives::ScrHandle itemset) {
-			return base::menu::natives::ITEMSETS::GET_INDEXED_ITEM_IN_ITEMSET(index, itemset).Get();
 		}
 
 		std::string MiscGetContentToLoadShim() {
@@ -1883,10 +1723,6 @@ namespace {
 			return result != nullptr ? std::string(result) : std::string();
 		}
 
-		int NetworkNetworkGetHostPlayerIndexShim() {
-			return base::menu::natives::NETWORK::NETWORK_GET_HOST_PLAYER_INDEX().Get();
-		}
-
 		std::string NetworkNetworkGetAccessCodeLabelHeadingShim(int accessCode) {
 			const char* const result = base::menu::natives::NETWORK::_NETWORK_GET_ACCESS_CODE_LABEL_HEADING(accessCode);
 			return result != nullptr ? std::string(result) : std::string();
@@ -1944,24 +1780,8 @@ namespace {
 			base::menu::natives::NETWORK::NETWORK_REGISTER_PLAYER_BROADCAST_VARIABLES(vars, numVars, debugName.c_str());
 		}
 
-		int NetworkNetworkGetPlayerIndexShim(::base::menu::natives::Player player) {
-			return base::menu::natives::NETWORK::NETWORK_GET_PLAYER_INDEX(player).Get();
-		}
-
-		int NetworkNetworkGetPlayerIndexFromPedShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::NETWORK::NETWORK_GET_PLAYER_INDEX_FROM_PED(ped).Get();
-		}
-
-		int NetworkNetworkGetHostOfThisScriptShim() {
-			return base::menu::natives::NETWORK::NETWORK_GET_HOST_OF_THIS_SCRIPT().Get();
-		}
-
-		int NetworkNetworkGetHostOfScriptShim(const std::string& scriptName, int instance_id, int position_hash) {
-			return base::menu::natives::NETWORK::NETWORK_GET_HOST_OF_SCRIPT(scriptName.c_str(), instance_id, position_hash).Get();
-		}
-
-		int NetworkNetworkGetHostOfThreadShim(int threadId) {
-			return base::menu::natives::NETWORK::NETWORK_GET_HOST_OF_THREAD(threadId).Get();
+		::base::menu::natives::Player NetworkNetworkGetHostOfScriptShim(const std::string& scriptName, int instance_id, int position_hash) {
+			return base::menu::natives::NETWORK::NETWORK_GET_HOST_OF_SCRIPT(scriptName.c_str(), instance_id, position_hash);
 		}
 
 		bool NetworkNetworkIsScriptActiveShim(const std::string& scriptName, int instance_id, bool p2, int position_hash) {
@@ -1976,48 +1796,8 @@ namespace {
 			return base::menu::natives::NETWORK::NETWORK_IS_PLAYER_A_PARTICIPANT_ON_SCRIPT(player, script.c_str(), instance_id);
 		}
 
-		int NetworkParticipantIdShim() {
-			return base::menu::natives::NETWORK::PARTICIPANT_ID().Get();
-		}
-
-		int NetworkNetworkGetKillerOfPlayerShim(::base::menu::natives::Player player, ::base::menu::natives::Hash* weaponHash) {
-			return base::menu::natives::NETWORK::NETWORK_GET_KILLER_OF_PLAYER(player, weaponHash).Get();
-		}
-
-		int NetworkNetworkGetDestroyerOfNetworkIdShim(int netId, ::base::menu::natives::Hash* weaponHash) {
-			return base::menu::natives::NETWORK::NETWORK_GET_DESTROYER_OF_NETWORK_ID(netId, weaponHash).Get();
-		}
-
-		int NetworkNetworkGetDestroyerOfEntityShim(::base::menu::natives::Entity entity, ::base::menu::natives::Hash* weaponHash) {
-			return base::menu::natives::NETWORK::NETWORK_GET_DESTROYER_OF_ENTITY(entity, weaponHash).Get();
-		}
-
-		int NetworkNetworkGetEntityKillerOfPlayerShim(::base::menu::natives::Player player, ::base::menu::natives::Hash* weaponHash) {
-			return base::menu::natives::NETWORK::NETWORK_GET_ENTITY_KILLER_OF_PLAYER(player, weaponHash).Get();
-		}
-
 		void NetworkNetworkSetCurrentPublicContentIdShim(const std::string& missionId) {
 			base::menu::natives::NETWORK::NETWORK_SET_CURRENT_PUBLIC_CONTENT_ID(missionId.c_str());
-		}
-
-		int NetworkNetworkGetEntityFromNetworkIdShim(int netId) {
-			return base::menu::natives::NETWORK::NETWORK_GET_ENTITY_FROM_NETWORK_ID(netId).Get();
-		}
-
-		int NetworkNetToVehShim(int netHandle) {
-			return base::menu::natives::NETWORK::NET_TO_VEH(netHandle).Get();
-		}
-
-		int NetworkNetToPedShim(int netHandle) {
-			return base::menu::natives::NETWORK::NET_TO_PED(netHandle).Get();
-		}
-
-		int NetworkNetToObjShim(int netHandle) {
-			return base::menu::natives::NETWORK::NET_TO_OBJ(netHandle).Get();
-		}
-
-		int NetworkNetToEntShim(int netHandle) {
-			return base::menu::natives::NETWORK::NET_TO_ENT(netHandle).Get();
 		}
 
 		void NetworkNetworkHandleFromUserIdShim(const std::string& userId, ::base::menu::natives::Any* gamerHandle, int gamerHandleSize) {
@@ -2033,10 +1813,6 @@ namespace {
 			return result != nullptr ? std::string(result) : std::string();
 		}
 
-		int NetworkNetworkGetPlayerFromGamerHandleShim(::base::menu::natives::Any* gamerHandle) {
-			return base::menu::natives::NETWORK::NETWORK_GET_PLAYER_FROM_GAMER_HANDLE(gamerHandle).Get();
-		}
-
 		std::string NetworkNetworkMemberIdFromGamerHandleShim(::base::menu::natives::Any* gamerHandle) {
 			const char* const result = base::menu::natives::NETWORK::NETWORK_MEMBER_ID_FROM_GAMER_HANDLE(gamerHandle);
 			return result != nullptr ? std::string(result) : std::string();
@@ -2050,10 +1826,6 @@ namespace {
 		std::string NetworkNetworkPlayerGetUseridShim(::base::menu::natives::Player player, int* userID) {
 			const char* const result = base::menu::natives::NETWORK::NETWORK_PLAYER_GET_USERID(player, userID);
 			return result != nullptr ? std::string(result) : std::string();
-		}
-
-		int NetworkNetworkGetEntityFromObjectIdShim(::base::menu::natives::Any p0) {
-			return base::menu::natives::NETWORK::NETWORK_GET_ENTITY_FROM_OBJECT_ID(p0).Get();
 		}
 
 		std::string NetworkNetworkLoadGamerDisplayNameShim(::base::menu::natives::Any* gamerHandle) {
@@ -2342,48 +2114,8 @@ namespace {
 			return result != nullptr ? std::string(result) : std::string();
 		}
 
-		int ObjectCreateObjectShim(::base::menu::natives::Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic) {
-			return base::menu::natives::OBJECT::CREATE_OBJECT(modelHash, x, y, z, isNetwork, bScriptHostObj, dynamic).Get();
-		}
-
-		int ObjectCreateObjectNoOffsetShim(::base::menu::natives::Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic, ::base::menu::natives::Any p7) {
-			return base::menu::natives::OBJECT::CREATE_OBJECT_NO_OFFSET(modelHash, x, y, z, isNetwork, bScriptHostObj, dynamic, p7).Get();
-		}
-
-		int ObjectGetClosestObjectOfTypeShim(float x, float y, float z, float radius, ::base::menu::natives::Hash modelHash, bool isMission, bool p6, bool p7) {
-			return base::menu::natives::OBJECT::GET_CLOSEST_OBJECT_OF_TYPE(x, y, z, radius, modelHash, isMission, p6, p7).Get();
-		}
-
-		int ObjectGetRayfireMapObjectShim(float x, float y, float z, float radius, const std::string& name) {
-			return base::menu::natives::OBJECT::GET_RAYFIRE_MAP_OBJECT(x, y, z, radius, name.c_str()).Get();
-		}
-
-		int ObjectCreatePickupShim(::base::menu::natives::Hash pickupHash, float posX, float posY, float posZ, int p4, int value, bool p6, ::base::menu::natives::Hash modelHash) {
-			return base::menu::natives::OBJECT::CREATE_PICKUP(pickupHash, posX, posY, posZ, p4, value, p6, modelHash).Get();
-		}
-
-		int ObjectCreatePickupRotateShim(::base::menu::natives::Hash pickupHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, int flag, int amount, ::base::menu::natives::Any p9, bool p10, ::base::menu::natives::Hash modelHash) {
-			return base::menu::natives::OBJECT::CREATE_PICKUP_ROTATE(pickupHash, posX, posY, posZ, rotX, rotY, rotZ, flag, amount, p9, p10, modelHash).Get();
-		}
-
-		int ObjectCreateAmbientPickupShim(::base::menu::natives::Hash pickupHash, float posX, float posY, float posZ, int flags, int value, ::base::menu::natives::Hash modelHash, bool p7, bool p8) {
-			return base::menu::natives::OBJECT::CREATE_AMBIENT_PICKUP(pickupHash, posX, posY, posZ, flags, value, modelHash, p7, p8).Get();
-		}
-
-		int ObjectCreateNonNetworkedAmbientPickupShim(::base::menu::natives::Hash pickupHash, float posX, float posY, float posZ, int flags, int value, ::base::menu::natives::Hash modelHash, bool p7, bool p8) {
-			return base::menu::natives::OBJECT::CREATE_NON_NETWORKED_AMBIENT_PICKUP(pickupHash, posX, posY, posZ, flags, value, modelHash, p7, p8).Get();
-		}
-
-		int ObjectCreatePortablePickupShim(::base::menu::natives::Hash pickupHash, float x, float y, float z, bool placeOnGround, ::base::menu::natives::Hash modelHash) {
-			return base::menu::natives::OBJECT::CREATE_PORTABLE_PICKUP(pickupHash, x, y, z, placeOnGround, modelHash).Get();
-		}
-
-		int ObjectCreateNonNetworkedPortablePickupShim(::base::menu::natives::Hash pickupHash, float x, float y, float z, bool placeOnGround, ::base::menu::natives::Hash modelHash) {
-			return base::menu::natives::OBJECT::CREATE_NON_NETWORKED_PORTABLE_PICKUP(pickupHash, x, y, z, placeOnGround, modelHash).Get();
-		}
-
-		int ObjectGetPickupObjectShim(::base::menu::natives::Pickup pickup) {
-			return base::menu::natives::OBJECT::GET_PICKUP_OBJECT(pickup).Get();
+		::base::menu::natives::Object ObjectGetRayfireMapObjectShim(float x, float y, float z, float radius, const std::string& name) {
+			return base::menu::natives::OBJECT::GET_RAYFIRE_MAP_OBJECT(x, y, z, radius, name.c_str());
 		}
 
 		std::string PadGetControlInstructionalButtonsStringShim(int control, int action, bool allowXOSwap) {
@@ -2404,88 +2136,12 @@ namespace {
 			return base::menu::natives::PAD::SWITCH_PC_SCRIPTED_CONTROLS(schemeName.c_str());
 		}
 
-		int PedCreatePedShim(int pedType, ::base::menu::natives::Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostPed) {
-			return base::menu::natives::PED::CREATE_PED(pedType, modelHash, x, y, z, heading, isNetwork, bScriptHostPed).Get();
-		}
-
-		int PedClonePedShim(::base::menu::natives::Ped ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag) {
-			return base::menu::natives::PED::CLONE_PED(ped, isNetwork, bScriptHostPed, copyHeadBlendFlag).Get();
-		}
-
-		int PedClonePedAltShim(::base::menu::natives::Ped ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag, bool p4) {
-			return base::menu::natives::PED::CLONE_PED_ALT(ped, isNetwork, bScriptHostPed, copyHeadBlendFlag, p4).Get();
-		}
-
-		int PedCreatePedInsideVehicleShim(::base::menu::natives::Vehicle vehicle, int pedType, ::base::menu::natives::Hash modelHash, int seat, bool isNetwork, bool bScriptHostPed) {
-			return base::menu::natives::PED::CREATE_PED_INSIDE_VEHICLE(vehicle, pedType, modelHash, seat, isNetwork, bScriptHostPed).Get();
-		}
-
-		int PedCreateRandomPedShim(float posX, float posY, float posZ) {
-			return base::menu::natives::PED::CREATE_RANDOM_PED(posX, posY, posZ).Get();
-		}
-
-		int PedCreateRandomPedAsDriverShim(::base::menu::natives::Vehicle vehicle, bool returnHandle) {
-			return base::menu::natives::PED::CREATE_RANDOM_PED_AS_DRIVER(vehicle, returnHandle).Get();
-		}
-
-		int PedGetVehiclePedIsInShim(::base::menu::natives::Ped ped, bool includeEntering) {
-			return base::menu::natives::PED::GET_VEHICLE_PED_IS_IN(ped, includeEntering).Get();
-		}
-
-		int PedGetMountShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_MOUNT(ped).Get();
-		}
-
-		int PedCreateParachuteBagObjectShim(::base::menu::natives::Ped ped, bool p1, bool p2) {
-			return base::menu::natives::PED::CREATE_PARACHUTE_BAG_OBJECT(ped, p1, p2).Get();
-		}
-
 		void PedSetPedStealthMovementShim(::base::menu::natives::Ped ped, bool p1, const std::string& action) {
 			base::menu::natives::PED::SET_PED_STEALTH_MOVEMENT(ped, p1, action.c_str());
 		}
 
-		int PedGetPedTargetFromCombatPedShim(::base::menu::natives::Ped ped, ::base::menu::natives::Any p1) {
-			return base::menu::natives::PED::GET_PED_TARGET_FROM_COMBAT_PED(ped, p1).Get();
-		}
-
-		int PedGetPedsJackerShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_PEDS_JACKER(ped).Get();
-		}
-
-		int PedGetJackTargetShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_JACK_TARGET(ped).Get();
-		}
-
-		int PedGetVehiclePedIsTryingToEnterShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_VEHICLE_PED_IS_TRYING_TO_ENTER(ped).Get();
-		}
-
-		int PedGetPedSourceOfDeathShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_PED_SOURCE_OF_DEATH(ped).Get();
-		}
-
 		bool PedAddRelationshipGroupShim(const std::string& name, ::base::menu::natives::Hash* groupHash) {
 			return base::menu::natives::PED::ADD_RELATIONSHIP_GROUP(name.c_str(), groupHash);
-		}
-
-		int PedGetPlayerPedIsFollowingShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_PLAYER_PED_IS_FOLLOWING(ped).Get();
-		}
-
-		int PedGetVehiclePedIsUsingShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_VEHICLE_PED_IS_USING(ped).Get();
-		}
-
-		int PedGetVehiclePedIsEnteringShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_VEHICLE_PED_IS_ENTERING(ped).Get();
-		}
-
-		int PedGetPedAsGroupMemberShim(int groupID, int memberNumber) {
-			return base::menu::natives::PED::GET_PED_AS_GROUP_MEMBER(groupID, memberNumber).Get();
-		}
-
-		int PedGetPedAsGroupLeaderShim(int groupID) {
-			return base::menu::natives::PED::GET_PED_AS_GROUP_LEADER(groupID).Get();
 		}
 
 		void PedSetPedMovementClipsetShim(::base::menu::natives::Ped ped, const std::string& clipSet, float transitionSpeed) {
@@ -2532,10 +2188,6 @@ namespace {
 			return base::menu::natives::PED::GET_ANIM_INITIAL_OFFSET_ROTATION(animDict.c_str(), animName.c_str(), x, y, z, xRot, yRot, zRot, p8, p9);
 		}
 
-		int PedGetRandomPedAtCoordShim(float x, float y, float z, float xRadius, float yRadius, float zRadius, int pedType) {
-			return base::menu::natives::PED::GET_RANDOM_PED_AT_COORD(x, y, z, xRadius, yRadius, zRadius, pedType).Get();
-		}
-
 		void PedSetPedNameDebugShim(::base::menu::natives::Ped ped, const std::string& name) {
 			base::menu::natives::PED::SET_PED_NAME_DEBUG(ped, name.c_str());
 		}
@@ -2578,10 +2230,6 @@ namespace {
 
 		void PedSetFacialIdleAnimOverrideShim(::base::menu::natives::Ped ped, const std::string& animName, const std::string& animDict) {
 			base::menu::natives::PED::SET_FACIAL_IDLE_ANIM_OVERRIDE(ped, animName.c_str(), animDict.c_str());
-		}
-
-		int PedGetMeleeTargetForPedShim(::base::menu::natives::Ped ped) {
-			return base::menu::natives::PED::GET_MELEE_TARGET_FOR_PED(ped).Get();
 		}
 
 		void PedSetPedCowerHashShim(::base::menu::natives::Ped ped, const std::string& p1) {
@@ -2629,37 +2277,9 @@ namespace {
 			base::menu::natives::PHYSICS::LOAD_ROPE_DATA(ropeId, rope_preset.c_str());
 		}
 
-		int PlayerGetPlayerPedShim(::base::menu::natives::Player player) {
-			return base::menu::natives::PLAYER::GET_PLAYER_PED(player).Get();
-		}
-
-		int PlayerGetPlayerPedScriptIndexShim(::base::menu::natives::Player player) {
-			return base::menu::natives::PLAYER::GET_PLAYER_PED_SCRIPT_INDEX(player).Get();
-		}
-
 		std::string PlayerGetPlayerNameShim(::base::menu::natives::Player player) {
 			const char* const result = base::menu::natives::PLAYER::GET_PLAYER_NAME(player);
 			return result != nullptr ? std::string(result) : std::string();
-		}
-
-		int PlayerGetPlayersLastVehicleShim() {
-			return base::menu::natives::PLAYER::GET_PLAYERS_LAST_VEHICLE().Get();
-		}
-
-		int PlayerGetPlayerIndexShim() {
-			return base::menu::natives::PLAYER::GET_PLAYER_INDEX().Get();
-		}
-
-		int PlayerIntToPlayerindexShim(int value) {
-			return base::menu::natives::PLAYER::INT_TO_PLAYERINDEX(value).Get();
-		}
-
-		int PlayerPlayerIdShim() {
-			return base::menu::natives::PLAYER::PLAYER_ID().Get();
-		}
-
-		int PlayerPlayerPedIdShim() {
-			return base::menu::natives::PLAYER::PLAYER_PED_ID().Get();
 		}
 
 		void PlayerForceCleanupForAllThreadsWithThisNameShim(const std::string& name, int cleanupFlags) {
@@ -3107,10 +2727,6 @@ namespace {
 			base::menu::natives::TASK::TASK_RAPPEL_DOWN_WALL_USING_CLIPSET_OVERRIDE(ped, x1, y1, z1, x2, y2, z2, minZ, ropeHandle, clipSet.c_str(), p10, p11);
 		}
 
-		int TaskAddCoverPointShim(float x, float y, float z, float direction, int usage, int height, int arc, bool isPriority) {
-			return base::menu::natives::TASK::ADD_COVER_POINT(x, y, z, direction, usage, height, arc, isPriority).Get();
-		}
-
 		void TaskTaskStandGuardShim(::base::menu::natives::Ped ped, float x, float y, float z, float heading, const std::string& scenarioName) {
 			base::menu::natives::TASK::TASK_STAND_GUARD(ped, x, y, z, heading, scenarioName.c_str());
 		}
@@ -3300,24 +2916,8 @@ namespace {
 			base::menu::natives::TASK::TASK_SWEEP_AIM_POSITION(ped, animDict.c_str(), lowAnimName.c_str(), medAnimName.c_str(), hiAnimName.c_str(), runtime, x, y, z, turnRate, blendInDuration);
 		}
 
-		int VehicleCreateVehicleShim(::base::menu::natives::Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostVeh, bool p7) {
-			return base::menu::natives::VEHICLE::CREATE_VEHICLE(modelHash, x, y, z, heading, isNetwork, bScriptHostVeh, p7).Get();
-		}
-
 		bool VehicleIsVehicleInGarageAreaShim(const std::string& garageName, ::base::menu::natives::Vehicle vehicle) {
 			return base::menu::natives::VEHICLE::IS_VEHICLE_IN_GARAGE_AREA(garageName.c_str(), vehicle);
-		}
-
-		int VehicleGetPedInVehicleSeatShim(::base::menu::natives::Vehicle vehicle, int seatIndex, bool p2) {
-			return base::menu::natives::VEHICLE::GET_PED_IN_VEHICLE_SEAT(vehicle, seatIndex, p2).Get();
-		}
-
-		int VehicleGetLastPedInVehicleSeatShim(::base::menu::natives::Vehicle vehicle, int seatIndex) {
-			return base::menu::natives::VEHICLE::GET_LAST_PED_IN_VEHICLE_SEAT(vehicle, seatIndex).Get();
-		}
-
-		int VehicleFindHandlerVehicleContainerIsAttachedToShim(::base::menu::natives::Entity entity) {
-			return base::menu::natives::VEHICLE::FIND_HANDLER_VEHICLE_CONTAINER_IS_ATTACHED_TO(entity).Get();
 		}
 
 		void VehicleSetVehicleNumberPlateTextShim(::base::menu::natives::Vehicle vehicle, const std::string& plateText) {
@@ -3327,10 +2927,6 @@ namespace {
 		std::string VehicleGetVehicleNumberPlateTextShim(::base::menu::natives::Vehicle vehicle) {
 			const char* const result = base::menu::natives::VEHICLE::GET_VEHICLE_NUMBER_PLATE_TEXT(vehicle);
 			return result != nullptr ? std::string(result) : std::string();
-		}
-
-		int VehicleCreateMissionTrainShim(int variation, float x, float y, float z, bool direction, ::base::menu::natives::Any p5, ::base::menu::natives::Any p6) {
-			return base::menu::natives::VEHICLE::CREATE_MISSION_TRAIN(variation, x, y, z, direction, p5, p6).Get();
 		}
 
 		int VehicleGetVehicleRecordingIdShim(int recording, const std::string& script) {
@@ -3373,32 +2969,8 @@ namespace {
 			base::menu::natives::VEHICLE::START_PLAYBACK_RECORDED_VEHICLE_USING_AI(vehicle, recording, script.c_str(), speed, drivingStyle);
 		}
 
-		int VehicleGetRandomVehicleInSphereShim(float x, float y, float z, float radius, ::base::menu::natives::Hash modelHash, int flags) {
-			return base::menu::natives::VEHICLE::GET_RANDOM_VEHICLE_IN_SPHERE(x, y, z, radius, modelHash, flags).Get();
-		}
-
-		int VehicleGetRandomVehicleFrontBumperInSphereShim(float p0, float p1, float p2, float p3, int p4, int p5, int p6) {
-			return base::menu::natives::VEHICLE::GET_RANDOM_VEHICLE_FRONT_BUMPER_IN_SPHERE(p0, p1, p2, p3, p4, p5, p6).Get();
-		}
-
-		int VehicleGetRandomVehicleBackBumperInSphereShim(float p0, float p1, float p2, float p3, int p4, int p5, int p6) {
-			return base::menu::natives::VEHICLE::GET_RANDOM_VEHICLE_BACK_BUMPER_IN_SPHERE(p0, p1, p2, p3, p4, p5, p6).Get();
-		}
-
-		int VehicleGetClosestVehicleShim(float x, float y, float z, float radius, ::base::menu::natives::Hash modelHash, int flags) {
-			return base::menu::natives::VEHICLE::GET_CLOSEST_VEHICLE(x, y, z, radius, modelHash, flags).Get();
-		}
-
-		int VehicleGetTrainCarriageShim(::base::menu::natives::Vehicle train, int trailerNumber) {
-			return base::menu::natives::VEHICLE::GET_TRAIN_CARRIAGE(train, trailerNumber).Get();
-		}
-
 		int VehicleGetMissionTrainConfigIndexByNameShim(const std::string& name) {
 			return base::menu::natives::VEHICLE::_GET_MISSION_TRAIN_CONFIG_INDEX_BY_NAME(name.c_str());
-		}
-
-		int VehicleGetPedUsingVehicleDoorShim(::base::menu::natives::Vehicle vehicle, int doord) {
-			return base::menu::natives::VEHICLE::GET_PED_USING_VEHICLE_DOOR(vehicle, doord).Get();
 		}
 
 		std::string VehicleGetDisplayNameFromVehicleModelShim(::base::menu::natives::Hash modelHash) {
@@ -3413,18 +2985,6 @@ namespace {
 
 		void VehicleSetVehicleNameDebugShim(::base::menu::natives::Vehicle vehicle, const std::string& name) {
 			base::menu::natives::VEHICLE::SET_VEHICLE_NAME_DEBUG(vehicle, name.c_str());
-		}
-
-		int VehicleGetEntityAttachedToTowTruckShim(::base::menu::natives::Vehicle towTruck) {
-			return base::menu::natives::VEHICLE::GET_ENTITY_ATTACHED_TO_TOW_TRUCK(towTruck).Get();
-		}
-
-		int VehicleSetVehicleAutomaticallyAttachesShim(::base::menu::natives::Vehicle vehicle, bool p1, ::base::menu::natives::Any p2) {
-			return base::menu::natives::VEHICLE::SET_VEHICLE_AUTOMATICALLY_ATTACHES(vehicle, p1, p2).Get();
-		}
-
-		int VehicleGetVehicleTrailerParentVehicleShim(::base::menu::natives::Vehicle trailer) {
-			return base::menu::natives::VEHICLE::_GET_VEHICLE_TRAILER_PARENT_VEHICLE(trailer).Get();
 		}
 
 		std::string VehicleGetVehicleModColor1NameShim(::base::menu::natives::Vehicle vehicle, bool p1) {
@@ -3452,40 +3012,8 @@ namespace {
 			return result != nullptr ? std::string(result) : std::string();
 		}
 
-		int VehicleGetLastDrivenVehicleShim() {
-			return base::menu::natives::VEHICLE::GET_LAST_DRIVEN_VEHICLE().Get();
-		}
-
-		int VehicleGetVehicleAttachedToCargobobShim(::base::menu::natives::Vehicle cargobob) {
-			return base::menu::natives::VEHICLE::GET_VEHICLE_ATTACHED_TO_CARGOBOB(cargobob).Get();
-		}
-
-		int VehicleGetEntityAttachedToCargobobShim(::base::menu::natives::Any p0) {
-			return base::menu::natives::VEHICLE::GET_ENTITY_ATTACHED_TO_CARGOBOB(p0).Get();
-		}
-
-		int VehicleDoesVehicleExistWithDecoratorShim(const std::string& decorator) {
-			return base::menu::natives::VEHICLE::DOES_VEHICLE_EXIST_WITH_DECORATOR(decorator.c_str()).Get();
-		}
-
-		int VehicleGetLastShuntVehicleShim(::base::menu::natives::Vehicle vehicle) {
-			return base::menu::natives::VEHICLE::GET_LAST_SHUNT_VEHICLE(vehicle).Get();
-		}
-
-		int WeaponGetCurrentPedWeaponEntityIndexShim(::base::menu::natives::Ped ped, bool doDeadCheck) {
-			return base::menu::natives::WEAPON::GET_CURRENT_PED_WEAPON_ENTITY_INDEX(ped, doDeadCheck).Get();
-		}
-
-		int WeaponCreateWeaponObjectShim(::base::menu::natives::Hash weaponHash, int ammoCount, float x, float y, float z, bool showWorldModel, float scale, ::base::menu::natives::Any p7, ::base::menu::natives::Any p8, ::base::menu::natives::Any p9) {
-			return base::menu::natives::WEAPON::CREATE_WEAPON_OBJECT(weaponHash, ammoCount, x, y, z, showWorldModel, scale, p7, p8, p9).Get();
-		}
-
-		int WeaponGetWeaponObjectFromPedShim(::base::menu::natives::Ped ped, bool p1) {
-			return base::menu::natives::WEAPON::GET_WEAPON_OBJECT_FROM_PED(ped, p1).Get();
-		}
-
-		int WeaponSetPedShootOrdnanceWeaponShim(::base::menu::natives::Ped ped, float p1) {
-			return base::menu::natives::WEAPON::SET_PED_SHOOT_ORDNANCE_WEAPON(ped, p1).Get();
+		::base::menu::natives::Vehicle VehicleDoesVehicleExistWithDecoratorShim(const std::string& decorator) {
+			return base::menu::natives::VEHICLE::DOES_VEHICLE_EXIST_WITH_DECORATOR(decorator.c_str());
 		}
 
 		int ZoneGetZoneFromNameIdShim(const std::string& zoneName) {
@@ -4444,8 +3972,8 @@ Camera names found in the b617d scripts:
 "DEFAULT_SPLINE_CAMERA"
 ------------
 Side Note: It seems p8 is basically to represent what would be the bool p1 within CREATE_CAM native. As well as the p9 since it's always 2 in scripts seems to represent what would be the last param within SET_CAM_ROT native which normally would be 2.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateCamera(Hash camHash, bool p1)", AngelScript::asFUNCTION(CameraCreateCameraShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateCameraWithParams(Hash camHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, bool p8, int p9)", AngelScript::asFUNCTION(CameraCreateCameraWithParamsShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateCamera(Hash camHash, bool p1)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::CREATE_CAMERA), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateCameraWithParams(Hash camHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float fov, bool p8, int p9)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::CREATE_CAMERA_WITH_PARAMS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(p9 uses 2 by default)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DestroyCam(int cam, bool bScriptHostCam)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::DESTROY_CAM), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(BOOL param indicates whether the cam should be destroyed if it belongs to the calling script.)ASDOC");
@@ -4458,7 +3986,7 @@ Side Note: It seems p8 is basically to represent what would be the bool p1 withi
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsCamActive(int cam)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::IS_CAM_ACTIVE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns whether or not the passed camera handle is active.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsCamRendering(int cam)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::IS_CAM_RENDERING), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRenderingCam()", AngelScript::asFUNCTION(CameraGetRenderingCamShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRenderingCam()", AngelScript::asFUNCTION(base::menu::natives::CAMERA::GET_RENDERING_CAM), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "Vector3 GetCamCoord(int cam)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::GET_CAM_COORD), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "Vector3 GetCamRot(int cam, int rotationOrder)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::GET_CAM_ROT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(The last parameter, as in other "ROT" methods, is usually 2.)ASDOC");
@@ -4540,7 +4068,7 @@ Set to false by default.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AllowMotionBlurDecay(int p0, bool p1)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::ALLOW_MOTION_BLUR_DECAY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetCamDebugName(int camera, const std::string&in name)", AngelScript::asFUNCTION(CameraSetCamDebugNameShim), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(NOTE: Debugging functions are not present in the retail version of the game.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetDebugCam()", AngelScript::asFUNCTION(CameraGetDebugCamShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetDebugCam()", AngelScript::asFUNCTION(base::menu::natives::CAMERA::GET_DEBUG_CAM), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AddCamSplineNode(int camera, float x, float y, float z, float xRot, float yRot, float zRot, int length, int smoothingStyle, int rotationOrder)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::ADD_CAM_SPLINE_NODE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(I filled p1-p6 (the floats) as they are as other natives with 6 floats in a row are similar and I see no other method. So if a test from anyone proves them wrong please correct.
 
@@ -4927,7 +4455,7 @@ Full list of cam shake types by DurtyFree: https://github.com/DurtyFree/gta-v-da
 		base::menu::as::util::RegisterGlobalFunction(engine, "void StopCutsceneCamShaking(int p0)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::STOP_CUTSCENE_CAM_SHAKING), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetCutsceneCamFarClipThisUpdate(float p0)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::SET_CUTSCENE_CAM_FAR_CLIP_THIS_UPDATE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Hardcoded to only work in multiplayer.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetFocusPedOnScreen(float p0, int p1, float p2, float p3, float p4, float p5, float p6, int p7, int p8)", AngelScript::asFUNCTION(CameraGetFocusPedOnScreenShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetFocusPedOnScreen(float p0, int p1, float p2, float p3, float p4, float p5, float p6, int p7, int p8)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::GET_FOCUS_PED_ON_SCREEN), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DisableNearClipScanThisUpdate()", AngelScript::asFUNCTION(base::menu::natives::CAMERA::DISABLE_NEAR_CLIP_SCAN_THIS_UPDATE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetCamDeathFailEffectState(int p0)", AngelScript::asFUNCTION(base::menu::natives::CAMERA::SET_CAM_DEATH_FAIL_EFFECT_STATE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(if p0 is 0, effect is cancelled
@@ -5281,7 +4809,7 @@ This is one of the most CPU demanding BOOL natives in the game; avoid calling th
 Tested with vehicles, returns true whenever the vehicle is touching any entity.
 
 Note: for vehicles, the wheels can touch the ground and it will still return false, but if the body of the vehicle touches the ground, it will return true.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastEntityHitByEntity(int entity)", AngelScript::asFUNCTION(EntityGetLastEntityHitByEntityShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastEntityHitByEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::_GET_LAST_ENTITY_HIT_BY_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "Hash GetLastMaterialHitByEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_LAST_MATERIAL_HIT_BY_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "Vector3 GetCollisionNormalOfLastHitForEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_COLLISION_NORMAL_OF_LAST_HIT_FOR_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ForceEntityAiAndAnimationUpdate(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::FORCE_ENTITY_AI_AND_ANIMATION_UPDATE), AngelScript::asCALL_CDECL)
@@ -5305,7 +4833,7 @@ return 20800.000000
 Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "float GetAnimDuration(const std::string&in animDict, const std::string&in animName)", AngelScript::asFUNCTION(EntityGetAnimDurationShim), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityAttachedTo(int entity)", AngelScript::asFUNCTION(EntityGetEntityAttachedToShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityAttachedTo(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_ENTITY_ATTACHED_TO), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "Vector3 GetEntityCoords(int entity, bool alive)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_ENTITY_COORDS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets the current coordinates for a specified entity.
 `entity` = The entity to get the coordinates from.
@@ -5400,16 +4928,16 @@ float mph = (speed * 2.236936);
 			.Desc(R"ASDOC(Relative can be used for getting speed relative to the frame of the vehicle, to determine for example, if you are going in reverse (-y speed) or not (+y speed).)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "float GetEntityUprightValue(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_ENTITY_UPRIGHT_VALUE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "Vector3 GetEntityVelocity(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_ENTITY_VELOCITY), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetObjectIndexFromEntityIndex(int entity)", AngelScript::asFUNCTION(EntityGetObjectIndexFromEntityIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetObjectIndexFromEntityIndex(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_OBJECT_INDEX_FROM_ENTITY_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Simply returns whatever is passed to it (Regardless of whether the handle is valid or not).)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedIndexFromEntityIndex(int entity)", AngelScript::asFUNCTION(EntityGetPedIndexFromEntityIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedIndexFromEntityIndex(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Simply returns whatever is passed to it (Regardless of whether the handle is valid or not).)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehicleIndexFromEntityIndex(int entity)", AngelScript::asFUNCTION(EntityGetVehicleIndexFromEntityIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehicleIndexFromEntityIndex(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_VEHICLE_INDEX_FROM_ENTITY_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Simply returns whatever is passed to it (Regardless of whether the handle is valid or not).)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "Vector3 GetWorldPositionOfEntityBone(int entity, int boneIndex)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_WORLD_POSITION_OF_ENTITY_BONE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the coordinates of an entity-bone.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNearestPlayerToEntity(int entity)", AngelScript::asFUNCTION(EntityGetNearestPlayerToEntityShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNearestPlayerToEntityOnTeam(int entity, int team)", AngelScript::asFUNCTION(EntityGetNearestPlayerToEntityOnTeamShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNearestPlayerToEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_NEAREST_PLAYER_TO_ENTITY), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNearestPlayerToEntityOnTeam(int entity, int team)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_NEAREST_PLAYER_TO_ENTITY_ON_TEAM), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNearestParticipantToEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_NEAREST_PARTICIPANT_TO_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityType(int entity)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_ENTITY_TYPE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns:
@@ -5807,7 +5335,7 @@ set_entity_invincible(uParam0, 1);)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetEntityCantCauseCollisionDamagedEntity(int entity1, int entity2)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::SET_ENTITY_CANT_CAUSE_COLLISION_DAMAGED_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetAllowMigrateToSpectator(int entity, int p1)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::SET_ALLOW_MIGRATE_TO_SPECTATOR), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(p1 is always set to 1)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityOfTypeAttachedToEntity(int entity, Hash modelHash)", AngelScript::asFUNCTION(EntityGetEntityOfTypeAttachedToEntityShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityOfTypeAttachedToEntity(int entity, Hash modelHash)", AngelScript::asFUNCTION(base::menu::natives::ENTITY::GET_ENTITY_OF_TYPE_ATTACHED_TO_ENTITY), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets the handle of an entity with a specific model hash attached to another entity, such as an object attached to a ped.
 This native does not appear to have anything to do with pickups as in scripts it is used with objects.
 
@@ -6041,14 +5569,14 @@ FILES::EXECUTE_CONTENT_CHANGESET_GROUP_FOR_ALL(joaat("GROUP_MAP"));)ASDOC");
 	// fire
 	engine->SetDefaultNamespace("natives::fire");
 
-		base::menu::as::util::RegisterGlobalFunction(engine, "int StartScriptFire(float X, float Y, float Z, int maxChildren, bool isGasFire)", AngelScript::asFUNCTION(FireStartScriptFireShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int StartScriptFire(float X, float Y, float Z, int maxChildren, bool isGasFire)", AngelScript::asFUNCTION(base::menu::natives::FIRE::START_SCRIPT_FIRE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Starts a fire:
 
 xyz: Location of fire
 maxChildren: The max amount of times a fire can spread to other objects. Must be 25 or less, or the function will do nothing.
 isGasFire: Whether or not the fire is powered by gasoline.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void RemoveScriptFire(int fireHandle)", AngelScript::asFUNCTION(base::menu::natives::FIRE::REMOVE_SCRIPT_FIRE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int StartEntityFire(int entity)", AngelScript::asFUNCTION(FireStartEntityFireShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int StartEntityFire(int entity)", AngelScript::asFUNCTION(base::menu::natives::FIRE::START_ENTITY_FIRE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void StopEntityFire(int entity)", AngelScript::asFUNCTION(base::menu::natives::FIRE::STOP_ENTITY_FIRE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsEntityOnFire(int entity)", AngelScript::asFUNCTION(base::menu::natives::FIRE::IS_ENTITY_ON_FIRE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNumberOfFiresInRange(float x, float y, float z, float radius)", AngelScript::asFUNCTION(base::menu::natives::FIRE::GET_NUMBER_OF_FIRES_IN_RANGE), AngelScript::asCALL_CDECL);
@@ -6075,11 +5603,11 @@ explosionType: See ADD_EXPLOSION.)ASDOC");
 			.Desc(R"ASDOC(explosionType: See ADD_EXPLOSION.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsExplosionInSphere(int explosionType, float x, float y, float z, float radius)", AngelScript::asFUNCTION(base::menu::natives::FIRE::IS_EXPLOSION_IN_SPHERE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(explosionType: See ADD_EXPLOSION.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetOwnerOfExplosionInSphere(int explosionType, float x, float y, float z, float radius)", AngelScript::asFUNCTION(FireGetOwnerOfExplosionInSphereShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetOwnerOfExplosionInSphere(int explosionType, float x, float y, float z, float radius)", AngelScript::asFUNCTION(base::menu::natives::FIRE::GET_OWNER_OF_EXPLOSION_IN_SPHERE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(explosionType: See ADD_EXPLOSION.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsExplosionInAngledArea(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float width)", AngelScript::asFUNCTION(base::menu::natives::FIRE::IS_EXPLOSION_IN_ANGLED_AREA), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(explosionType: See ADD_EXPLOSION, -1 for any explosion type)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetOwnerOfExplosionInAngledArea(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float radius)", AngelScript::asFUNCTION(FireGetOwnerOfExplosionInAngledAreaShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetOwnerOfExplosionInAngledArea(int explosionType, float x1, float y1, float z1, float x2, float y2, float z2, float radius)", AngelScript::asFUNCTION(base::menu::natives::FIRE::GET_OWNER_OF_EXPLOSION_IN_ANGLED_AREA), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns a handle to the first entity within the a circle spawned inside the 2 points from a radius.
 
 explosionType: See ADD_EXPLOSION.)ASDOC");
@@ -7868,9 +7396,9 @@ r, g, b, a - color)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetStandardBlipEnumId()", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_STANDARD_BLIP_ENUM_ID), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetWaypointBlipEnumId()", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_WAYPOINT_BLIP_ENUM_ID), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNumberOfActiveBlips()", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_NUMBER_OF_ACTIVE_BLIPS), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNextBlipInfoId(int blipSprite)", AngelScript::asFUNCTION(HudGetNextBlipInfoIdShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetFirstBlipInfoId(int blipSprite)", AngelScript::asFUNCTION(HudGetFirstBlipInfoIdShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetClosestBlipInfoId(int blipSprite)", AngelScript::asFUNCTION(HudGetClosestBlipInfoIdShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNextBlipInfoId(int blipSprite)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_NEXT_BLIP_INFO_ID), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetFirstBlipInfoId(int blipSprite)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_FIRST_BLIP_INFO_ID), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetClosestBlipInfoId(int blipSprite)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_CLOSEST_BLIP_INFO_ID), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "Vector3 GetBlipInfoIdCoord(int blip)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_BLIP_INFO_ID_COORD), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipInfoIdDisplay(int blip)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_BLIP_INFO_ID_DISPLAY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipInfoIdType(int blip)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_BLIP_INFO_ID_TYPE), AngelScript::asCALL_CDECL)
@@ -7882,27 +7410,27 @@ r, g, b, a - color)ASDOC");
 5 - unk
 6 - Pickup
 7 - Radius)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipInfoIdEntityIndex(int blip)", AngelScript::asFUNCTION(HudGetBlipInfoIdEntityIndexShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipInfoIdPickupIndex(int blip)", AngelScript::asFUNCTION(HudGetBlipInfoIdPickupIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipInfoIdEntityIndex(int blip)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_BLIP_INFO_ID_ENTITY_INDEX), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipInfoIdPickupIndex(int blip)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_BLIP_INFO_ID_PICKUP_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(This function is hard-coded to always return 0.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipFromEntity(int entity)", AngelScript::asFUNCTION(HudGetBlipFromEntityShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetBlipFromEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_BLIP_FROM_ENTITY), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the Blip handle of given Entity.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForRadius(float posX, float posY, float posZ, float radius)", AngelScript::asFUNCTION(HudAddBlipForRadiusShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForArea(float x, float y, float z, float width, float height)", AngelScript::asFUNCTION(HudAddBlipForAreaShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForRadius(float posX, float posY, float posZ, float radius)", AngelScript::asFUNCTION(base::menu::natives::HUD::ADD_BLIP_FOR_RADIUS), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForArea(float x, float y, float z, float width, float height)", AngelScript::asFUNCTION(base::menu::natives::HUD::ADD_BLIP_FOR_AREA), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Adds a rectangular blip for the specified coordinates/area.
 
 It is recommended to use SET_BLIP_ROTATION and SET_BLIP_COLOUR to make the blip not rotate along with the camera.
 
 By default, the blip will show as a _regular_ blip with the specified color/sprite if it is outside of the minimap view.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForEntity(int entity)", AngelScript::asFUNCTION(HudAddBlipForEntityShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::HUD::ADD_BLIP_FOR_ENTITY), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns red ( default ) blip attached to entity.
 
 Example:
 Blip blip; //Put this outside your case or option
 blip = HUD::ADD_BLIP_FOR_ENTITY(YourPedOrBodyguardName);
 HUD::SET_BLIP_AS_FRIENDLY(blip, true);)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForPickup(int pickup)", AngelScript::asFUNCTION(HudAddBlipForPickupShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForCoord(float x, float y, float z)", AngelScript::asFUNCTION(HudAddBlipForCoordShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForPickup(int pickup)", AngelScript::asFUNCTION(base::menu::natives::HUD::ADD_BLIP_FOR_PICKUP), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int AddBlipForCoord(float x, float y, float z)", AngelScript::asFUNCTION(base::menu::natives::HUD::ADD_BLIP_FOR_COORD), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Creates an orange ( default ) Blip-object. Returns a Blip-object which can then be modified.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TriggerSonarBlip(float posX, float posY, float posZ, float radius, int p4)", AngelScript::asFUNCTION(base::menu::natives::HUD::TRIGGER_SONAR_BLIP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AllowSonarBlips(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::ALLOW_SONAR_BLIPS), AngelScript::asCALL_CDECL);
@@ -7957,7 +7485,7 @@ HUD::SET_BLIP_ALPHA(blip , 64);)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetBlipHighDetail(int blip, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_BLIP_HIGH_DETAIL), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetBlipAsMissionCreatorBlip(int blip, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_BLIP_AS_MISSION_CREATOR_BLIP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsMissionCreatorBlip(int blip)", AngelScript::asFUNCTION(base::menu::natives::HUD::IS_MISSION_CREATOR_BLIP), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNewSelectedMissionCreatorBlip()", AngelScript::asFUNCTION(HudGetNewSelectedMissionCreatorBlipShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNewSelectedMissionCreatorBlip()", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_NEW_SELECTED_MISSION_CREATOR_BLIP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsHoveringOverMissionCreatorBlip()", AngelScript::asFUNCTION(base::menu::natives::HUD::IS_HOVERING_OVER_MISSION_CREATOR_BLIP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ShowStartMissionInstructionalButton(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::SHOW_START_MISSION_INSTRUCTIONAL_BUTTON), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ShowContactInstructionalButton(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::SHOW_CONTACT_INSTRUCTIONAL_BUTTON), AngelScript::asCALL_CDECL);
@@ -8094,7 +7622,7 @@ HUD::SET_WAYPOINT_OFF();)ASDOC");
 p2 appears to be always -1. If p2 is -1 then native wouldn't change the color.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetMinimapSonarSweep(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_MINIMAP_SONAR_SWEEP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ShowAccountPicker()", AngelScript::asFUNCTION(base::menu::natives::HUD::SHOW_ACCOUNT_PICKER), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetMainPlayerBlipId()", AngelScript::asFUNCTION(HudGetMainPlayerBlipIdShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetMainPlayerBlipId()", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_MAIN_PLAYER_BLIP_ID), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPmWarningscreenActive(bool p0)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_PM_WARNINGSCREEN_ACTIVE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void HideLoadingOnFadeThisFrame()", AngelScript::asFUNCTION(base::menu::natives::HUD::HIDE_LOADING_ON_FADE_THIS_FRAME), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetRadarAsInteriorThisFrame(Hash interior, float x, float y, int z, int zoom)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_RADAR_AS_INTERIOR_THIS_FRAME), AngelScript::asCALL_CDECL)
@@ -8538,7 +8066,7 @@ If toggle is false, the map is shown in normal mode)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void CustomMinimapClearBlips()", AngelScript::asFUNCTION(base::menu::natives::HUD::CUSTOM_MINIMAP_CLEAR_BLIPS), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool ForceSonarBlipsThisFrame()", AngelScript::asFUNCTION(base::menu::natives::HUD::FORCE_SONAR_BLIPS_THIS_FRAME), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Doesn't actually return anything.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNorthBlidIndex()", AngelScript::asFUNCTION(HudGetNorthBlidIndexShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetNorthBlidIndex()", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_NORTH_BLID_INDEX), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DisplayPlayerNameTagsOnBlips(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::DISPLAY_PLAYER_NAME_TAGS_ON_BLIPS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Toggles whether or not name labels are shown on the expanded minimap next to player blips, like in GTA:O.
 Doesn't need to be called every frame.
@@ -8746,8 +8274,8 @@ See https://gtaforums.com/topic/884370-native-research-ai-blips for further info
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedAiBlipForcedOn(int ped, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_PED_AI_BLIP_FORCED_ON), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedAiBlipNoticeRange(int ped, float range)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_PED_AI_BLIP_NOTICE_RANGE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedAiBlipSprite(int ped, int spriteId)", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_PED_AI_BLIP_SPRITE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetAiPedPedBlipIndex(int ped)", AngelScript::asFUNCTION(HudGetAiPedPedBlipIndexShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetAiPedVehicleBlipIndex(int ped)", AngelScript::asFUNCTION(HudGetAiPedVehicleBlipIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetAiPedPedBlipIndex(int ped)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_AI_PED_PED_BLIP_INDEX), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetAiPedVehicleBlipIndex(int ped)", AngelScript::asFUNCTION(base::menu::natives::HUD::GET_AI_PED_VEHICLE_BLIP_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the current AI BLIP for the specified ped)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool HasDirectorModeBeenLaunchedByCode()", AngelScript::asFUNCTION(base::menu::natives::HUD::HAS_DIRECTOR_MODE_BEEN_LAUNCHED_BY_CODE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetDirectorModeLaunchedByScript()", AngelScript::asFUNCTION(base::menu::natives::HUD::SET_DIRECTOR_MODE_LAUNCHED_BY_SCRIPT), AngelScript::asCALL_CDECL);
@@ -8793,7 +8321,7 @@ If toggle is false, shows special ability bar / character name in the pause menu
 			.Desc(R"ASDOC(Gets the room hash key from the room that the specified entity is in. Each room in every interior has a unique key. Returns 0 if the entity is outside.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "Hash GetKeyForEntityInRoom(int entity)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::GET_KEY_FOR_ENTITY_IN_ROOM), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Seems to do the exact same as INTERIOR::GET_ROOM_KEY_FROM_ENTITY)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorFromEntity(int entity)", AngelScript::asFUNCTION(InteriorGetInteriorFromEntityShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorFromEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::GET_INTERIOR_FROM_ENTITY), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the handle of the interior that the entity is in. Returns 0 if outside.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void RetainEntityInInterior(int entity, int interior)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::RETAIN_ENTITY_IN_INTERIOR), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClearInteriorStateOfEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::CLEAR_INTERIOR_STATE_OF_ENTITY), AngelScript::asCALL_CDECL)
@@ -8807,9 +8335,9 @@ INTERIOR::SET_ROOM_FOR_GAME_VIEWPORT_BY_NAME("V_CarModRoom");)ASDOC");
 			.Desc(R"ASDOC(Usage: INTERIOR::SET_ROOM_FOR_GAME_VIEWPORT_BY_KEY(INTERIOR::GET_KEY_FOR_ENTITY_IN_ROOM(PLAYER::PLAYER_PED_ID()));)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "Hash GetRoomKeyForGameViewport()", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::GET_ROOM_KEY_FOR_GAME_VIEWPORT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClearRoomForGameViewport()", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::CLEAR_ROOM_FOR_GAME_VIEWPORT), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorFromPrimaryView()", AngelScript::asFUNCTION(InteriorGetInteriorFromPrimaryViewShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorFromPrimaryView()", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::GET_INTERIOR_FROM_PRIMARY_VIEW), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the current interior id from gameplay camera)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorAtCoords(float x, float y, float z)", AngelScript::asFUNCTION(InteriorGetInteriorAtCoordsShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorAtCoords(float x, float y, float z)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::GET_INTERIOR_AT_COORDS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns interior ID from specified coordinates. If coordinates are outside, then it returns 0.
 
 Example for VB.NET
@@ -8832,12 +8360,12 @@ Use: INTERIOR::UNPIN_INTERIOR(INTERIOR::GET_INTERIOR_AT_COORDS_WITH_TYPE(x, y, z
 Interior types include: "V_Michael", "V_Franklins", "V_Franklinshouse", etc.. you can find them in the scripts.
 
 Not a very useful native as you could just use GET_INTERIOR_AT_COORDS instead and get the same result, without even having to specify the interior type.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorAtCoordsWithTypehash(float x, float y, float z, Hash typeHash)", AngelScript::asFUNCTION(InteriorGetInteriorAtCoordsWithTypehashShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorAtCoordsWithTypehash(float x, float y, float z, Hash typeHash)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::GET_INTERIOR_AT_COORDS_WITH_TYPEHASH), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Hashed version of GET_INTERIOR_AT_COORDS_WITH_TYPE)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ActivateInteriorGroupsUsingCamera()", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::ACTIVATE_INTERIOR_GROUPS_USING_CAMERA), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsCollisionMarkedOutside(float x, float y, float z)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::IS_COLLISION_MARKED_OUTSIDE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns true if the collision at the specified coords is marked as being outside (false if there's an interior))ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorFromCollision(float x, float y, float z)", AngelScript::asFUNCTION(InteriorGetInteriorFromCollisionShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetInteriorFromCollision(float x, float y, float z)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::GET_INTERIOR_FROM_COLLISION), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void EnableStadiumProbesThisFrame(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::INTERIOR::ENABLE_STADIUM_PROBES_THIS_FRAME), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ActivateInteriorEntitySet(int interior, const std::string&in entitySetName)", AngelScript::asFUNCTION(InteriorActivateInteriorEntitySetShim), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(More info: https://gtaforums.com/topic/836367-adding-props-to-interiors/
@@ -8867,13 +8395,13 @@ More info: https://gtaforums.com/topic/836301-hiding-gta-online-apartment-exteri
 	// itemsets
 	engine->SetDefaultNamespace("natives::itemsets");
 
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateItemset(bool p0)", AngelScript::asFUNCTION(ItemsetsCreateItemsetShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateItemset(bool p0)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::CREATE_ITEMSET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DestroyItemset(int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::DESTROY_ITEMSET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsItemsetValid(int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::IS_ITEMSET_VALID), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool AddToItemset(int item, int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::ADD_TO_ITEMSET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void RemoveFromItemset(int item, int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::REMOVE_FROM_ITEMSET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetItemsetSize(int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::GET_ITEMSET_SIZE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetIndexedItemInItemset(int index, int itemset)", AngelScript::asFUNCTION(ItemsetsGetIndexedItemInItemsetShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetIndexedItemInItemset(int index, int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::GET_INDEXED_ITEM_IN_ITEMSET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsInItemset(int item, int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::IS_IN_ITEMSET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void CleanItemset(int itemset)", AngelScript::asFUNCTION(base::menu::natives::ITEMSETS::CLEAN_ITEMSET), AngelScript::asCALL_CDECL);
 
@@ -10297,7 +9825,7 @@ Returns some sort of unavailable reason:
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkAreSocialClubPoliciesCurrent()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_ARE_SOCIAL_CLUB_POLICIES_CURRENT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsHost()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_IS_HOST), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(If you are host, returns true else returns false.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetHostPlayerIndex()", AngelScript::asFUNCTION(NetworkNetworkGetHostPlayerIndexShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetHostPlayerIndex()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_HOST_PLAYER_INDEX), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkWasGameSuspended()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_WAS_GAME_SUSPENDED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkHaveOnlinePrivileges()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_HAVE_ONLINE_PRIVILEGES), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkMultiplayerCrossplayNotAllowed()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::_NETWORK_MULTIPLAYER_CROSSPLAY_NOT_ALLOWED), AngelScript::asCALL_CDECL)
@@ -10654,9 +10182,9 @@ nothing doin.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetBroadcastDataPlayerUpdateSize(Hash scriptNameHash, int instance, Hash positionHash, int handlerNum)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::_NETWORK_GET_BROADCAST_DATA_PLAYER_UPDATE_SIZE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Note: this native was added in build 889.19)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkHasReceivedHostBroadcastData()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_HAS_RECEIVED_HOST_BROADCAST_DATA), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetPlayerIndex(int player)", AngelScript::asFUNCTION(NetworkNetworkGetPlayerIndexShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetPlayerIndex(int player)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_PLAYER_INDEX), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetParticipantIndex(int index)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_PARTICIPANT_INDEX), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetPlayerIndexFromPed(int ped)", AngelScript::asFUNCTION(NetworkNetworkGetPlayerIndexFromPedShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetPlayerIndexFromPed(int ped)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_PLAYER_INDEX_FROM_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the Player associated to a given Ped when in an online session.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetNumConnectedPlayers()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_NUM_CONNECTED_PLAYERS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the amount of players connected in the current session. Only works when connected to a session/server.)ASDOC");
@@ -10666,7 +10194,7 @@ nothing doin.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsPlayerActive(int player)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_IS_PLAYER_ACTIVE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsPlayerAParticipant(int player)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_IS_PLAYER_A_PARTICIPANT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsHostOfThisScript()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_IS_HOST_OF_THIS_SCRIPT), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetHostOfThisScript()", AngelScript::asFUNCTION(NetworkNetworkGetHostOfThisScriptShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetHostOfThisScript()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_HOST_OF_THIS_SCRIPT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetHostOfScript(const std::string&in scriptName, int instance_id, int position_hash)", AngelScript::asFUNCTION(NetworkNetworkGetHostOfScriptShim), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(scriptName examples:
 "freemode", "AM_CR_SecurityVan", ...
@@ -10674,7 +10202,7 @@ nothing doin.)ASDOC");
 Most of the time, these values are used:
 instance_id = -1
 position_hash = 0)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetHostOfThread(int threadId)", AngelScript::asFUNCTION(NetworkNetworkGetHostOfThreadShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetHostOfThread(int threadId)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_HOST_OF_THREAD), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetMissionFinished()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_SET_MISSION_FINISHED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsScriptActive(const std::string&in scriptName, int instance_id, bool p2, int position_hash)", AngelScript::asFUNCTION(NetworkNetworkIsScriptActiveShim), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsScriptActiveByHash(Hash scriptHash, int p1, bool p2, int p3)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_IS_SCRIPT_ACTIVE_BY_HASH), AngelScript::asCALL_CDECL);
@@ -10685,19 +10213,19 @@ position_hash = 0)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsPlayerAParticipantOnScript(int player, const std::string&in script, int instance_id)", AngelScript::asFUNCTION(NetworkNetworkIsPlayerAParticipantOnScriptShim), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkPreventScriptHostMigration()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_PREVENT_SCRIPT_HOST_MIGRATION), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkRequestToBeHostOfThisScript()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_REQUEST_TO_BE_HOST_OF_THIS_SCRIPT), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int ParticipantId()", AngelScript::asFUNCTION(NetworkParticipantIdShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int ParticipantId()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::PARTICIPANT_ID), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Return the local Participant ID)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int ParticipantIdToInt()", AngelScript::asFUNCTION(base::menu::natives::NETWORK::PARTICIPANT_ID_TO_INT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Return the local Participant ID.
 
 This native is exactly the same as 'PARTICIPANT_ID' native.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetKillerOfPlayer(int player, Hash&out weaponHash)", AngelScript::asFUNCTION(NetworkNetworkGetKillerOfPlayerShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetDestroyerOfNetworkId(int netId, Hash&out weaponHash)", AngelScript::asFUNCTION(NetworkNetworkGetDestroyerOfNetworkIdShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetDestroyerOfEntity(int entity, Hash&out weaponHash)", AngelScript::asFUNCTION(NetworkNetworkGetDestroyerOfEntityShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetKillerOfPlayer(int player, Hash&out weaponHash)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_KILLER_OF_PLAYER), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetDestroyerOfNetworkId(int netId, Hash&out weaponHash)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_DESTROYER_OF_NETWORK_ID), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetDestroyerOfEntity(int entity, Hash&out weaponHash)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_DESTROYER_OF_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkGetAssistedKillOfEntity(int player, int entity, int&out p2)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_ASSISTED_KILL_OF_ENTITY), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(NETWORK_GET_ASSISTED_DAMAGE_OF_ENTITY that ensures the entity is dead (IS_ENTITY_DEAD))ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkGetAssistedDamageOfEntity(int player, int entity, int&out p2)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_ASSISTED_DAMAGE_OF_ENTITY), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetEntityKillerOfPlayer(int player, Hash&out weaponHash)", AngelScript::asFUNCTION(NetworkNetworkGetEntityKillerOfPlayerShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetEntityKillerOfPlayer(int player, Hash&out weaponHash)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_ENTITY_KILLER_OF_PLAYER), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetCurrentPublicContentId(const std::string&in missionId)", AngelScript::asFUNCTION(NetworkNetworkSetCurrentPublicContentIdShim), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetCurrentChatOption(int newChatOption)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_SET_CURRENT_CHAT_OPTION), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetCurrentSpawnLocationOption(Hash mpSettingSpawn)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_SET_CURRENT_SPAWN_LOCATION_OPTION), AngelScript::asCALL_CDECL)
@@ -10739,7 +10267,7 @@ MP_SETTING_SPAWN_MAX,
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkSetLocalPlayerSyncLookAt(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_SET_LOCAL_PLAYER_SYNC_LOOK_AT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkHasEntityBeenRegisteredWithThisThread(int entity)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_HAS_ENTITY_BEEN_REGISTERED_WITH_THIS_THREAD), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetNetworkIdFromEntity(int entity)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_NETWORK_ID_FROM_ENTITY), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetEntityFromNetworkId(int netId)", AngelScript::asFUNCTION(NetworkNetworkGetEntityFromNetworkIdShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetEntityFromNetworkId(int netId)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_ENTITY_FROM_NETWORK_ID), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkGetEntityIsNetworked(int entity)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_ENTITY_IS_NETWORKED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkGetEntityIsLocal(int entity)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_ENTITY_IS_LOCAL), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkRegisterEntityAsNetworked(int entity)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_REGISTER_ENTITY_AS_NETWORKED), AngelScript::asCALL_CDECL);
@@ -10764,12 +10292,12 @@ MP_SETTING_SPAWN_MAX,
 			.Desc(R"ASDOC(Lets objects spawn online simply do it like this:
 
 int createdObject = OBJ_TO_NET(CREATE_OBJECT_NO_OFFSET(oball, pCoords.x, pCoords.y, pCoords.z, 1, 0, 0));)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToVeh(int netHandle)", AngelScript::asFUNCTION(NetworkNetToVehShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToPed(int netHandle)", AngelScript::asFUNCTION(NetworkNetToPedShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToVeh(int netHandle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NET_TO_VEH), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToPed(int netHandle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NET_TO_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(gets the ped id of a network id)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToObj(int netHandle)", AngelScript::asFUNCTION(NetworkNetToObjShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToObj(int netHandle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NET_TO_OBJ), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(gets the object id of a network id)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToEnt(int netHandle)", AngelScript::asFUNCTION(NetworkNetToEntShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetToEnt(int netHandle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NET_TO_ENT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(gets the entity id of a network id)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkGetLocalHandle(NativeHandle@ gamerHandle, int gamerHandleSize)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_LOCAL_HANDLE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkHandleFromUserId(const std::string&in userId, NativeHandle@ gamerHandle, int gamerHandleSize)", AngelScript::asFUNCTION(NetworkNetworkHandleFromUserIdShim), AngelScript::asCALL_CDECL);
@@ -10788,7 +10316,7 @@ int createdObject = OBJ_TO_NET(CREATE_OBJECT_NO_OFFSET(oball, pCoords.x, pCoords
 			.Desc(R"ASDOC(This function is hard-coded to always return 0.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkAreHandlesTheSame(NativeHandle@ gamerHandle1, NativeHandle@ gamerHandle2)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_ARE_HANDLES_THE_SAME), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsHandleValid(NativeHandle@ gamerHandle, int gamerHandleSize)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_IS_HANDLE_VALID), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetPlayerFromGamerHandle(NativeHandle@ gamerHandle)", AngelScript::asFUNCTION(NetworkNetworkGetPlayerFromGamerHandleShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetPlayerFromGamerHandle(NativeHandle@ gamerHandle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_PLAYER_FROM_GAMER_HANDLE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "std::string NetworkMemberIdFromGamerHandle(NativeHandle@ gamerHandle)", AngelScript::asFUNCTION(NetworkNetworkMemberIdFromGamerHandleShim), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkIsGamerInMySession(NativeHandle@ gamerHandle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_IS_GAMER_IN_MY_SESSION), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void NetworkShowProfileUi(NativeHandle@ gamerHandle)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_SHOW_PROFILE_UI), AngelScript::asCALL_CDECL);
@@ -10806,7 +10334,7 @@ R* now checks with the IS_DLC_PRESENT native for the dlc hash 2532323046,
 if that is present it will unlock dev stuff.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool NetworkPlayerIndexIsCheater(int player)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_PLAYER_INDEX_IS_CHEATER), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkEntityGetObjectId(int entity)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_ENTITY_GET_OBJECT_ID), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetEntityFromObjectId(int p0)", AngelScript::asFUNCTION(NetworkNetworkGetEntityFromObjectIdShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkGetEntityFromObjectId(int p0)", AngelScript::asFUNCTION(base::menu::natives::NETWORK::NETWORK_GET_ENTITY_FROM_OBJECT_ID), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(I've had this return the player's ped handle sometimes, but also other random entities.
 Whatever p0 is, it's at least not synced to other players.
 At least not all the time, some p0 values actually output the same entity, (different handle of course, but same entity).
@@ -11544,9 +11072,9 @@ Note: an invalid error code returns a null pointer!)ASDOC");
 	// object
 	engine->SetDefaultNamespace("natives::object");
 
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateObject(Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic)", AngelScript::asFUNCTION(ObjectCreateObjectShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateObject(Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_OBJECT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(List of object models that can be created without any additional effort like making sure ytyp is loaded etc: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ObjectList.ini)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateObjectNoOffset(Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic, int p7)", AngelScript::asFUNCTION(ObjectCreateObjectNoOffsetShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateObjectNoOffset(Hash modelHash, float x, float y, float z, bool isNetwork, bool bScriptHostObj, bool dynamic, int p7)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_OBJECT_NO_OFFSET), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(List of object models that can be created without any additional effort like making sure ytyp is loaded etc: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ObjectList.ini)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DeleteObject(int&out object)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::DELETE_OBJECT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Deletes the specified object, then sets the handle pointed to by the pointer to NULL.)ASDOC");
@@ -11565,7 +11093,7 @@ Has to be looped until it returns true.)ASDOC");
 			.Desc(R"ASDOC(Sets the 34th and 35th object flags related to player peds.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetObjectForceVehiclesToAvoid(int object, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_OBJECT_FORCE_VEHICLES_TO_AVOID), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Overrides a flag on the object which determines if the object should be avoided by a vehicle in task CTaskVehicleGoToPointWithAvoidanceAutomobile.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetClosestObjectOfType(float x, float y, float z, float radius, Hash modelHash, bool isMission, bool p6, bool p7)", AngelScript::asFUNCTION(ObjectGetClosestObjectOfTypeShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetClosestObjectOfType(float x, float y, float z, float radius, Hash modelHash, bool isMission, bool p6, bool p7)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::GET_CLOSEST_OBJECT_OF_TYPE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Has 8 params in the latest patches.
 
 isMission - if true doesn't return mission objects)ASDOC");
@@ -11735,9 +11263,9 @@ For example, if the object just spawned (state 2), the native will return 3.)ASD
 		base::menu::as::util::RegisterGlobalFunction(engine, "float GetRayfireMapObjectAnimPhase(int object)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::GET_RAYFIRE_MAP_OBJECT_ANIM_PHASE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(`object`: The des-object handle to get the animation progress from.
 Return value is a float between 0.0 and 1.0, 0.0 is the beginning of the animation, 1.0 is the end. Value resets to 0.0 instantly after reaching 1.0.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePickup(Hash pickupHash, float posX, float posY, float posZ, int p4, int value, bool p6, Hash modelHash)", AngelScript::asFUNCTION(ObjectCreatePickupShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePickup(Hash pickupHash, float posX, float posY, float posZ, int p4, int value, bool p6, Hash modelHash)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_PICKUP), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePickupRotate(Hash pickupHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, int flag, int amount, int p9, bool p10, Hash modelHash)", AngelScript::asFUNCTION(ObjectCreatePickupRotateShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePickupRotate(Hash pickupHash, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, int flag, int amount, int p9, bool p10, Hash modelHash)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_PICKUP_ROTATE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(flags:
 8 (1 << 3): place on ground
 512 (1 << 9): spin around
@@ -11745,13 +11273,13 @@ Return value is a float between 0.0 and 1.0, 0.0 is the beginning of the animati
 Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ForcePickupRotateFaceUp()", AngelScript::asFUNCTION(base::menu::natives::OBJECT::FORCE_PICKUP_ROTATE_FACE_UP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetCustomPickupWeaponHash(Hash pickupHash, int pickup)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::SET_CUSTOM_PICKUP_WEAPON_HASH), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateAmbientPickup(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, bool p7, bool p8)", AngelScript::asFUNCTION(ObjectCreateAmbientPickupShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateAmbientPickup(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, bool p7, bool p8)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_AMBIENT_PICKUP), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateNonNetworkedAmbientPickup(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, bool p7, bool p8)", AngelScript::asFUNCTION(ObjectCreateNonNetworkedAmbientPickupShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateNonNetworkedAmbientPickup(Hash pickupHash, float posX, float posY, float posZ, int flags, int value, Hash modelHash, bool p7, bool p8)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_NON_NETWORKED_AMBIENT_PICKUP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void BlockPlayersForAmbientPickup(int p0, int p1)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::BLOCK_PLAYERS_FOR_AMBIENT_PICKUP), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePortablePickup(Hash pickupHash, float x, float y, float z, bool placeOnGround, Hash modelHash)", AngelScript::asFUNCTION(ObjectCreatePortablePickupShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePortablePickup(Hash pickupHash, float x, float y, float z, bool placeOnGround, Hash modelHash)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_PORTABLE_PICKUP), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateNonNetworkedPortablePickup(Hash pickupHash, float x, float y, float z, bool placeOnGround, Hash modelHash)", AngelScript::asFUNCTION(ObjectCreateNonNetworkedPortablePickupShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateNonNetworkedPortablePickup(Hash pickupHash, float x, float y, float z, bool placeOnGround, Hash modelHash)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::CREATE_NON_NETWORKED_PORTABLE_PICKUP), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Full list of pickup types by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/pickupTypes.json)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AttachPortablePickupToPed(int pickupObject, int ped)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::ATTACH_PORTABLE_PICKUP_TO_PED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DetachPortablePickupFromPed(int pickupObject)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::DETACH_PORTABLE_PICKUP_FROM_PED), AngelScript::asCALL_CDECL);
@@ -11791,7 +11319,7 @@ Spawns 3 spray cans that'll collectively give $1000 when picked up. (Three spray
 Max is 2000 in MP. So if you put the amount to 20, but the value to $400,000 eg. They will only be able to pickup 20 - $2,000 bags. So, $40,000)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DoesPickupExist(int pickup)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::DOES_PICKUP_EXIST), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DoesPickupObjectExist(int pickupObject)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::DOES_PICKUP_OBJECT_EXIST), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPickupObject(int pickup)", AngelScript::asFUNCTION(ObjectGetPickupObjectShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPickupObject(int pickup)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::GET_PICKUP_OBJECT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsObjectAPickup(int object)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::IS_OBJECT_A_PICKUP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsObjectAPortablePickup(int object)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::IS_OBJECT_A_PORTABLE_PICKUP), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DoesPickupOfTypeExistInArea(Hash pickupHash, float x, float y, float z, float radius)", AngelScript::asFUNCTION(base::menu::natives::OBJECT::DOES_PICKUP_OF_TYPE_EXIST_IN_AREA), AngelScript::asCALL_CDECL)
@@ -12214,14 +11742,14 @@ This function returns the value 100000.0 over long distances, seems to be a fail
 	// ped
 	engine->SetDefaultNamespace("natives::ped");
 
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePed(int pedType, Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostPed)", AngelScript::asFUNCTION(PedCreatePedShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePed(int pedType, Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostPed)", AngelScript::asFUNCTION(base::menu::natives::PED::CREATE_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(https://alloc8or.re/gta5/doc/enums/ePedType.txt
 
 Full list of peds by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/peds.json)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DeletePed(int&out ped)", AngelScript::asFUNCTION(base::menu::natives::PED::DELETE_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Deletes the specified ped, then sets the handle pointed to by the pointer to NULL.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int ClonePed(int ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag)", AngelScript::asFUNCTION(PedClonePedShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int ClonePedAlt(int ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag, bool p4)", AngelScript::asFUNCTION(PedClonePedAltShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int ClonePed(int ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag)", AngelScript::asFUNCTION(base::menu::natives::PED::CLONE_PED), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int ClonePedAlt(int ped, bool isNetwork, bool bScriptHostPed, bool copyHeadBlendFlag, bool p4)", AngelScript::asFUNCTION(base::menu::natives::PED::CLONE_PED_ALT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClonePedToTarget(int ped, int targetPed)", AngelScript::asFUNCTION(base::menu::natives::PED::CLONE_PED_TO_TARGET), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Copies ped's components and props to targetPed.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClonePedToTargetAlt(int ped, int targetPed, bool p2)", AngelScript::asFUNCTION(base::menu::natives::PED::CLONE_PED_TO_TARGET_ALT), AngelScript::asCALL_CDECL);
@@ -12252,7 +11780,7 @@ If the handle is invalid, the function returns true.)ASDOC");
 			.Desc(R"ASDOC(Returns whether the specified ped is reloading.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedAPlayer(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_A_PLAYER), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns true if the given ped has a valid pointer to CPlayerInfo in its CPed class. That's all.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePedInsideVehicle(int vehicle, int pedType, Hash modelHash, int seat, bool isNetwork, bool bScriptHostPed)", AngelScript::asFUNCTION(PedCreatePedInsideVehicleShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreatePedInsideVehicle(int vehicle, int pedType, Hash modelHash, int seat, bool isNetwork, bool bScriptHostPed)", AngelScript::asFUNCTION(base::menu::natives::PED::CREATE_PED_INSIDE_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(pedType: see CREATE_PED
 
 Full list of peds by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/peds.json)ASDOC");
@@ -12305,7 +11833,7 @@ Left Rear = 1
 RightRear = 2)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedAllowVehiclesOverride(int ped, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_ALLOW_VEHICLES_OVERRIDE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool CanCreateRandomPed(bool p0)", AngelScript::asFUNCTION(base::menu::natives::PED::CAN_CREATE_RANDOM_PED), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateRandomPed(float posX, float posY, float posZ)", AngelScript::asFUNCTION(PedCreateRandomPedShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateRandomPed(float posX, float posY, float posZ)", AngelScript::asFUNCTION(base::menu::natives::PED::CREATE_RANDOM_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(vb.net
 Dim ped_handle As Integer
 With Game.Player.Character
@@ -12315,7 +11843,7 @@ End With
 
 Creates a Ped at the specified location, returns the Ped Handle.
 Ped will not act until SET_PED_AS_NO_LONGER_NEEDED is called.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateRandomPedAsDriver(int vehicle, bool returnHandle)", AngelScript::asFUNCTION(PedCreateRandomPedAsDriverShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateRandomPedAsDriver(int vehicle, bool returnHandle)", AngelScript::asFUNCTION(base::menu::natives::PED::CREATE_RANDOM_PED_AS_DRIVER), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool CanCreateRandomDriver()", AngelScript::asFUNCTION(base::menu::natives::PED::CAN_CREATE_RANDOM_DRIVER), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool CanCreateRandomBikeRider()", AngelScript::asFUNCTION(base::menu::natives::PED::CAN_CREATE_RANDOM_BIKE_RIDER), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedMoveAnimsBlendOut(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_MOVE_ANIMS_BLEND_OUT), AngelScript::asCALL_CDECL);
@@ -12328,7 +11856,7 @@ The one time this is set to true seems to do with when you fail the mission.)ASD
 			.Desc(R"ASDOC(Returns true/false if the ped is/isn't male.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedHuman(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_HUMAN), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns true/false if the ped is/isn't humanoid.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsIn(int ped, bool includeEntering)", AngelScript::asFUNCTION(PedGetVehiclePedIsInShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsIn(int ped, bool includeEntering)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_VEHICLE_PED_IS_IN), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets the vehicle the specified Ped is in. Returns 0 if the ped is/was not in a vehicle.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ResetPedLastVehicle(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::RESET_PED_LAST_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Resets the value for the last vehicle driven by the Ped.)ASDOC");
@@ -12342,7 +11870,7 @@ The one time this is set to true seems to do with when you fail the mission.)ASD
 		base::menu::as::util::RegisterGlobalFunction(engine, "void InstantlyFillPedPopulation()", AngelScript::asFUNCTION(base::menu::natives::PED::INSTANTLY_FILL_PED_POPULATION), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedOnMount(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_ON_MOUNT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Same function call as PED::GET_MOUNT, aka just returns 0)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetMount(int ped)", AngelScript::asFUNCTION(PedGetMountShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetMount(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_MOUNT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Function just returns 0
 void __fastcall ped__get_mount(NativeContext *a1)
 {
@@ -12439,7 +11967,7 @@ Normal means no parachute?)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedParachuteTintIndex(int ped, int tintIndex)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_PARACHUTE_TINT_INDEX), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void GetPedParachuteTintIndex(int ped, int&out outTintIndex)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_PARACHUTE_TINT_INDEX), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedReserveParachuteTintIndex(int ped, int p1)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_RESERVE_PARACHUTE_TINT_INDEX), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateParachuteBagObject(int ped, bool p1, bool p2)", AngelScript::asFUNCTION(PedCreateParachuteBagObjectShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateParachuteBagObject(int ped, bool p1, bool p2)", AngelScript::asFUNCTION(base::menu::natives::PED::CREATE_PARACHUTE_BAG_OBJECT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedDucking(int ped, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_DUCKING), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(This is the SET_CHAR_DUCKING from GTA IV, that makes Peds duck. This function does nothing in GTA V. It cannot set the ped as ducking in vehicles, and IS_PED_DUCKING will always return false.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedDucking(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_DUCKING), AngelScript::asCALL_CDECL);
@@ -12491,15 +12019,15 @@ Only works in singleplayer)ASDOC");
 			.Desc(R"ASDOC(Checks to see if ped and target are in combat with eachother. Only goes one-way: if target is engaged in combat with ped but ped has not yet reacted, the function will return false until ped starts fighting back.
 
 p1 is usually 0 in the scripts because it gets the ped id during the task sequence. For instance: PED::IS_PED_IN_COMBAT(l_42E[4/*14*/], PLAYER::PLAYER_PED_ID()) // armenian2.ct4: 43794)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedTargetFromCombatPed(int ped, int p1)", AngelScript::asFUNCTION(PedGetPedTargetFromCombatPedShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedTargetFromCombatPed(int ped, int p1)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_TARGET_FROM_COMBAT_PED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool CanPedInCombatSeeTarget(int ped, int target)", AngelScript::asFUNCTION(base::menu::natives::PED::CAN_PED_IN_COMBAT_SEE_TARGET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedDoingDriveby(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_DOING_DRIVEBY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedJacking(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_JACKING), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedBeingJacked(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_BEING_JACKED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedBeingStunned(int ped, int p1)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_BEING_STUNNED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(p1 is always 0)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedsJacker(int ped)", AngelScript::asFUNCTION(PedGetPedsJackerShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetJackTarget(int ped)", AngelScript::asFUNCTION(PedGetJackTargetShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedsJacker(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PEDS_JACKER), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetJackTarget(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_JACK_TARGET), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedFleeing(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_FLEEING), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedInCover(int ped, bool exceptUseWeapon)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_IN_COVER), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(p1 is nearly always 0 in the scripts.)ASDOC");
@@ -12510,8 +12038,8 @@ p1 is usually 0 in the scripts because it gets the ped id during the task sequen
 			.Desc(R"ASDOC(i could be time. Only example in the decompiled scripts uses it as -1.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool HasPedClearLosToEntity(int ped, int entity, float x, float y, float z, int p5, bool p6, bool p7)", AngelScript::asFUNCTION(base::menu::natives::PED::_HAS_PED_CLEAR_LOS_TO_ENTITY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetSeatPedIsTryingToEnter(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_SEAT_PED_IS_TRYING_TO_ENTER), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsTryingToEnter(int ped)", AngelScript::asFUNCTION(PedGetVehiclePedIsTryingToEnterShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedSourceOfDeath(int ped)", AngelScript::asFUNCTION(PedGetPedSourceOfDeathShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsTryingToEnter(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_VEHICLE_PED_IS_TRYING_TO_ENTER), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedSourceOfDeath(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_SOURCE_OF_DEATH), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the Entity (Ped, Vehicle, or ?Object?) that killed the 'ped'
 
 Is best to check if the Ped is dead before asking for its killer.)ASDOC");
@@ -12656,7 +12184,7 @@ p1:
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedGroupIndex(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_GROUP_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the group id of which the specified ped is a member of.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedInGroup(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_IN_GROUP), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerPedIsFollowing(int ped)", AngelScript::asFUNCTION(PedGetPlayerPedIsFollowingShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerPedIsFollowing(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PLAYER_PED_IS_FOLLOWING), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetGroupFormation(int groupId, int formationType)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_GROUP_FORMATION), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(0: Default
 1: Circle Around Leader
@@ -12664,9 +12192,9 @@ p1:
 3: Line, with Leader at center)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetGroupFormationSpacing(int groupId, float x, float y, float z)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_GROUP_FORMATION_SPACING), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ResetGroupFormationDefaultSpacing(int groupHandle)", AngelScript::asFUNCTION(base::menu::natives::PED::RESET_GROUP_FORMATION_DEFAULT_SPACING), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsUsing(int ped)", AngelScript::asFUNCTION(PedGetVehiclePedIsUsingShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsUsing(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_VEHICLE_PED_IS_USING), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets ID of vehicle player using. It means it can get ID at any interaction with vehicle. Enter\exit for example. And that means it is faster than GET_VEHICLE_PED_IS_IN but less safe.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsEntering(int ped)", AngelScript::asFUNCTION(PedGetVehiclePedIsEnteringShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehiclePedIsEntering(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_VEHICLE_PED_IS_ENTERING), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedGravity(int ped, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_GRAVITY), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(enable or disable the gravity of a ped
 
@@ -12700,7 +12228,7 @@ PED::SET_PED_GRAVITY(Local_289[iVar0 /*20*/], 0x00000001);)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool CanKnockPedOffVehicle(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::CAN_KNOCK_PED_OFF_VEHICLE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void KnockPedOffVehicle(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::KNOCK_PED_OFF_VEHICLE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedCoordsNoGang(int ped, float posX, float posY, float posZ)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_COORDS_NO_GANG), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedAsGroupMember(int groupID, int memberNumber)", AngelScript::asFUNCTION(PedGetPedAsGroupMemberShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedAsGroupMember(int groupID, int memberNumber)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_AS_GROUP_MEMBER), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(from fm_mission_controller.c4 (variable names changed for clarity):
 
 int groupID = PLAYER::GET_PLAYER_GROUP(PLAYER::PLAYER_ID());
@@ -12709,7 +12237,7 @@ if (groupSize >= 1) {
 . . . . for (int memberNumber = 0; memberNumber < groupSize; memberNumber++) {
 . . . . . . . . Ped ped1 = PED::GET_PED_AS_GROUP_MEMBER(groupID, memberNumber);
 . . . . . . . . //and so on)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedAsGroupLeader(int groupID)", AngelScript::asFUNCTION(PedGetPedAsGroupLeaderShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedAsGroupLeader(int groupID)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_PED_AS_GROUP_LEADER), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedKeepTask(int ped, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_KEEP_TASK), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedAllowMinorReactionsAsMissionPed(int ped, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::PED::SET_PED_ALLOW_MINOR_REACTIONS_AS_MISSION_PED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedSwimming(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_SWIMMING), AngelScript::asCALL_CDECL);
@@ -13182,7 +12710,7 @@ gtaxscripting.blogspot.com/2016/04/gta-v-peds-component-and-props.html)ASDOC");
 l_216 = RECSBRobber1)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void RegisterHatedTargetsAroundPed(int ped, float radius)", AngelScript::asFUNCTION(base::menu::natives::PED::REGISTER_HATED_TARGETS_AROUND_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Based on TASK_COMBAT_HATED_TARGETS_AROUND_PED, the parameters are likely similar (PedHandle, and area to attack in).)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomPedAtCoord(float x, float y, float z, float xRadius, float yRadius, float zRadius, int pedType)", AngelScript::asFUNCTION(PedGetRandomPedAtCoordShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomPedAtCoord(float x, float y, float z, float xRadius, float yRadius, float zRadius, int pedType)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_RANDOM_PED_AT_COORD), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets a random ped in the x/y/zRadius near the x/y/z coordinates passed.
 
 Ped Types:
@@ -14735,7 +14263,7 @@ TLR_SearchForTarget
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedPerformingStealthKill(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_PERFORMING_STEALTH_KILL), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedPerformingACounterAttack(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_PERFORMING_A_COUNTER_ATTACK), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPedBeingStealthKilled(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::IS_PED_BEING_STEALTH_KILLED), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetMeleeTargetForPed(int ped)", AngelScript::asFUNCTION(PedGetMeleeTargetForPedShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetMeleeTargetForPed(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::GET_MELEE_TARGET_FOR_PED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool WasPedKilledByStealth(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::WAS_PED_KILLED_BY_STEALTH), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool WasPedKilledByTakedown(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::WAS_PED_KILLED_BY_TAKEDOWN), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool WasPedKnockedOut(int ped)", AngelScript::asFUNCTION(base::menu::natives::PED::WAS_PED_KNOCKED_OUT), AngelScript::asCALL_CDECL);
@@ -15197,9 +14725,9 @@ Rope will sometimes contract and fall to the ground like you'd expect it to, but
 	// player
 	engine->SetDefaultNamespace("natives::player");
 
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerPed(int player)", AngelScript::asFUNCTION(PlayerGetPlayerPedShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerPed(int player)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::GET_PLAYER_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets the ped for a specified player index.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerPedScriptIndex(int player)", AngelScript::asFUNCTION(PlayerGetPlayerPedScriptIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerPedScriptIndex(int player)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::GET_PLAYER_PED_SCRIPT_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Identical to PLAYER::GET_PLAYER_PED)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPlayerModel(int player, Hash model)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::SET_PLAYER_MODEL), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Set the model for a specific Player. Be aware that this will destroy the current Ped for the Player and create a new one, any reference to the old ped should be reset
@@ -15438,11 +14966,11 @@ If atArresting is set to 1, this function will return 1 when player is being arr
 
 If atArresting is set to 0, this function will return 1 only when the busted screen is shown.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ResetPlayerArrestState(int player)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::RESET_PLAYER_ARREST_STATE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayersLastVehicle()", AngelScript::asFUNCTION(PlayerGetPlayersLastVehicleShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayersLastVehicle()", AngelScript::asFUNCTION(base::menu::natives::PLAYER::GET_PLAYERS_LAST_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Alternative: GET_VEHICLE_PED_IS_IN(PLAYER_PED_ID(), 1);)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerIndex()", AngelScript::asFUNCTION(PlayerGetPlayerIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPlayerIndex()", AngelScript::asFUNCTION(base::menu::natives::PLAYER::GET_PLAYER_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns the same as PLAYER_ID and NETWORK_PLAYER_ID_TO_INT)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int IntToPlayerindex(int value)", AngelScript::asFUNCTION(PlayerIntToPlayerindexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int IntToPlayerindex(int value)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::INT_TO_PLAYERINDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Simply returns whatever is passed to it (Regardless of whether the handle is valid or not).)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int IntToParticipantindex(int value)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::INT_TO_PARTICIPANTINDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Simply returns whatever is passed to it (Regardless of whether the handle is valid or not).
@@ -15453,11 +14981,11 @@ if (NETWORK::NETWORK_IS_PARTICIPANT_ACTIVE(PLAYER::INT_TO_PARTICIPANTINDEX(i))))
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetTimeSincePlayerDroveOnPavement(int player)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::GET_TIME_SINCE_PLAYER_DROVE_ON_PAVEMENT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetTimeSincePlayerDroveAgainstTraffic(int player)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::GET_TIME_SINCE_PLAYER_DROVE_AGAINST_TRAFFIC), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsPlayerFreeForAmbientTask(int player)", AngelScript::asFUNCTION(base::menu::natives::PLAYER::IS_PLAYER_FREE_FOR_AMBIENT_TASK), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int PlayerId()", AngelScript::asFUNCTION(PlayerPlayerIdShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int PlayerId()", AngelScript::asFUNCTION(base::menu::natives::PLAYER::PLAYER_ID), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(This returns YOUR 'identity' as a Player type.
 
 Always returns 0 in story mode.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int PlayerPedId()", AngelScript::asFUNCTION(PlayerPlayerPedIdShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int PlayerPedId()", AngelScript::asFUNCTION(base::menu::natives::PLAYER::PLAYER_PED_ID), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns current player ped)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "int NetworkPlayerIdToInt()", AngelScript::asFUNCTION(base::menu::natives::PLAYER::NETWORK_PLAYER_ID_TO_INT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Does exactly the same thing as PLAYER_ID())ASDOC");
@@ -18377,7 +17905,7 @@ StartAimingDist = distance where the ped should start to aim.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskClearDefensiveArea(int ped)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_CLEAR_DEFENSIVE_AREA), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskPedSlideToCoord(int ped, float x, float y, float z, float heading, float speed)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_PED_SLIDE_TO_COORD), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void TaskPedSlideToCoordHdgRate(int ped, float x, float y, float z, float heading, float speed, float headingChangeRate)", AngelScript::asFUNCTION(base::menu::natives::TASK::TASK_PED_SLIDE_TO_COORD_HDG_RATE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int AddCoverPoint(float x, float y, float z, float direction, int usage, int height, int arc, bool isPriority)", AngelScript::asFUNCTION(TaskAddCoverPointShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int AddCoverPoint(float x, float y, float z, float direction, int usage, int height, int arc, bool isPriority)", AngelScript::asFUNCTION(base::menu::natives::TASK::ADD_COVER_POINT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void RemoveCoverPoint(int coverpoint)", AngelScript::asFUNCTION(base::menu::natives::TASK::REMOVE_COVER_POINT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DoesScriptedCoverPointExistAtCoords(float x, float y, float z)", AngelScript::asFUNCTION(base::menu::natives::TASK::DOES_SCRIPTED_COVER_POINT_EXIST_AT_COORDS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Checks if there is a cover point at position)ASDOC");
@@ -19005,7 +18533,7 @@ Looks like only the player can be arrested this way. Peds react and try to arres
 	// vehicle
 	engine->SetDefaultNamespace("natives::vehicle");
 
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateVehicle(Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostVeh, bool p7)", AngelScript::asFUNCTION(VehicleCreateVehicleShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateVehicle(Hash modelHash, float x, float y, float z, float heading, bool isNetwork, bool bScriptHostVeh, bool p7)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::CREATE_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(p7 when set to true allows you to spawn vehicles under -100 z.
 Full list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void DeleteVehicle(int&out vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::DELETE_VEHICLE), AngelScript::asCALL_CDECL)
@@ -19228,7 +18756,7 @@ Full list of vehicle colors by DurtyFree: https://github.com/DurtyFree/gta-v-dat
 seatIndex  = -1 being the driver seat.
 Use GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle) - 1 for last seat index.
 isTaskRunning = on true the function returns already false while a task on the target seat is running (TASK_ENTER_VEHICLE/TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT) - on false only when a ped is finally sitting in the seat.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedInVehicleSeat(int vehicle, int seatIndex, bool p2)", AngelScript::asFUNCTION(VehicleGetPedInVehicleSeatShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedInVehicleSeat(int vehicle, int seatIndex, bool p2)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_PED_IN_VEHICLE_SEAT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(If there is no ped in the seat, and the game considers the vehicle as ambient population, this will create a random occupant ped in the seat, which may be cleaned up by the game fairly soon if not marked as script-owned mission entity.
 
 Seat indexes:
@@ -19241,7 +18769,7 @@ Seat indexes:
 etc.
 
 If p2 is true it uses a different GetOccupant function.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastPedInVehicleSeat(int vehicle, int seatIndex)", AngelScript::asFUNCTION(VehicleGetLastPedInVehicleSeatShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastPedInVehicleSeat(int vehicle, int seatIndex)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_LAST_PED_IN_VEHICLE_SEAT), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetVehicleLightsState(int vehicle, bool&out lightsOn, bool&out highbeamsOn)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_VEHICLE_LIGHTS_STATE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsVehicleTyreBurst(int vehicle, int wheelID, bool completely)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::IS_VEHICLE_TYRE_BURST), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(wheelID used for 4 wheelers seem to be (0, 1, 4, 5)
@@ -19281,7 +18809,7 @@ https://www.calculateme.com/speed/meters-per-second/to-miles-per-hour/)ASDOC");
 			.Desc(R"ASDOC(0.0 = Lowest 1.0 = Highest. This is best to be used if you wanna pick-up a car since un-realistically on GTA V forklifts can't pick up much of anything due to vehicle mass. If you put this under a car then set it above 0.0 to a 'lifted-value' it will raise the car with no issue lol)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsEntityAttachedToHandlerFrame(int vehicle, int entity)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::IS_ENTITY_ATTACHED_TO_HANDLER_FRAME), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsAnyEntityAttachedToHandlerFrame(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::IS_ANY_ENTITY_ATTACHED_TO_HANDLER_FRAME), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int FindHandlerVehicleContainerIsAttachedTo(int entity)", AngelScript::asFUNCTION(VehicleFindHandlerVehicleContainerIsAttachedToShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int FindHandlerVehicleContainerIsAttachedTo(int entity)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::FIND_HANDLER_VEHICLE_CONTAINER_IS_ATTACHED_TO), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Finds the vehicle that is carrying this entity with a handler frame.
 The model of the entity must be prop_contr_03b_ld or the function will return 0.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsHandlerFrameLinedUpWithContainer(int vehicle, int entity)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::IS_HANDLER_FRAME_LINED_UP_WITH_CONTAINER), AngelScript::asCALL_CDECL);
@@ -19468,7 +18996,7 @@ Yellow_on_Blue = 2,
 Yellow_on_Black = 1,
 North_Yankton = 5,)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetRandomTrains(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_RANDOM_TRAINS), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateMissionTrain(int variation, float x, float y, float z, bool direction, int p5, int p6)", AngelScript::asFUNCTION(VehicleCreateMissionTrainShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateMissionTrain(int variation, float x, float y, float z, bool direction, int p5, int p6)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::CREATE_MISSION_TRAIN), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Train models HAVE TO be loaded (requested) before you use this.
 For variation 15 - request:
 
@@ -19580,7 +19108,7 @@ FORCE_PLAYBACK_RECORDED_VEHICLE_UPDATE is a related native that deals with the A
 VEHICLE::SET_VEHICLE_MODEL_IS_SUPPRESSED(MISC::GET_HASH_KEY("taco"), true);
 
 Full list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomVehicleInSphere(float x, float y, float z, float radius, Hash modelHash, int flags)", AngelScript::asFUNCTION(VehicleGetRandomVehicleInSphereShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomVehicleInSphere(float x, float y, float z, float radius, Hash modelHash, int flags)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_RANDOM_VEHICLE_IN_SPHERE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets a random vehicle in a sphere at the specified position, of the specified radius.
 
 x: The X-component of the position of the sphere.
@@ -19591,9 +19119,9 @@ modelHash: The vehicle model to limit the selection to. Pass 0 for any model.
 flags: The bitwise flags that modifies the behaviour of this function.
 
 Full list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomVehicleFrontBumperInSphere(float p0, float p1, float p2, float p3, int p4, int p5, int p6)", AngelScript::asFUNCTION(VehicleGetRandomVehicleFrontBumperInSphereShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomVehicleBackBumperInSphere(float p0, float p1, float p2, float p3, int p4, int p5, int p6)", AngelScript::asFUNCTION(VehicleGetRandomVehicleBackBumperInSphereShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetClosestVehicle(float x, float y, float z, float radius, Hash modelHash, int flags)", AngelScript::asFUNCTION(VehicleGetClosestVehicleShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomVehicleFrontBumperInSphere(float p0, float p1, float p2, float p3, int p4, int p5, int p6)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_RANDOM_VEHICLE_FRONT_BUMPER_IN_SPHERE), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetRandomVehicleBackBumperInSphere(float p0, float p1, float p2, float p3, int p4, int p5, int p6)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_RANDOM_VEHICLE_BACK_BUMPER_IN_SPHERE), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetClosestVehicle(float x, float y, float z, float radius, Hash modelHash, int flags)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_CLOSEST_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Example usage
 VEHICLE::GET_CLOSEST_VEHICLE(x, y, z, radius, hash, unknown leave at 70)
 
@@ -19622,7 +19150,7 @@ It's probably more convenient to use worldGetAllVehicles(int *arr, int arrSize) 
 Conclusion: This native is not worth trying to use. Use something like this instead: https://pastebin.com/xiFdXa7h
 
 Full list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetTrainCarriage(int train, int trailerNumber)", AngelScript::asFUNCTION(VehicleGetTrainCarriageShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetTrainCarriage(int train, int trailerNumber)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_TRAIN_CARRIAGE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Corrected p1. it's basically the 'carriage/trailer number'. So if the train has 3 trailers you'd call the native once with a var or 3 times with 1, 2, 3.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetMakeTrainScanForBlockingEntities(int train, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::_SET_MAKE_TRAIN_SCAN_FOR_BLOCKING_ENTITIES), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "int GetMissionTrainConfigIndexByName(const std::string&in name)", AngelScript::asFUNCTION(VehicleGetMissionTrainConfigIndexByNameShim), AngelScript::asCALL_CDECL);
@@ -19683,7 +19211,7 @@ disableAutoStart: If true, the system will prevent the engine from starting when
 			.Desc(R"ASDOC(doorId: see SET_VEHICLE_DOOR_SHUT)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "float GetVehicleDoorAngleRatio(int vehicle, int doorId)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_VEHICLE_DOOR_ANGLE_RATIO), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(doorId: see SET_VEHICLE_DOOR_SHUT)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedUsingVehicleDoor(int vehicle, int doord)", AngelScript::asFUNCTION(VehicleGetPedUsingVehicleDoorShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetPedUsingVehicleDoor(int vehicle, int doord)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_PED_USING_VEHICLE_DOOR), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(doorId: see SET_VEHICLE_DOOR_SHUT)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetVehicleDoorShut(int vehicle, int doorId, bool closeInstantly)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_DOOR_SHUT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(enum eDoorId
@@ -20056,8 +19584,8 @@ blazer)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DetachVehicleFromAnyTowTruck(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::DETACH_VEHICLE_FROM_ANY_TOW_TRUCK), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsVehicleAttachedToTowTruck(int towTruck, int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::IS_VEHICLE_ATTACHED_TO_TOW_TRUCK), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Scripts verify that towTruck is the first parameter, not the second.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityAttachedToTowTruck(int towTruck)", AngelScript::asFUNCTION(VehicleGetEntityAttachedToTowTruckShim), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int SetVehicleAutomaticallyAttaches(int vehicle, bool p1, int p2)", AngelScript::asFUNCTION(VehicleSetVehicleAutomaticallyAttachesShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityAttachedToTowTruck(int towTruck)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_ENTITY_ATTACHED_TO_TOW_TRUCK), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int SetVehicleAutomaticallyAttaches(int vehicle, bool p1, int p2)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_AUTOMATICALLY_ATTACHES), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetVehicleBulldozerArmPosition(int vehicle, float position, bool p2)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_BULLDOZER_ARM_POSITION), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Sets the arm position of a bulldozer. Position must be a value between 0.0 and 1.0. Ignored when `p2` is set to false, instead incrementing arm position by 0.1 (or 10%).)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetVehicleTankTurretPosition(int vehicle, float position, bool p2)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_TANK_TURRET_POSITION), AngelScript::asCALL_CDECL);
@@ -20100,7 +19628,7 @@ Set turnSignal to 1 for left light, 0 for right light.)ASDOC");
 			.Desc(R"ASDOC(Default:1000||This sets a value which is used when NETWORK_ENABLE_EMPTY_CROWDING_VEHICLES_REMOVAL(true) is called each frame.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetVehicleTrailerVehicle(int vehicle, int&out trailer)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_VEHICLE_TRAILER_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Gets the trailer of a vehicle and puts it into the trailer parameter.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehicleTrailerParentVehicle(int trailer)", AngelScript::asFUNCTION(VehicleGetVehicleTrailerParentVehicleShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehicleTrailerParentVehicle(int trailer)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::_GET_VEHICLE_TRAILER_PARENT_VEHICLE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetVehicleUsesLargeRearRamp(int vehicle, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_USES_LARGE_REAR_RAMP), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(vehicle must be a plane)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetVehicleRudderBroken(int vehicle, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_RUDDER_BROKEN), AngelScript::asCALL_CDECL);
@@ -20437,7 +19965,7 @@ Y forces the bike to lean to the left or to the right (-1, 1))ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetVehicleNotStealableAmbiently(int vehicle, bool p1)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_NOT_STEALABLE_AMBIENTLY), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void LockDoorsWhenNoLongerNeeded(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::LOCK_DOORS_WHEN_NO_LONGER_NEEDED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetLastDrivenVehicle(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_LAST_DRIVEN_VEHICLE), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastDrivenVehicle()", AngelScript::asFUNCTION(VehicleGetLastDrivenVehicleShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastDrivenVehicle()", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_LAST_DRIVEN_VEHICLE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void ClearLastDrivenVehicle()", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::CLEAR_LAST_DRIVEN_VEHICLE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetVehicleHasBeenDrivenFlag(int vehicle, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_VEHICLE_HAS_BEEN_DRIVEN_FLAG), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetTaskVehicleGotoPlaneMinHeightAboveTerrain(int plane, int height)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_TASK_VEHICLE_GOTO_PLANE_MIN_HEIGHT_ABOVE_TERRAIN), AngelScript::asCALL_CDECL);
@@ -20510,9 +20038,9 @@ Confirmed, it is a debug native.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DetachVehicleFromAnyCargobob(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::DETACH_VEHICLE_FROM_ANY_CARGOBOB), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DetachEntityFromCargobob(int cargobob, int entity)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::DETACH_ENTITY_FROM_CARGOBOB), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsVehicleAttachedToCargobob(int cargobob, int vehicleAttached)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::IS_VEHICLE_ATTACHED_TO_CARGOBOB), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehicleAttachedToCargobob(int cargobob)", AngelScript::asFUNCTION(VehicleGetVehicleAttachedToCargobobShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetVehicleAttachedToCargobob(int cargobob)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_VEHICLE_ATTACHED_TO_CARGOBOB), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns attached vehicle (Vehicle in parameter must be cargobob))ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityAttachedToCargobob(int p0)", AngelScript::asFUNCTION(VehicleGetEntityAttachedToCargobobShim), AngelScript::asCALL_CDECL);
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetEntityAttachedToCargobob(int p0)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_ENTITY_ATTACHED_TO_CARGOBOB), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AttachVehicleToCargobob(int cargobob, int vehicle, int p2, float x, float y, float z)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::ATTACH_VEHICLE_TO_CARGOBOB), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void AttachEntityToCargobob(int p0, int p1, int p2, int p3, int p4, int p5)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::ATTACH_ENTITY_TO_CARGOBOB), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetCargobobForceDontDetachVehicle(int cargobob, bool toggle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_CARGOBOB_FORCE_DONT_DETACH_VEHICLE), AngelScript::asCALL_CDECL)
@@ -20915,7 +20443,7 @@ The 'point' is either 400.0 or 250.0 units away from the Ped's current coordinat
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool IsVehicleOnBoostPad(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::_IS_VEHICLE_ON_BOOST_PAD), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetIsVehicleShunting(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_IS_VEHICLE_SHUNTING), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetHasVehicleBeenHitByShunt(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_HAS_VEHICLE_BEEN_HIT_BY_SHUNT), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastShuntVehicle(int vehicle)", AngelScript::asFUNCTION(VehicleGetLastShuntVehicleShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetLastShuntVehicle(int vehicle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::GET_LAST_SHUNT_VEHICLE), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns last vehicle that was rammed by the given vehicle using the shunt boost.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetDisableVehicleExplosionsDamage(bool toggle)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_DISABLE_VEHICLE_EXPLOSIONS_DAMAGE), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetOverrideNitrousLevel(int vehicle, bool toggle, float level, float power, float rechargeTime, bool disableSound)", AngelScript::asFUNCTION(base::menu::natives::VEHICLE::SET_OVERRIDE_NITROUS_LEVEL), AngelScript::asCALL_CDECL);
@@ -21083,7 +20611,7 @@ Returns -1 if the component isn't of type CWeaponComponentVariantModel.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool GetCurrentPedWeapon(int ped, Hash&out weaponHash, bool doDeadCheck)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::GET_CURRENT_PED_WEAPON), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns true if the hash of the equipped weapon object equals the weapon hash.
 doDeadCheck does nothing in release builds.)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetCurrentPedWeaponEntityIndex(int ped, bool doDeadCheck)", AngelScript::asFUNCTION(WeaponGetCurrentPedWeaponEntityIndexShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetCurrentPedWeaponEntityIndex(int ped, bool doDeadCheck)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::GET_CURRENT_PED_WEAPON_ENTITY_INDEX), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(doDeadCheck does nothing in release builds.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "Hash GetBestPedWeapon(int ped, bool bIgnoreAmmoCheck)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::GET_BEST_PED_WEAPON), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(bIgnoreAmmoCheck is always false in the scripts.)ASDOC");
@@ -21274,7 +20802,7 @@ Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps
 REQUEST_WEAPON_ASSET(iLocal_1888, 31, 26);)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool HasWeaponAssetLoaded(Hash weaponHash)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::HAS_WEAPON_ASSET_LOADED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void RemoveWeaponAsset(Hash weaponHash)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::REMOVE_WEAPON_ASSET), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateWeaponObject(Hash weaponHash, int ammoCount, float x, float y, float z, bool showWorldModel, float scale, int p7, int p8, int p9)", AngelScript::asFUNCTION(WeaponCreateWeaponObjectShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int CreateWeaponObject(Hash weaponHash, int ammoCount, float x, float y, float z, bool showWorldModel, float scale, int p7, int p8, int p9)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::CREATE_WEAPON_OBJECT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Now has 8 params.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void GiveWeaponComponentToWeaponObject(int weaponObject, Hash componentHash)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::GIVE_WEAPON_COMPONENT_TO_WEAPON_OBJECT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(componentHash:
@@ -21287,7 +20815,7 @@ ${component_at_ar_flsh}, ${component_at_ar_supp}, ${component_at_pi_flsh}, ${com
 		base::menu::as::util::RegisterGlobalFunction(engine, "void GiveWeaponObjectToPed(int weaponObject, int ped)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::GIVE_WEAPON_OBJECT_TO_PED), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "bool DoesWeaponTakeWeaponComponent(Hash weaponHash, Hash componentHash)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::DOES_WEAPON_TAKE_WEAPON_COMPONENT), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Full list of weapons & components by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json)ASDOC");
-		base::menu::as::util::RegisterGlobalFunction(engine, "int GetWeaponObjectFromPed(int ped, bool p1)", AngelScript::asFUNCTION(WeaponGetWeaponObjectFromPedShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int GetWeaponObjectFromPed(int ped, bool p1)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::GET_WEAPON_OBJECT_FROM_PED), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Drops the current weapon and returns the object
 
 Unknown behavior when unarmed.)ASDOC");
@@ -21437,7 +20965,7 @@ Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps
 		base::menu::as::util::RegisterGlobalFunction(engine, "float GetWeaponTimeBetweenShots(Hash weaponHash)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::GET_WEAPON_TIME_BETWEEN_SHOTS), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Full list of weapons by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/weapons.json)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetPedChanceOfFiringBlanks(int ped, float xBias, float yBias)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::SET_PED_CHANCE_OF_FIRING_BLANKS), AngelScript::asCALL_CDECL);
-		base::menu::as::util::RegisterGlobalFunction(engine, "int SetPedShootOrdnanceWeapon(int ped, float p1)", AngelScript::asFUNCTION(WeaponSetPedShootOrdnanceWeaponShim), AngelScript::asCALL_CDECL)
+		base::menu::as::util::RegisterGlobalFunction(engine, "int SetPedShootOrdnanceWeapon(int ped, float p1)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::SET_PED_SHOOT_ORDNANCE_WEAPON), AngelScript::asCALL_CDECL)
 			.Desc(R"ASDOC(Returns handle of the projectile.)ASDOC");
 		base::menu::as::util::RegisterGlobalFunction(engine, "void RequestWeaponHighDetailModel(int weaponObject)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::REQUEST_WEAPON_HIGH_DETAIL_MODEL), AngelScript::asCALL_CDECL);
 		base::menu::as::util::RegisterGlobalFunction(engine, "void SetWeaponPedDamageModifier(Hash weapon, float damageModifier)", AngelScript::asFUNCTION(base::menu::natives::WEAPON::_SET_WEAPON_PED_DAMAGE_MODIFIER), AngelScript::asCALL_CDECL);

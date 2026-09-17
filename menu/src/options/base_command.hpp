@@ -46,7 +46,7 @@ namespace base::menu::options {
     /// A command that declares nothing, or whose arguments are added inside ModifyParser, has only its
     /// name and description here: a parser cannot be read back for a declaration, so GetArgs() is the
     /// only thing this can describe.
-    std::string GetHelp() const {
+    virtual std::string GetHelp() const {
       return FormatHelp(*this);
     }
 
@@ -56,7 +56,7 @@ namespace base::menu::options {
       return name_;
     }
 
-    std::string GetDescription() const {
+    virtual std::string GetDescription() const {
       // A description is a localization key, so without the localization manager the key itself is the
       // best answer there is - and the alternative is reading through a null pointer. A command
       // asked for its description outside the menu, as a test and a script callback both do, is
@@ -68,7 +68,7 @@ namespace base::menu::options {
       return ui::localization::kMANAGER->Localize(description_);
     }
 
-    std::string GetDescriptionRaw() const {
+    virtual std::string GetDescriptionRaw() const {
       return description_;
     }
 

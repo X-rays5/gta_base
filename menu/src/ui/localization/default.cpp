@@ -7,7 +7,6 @@
 
 namespace base::menu::ui::localization {
   const translation_map_t default_translation = {
-    ADD_TRANSLATION("text/hello_world", "Hello World!")
     ADD_TRANSLATION("label/ok", "Ok")
     ADD_TRANSLATION("label/cancel", "Cancel")
     ADD_TRANSLATION("label/yes", "Yes")
@@ -18,6 +17,7 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("label/reset", "Cancel")
     ADD_TRANSLATION("label/refresh", "Refresh")
     ADD_TRANSLATION("label/invalid_submenu", "Invalid Submenu")
+    ADD_TRANSLATION("label/teleport", "Teleport")
     ADD_TRANSLATION("info/save_able", "Press F11 to save this option")
     ADD_TRANSLATION("info/hotkey_able", "Press F12 to set a hotkey for this option")
     ADD_TRANSLATION("info/hotkey", "Hotkey set to '{}' press F12 to replace")
@@ -68,6 +68,10 @@ namespace base::menu::ui::localization {
     ADD_TRANSLATION("ui/action/suicide", "Suicide")
     ADD_TRANSLATION("ui/action/self_max_armour", "Max Armour")
     ADD_TRANSLATION("ui/action/self_remove_armour", "Remove Armour")
+    ADD_TRANSLATION("ui/action/teleport_to_waypoint", "Teleport to waypoint")
+    ADD_TRANSLATION("ui/action/teleport_to_objective", "Teleport to objective")
+    ADD_TRANSLATION("ui/action/teleport_into_last_vehicle", "Teleport into last vehicle")
+    ADD_TRANSLATION("ui/action/teleport_to_last_vehicle", "Teleport to last vehicle")
     ADD_TRANSLATION("ui/option/force_wanted_level", "Force Wanted Level")
     ADD_TRANSLATION("ui/option/force_wanted_level/desc", "Forces the wanted level to the specified level (0-5).")
     ADD_TRANSLATION("ui/option/never_wanted", "Never Wanted")

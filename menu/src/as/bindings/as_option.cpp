@@ -371,7 +371,7 @@ namespace base::menu::as::bindings::option {
         return false;
       }
 
-      return menu::options::ParseAndRun(*option, arguments);
+      return menu::options::ParseAndRun(option->GetCommand(), arguments);
     }
   }
 
@@ -422,7 +422,7 @@ namespace base::menu::as::bindings::option {
     return true;
   }
 
-  void ScriptOption::execute(std::shared_ptr<argparse::ArgumentParser> args) {
+  void ScriptOption::runCommand(std::shared_ptr<argparse::ArgumentParser> args) {
     if (!HasCallback()) {
       LOG_ERROR("[AS] '{}' was run, which has no callback to run: nothing happens", GetName());
       return;
@@ -556,8 +556,8 @@ namespace base::menu::as::bindings::option {
     static_cast<void>(gui::InvokeUiCallback(owner_, ui_decl_, *page));
   }
 
-  ScriptOptionHandle::ScriptOptionHandle(std::shared_ptr<menu::options::BaseOption> option,
-                                         std::shared_ptr<const std::vector<menu::options::ParsedArg>> args)
+  ScriptOptionHandle::ScriptOptionHandle(std::shared_ptr<BaseOption> option,
+                                         std::shared_ptr<const std::vector<ParsedArg>> args)
     : option_(std::move(option)), args_(std::move(args)) {
     live_instances.fetch_add(1, std::memory_order_relaxed);
   }

@@ -5,7 +5,7 @@
 #include "never_wanted.hpp"
 
 namespace base::menu::options {
-  void NeverWantedOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void NeverWantedOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     enabled_ = !enabled_;
   }
 
@@ -17,8 +17,9 @@ namespace base::menu::options {
     return true;
   }
 
-  void NeverWantedOption::HandleHotkey() {
+  bool NeverWantedOption::HandleHotkey() {
     enabled_ = !enabled_;
+    return true;
   }
 
   void NeverWantedOption::Save(glz::generic& data) {
@@ -46,10 +47,6 @@ namespace base::menu::options {
 
   bool NeverWantedOption::IsTickable() const {
     return true;
-  }
-
-  BaseOption::TickThread NeverWantedOption::GetTickThread() const {
-    return TickThread::kGAME_SCRIPT;
   }
 }
 

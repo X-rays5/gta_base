@@ -137,7 +137,7 @@ namespace base::menu::hotkey {
     const Hotkey hotkey(vk_key, modifier);
     if (const auto it = key_opt_map_.find(hotkey); it != key_opt_map_.end() && it->second) {
       NOTIFY_INFO("ui/hotkey", "ui/hotkey/activated", it->second->GetName());
-      it->second->HandleHotkey();
+      it->second->TriggerHotkey();
     }
   }
 

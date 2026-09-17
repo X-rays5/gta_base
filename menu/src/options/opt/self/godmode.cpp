@@ -10,12 +10,13 @@ namespace base::menu::options {
     GTA_BASE_OPTION_UI_COMP(sub, ui::components::ToggleComponent(label, GetDescriptionRaw(), &enabled_));
   }
 
-  void GodModeOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void GodModeOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     enabled_ = !enabled_;
   }
 
-  void GodModeOption::HandleHotkey() {
+  bool GodModeOption::HandleHotkey() {
     enabled_ = !enabled_;
+    return true;
   }
 
   bool GodModeOption::IsHotkeyAble() const {
@@ -32,10 +33,6 @@ namespace base::menu::options {
 
   bool GodModeOption::IsTickable() const {
     return true;
-  }
-
-  BaseOption::TickThread GodModeOption::GetTickThread() const {
-    return TickThread::kGAME_SCRIPT;
   }
 
   void GodModeOption::Save(glz::generic& data) {

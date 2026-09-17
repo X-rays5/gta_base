@@ -14,19 +14,20 @@ namespace base::menu::options {
     }
   }
 
-  void SelfMaxArmourOption::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void SelfMaxArmourOption::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     MaxArmour();
   }
 
   void SelfMaxArmourOption::CreateOptionUi(const std::string& label, ui::Submenu* sub) {
-    GTA_BASE_OPTION_UI_COMP(sub, ui::components::ExecuteComponent(label, GetDescriptionRaw(), MaxArmour));
+    GTA_BASE_OPTION_EXECUTE_UI_COMP(sub, label);
   }
 
   bool SelfMaxArmourOption::IsHotkeyAble() const {
     return true;
   }
 
-  void SelfMaxArmourOption::HandleHotkey() {
+  bool SelfMaxArmourOption::HandleHotkey() {
     MaxArmour();
+    return true;
   }
 }

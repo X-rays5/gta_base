@@ -10,10 +10,12 @@ namespace base::menu::options {
   public:
     VehicleRepairOption() : BaseOption("vehicle_repair") {}
 
-    virtual void execute(std::shared_ptr<argparse::ArgumentParser> args) override;
     virtual void CreateOptionUi(const std::string& label, ui::Submenu* sub) override;
     virtual bool IsHotkeyAble() const override;
-    virtual void HandleHotkey() override;
+
+  protected:
+    virtual void runCommand(std::shared_ptr<argparse::ArgumentParser> args) override;
+    virtual bool HandleHotkey() override;
   };
 }
 

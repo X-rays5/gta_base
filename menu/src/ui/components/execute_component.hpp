@@ -22,7 +22,11 @@ namespace base::menu::ui::components {
     virtual void HandleButtonPress(const PressedButton button) override {
       if (button == PressedButton::kSUBMIT) {
         util::kTHREAD_POOL->emplace_back([handler = exec_handler_] {
+          if constexpr (std::is_pointer_v<Func> && requires { (*handler)(); }) {
+            (*handler)();
+          } else {
             handler();
+          }
         });
       }
     }

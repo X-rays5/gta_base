@@ -5,7 +5,7 @@
 #include "semi_godmode.hpp"
 
 namespace base::menu::options {
-  void SemiGodModeOpt::execute(std::shared_ptr<argparse::ArgumentParser>) {
+  void SemiGodModeOpt::runCommand(std::shared_ptr<argparse::ArgumentParser>) {
     enabled_ = !enabled_;
   }
 
@@ -17,8 +17,9 @@ namespace base::menu::options {
     return true;
   }
 
-  void SemiGodModeOpt::HandleHotkey() {
+  bool SemiGodModeOpt::HandleHotkey() {
     enabled_ = !enabled_;
+    return true;
   }
 
   void SemiGodModeOpt::Save(glz::generic& data) {
@@ -39,10 +40,6 @@ namespace base::menu::options {
 
   bool SemiGodModeOpt::IsTickable() const {
     return true;
-  }
-
-  BaseOption::TickThread SemiGodModeOpt::GetTickThread() const {
-    return TickThread::kGAME_SCRIPT;
   }
 
   void SemiGodModeOpt::Tick() {

@@ -39,5 +39,6 @@ namespace base::menu::natives {
     handler(&context_);
     context_.FixVectors();
     ApplyHandleOuts();
+    ApplyVectorOuts();
   }
 }

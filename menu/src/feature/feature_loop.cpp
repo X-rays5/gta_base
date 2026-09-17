@@ -54,29 +54,28 @@ namespace base::menu::feature {
         // spawned one - GET_VEHICLE_PED_IS_IN on an invalid ped faults inside the game. With no local
         // ped there is no vehicle to report either, so the globals go back to zero rather than keeping
         // whatever the ped that just went away was in.
-        game::globals::local_player.vehicle_id = natives::Vehicle{};
+        game::globals::local_player.vehicle = natives::Vehicle{};
         game::globals::local_player.vehicle_include_entering = natives::Vehicle{};
         game::globals::local_player.last_vehicle = natives::Vehicle{};
       } else {
+        // A handle is taken only when the matching in-vehicle question answers yes: GET_VEHICLE_PED_IS_IN
+        // keeps naming the vehicle a ped has got out of - the game retains m_pMyVehicle past the exit and
+        // clears it only for a ped carrying CPED_CONFIG_FLAG_ResetLastVehicleOnVehicleExit - while
+        // CPED_CONFIG_FLAG_InVehicle, which IS_PED_IN_ANY_VEHICLE reads, is cleared on the way out. Asked
+        // for the handle alone, these globals report a vehicle for a player standing on the street.
+        const auto in_vehicle = ped.IsInAnyVehicle(false);
+        const auto entering_vehicle = ped.IsInAnyVehicle(true);
         const auto vehicle = ped.GetVehicle(false);
         const auto entering = ped.GetVehicle(true);
         const auto last_vehicle = natives::PLAYER::GET_PLAYERS_LAST_VEHICLE();
 
-        game::globals::local_player.vehicle_id = vehicle;
-        game::globals::local_player.vehicle_include_entering = entering;
+        game::globals::local_player.vehicle = in_vehicle ? vehicle.value_or(natives::Vehicle{}) : natives::Vehicle{};
+        game::globals::local_player.vehicle_include_entering = entering_vehicle ? entering.value_or(natives::Vehicle{}) : natives::Vehicle{};
         game::globals::local_player.last_vehicle = last_vehicle;
       }
 
       if (has_ped != had_local_ped) {
         had_local_ped = has_ped;
-        if (has_ped) {
-          LOG_INFO("Local ped: player {} ped {} vehicle {} entering {} last {}", player, ped,
-                   game::globals::local_player.vehicle_id.load(),
-                   game::globals::local_player.vehicle_include_entering.load(),
-                   game::globals::local_player.last_vehicle.load());
-        } else {
-          LOG_INFO("No local ped.");
-        }
       }
     }
   }
@@ -101,7 +100,7 @@ namespace base::menu::feature {
     if (options::kOPTION_REGISTRY) {
       const auto all_opt = options::kOPTION_REGISTRY->GetAllOptions();
       for (auto&& opt : all_opt) {
-        if (opt && opt->IsTickable() && opt->GetTickThread() == options::BaseOption::TickThread::kGAME_SCRIPT) {
+        if (opt && opt->IsTickable() && opt->GetThreadType() == options::BaseOption::ThreadType::kGAME_SCRIPT) {
           opt->Tick();
         }
       }
