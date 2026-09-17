@@ -29,6 +29,8 @@ namespace base::menu::hotkey {
         case VK_SHIFT:
         case VK_CONTROL:
         case VK_MENU:
+        case VK_F11:
+        case VK_F12:
           return true;
         default:
           return false;
@@ -51,25 +53,32 @@ namespace base::menu::hotkey {
   }
 
   void HotkeyManager::AddNewHotkey(std::shared_ptr<options::BaseOption> option) {
-    common::concurrency::ScopedSpinlock lock(add_hotkey_lock_);
+    // Nothing that guards the map may be held across the wait below: it lasts as long as the player
+    // takes to press a key, and the render thread asks this manager for the key bound to the selected
+    // option on every frame it draws. Holding the lock for the duration stalls the render thread for
+    // the same length of time, which is long enough that the "press a key" notification raised here is
+    // only drawn once the key has already been pressed and the hotkey made.
     is_adding_hotkey_ = true;
-
     NOTIFY_INFO("ui/hotkey", "ui/hotkey/press_key");
     const auto res = new_hotkey_signal_.Wait(5000);
     if (res == WAIT_TIMEOUT) {
-      NOTIFY_WARN("ui/hotkey", "ui/hotkey/press_key_timeout");
       is_adding_hotkey_ = false;
+      NOTIFY_WARN("ui/hotkey", "ui/hotkey/press_key_timeout");
       return;
     }
 
     if (res != WAIT_OBJECT_0) {
+      // Cleared here as well, or every key pressed afterwards would be taken for an attempt to add one.
+      is_adding_hotkey_ = false;
       NOTIFY_INFO("ui/hotkey", "ui/hotkey/add_failed");
       LOG_ERROR("Failed to add hotkey, wait failed with code {}", win32::GetLastErrorStr());
       return;
     }
 
     NOTIFY_INFO("ui/hotkey", "ui/hotkey/add_success", option->GetName(), new_hotkey_.AsString());
+    common::concurrency::ScopedSpinlock lock(add_hotkey_lock_);
     key_opt_map_.emplace(new_hotkey_, option);
+    lock.Unlock();
 
     Save();
   }
@@ -126,8 +135,7 @@ namespace base::menu::hotkey {
     }
 
     const Hotkey hotkey(vk_key, modifier);
-    const auto it = key_opt_map_.find(hotkey);
-    if (it != key_opt_map_.end() && it->second) {
+    if (const auto it = key_opt_map_.find(hotkey); it != key_opt_map_.end() && it->second) {
       NOTIFY_INFO("ui/hotkey", "ui/hotkey/activated", it->second->GetName());
       it->second->HandleHotkey();
     }

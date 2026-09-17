@@ -83,7 +83,7 @@ namespace base::menu::ui {
     std::shared_ptr<Theme> theme = std::make_shared<Theme>();
     const std::chrono::milliseconds menu_ui_key_state_cooldown = std::chrono::milliseconds(200);
     const std::chrono::milliseconds menu_ui_navigation_key_state_cooldown = std::chrono::milliseconds(200);
-    const std::chrono::milliseconds option_interaction_key_state_cooldown = std::chrono::milliseconds(500);
+    const std::chrono::milliseconds option_interaction_key_state_cooldown = std::chrono::milliseconds(1000);
     const UiSize header_height = UiSize(0.1f);
     const UiSize seperator_height = UiSize(0.0015f);
     const UiSize menu_item_height = UiSize(0.025f);

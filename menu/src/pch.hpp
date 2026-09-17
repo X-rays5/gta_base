@@ -11,6 +11,7 @@
 #include <base-common/util/result.hpp>
 #include <base-common/win32/all.hpp>
 #include <imfont/IconsFontAwesome6.hpp>
+#include <minicoropp/coroutine.hpp>
 #include "globals.hpp"
 #include "ui/notification/manager.hpp"
 
