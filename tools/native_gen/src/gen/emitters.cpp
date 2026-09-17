@@ -147,6 +147,20 @@ namespace base::tools::native_gen::gen {
       return kAliases.contains(compact);
     }
 
+    // The handle aliases that are classes in C++ rather than the int32_t they read as in a script.
+    // Everything in the alias set is one except Any, which native_types.hpp defines as a plain
+    // uint32_t: that one really is the scalar it is spelled as, and crosses on its own.
+    //
+    // The distinction matters because the two sides of a call disagree about a class. A script is
+    // told `int` and so reads the result out of EAX, while MSVC brings a class back in memory,
+    // through a pointer it takes in RCX - a register AngelScript, having no return buffer to pass,
+    // fills with the call's first argument. The game's first argument written through as a return
+    // slot is a fault rather than a wrong value, so a native returning one of these cannot be
+    // registered directly. See BuildAsBinding for the shim that crosses for it.
+    bool IsHandleClassAlias(const std::string& compact) {
+      return IsIntHandleAlias(compact) && compact != "Any";
+    }
+
     bool IsPlainPrimitive(const std::string& compact) {
       return compact == "void" || compact == "bool" || compact == "int" || compact == "float";
     }
@@ -452,7 +466,13 @@ namespace base::tools::native_gen::gen {
       }
 
       const bool string_return = IsStringPointer(return_type);
-      const bool needs_shim = has_char_buffer || has_string_input || string_return;
+      // A handle return needs the shim even though nothing about its spelling looks wrong: the
+      // declaration says `int`, which is what a script should see, but the function behind it returns
+      // a class, and that is not the same call. The shim makes the class-returning call in C++, where
+      // the hidden return pointer is the compiler's own business, and hands the identity back as the
+      // int the script was told to expect.
+      const bool handle_return = IsHandleClassAlias(return_type);
+      const bool needs_shim = has_char_buffer || has_string_input || string_return || handle_return;
       const bool shim_returns_string = has_char_buffer || string_return;
 
       // The out-buffer goes, and so does a bufferSize that describes it, since the shim owns the
@@ -500,7 +520,8 @@ namespace base::tools::native_gen::gen {
       binding.declaration = decl_return + " " + as_name + "(" + decl_params + ")";
 
       if (needs_shim) {
-        const std::string shim_return = shim_returns_string ? "std::string" : CppType(return_type);
+        const std::string shim_return =
+            shim_returns_string ? "std::string" : (handle_return ? "int" : CppType(return_type));
 
         std::string shim_params;
         listed = 0;
@@ -550,6 +571,8 @@ namespace base::tools::native_gen::gen {
             body += "const char* const result = " + call + ";\n";
             body += "return result != nullptr ? std::string(result) : std::string();\n";
           }
+        } else if (handle_return) {
+          body += "return " + call + ".Get();\n";
         } else if (shim_return == "void") {
           body += call + ";\n";
         } else {
